@@ -23,7 +23,7 @@ export const unfollowTitleGQLMutation = graphql(`
 
 export const isFollowingTitleQuery = graphql(`
 	query isFollowingTitleQuery($id: UUID!) {
-		follows{
+		follows {
 			isFollowingManga(id: $id)
 		}
 	}
@@ -68,8 +68,6 @@ export default function isFollowingTitle(id: string, options?: {
 			}).toPromise();
 			if (res.error) {
 				throw res.error;
-			} else {
-				return res.data?.follows.isFollowingManga ?? false
 			}
 		}
 	}), () => mangadexQueryClient);
@@ -84,11 +82,24 @@ export default function isFollowingTitle(id: string, options?: {
 		update(updater) {
 			const value = updater(get(queryDerived));
 			setFollowingStatus(value, id, toast, query, options);
-		},
-	}
+		}
+	};
 }
 
-function setFollowingStatus(value: boolean, id: string, toast: boolean, query: CreateQueryResult, options: { onSettled?: (error: Error | null, variables: string) => void; onError?: (error: Error, variables: string) => void; onSucess?: (variables: string) => void; toast?: boolean; } | undefined) {
+function setFollowingStatus(
+	value: boolean,
+	id: string,
+	toast: boolean,
+	query: CreateQueryResult,
+	options:
+		| {
+			onSettled?: (error: Error | null, variables: string) => void;
+			onError?: (error: Error, variables: string) => void;
+			onSucess?: (variables: string) => void;
+			toast?: boolean;
+		}
+		| undefined
+) {
 	if (value) {
 		followTitleMutation.mutate(id, {
 			onError(error, variables, context) {
@@ -112,7 +123,7 @@ function setFollowingStatus(value: boolean, id: string, toast: boolean, query: C
 			onSettled(data, error, variables, context) {
 				query.refetch();
 				options?.onSettled?.(error, variables);
-			},
+			}
 		});
 	} else {
 		unfollowTitleMutation.mutate(id, {
@@ -137,7 +148,7 @@ function setFollowingStatus(value: boolean, id: string, toast: boolean, query: C
 			onSettled(data, error, variables, context) {
 				query.refetch();
 				options?.onSettled?.(error, variables);
-			},
+			}
 		});
 	}
 }

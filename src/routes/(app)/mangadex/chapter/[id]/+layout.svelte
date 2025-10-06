@@ -1,28 +1,46 @@
 <script lang="ts">
-	import { onMount, type Snippet } from "svelte";
-	import type { LayoutData } from "./$types";
-	import NoConflictLayout from "./NoConflictLayout.svelte";
+	import { createQuery, type CreateQueryOptions } from "@tanstack/svelte-query";
+	import type { LayoutProps } from "./$types";
+	import { getContextClient } from "@urql/svelte";
+	import { derived, toStore } from "svelte/store";
+	import { load } from "./layout.context";
 	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
-	import { hasConflicts } from "@mangadex/utils/conflicts";
-	import ConflictLayout from "@mangadex/routes/title/[id]/ConflictLayout.svelte";
-	import { isDataSaver } from "@mangadex/stores/chapterQuality";
-	import { noop } from "lodash";
+	import LoadingPage from "@mangadex/componnents/pages/LoadingPage.svelte";
+	import AfterLoadingLayout from "./AfterLoadingLayout.svelte";
+	import PageError from "@mangadex/componnents/PageError.svelte";
 
-	interface Props {
-		data: LayoutData;
-		children?: Snippet;
-	}
-	let { data, children }: Props = $props();
-	let hasConflict = $derived.by(() => hasConflicts(data.conflicts));
-	let ingnoreConflict = $state(false);
-	onMount(() => isDataSaver.subscribe(noop));
+	let { data, children }: LayoutProps = $props();
+	const client = getContextClient();
+	const query = createQuery(
+		derived([toStore(() => data)], ([data]) => {
+			return {
+				queryKey: ["chapter", data.id, "load", JSON.stringify(data)],
+				networkMode: "always",
+				async queryFn() {
+					return load({
+						id: data.id,
+						isEnd: data.isEnd,
+						client,
+						startPage: data.startPage
+					});
+				}
+			} satisfies CreateQueryOptions;
+		})
+	);
 </script>
 
-{#if hasConflict && !ingnoreConflict && data.conflicts}
-	<AppTitle title="Title {data.data.id} - MangaDex" />
-	<ConflictLayout conflicts={data.conflicts} bind:ingnoreConflict />
-{:else}
-	<NoConflictLayout {data}>
-		{@render children?.()}
-	</NoConflictLayout>
+{#if $query.isLoading}
+	<AppTitle title="Loading chapter... | MangaDex" />
+	<LoadingPage />
+{:else if $query.isSuccess}
+	<AfterLoadingLayout data={$query.data}>
+		{@render children()}
+	</AfterLoadingLayout>
+{:else if $query.isError}
+	<PageError
+		message={$query.error.message}
+		retry={() => {
+			$query.refetch();
+		}}
+	/>
 {/if}

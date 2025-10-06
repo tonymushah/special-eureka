@@ -26,11 +26,12 @@
 </script>
 
 <div
-	class="layout"
+	class="layout chapter-element"
 	class:isNotLogged={!$isLogged}
 	class:haveBeenRead
 	class:haveNotBeenRead={!haveBeenRead && $isLogged}
 	class:hasImages={$download_state_images.hasImages}
+	data-chapter-id={id}
 	style="--status-left: {$download_state_images.left}; --status-right: {$download_state_images.right};"
 >
 	<div class="state">
@@ -140,5 +141,12 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
+	}
+	.chapter-element:global([data-selecto-selected]) {
+		background-color: color-mix(in srgb, var(--primary) 50%, transparent 50%);
+		-webkit-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		user-select: none;
 	}
 </style>

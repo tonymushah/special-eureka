@@ -6,22 +6,21 @@
 		toMangaListParams,
 		type MangaSearchParams
 	} from "@mangadex/componnents/manga/search/form/state";
-	import Title from "@mangadex/componnents/theme/texts/title/Title.svelte";
+	import PageTitle from "@mangadex/componnents/pages/PageTitle.svelte";
+	import goto_sub_menu from "@mangadex/componnents/sidebar/goto_sub_menu";
 	import defaultContentProfile from "@mangadex/content-profile/graphql/defaultProfile";
 	import type { MangaListParams } from "@mangadex/gql/graphql";
-	import { derived, get, writable } from "svelte/store";
-	import type { PageData } from "./$types";
-	import SearchContent from "./SearchContent.svelte";
 	import pageLimit from "@mangadex/stores/page-limit";
-	import { setContextMenuContext } from "@special-eureka/core/utils/contextMenuContext";
+	import defaultContextMenuContent from "@mangadex/utils/defaultContextMenuContent";
 	import contextMenu, {
 		ContextMenuItemProvider
 	} from "@special-eureka/core/commands/contextMenu";
-	import defaultContextMenuContent from "@mangadex/utils/defaultContextMenuContent";
-	import goto_sub_menu from "@mangadex/componnents/sidebar/goto_sub_menu";
-	import { delay } from "lodash";
-	import PageTitle from "@mangadex/componnents/pages/PageTitle.svelte";
 	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
+	import { setContextMenuContext } from "@special-eureka/core/utils/contextMenuContext";
+	import { delay } from "lodash";
+	import { derived, get, writable } from "svelte/store";
+	import type { PageData } from "./$types";
+	import SearchContent from "./SearchContent.svelte";
 
 	interface Props {
 		data: PageData;

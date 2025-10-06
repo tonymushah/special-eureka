@@ -1,21 +1,21 @@
 <script lang="ts">
+	import Fetching from "@mangadex/componnents/search/content/Fetching.svelte";
+	import HasNext from "@mangadex/componnents/search/content/HasNext.svelte";
+	import NothingToShow from "@mangadex/componnents/search/content/NothingToShow.svelte";
 	import type { CurrentLoggedLists } from "@mangadex/gql/graphql";
 	import pageLimit from "@mangadex/stores/page-limit";
 	import type AbstractSearchResult from "@mangadex/utils/searchResult/AbstractSearchResult";
 	import { createInfiniteQuery, type CreateInfiniteQueryOptions } from "@tanstack/svelte-query";
+	import { getContextClient } from "@urql/svelte";
+	import { debounce } from "lodash";
+	import { onDestroy } from "svelte";
 	import { derived as der, get } from "svelte/store";
+	import { ActionMode } from ".";
 	import type { CurrentUserCustomListItemData } from "./content";
 	import executeSearchQuery from "./content";
-	import { getContextClient } from "@urql/svelte";
-	import { ActionMode } from ".";
-	import { debounce } from "lodash";
-	import { mutation } from "./query";
 	import CustomListCheckbox from "./CustomListCheckbox.svelte";
-	import { onDestroy } from "svelte";
-	import Fetching from "@mangadex/componnents/search/content/Fetching.svelte";
-	import HasNext from "@mangadex/componnents/search/content/HasNext.svelte";
-	import NothingToShow from "@mangadex/componnents/search/content/NothingToShow.svelte";
 	import MakeANewList from "./MakeANewList.svelte";
+	import { mutationQueryMutation } from "./mutation";
 
 	const client = getContextClient();
 
@@ -59,32 +59,23 @@
 	let query = createInfiniteQuery(() => $queryOptions);
 
 	let selectedListMap = $state(new Map<string, ActionMode>());
+
 	$effect.pre(() => {
 		mutate = async (manga_id: string) => {
 			isMutating = true;
 			try {
-				const addTo = Array.from(
-					selectedListMap
-						.entries()
-						.filter(([_, mode]) => mode == ActionMode.Add)
-						.map(([id, _]) => id)
+				await $mutationQueryMutation.mutateAsync(
+					{
+						selectedListMap,
+						title: manga_id,
+						client
+					},
+					{
+						onSettled() {
+							$query.refetch();
+						}
+					}
 				);
-				const removeFrom = Array.from(
-					selectedListMap
-						.entries()
-						.filter(([_, mode]) => mode == ActionMode.Remove)
-						.map(([id, _]) => id)
-				);
-				const res = await client
-					.mutation(mutation, {
-						addTo,
-						removeFrom,
-						manga_id
-					})
-					.toPromise();
-				if (res.error) {
-					throw res.error;
-				}
 			} finally {
 				isMutating = false;
 			}

@@ -18,7 +18,11 @@ export const anyChapterSub = graphql(`
 export const mutateReadMarkersBatch = graphql(`
 	mutation mutateReadMarkersBatch($unreads: [UUID!]!, $read: [UUID!]!, $updateHistory: Boolean) {
 		readMarker {
-			readMarkersBatch(chapterIdsRead: $read, chapterIdsUnread: $unreads, updateHistory: $updateHistory)
+			readMarkersBatch(
+				chapterIdsRead: $read
+				chapterIdsUnread: $unreads
+				updateHistory: $updateHistory
+			)
 		}
 	}
 `);

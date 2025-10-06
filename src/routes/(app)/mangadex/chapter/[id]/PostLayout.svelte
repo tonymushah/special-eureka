@@ -53,6 +53,7 @@
 <script lang="ts">
 	/// TODO add fixed mangareading style
 	/// TODO Add cached chapter double page context data
+	import { dev } from "$app/environment";
 	import {
 		CurrentChapterData,
 		CurrentChapterGroup,
@@ -86,11 +87,11 @@
 	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
 	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
 	import { getContextClient } from "@urql/svelte";
-	import { untrack } from "svelte";
-	import { derived, get, toStore, writable } from "svelte/store";
-	import type { LayoutData } from "./$types";
-	import { dev } from "$app/environment";
 	import { delay } from "lodash";
+	import { derived, get, toStore, writable } from "svelte/store";
+	import type { LayoutData } from "./layout.context";
+	import { addListenerToChapterThreadEventTarget } from "@mangadex/componnents/chapter/page/contexts/previousNextEventTarget";
+	import { openUrl } from "@tauri-apps/plugin-opener";
 
 	interface Props {
 		data: LayoutData;
@@ -243,6 +244,18 @@
 				addErrorToast("Cannot fetch chapter comments data", e);
 			});
 	});
+	$effect(() =>
+		addListenerToChapterThreadEventTarget(() => {
+			const threadUrl = $currentChapterData.thread?.threadUrl;
+			if (threadUrl) {
+				openUrl(threadUrl).catch((e) => {
+					addErrorToast("Error on opening url", e);
+				});
+			} else {
+				addErrorToast("This chapter has no forum thread", null);
+			}
+		})
+	);
 </script>
 
 <AppTitle

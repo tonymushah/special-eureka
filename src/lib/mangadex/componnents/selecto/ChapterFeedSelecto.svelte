@@ -1,3 +1,9 @@
+<script lang="ts" module>
+	const canSelect = writable(false);
+
+	export const canSelect_ = readonly(canSelect);
+</script>
+
 <script lang="ts">
 	import "./styles.css";
 	import SelectionArea from "@viselect/vanilla";
@@ -5,6 +11,10 @@
 	import { uniq } from "lodash";
 	import { openSelectoDialog } from "./ChapterFeedSelectoDialog.svelte";
 	import { scrollElementId } from "../layout/scrollElement";
+	import { getCurrentWebviewWindow } from "@tauri-apps/api/webviewWindow";
+	import { onDestroy, onMount } from "svelte";
+	import type { UnlistenFn } from "@tauri-apps/api/event";
+	import { readonly, writable } from "svelte/store";
 
 	interface Props {
 		container: HTMLElement | undefined;
@@ -20,7 +30,6 @@
 		useDialog = true,
 		onEnd
 	}: Props = $props();
-	let canSelect = $state(false);
 	let selected_mangas = $derived(uniq(selectedMangas));
 	let selected_chapters = $derived(uniq(selectedChapters));
 	const selectionAreaClass = "chapter-feed-selecto-area";
@@ -39,7 +48,7 @@
 		selectedMangas = [];
 	}
 	$effect(() => {
-		if (container && canSelect) {
+		if (container && $canSelect) {
 			cleatSelecteds();
 			container.style.userSelect = "none";
 			(() => {
@@ -104,14 +113,27 @@
 			};
 		}
 	});
+	const currentWindow = getCurrentWebviewWindow();
+	let unlistens: UnlistenFn[] = [];
+	onMount(async () => {
+		const unlisten = await currentWindow.onFocusChanged(({ payload: isFocused }) => {
+			if (isFocused == false) {
+				$canSelect = false;
+			}
+		});
+		unlistens.push(unlisten);
+	});
+	onDestroy(() => {
+		unlistens.forEach((u) => u());
+	});
 </script>
 
 <svelte:window
 	onkeydown={(e) => {
 		if (e.key == "Control") {
 			e.preventDefault();
-			canSelect = true;
-		} else if (e.key == "a" && canSelect && container) {
+			$canSelect = true;
+		} else if (e.key == "a" && $canSelect && container) {
 			e.preventDefault();
 			[".manga-element", ".chapter-element"]
 				.map((d) => container.querySelectorAll(d))
@@ -130,10 +152,10 @@
 	}}
 	onkeyup={(e) => {
 		if (e.key == "Control") {
-			canSelect = false;
+			$canSelect = false;
 		}
 	}}
 	onfocusout={(e) => {
-		canSelect = false;
+		$canSelect = false;
 	}}
 />

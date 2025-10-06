@@ -3,24 +3,27 @@ import { client } from "@mangadex/gql/urql";
 import { readable, type Readable } from "svelte/store";
 
 export type ChapterReadMarkersItem = {
-	chapter: string,
-	read: boolean
+	chapter: string;
+	read: boolean;
 };
 
-export const listenToAnyChapterReadMarkers = readable<ChapterReadMarkersItem | undefined>(undefined, (set) => {
-	const sub = client.subscription(anyChapterSub, {}).subscribe((d) => {
-		if (d.data) {
-			const item = d.data.watchReadMarkers;
-			set({
-				chapter: item.chapter,
-				read: item.read
-			});
-		}
-	});
-	return () => {
-		sub.unsubscribe()
+export const listenToAnyChapterReadMarkers = readable<ChapterReadMarkersItem | undefined>(
+	undefined,
+	(set) => {
+		const sub = client.subscription(anyChapterSub, {}).subscribe((d) => {
+			if (d.data) {
+				const item = d.data.watchReadMarkers;
+				set({
+					chapter: item.chapter,
+					read: item.read
+				});
+			}
+		});
+		return () => {
+			sub.unsubscribe();
+		};
 	}
-});
+);
 
 export default function chapterReadState(id: string): Readable<boolean> {
 	return readable(false, (set) => {
@@ -31,8 +34,7 @@ export default function chapterReadState(id: string): Readable<boolean> {
 			}
 		});
 		return () => {
-			sub.unsubscribe()
-		}
+			sub.unsubscribe();
+		};
 	});
 }
-

@@ -71,12 +71,12 @@ export function offlinePresenceQueryKey(id: string) {
 	return ["manga", id, "offline-presence"];
 }
 
-export const invalidateMangaOfflinePresence = (async (id: string) => {
+export const invalidateMangaOfflinePresence = async (id: string) => {
 	const queryKey = offlinePresenceQueryKey(id);
 	await mangadexQueryClient.refetchQueries({
 		queryKey
 	});
-});
+};
 
 export const downloadMutationQuery = createMutation(() => (
 	{
@@ -125,7 +125,7 @@ export const removeMutation = createMutation(() => (
 			return res;
 		},
 		onSettled(data, error, variables, context) {
-			invalidateMangaOfflinePresence(variables)
+			invalidateMangaOfflinePresence(variables);
 		},
 		onError(error, variables, context) {
 			addErrorToast("Cannot remove title", error);
@@ -158,7 +158,7 @@ export const cancelMutation = createMutation(() => (
 			return res;
 		},
 		onSettled(data, error, variables, context) {
-			invalidateMangaOfflinePresence(variables)
+			invalidateMangaOfflinePresence(variables);
 		},
 		onError(error, variables, context) {
 			addErrorToast("Cannot cancel download", error);
@@ -240,7 +240,13 @@ function subOpManga(id: string, deferred = false) {
 	});
 }
 
-export default function mangaDownloadState({ id, deferred }: { id: string, deferred?: boolean }): Readable<MangaDownloadState> {
+export default function mangaDownloadState({
+	id,
+	deferred
+}: {
+	id: string;
+	deferred?: boolean;
+}): Readable<MangaDownloadState> {
 	const dState = downloadStateQuery(id);
 	return derived([subOpManga(id, deferred), toStore(() => dState)], ([$sub, $initState], set) => {
 		const res = (() => {
@@ -257,7 +263,11 @@ export default function mangaDownloadState({ id, deferred }: { id: string, defer
 				} else if (data.isOfflineAppStateNotLoaded) {
 					return MangaDownloadState.OfflineAppStateNotLoaded;
 				} else if (data.isPending) {
-					if ($initState.data?.error || $initState.error || $initState.data?.data?.downloadState.manga.hasFailed) {
+					if (
+						$initState.data?.error ||
+						$initState.error ||
+						$initState.data?.data?.downloadState.manga.hasFailed
+					) {
 						return MangaDownloadState.Error;
 					} else if ($initState.data?.data?.downloadState.manga) {
 						return MangaDownloadState.Done;
@@ -268,7 +278,11 @@ export default function mangaDownloadState({ id, deferred }: { id: string, defer
 			} else if ($sub?.error) {
 				return MangaDownloadState.Error;
 			}
-			if ($initState.data?.error || $initState.error || $initState.data?.data?.downloadState.manga.hasFailed) {
+			if (
+				$initState.data?.error ||
+				$initState.error ||
+				$initState.data?.data?.downloadState.manga.hasFailed
+			) {
 				return MangaDownloadState.Error;
 			} else if ($initState.data?.data?.downloadState.manga) {
 				return MangaDownloadState.Done;
@@ -277,22 +291,31 @@ export default function mangaDownloadState({ id, deferred }: { id: string, defer
 			}
 		})();
 		set(res);
-	}, MangaDownloadState.Pending as MangaDownloadState);
+	},
+		MangaDownloadState.Pending as MangaDownloadState
+	);
 }
 
-export function isMangaDownloading(param: { id: string, deferred?: boolean }): Readable<boolean> {
-	return derived(mangaDownloadState(param), (result) => {
-		switch (result) {
-			case MangaDownloadState.Downloading:
-				return true;
-			default:
-				return false;
-				break;
-		}
-	}, false);
+export function isMangaDownloading(param: { id: string; deferred?: boolean }): Readable<boolean> {
+	return derived(
+		mangaDownloadState(param),
+		(result) => {
+			switch (result) {
+				case MangaDownloadState.Downloading:
+					return true;
+				default:
+					return false;
+					break;
+			}
+		},
+		false
+	);
 }
 
-export function mangaDownloadingError(param: { id: string, deferred?: boolean }): Readable<Error | undefined> {
+export function mangaDownloadingError(param: {
+	id: string;
+	deferred?: boolean;
+}): Readable<Error | undefined> {
 	return derived(subOpManga(param.id, param.deferred), (result) => {
 		if (result?.error) {
 			return result?.error;
@@ -302,29 +325,37 @@ export function mangaDownloadingError(param: { id: string, deferred?: boolean })
 	});
 }
 
-export function isMangaDownloaded(param: { id: string, deferred?: boolean }) {
-	return derived(mangaDownloadState(param), (result) => {
-		switch (result) {
-			case MangaDownloadState.Done:
-				return true;
+export function isMangaDownloaded(param: { id: string; deferred?: boolean }) {
+	return derived(
+		mangaDownloadState(param),
+		(result) => {
+			switch (result) {
+				case MangaDownloadState.Done:
+					return true;
 
-			default:
-				return false;
-		}
-	}, false);
+				default:
+					return false;
+			}
+		},
+		false
+	);
 }
 
-export function hasMangaDownloadingFailed(param: { id: string, deferred?: boolean }) {
-	return derived(mangaDownloadState(param), (result) => {
-		switch (result) {
-			case MangaDownloadState.Error:
-				return true;
-			case MangaDownloadState.Canceled:
-				return true;
-			default:
-				return false;
-		}
-	}, false);
+export function hasMangaDownloadingFailed(param: { id: string; deferred?: boolean }) {
+	return derived(
+		mangaDownloadState(param),
+		(result) => {
+			switch (result) {
+				case MangaDownloadState.Error:
+					return true;
+				case MangaDownloadState.Canceled:
+					return true;
+				default:
+					return false;
+			}
+		},
+		false
+	);
 }
 
 /*

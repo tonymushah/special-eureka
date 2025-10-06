@@ -5,7 +5,7 @@ import { createMutation } from "@tanstack/svelte-query";
 
 export const deleteCustomListGQLMutation = graphql(`
 	mutation deleteCustomListMutation($id: UUID!) {
-		customList{
+		customList {
 			delete(id: $id)
 		}
 	}

@@ -23,7 +23,7 @@ export const unfollowGroupGQLMutation = graphql(`
 
 export const isFollowingGroupQuery = graphql(`
 	query isFollowingScanlationGroupQuery($id: UUID!) {
-		follows{
+		follows {
 			isFollowingGroup(id: $id)
 		}
 	}
@@ -68,8 +68,6 @@ export default function isFollowingGroup(id: string, options?: {
 			}).toPromise();
 			if (res.error) {
 				throw res.error;
-			} else {
-				return res.data?.follows.isFollowingGroup ?? false
 			}
 		}
 	}), () => mangadexQueryClient);
@@ -84,11 +82,24 @@ export default function isFollowingGroup(id: string, options?: {
 		update(updater) {
 			const value = updater(get(queryDerived));
 			setFollowingStatus(value, id, toast, query, options);
-		},
-	}
+		}
+	};
 }
 
-function setFollowingStatus(value: boolean, id: string, toast: boolean, query: CreateQueryResult, options: { onSettled?: (error: Error | null, variables: string) => void; onError?: (error: Error, variables: string) => void; onSucess?: (variables: string) => void; toast?: boolean; } | undefined) {
+function setFollowingStatus(
+	value: boolean,
+	id: string,
+	toast: boolean,
+	query: CreateQueryResult,
+	options:
+		| {
+			onSettled?: (error: Error | null, variables: string) => void;
+			onError?: (error: Error, variables: string) => void;
+			onSucess?: (variables: string) => void;
+			toast?: boolean;
+		}
+		| undefined
+) {
 	if (value) {
 		followGroupMutation.mutate(id, {
 			onError(error, variables, context) {
@@ -112,7 +123,7 @@ function setFollowingStatus(value: boolean, id: string, toast: boolean, query: C
 			onSettled(data, error, variables, context) {
 				query.refetch()
 				options?.onSettled?.(error, variables);
-			},
+			}
 		});
 	} else {
 		unfollowGroupMutation.mutate(id, {
@@ -137,7 +148,7 @@ function setFollowingStatus(value: boolean, id: string, toast: boolean, query: C
 			onSettled(data, error, variables, context) {
 				query.refetch()
 				options?.onSettled?.(error, variables);
-			},
+			}
 		});
 	}
 }

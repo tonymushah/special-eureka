@@ -5,17 +5,25 @@ import { getContext, setContext } from "svelte";
 
 const KEY = "context-menu-context";
 
-export function setContextMenuContext(_items: (() => ContextMenuItem[]) | ContextMenuItem[], append?: boolean) {
-	let items: (() => ContextMenuItem[]);
+export function setContextMenuContext(
+	_items: (() => ContextMenuItem[]) | ContextMenuItem[],
+	append?: boolean
+) {
+	let items: () => ContextMenuItem[];
 	if (isArray(_items)) {
 		items = () => _items;
 	} else {
 		items = _items;
 	}
 	const parentContext = getContextMenuContext();
-	return setContext(KEY, append ? () => {
-		return [...parentContext(), ...items()]
-	} : items);
+	return setContext(
+		KEY,
+		append
+			? () => {
+					return [...parentContext(), ...items()];
+				}
+			: items
+	);
 }
 
 export function getContextMenuContext(): () => ContextMenuItem[] {
@@ -28,14 +36,16 @@ export function getContextMenuContext(): () => ContextMenuItem[] {
 }
 
 export type RegisterContextMenuEventOptions = {
-	additionalMenus?: (() => ContextMenuItem[]) | ContextMenuItem[]
+	additionalMenus?: (() => ContextMenuItem[]) | ContextMenuItem[];
 	includeContext?: boolean;
 	preventDefault?: boolean;
 	stopPropagation?: boolean;
-	addSeparator?: boolean
+	addSeparator?: boolean;
 };
 
-export default function registerContextMenuEvent(options?: RegisterContextMenuEventOptions): (e: MouseEvent) => any {
+export default function registerContextMenuEvent(
+	options?: RegisterContextMenuEventOptions
+): (e: MouseEvent) => any {
 	const includeContext = options?.includeContext ?? true;
 	const contextMenuFunc = includeContext ? getContextMenuContext() : () => [];
 	const addSeparator = options?.addSeparator ?? true;
@@ -46,7 +56,7 @@ export default function registerContextMenuEvent(options?: RegisterContextMenuEv
 		if (options?.stopPropagation ?? true) {
 			e.stopPropagation();
 		}
-		let menu = contextMenuFunc();
+		const menu = contextMenuFunc();
 		if (options?.additionalMenus) {
 			if (addSeparator) {
 				menu.push(ContextMenuItemProvider.seperator());
@@ -57,6 +67,6 @@ export default function registerContextMenuEvent(options?: RegisterContextMenuEv
 				menu.push(...options.additionalMenus);
 			}
 		}
-		await contextMenu(menu, e)
-	}
+		await contextMenu(menu, e);
+	};
 }

@@ -10,8 +10,10 @@ const sub_read = readable(false, (set) => {
 		if (blur) {
 			set(blur);
 		}
-	})
-	return () => { sub.unsubscribe() }
+	});
+	return () => {
+		sub.unsubscribe();
+	};
 });
 
 export const forcePort443Mutation = createMutation(() => ({

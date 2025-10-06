@@ -66,7 +66,7 @@ export default function manga_reading_status(
 	}
 ): Readable<ReadingStatus | null> {
 	return readable<ReadingStatus | null>(options.initValue ?? null, (set) => {
-		let sub = client
+		const sub = client
 			.subscription(subscription, {
 				id
 			})

@@ -140,7 +140,7 @@ export const removeMutation = createMutation(() => (
 				.toPromise();
 		},
 		onSettled(data, error, variables, context) {
-			invalidateChapterOfflinePresence(variables)
+			invalidateChapterOfflinePresence(variables);
 		},
 		onSuccess(data, variables, context) {
 			addToast({
@@ -196,7 +196,7 @@ export const downloadMutation = createMutation(
 			return res;
 		},
 		onSettled(data, error, variables, context) {
-			invalidateChapterOfflinePresence(variables.id)
+			invalidateChapterOfflinePresence(variables.id);
 		},
 		onError(error, variables, context) {
 			addErrorToast("Error on downloading title", error);
@@ -210,8 +210,14 @@ type ChapterSubOpType = OperationResult<
 	ChapterDownloadStateSubscriptionVariables
 >;
 
-export function chapterDownloadStateRaw({ id, deferred }: { id: string, deferred?: boolean }): Readable<ChapterSubOpType | undefined> {
-	return subOpChapter(id, deferred)
+export function chapterDownloadStateRaw({
+	id,
+	deferred
+}: {
+	id: string;
+	deferred?: boolean;
+}): Readable<ChapterSubOpType | undefined> {
+	return subOpChapter(id, deferred);
 }
 
 export function isChapterPresentRaw(id: string) {
@@ -231,7 +237,13 @@ export function isChapterPresentRaw(id: string) {
 	);
 }
 
-export default function chapterDownloadState({ id, deferred }: { id: string, deferred?: boolean }): Readable<ChapterDownloadState> {
+export default function chapterDownloadState({
+	id,
+	deferred
+}: {
+	id: string;
+	deferred?: boolean;
+}): Readable<ChapterDownloadState> {
 	const isPresentRaw = isChapterPresentRaw(id);
 	return derived([toStore(() => isPresentRaw), chapterDownloadStateRaw({ id, deferred }), toStore(() => removeMutation)], ([$isChapterPresentRaw, $rawState, $removeMutation], set, update) => {
 		const res = (() => {
@@ -271,27 +283,32 @@ export default function chapterDownloadState({ id, deferred }: { id: string, def
 			}
 		})();
 		set(res);
-	}, ChapterDownloadState.Pending as ChapterDownloadState);
+	},
+		ChapterDownloadState.Pending as ChapterDownloadState
+	);
 }
 
-export function isChapterDownloading(param: { id: string, deferred?: boolean }): Readable<boolean> {
-	return derived(chapterDownloadStateRaw(param), (result) => {
-		if (result?.data?.watchChapterDownloadState.downloading) {
-			return true
-		} else {
-			return false;
-		}
-	}, false);
+export function isChapterDownloading(param: { id: string; deferred?: boolean }): Readable<boolean> {
+	return derived(
+		chapterDownloadStateRaw(param),
+		(result) => {
+			if (result?.data?.watchChapterDownloadState.downloading) {
+				return true;
+			} else {
+				return false;
+			}
+		},
+		false
+	);
 }
 
-export function chapterDowloadingImageState(param: { id: string, deferred?: boolean }) {
+export function chapterDowloadingImageState(param: { id: string; deferred?: boolean }) {
 	return derived(chapterDownloadStateRaw(param), (result) => {
 		return result?.data?.watchChapterDownloadState.downloading?.fetchingImage;
 	});
-
 }
 
-export function chapterDownloadingError(param: { id: string, deferred?: boolean }) {
+export function chapterDownloadingError(param: { id: string; deferred?: boolean }) {
 	return derived(chapterDownloadStateRaw(param), (result) => {
 		if (result?.error) {
 			return result?.error;
@@ -301,7 +318,7 @@ export function chapterDownloadingError(param: { id: string, deferred?: boolean 
 	});
 }
 
-export function hasChapterDownloadingFailed(param: { id: string, deferred?: boolean }) {
+export function hasChapterDownloadingFailed(param: { id: string; deferred?: boolean }) {
 	return derived(chapterDownloadState(param), (result) => {
 		switch (result) {
 			case ChapterDownloadState.Error:
@@ -314,7 +331,7 @@ export function hasChapterDownloadingFailed(param: { id: string, deferred?: bool
 	});
 }
 
-export function chapterDownloadStateImages(param: { id: string, deferred?: boolean }) {
+export function chapterDownloadStateImages(param: { id: string; deferred?: boolean }) {
 	return derived(
 		[chapterDowloadingImageState(param), isChapterDownloading(param)],
 		([_state, $is_downloading]) => {
@@ -338,7 +355,7 @@ export function chapterDownloadStateImages(param: { id: string, deferred?: boole
 	);
 }
 
-export function isChapterDownloaded(param: { id: string, deferred?: boolean }) {
+export function isChapterDownloaded(param: { id: string; deferred?: boolean }) {
 	return derived(chapterDownloadState(param), (result) => {
 		switch (result) {
 			case ChapterDownloadState.Done:

@@ -74,7 +74,8 @@
 						<div>
 							<h3 use:melt={$title(id)}>
 								{data.title}
-								<span data-toast-variant={data.variant ?? "accent"} class="status"></span>
+								<span data-toast-variant={data.variant ?? "accent"} class="status"
+								></span>
 							</h3>
 							<div use:melt={$description(id)} class="description">
 								{data.description}

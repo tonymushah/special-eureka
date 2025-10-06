@@ -83,6 +83,7 @@
 	}
 	p.label {
 		font-size: var(--context-menu-font-size);
+		text-wrap: nowrap;
 	}
 	p {
 		margin: 0px;

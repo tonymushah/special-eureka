@@ -11,8 +11,10 @@ const sub_read = readable(ContentProfileWarningMode.Always, (set) => {
 		if (blur) {
 			set(blur);
 		}
-	})
-	return () => { sub.unsubscribe() }
+	});
+	return () => {
+		sub.unsubscribe();
+	};
 });
 
 export const contentProfileWarningModeMutation = createMutation(() => ({

@@ -1,12 +1,10 @@
 <script lang="ts">
 	import ErrorComponent from "@mangadex/componnents/ErrorComponent.svelte";
-	import ChapterFeedSelecto from "@mangadex/componnents/selecto/ChapterFeedSelecto.svelte";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import defaultContentProfile from "@mangadex/content-profile/graphql/defaultProfile";
 	import { mangadexQueryClient } from "@mangadex/index";
 	import { getTitleLayoutData } from "@mangadex/routes/title/[id]/layout.context";
 	import { getContextReadChapterMarkers } from "@mangadex/stores/read-markers/context";
-	import { readMarkers as readMarkersMutation } from "@mangadex/stores/read-markers/mutations";
 	import { isLogged } from "@mangadex/utils/auth";
 	import { createQuery } from "@tanstack/svelte-query";
 	import type { UnlistenFn } from "@tauri-apps/api/event";
@@ -21,6 +19,9 @@
 	import { fetchChapters, fetchComments } from "./utils";
 	import { getChapterStoreContext } from "./utils/chapterStores";
 	import mangaAggregateQuery from "./utils/query";
+	import { readMarkers as readMarkersMutation } from "@mangadex/stores/read-markers/mutations";
+	import ChapterFeedSelecto from "@mangadex/componnents/selecto/ChapterFeedSelecto.svelte";
+	import { hasConflicts } from "@mangadex/utils/conflicts";
 
 	const chaptersStore = getChapterStoreContext();
 	const client = getContextClient();
@@ -93,7 +94,7 @@
 				const ids: string[] =
 					query?.data?.manga.aggregate.chunked.flatMap((d) => d.ids) ?? [];
 				if (ids.length > 0)
-					fetchChapters(ids)
+					fetchChapters(ids, !hasConflicts(__res.conflicts))
 						.then(async (cs) => {
 							if (cs) chaptersStore.addByBatch(cs);
 							const comments = await fetchComments(ids);
@@ -333,6 +334,9 @@
 		height: 200px;
 		border: 3px solid var(--mid-tone);
 		border-radius: 6px;
+	}
+	.content {
+		padding-top: 12px;
 	}
 	.right {
 		display: flex;

@@ -5,6 +5,7 @@
 	import { onMount } from "svelte";
 	import openTitle from "@mangadex/utils/links/title/[id]";
 	import type { SwiperOptions } from "swiper/types";
+	import { readManga } from "@mangadex/componnents/manga/read/ReadDialog.svelte";
 
 	interface Props {
 		mangas: StaffPicksTitle[];
@@ -57,6 +58,9 @@
 					{description}
 					onmoreInfoClick={() => {
 						openTitle(id);
+					}}
+					onreadClick={() => {
+						readManga(id);
 					}}
 					mangaId={id}
 				/>

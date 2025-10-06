@@ -6,10 +6,10 @@ import { createMutation } from "@tanstack/svelte-query";
 
 const getListVersionMutation = graphql(`
 	query getCustomListVersion1($id: UUID!) {
-		customList{
+		customList {
 			get(id: $id, private: true) {
 				id
-				attributes{
+				attributes {
 					version
 				}
 			}
@@ -18,13 +18,13 @@ const getListVersionMutation = graphql(`
 `);
 
 const updateVisibility = graphql(`
-	mutation updateCustomListVisibility1 ($id: UUID!, $visibility: CustomListVisibility!, $version: Int!) {
+	mutation updateCustomListVisibility1(
+		$id: UUID!
+		$visibility: CustomListVisibility!
+		$version: Int!
+	) {
 		customList {
-			update(params:  {
-			   listId: $id,
-			   version: $version,
-			   visibility: $visibility
-			}) {
+			update(params: { listId: $id, version: $version, visibility: $visibility }) {
 				id
 			}
 		}

@@ -10,8 +10,10 @@ const sub_read = readable(true, (set) => {
 		if (blur) {
 			set(blur);
 		}
-	})
-	return () => { sub.unsubscribe() }
+	});
+	return () => {
+		sub.unsubscribe();
+	};
 });
 
 export const contentProfileBlurMutation = createMutation(() => ({

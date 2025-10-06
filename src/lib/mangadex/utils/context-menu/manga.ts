@@ -338,7 +338,7 @@ export default function mangaElementContextMenu({
 										openNewWindow(
 											currentLocationWithNewPath(
 												route("/mangadex/author/[id]", {
-													id
+													id: author.id
 												})
 											)
 										);
@@ -380,7 +380,7 @@ export default function mangaElementContextMenu({
 										openNewWindow(
 											currentLocationWithNewPath(
 												route("/mangadex/author/[id]", {
-													id
+													id: author.id
 												})
 											)
 										);
