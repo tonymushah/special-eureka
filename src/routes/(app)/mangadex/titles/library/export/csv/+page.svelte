@@ -42,7 +42,7 @@
 		});
 		try {
 			if (typeof exportPath == "string") {
-				await $exportLibraryToCSV.mutateAsync(
+				await exportLibraryToCSV.mutateAsync(
 					{ ...options, exportPath },
 					{
 						onSettled(data, error, variables, context) {
@@ -88,7 +88,7 @@
 				type="checkbox"
 				class="checkbox"
 				bind:checked={options.excludeContentProfile}
-				disabled={$exportLibraryToCSV.isPending}
+				disabled={exportLibraryToCSV.isPending}
 				defaultChecked
 			/>
 			<label for="exclude-content-profile">Exclude content profile</label>
@@ -98,7 +98,7 @@
 				id="include-score"
 				type="checkbox"
 				class="checkbox"
-				disabled={$exportLibraryToCSV.isPending}
+				disabled={exportLibraryToCSV.isPending}
 				bind:checked={options.includeScores}
 			/>
 			<label for="include-score">Include your score</label>
@@ -108,7 +108,7 @@
 				id="include-read-volumes"
 				type="checkbox"
 				class="checkbox"
-				disabled={$exportLibraryToCSV.isPending}
+				disabled={exportLibraryToCSV.isPending}
 				bind:checked={options.includeReadVolumes}
 			/>
 			<label for="include-read-volumes">Include read volumes</label>
@@ -118,7 +118,7 @@
 				id="include-read-chapters"
 				type="checkbox"
 				class="checkbox"
-				disabled={$exportLibraryToCSV.isPending}
+				disabled={exportLibraryToCSV.isPending}
 				bind:checked={options.includeReadChapters}
 			/>
 			<label for="include-read-chapters">Include read chapters</label>
@@ -129,7 +129,7 @@
 				type="checkbox"
 				class="checkbox"
 				bind:checked={options.includeMdScore}
-				disabled={$exportLibraryToCSV.isPending}
+				disabled={exportLibraryToCSV.isPending}
 				defaultChecked
 			/>
 			<label for="include-mangadex-scores">Include MangaDex Scores</label>
@@ -140,7 +140,7 @@
 				type="checkbox"
 				class="checkbox"
 				bind:checked={options.includeForumUrl}
-				disabled={$exportLibraryToCSV.isPending}
+				disabled={exportLibraryToCSV.isPending}
 				defaultChecked
 			/>
 			<label for="include-forum-url">Include Forum Urls</label>
@@ -151,7 +151,7 @@
 				type="checkbox"
 				class="checkbox"
 				bind:checked={revealAfterFinish}
-				disabled={$exportLibraryToCSV.isPending}
+				disabled={exportLibraryToCSV.isPending}
 				defaultChecked
 			/>
 			<label for="reveal-after-finish">Reveal File After Finish</label>
@@ -161,7 +161,7 @@
 	<section class="actions" class:isLtr={!$isSidebarRtl}>
 		<PrimaryButton
 			isBase
-			disabled={$exportLibraryToCSV.isPending || !$isLogged}
+			disabled={exportLibraryToCSV.isPending || !$isLogged}
 			onclick={(e) => {
 				submitExport();
 			}}
@@ -177,7 +177,7 @@
 			onclick={(e) => {
 				options = defaultOptions();
 			}}
-			disabled={$exportLibraryToCSV.isPending}
+			disabled={exportLibraryToCSV.isPending}
 		>
 			<div class="button-content">
 				<div class="icon">

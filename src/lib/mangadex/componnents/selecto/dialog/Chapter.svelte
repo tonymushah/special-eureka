@@ -34,25 +34,25 @@
 		<ButtonAccentOnlyLabel
 			variant="3"
 			label="Download"
-			disabled={$multiChapterDownload.isPending && $removeMultipleChapterMutation.isPending}
+			disabled={multiChapterDownload.isPending && removeMultipleChapterMutation.isPending}
 			onclick={() => {
-				$multiChapterDownload.mutate(chapters);
+				multiChapterDownload.mutate(chapters);
 			}}
 		/>
 		<ButtonAccentOnlyLabel
 			variant="3"
-			disabled={$multiChapterDownload.isPending && $removeMultipleChapterMutation.isPending}
+			disabled={multiChapterDownload.isPending && removeMultipleChapterMutation.isPending}
 			label="Remove them locally"
 			onclick={() => {
-				$removeMultipleChapterMutation.mutate(chapters);
+				removeMultipleChapterMutation.mutate(chapters);
 			}}
 		/>
 		<ButtonAccentOnlyLabel
 			variant="3"
-			disabled={$exportIdsToTxt.isPending}
+			disabled={exportIdsToTxt.isPending}
 			label="Export ids as txt"
 			onclick={() => {
-				$exportIdsToTxt.mutateAsync(
+				exportIdsToTxt.mutateAsync(
 					{
 						uuids: chapters
 					},

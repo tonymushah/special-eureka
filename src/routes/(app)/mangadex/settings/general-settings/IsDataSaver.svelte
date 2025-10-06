@@ -6,7 +6,7 @@
 	<input
 		type="checkbox"
 		bind:checked={$isDataSaver}
-		disabled={$chapterQualityMutation.isPending}
+		disabled={chapterQualityMutation.isPending}
 		class="checkbox"
 	/>
 	<h3>Data Saver</h3>

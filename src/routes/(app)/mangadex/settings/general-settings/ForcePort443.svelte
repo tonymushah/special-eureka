@@ -6,7 +6,7 @@
 	<input
 		type="checkbox"
 		bind:checked={$forcePort443}
-		disabled={$forcePort443Mutation.isPending}
+		disabled={forcePort443Mutation.isPending}
 		class="checkbox"
 	/>
 	<h3>Use Port 443 for MangaDex@Home</h3>

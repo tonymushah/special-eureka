@@ -56,7 +56,7 @@
 		});
 		try {
 			if (typeof exportPath == "string") {
-				await $exportLibraryToMyAnimeList.mutateAsync(
+				await exportLibraryToMyAnimeList.mutateAsync(
 					{ ...options, exportPath },
 					{
 						onSettled(data, error, variables) {
@@ -74,7 +74,10 @@
 							}
 						},
 						onError(error) {
-							addErrorToast("Cannot export library as a My Anime List XML Import file", error);
+							addErrorToast(
+								"Cannot export library as a My Anime List XML Import file",
+								error
+							);
 						}
 					}
 				);
@@ -112,7 +115,7 @@
 
 <div class="export-layout">
 	<Title>Export as MyAnimeList</Title>
-	{#if $exportLibraryToMyAnimeList.error && !$exportLibraryToMyAnimeList.isPending}
+	{#if exportLibraryToMyAnimeList.error && !exportLibraryToMyAnimeList.isPending}
 		<div
 			transition:slide={{
 				axis: "y"
@@ -120,13 +123,13 @@
 		>
 			<ErrorComponent
 				label="Cannot export library"
-				error={$exportLibraryToMyAnimeList.error}
+				error={exportLibraryToMyAnimeList.error}
 				close={() => {
-					$exportLibraryToMyAnimeList.reset();
+					exportLibraryToMyAnimeList.reset();
 				}}
 			/>
 		</div>
-	{:else if $exportLibraryToMyAnimeList.isPending && $exportTaskEvent}
+	{:else if exportLibraryToMyAnimeList.isPending && $exportTaskEvent}
 		{@const c_state = $exportTaskEvent.state}
 		<div
 			transition:slide={{
@@ -166,7 +169,7 @@
 		<FormInput
 			inputProps={{
 				id: user_id_input_id,
-				disabled: $exportLibraryToMyAnimeList.isPending,
+				disabled: exportLibraryToMyAnimeList.isPending,
 				required: true
 			}}
 			bind:value={options.userId}
@@ -177,7 +180,7 @@
 		<FormInput
 			inputProps={{
 				id: user_name_input_id,
-				disabled: $exportLibraryToMyAnimeList.isPending,
+				disabled: exportLibraryToMyAnimeList.isPending,
 				required: true
 			}}
 			bind:value={options.userName}
@@ -190,7 +193,7 @@
 				<label for={reading_id}>Reading: </label>
 				<select
 					bind:value={options.priorities.reading}
-					disabled={$exportLibraryToMyAnimeList.isPending}
+					disabled={exportLibraryToMyAnimeList.isPending}
 					id={reading_id}
 				>
 					<option value={MaltitlePriority.Low}>Low</option>
@@ -202,7 +205,7 @@
 				<label for={on_hold_id}>On-Hold: </label>
 				<select
 					bind:value={options.priorities.onHold}
-					disabled={$exportLibraryToMyAnimeList.isPending}
+					disabled={exportLibraryToMyAnimeList.isPending}
 					id={on_hold_id}
 				>
 					<option value={MaltitlePriority.Low}>Low</option>
@@ -214,7 +217,7 @@
 				<label for={planToRead_id}>Plan to Read: </label>
 				<select
 					bind:value={options.priorities.planToRead}
-					disabled={$exportLibraryToMyAnimeList.isPending}
+					disabled={exportLibraryToMyAnimeList.isPending}
 					id={planToRead_id}
 				>
 					<option value={MaltitlePriority.Low}>Low</option>
@@ -226,7 +229,7 @@
 				<label for={completed_id}>Completed: </label>
 				<select
 					bind:value={options.priorities.completed}
-					disabled={$exportLibraryToMyAnimeList.isPending}
+					disabled={exportLibraryToMyAnimeList.isPending}
 					id={completed_id}
 				>
 					<option value={MaltitlePriority.Low}>Low</option>
@@ -238,7 +241,7 @@
 				<label for={reReading_id}>Re-Reading: </label>
 				<select
 					bind:value={options.priorities.reReading}
-					disabled={$exportLibraryToMyAnimeList.isPending}
+					disabled={exportLibraryToMyAnimeList.isPending}
 					id={reReading_id}
 				>
 					<option value={MaltitlePriority.Low}>Low</option>
@@ -250,7 +253,7 @@
 				<label for={dropped_id}>Dropped: </label>
 				<select
 					bind:value={options.priorities.dropped}
-					disabled={$exportLibraryToMyAnimeList.isPending}
+					disabled={exportLibraryToMyAnimeList.isPending}
 					id={dropped_id}
 				>
 					<option value={MaltitlePriority.Low}>Low</option>
@@ -267,7 +270,7 @@
 				type="checkbox"
 				class="checkbox"
 				bind:checked={options.excludeContentProfile}
-				disabled={$exportLibraryToMyAnimeList.isPending}
+				disabled={exportLibraryToMyAnimeList.isPending}
 				defaultChecked
 			/>
 			<label for="exclude-content-profile">Exclude content profile</label>
@@ -278,7 +281,7 @@
 				type="checkbox"
 				class="checkbox"
 				bind:checked={options.hasAvailableChapters}
-				disabled={$exportLibraryToMyAnimeList.isPending}
+				disabled={exportLibraryToMyAnimeList.isPending}
 				defaultChecked
 			/>
 			<label for="has-available-chapter">Has available chapter</label>
@@ -288,7 +291,7 @@
 				id="include-score"
 				type="checkbox"
 				class="checkbox"
-				disabled={$exportLibraryToMyAnimeList.isPending}
+				disabled={exportLibraryToMyAnimeList.isPending}
 				bind:checked={options.includeScore}
 			/>
 			<label for="include-score">Include score</label>
@@ -298,7 +301,7 @@
 				id="include-read-volumes"
 				type="checkbox"
 				class="checkbox"
-				disabled={$exportLibraryToMyAnimeList.isPending}
+				disabled={exportLibraryToMyAnimeList.isPending}
 				bind:checked={options.includeReadVolumes}
 			/>
 			<label for="include-read-volumes">Include read volumes</label>
@@ -308,7 +311,7 @@
 				id="include-read-chapters"
 				type="checkbox"
 				class="checkbox"
-				disabled={$exportLibraryToMyAnimeList.isPending}
+				disabled={exportLibraryToMyAnimeList.isPending}
 				bind:checked={options.includeReadChapters}
 			/>
 			<label for="include-read-chapters">Include read chapters</label>
@@ -319,7 +322,7 @@
 				type="checkbox"
 				class="checkbox"
 				bind:checked={revealAfterFinish}
-				disabled={$exportLibraryToMyAnimeList.isPending}
+				disabled={exportLibraryToMyAnimeList.isPending}
 				defaultChecked
 			/>
 			<label for="reveal-after-finishi">Reveal File After Finish</label>
@@ -328,7 +331,7 @@
 	<section class="actions" class:isLtr={!$isSidebarRtl}>
 		<PrimaryButton
 			isBase
-			disabled={$exportLibraryToMyAnimeList.isPending || !$isLogged}
+			disabled={exportLibraryToMyAnimeList.isPending || !$isLogged}
 			onclick={(e) => {
 				submitExport();
 			}}
@@ -346,7 +349,7 @@
 			onclick={() => {
 				options = defaultOptions();
 			}}
-			disabled={$exportLibraryToMyAnimeList.isPending}
+			disabled={exportLibraryToMyAnimeList.isPending}
 		>
 			<div class="button-content">
 				<div class="icon">
@@ -358,13 +361,14 @@
 	</section>
 	<section class="notes">
 		<p>
-			<u>Note:</u> Since exporting your library sends a lot of requests to the MangaDex API, it is
+			<u>Note:</u> Since exporting your library sends a lot of requests to the MangaDex API,
+			it is
 			<b>recommended to not open MangaDex on your browser </b>
 			<i>or any similar activities that might send unecessary requests to the API </i>
 			because it might blow your
 			<i>IP rate-limit</i>
-			and also check if <b>your internet connection is smooth enough</b> for this operation. (also
-			check if you have enough RAM too.
+			and also check if <b>your internet connection is smooth enough</b> for this operation.
+			(also check if you have enough RAM too.
 			<code>`The bigger the library, the more it needs RAM`</code>)
 		</p>
 	</section>

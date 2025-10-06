@@ -128,9 +128,9 @@
 	});
 	const handle_download_event = debounce(async () => {
 		if ($downloading) {
-			await $cancelDownloadMutation.mutateAsync(id);
+			await cancelDownloadMutation.mutateAsync(id);
 		} else {
-			await $downloadMutation.mutateAsync({ id });
+			await downloadMutation.mutateAsync({ id });
 		}
 	});
 	const showTrashButton = derived(
@@ -154,14 +154,14 @@
 	const hasBeenRead = getContextReadChapterMarker(id);
 	const handleRead = debounce(() => {
 		if ($isLogged) {
-			if (!$readMarkers.isPending) {
+			if (!readMarkers.isPending) {
 				if ($hasBeenRead) {
-					$readMarkers.mutate({
+					readMarkers.mutate({
 						reads: [],
 						unreads: [id]
 					});
 				} else {
-					$readMarkers.mutate({
+					readMarkers.mutate({
 						reads: [id],
 						unreads: []
 					});
@@ -203,18 +203,18 @@
 			{#if $showTrashButton}
 				<div
 					class="buttons remove"
-					aria-disabled={$removeMutation.isPending}
+					aria-disabled={removeMutation.isPending}
 					onclick={async (e) => {
 						onremove?.({
 							...e,
 							id
 						});
-						await $removeMutation.mutateAsync(id);
+						await removeMutation.mutateAsync(id);
 					}}
 					onkeypress={async (e) => {
 						onremoveKeyPress?.({ ...e, id });
 						if (e.key == "Enter") {
-							await $removeMutation.mutateAsync(id);
+							await removeMutation.mutateAsync(id);
 						}
 					}}
 					tabindex={0}
@@ -256,11 +256,11 @@
 						}
 					}
 				}}
-				aria-disabled={$readMarkers.isPending}
+				aria-disabled={readMarkers.isPending}
 			>
 				{#if !$hasBeenRead && $isLogged}
 					<EyeIcon />
-				{:else if $readMarkers.isPending || !$isLogged}
+				{:else if readMarkers.isPending || !$isLogged}
 					<RiSearchEyeLine size="25" />
 				{:else}
 					<EyeOffIcon />

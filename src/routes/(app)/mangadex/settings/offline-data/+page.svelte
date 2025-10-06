@@ -11,66 +11,60 @@
 	import { derived, get } from "svelte/store";
 	import { slide } from "svelte/transition";
 	import { v4 } from "uuid";
-	const dataDir = derived(queryStore, (qS) => qS.data?.userOption.getOfflineConfig.dataDir);
-	const chaptersDir = derived(
-		queryStore,
-		(qS) => qS.data?.userOption.getOfflineConfig.chaptersDir
-	);
-	const coversDir = derived(queryStore, (qS) => qS.data?.userOption.getOfflineConfig.coversDir);
-	const mangasDir = derived(queryStore, (qS) => qS.data?.userOption.getOfflineConfig.mangasDir);
+	let dataDir = $derived(queryStore.data?.userOption.getOfflineConfig.dataDir);
+	let chaptersDir = $derived(queryStore.data?.userOption.getOfflineConfig.chaptersDir);
+	let coversDir = $derived(queryStore.data?.userOption.getOfflineConfig.coversDir);
+	let mangasDir = $derived(queryStore.data?.userOption.getOfflineConfig.mangasDir);
 
 	async function setupDataDir(dir: string) {
-		return await get(mutationStore).mutateAsync({
+		return await mutationStore.mutateAsync({
 			dataDirectory: dir
 		});
 	}
 	async function setupChapters(dir: string) {
-		const dataDirectory = get(dataDir);
+		const dataDirectory = dataDir;
 		if (dataDirectory) {
-			return await get(mutationStore).mutateAsync({
+			return await mutationStore.mutateAsync({
 				dataDirectory,
 				chaptersDirectory: dir
 			});
 		}
 	}
 	async function setupCovers(dir: string) {
-		const dataDirectory = get(dataDir);
+		const dataDirectory = dataDir;
 		if (dataDirectory) {
-			return await get(mutationStore).mutateAsync({
+			return await mutationStore.mutateAsync({
 				dataDirectory,
 				coversDirectory: dir
 			});
 		}
 	}
 	async function setupMangasDir(dir: string) {
-		const dataDirectory = get(dataDir);
+		const dataDirectory = dataDir;
 		if (dataDirectory) {
-			return await get(mutationStore).mutateAsync({
+			return await mutationStore.mutateAsync({
 				dataDirectory,
 				mangasDirectory: dir
 			});
 		}
 	}
-	const disabled = derived(
-		[isMounted, mutationStore],
-		([isMounted, mutationStore]) => isMounted || mutationStore.isPending
-	);
+	let disabled = $derived(isMounted || mutationStore.isPending);
 </script>
 
 <h1>Offline Data Config</h1>
 
 <AppTitle title="Offline Data Config - MangaDex" />
 
-{#if $mutationStore.error}
-	<ErrorComponent error={$mutationStore.error} label="Error on updating config" />
+{#if mutationStore.error}
+	<ErrorComponent error={mutationStore.error} label="Error on updating config" />
 {/if}
 
-{#if $queryStore.error}
+{#if queryStore.error}
 	<ErrorComponent
-		error={$queryStore.error}
+		error={queryStore.error}
 		label="Error on fetching config"
 		retry={() => {
-			$queryStore.refetch();
+			queryStore.refetch();
 		}}
 	/>
 {/if}
@@ -94,11 +88,11 @@
 			class="dir-info"
 			class:disabled={$disabled}
 			onclick={() => {
-				if ($dataDir) {
-					revealItemInDir($dataDir).catch(console.warn);
+				if (dataDir) {
+					revealItemInDir(dataDir).catch(console.warn);
 				}
 			}}
-			href={`#${v4()}`}>{$dataDir}</a
+			href={`#${v4()}`}>{dataDir}</a
 		>
 	</p>
 	<ButtonAccentOnlyLabel
@@ -124,11 +118,11 @@
 			class="dir-info"
 			class:disabled={$disabled}
 			onclick={() => {
-				if ($mangasDir) {
-					revealItemInDir($mangasDir);
+				if (mangasDir) {
+					revealItemInDir(mangasDir);
 				}
 			}}
-			href={`#${v4()}`}>{$mangasDir}</a
+			href={`#${v4()}`}>{mangasDir}</a
 		>
 	</p>
 	<ButtonAccentOnlyLabel
@@ -139,7 +133,7 @@
 				directory: true,
 				title: "Select offline titles directory",
 				multiple: false,
-				defaultPath: $dataDir
+				defaultPath: dataDir
 			});
 			if (dir) {
 				setupMangasDir(dir);
@@ -155,11 +149,11 @@
 			class="dir-info"
 			class:disabled={$disabled}
 			onclick={() => {
-				if ($chaptersDir) {
-					revealItemInDir($chaptersDir);
+				if (chaptersDir) {
+					revealItemInDir(chaptersDir);
 				}
 			}}
-			href={`#${v4()}`}>{$chaptersDir}</a
+			href={`#${v4()}`}>{chaptersDir}</a
 		>
 	</p>
 	<ButtonAccentOnlyLabel
@@ -170,7 +164,7 @@
 				directory: true,
 				title: "Select offline chapters directory",
 				multiple: false,
-				defaultPath: $dataDir
+				defaultPath: dataDir
 			});
 			if (dir) {
 				setupChapters(dir);
@@ -186,11 +180,11 @@
 			class="dir-info"
 			class:disabled={$disabled}
 			onclick={() => {
-				if ($coversDir) {
-					revealItemInDir($coversDir);
+				if (coversDir) {
+					revealItemInDir(coversDir);
 				}
 			}}
-			href={`#${v4()}`}>{$coversDir}</a
+			href={`#${v4()}`}>{coversDir}</a
 		>
 	</p>
 	<ButtonAccentOnlyLabel
