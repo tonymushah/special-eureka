@@ -13,24 +13,28 @@ export default defineConfig({
 	},
 	// prevent vite from obscuring rust errors
 	clearScreen: false,
+	esbuild: {
+		// We need this or else the ts code that uses `using` will not work on linux ;(
+		target: process.env.TAURI_PLATFORM == "windows" ? "chrome105" : "safari13",
+	},
 	// Tauri expects a fixed port, fail if that port is not available
 	server: {
 		port: 9305,
 		strictPort: true,
 		fs: {
 			deny: [
-				"../src-tauri",
+				"./src-tauri",
 				".env",
 				".env.*",
 				"*.crt",
 				"*.pem",
-				"../target",
-				"../data"
+				"./target",
+				"./data"
 			]
 		},
 		watch: {
 			ignored: [`${searchForWorkspaceRoot(process.cwd())}/src-tauri`, `${searchForWorkspaceRoot(process.cwd())}/target`, `${searchForWorkspaceRoot(process.cwd())}/data`]
-		}
+		},
 	},
 	// to access the Tauri environment variables set by the CLI with information about the current target
 	envPrefix: [

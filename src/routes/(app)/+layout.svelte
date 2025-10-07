@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Snippet } from "svelte";
+	import "core-js/stable";
 
 	interface Props {
 		children?: Snippet;

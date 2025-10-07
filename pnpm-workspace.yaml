@@ -2,6 +2,7 @@ ignoredBuiltDependencies:
   - '@parcel/watcher'
 
 onlyBuiltDependencies:
+  - core-js
   - esbuild
   - sharp
   - svelte-preprocess

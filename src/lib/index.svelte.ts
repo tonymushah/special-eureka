@@ -11,7 +11,7 @@ export function extractFromAccessor<T>(_access: Accessor<T>): ExtractedAccessor<
 	const d = $effect.root(() => {
 		val = _access();
 	});
-	return {
+	const to_ret = {
 		get value() {
 			return val;
 		},
@@ -19,14 +19,16 @@ export function extractFromAccessor<T>(_access: Accessor<T>): ExtractedAccessor<
 			d();
 		}
 	};
+	console.debug(to_ret);
+	return to_ret;
 }
 
 export function internalToStore<T>(accessor: Accessor<T>): Readable<T> {
 	const inner = extractFromAccessor(accessor);
 	return useExtractedAccessor(inner, (value) => readable<T>(value, (set) => {
 		return $effect.root(() => {
-			const val = accessor();
-			$effect.pre(() => {
+			let val = $derived(accessor());
+			$effect(() => {
 				set(val);
 			})
 		});

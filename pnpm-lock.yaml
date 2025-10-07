@@ -56,6 +56,9 @@ importers:
       '@urql/svelte':
         specifier: ^5.0.0
         version: 5.0.0(@urql/core@5.2.0(graphql@16.11.0))(svelte@5.39.9)
+      core-js:
+        specifier: ^3.45.1
+        version: 3.45.1
       fast-xml-parser:
         specifier: ^5.3.0
         version: 5.3.0
@@ -2502,6 +2505,9 @@ packages:
 
   copy-anything@2.0.6:
     resolution: {integrity: sha512-1j20GZTsvKNkc4BY3NpMOM8tt///wY3FpIzozTOFO2ffuZcV61nojHXVKIy3WM+7ADCy5FVhdZYHYDdgTU0yJw==}
+
+  core-js@3.45.1:
+    resolution: {integrity: sha512-L4NPsJlCfZsPeXukyzHFlg/i7IIVwHSItR0wg0FLNqYClJ4MQYTYLbC7EkjKYRLZF2iof2MUgN0EGy7MdQFChg==}
 
   cosmiconfig@8.3.6:
     resolution: {integrity: sha512-kcZ6+W5QzcJ3P1Mt+83OUv/oHFqZHIx8DuxG6eZ5RGMERoLqp4BuGjhHLYGK+Kf5XVkQvqBSmAy/nGWN3qDgEA==}
@@ -6889,6 +6895,8 @@ snapshots:
   copy-anything@2.0.6:
     dependencies:
       is-what: 3.14.1
+
+  core-js@3.45.1: {}
 
   cosmiconfig@8.3.6(typescript@5.9.3):
     dependencies:

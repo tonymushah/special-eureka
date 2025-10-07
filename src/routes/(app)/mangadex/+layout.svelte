@@ -1,7 +1,10 @@
 <script lang="ts">
-	const Layout = import("@mangadex/componnents/layout/MangaDexLayout.svelte").then(
-		(mod) => mod.default
-	);
+	const Layout = import("@mangadex/componnents/layout/MangaDexLayout.svelte")
+		.then((mod) => mod.default)
+		.catch((e) => {
+			console.error(e);
+			throw e;
+		});
 	interface Props {
 		children?: import("svelte").Snippet;
 	}
@@ -43,6 +46,7 @@
 			align-items: center;
 			justify-content: center;
 			display: flex;
+			flex-direction: column;
 		}
 	}
 	@media (prefers-color-scheme: light) {
