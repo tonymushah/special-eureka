@@ -54,6 +54,7 @@
 	import { v4 } from "uuid";
 	import type { LayoutData } from "./layout.context";
 	import { setTitleLayoutData } from "./layout.context";
+	import { isLogged } from "@mangadex/utils/auth";
 
 	type TopMangaStatisticsStoreData = TopMangaStatistics & {
 		threadUrl?: string;
@@ -274,10 +275,10 @@
 			})
 		);
 	}}
-	{disableAddToLibrary}
+	disableAddToLibrary={disableAddToLibrary && !$isLogged}
 	rating={der(manga_rating(data.layoutData.id), (d) => d ?? undefined)}
 	{onrating}
-	{disableRating}
+	disableRating={disableRating && !$isLogged}
 	disableRead={!$hasChaptToRead}
 	onread={() => {
 		readManga(data.layoutData.id);
