@@ -92,26 +92,28 @@
 	onMount(async () => {
 		unlistens.push(
 			$effect.root(() => {
-				const ids: string[] =
-					query?.data?.manga.aggregate.chunked.flatMap((d) => d.ids) ?? [];
-				if (ids.length > 0)
-					fetchChapters(ids, !hasConflicts(__res.conflicts))
-						.then(async (cs) => {
-							if (cs) chaptersStore.addByBatch(cs);
-							const comments = await fetchComments(ids);
-							comments.forEach((c) => {
-								threadUrls.set(c.id, c.stats.threadUrl);
+				$effect(() => {
+					const ids: string[] =
+						query?.data?.manga.aggregate.chunked.flatMap((d) => d.ids) ?? [];
+					if (ids.length > 0)
+						fetchChapters(ids, !hasConflicts(__res.conflicts))
+							.then(async (cs) => {
+								if (cs) chaptersStore.addByBatch(cs);
+								const comments = await fetchComments(ids);
+								comments.forEach((c) => {
+									threadUrls.set(c.id, c.stats.threadUrl);
+								});
+								chaptersStore.setComments(
+									comments.map((c) => ({
+										id: c.id,
+										comments: c.stats.comments
+									}))
+								);
+							})
+							.catch((e) => {
+								console.error(e);
 							});
-							chaptersStore.setComments(
-								comments.map((c) => ({
-									id: c.id,
-									comments: c.stats.comments
-								}))
-							);
-						})
-						.catch((e) => {
-							console.error(e);
-						});
+				});
 			})
 		);
 		unlistens.push(
