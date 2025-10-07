@@ -1,4 +1,5 @@
 import { goto } from "$app/navigation";
+import { extractFromAccessor } from "$lib/index.svelte";
 import { route } from "$lib/ROUTES";
 import {
 	cancelDownloadMutation,
@@ -74,7 +75,8 @@ export default function chapterElementContextMenuItems({
 			ContextMenuItemProvider.menuItem({
 				text: "Cancel download",
 				action() {
-					cancelDownloadMutation.mutateAsync(id);
+					using mut = extractFromAccessor(cancelDownloadMutation);
+					mut.value.mutateAsync(id);
 				}
 			})
 		);
@@ -83,7 +85,8 @@ export default function chapterElementContextMenuItems({
 			ContextMenuItemProvider.menuItem({
 				text: isDownloaded ? "Re-download" : "Download",
 				action() {
-					downloadMutation.mutateAsync({
+					using mut = extractFromAccessor(downloadMutation);
+					mut.value.mutateAsync({
 						id
 					});
 				},
@@ -95,7 +98,8 @@ export default function chapterElementContextMenuItems({
 				ContextMenuItemProvider.menuItem({
 					text: "Remove chapter locally",
 					action() {
-						removeMutation.mutateAsync(id);
+						using mut = extractFromAccessor(removeMutation);
+						mut.value.mutateAsync(id);
 					}
 				})
 			);

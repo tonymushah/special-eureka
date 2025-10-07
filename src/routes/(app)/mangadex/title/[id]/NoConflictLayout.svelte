@@ -19,9 +19,9 @@
 	import Markdown from "@mangadex/componnents/markdown/Markdown.svelte";
 	import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 	import mangaDownloadState, {
-		cancelMutation,
-		downloadMutationQuery,
-		removeMutation
+		cancelMutation as cancelMutationLoader,
+		downloadMutationQuery as downloadMutationQueryLoader,
+		removeMutation as removeMutationLoader
 	} from "@mangadex/download/manga";
 	import { mangaReadMarkers } from "@mangadex/gql-docs/read-markers/chapters";
 	import { client } from "@mangadex/gql/urql";
@@ -230,6 +230,9 @@
 			new Map()
 		)
 	);
+	let removeMutation = removeMutationLoader();
+	let downloadMutationQuery = downloadMutationQueryLoader();
+	let cancelMutation = cancelMutationLoader();
 </script>
 
 <svelte:window onfocus={refetchReadingFollowingStatus} />

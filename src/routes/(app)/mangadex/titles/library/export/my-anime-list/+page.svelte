@@ -6,7 +6,7 @@
 	import FormInput from "@mangadex/componnents/theme/form/input/FormInput.svelte";
 	import Title from "@mangadex/componnents/theme/texts/title/Title.svelte";
 	import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
-	import { exportLibraryToMyAnimeList } from "@mangadex/gql-docs/library/export/my-anime-list";
+	import { exportLibraryToMyAnimeList as exportLibraryToMyAnimeListLoader } from "@mangadex/gql-docs/library/export/my-anime-list";
 	import {
 		MaltitlePriority,
 		type MdlibraryToMyAnimeListExportOption,
@@ -41,6 +41,7 @@
 	let options: Options = $state(defaultOptions());
 	let revealAfterFinish: boolean = $state(true);
 
+	let exportLibraryToMyAnimeList = exportLibraryToMyAnimeListLoader();
 	async function submitExport() {
 		const exportPath = await save({
 			title: "Export MangaDex library to My Anime List XML Import",

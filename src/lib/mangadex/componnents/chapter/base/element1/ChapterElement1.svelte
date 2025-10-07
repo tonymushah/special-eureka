@@ -81,11 +81,11 @@
 		hasChapterDownloadingFailed,
 		isChapterDownloaded,
 		isChapterDownloading,
-		removeMutation
+		removeMutation as removeMutationLoader
 	} from "@mangadex/download/chapter";
 	import type { Language, UserRole } from "@mangadex/gql/graphql";
 	import { getContextReadChapterMarker } from "@mangadex/stores/read-markers/context";
-	import { readMarkers } from "@mangadex/stores/read-markers/mutations";
+	import { readMarkers as readMarkersLoader } from "@mangadex/stores/read-markers/mutations";
 	import { isLogged } from "@mangadex/utils/auth";
 	import chapterElementContextMenuItems from "@mangadex/utils/context-menu/chapter";
 	import registerContextMenuEvent, {
@@ -97,6 +97,8 @@
 	import { derived } from "svelte/store";
 	import DownloadStateComp from "./DownloadStateComp.svelte";
 	import Layout from "./Layout.svelte";
+	import { extractFromAccessor } from "$lib/index.svelte";
+	import { cancelChapterDownload, downloadChapter } from "./utils";
 
 	let {
 		id,
@@ -117,6 +119,9 @@
 		onclick
 	}: Props = $props();
 
+	let readMarkers = readMarkersLoader();
+	let removeMutation = removeMutationLoader();
+
 	const downloading = isChapterDownloading({
 		id
 	});
@@ -126,11 +131,11 @@
 	const downloaded = isChapterDownloaded({
 		id
 	});
-	const handle_download_event = debounce(async () => {
+	const handle_download_event = debounce(async function () {
 		if ($downloading) {
-			await cancelDownloadMutation.mutateAsync(id);
+			await cancelChapterDownload(id);
 		} else {
-			await downloadMutation.mutateAsync({ id });
+			await downloadChapter(id);
 		}
 	});
 	const showTrashButton = derived(

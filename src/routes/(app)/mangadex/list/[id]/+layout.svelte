@@ -4,16 +4,16 @@
 	import { CustomListVisibility } from "@mangadex/gql/graphql";
 	import UserLink from "@mangadex/componnents/user/UserLink.svelte";
 	import MidToneLine from "@mangadex/componnents/theme/lines/MidToneLine.svelte";
-	import { page } from "$app/stores";
 	import { derived as storeDerived } from "svelte/store";
 	import { goto, invalidate } from "$app/navigation";
 	import { route } from "$lib/ROUTES";
 	import { setContextMenuContext } from "@special-eureka/core/utils/contextMenuContext";
 	import customListElementContextMenu from "@mangadex/utils/context-menu/list";
 	import DangerButtonOnlyLabel from "@mangadex/componnents/theme/buttons/DangerButtonOnlyLabel.svelte";
-	import updateCustomListVisibilityMutation from "@mangadex/gql-docs/list/id/update-visibilty";
+	import updateCustomListVisibilityMutationLoader from "@mangadex/gql-docs/list/id/update-visibilty";
 	import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 	import ButtonAccentOnlyLabel from "@mangadex/componnents/theme/buttons/ButtonAccentOnlyLabel.svelte";
+	import { page } from "$app/state";
 
 	interface Props {
 		data: LayoutData;
@@ -23,8 +23,8 @@
 	let { children, data }: Props = $props();
 	let isPrivate = $derived(data.attributes.visibility == CustomListVisibility.Private);
 	let user = $derived(data.relationships.user);
-	const path = storeDerived(page, ($p) => {
-		let pathname = $p.url.pathname;
+	let path = $derived.by(() => {
+		let pathname = page.url.pathname;
 		if (pathname.endsWith("/")) {
 			return pathname.substring(0, pathname.length - 1);
 		} else {
@@ -34,6 +34,7 @@
 	setContextMenuContext(() =>
 		customListElementContextMenu({ id: data.id, name: data.attributes.name })
 	);
+	let updateCustomListVisibilityMutation = updateCustomListVisibilityMutationLoader();
 </script>
 
 <div class="layout">
@@ -123,7 +124,7 @@
 	</div>
 	<nav class="custom-list-nav">
 		<button
-			class:active={$path ==
+			class:active={path ==
 				route("/mangadex/list/[id]", {
 					id: isPrivate ? `private:${data.id}` : data.id
 				})}
@@ -138,7 +139,7 @@
 			Titles
 		</button>
 		<button
-			class:active={$path ==
+			class:active={path ==
 				route("/mangadex/list/[id]/feed", {
 					id: isPrivate ? `private:${data.id}` : data.id
 				})}

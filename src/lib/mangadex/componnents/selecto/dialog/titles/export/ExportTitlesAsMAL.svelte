@@ -6,7 +6,7 @@
 	import FormInput from "@mangadex/componnents/theme/form/input/FormInput.svelte";
 	import Title from "@mangadex/componnents/theme/texts/title/Title.svelte";
 	import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
-	import exportTitlesToMAL from "@mangadex/gql-docs/title/export/mal";
+	import exportTitlesToMALLoader from "@mangadex/gql-docs/title/export/mal";
 	import {
 		MaltitlePriority,
 		type MdidsToMyAnimeListExportOption,
@@ -39,6 +39,7 @@
 	}
 	let options: Options = $state(defaultOptions());
 	let revealAfterFinish: boolean = $state(true);
+	let exportTitlesToMAL = exportTitlesToMALLoader();
 
 	async function submitExport() {
 		const exportPath = await save({

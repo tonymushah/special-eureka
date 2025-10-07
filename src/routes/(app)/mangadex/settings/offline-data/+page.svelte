@@ -1,16 +1,16 @@
 <script lang="ts">
 	import ErrorComponent from "@mangadex/componnents/ErrorComponent.svelte";
-	import HomeErrorComponnent from "@mangadex/componnents/home/utils/HomeErrorComponnent.svelte";
 	import ButtonAccentOnlyLabel from "@mangadex/componnents/theme/buttons/ButtonAccentOnlyLabel.svelte";
 	import WarningComponent from "@mangadex/componnents/WarningComponent.svelte";
-	import { mutationStore, queryStore } from "@mangadex/stores/offlineConfig";
+	import { mutationStore, queryStore as queryStoreLoader } from "@mangadex/stores/offlineConfig";
 	import { isMounted } from "@mangadex/stores/offlineIsMounted";
 	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
 	import { open as dialogOpen } from "@tauri-apps/plugin-dialog";
-	import { openPath, revealItemInDir } from "@tauri-apps/plugin-opener";
-	import { derived, get } from "svelte/store";
+	import { revealItemInDir } from "@tauri-apps/plugin-opener";
 	import { slide } from "svelte/transition";
 	import { v4 } from "uuid";
+
+	let queryStore = queryStoreLoader();
 	let dataDir = $derived(queryStore.data?.userOption.getOfflineConfig.dataDir);
 	let chaptersDir = $derived(queryStore.data?.userOption.getOfflineConfig.chaptersDir);
 	let coversDir = $derived(queryStore.data?.userOption.getOfflineConfig.coversDir);

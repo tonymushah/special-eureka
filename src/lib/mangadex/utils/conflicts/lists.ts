@@ -8,12 +8,13 @@ import contentProfileWarningMode from "@mangadex/stores/contentProfileWarningMod
 import defaultContentProfile from "@mangadex/content-profile/graphql/defaultProfile";
 import { titleStatusMapQuery } from "@mangadex/gql-docs/library/isIn";
 import type { ReadingStatus } from "@mangadex/gql/graphql";
+import { internalToStore } from "$lib/index.svelte";
 
 export function conflictsMap(
 	lists: Readable<MaybeConflictedTitle[]>
 ): Readable<Map<string, ContentProfileConflicts>> {
 	const libraryMap = derived(
-		titleStatusMapQuery,
+		internalToStore(titleStatusMapQuery),
 		(q) => q.data ?? new Map<string, ReadingStatus>()
 	);
 	return derived(

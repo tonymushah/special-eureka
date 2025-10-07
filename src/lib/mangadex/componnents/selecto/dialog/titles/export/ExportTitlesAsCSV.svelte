@@ -2,7 +2,7 @@
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import PrimaryButton from "@mangadex/componnents/theme/buttons/PrimaryButton.svelte";
 	import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
-	import exportTitlesToCSV from "@mangadex/gql-docs/title/export/csv";
+	import exportTitlesToCSVLoader from "@mangadex/gql-docs/title/export/csv";
 	import type { ExportIdsLibraryToCsvOptions } from "@mangadex/gql/graphql";
 	import { isLogged } from "@mangadex/utils/auth";
 	import { save } from "@tauri-apps/plugin-dialog";
@@ -24,6 +24,7 @@
 	}
 	let revealAfterFinish: boolean = $state(true);
 	let options: Options = $state(defaultOptions());
+	let exportTitlesToCSV = exportTitlesToCSVLoader();
 	async function submitExport() {
 		const path = await save({
 			title: "Export Titles as CSV",

@@ -1,5 +1,10 @@
 <script lang="ts">
-	import { chapterQualityMutation, isDataSaver } from "@mangadex/stores/chapterQuality";
+	import {
+		chapterQualityMutation as chapterQualityMutationLoader,
+		isDataSaver
+	} from "@mangadex/stores/chapterQuality";
+
+	let chapterQualityMutation = chapterQualityMutationLoader();
 </script>
 
 <div>

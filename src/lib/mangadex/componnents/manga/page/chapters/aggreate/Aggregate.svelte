@@ -19,10 +19,11 @@
 	import { fetchChapters, fetchComments } from "./utils";
 	import { getChapterStoreContext } from "./utils/chapterStores";
 	import mangaAggregateQuery from "./utils/query";
-	import { readMarkers as readMarkersMutation } from "@mangadex/stores/read-markers/mutations";
+	import { readMarkers as readMarkersMutationLoader } from "@mangadex/stores/read-markers/mutations";
 	import ChapterFeedSelecto from "@mangadex/componnents/selecto/ChapterFeedSelecto.svelte";
 	import { hasConflicts } from "@mangadex/utils/conflicts";
 
+	let readMarkersMutation = readMarkersMutationLoader();
 	const chaptersStore = getChapterStoreContext();
 	const client = getContextClient();
 	const __res = getTitleLayoutData();

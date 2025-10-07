@@ -82,7 +82,7 @@
 	import chapterPageThread from "@mangadex/gql-docs/chapter/layout-query/thread";
 	import { DrawerMode, ReadingMode } from "@mangadex/gql/graphql";
 	import { drawerModeStore } from "@mangadex/stores/chapterLayout";
-	import { readMarkers } from "@mangadex/stores/read-markers/mutations";
+	import { readMarkers as readMarkersLoader } from "@mangadex/stores/read-markers/mutations";
 	import { isLogged } from "@mangadex/utils/auth";
 	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
 	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
@@ -101,6 +101,7 @@
 	let { data = $bindable(), children }: Props = $props();
 
 	const client = getContextClient();
+	let readMarkers = readMarkersLoader();
 	$effect(() => {
 		const id = data.data.id;
 		if (typeof id == "string") {

@@ -1,7 +1,8 @@
 <script lang="ts">
 	import contentProfileBlur, {
-		contentProfileBlurMutation
+		contentProfileBlurMutation as contentProfileBlurMutationLoader
 	} from "@mangadex/stores/contentProfileBlur";
+	let contentProfileBlurMutation = contentProfileBlurMutationLoader();
 </script>
 
 <div>

@@ -1,15 +1,15 @@
 <script lang="ts">
 	import PrimaryButtonOnlyLabel from "@mangadex/componnents/theme/buttons/PrimaryButtonOnlyLabel.svelte";
 	import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
-	import { getContextClient } from "@urql/svelte";
 	import Lists from "./lists/Lists.svelte";
-	import mutation from "./lists/mutation";
+	import mutationLoader from "./lists/mutation";
 
 	interface Props {
 		titles: string[];
 	}
 	let { titles }: Props = $props();
 	let selectedLists: string[] = $state([]);
+	let mutation = mutationLoader();
 </script>
 
 <div class="lists">

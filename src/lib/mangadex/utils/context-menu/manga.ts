@@ -26,6 +26,7 @@ import { range } from "lodash";
 import { get } from "svelte/store";
 import { isLogged } from "../auth";
 import get_value_and_random_if_undefined from "../lang/get_value_and_random_if_undefined";
+import { extractFromAccessor } from "$lib/index.svelte";
 
 type MangaElementContextMenuOption = {
 	id: string;
@@ -222,7 +223,8 @@ export default function mangaElementContextMenu({
 			ContextMenuItemProvider.menuItem({
 				text: "Cancel title download",
 				action() {
-					cancelMutation.mutateAsync(id);
+					using mut = extractFromAccessor(cancelMutation);
+					mut.value.mutateAsync(id);
 				}
 			})
 		);
@@ -231,7 +233,8 @@ export default function mangaElementContextMenu({
 			ContextMenuItemProvider.menuItem({
 				text: isDownloaded ? "Re-download" : "Download",
 				action() {
-					downloadMutationQuery.mutateAsync(id, {
+					using mut = extractFromAccessor(downloadMutationQuery);
+					mut.value.mutateAsync(id, {
 						onError(error, variables, context) {
 							addErrorToast("Cannot download title", error);
 						},
@@ -253,7 +256,8 @@ export default function mangaElementContextMenu({
 				ContextMenuItemProvider.menuItem({
 					text: "Remove title locally",
 					action() {
-						(removeMutation).mutateAsync(id);
+						using mut = extractFromAccessor(removeMutation);
+						mut.value.mutateAsync(id);
 					}
 				})
 			);

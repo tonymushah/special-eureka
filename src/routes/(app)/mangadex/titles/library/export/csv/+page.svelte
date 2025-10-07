@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Title from "@mangadex/componnents/theme/texts/title/Title.svelte";
 	import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
-	import { exportLibraryToCSV } from "@mangadex/gql-docs/library/export/csv";
+	import { exportLibraryToCSV as exportLibraryToCSVLoader } from "@mangadex/gql-docs/library/export/csv";
 	import type { ExportMdLibraryToCsvOptions } from "@mangadex/gql/graphql";
 	import { save } from "@tauri-apps/plugin-dialog";
 	import { revealItemInDir } from "@tauri-apps/plugin-opener";
@@ -24,6 +24,7 @@
 		};
 	}
 
+	let exportLibraryToCSV = exportLibraryToCSVLoader();
 	let options: Options = $state(defaultOptions());
 	let revealAfterFinish: boolean = $state(true);
 

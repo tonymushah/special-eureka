@@ -23,6 +23,7 @@
 		UsersIcon,
 		XIcon
 	} from "svelte-feather-icons";
+	import { cancelChapterDownload, downloadChapter } from "./utils";
 
 	type Group = {
 		id: string;
@@ -144,11 +145,9 @@
 
 	const handle_download_event = debounce(async function () {
 		if ($isDownloading) {
-			await cancelDownloadMutation.mutateAsync(id);
+			await cancelChapterDownload(id);
 		} else {
-			await downloadMutation.mutateAsync({
-				id
-			});
+			await downloadChapter(id);
 		}
 	});
 	setContextMenuContext(() => {

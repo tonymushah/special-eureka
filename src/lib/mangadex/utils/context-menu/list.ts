@@ -16,6 +16,7 @@ import { save } from "@tauri-apps/plugin-dialog";
 import { openUrl, revealItemInDir } from "@tauri-apps/plugin-opener";
 import { get } from "svelte/store";
 import { isLogged } from "../auth";
+import { extractFromAccessor } from "$lib/index.svelte";
 
 type CustomListElementContextMenuOptions = {
 	id: string;
@@ -88,7 +89,8 @@ export default function customListElementContextMenu({
 					]
 				});
 				if (exportPath) {
-					exportCustomListsToCSV.mutateAsync(
+					using mut = extractFromAccessor(exportCustomListsToCSV);
+					mut.value.mutateAsync(
 						{
 							ids: [id],
 							exportPath,
@@ -120,7 +122,10 @@ export default function customListElementContextMenu({
 					addErrorToast("Invalid input", undefined);
 				}
 			},
-			enabled: !exportCustomListsToCSV.isPending
+			enabled: (() => {
+				using mut = extractFromAccessor(exportCustomListsToCSV);
+				return !mut.value.isPending
+			})(),
 		})
 	);
 	if (isMine) {
@@ -131,7 +136,8 @@ export default function customListElementContextMenu({
 					ContextMenuItemProvider.menuItem({
 						text: "Public",
 						action() {
-							updateCustomListVisibilityMutation.mutate(
+							using mut = extractFromAccessor(updateCustomListVisibilityMutation);
+							mut.value.mutate(
 								{ id, visibility: CustomListVisibility.Public },
 								{
 									onSuccess() {
@@ -153,7 +159,8 @@ export default function customListElementContextMenu({
 					ContextMenuItemProvider.menuItem({
 						text: "Private",
 						action() {
-							updateCustomListVisibilityMutation.mutate(
+							using mut = extractFromAccessor(updateCustomListVisibilityMutation);
+							mut.value.mutate(
 								{ id, visibility: CustomListVisibility.Private },
 								{
 									onSuccess() {
@@ -178,7 +185,8 @@ export default function customListElementContextMenu({
 			ContextMenuItemProvider.menuItem({
 				text: "Delete",
 				action() {
-					(deleteCustomListMutation).mutate(id, {
+					using mut = extractFromAccessor(deleteCustomListMutation);
+					mut.value.mutate(id, {
 						onError(error, variables, context) {
 							addErrorToast("Cannot delete custom list", error);
 						},

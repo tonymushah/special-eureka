@@ -1,5 +1,9 @@
 <script lang="ts">
-	import forcePort443, { forcePort443Mutation } from "@mangadex/stores/forcePort443";
+	import forcePort443, {
+		forcePort443Mutation as forcePort443MutationLoader
+	} from "@mangadex/stores/forcePort443";
+
+	let forcePort443Mutation = forcePort443MutationLoader();
 </script>
 
 <div>
