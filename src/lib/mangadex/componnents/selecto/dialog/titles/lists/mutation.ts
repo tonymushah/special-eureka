@@ -3,7 +3,7 @@ import { addToListBatch } from "./query";
 import { createMutation } from "@tanstack/svelte-query";
 import { mangadexQueryClient } from "@mangadex/index";
 
-const mutation = createMutation<
+const mutation = () => createMutation<
 	void,
 	Error,
 	{

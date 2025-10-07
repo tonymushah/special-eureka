@@ -3,7 +3,7 @@ import { client } from "@mangadex/gql/urql";
 import { mangadexQueryClient } from "@mangadex/index";
 import { createMutation, type MutationFunction } from "@tanstack/svelte-query";
 
-export const readMarkers = createMutation(() => ({
+export const readMarkers = () => createMutation(() => ({
 	mutationKey: ["readmarkers", "update"],
 	mutationFn: (async ({ reads, unreads, updateHistory }) => {
 		const res = await client.mutation(mutateReadMarkersBatch, {

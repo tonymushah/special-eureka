@@ -18,6 +18,7 @@ import {
 	type Readable
 } from "svelte/store";
 import { mangadexQueryClient } from "..";
+import { internalToStore } from "$lib/index.svelte";
 
 const download_mutation = graphql(`
 	mutation downloadChapterMutation($id: UUID!, $quality: DownloadMode) {
@@ -129,7 +130,7 @@ function subOpChapter(id: string, deferred: boolean = false) {
 	});
 }
 
-export const removeMutation = createMutation(() => (
+export const removeMutation = () => createMutation(() => (
 	{
 		mutationKey: ["chapter-removing"],
 		async mutationFn(id: string) {
@@ -155,7 +156,7 @@ export const removeMutation = createMutation(() => (
 	() => mangadexQueryClient
 );
 
-export const cancelDownloadMutation = createMutation(() => ({
+export const cancelDownloadMutation = () => createMutation(() => ({
 	mutationKey: ["chapter", "download", "cancel"],
 	async mutationFn(id: string) {
 		return await client
@@ -183,7 +184,7 @@ type DownloadMutationVariable = {
 	quality?: DownloadMode;
 };
 
-export const downloadMutation = createMutation(
+export const downloadMutation = () => createMutation(
 	() => ({
 		mutationKey: ["chapter", "download"],
 		async mutationFn({ id, quality }: DownloadMutationVariable) {
@@ -222,7 +223,7 @@ export function chapterDownloadStateRaw({
 
 export function isChapterPresentRaw(id: string) {
 	const queryKey = offlinePresenceQueryKey(id);
-	return createQuery(() => (
+	return () => createQuery(() => (
 		{
 			queryKey,
 			async queryFn() {
@@ -245,7 +246,7 @@ export default function chapterDownloadState({
 	deferred?: boolean;
 }): Readable<ChapterDownloadState> {
 	const isPresentRaw = isChapterPresentRaw(id);
-	return derived([toStore(() => isPresentRaw), chapterDownloadStateRaw({ id, deferred }), toStore(() => removeMutation)], ([$isChapterPresentRaw, $rawState, $removeMutation], set, update) => {
+	return derived([internalToStore(isPresentRaw), chapterDownloadStateRaw({ id, deferred }), internalToStore(removeMutation)], ([$isChapterPresentRaw, $rawState, $removeMutation], set, update) => {
 		const res = (() => {
 			if ($removeMutation.isPending) {
 				return ChapterDownloadState.Removing;

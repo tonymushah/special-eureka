@@ -3,6 +3,7 @@ import { client } from "@mangadex/gql/urql";
 import { createMutation } from "@tanstack/svelte-query";
 import { get, readable, type Writable } from "svelte/store";
 import { mangadexQueryClient } from "..";
+import { extractFromAccessor } from "$lib/index.svelte";
 
 const sub_read = readable(false, (set) => {
 	const sub = client.subscription(gql_subscription, {}).subscribe((res) => {
@@ -16,7 +17,7 @@ const sub_read = readable(false, (set) => {
 	};
 });
 
-export const forcePort443Mutation = createMutation(() => ({
+export const forcePort443Mutation = () => createMutation(() => ({
 	mutationKey: ["force-port-443", "update"],
 	async mutationFn(force: boolean) {
 		const res = await client.mutation(gql_mutation, {
@@ -34,11 +35,13 @@ const forcePort443: Writable<boolean> = {
 		return sub_read.subscribe(run, invalidate);
 	},
 	set(value) {
-		forcePort443Mutation.mutate(value);
+		using mut = extractFromAccessor(forcePort443Mutation);
+		mut.value.mutate(value);
 	},
 	update(updater) {
 		const value = get(sub_read);
-		forcePort443Mutation.mutate(updater(value));
+		using mut = extractFromAccessor(forcePort443Mutation);
+		mut.value.mutate(updater(value));
 	},
 }
 

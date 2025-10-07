@@ -17,6 +17,7 @@ import {
 	type Readable
 } from "svelte/store";
 import { mangadexQueryClient } from "..";
+import { internalToStore } from "$lib/index.svelte";
 
 const downloadMutation = graphql(`
 	mutation downloadCover($id: UUID!) {
@@ -83,7 +84,7 @@ export const invalidateCoverOfflinePresence = async (id: string) => {
 const downloadStateQuery = (id: string, _client?: QueryClient) => {
 	const client = _client ?? mangadexQueryClient;
 	const queryKey = offlinePresenceQueryKey(id);
-	return createQuery(() => (
+	return () => createQuery(() => (
 		{
 			queryKey,
 			async queryFn() {
@@ -98,7 +99,7 @@ const downloadStateQuery = (id: string, _client?: QueryClient) => {
 	);
 };
 
-export const downloadMutationQuery = createMutation(
+export const downloadMutationQuery = () => createMutation(
 	() => ({
 		mutationKey: ["cover", "download"],
 		async mutationFn(id: string) {
@@ -127,7 +128,7 @@ export const downloadMutationQuery = createMutation(
 	() => mangadexQueryClient
 );
 
-export const removeMutation = createMutation(
+export const removeMutation = () => createMutation(
 	() => ({
 		mutationKey: ["cover-removing"],
 		async mutationFn(id: string) {
@@ -157,12 +158,7 @@ export const removeMutation = createMutation(
 	() => mangadexQueryClient
 );
 
-const remove = debounce(async (id: string, _client?: QueryClient) => {
-	const client = _client ?? mangadexQueryClient;
-	return await removeMutation.mutateAsync(id);
-});
-
-export const cancelDonwloadMutation = createMutation(() => ({
+export const cancelDonwloadMutation = () => createMutation(() => ({
 	mutationKey: ["cover", "download", "cancel"],
 	async mutationFn(id: string) {
 		const res = await gqlClient
@@ -239,7 +235,7 @@ type CoverSubOpType = OperationResult<
 
 export default function coverDownloadState({ id, deferred }: { id: string, deferred?: boolean }): Readable<CoverDownloadState> {
 	const dState = downloadStateQuery(id);
-	return derived([toStore(() => dState), subOPCover(id, deferred)], ([$query, $state], set) => {
+	return derived([internalToStore(dState), subOPCover(id, deferred)], ([$query, $state], set) => {
 		const res = (() => {
 			if ($state?.data) {
 				const data = $state.data.watchCoverDownloadState;

@@ -39,7 +39,7 @@ export default async function isInLibrary(
 	}
 }
 
-export const titleStatusMapQuery = createQuery(() => ({
+export const titleStatusMapQuery = () => createQuery(() => ({
 	networkMode: "online",
 	queryKey: ["title", "status", "map", "query"],
 	async queryFn() {

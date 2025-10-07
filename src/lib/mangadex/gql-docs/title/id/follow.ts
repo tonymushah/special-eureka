@@ -1,3 +1,4 @@
+import { extractFromAccessor, internalToStore } from "$lib/index.svelte";
 import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 import { graphql } from "@mangadex/gql/gql";
 import { client } from "@mangadex/gql/urql";
@@ -29,7 +30,7 @@ export const isFollowingTitleQuery = graphql(`
 	}
 `);
 
-export const followTitleMutation = createMutation(() => ({
+export const followTitleMutation = () => createMutation(() => ({
 	mutationKey: ["custom-list", "follow"],
 	async mutationFn(id: string) {
 		const res = await client.mutation(followTitleGQLMutation, {
@@ -41,7 +42,7 @@ export const followTitleMutation = createMutation(() => ({
 	}
 }), () => mangadexQueryClient);
 
-export const unfollowTitleMutation = createMutation(() => ({
+export const unfollowTitleMutation = () => createMutation(() => ({
 	mutationKey: ["title", "unfollow"],
 	async mutationFn(id: string) {
 		const res = await client.mutation(unfollowTitleGQLMutation, {
@@ -60,7 +61,7 @@ export default function isFollowingTitle(id: string, options?: {
 	toast?: boolean
 }): Writable<boolean> {
 	const toast = options?.toast ?? true;
-	const query = createQuery(() => ({
+	const query = () => createQuery(() => ({
 		queryKey: ["title", id, "is-following"],
 		async queryFn() {
 			const res = await client.query(isFollowingTitleQuery, {
@@ -71,17 +72,19 @@ export default function isFollowingTitle(id: string, options?: {
 			}
 		}
 	}), () => mangadexQueryClient);
-	const queryDerived = derived(toStore(() => query), ($query) => {
+	const queryDerived = derived(internalToStore(query), ($query) => {
 		return $query.data ?? false
 	}, false);
 	return {
 		subscribe: queryDerived.subscribe,
 		set(value) {
-			setFollowingStatus(value, id, toast, query, options);
+			using q_ = extractFromAccessor(query);
+			setFollowingStatus(value, id, toast, q_.value, options);
 		},
 		update(updater) {
 			const value = updater(get(queryDerived));
-			setFollowingStatus(value, id, toast, query, options);
+			using q_ = extractFromAccessor(query);
+			setFollowingStatus(value, id, toast, q_.value, options);
 		}
 	};
 }
@@ -101,7 +104,8 @@ function setFollowingStatus(
 		| undefined
 ) {
 	if (value) {
-		followTitleMutation.mutate(id, {
+		using mut = extractFromAccessor(followTitleMutation);
+		mut.value.mutate(id, {
 			onError(error, variables, context) {
 				if (toast) {
 					addErrorToast("Cannot change title following status", error);
@@ -126,7 +130,8 @@ function setFollowingStatus(
 			}
 		});
 	} else {
-		unfollowTitleMutation.mutate(id, {
+		using mut = extractFromAccessor(unfollowTitleMutation);
+		mut.value.mutate(id, {
 			onError(error, variables, context) {
 				if (toast) {
 					addErrorToast("Cannot change title following status", error);

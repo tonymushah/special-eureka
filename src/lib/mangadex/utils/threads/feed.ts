@@ -1,7 +1,7 @@
+import type { ChapterFeedListItemExt } from "@mangadex/routes/list/[id]/feed/search";
 import type { CreateInfiniteQueryResult, InfiniteData } from "@tanstack/svelte-query";
 import { derived, toStore, type Readable } from "svelte/store";
 import type AbstractSearchResult from "../searchResult/AbstractSearchResult";
-import type { ChapterFeedListItemExt } from "@mangadex/routes/list/[id]/feed/search";
 
 export default function chapterThreadsFromChapterFeedQuery(query: CreateInfiniteQueryResult<InfiniteData<AbstractSearchResult<ChapterFeedListItemExt>>>): Readable<Map<string, string | undefined>> {
 	return derived(toStore(() => query), (query) => {

@@ -1,8 +1,9 @@
 import { gql_mutation, gql_subscription } from "@mangadex/gql-docs/contentProfileBlur";
 import { client } from "@mangadex/gql/urql";
 import { createMutation } from "@tanstack/svelte-query";
-import { get, readable, type Writable } from "svelte/store";
+import { get, readable, toStore, type Writable } from "svelte/store";
 import { mangadexQueryClient } from "..";
+import { extractFromAccessor } from "$lib/index.svelte";
 
 const sub_read = readable(true, (set) => {
 	const sub = client.subscription(gql_subscription, {}).subscribe((res) => {
@@ -16,7 +17,7 @@ const sub_read = readable(true, (set) => {
 	};
 });
 
-export const contentProfileBlurMutation = createMutation(() => ({
+export const contentProfileBlurMutation = () => createMutation(() => ({
 	mutationKey: ["content-profile", "blur", "update"],
 	async mutationFn(blur: boolean) {
 		const res = await client.mutation(gql_mutation, {
@@ -34,11 +35,13 @@ const contentProfileBlur: Writable<boolean> = {
 		return sub_read.subscribe(run, invalidate);
 	},
 	set(value) {
-		contentProfileBlurMutation.mutate(value);
+		using mut = extractFromAccessor(contentProfileBlurMutation);
+		mut.value.mutate(value);
 	},
 	update(updater) {
 		const value = get(sub_read);
-		contentProfileBlurMutation.mutate(updater(value));
+		using mut = extractFromAccessor(contentProfileBlurMutation);
+		mut.value.mutate(updater(value));
 	},
 }
 

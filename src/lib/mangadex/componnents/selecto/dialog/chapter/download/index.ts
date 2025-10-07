@@ -23,7 +23,7 @@ const multiChapterCancelDownloadBase = graphql(`
 	}
 `);
 
-export const multiChapterDownload = createMutation<void, Error, string[]>(() => (
+export const multiChapterDownload = () => createMutation<void, Error, string[]>(() => (
 	{
 		mutationKey: ["multi", "download", "chapters"],
 		async mutationFn(ids) {
@@ -57,7 +57,7 @@ export const multiChapterDownload = createMutation<void, Error, string[]>(() => 
 	() => mangadexQueryClient
 );
 
-export const multiCancelChapterDownload = createMutation<void, Error, string[]>(() => (
+export const multiCancelChapterDownload = () => createMutation<void, Error, string[]>(() => (
 	{
 		mutationKey: ["multi", "cancel", "download", "chapters"],
 		async mutationFn(ids) {

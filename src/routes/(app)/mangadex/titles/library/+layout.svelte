@@ -8,7 +8,6 @@
 	import { addErrorToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 	import getCurrentUserLibrarySize from "@mangadex/stores/library/size";
 	import type { Snippet } from "svelte";
-	import { derived as der } from "svelte/store";
 
 	interface Props {
 		children?: Snippet;
