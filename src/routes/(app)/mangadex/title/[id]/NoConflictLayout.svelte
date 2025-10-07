@@ -132,6 +132,7 @@
 	const onreadingStatus = debounce((e: ReadingStatusEventDetail) => {
 		if (!disableAddToLibrary) {
 			disableAddToLibrary = true;
+			/// TODO Please migrate this to tanstack query
 			Promise.all([
 				set_manga_reading_status(layoutData.id, e.readingStatus ?? null),
 				set_manga_following_status(layoutData.id, e.isFollowing)
