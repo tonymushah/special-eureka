@@ -14,6 +14,7 @@
 	import ChapterFeedElement3 from "../element3/ChapterFeedElement3.svelte";
 	import ChapterFeedListSelector from "./select/ChapterFeedListSelector.svelte";
 	import { listenToAnyChapterReadMarkers } from "@mangadex/stores/read-markers";
+	import { isArray } from "lodash";
 
 	type MouseEnvDiv = MouseEvent & {
 		currentTarget: HTMLDivElement & EventTarget;
@@ -96,19 +97,23 @@
 			const mangaIds = new Set($list.map((item) => item.mangaId));
 
 			const sub = client
-				.query(mangasReadMarkers, {
-					ids: new Array(mangaIds.values())
-				})
+				.query(
+					mangasReadMarkers,
+					{
+						ids: mangaIds.values().toArray()
+					},
+					{
+						optimistic: true
+					}
+				)
 				.subscribe((res) => {
 					const markersArray = res.data?.readMarker.mangaReadMarkers;
-					if (markersArray) {
+					if (isArray(markersArray)) {
 						const read = new Set<string>(markersArray);
 						read.forEach((chapter) => {
 							update((ctx) => {
-								const state = ctx.markers.get(chapter);
-								if (state) {
-									ctx.markers.set(chapter, true);
-								}
+								ctx.markers.set(chapter, true);
+
 								return ctx;
 							});
 						});

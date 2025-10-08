@@ -48,7 +48,7 @@
 	import { createQuery, type CreateQueryOptions } from "@tanstack/svelte-query";
 	import { writeText } from "@tauri-apps/plugin-clipboard-manager";
 	import { openUrl as open } from "@tauri-apps/plugin-opener";
-	import { debounce } from "lodash";
+	import { debounce, delay } from "lodash";
 	import { type Snippet } from "svelte";
 	import { derived as der, derived, toStore } from "svelte/store";
 	import { v4 } from "uuid";
@@ -212,22 +212,39 @@
 			}
 		} satisfies CreateQueryOptions;
 	});
+
+	const readMarkerStores = toStore(() => {
+		return {
+			...chapterReadMarkers
+		};
+	});
 	initContextReadChapterMarkers(
 		derived(
-			[toStore(() => chapterReadMarkers)],
-			([$query], set, update) => {
-				set(new Map($query.data?.map((d) => [d, true]) ?? []) as Map<string, boolean>);
-				return listenToAnyChapterReadMarkers.subscribe((a) => {
-					if (a != undefined) {
-						update((markers: Map<string, boolean>) => {
-							const state = markers.get(a.chapter);
-							if (state != undefined) {
-								markers.set(a.chapter, a.read);
+			[readMarkerStores],
+			([query], set, update) => {
+				if (query.isSuccess) {
+					const tosend = new Map(query.data.map((d) => [d, true])) as Map<
+						string,
+						boolean
+					>;
+					set(tosend);
+					const sub = listenToAnyChapterReadMarkers.subscribe((a) => {
+						if (a != undefined) {
+							if (query.isSuccess) {
+								update((markers: Map<string, boolean>) => {
+									if (markers.size > 1) {
+										const state = markers.get(a.chapter);
+										if (state != undefined) {
+											markers.set(a.chapter, a.read);
+										}
+									}
+									return markers;
+								});
 							}
-							return markers;
-						});
-					}
-				});
+						}
+					});
+					return sub;
+				}
 			},
 			new Map()
 		)

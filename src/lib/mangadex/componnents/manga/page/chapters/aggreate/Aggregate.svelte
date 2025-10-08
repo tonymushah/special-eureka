@@ -141,22 +141,23 @@
 	}
 	const readMarkers = getContextReadChapterMarkers();
 	let unread = $derived.by(() => {
-		const markers = $readMarkers;
 		let chapters = new Set(
 			query.data?.manga.aggregate.chunked.flatMap((t) => t.ids as string[])
 		);
+
 		let readChapters = new Set(
-			markers
+			$readMarkers
 				.entries()
-				.filter(([v]) => {
+				.filter(([k, v]) => {
 					return v;
 				})
-				.map(([v, k]) => {
+				.map(([k, v]) => {
 					return k;
 				})
 		);
+		console.log(readChapters);
 		let unreadChapters = chapters.difference(readChapters);
-
+		console.log(unreadChapters);
 		return unreadChapters;
 	});
 	let hasUnread = $derived.by(() => unread.size > 0);

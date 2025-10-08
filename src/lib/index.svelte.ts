@@ -19,7 +19,7 @@ export function extractFromAccessor<T>(_access: Accessor<T>): ExtractedAccessor<
 			d();
 		}
 	};
-	console.debug(to_ret);
+	//console.debug(to_ret);
 	return to_ret;
 }
 
