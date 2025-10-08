@@ -31,8 +31,6 @@
 		"@eslint/js": "^9.37.0",
 		"@graphql-codegen/cli": "^6.0.0",
 		"@graphql-codegen/client-preset": "^5.1.0",
-		"@kitql/helpers": "^0.8.13",
-		"@kitql/internals": "^0.10.5",
 		"@melt-ui/pp": "^0.3.2",
 		"@melt-ui/svelte": "^0.86.6",
 		"@parcel/watcher": "^2.5.1",
@@ -48,8 +46,6 @@
 		"@types/lodash": "^4.17.20",
 		"@types/react": "^19.2.2",
 		"@types/react-dom": "^19.2.1",
-		"@types/toastify-js": "^1.12.4",
-		"@types/uuid": "^11.0.0",
 		"@typescript-eslint/eslint-plugin": "^8.46.0",
 		"@typescript-eslint/parser": "^8.46.0",
 		"@viselect/vanilla": "^3.9.0",
@@ -79,7 +75,6 @@
 		"vite": "^7.1.9",
 		"vite-plugin-image-optimizer": "^2.0.2",
 		"vite-plugin-kit-routes": "^1.0.2",
-		"vite-plugin-watch-and-run": "^1.7.5",
 		"vitest": "^3.2.4"
 	},
 	"type": "module",
@@ -116,7 +111,6 @@
 		"svelte-remixicon": "^2.7.0",
 		"swiper": "^12.0.2",
 		"timeago.js": "^4.0.2",
-		"toastify-js": "^1.12.0",
 		"uuid": "^13.0.0"
 	},
 	"packageManager": "pnpm@10.18.1",
