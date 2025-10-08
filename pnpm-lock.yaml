@@ -31,7 +31,7 @@ importers:
         version: 3.2.0(graphql@16.11.0)
       '@humanspeak/svelte-markdown':
         specifier: ^0.8.12
-        version: 0.8.12(svelte@5.39.10)
+        version: 0.8.13(svelte@5.39.10)
       '@panzoom/panzoom':
         specifier: ^4.6.0
         version: 4.6.0
@@ -928,8 +928,8 @@ packages:
     resolution: {integrity: sha512-/zUx+yOsIrG4Y43Eh2peDeKCxlRt/gET6aHfaKpuq267qXdYDFViVHfMaLyygZOnl0kGWxFIgsBy8QFuTLUXEQ==}
     engines: {node: '>=18.18.0'}
 
-  '@humanspeak/svelte-markdown@0.8.12':
-    resolution: {integrity: sha512-jqeg0O9N9kugfUalzwbmXKL6E3hI3TYoqisPaW2IKCl6DrN/dgKqfe87qY9Gmcb/YZ90el/dB5D4l/FSqYZHZw==}
+  '@humanspeak/svelte-markdown@0.8.13':
+    resolution: {integrity: sha512-A0Ds5HaAID6HPcJ9MZUKjNuDpIOn10AUhwoJl46mHFvl4uM0//+UU0wJc2CFj3kPtsruJLR+7ZOImWb6awmAbQ==}
     peerDependencies:
       svelte: ^5.0.0
 
@@ -5177,7 +5177,7 @@ snapshots:
       '@humanfs/core': 0.19.1
       '@humanwhocodes/retry': 0.4.3
 
-  '@humanspeak/svelte-markdown@0.8.12(svelte@5.39.10)':
+  '@humanspeak/svelte-markdown@0.8.13(svelte@5.39.10)':
     dependencies:
       github-slugger: 2.0.0
       htmlparser2: 10.0.0
