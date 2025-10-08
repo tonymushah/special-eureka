@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Paragraph from "@mangadex/componnents/markdown/renderers/Paragraph.svelte";
 	import ExtLink from "@mangadex/componnents/theme/links/ExtLink.svelte";
-	import SvelteMarkdown from "svelte-markdown";
+	import SvelteMarkdown from "@humanspeak/svelte-markdown";
 	import Heading from "./Heading.svelte";
 	interface Props {
 		description: string;

@@ -5,7 +5,7 @@
 		download_and_install_updates
 	} from "@special-eureka/core/commands/updater";
 	import { createMutation, createQuery } from "@tanstack/svelte-query";
-	import Markdown from "svelte-exmarkdown";
+	import Markdown from "@humanspeak/svelte-markdown";
 
 	let query = createQuery(() => ({
 		queryKey: ["updates"],
@@ -71,7 +71,7 @@
 					<p>Publish date: {query.data.publish_date}</p>
 				{/if}
 				{#if query.data.description}
-					<Markdown md={query.data.description} />
+					<Markdown source={query.data.description} />
 				{/if}
 				{#if updateMutation.isError}
 					<div class="mutate-error">
