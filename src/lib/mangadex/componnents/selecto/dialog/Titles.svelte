@@ -3,11 +3,11 @@
 	import AddToListBatch from "./titles/AddToListBatch.svelte";
 	import UpdateReadingStatuses from "./titles/UpdateReadingStatuses.svelte";
 	import { dev } from "$app/environment";
-	import { titlesDownload } from "./titles/download";
+	import { titlesDownload as titlesDownloadLoader } from "./titles/download";
 	import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 	import Selections from "./titles/Selections.svelte";
 	import SectionBase from "./SectionBase.svelte";
-	import exportIdsToTxt from "@mangadex/gql-docs/export/ids";
+	import exportIdsToTxtLoader from "@mangadex/gql-docs/export/ids";
 	import { revealItemInDir } from "@tauri-apps/plugin-opener";
 	import ExportTitlesAsCsv from "./titles/export/ExportTitlesAsCSV.svelte";
 	import ExportTitlesAsMal from "./titles/export/ExportTitlesAsMAL.svelte";
@@ -17,6 +17,8 @@
 		titles: string[];
 	}
 	let { titles: titles_main }: Props = $props();
+	let titlesDownload = titlesDownloadLoader();
+	let exportIdsToTxt = exportIdsToTxtLoader();
 	let titles = $state(titles_main);
 	let currentAction: "lists" | "status" | "selections" | "export-csv" | "export-mal" =
 		$state("lists");

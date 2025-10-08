@@ -4,6 +4,7 @@ import { createMutation } from "@tanstack/svelte-query";
 import { get, readable, type Writable } from "svelte/store";
 import { mangadexQueryClient } from "..";
 import { ContentProfileWarningMode } from "@mangadex/gql/graphql";
+import { extractFromAccessor } from "$lib/index.svelte";
 
 const sub_read = readable(ContentProfileWarningMode.Always, (set) => {
 	const sub = client.subscription(gql_subscription, {}).subscribe((res) => {
@@ -17,7 +18,7 @@ const sub_read = readable(ContentProfileWarningMode.Always, (set) => {
 	};
 });
 
-export const contentProfileWarningModeMutation = createMutation(() => ({
+export const contentProfileWarningModeMutation = () => createMutation(() => ({
 	mutationKey: ["content-profile", "warning-mode", "update"],
 	async mutationFn(mode: ContentProfileWarningMode) {
 		const res = await client.mutation(gql_mutation, {
@@ -35,11 +36,13 @@ const contentProfileWarningMode: Writable<ContentProfileWarningMode> = {
 		return sub_read.subscribe(run, invalidate);
 	},
 	set(value) {
-		contentProfileWarningModeMutation.mutate(value);
+		using mutation = extractFromAccessor(contentProfileWarningModeMutation);
+		mutation.value.mutate(value);
 	},
 	update(updater) {
 		const value = get(sub_read);
-		contentProfileWarningModeMutation.mutate(updater(value));
+		using mutation = extractFromAccessor(contentProfileWarningModeMutation);
+		mutation.value.mutate(updater(value));
 	},
 }
 

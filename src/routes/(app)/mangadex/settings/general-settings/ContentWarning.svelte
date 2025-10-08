@@ -1,8 +1,9 @@
 <script lang="ts">
 	import { ContentProfileWarningMode } from "@mangadex/gql/graphql";
 	import contentProfileWarningMode, {
-		contentProfileWarningModeMutation
+		contentProfileWarningModeMutation as contentProfileWarningModeMutationLoader
 	} from "@mangadex/stores/contentProfileWarningMode";
+	let contentProfileWarningModeMutation = contentProfileWarningModeMutationLoader();
 </script>
 
 <div>

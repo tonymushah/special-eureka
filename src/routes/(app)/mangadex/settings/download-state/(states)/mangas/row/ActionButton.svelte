@@ -3,12 +3,12 @@
 	import DangerButtonOnlyLabel from "@mangadex/componnents/theme/buttons/DangerButtonOnlyLabel.svelte";
 	import PrimaryButtonOnlyLabel from "@mangadex/componnents/theme/buttons/PrimaryButtonOnlyLabel.svelte";
 	import {
-		cancelMutation,
-		downloadMutationQuery,
+		cancelMutation as cancelMutationLoader,
+		downloadMutationQuery as downloadMutationQueryLoader,
 		hasMangaDownloadingFailed,
 		isMangaDownloaded,
 		isMangaDownloading,
-		removeMutation
+		removeMutation as removeMutationLoader
 	} from "@mangadex/download/manga";
 	import { derived as storeDerived } from "svelte/store";
 
@@ -26,6 +26,9 @@
 			return downloaded || failed;
 		}
 	);
+	let cancelMutation = cancelMutationLoader();
+	let downloadMutationQuery = downloadMutationQueryLoader();
+	let removeMutation = removeMutationLoader();
 </script>
 
 <div>

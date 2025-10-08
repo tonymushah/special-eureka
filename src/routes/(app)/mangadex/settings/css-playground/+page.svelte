@@ -2,7 +2,6 @@
 	import CustomListCheckbox from "@mangadex/componnents/manga/add-to-list/CustomListCheckbox.svelte";
 	import MakeANewList from "@mangadex/componnents/manga/add-to-list/MakeANewList.svelte";
 	import MangaDexTabs from "@mangadex/componnents/theme/tabs/MangaDexTabs.svelte";
-	import ToastForStories from "@mangadex/componnents/theme/toast/ToastForStories.svelte";
 	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
 	import { slide } from "svelte/transition";
 	import { v4 } from "uuid";
@@ -38,11 +37,6 @@
 						}}
 					>
 						<h3>Mangas lol</h3>
-						<ToastForStories
-							title="Something"
-							description="sadadasd"
-							color="var(--danger)"
-						/>
 					</div>
 				{/if}
 				{#if content == "tab-2"}

@@ -34,12 +34,12 @@ export function DownloadStateToChapterDownloadState(data: {
 }): ChapterDownloadState {
 	if (data.isDownloaded) {
 		if (!data.hasFailed) {
-			return ChapterDownloadState.Downloaded;
+			return ChapterDownloadState.Done;
 		} else {
-			return ChapterDownloadState.Failed;
+			return ChapterDownloadState.Error;
 		}
 	} else {
-		return ChapterDownloadState.NotDownloaded;
+		return ChapterDownloadState.Pending;
 	}
 }
 
@@ -47,7 +47,7 @@ export default function getChapterDownloadState({
 	id,
 	client
 }: GetChapterDownloadStateParams): Readable<ChapterDownloadState> {
-	const store = readable<ChapterDownloadState>(ChapterDownloadState.NotDownloaded, (set) => {
+	const store = readable<ChapterDownloadState>(ChapterDownloadState.Pending, (set) => {
 		client
 			.query(isChapterDownloadedQuery, {
 				id

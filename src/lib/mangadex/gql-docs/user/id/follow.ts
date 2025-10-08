@@ -1,3 +1,4 @@
+import { extractFromAccessor, internalToStore } from "$lib/index.svelte";
 import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 import { graphql } from "@mangadex/gql/gql";
 import { client } from "@mangadex/gql/urql";
@@ -29,7 +30,7 @@ export const isFollowingUserQuery = graphql(`
 	}
 `);
 
-export const followUserMutation = createMutation(() => ({
+export const followUserMutation = () => createMutation(() => ({
 	mutationKey: ["user", "follow"],
 	async mutationFn(id: string) {
 		const res = await client.mutation(followUserGQLMutation, {
@@ -41,7 +42,7 @@ export const followUserMutation = createMutation(() => ({
 	}
 }), () => mangadexQueryClient);
 
-export const unfollowUserMutation = createMutation(() => ({
+export const unfollowUserMutation = () => createMutation(() => ({
 	mutationKey: ["user", "unfollow"],
 	async mutationFn(id: string) {
 		const res = await client.mutation(unfollowUserGQLMutation, {
@@ -60,7 +61,7 @@ export default function isFollowingUser(id: string, options?: {
 	toast?: boolean
 }): Writable<boolean> {
 	const toast = options?.toast ?? true;
-	const query = createQuery(() => ({
+	const query = () => createQuery(() => ({
 		queryKey: ["user", id, "is-following"],
 		async queryFn() {
 			const res = await client.query(isFollowingUserQuery, {
@@ -71,17 +72,19 @@ export default function isFollowingUser(id: string, options?: {
 			}
 		}
 	}), () => mangadexQueryClient);
-	const queryDerived = derived(toStore(() => query), ($query) => {
+	const queryDerived = derived(internalToStore(query), ($query) => {
 		return $query.data ?? false
 	}, false);
 	return {
 		subscribe: queryDerived.subscribe,
 		set(value) {
-			setFollowingStatus(value, id, toast, query, options);
+			using q_ = extractFromAccessor(query);
+			setFollowingStatus(value, id, toast, q_.value, options);
 		},
 		update(updater) {
 			const value = updater(get(queryDerived));
-			setFollowingStatus(value, id, toast, query, options);
+			using q_ = extractFromAccessor(query);
+			setFollowingStatus(value, id, toast, q_.value, options);
 		}
 	};
 }
@@ -101,7 +104,8 @@ function setFollowingStatus(
 		| undefined
 ) {
 	if (value) {
-		followUserMutation.mutate(id, {
+		using mut = extractFromAccessor(followUserMutation);
+		mut.value.mutate(id, {
 			onError(error, variables, context) {
 				if (toast) {
 					addErrorToast("Cannot change user following status", error);
@@ -126,7 +130,8 @@ function setFollowingStatus(
 			}
 		});
 	} else {
-		unfollowUserMutation.mutate(id, {
+		using mut = extractFromAccessor(unfollowUserMutation);
+		mut.value.mutate(id, {
 			onError(error, variables, context) {
 				if (toast) {
 					addErrorToast("Cannot change user following status", error);

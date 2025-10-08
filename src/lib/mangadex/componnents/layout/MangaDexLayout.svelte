@@ -34,6 +34,7 @@
 </script>
 
 <QueryClientProvider client={mangadexQueryClient}>
+	<SvelteQueryDevtools />
 	<div class="d-content">
 		<style>
 			html::-webkit-scrollbar {
@@ -47,7 +48,6 @@
 			</MangaDexDefaultThemeProvider>
 		</MangaDexContextDataProvider>
 	</div>
-	<SvelteQueryDevtools />
 </QueryClientProvider>
 
 <style lang="scss">

@@ -4,6 +4,7 @@ import { mangadexQueryClient } from "..";
 import { client } from "@mangadex/gql/urql";
 import { get } from "svelte/store";
 import type { OfflineConfigInput } from "@mangadex/gql/graphql";
+import { extractFromAccessor } from "$lib/index.svelte";
 
 const query = graphql(`
 	query offlineConfig {
@@ -31,7 +32,7 @@ const mutation = graphql(`
 	}
 `);
 
-export const queryStore = createQuery(() => (
+export const queryStore = () => createQuery(() => (
 	{
 		queryKey: ["offline", "config"],
 		async queryFn() {
@@ -57,13 +58,11 @@ async function updateCfg(cfg: OfflineConfigInput) {
 	throw new Error("No data or error");
 }
 
-export const mutationStore = createMutation(() => (
-	{
-		mutationKey: ["offline", "config", "mutation"],
-		onSettled(data, error, variables, context) {
-			queryStore.refetch();
-		},
-		mutationFn: updateCfg
-	}),
-	() => mangadexQueryClient
-);
+export const mutationStore = createMutation(() => ({
+	mutationKey: ["offline", "config", "mutation"],
+	onSettled(data, error, variables, context) {
+		using mut = extractFromAccessor(queryStore);
+		mut.value.refetch();
+	},
+	mutationFn: updateCfg
+}), () => mangadexQueryClient);

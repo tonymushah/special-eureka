@@ -12,7 +12,7 @@ export const exportIdsToTxt_mutation = graphql(`
 	}
 `);
 
-const exportIdsToTxt = createMutation(() => (
+const exportIdsToTxt = () => createMutation(() => (
 	{
 		mutationKey: ["export", "ids", "as-txt"],
 		async mutationFn(options: { uuids: string[]; path?: string }): Promise<string> {

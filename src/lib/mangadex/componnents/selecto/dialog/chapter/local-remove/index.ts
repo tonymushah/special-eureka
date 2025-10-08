@@ -12,7 +12,7 @@ const removeMultipleChapterMutationBase = graphql(`
 	}
 `);
 
-export const removeMultipleChapterMutation = createMutation<void, Error, string[]>(() => (
+export const removeMultipleChapterMutation = () => createMutation<void, Error, string[]>(() => (
 	{
 		mutationKey: ["remove", "multitple", "chapters", "localy"],
 		async mutationFn(chapters) {

@@ -1,3 +1,4 @@
+import { extractFromAccessor, internalToStore } from "$lib/index.svelte";
 import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 import { graphql } from "@mangadex/gql/gql";
 import { client } from "@mangadex/gql/urql";
@@ -29,7 +30,7 @@ export const isFollowingCustomListQuery = graphql(`
 	}
 `);
 
-export const followCustomListMutation = createMutation(() => ({
+export const followCustomListMutation = () => createMutation(() => ({
 	mutationKey: ["custom-list", "follow"],
 	async mutationFn(id: string) {
 		const res = await client.mutation(followCustomListGQLMutation, {
@@ -41,7 +42,7 @@ export const followCustomListMutation = createMutation(() => ({
 	}
 }), () => mangadexQueryClient);
 
-export const unfollowCustomListMutation = createMutation(() => ({
+export const unfollowCustomListMutation = () => createMutation(() => ({
 	mutationKey: ["custom-list", "unfollow"],
 	async mutationFn(id: string) {
 		const res = await client.mutation(unfollowCustomListGQLMutation, {
@@ -60,7 +61,7 @@ export default function isFollowingCustomList(id: string, options?: {
 	toast?: boolean
 }): Writable<boolean> {
 	const toast = options?.toast ?? true;
-	const query = createQuery(() => ({
+	const query = () => createQuery(() => ({
 		queryKey: ["custom-list", id, "is-following"],
 		async queryFn() {
 			const res = await client.query(isFollowingCustomListQuery, {
@@ -71,17 +72,19 @@ export default function isFollowingCustomList(id: string, options?: {
 			}
 		}
 	}), () => mangadexQueryClient);
-	const queryDerived = derived(toStore(() => query), ($query) => {
+	const queryDerived = derived(internalToStore(query), ($query) => {
 		return $query.data ?? false
 	}, false);
 	return {
 		subscribe: queryDerived.subscribe,
 		set(value) {
-			setFollowingStatus(value, id, toast, query, options);
+			using q_ = extractFromAccessor(query);
+			setFollowingStatus(value, id, toast, q_.value, options);
 		},
 		update(updater) {
 			const value = updater(get(queryDerived));
-			setFollowingStatus(value, id, toast, query, options);
+			using q_ = extractFromAccessor(query);
+			setFollowingStatus(value, id, toast, q_.value, options);
 		}
 	};
 }
@@ -101,7 +104,8 @@ function setFollowingStatus(
 		| undefined
 ) {
 	if (value) {
-		followCustomListMutation.mutate(id, {
+		using mut = extractFromAccessor(followCustomListMutation);
+		mut.value.mutate(id, {
 			onError(error, variables, context) {
 				if (toast) {
 					addErrorToast("Cannot change custom list following status", error);
@@ -126,7 +130,8 @@ function setFollowingStatus(
 			}
 		});
 	} else {
-		unfollowCustomListMutation.mutate(id, {
+		using mut = extractFromAccessor(unfollowCustomListMutation);
+		mut.value.mutate(id, {
 			onError(error, variables, context) {
 				if (toast) {
 					addErrorToast("Cannot change custom list following status", error);

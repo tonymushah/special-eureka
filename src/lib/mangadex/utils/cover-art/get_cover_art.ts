@@ -1,3 +1,4 @@
+import { internalToStore } from "$lib/index.svelte";
 import { graphql } from "@mangadex/gql/exports";
 import type { CoverImageQuality } from "@mangadex/gql/graphql";
 import { mangadexQueryClient } from "@mangadex/index";
@@ -31,7 +32,7 @@ export default function get_cover_art({
 	client: Client;
 	mode?: CoverImageQuality;
 }): Readable<string | undefined> {
-	const store = createQuery(() => (
+	const store = () => createQuery(() => (
 		{
 			queryKey: ["cover", "image", cover_id, manga_id, filename, mode],
 			async queryFn() {
@@ -67,7 +68,7 @@ export default function get_cover_art({
 		}),
 		() => mangadexQueryClient
 	);
-	return derived(toStore(() => store), ($s, set) => {
+	return derived(internalToStore(store), ($s, set) => {
 		const url: string | undefined = $s.data;
 		set(url);
 	});

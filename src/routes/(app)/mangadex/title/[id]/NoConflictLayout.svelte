@@ -19,9 +19,9 @@
 	import Markdown from "@mangadex/componnents/markdown/Markdown.svelte";
 	import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 	import mangaDownloadState, {
-		cancelMutation,
-		downloadMutationQuery,
-		removeMutation
+		cancelMutation as cancelMutationLoader,
+		downloadMutationQuery as downloadMutationQueryLoader,
+		removeMutation as removeMutationLoader
 	} from "@mangadex/download/manga";
 	import { mangaReadMarkers } from "@mangadex/gql-docs/read-markers/chapters";
 	import { client } from "@mangadex/gql/urql";
@@ -54,6 +54,7 @@
 	import { v4 } from "uuid";
 	import type { LayoutData } from "./layout.context";
 	import { setTitleLayoutData } from "./layout.context";
+	import { isLogged } from "@mangadex/utils/auth";
 
 	type TopMangaStatisticsStoreData = TopMangaStatistics & {
 		threadUrl?: string;
@@ -131,6 +132,7 @@
 	const onreadingStatus = debounce((e: ReadingStatusEventDetail) => {
 		if (!disableAddToLibrary) {
 			disableAddToLibrary = true;
+			/// TODO Please migrate this to tanstack query
 			Promise.all([
 				set_manga_reading_status(layoutData.id, e.readingStatus ?? null),
 				set_manga_following_status(layoutData.id, e.isFollowing)
@@ -230,6 +232,9 @@
 			new Map()
 		)
 	);
+	let removeMutation = removeMutationLoader();
+	let downloadMutationQuery = downloadMutationQueryLoader();
+	let cancelMutation = cancelMutationLoader();
 </script>
 
 <svelte:window onfocus={refetchReadingFollowingStatus} />
@@ -271,10 +276,10 @@
 			})
 		);
 	}}
-	{disableAddToLibrary}
+	disableAddToLibrary={disableAddToLibrary && !$isLogged}
 	rating={der(manga_rating(data.layoutData.id), (d) => d ?? undefined)}
 	{onrating}
-	{disableRating}
+	disableRating={disableRating && !$isLogged}
 	disableRead={!$hasChaptToRead}
 	onread={() => {
 		readManga(data.layoutData.id);

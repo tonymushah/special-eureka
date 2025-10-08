@@ -1,3 +1,4 @@
+import { extractFromAccessor, internalToStore } from "$lib/index.svelte";
 import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 import { graphql } from "@mangadex/gql/gql";
 import { client } from "@mangadex/gql/urql";
@@ -29,7 +30,7 @@ export const isFollowingGroupQuery = graphql(`
 	}
 `);
 
-export const followGroupMutation = createMutation(() => ({
+export const followGroupMutation = () => createMutation(() => ({
 	mutationKey: ["scanlation-group", "follow"],
 	async mutationFn(id: string) {
 		const res = await client.mutation(followGroupGQLMutation, {
@@ -41,7 +42,7 @@ export const followGroupMutation = createMutation(() => ({
 	}
 }), () => mangadexQueryClient);
 
-export const unfollowGroupMutation = createMutation(() => ({
+export const unfollowGroupMutation = () => createMutation(() => ({
 	mutationKey: ["scanlation-group", "unfollow"],
 	async mutationFn(id: string) {
 		const res = await client.mutation(unfollowGroupGQLMutation, {
@@ -60,7 +61,7 @@ export default function isFollowingGroup(id: string, options?: {
 	toast?: boolean
 }): Writable<boolean> {
 	const toast = options?.toast ?? true;
-	const query = createQuery(() => ({
+	const query = () => createQuery(() => ({
 		queryKey: ["scanlation-group", id, "is-following"],
 		async queryFn() {
 			const res = await client.query(isFollowingGroupQuery, {
@@ -71,17 +72,19 @@ export default function isFollowingGroup(id: string, options?: {
 			}
 		}
 	}), () => mangadexQueryClient);
-	const queryDerived = derived(toStore(() => query), ($query) => {
+	const queryDerived = derived(internalToStore(query), ($query) => {
 		return $query.data ?? false
 	}, false);
 	return {
 		subscribe: queryDerived.subscribe,
 		set(value) {
-			setFollowingStatus(value, id, toast, query, options);
+			using q = extractFromAccessor(query);
+			setFollowingStatus(value, id, toast, q.value, options);
 		},
 		update(updater) {
 			const value = updater(get(queryDerived));
-			setFollowingStatus(value, id, toast, query, options);
+			using q = extractFromAccessor(query);
+			setFollowingStatus(value, id, toast, q.value, options);
 		}
 	};
 }
@@ -101,7 +104,8 @@ function setFollowingStatus(
 		| undefined
 ) {
 	if (value) {
-		followGroupMutation.mutate(id, {
+		using mut_ = extractFromAccessor(followGroupMutation);
+		mut_.value.mutate(id, {
 			onError(error, variables, context) {
 				if (toast) {
 					addErrorToast("Cannot change scanlation group following status", error);
@@ -126,7 +130,8 @@ function setFollowingStatus(
 			}
 		});
 	} else {
-		unfollowGroupMutation.mutate(id, {
+		using mut = extractFromAccessor(unfollowGroupMutation);
+		mut.value.mutate(id, {
 			onError(error, variables, context) {
 				if (toast) {
 					addErrorToast("Cannot change scanlation group following status", error);

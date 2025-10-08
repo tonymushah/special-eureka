@@ -3,12 +3,12 @@
 	import DangerButtonOnlyLabel from "@mangadex/componnents/theme/buttons/DangerButtonOnlyLabel.svelte";
 	import PrimaryButtonOnlyLabel from "@mangadex/componnents/theme/buttons/PrimaryButtonOnlyLabel.svelte";
 	import {
-		cancelDonwloadMutation,
-		downloadMutationQuery,
+		cancelDonwloadMutation as cancelDonwloadMutationLoader,
+		downloadMutationQuery as downloadMutationQueryLoader,
 		hasCoverDownloadingFailed,
 		isCoverDownloaded,
 		isCoverDownloading,
-		removeMutation
+		removeMutation as removeMutationLoader
 	} from "@mangadex/download/cover";
 	import { derived as storeDerived } from "svelte/store";
 
@@ -30,6 +30,9 @@
 		],
 		([downloaded, failed]) => downloaded || failed
 	);
+	let cancelMutation = cancelDonwloadMutationLoader();
+	let downloadMutationQuery = downloadMutationQueryLoader();
+	let removeMutation = removeMutationLoader();
 </script>
 
 <div>
@@ -51,7 +54,7 @@
 			label="Cancel"
 			variant="5"
 			onclick={() => {
-				cancelDonwloadMutation.mutateAsync(id);
+				cancelMutation.mutateAsync(id);
 			}}
 		/>
 	{:else}

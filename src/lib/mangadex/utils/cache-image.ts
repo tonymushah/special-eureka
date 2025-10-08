@@ -1,6 +1,6 @@
 import { mangadexQueryClient } from "@mangadex/index";
 import { createQueries, createQuery, type QueryFunctionContext } from "@tanstack/svelte-query";
-import { derived, fromStore, type Readable } from "svelte/store";
+import { fromStore, type Readable } from "svelte/store";
 
 export function cacheImage(url: string) {
 	return createQuery(() => (

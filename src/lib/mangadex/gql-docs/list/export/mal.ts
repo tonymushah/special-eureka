@@ -14,7 +14,7 @@ const export_mutation = graphql(`
 	}
 `);
 
-const exportCustomListsToMAL = createMutation(() => (
+const exportCustomListsToMAL = () => createMutation(() => (
 	{
 		mutationKey: ["export", "custom-lists", "to", "MAL"],
 		async mutationFn(options: MdcustomListsToMyAnimeListExportOption): Promise<string> {

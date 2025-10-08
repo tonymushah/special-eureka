@@ -19,7 +19,7 @@
 	import MediumMangaList from "./medium/MediumMangaList.svelte";
 	import contentProfileWarningMode from "@mangadex/stores/contentProfileWarningMode";
 	import defaultContentProfile from "@mangadex/content-profile/graphql/defaultProfile";
-	import { titleStatusMapQuery } from "@mangadex/gql-docs/library/isIn";
+	import { titleStatusMapQuery as titleStatusMapQueryLoader } from "@mangadex/gql-docs/library/isIn";
 	import { isArray } from "lodash";
 	import contentProfileBlur from "@mangadex/stores/contentProfileBlur";
 	import { updateTitleBlur } from "@mangadex/utils/conflicts/mangaProps";
@@ -29,6 +29,7 @@
 	}
 
 	let { list: propsList }: Props = $props();
+	let titleStatusMapQuery = titleStatusMapQueryLoader();
 	let list = $derived.by(() => {
 		if ($contentProfileBlur) {
 			let toRet: Map<string, MangaListContentItemProps> = new Map();

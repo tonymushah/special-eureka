@@ -14,7 +14,7 @@ const mutation = graphql(`
 	}
 `);
 
-export const titlesDownload = createMutation<void, Error, string[]>(() => (
+export const titlesDownload = () => createMutation<void, Error, string[]>(() => (
 	{
 		mutationKey: ["titles", "download"],
 		async mutationFn(titles) {

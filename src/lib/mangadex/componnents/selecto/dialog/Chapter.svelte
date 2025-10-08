@@ -3,9 +3,9 @@
 	import SectionBase from "./SectionBase.svelte";
 	import DangerButtonOnlyLabel from "@mangadex/componnents/theme/buttons/DangerButtonOnlyLabel.svelte";
 	import Selections from "./chapter/Selections.svelte";
-	import { multiChapterDownload } from "./chapter/download";
-	import { removeMultipleChapterMutation } from "./chapter/local-remove";
-	import exportIdsToTxt from "@mangadex/gql-docs/export/ids";
+	import { multiChapterDownload as multiChapterDownloadLoader } from "./chapter/download";
+	import { removeMultipleChapterMutation as removeMultipleChapterMutationLoader } from "./chapter/local-remove";
+	import exportIdsToTxtLoader from "@mangadex/gql-docs/export/ids";
 	import { addErrorToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 	import { revealItemInDir } from "@tauri-apps/plugin-opener";
 	import { isMounted } from "@mangadex/stores/offlineIsMounted";
@@ -13,6 +13,9 @@
 	interface Props {
 		chapters: string[];
 	}
+	let multiChapterDownload = multiChapterDownloadLoader();
+	let removeMultipleChapterMutation = removeMultipleChapterMutationLoader();
+	let exportIdsToTxt = exportIdsToTxtLoader();
 	let { chapters = $bindable([]) }: Props = $props();
 	let currentAction: "selection" = $state("selection");
 	let canDelete = false;
