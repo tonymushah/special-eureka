@@ -194,8 +194,8 @@
 			}))
 		})
 	);
-	const chapterReadMarkers = createQuery(() => {
-		const id = data.layoutData.id;
+	let chapterReadMarkers = createQuery(() => {
+		let id = data.layoutData.id;
 		return {
 			queryKey: ["title", id, "read-markers", "page"],
 			async queryFn() {
