@@ -1,4 +1,5 @@
 <script lang="ts">
+	import registerContextMenuEvent from "@special-eureka/core/utils/contextMenuContext";
 	import { openUrl as open } from "@tauri-apps/plugin-opener";
 
 	interface Props {
@@ -21,6 +22,9 @@
 	}}
 	onclick={(e) => {
 		open(href);
+	}}
+	oncontextmenu={(e) => {
+		e.preventDefault();
 	}}
 >
 	{@render children?.()}

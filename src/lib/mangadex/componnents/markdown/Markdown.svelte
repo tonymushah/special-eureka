@@ -1,7 +1,8 @@
 <script lang="ts">
-	import SvelteMarkdown from "svelte-markdown";
+	import SvelteMarkdown from "@humanspeak/svelte-markdown";
 	import ExtLink from "../theme/links/ExtLink.svelte";
 	import Paragraph from "./renderers/Paragraph.svelte";
+	import Table from "./renderers/Table.svelte";
 	interface Props {
 		source: string;
 	}
@@ -13,6 +14,7 @@
 	{source}
 	renderers={{
 		link: ExtLink,
-		paragraph: Paragraph
+		paragraph: Paragraph,
+		table: Table
 	}}
 />
