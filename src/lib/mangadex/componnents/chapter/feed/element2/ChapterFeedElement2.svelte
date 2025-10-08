@@ -11,6 +11,7 @@
 	import registerContextMenuEvent, {
 		setContextMenuContext
 	} from "@special-eureka/core/utils/contextMenuContext";
+	import { fade } from "svelte/transition";
 
 	type MouseEnvDiv = MouseEvent & {
 		currentTarget: HTMLDivElement & EventTarget;
@@ -97,18 +98,36 @@
 		onremove,
 		onremovePress: onremoveKeyPress
 	}: Props = $props();
-	let isCollapsed = $state(true);
-	let canCollaspe = $state(false);
-	function setDisplayedChapters() {
-		if (chapters.length > 3) {
-			canCollaspe = true;
-		}
-	}
-	onMount(() => {
-		setDisplayedChapters();
+	let isCollapsed = $state(false);
+
+	let [toShow, toHide] = $derived.by(() => {
+		return [chapters.slice(0, 2), chapters.splice(2)];
 	});
+	let canCollaspe = $derived(toHide.length > 0);
 	setContextMenuContext(() => mangaElementContextMenu({ id: mangaId, coverArtId: mangaId }));
 </script>
+
+{#snippet _chapters(chaps: Chapter[])}
+	{#each chaps as { chapterId, title, lang, groups, uploader, upload_date, comments }}
+		<ChapterElement1
+			{ondownload}
+			{ondownloadKeyPress}
+			{onread}
+			{onreadKeyPress}
+			{oncomments}
+			{oncommentsKeyPress}
+			{onremove}
+			{onremoveKeyPress}
+			id={chapterId}
+			{title}
+			{lang}
+			{groups}
+			{upload_date}
+			{uploader}
+			{comments}
+		/>
+	{/each}
+{/snippet}
 
 <article class="layout manga-element" data-manga-id={mangaId}>
 	<div
@@ -169,26 +188,13 @@
 		</div>
 		<hr />
 		<div class="bottom-body">
-			<div class="chapters" class:isCollapsed>
-				{#each chapters as { chapterId, title, lang, groups, uploader, upload_date, comments }}
-					<ChapterElement1
-						{ondownload}
-						{ondownloadKeyPress}
-						{onread}
-						{onreadKeyPress}
-						{oncomments}
-						{oncommentsKeyPress}
-						{onremove}
-						{onremoveKeyPress}
-						id={chapterId}
-						{title}
-						{lang}
-						{groups}
-						{upload_date}
-						{uploader}
-						{comments}
-					/>
-				{/each}
+			<div class="chapters">
+				{@render _chapters(toShow)}
+				<div class="animated" class:isCollapsed>
+					<div class="inner">
+						{@render _chapters(toHide)}
+					</div>
+				</div>
 			</div>
 			{#if canCollaspe}
 				<div class="collapse">
@@ -199,9 +205,11 @@
 						}}
 					>
 						{#if isCollapsed}
-							Show more
-						{:else}
 							Show less
+						{:else}
+							Show more {#if toHide.length > 0}
+								({toHide.length})
+							{/if}
 						{/if}
 					</ButtonAccent>
 				</div>
@@ -219,9 +227,7 @@
 		overflow-y: hidden;
 		border-radius: 0.25rem;
 	}
-	.chapters {
-		transition: height 300ms ease-in-out;
-	}
+
 	div.cover > img {
 		height: 12em;
 		object-fit: cover;
@@ -257,18 +263,27 @@
 		width: 100%;
 	}
 	div.bottom-body > div.chapters {
-		display: flex;
-		flex-direction: column;
 		gap: 5px;
 		overflow: hidden;
-		transition: height 300ms ease-in-out;
 		margin-bottom: 5px;
 	}
-	div.bottom-body > div.chapters:not(.isCollapsed) {
-		height: initial;
-	}
-	div.bottom-body > div.chapters.isCollapsed {
-		height: 8.6em;
+	.chapters {
+		display: grid;
+
+		.animated {
+			display: grid;
+			grid-template-rows: 0fr;
+			transition: grid-template-rows 300ms ease;
+
+			.inner {
+				display: grid;
+				gap: 5px;
+				overflow: hidden;
+			}
+		}
+		.animated.isCollapsed {
+			grid-template-rows: 1fr;
+		}
 	}
 	div.manga-content:hover {
 		cursor: pointer;
