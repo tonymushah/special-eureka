@@ -5882,7 +5882,7 @@ dependencies = [
  "tauri-macros",
  "tauri-runtime",
  "tauri-runtime-wry",
- "tauri-utils 2.7.0 (git+https://github.com/tauri-apps/tauri?branch=feat%2Ftruly-portable-appimage)",
+ "tauri-utils",
  "thiserror 2.0.17",
  "tokio",
  "tray-icon",
@@ -5911,7 +5911,7 @@ dependencies = [
  "serde",
  "serde_json",
  "tauri-codegen",
- "tauri-utils 2.7.0 (git+https://github.com/tauri-apps/tauri?branch=feat%2Ftruly-portable-appimage)",
+ "tauri-utils",
  "tauri-winres",
  "toml 0.9.7",
  "walkdir",
@@ -5935,7 +5935,7 @@ dependencies = [
  "serde_json",
  "sha2",
  "syn 2.0.106",
- "tauri-utils 2.7.0 (git+https://github.com/tauri-apps/tauri?branch=feat%2Ftruly-portable-appimage)",
+ "tauri-utils",
  "thiserror 2.0.17",
  "time",
  "url",
@@ -5953,7 +5953,7 @@ dependencies = [
  "quote",
  "syn 2.0.106",
  "tauri-codegen",
- "tauri-utils 2.7.0 (git+https://github.com/tauri-apps/tauri?branch=feat%2Ftruly-portable-appimage)",
+ "tauri-utils",
 ]
 
 [[package]]
@@ -5968,7 +5968,7 @@ dependencies = [
  "schemars 0.8.22",
  "serde",
  "serde_json",
- "tauri-utils 2.7.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "tauri-utils",
  "toml 0.9.7",
  "walkdir",
 ]
@@ -5999,7 +5999,7 @@ dependencies = [
  "serde_json",
  "tauri",
  "tauri-plugin",
- "tauri-utils 2.7.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "tauri-utils",
  "thiserror 2.0.17",
  "tracing",
  "url",
@@ -6039,7 +6039,7 @@ dependencies = [
  "serde_repr",
  "tauri",
  "tauri-plugin",
- "tauri-utils 2.7.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "tauri-utils",
  "thiserror 2.0.17",
  "toml 0.9.7",
  "url",
@@ -6211,7 +6211,7 @@ dependencies = [
  "raw-window-handle",
  "serde",
  "serde_json",
- "tauri-utils 2.7.0 (git+https://github.com/tauri-apps/tauri?branch=feat%2Ftruly-portable-appimage)",
+ "tauri-utils",
  "thiserror 2.0.17",
  "url",
  "webkit2gtk",
@@ -6237,48 +6237,12 @@ dependencies = [
  "softbuffer",
  "tao",
  "tauri-runtime",
- "tauri-utils 2.7.0 (git+https://github.com/tauri-apps/tauri?branch=feat%2Ftruly-portable-appimage)",
+ "tauri-utils",
  "url",
  "webkit2gtk",
  "webview2-com",
  "windows",
  "wry",
-]
-
-[[package]]
-name = "tauri-utils"
-version = "2.7.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "41a3852fdf9a4f8fbeaa63dc3e9a85284dd6ef7200751f0bd66ceee30c93f212"
-dependencies = [
- "anyhow",
- "cargo_metadata",
- "ctor",
- "dunce",
- "glob",
- "html5ever 0.29.1",
- "http",
- "infer",
- "json-patch",
- "kuchikiki",
- "log",
- "memchr",
- "phf 0.11.3",
- "proc-macro2",
- "quote",
- "regex",
- "schemars 0.8.22",
- "semver",
- "serde",
- "serde-untagged",
- "serde_json",
- "serde_with",
- "swift-rs",
- "thiserror 2.0.17",
- "toml 0.9.7",
- "url",
- "urlpattern",
- "uuid",
 ]
 
 [[package]]
