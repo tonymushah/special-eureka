@@ -5928,10 +5928,12 @@ dependencies = [
  "glob",
  "heck 0.5.0",
  "json-patch",
+ "quote",
  "schemars 0.8.22",
  "semver",
  "serde",
  "serde_json",
+ "tauri-codegen 2.4.0 (git+https://github.com/tauri-apps/tauri?branch=feat%2Ftruly-portable-appimage)",
  "tauri-utils 2.7.0 (git+https://github.com/tauri-apps/tauri?branch=feat%2Ftruly-portable-appimage)",
  "tauri-winres",
  "toml 0.9.7",
@@ -5966,6 +5968,31 @@ dependencies = [
 ]
 
 [[package]]
+name = "tauri-codegen"
+version = "2.4.0"
+source = "git+https://github.com/tauri-apps/tauri?branch=feat%2Ftruly-portable-appimage#f0511be705661dba2e505d7a86f513f5b4dbe240"
+dependencies = [
+ "base64 0.22.1",
+ "ico",
+ "json-patch",
+ "plist",
+ "png 0.17.16",
+ "proc-macro2",
+ "quote",
+ "semver",
+ "serde",
+ "serde_json",
+ "sha2",
+ "syn 2.0.106",
+ "tauri-utils 2.7.0 (git+https://github.com/tauri-apps/tauri?branch=feat%2Ftruly-portable-appimage)",
+ "thiserror 2.0.17",
+ "time",
+ "url",
+ "uuid",
+ "walkdir",
+]
+
+[[package]]
 name = "tauri-macros"
 version = "2.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -5975,7 +6002,7 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn 2.0.106",
- "tauri-codegen",
+ "tauri-codegen 2.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "tauri-utils 2.7.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
