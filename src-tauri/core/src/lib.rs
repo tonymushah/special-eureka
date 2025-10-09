@@ -21,7 +21,7 @@ pub fn run() {
             .unwrap()
     })
     .unwrap();
-    let context = tauri::generate_context!();
+    let context = tauri::tauri_build_context!();
     System::set_current(runtime_guard.sys().clone());
     /*let tauri_async_runtime = RuntimeBuilder::new_current_thread()
         .enable_all()
