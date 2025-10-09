@@ -76,8 +76,6 @@
 	import Link from "@mangadex/componnents/theme/links/Link.svelte";
 	import UserRolesComp from "@mangadex/componnents/user/UserRolesComp.svelte";
 	import {
-		cancelDownloadMutation,
-		downloadMutation,
 		hasChapterDownloadingFailed,
 		isChapterDownloaded,
 		isChapterDownloading,
@@ -97,7 +95,6 @@
 	import { derived } from "svelte/store";
 	import DownloadStateComp from "./DownloadStateComp.svelte";
 	import Layout from "./Layout.svelte";
-	import { extractFromAccessor } from "$lib/index.svelte";
 	import { cancelChapterDownload, downloadChapter } from "./utils";
 
 	let {
