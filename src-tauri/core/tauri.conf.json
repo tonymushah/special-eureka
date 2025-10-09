@@ -39,7 +39,8 @@
 				"depends": []
 			},
 			"appimage": {
-				"bundleMediaFramework": false
+				"bundleMediaFramework": false,
+				"useNewFormat": true
 			},
 			"rpm": {
 				"epoch": 0,
