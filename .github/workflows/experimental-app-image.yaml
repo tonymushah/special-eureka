@@ -1,0 +1,43 @@
+name: build-app-with-experimental-app-image
+on:
+    workflow_dispatch:
+permissions:
+    contents: write
+
+jobs:
+    tauri-build-experimental:
+        runs-on: 'ubuntu-24.04'
+        steps:
+            - uses: actions/checkout@v5
+            - name: setup node
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 24
+            - name: install pnpm
+              uses: pnpm/action-setup@v4
+              with:
+                  run_install: false
+            - name: install Rust stable
+              uses: dtolnay/rust-toolchain@stable
+            - name: install dependencies
+              run: |
+                sudo apt-get update
+                sudo apt-get install -y libwebkit2gtk-4.0-dev libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
+            - name: install tauri-cli experimental app image
+              run: cargo install tauri-cli --git https://github.com/tauri-apps/tauri.git --branch feat/truly-portable-appimage
+            - name: install app dependencies
+              run: pnpm install
+            - name: build the actual app with tauri action
+              uses: tauri-apps/tauri-action@v0
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
+                  TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_PASSWORD }}
+              with:
+                  tagName: v__VERSION__.0
+                  releaseName: "Special Eureka v__VERSION__ app-image experimental 0"
+                  releaseBody: "An experimental app image release using the [tauri/feat/truly-portable-app-image](https://github.com/tauri-apps/tauri/pull/12491)"
+                  releaseDraft: true
+                  prerelease: true
+                  tauriScript: cargo tauri
+
