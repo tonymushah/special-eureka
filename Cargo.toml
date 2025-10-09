@@ -5,8 +5,6 @@ resolver = "2"
 
 [workspace.dependencies]
 serde_json = "1.0"
-tauri-build = { version = "2" }
-tauri = "2"
 tokio = "1"
 anyhow = "1"
 uuid = "1"
@@ -36,6 +34,14 @@ serde-xml-rs = "0.8"
 clap = "4"
 csv = "1"
 
+[workspace.dependencies.tauri]
+version = "2"
+
+[workspace.dependencies.tauri-build]
+git = "https://github.com/tauri-apps/tauri"
+branch = "feat/truly-portable-appimage"
+version = "2"
+
 [workspace.dependencies.tauri-plugin-notification]
 git = "https://github.com/tauri-apps/plugins-workspace"
 branch = "v2"
@@ -64,6 +70,10 @@ branch = "v2"
 git = "https://github.com/tauri-apps/plugins-workspace"
 branch = "v2"
 features = ["deep-link"]
+
+[workspace.dependencies.tauri-plugin-updater]
+git = "https://github.com/tauri-apps/plugins-workspace"
+branch = "v2"
 
 [workspace.dependencies.mangadex]
 path = "./src-tauri/mangadex"

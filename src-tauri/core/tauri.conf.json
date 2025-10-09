@@ -1,5 +1,5 @@
 {
-	"$schema": "../../node_modules/@tauri-apps/cli/config.schema.json",
+	"$schema": "https://raw.githubusercontent.com/tauri-apps/tauri/f0511be705661dba2e505d7a86f513f5b4dbe240/crates/tauri-cli/config.schema.json",
 	"build": {
 		"beforeBuildCommand": "pnpm run vite:build",
 		"beforeDevCommand": "pnpm run vite:dev",
