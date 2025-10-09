@@ -22,7 +22,7 @@ jobs:
             - name: install dependencies
               run: |
                 sudo apt-get update
-                sudo apt-get install -y libwebkit2gtk-4.0-dev libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
+                sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
             - name: install tauri-cli experimental app image
               run: cargo install tauri-cli --git https://github.com/tauri-apps/tauri.git --branch feat/truly-portable-appimage
             - name: install app dependencies
