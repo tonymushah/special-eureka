@@ -1,0 +1,1 @@
+export let allowSync = $state(false);
