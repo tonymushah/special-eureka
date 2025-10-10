@@ -6169,8 +6169,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-updater"
 version = "2.9.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "27cbc31740f4d507712550694749572ec0e43bdd66992db7599b89fbfd6b167b"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#6b5b1053ba8aeb789dd5cb5fb05b7e98f3b8de0b"
 dependencies = [
  "base64 0.22.1",
  "dirs",

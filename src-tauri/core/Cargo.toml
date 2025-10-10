@@ -42,7 +42,7 @@ thiserror.workspace = true
 tauri-plugin-single-instance.workspace = true
 
 [target."cfg(not(any(target_os = \"android\", target_os = \"ios\")))".dependencies.tauri-plugin-updater]
-version = "2"
+workspace = true
 optional = true
 
 [dependencies.mangadex]
