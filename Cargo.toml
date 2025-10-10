@@ -65,6 +65,10 @@ git = "https://github.com/tauri-apps/plugins-workspace"
 branch = "v2"
 features = ["deep-link"]
 
+[workspace.dependencies.tauri-plugin-updater]
+git = "https://github.com/tauri-apps/plugins-workspace"
+branch = "v2"
+
 [workspace.dependencies.mangadex]
 path = "./src-tauri/mangadex"
 package = "tauri-plugin-speu-mangadex"
