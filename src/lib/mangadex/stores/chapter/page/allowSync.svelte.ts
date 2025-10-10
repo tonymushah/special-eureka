@@ -1,1 +1,3 @@
-export let allowSync = $state(false);
+export let allowSync = $state({
+	allow: false
+});

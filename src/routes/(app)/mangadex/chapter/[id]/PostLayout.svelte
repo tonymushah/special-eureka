@@ -92,6 +92,9 @@
 	import type { LayoutData } from "./layout.context";
 	import { addListenerToChapterThreadEventTarget } from "@mangadex/componnents/chapter/page/contexts/previousNextEventTarget";
 	import { openUrl } from "@tauri-apps/plugin-opener";
+	import { allowSync } from "@mangadex/stores/chapter/page/allowSync.svelte";
+	import { getChapterPageSync } from "@mangadex/stores/chapter/page";
+	import { untrack } from "svelte";
 
 	interface Props {
 		data: LayoutData;
@@ -185,7 +188,27 @@
 
 	initCurrentChapterDirection(readingDirectionWritable);
 	initCurrentChapterImageFit(imageFitWritable);
-	const currentPage = initChapterCurrentPageContext(writable(data.currentPage));
+	const chapterSync = getChapterPageSync(data.data.id);
+	const currentPage = initChapterCurrentPageContext(
+		writable(data.currentPage, (set) => {
+			return chapterSync.subscribe((page) => {
+				if (allowSync.allow && typeof page == "number") {
+					set(page);
+				}
+			});
+		})
+	);
+	$effect(() => {
+		if (untrack(() => allowSync.allow)) {
+			allowSync.allow = false;
+			chapterSync.set($currentPage);
+			delay(() => {
+				allowSync.allow = true;
+			}, 10);
+		} else {
+			chapterSync.set($currentPage);
+		}
+	});
 	$effect(() => {
 		currentPage.set(data.currentPage);
 	});
