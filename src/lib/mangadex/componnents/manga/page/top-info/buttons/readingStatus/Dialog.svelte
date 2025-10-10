@@ -33,8 +33,14 @@
 	}: Props = $props();
 
 	const selectedStatus = writable<ReadingStatus | undefined>(status);
+	$effect(() => {
+		selectedStatus.set(status);
+	});
 
 	const selectedIsFollowing = writable(isFollowing);
+	$effect(() => {
+		selectedIsFollowing.set(isFollowing);
+	});
 
 	function closeDialog() {
 		if (dialog) {
