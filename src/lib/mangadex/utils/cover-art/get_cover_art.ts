@@ -44,6 +44,7 @@ export default function get_cover_art({
 					filename
 				})
 				.toPromise();
+			console.debug(["cover", "image", cover_id, manga_id, filename, mode]);
 			if (res.error) {
 				throw res.error;
 			}
@@ -65,7 +66,10 @@ export default function get_cover_art({
 			return newData;
 		},*/
 		staleTime: 1000 * 60 * 15,
-		networkMode: "always"
+		networkMode: "always",
+		retry: 1,
+		refetchOnReconnect: false,
+		refetchOnWindowFocus: false,
 	}),
 		() => mangadexQueryClient
 	);
