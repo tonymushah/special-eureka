@@ -23,6 +23,7 @@ pub async fn refresh_token<R: Runtime>(app: AppHandle<R>) -> crate::Result<()> {
     };
 
     if should_fetched {
+        client.ping().get().send().await?;
         #[cfg(debug_assertions)]
         log::debug!("Should be fetched");
         app.get_specific_rate_limit()?.refresh().await;
