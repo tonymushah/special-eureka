@@ -199,21 +199,13 @@
 		})
 	);
 	$effect(() => {
-		if (untrack(() => allowSync.allow)) {
-			allowSync.allow = false;
-			chapterSync.set($currentPage);
-			delay(() => {
-				allowSync.allow = true;
-			}, 10);
-		} else {
-			chapterSync.set($currentPage);
-		}
-	});
-	$effect(() => {
 		currentPage.set(data.currentPage);
 	});
 	$effect(() => {
 		currentChapterData.set(layoutDataToCurrentChapterData(data));
+	});
+	$effect(() => {
+		chapterSync.set($currentPage);
 	});
 	$effect(() => {
 		client

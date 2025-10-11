@@ -1,12 +1,20 @@
 import { dev } from "$app/environment";
-import { app } from "@tauri-apps/api";
 import { emit, listen } from "@tauri-apps/api/event";
+import { getCurrentWebview } from "@tauri-apps/api/webview";
 import { get, readable, type Readable, type Writable } from "svelte/store";
+
+type ChapterSyncPayload = {
+	page: number,
+	emitter?: string
+}
 
 function getChapterSyncReadable(chapterId: string): Readable<number | null> {
 	return readable<number | null>(null, (set) => {
-		const ev_ = listen<number>(eventName(chapterId), (ev) => {
-			set(ev.payload);
+		const ev_ = listen<ChapterSyncPayload>(eventName(chapterId), (ev) => {
+			const payload = ev.payload;
+			if (payload.emitter !== getCurrentWebview().label) {
+				set(payload.page);
+			}
 		})
 		return () => {
 			ev_.then((d) => d());
@@ -19,7 +27,7 @@ function eventName(chapterId: string) {
 }
 
 function emitChapterSync(chapterId: string, page: number) {
-	return emit<number>(eventName(chapterId), page);
+	return emit<ChapterSyncPayload>(eventName(chapterId), { page, emitter: getCurrentWebview().label });
 }
 
 export function getChapterPageSync(chapterId: string): Writable<number | null> {
