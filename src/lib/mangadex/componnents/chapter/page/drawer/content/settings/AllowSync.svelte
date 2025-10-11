@@ -5,7 +5,7 @@
 	import Icon from "./allow-sync/Icon.svelte";
 
 	let allow = $derived(allowSync.allow);
-	let label = $derived(allow ? "Page number synced" : "Page number unsynced");
+	let label = $derived(allow ? "Page synced" : "Page unsynced");
 </script>
 
 <SettingsTransitComp>

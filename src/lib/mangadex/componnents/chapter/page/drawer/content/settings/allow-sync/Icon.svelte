@@ -1,13 +1,11 @@
 <script lang="ts">
 	import { allowSync } from "@mangadex/stores/chapter/page/allowSync.svelte";
-	import { RefreshCwIcon, RefreshCcwIcon } from "svelte-feather-icons";
+	import { RiWindow2Fill } from "svelte-remixicon";
 
 	let allow = $derived(allowSync.allow);
-	const size = "16";
+	const size = "16px";
 </script>
 
 {#if allow}
-	<RefreshCwIcon {size} />
-{:else}
-	<RefreshCcwIcon {size} />
+	<RiWindow2Fill {size} />
 {/if}
