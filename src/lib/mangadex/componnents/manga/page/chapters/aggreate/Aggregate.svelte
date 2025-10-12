@@ -155,9 +155,7 @@
 					return k;
 				})
 		);
-		console.log(readChapters);
 		let unreadChapters = chapters.difference(readChapters);
-		console.log(unreadChapters);
 		return unreadChapters;
 	});
 	let hasUnread = $derived.by(() => unread.size > 0);
