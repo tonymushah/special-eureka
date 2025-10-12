@@ -7,12 +7,12 @@
 </script>
 
 <script lang="ts">
-	import MangaElementBase2 from "../../base/base2/MangaElementBase2WithReadableCover.svelte";
 	import { goto } from "$app/navigation";
 	import { route } from "$lib/ROUTES";
 	import { isArray } from "lodash";
-	import { crossfade } from "svelte/transition";
 	import { flip } from "svelte/animate";
+	import MangaElementBase2 from "../../base/base2/MangaElementBase2WithReadableCover.svelte";
+	import { fade } from "svelte/transition";
 
 	interface Props {
 		list?: LongMangaListItemProps[] | LongMangaListItemProps[][];
@@ -32,20 +32,12 @@
 		});
 		return map.values().toArray();
 	});
-	const [send, receive] = crossfade({});
 </script>
 
 <section class="long-list">
-	{#each realList as data (`long-manga-element-${data.id}`)}
-		<span
-			animate:flip
-			in:receive={{
-				key: `long-manga-element-${data.id}`
-			}}
-			out:send={{
-				key: `long-manga-element-${data.id}`
-			}}
-			><MangaElementBase2
+	{#each realList as data (`${data.id}`)}
+		<span animate:flip transition:fade>
+			<MangaElementBase2
 				{...data}
 				onclick={() => {
 					goto(
@@ -63,8 +55,8 @@
 					);
 				}}
 				--button-justify-content="start"
-			/></span
-		>
+			/>
+		</span>
 	{/each}
 </section>
 

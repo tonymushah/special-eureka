@@ -5,13 +5,13 @@
 </script>
 
 <script lang="ts">
-	import type { ComponentProps } from "svelte";
-	import MangaElementBase1 from "../../base/base1/MangaElementBase1WithReadableCoverImage.svelte";
 	import { goto } from "$app/navigation";
 	import { route } from "$lib/ROUTES";
 	import { isArray } from "lodash";
-	import { crossfade } from "svelte/transition";
+	import type { ComponentProps } from "svelte";
 	import { flip } from "svelte/animate";
+	import MangaElementBase1 from "../../base/base1/MangaElementBase1WithReadableCoverImage.svelte";
+	import { fade } from "svelte/transition";
 
 	interface Props {
 		list?: MediumMangaListElementProps[] | MediumMangaListElementProps[][];
@@ -31,20 +31,11 @@
 		});
 		return map.values().toArray();
 	});
-	const [send, receive] = crossfade({});
 </script>
 
 <section class="medium">
-	{#each realList as data (`medium-manga-element-${data.mangaId}`)}
-		<span
-			animate:flip
-			in:receive={{
-				key: `medium-manga-element-${data.mangaId}`
-			}}
-			out:send={{
-				key: `medium-manga-element-${data.mangaId}`
-			}}
-		>
+	{#each realList as data (`${data.mangaId}`)}
+		<span animate:flip transition:fade>
 			<MangaElementBase1
 				{...data}
 				withFull
