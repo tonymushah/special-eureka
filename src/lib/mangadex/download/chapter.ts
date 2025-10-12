@@ -99,7 +99,6 @@ export const invalidateChapterOfflinePresence = async (id: string) => {
 	const queryKey = offlinePresenceQueryKey(id);
 	await mangadexQueryClient.refetchQueries({
 		queryKey,
-		exact: true
 	});
 };
 
@@ -141,7 +140,7 @@ export const removeMutation = () => createMutation(() => (
 				.toPromise();
 		},
 		onSettled(data, error, variables, context) {
-			invalidateChapterOfflinePresence(variables);
+			invalidateChapterOfflinePresence(variables).catch(console.error);
 		},
 		onSuccess(data, variables, context) {
 			addToast({
@@ -223,17 +222,20 @@ export function chapterDownloadStateRaw({
 
 export function isChapterPresentRaw(id: string) {
 	const queryKey = offlinePresenceQueryKey(id);
-	return () => createQuery(() => (
-		{
-			queryKey,
-			async queryFn() {
-				return await client
-					.query(chapterOfflineState, {
-						id
-					})
-					.toPromise();
-			}
-		}),
+	return () => createQuery(() => ({
+		queryKey,
+		async queryFn() {
+			return await client
+				.query(chapterOfflineState, {
+					id
+				})
+				.toPromise().then((d) => {
+					console.debug(d);
+					return d
+				});
+		},
+		networkMode: "always"
+	}),
 		() => mangadexQueryClient
 	);
 }
@@ -275,14 +277,15 @@ export default function chapterDownloadState({
 				return ChapterDownloadState.Error;
 			}
 			const isPresentData = $isChapterPresentRaw.data?.data?.downloadState.chapter;
-			if (isPresentData?.hasFailed) {
+			if (isPresentData?.hasFailed == true) {
 				return ChapterDownloadState.Error;
-			} else if (isPresentData?.isDownloaded) {
+			} else if (isPresentData?.isDownloaded == true) {
 				return ChapterDownloadState.Done;
 			} else {
 				return ChapterDownloadState.Pending;
 			}
 		})();
+
 		set(res);
 	},
 		ChapterDownloadState.Pending as ChapterDownloadState
@@ -357,15 +360,10 @@ export function chapterDownloadStateImages(param: { id: string; deferred?: boole
 }
 
 export function isChapterDownloaded(param: { id: string; deferred?: boolean }) {
-	return derived(chapterDownloadState(param), (result) => {
-		switch (result) {
-			case ChapterDownloadState.Done:
-				return true;
-
-			default:
-				return false;
-		}
-	});
+	return derived(chapterDownloadState(param), (result, set) => {
+		console.debug(ChapterDownloadState[result]);
+		set(result === ChapterDownloadState.Done)
+	}, false as boolean);
 }
 
 /*

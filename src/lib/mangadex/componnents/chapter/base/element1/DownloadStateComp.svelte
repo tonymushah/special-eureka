@@ -17,17 +17,18 @@
 	const failed = hasChapterDownloadingFailed({
 		id
 	});
-	const downloaded = isChapterDownloaded({
+	const downloaded_ = isChapterDownloaded({
 		id
 	});
+	let downloaded = $derived($downloaded_);
 </script>
 
-<span class:downloaded={$downloaded} class:downloading={$downloading} class:failed={$failed}>
+<span class:downloaded class:downloading={$downloading} class:failed={$failed}>
 	{#if $downloading}
 		<DownloadCloudIcon />
 	{:else if $failed}
 		<XIcon />
-	{:else if $downloaded}
+	{:else if downloaded}
 		<CheckIcon />
 	{:else}
 		<DownloadIcon />
