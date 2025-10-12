@@ -263,29 +263,17 @@ export default function mangaDownloadState({
 					return MangaDownloadState.Done;
 				} else if (data.isOfflineAppStateNotLoaded) {
 					return MangaDownloadState.OfflineAppStateNotLoaded;
-				} else if (data.isPending) {
-					if (
-						$initState?.data?.error ||
-						$initState?.error ||
-						$initState?.data?.data?.downloadState.manga.hasFailed
-					) {
-						return MangaDownloadState.Error;
-					} else if ($initState?.data?.data?.downloadState.manga) {
-						return MangaDownloadState.Done;
-					} else {
-						return MangaDownloadState.Pending;
-					}
 				}
 			} else if ($sub?.error) {
 				return MangaDownloadState.Error;
 			}
 			if (
-				$initState?.data?.error ||
-				$initState?.error ||
-				$initState?.data?.data?.downloadState.manga.hasFailed
+				$initState?.data?.error != undefined ||
+				$initState?.error != null ||
+				$initState?.data?.data?.downloadState.manga.hasFailed == true
 			) {
 				return MangaDownloadState.Error;
-			} else if ($initState?.data?.data?.downloadState.manga) {
+			} else if ($initState?.data?.data?.downloadState.manga.isDownloaded == true) {
 				return MangaDownloadState.Done;
 			} else {
 				return MangaDownloadState.Pending;
