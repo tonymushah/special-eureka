@@ -12,7 +12,7 @@
 	import { isArray } from "lodash";
 	import { flip } from "svelte/animate";
 	import MangaElementBase3 from "../../base/base3/MangaElementBase3WithReadableCoverImage.svelte";
-	import { fade } from "svelte/transition";
+	import { crossfade, fade } from "svelte/transition";
 
 	interface Props {
 		list?: CoverMangaListItemProps[] | CoverMangaListItemProps[][];
@@ -32,11 +32,22 @@
 		});
 		return map.values().toArray();
 	});
+	const [send, receive] = crossfade({
+		fallback: (node) => fade(node)
+	});
 </script>
 
 <section class="cover-list">
 	{#each realList as item (`${item.id}`)}
-		<span animate:flip transition:fade>
+		<span
+			animate:flip
+			out:send={{
+				key: item.id
+			}}
+			in:receive={{
+				key: item.id
+			}}
+		>
 			<MangaElementBase3
 				{...item}
 				onclick={() => {

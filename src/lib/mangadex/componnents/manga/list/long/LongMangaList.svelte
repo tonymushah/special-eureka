@@ -12,7 +12,7 @@
 	import { isArray } from "lodash";
 	import { flip } from "svelte/animate";
 	import MangaElementBase2 from "../../base/base2/MangaElementBase2WithReadableCover.svelte";
-	import { fade } from "svelte/transition";
+	import { crossfade, fade } from "svelte/transition";
 
 	interface Props {
 		list?: LongMangaListItemProps[] | LongMangaListItemProps[][];
@@ -32,11 +32,22 @@
 		});
 		return map.values().toArray();
 	});
+	const [send, receive] = crossfade({
+		fallback: (node) => fade(node)
+	});
 </script>
 
 <section class="long-list">
 	{#each realList as data (`${data.id}`)}
-		<span animate:flip transition:fade>
+		<span
+			animate:flip
+			out:send={{
+				key: data.id
+			}}
+			in:receive={{
+				key: data.id
+			}}
+		>
 			<MangaElementBase2
 				{...data}
 				onclick={() => {

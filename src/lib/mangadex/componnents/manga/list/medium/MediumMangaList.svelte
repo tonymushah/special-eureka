@@ -11,7 +11,7 @@
 	import type { ComponentProps } from "svelte";
 	import { flip } from "svelte/animate";
 	import MangaElementBase1 from "../../base/base1/MangaElementBase1WithReadableCoverImage.svelte";
-	import { fade } from "svelte/transition";
+	import { crossfade, fade } from "svelte/transition";
 
 	interface Props {
 		list?: MediumMangaListElementProps[] | MediumMangaListElementProps[][];
@@ -31,11 +31,22 @@
 		});
 		return map.values().toArray();
 	});
+	const [send, receive] = crossfade({
+		fallback: (node) => fade(node)
+	});
 </script>
 
 <section class="medium">
 	{#each realList as data (`${data.mangaId}`)}
-		<span animate:flip transition:fade>
+		<span
+			animate:flip
+			in:receive={{
+				key: data.mangaId
+			}}
+			out:send={{
+				key: data.mangaId
+			}}
+		>
 			<MangaElementBase1
 				{...data}
 				withFull
