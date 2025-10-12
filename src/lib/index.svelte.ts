@@ -27,8 +27,7 @@ export function internalToStore<T>(accessor: Accessor<T>): Readable<T> {
 	const inner = extractFromAccessor(accessor);
 	return useExtractedAccessor(inner, (value) => readable<T>(value, (set) => {
 		return $effect.root(() => {
-			let current_val = accessor();
-			let val = $derived.by(() => ({ ...current_val }));
+			let val = $derived(accessor());
 			$effect.pre(() => {
 				set(val);
 			})
