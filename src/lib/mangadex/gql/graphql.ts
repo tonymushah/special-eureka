@@ -530,12 +530,19 @@ export type ChapterPages = {
 
 export type ChapterPagesStoreMutation = {
 	__typename?: "ChapterPagesStoreMutation";
+	exportPage: Scalars["Boolean"]["output"];
 	fetchMetadata: Scalars["Boolean"]["output"];
 	refetchIncompletes: Scalars["Boolean"]["output"];
 	refetchPage: Scalars["Boolean"]["output"];
 	resendAll: Scalars["Boolean"]["output"];
 	resendPage: Scalars["Boolean"]["output"];
 	startCaching: Scalars["Boolean"]["output"];
+};
+
+export type ChapterPagesStoreMutationExportPageArgs = {
+	defer?: InputMaybe<Scalars["Boolean"]["input"]>;
+	exportPath: Scalars["String"]["input"];
+	page: Scalars["Int"]["input"];
 };
 
 export type ChapterPagesStoreMutationRefetchPageArgs = {
