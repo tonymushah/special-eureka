@@ -18,6 +18,9 @@
 	import { onDestroy } from "svelte";
 	import { derived } from "svelte/store";
 	import executeSearchQuery, { type LatestUploadsParams as Params } from "./search";
+	import { createForumThread } from "@mangadex/stores/create-forum-thread";
+	import { ForumThreadType } from "@mangadex/gql/graphql";
+	import { addErrorToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 
 	const client = getContextClient();
 	const queryOptions = derived([pageLimit], ([$limit]) => {
@@ -86,6 +89,7 @@
 		}
 	});
 	const threads = chapterThreadsFromChapterFeedQuery(query);
+	const createForumThreadMutation = createForumThread();
 </script>
 
 <div class="result">
@@ -104,6 +108,21 @@
 			const url = $threads.get(id);
 			if (url) {
 				openUrl(url);
+			} else {
+				createForumThreadMutation.mutate(
+					{
+						id: id,
+						threadType: ForumThreadType.Chapter
+					},
+					{
+						onError(error) {
+							addErrorToast("Cannot create forum thread", error);
+						},
+						onSuccess(data) {
+							open(data.forumUrl);
+						}
+					}
+				);
 			}
 		}}
 	/>

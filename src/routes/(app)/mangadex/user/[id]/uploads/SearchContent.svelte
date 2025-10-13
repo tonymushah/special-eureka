@@ -5,7 +5,7 @@
 	import Fetching from "@mangadex/componnents/search/content/Fetching.svelte";
 	import HasNext from "@mangadex/componnents/search/content/HasNext.svelte";
 	import NothingToShow from "@mangadex/componnents/search/content/NothingToShow.svelte";
-	import { OrderDirection, type ChapterSortOrder } from "@mangadex/gql/graphql";
+	import { ForumThreadType, OrderDirection, type ChapterSortOrder } from "@mangadex/gql/graphql";
 	import chapterFeedStyle from "@mangadex/stores/chapterFeedStyle";
 	import type AbstractSearchResult from "@mangadex/utils/searchResult/AbstractSearchResult";
 	import { createInfiniteQuery, type CreateInfiniteQueryOptions } from "@tanstack/svelte-query";
@@ -22,6 +22,8 @@
 	import ChapterSortSelector from "@mangadex/componnents/chapter/feed/list/sort/ChapterSortSelector.svelte";
 	import chapterThreadsFromChapterFeedQuery from "@mangadex/utils/threads/feed";
 	import { openUrl } from "@tauri-apps/plugin-opener";
+	import { createForumThread } from "@mangadex/stores/create-forum-thread";
+	import { addErrorToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 
 	interface Props {
 		userId: Readable<string>;
@@ -100,6 +102,7 @@
 		}
 	});
 	const threads = chapterThreadsFromChapterFeedQuery(query);
+	const createForumThreadMutation = createForumThread();
 </script>
 
 <div class="result">
@@ -118,6 +121,21 @@
 			const url = $threads.get(id);
 			if (url) {
 				openUrl(url);
+			} else {
+				createForumThreadMutation.mutate(
+					{
+						id: id,
+						threadType: ForumThreadType.Chapter
+					},
+					{
+						onError(error) {
+							addErrorToast("Cannot create forum thread", error);
+						},
+						onSuccess(data) {
+							open(data.forumUrl);
+						}
+					}
+				);
 			}
 		}}
 	>

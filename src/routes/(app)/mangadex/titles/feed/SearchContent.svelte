@@ -6,7 +6,11 @@
 	import Fetching from "@mangadex/componnents/search/content/Fetching.svelte";
 	import HasNext from "@mangadex/componnents/search/content/HasNext.svelte";
 	import NothingToShow from "@mangadex/componnents/search/content/NothingToShow.svelte";
-	import { OrderDirection, type MangaFeedSortOrder } from "@mangadex/gql/graphql";
+	import {
+		ForumThreadType,
+		OrderDirection,
+		type MangaFeedSortOrder
+	} from "@mangadex/gql/graphql";
 	import type { ChapterFeedListItemExt } from "@mangadex/routes/user/[id]/uploads/search";
 	import chapterFeedStyle from "@mangadex/stores/chapterFeedStyle";
 	import pageLimit from "@mangadex/stores/page-limit";
@@ -25,6 +29,8 @@
 	import { openUrl } from "@tauri-apps/plugin-opener";
 	import { addErrorToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 	import defaultContentProfile from "@mangadex/content-profile/graphql/defaultProfile";
+	import chapterThreadsFromChapterFeedQuery from "@mangadex/utils/threads/feed";
+	import { createForumThread } from "@mangadex/stores/create-forum-thread";
 
 	const client = getContextClient();
 	const order = writable<MangaFeedSortOrder | undefined>({
@@ -110,24 +116,8 @@
 			observer.observe(to_obserce_bind);
 		}
 	});
-	const oncomments = (e: { id: string }) => {
-		let threadUrl: string | undefined = undefined;
-		for (let index = 0; index < feed.length; index++) {
-			const { chapters } = feed[index];
-			for (let index = 0; index < chapters.length; index++) {
-				const chapter = chapters[index];
-				if (chapter.chapterId == e.id) {
-					threadUrl = chapter.threadUrl;
-				}
-			}
-			if (threadUrl) {
-				openUrl(threadUrl).catch((e) => {
-					addErrorToast("Cannot open thread url", e);
-				});
-				break;
-			}
-		}
-	};
+	const threads = chapterThreadsFromChapterFeedQuery(query);
+	const createForumThreadMutation = createForumThread();
 </script>
 
 <div class="result">
@@ -142,7 +132,27 @@
 				})
 			);
 		}}
-		{oncomments}
+		oncomments={({ id }) => {
+			const url = $threads.get(id);
+			if (url) {
+				openUrl(url);
+			} else {
+				createForumThreadMutation.mutate(
+					{
+						id: id,
+						threadType: ForumThreadType.Chapter
+					},
+					{
+						onError(error) {
+							addErrorToast("Cannot create forum thread", error);
+						},
+						onSuccess(data) {
+							open(data.forumUrl);
+						}
+					}
+				);
+			}
+		}}
 	>
 		{#snippet additionalContent()}
 			<div class="additional-content">
