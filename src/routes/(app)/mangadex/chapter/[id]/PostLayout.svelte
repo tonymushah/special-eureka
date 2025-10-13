@@ -94,6 +94,8 @@
 	import type { LayoutData } from "./layout.context";
 	import { createQuery } from "@tanstack/svelte-query";
 	import { createForumThread } from "@mangadex/stores/create-forum-thread";
+	import { onMount, untrack } from "svelte";
+	import { delay } from "lodash";
 
 	interface Props {
 		data: LayoutData;
@@ -104,31 +106,36 @@
 
 	const client = getContextClient();
 	let readMarkers = readMarkersLoader();
-	let chapterId = $derived(data.data.id);
 	$effect(() => {
+		const chapterId = data.data.id;
 		if (typeof chapterId == "string") {
-			readMarkers.mutate(
-				{
-					reads: [chapterId],
-					unreads: [],
-					// NOTE history is currently disabled
-					updateHistory: false
-				},
-				{
-					onSuccess(data, variables, context) {
-						if (dev) {
-							addToast({
-								data: {
-									title: "Marked chapter as read"
-								}
-							});
-						}
+			const time = delay(() => {
+				readMarkers.mutate(
+					{
+						reads: [chapterId],
+						unreads: [],
+						// NOTE history is currently disabled
+						updateHistory: false
 					},
-					onError(error, variables, context) {
-						addErrorToast("Cannot mark chapter as read", error);
+					{
+						onSuccess(data, variables, context) {
+							if (dev) {
+								addToast({
+									data: {
+										title: "Marked chapter as read"
+									}
+								});
+							}
+						},
+						onError(error, variables, context) {
+							addErrorToast("Cannot mark chapter as read", error);
+						}
 					}
-				}
-			);
+				);
+			}, 100);
+			return () => {
+				clearTimeout(time);
+			};
 		}
 	});
 	const related = initRelatedChapters(writable([]));
@@ -257,7 +264,7 @@
 			});
 	});
 	let createForumThreadMutation = createForumThread();
-	$effect(() =>
+	onMount(() =>
 		addListenerToChapterThreadEventTarget(() => {
 			const threadUrl = $currentChapterData.thread?.threadUrl;
 			if (threadUrl) {
@@ -266,9 +273,9 @@
 				});
 			} else {
 				if (!createForumThreadMutation.isPending) {
-					createForumThreadMutation.mutate(
+					untrack(() => createForumThreadMutation).mutate(
 						{
-							id: chapterId,
+							id: data.data.id,
 							threadType: ForumThreadType.Chapter
 						},
 						{
