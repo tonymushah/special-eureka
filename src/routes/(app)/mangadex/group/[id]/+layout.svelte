@@ -17,12 +17,6 @@
 
 	let { data, children }: Props = $props();
 	let description = $derived(data.description ?? undefined);
-	$effect(() => {
-		console.log(`duration: ${data.publishDelay}`);
-	});
-	$effect(() => {
-		console.log(`since: ${data.createdAt}`);
-	});
 	let createdSince = $derived(data.createdAt);
 	//$: console.log(`since date: ${createdSince}`);
 </script>

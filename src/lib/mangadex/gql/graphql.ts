@@ -5312,6 +5312,29 @@ export type IsFollowingScanlationGroupQueryQuery = {
 	follows: { __typename?: "FollowsQueries"; isFollowingGroup: boolean };
 };
 
+export type GroupStatisticsQueryQueryVariables = Exact<{
+	id: Scalars["UUID"]["input"];
+}>;
+
+export type GroupStatisticsQueryQuery = {
+	__typename?: "Query";
+	statistics: {
+		__typename?: "StatisticsQueries";
+		group: {
+			__typename?: "GroupStatisticsQueries";
+			get: {
+				__typename?: "Statistics";
+				comments?: {
+					__typename?: "StatisticsComments";
+					threadId: number;
+					repliesCount: number;
+					threadUrl: any;
+				} | null;
+			};
+		};
+	};
+};
+
 export type ScanlationUploadsFeedQueryVariables = Exact<{
 	group: Scalars["UUID"]["input"];
 	translatedLanguages?: Array<Language> | Language;
@@ -15035,6 +15058,101 @@ export const IsFollowingScanlationGroupQueryDocument = {
 	IsFollowingScanlationGroupQueryQuery,
 	IsFollowingScanlationGroupQueryQueryVariables
 >;
+export const GroupStatisticsQueryDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "groupStatisticsQuery" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "statistics" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "group" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "get" },
+												arguments: [
+													{
+														kind: "Argument",
+														name: { kind: "Name", value: "id" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "id" }
+														}
+													}
+												],
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "comments"
+															},
+															selectionSet: {
+																kind: "SelectionSet",
+																selections: [
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "threadId"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "repliesCount"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "threadUrl"
+																		}
+																	}
+																]
+															}
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<GroupStatisticsQueryQuery, GroupStatisticsQueryQueryVariables>;
 export const ScanlationUploadsFeedDocument = {
 	kind: "Document",
 	definitions: [
