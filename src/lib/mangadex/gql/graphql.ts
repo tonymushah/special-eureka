@@ -946,6 +946,13 @@ export type CoverUploadParam = {
 	volume?: InputMaybe<Scalars["String"]["input"]>;
 };
 
+export type CreateForumTheardResponse = {
+	__typename?: "CreateForumTheardResponse";
+	forumId: Scalars["Int"]["output"];
+	forumUrl: Scalars["Url"]["output"];
+	repliesCount: Scalars["Int"]["output"];
+};
+
 export type CreateForumThreadParams = {
 	id: Scalars["UUID"]["input"];
 	type: ForumThreadType;
@@ -1538,7 +1545,7 @@ export enum ForumThreadType {
 export type ForumsMutations = {
 	__typename?: "ForumsMutations";
 	/** create a forum thread and return the generated forum id */
-	createThread: Scalars["Int"]["output"];
+	createThread: CreateForumTheardResponse;
 };
 
 export type ForumsMutationsCreateThreadArgs = {
@@ -7100,6 +7107,24 @@ export type ResetAuthClientMutationVariables = Exact<{ [key: string]: never }>;
 export type ResetAuthClientMutation = {
 	__typename?: "Mutation";
 	oauth: { __typename?: "OauthMutations"; clearClientInfo: boolean };
+};
+
+export type CreateForumThreadMutationVariables = Exact<{
+	id: Scalars["UUID"]["input"];
+	threadType: ForumThreadType;
+}>;
+
+export type CreateForumThreadMutation = {
+	__typename?: "Mutation";
+	forums: {
+		__typename?: "ForumsMutations";
+		createThread: {
+			__typename?: "CreateForumTheardResponse";
+			forumId: number;
+			forumUrl: any;
+			repliesCount: number;
+		};
+	};
 };
 
 export type MangaFollowingStatusSubscriptionSubscriptionVariables = Exact<{
@@ -24612,6 +24637,102 @@ export const ResetAuthClientDocument = {
 		}
 	]
 } as unknown as DocumentNode<ResetAuthClientMutation, ResetAuthClientMutationVariables>;
+export const CreateForumThreadDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "createForumThread" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "threadType" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "NamedType",
+							name: { kind: "Name", value: "ForumThreadType" }
+						}
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "forums" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "createThread" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "params" },
+											value: {
+												kind: "ObjectValue",
+												fields: [
+													{
+														kind: "ObjectField",
+														name: { kind: "Name", value: "id" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "id" }
+														}
+													},
+													{
+														kind: "ObjectField",
+														name: { kind: "Name", value: "type" },
+														value: {
+															kind: "Variable",
+															name: {
+																kind: "Name",
+																value: "threadType"
+															}
+														}
+													}
+												]
+											}
+										}
+									],
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "forumId" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "forumUrl" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "repliesCount" }
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<CreateForumThreadMutation, CreateForumThreadMutationVariables>;
 export const MangaFollowingStatusSubscriptionDocument = {
 	kind: "Document",
 	definitions: [
