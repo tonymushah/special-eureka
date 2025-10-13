@@ -146,7 +146,7 @@
 							addErrorToast("Cannot create forum thread", error);
 						},
 						onSuccess(data) {
-							open(data.forumUrl);
+							openUrl(data.forumUrl);
 						}
 					}
 				);
