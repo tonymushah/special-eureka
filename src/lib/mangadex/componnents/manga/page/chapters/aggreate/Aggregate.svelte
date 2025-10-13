@@ -22,6 +22,9 @@
 	import { readMarkers as readMarkersMutationLoader } from "@mangadex/stores/read-markers/mutations";
 	import ChapterFeedSelecto from "@mangadex/componnents/selecto/ChapterFeedSelecto.svelte";
 	import { hasConflicts } from "@mangadex/utils/conflicts";
+	import { createForumThread } from "@mangadex/stores/create-forum-thread";
+	import { ForumThreadType } from "@mangadex/gql/graphql";
+	import { addErrorToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 
 	let readMarkersMutation = readMarkersMutationLoader();
 	const chaptersStore = getChapterStoreContext();
@@ -162,6 +165,7 @@
 	let selecto_container: HTMLElement | undefined = $state(undefined);
 	let selectedMangas: string[] = $state([]);
 	let selectedChapters: string[] = $state([]);
+	let createForumThreadMutation = createForumThread();
 </script>
 
 <ChapterFeedSelecto bind:container={selecto_container} bind:selectedMangas bind:selectedChapters />
@@ -237,10 +241,34 @@
 							<AggregateContent
 								volumes={selected.chapter}
 								oncomments={(detail) => {
-									console.log(`clicked ${detail.id}`);
 									const threadUrl = threadUrls.get(detail.id);
 									if (threadUrl) {
 										open(threadUrl);
+									} else {
+										if (!createForumThreadMutation.isPending) {
+											createForumThreadMutation.mutate(
+												{
+													id: detail.id,
+													threadType: ForumThreadType.Chapter
+												},
+												{
+													onError(error) {
+														addErrorToast(
+															"Cannot create chapter theard",
+															error
+														);
+													},
+													onSuccess(data) {
+														threadUrls.set(detail.id, data.forumUrl);
+														chaptersStore.setComment(
+															detail.id,
+															data.repliesCount
+														);
+														open(data.forumUrl);
+													}
+												}
+											);
+										}
 									}
 								}}
 							/>
