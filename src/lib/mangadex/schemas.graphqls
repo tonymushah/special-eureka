@@ -710,6 +710,12 @@ input CoverUploadParam {
 	locale: Language!
 }
 
+type CreateForumTheardResponse {
+	forumId: Int!
+	forumUrl: Url!
+	repliesCount: Int!
+}
+
 input CreateForumThreadParams {
 	type: ForumThreadType!
 	id: UUID!
@@ -1189,7 +1195,7 @@ type ForumsMutations {
 	"""
 	create a forum thread and return the generated forum id
 	"""
-	createThread(params: CreateForumThreadParams!): Int!
+	createThread(params: CreateForumThreadParams!): CreateForumTheardResponse!
 }
 
 input GetAllChapterParams {
