@@ -91,4 +91,29 @@ impl ChapterPagesStoreMutation {
             Ok(false)
         }
     }
+    pub async fn export_page(
+        &self,
+        ctx: &Context<'_>,
+        export_path: String,
+        page: u32,
+        defer: Option<bool>,
+    ) -> crate::Result<bool> {
+        let app = ctx.get_app_handle::<tauri::Wry>()?;
+        let store = app.get_chapter_pages_store();
+        let handle = {
+            let Ok(store_read) = store.read() else {
+                return Ok(false);
+            };
+            let Some(handle) = store_read.get_handle_maybe_not_loaded(self.id, self.mode) else {
+                return Ok(false);
+            };
+            handle
+        };
+        if defer.unwrap_or_default() {
+            handle.export_page_defer(page, export_path);
+        } else {
+            handle.export_page(page, export_path).await?;
+        }
+        Ok(true)
+    }
 }
