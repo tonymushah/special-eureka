@@ -67,6 +67,7 @@
 	import { initCurrentChapterImageFit } from "@mangadex/componnents/chapter/page/contexts/imageFit";
 	import { initIsDrawerFixedWritable } from "@mangadex/componnents/chapter/page/contexts/isDrawerFixed";
 	import { initIsDrawerOpenWritable } from "@mangadex/componnents/chapter/page/contexts/isDrawerOpen";
+	import { addListenerToChapterThreadEventTarget } from "@mangadex/componnents/chapter/page/contexts/previousNextEventTarget";
 	import { initCurrentChapterDirection } from "@mangadex/componnents/chapter/page/contexts/readingDirection";
 	import {
 		initRelatedChapters,
@@ -80,21 +81,21 @@
 	import readingModeWritable from "@mangadex/gql-docs/chapter/layout-query/readingMode";
 	import relatedChaptersQuery from "@mangadex/gql-docs/chapter/layout-query/related";
 	import chapterPageThread from "@mangadex/gql-docs/chapter/layout-query/thread";
-	import { DrawerMode, ReadingMode } from "@mangadex/gql/graphql";
+	import { DrawerMode, ForumThreadType, ReadingMode } from "@mangadex/gql/graphql";
+	import { getChapterPageSync } from "@mangadex/stores/chapter/page";
+	import { allowSync } from "@mangadex/stores/chapter/page/allowSync.svelte";
 	import { drawerModeStore } from "@mangadex/stores/chapterLayout";
 	import { readMarkers as readMarkersLoader } from "@mangadex/stores/read-markers/mutations";
-	import { isLogged } from "@mangadex/utils/auth";
 	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
 	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
-	import { getContextClient } from "@urql/svelte";
-	import { delay } from "lodash";
-	import { derived, get, toStore, writable } from "svelte/store";
-	import type { LayoutData } from "./layout.context";
-	import { addListenerToChapterThreadEventTarget } from "@mangadex/componnents/chapter/page/contexts/previousNextEventTarget";
 	import { openUrl } from "@tauri-apps/plugin-opener";
-	import { allowSync } from "@mangadex/stores/chapter/page/allowSync.svelte";
-	import { getChapterPageSync } from "@mangadex/stores/chapter/page";
-	import { untrack } from "svelte";
+	import { getContextClient } from "@urql/svelte";
+	import { derived, toStore, writable } from "svelte/store";
+	import type { LayoutData } from "./layout.context";
+	import { createQuery } from "@tanstack/svelte-query";
+	import { createForumThread } from "@mangadex/stores/create-forum-thread";
+	import { onMount, untrack } from "svelte";
+	import { delay } from "lodash";
 
 	interface Props {
 		data: LayoutData;
@@ -106,36 +107,34 @@
 	const client = getContextClient();
 	let readMarkers = readMarkersLoader();
 	$effect(() => {
-		const id = data.data.id;
-		if (typeof id == "string") {
-			const timerId = delay(() => {
-				if (get(isLogged)) {
-					readMarkers.mutate(
-						{
-							reads: [data.data.id],
-							unreads: [],
-							// NOTE history is currently disabled
-							updateHistory: false
-						},
-						{
-							onSuccess(data, variables, context) {
-								if (dev) {
-									addToast({
-										data: {
-											title: "Marked chapter as read"
-										}
-									});
-								}
-							},
-							onError(error, variables, context) {
-								addErrorToast("Cannot mark chapter as read", error);
+		const chapterId = data.data.id;
+		if (typeof chapterId == "string") {
+			const time = delay(() => {
+				readMarkers.mutate(
+					{
+						reads: [chapterId],
+						unreads: [],
+						// NOTE history is currently disabled
+						updateHistory: false
+					},
+					{
+						onSuccess(data, variables, context) {
+							if (dev) {
+								addToast({
+									data: {
+										title: "Marked chapter as read"
+									}
+								});
 							}
+						},
+						onError(error, variables, context) {
+							addErrorToast("Cannot mark chapter as read", error);
 						}
-					);
-				}
-			}, 200);
+					}
+				);
+			}, 100);
 			return () => {
-				clearTimeout(timerId);
+				clearTimeout(time);
 			};
 		}
 	});
@@ -235,32 +234,37 @@
 				addErrorToast("Cannot get related chapters", e);
 			});
 	});
+	let chapterPageThreadQuery = createQuery(() => ({
+		queryKey: ["chapter", data.data.id, "thread"],
+		async queryFn() {
+			const res = await client
+				.query(chapterPageThread, {
+					id: data.data.id
+				})
+				.toPromise();
+			if (res.data) {
+				return res.data.statistics.chapter.get.comments;
+			} else if (res.error) {
+				throw res.error;
+			} else {
+				throw new Error("No data??");
+			}
+		},
+		networkMode: "online"
+	}));
 	$effect(() => {
-		client
-			.query(chapterPageThread, {
-				id: data.data.id
-			})
-			.toPromise()
-			.then((res) => {
-				const chapterStats = res.data?.statistics.chapter.get;
-				if (chapterStats) {
-					const commentsData = chapterStats.comments;
-					if (commentsData) {
-						currentChapterData.update((current) => {
-							current.thread = new CurrentChapterThread({
-								comments: commentsData.repliesCount,
-								threadUrl: commentsData.threadUrl
-							});
-							return current;
-						});
-					}
-				}
-			})
-			.catch((e) => {
-				addErrorToast("Cannot fetch chapter comments data", e);
+		let commentsData = chapterPageThreadQuery.data;
+		if (commentsData != undefined && commentsData != null)
+			currentChapterData.update((current) => {
+				current.thread = new CurrentChapterThread({
+					comments: commentsData.repliesCount,
+					threadUrl: commentsData.threadUrl
+				});
+				return current;
 			});
 	});
-	$effect(() =>
+	let createForumThreadMutation = createForumThread();
+	onMount(() =>
 		addListenerToChapterThreadEventTarget(() => {
 			const threadUrl = $currentChapterData.thread?.threadUrl;
 			if (threadUrl) {
@@ -268,7 +272,23 @@
 					addErrorToast("Error on opening url", e);
 				});
 			} else {
-				addErrorToast("This chapter has no forum thread", null);
+				if (!createForumThreadMutation.isPending) {
+					untrack(() => createForumThreadMutation).mutate(
+						{
+							id: data.data.id,
+							threadType: ForumThreadType.Chapter
+						},
+						{
+							onError(error) {
+								addErrorToast("Cannot create forum thread", error);
+							},
+							onSuccess(data) {
+								openUrl(data.forumUrl);
+								chapterPageThreadQuery.refetch();
+							}
+						}
+					);
+				}
 			}
 		})
 	);
