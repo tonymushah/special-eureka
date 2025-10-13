@@ -23,9 +23,16 @@
 		id: string;
 		hasRelation?: boolean;
 		comments?: number | undefined;
+		disableComments?: boolean;
 	}
 
-	let { id, hasRelation = false, comments = undefined, oncomment }: Props = $props();
+	let {
+		id,
+		hasRelation = false,
+		comments = undefined,
+		oncomment,
+		disableComments
+	}: Props = $props();
 </script>
 
 <nav>
@@ -60,6 +67,7 @@
 		onclick={(e) => {
 			oncomment?.(e);
 		}}
+		disabled={comments == undefined || disableComments}
 	>
 		Comments {#if comments}
 			({comments})
@@ -76,6 +84,9 @@
 		border: none;
 		font-size: 16px;
 		padding: 5px 10px;
+	}
+	button:disabled {
+		background-color: var(--accent);
 	}
 	button:hover {
 		background-color: var(--accent-l1-hover);
