@@ -97,7 +97,7 @@ importers:
         version: 4.2.0
       svelte-remixicon:
         specifier: ^2.7.1
-        version: 2.7.1(svelte@5.39.11)
+        version: 2.8.0(svelte@5.39.11)
       swiper:
         specifier: ^12.0.2
         version: 12.0.2
@@ -3877,8 +3877,8 @@ packages:
   svelte-feather-icons@4.2.0:
     resolution: {integrity: sha512-KuMTDrL6sA8aCxBv3RMgmmnnyIaAXaYcmWkmNa2r2Qj70vi+An2T6ZBAdiZr6wjx+a3eZJy+FRseeRkzQFGHPw==}
 
-  svelte-remixicon@2.7.1:
-    resolution: {integrity: sha512-ZDZE9R2QRntsKzGKaRsuH6dALdSf9HrrNZjDWgXql3AF8+M77LRpvDT9HpvJzCT9FQa/E9uqyQJ3oIEMEeGFuQ==}
+  svelte-remixicon@2.8.0:
+    resolution: {integrity: sha512-QfnObwZukDxTMbReTDyAuMNAKTGz/J5j2Hqh0d6dtnDG3IddU/SaCe67mZ4nBwtye/lqqE4hlF2cRwIn8MH6Iw==}
     peerDependencies:
       svelte: ^3.54.0 || ^4.0.0 || ^5.0.0
 
@@ -8051,7 +8051,7 @@ snapshots:
     dependencies:
       svelte: 3.59.2
 
-  svelte-remixicon@2.7.1(svelte@5.39.11):
+  svelte-remixicon@2.8.0(svelte@5.39.11):
     dependencies:
       svelte: 5.39.11
 
