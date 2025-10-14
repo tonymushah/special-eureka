@@ -10,12 +10,18 @@
 	import getCurrentChapterImages from "./utils/getCurrentChapterImages";
 	import { debounce, delay, noop } from "lodash";
 	import ChapterPages from "@mangadex/stores/chapter/pages";
-	import { addErrorToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
+	import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 	import type { Action } from "svelte/action";
 	import { onDestroy, onMount } from "svelte";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import Progress from "./progress/Progress.svelte";
 	import { getCurrentChapterData } from "./contexts/currentChapter";
+	import registerContextMenuEvent from "@special-eureka/core/utils/contextMenuContext";
+	import { ContextMenuItemProvider } from "@special-eureka/core/commands/contextMenu";
+	import { openUrl } from "@tauri-apps/plugin-opener";
+	import { exportPageMutationLoader } from "@mangadex/stores/chapter/page/export";
+	import { isDataSaver } from "@mangadex/stores/chapterQuality";
+	import { DownloadMode } from "@mangadex/gql/graphql";
 
 	const isFixed = isDrawerFixed();
 	const shouldShowHeader = derived(isFixed, (fixed) => {
@@ -56,6 +62,46 @@
 		let sub = images.subscribe(noop);
 		return sub;
 	});
+	let pageToUse: number = -1;
+	const exportPageMutation = exportPageMutationLoader();
+	const ev = registerContextMenuEvent({
+		preventDefault: true,
+		includeContext: true,
+		additionalMenus() {
+			return [
+				ContextMenuItemProvider.menuItem({
+					text: "Open page in the broswer",
+					action() {
+						openUrl(`https://mangadex.org/chapter/${$data.id}/${pageToUse + 1}`);
+					},
+					enabled: pageToUse >= 0
+				}),
+				ContextMenuItemProvider.menuItem({
+					text: "Save page",
+					action() {
+						exportPageMutation.mutate(
+							{
+								mode: $isDataSaver ? DownloadMode.DataSaver : DownloadMode.Normal,
+								id: $data.id,
+								page: pageToUse
+							},
+							{
+								onSuccess(data, variables, onMutateResult, context) {
+									addToast({
+										data: { title: "Exported page" }
+									});
+								},
+								onError(error, variables, onMutateResult, context) {
+									addErrorToast("Cannot export page", error);
+								}
+							}
+						);
+					},
+					enabled: pageToUse >= 0
+				})
+			];
+		}
+	});
 </script>
 
 <svelte:window onfocus={triggerFunc} />
@@ -84,7 +130,12 @@
 			{/if}
 			<section class="content">
 				{#if $images.pagesLen}
-					<ChapterReadingMode />
+					<ChapterReadingMode
+						oncontextmenu={(e) => {
+							pageToUse = e.pageNumber;
+							ev(e);
+						}}
+					/>
 				{:else}
 					<!-- svelte-ignore a11y_no_static_element_interactions -->
 					<div class="trigger" use:mount onmouseenter={triggerFunc}>

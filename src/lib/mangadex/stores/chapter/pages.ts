@@ -229,10 +229,12 @@ export type PageStateInner =
 	| {
 		page: ChapterImage;
 		error?: never;
+		num: number
 	}
 	| {
 		page?: never;
 		error: Error;
+		num: number
 	};
 
 export type PageState = PageStateInner | null;
@@ -340,13 +342,15 @@ export default class ChapterPages {
 	public getPageState(page: number): PageState {
 		const pageData = this.getPageData(page);
 		const pageError = this.getPageError(page);
-		if (pageData) {
+		if (pageData != null) {
 			return {
-				page: pageData
+				page: pageData,
+				num: page
 			};
-		} else if (pageError) {
+		} else if (pageError != null) {
 			return {
-				error: pageError
+				error: pageError,
+				num: page
 			};
 		} else {
 			return null;

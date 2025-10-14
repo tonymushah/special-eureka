@@ -17,6 +17,7 @@
 		fireChapterPreviousEvent
 	} from "../contexts/previousNextEventTarget";
 	import isDefaultDecoration from "$lib/core/window-decoration/stores/isDefaultDecoration";
+	import type { OnReadingModeContextMenu } from ".";
 
 	const mode = getCurrentChapterReadingMode();
 	const opened = der([isDrawerOpen(), isDrawerFixed()], ([$open, $fixed]) => $open && $fixed);
@@ -30,6 +31,10 @@
 	});
 	let open = $derived($opened);
 	let toRemoveHeight = $derived(`${$headerHeight_}px`);
+	interface Props {
+		oncontextmenu?: OnReadingModeContextMenu;
+	}
+	let { oncontextmenu }: Props = $props();
 </script>
 
 <SomeDiv --to-remove-height={"0"}>
@@ -42,11 +47,12 @@
 				onprevious={() => {
 					fireChapterPreviousEvent();
 				}}
+				{oncontextmenu}
 			/>
 		</div>
 	{:else if $mode == ReadingMode.LongStrip}
 		<div class="long" transition:fade class:fixed={$isShouldFixed}>
-			<LongStrip />
+			<LongStrip {oncontextmenu} />
 		</div>
 	{:else if $mode == ReadingMode.SinglePage}
 		<div transition:fade class:fixed={$isShouldFixed}>
@@ -57,11 +63,12 @@
 				onprevious={() => {
 					fireChapterPreviousEvent();
 				}}
+				{oncontextmenu}
 			/>
 		</div>
 	{:else if $mode == ReadingMode.WideStrip}
 		<div class="wide" transition:fade class:open class:fixed={$isShouldFixed}>
-			<WideStrip />
+			<WideStrip {oncontextmenu} />
 		</div>
 	{:else}
 		<div class:fixed={$isShouldFixed} class="none-selected">

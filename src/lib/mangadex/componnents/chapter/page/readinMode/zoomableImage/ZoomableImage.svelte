@@ -6,14 +6,16 @@
 	import { getCurrentChapterImageFit } from "../../contexts/imageFit";
 	import { addListenerToResetZoomEventTarget } from "../../contexts/resetZoomEventTarget";
 	import { resetZoomKey, zoomSpeedValue } from "./settings";
+	import type { OnContextMenu } from ".";
 
 	interface Props {
 		src: string | [string, string];
 		alt: string | [string, string];
 		noZoom?: boolean;
+		oncontextmenu?: OnContextMenu;
 	}
 
-	let { src, alt, noZoom }: Props = $props();
+	let { src, alt, noZoom, oncontextmenu }: Props = $props();
 
 	const imageFitStore = getCurrentChapterImageFit();
 	let toZoom: HTMLElement | undefined = $state(undefined);
@@ -73,10 +75,28 @@
 				class:fitHeight={$shouldFitHeight}
 			>
 				{#key src[0]}
-					<img src={src[0]} alt={alt[0]} />
+					<img
+						src={src[0]}
+						alt={alt[0]}
+						oncontextmenu={(e) => {
+							oncontextmenu?.({
+								...e,
+								source: "left"
+							});
+						}}
+					/>
 				{/key}
 				{#key src[1]}
-					<img src={src[1]} alt={alt[1]} />
+					<img
+						src={src[1]}
+						alt={alt[1]}
+						oncontextmenu={(e) => {
+							oncontextmenu?.({
+								...e,
+								source: "right"
+							});
+						}}
+					/>
 				{/key}
 			</div>
 		{:else if typeof src == "string" && typeof alt == "string"}
@@ -86,7 +106,15 @@
 				class:fitHeight={$shouldFitHeight}
 			>
 				{#key src}
-					<img {src} {alt} />
+					<img
+						{src}
+						{alt}
+						oncontextmenu={(e) => {
+							oncontextmenu?.({
+								...e
+							});
+						}}
+					/>
 				{/key}
 			</div>
 		{/if}
