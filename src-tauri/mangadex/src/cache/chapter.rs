@@ -101,7 +101,7 @@ enum Instructions {
     ExportPage {
         page: u32,
         export_path: String,
-        response_tx: Option<oneshot::Sender<crate::Result<()>>>,
+        response_tx: Option<oneshot::Sender<crate::Result<String>>>,
     },
 }
 
@@ -289,7 +289,7 @@ impl<R: Runtime> SpawnHandle<R> {
             }
         }
     }
-    async fn export_page(&self, page: u32, export_path: String) -> crate::Result<()> {
+    async fn export_page(&self, page: u32, mut export_path: String) -> crate::Result<String> {
         let page_data = {
             let Ok(read) = self.pages.read() else {
                 return Err(crate::Error::CannotReadChapterPagesData(self.chapter_id));
@@ -304,13 +304,17 @@ impl<R: Runtime> SpawnHandle<R> {
         };
         let mut file_to_copy = match page_data.url.domain() {
             Some("chapter-cache") => {
-                let filename = Path::new(page_data.url.path())
+                let to_use_path = Path::new(page_data.url.path());
+                let filename = to_use_path
                     .file_name()
                     .and_then(|d| d.to_str().map(String::from))
                     .ok_or(crate::Error::ChapterPageNotLoaded {
                         page,
                         chapter: self.chapter_id,
                     })?;
+                if let Some(extension) = to_use_path.extension().and_then(|e| e.to_str()) {
+                    export_path = format!("{export_path}.{extension}");
+                }
                 File::open(self.dir.join(filename))?
             }
             Some("chapter") => {
@@ -332,13 +336,17 @@ impl<R: Runtime> SpawnHandle<R> {
                     }
                 };
 
-                let filename = Path::new(page_data.url.path())
+                let to_use_path = Path::new(page_data.url.path());
+                let filename = to_use_path
                     .file_name()
                     .and_then(|d| d.to_str().map(String::from))
                     .ok_or(crate::Error::ChapterPageNotLoaded {
                         page,
                         chapter: self.chapter_id,
                     })?;
+                if let Some(extension) = to_use_path.extension().and_then(|e| e.to_str()) {
+                    export_path = format!("{export_path}.{extension}");
+                }
 
                 let offline_state = self.app_handle.get_offline_app_state()?;
                 let read = offline_state.read().await;
@@ -367,14 +375,14 @@ impl<R: Runtime> SpawnHandle<R> {
                 });
             }
         };
-        let mut export_file = File::create(export_path)?;
+        let mut export_file = File::create(&export_path)?;
         {
             let mut export_file_buffer = BufWriter::new(&mut export_file);
             let mut file_to_copy_buffer = BufReader::new(&mut file_to_copy);
             io::copy(&mut file_to_copy_buffer, &mut export_file_buffer)?;
             export_file_buffer.flush()?;
         }
-        Ok(())
+        Ok(export_path)
     }
     async fn refetch_incompletes(&mut self) -> Result<(), FetchingError> {
         self.pages.clear_poison();
@@ -842,7 +850,7 @@ impl ChapterPagesHandle {
     pub fn resend_all(&self) {
         self.send_instruction(Instructions::ResendAll);
     }
-    pub async fn export_page(&self, page: u32, export_path: String) -> crate::Result<()> {
+    pub async fn export_page(&self, page: u32, export_path: String) -> crate::Result<String> {
         let (tx, rx) = oneshot::channel();
         self.send_instruction(Instructions::ExportPage {
             page,
