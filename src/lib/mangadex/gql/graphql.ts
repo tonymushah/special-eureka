@@ -530,7 +530,7 @@ export type ChapterPages = {
 
 export type ChapterPagesStoreMutation = {
 	__typename?: "ChapterPagesStoreMutation";
-	exportPage: Scalars["Boolean"]["output"];
+	exportPage?: Maybe<Scalars["String"]["output"]>;
 	fetchMetadata: Scalars["Boolean"]["output"];
 	refetchIncompletes: Scalars["Boolean"]["output"];
 	refetchPage: Scalars["Boolean"]["output"];
@@ -5132,7 +5132,7 @@ export type ExportChapterPageMutation = {
 	__typename?: "Mutation";
 	chapter: {
 		__typename?: "ChapterMutations";
-		pagesCache: { __typename?: "ChapterPagesStoreMutation"; exportPage: boolean };
+		pagesCache: { __typename?: "ChapterPagesStoreMutation"; exportPage?: string | null };
 	};
 };
 

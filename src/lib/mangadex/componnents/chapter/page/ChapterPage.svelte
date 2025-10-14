@@ -18,7 +18,7 @@
 	import { getCurrentChapterData } from "./contexts/currentChapter";
 	import registerContextMenuEvent from "@special-eureka/core/utils/contextMenuContext";
 	import { ContextMenuItemProvider } from "@special-eureka/core/commands/contextMenu";
-	import { openUrl } from "@tauri-apps/plugin-opener";
+	import { openUrl, revealItemInDir } from "@tauri-apps/plugin-opener";
 	import { exportPageMutationLoader } from "@mangadex/stores/chapter/page/export";
 	import { isDataSaver } from "@mangadex/stores/chapterQuality";
 	import { DownloadMode } from "@mangadex/gql/graphql";
@@ -90,6 +90,9 @@
 									addToast({
 										data: { title: "Exported page" }
 									});
+									if (typeof data == "string") {
+										revealItemInDir(data);
+									}
 								},
 								onError(error, variables, onMutateResult, context) {
 									addErrorToast("Cannot export page", error);

@@ -36,6 +36,10 @@ export const exportPageMutationLoader = () => createMutation(() => ({
 		}).toPromise();
 		if (res.error) {
 			throw res.error;
+		} else if (res.data) {
+			return res.data.chapter.pagesCache.exportPage
+		} else {
+			throw new Error("no data???");
 		}
 	},
 	networkMode: "always"
