@@ -111,7 +111,7 @@
 				src={page.value}
 				alt={page.value}
 				oncontextmenu={(e) => {
-					oncontextmenu?.({ ...e, pageNumber: current_page.num });
+					oncontextmenu?.(Object.assign(e, { pageNumber: current_page.num }));
 				}}
 			/>
 		{:else}

@@ -146,18 +146,33 @@
 				<ZoomableImage
 					src={[p1.page.value, p2.page.value]}
 					alt={[p1.page.value, p2.page.value]}
-					oncontextmenu={({ source, ...e }) => {
+					oncontextmenu={(e) => {
+						console.log(e);
 						let pageNumber: number;
-						switch (source) {
+						switch (e.source) {
 							case "left":
 								pageNumber = p1.num;
 								break;
 							case "right":
 								pageNumber = p2.num;
+								break;
 							default:
+								console.error(
+									new Error("no source", {
+										cause: e
+									})
+								);
 								return;
 						}
-						oncontextmenu?.({ ...e, pageNumber });
+						oncontextmenu?.(
+							Object.assign(
+								e,
+								{ pageNumber },
+								{
+									source: undefined as never
+								}
+							)
+						);
 					}}
 				/>
 			{:else}

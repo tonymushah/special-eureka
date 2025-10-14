@@ -66,7 +66,9 @@
 	const exportPageMutation = exportPageMutationLoader();
 	const ev = registerContextMenuEvent({
 		preventDefault: true,
-		includeContext: true,
+		includeContext: false,
+		stopPropagation: true,
+		addSeparator: false,
 		additionalMenus() {
 			return [
 				ContextMenuItemProvider.menuItem({
@@ -135,6 +137,7 @@
 				{#if $images.pagesLen}
 					<ChapterReadingMode
 						oncontextmenu={(e) => {
+							console.log(e);
 							pageToUse = e.pageNumber;
 							ev(e);
 						}}

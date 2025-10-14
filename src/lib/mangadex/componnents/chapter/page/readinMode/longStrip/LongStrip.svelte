@@ -110,19 +110,11 @@
 	};
 	const widthWritable = getLongStripImagesWidthContextWritable();
 	//onMount(() => currentChapter.subscribe(([p]) => console.debug(p)));
-	let isCtrlPressed = $state(false);
 </script>
 
 <svelte:window
 	onkeydown={(e) => {
-		if (e.ctrlKey) {
-			isCtrlPressed = true;
-		}
-	}}
-	onkeyup={(e) => {
-		if (e.ctrlKey) {
-			isCtrlPressed = false;
-		}
+		console.log(e);
 	}}
 />
 
@@ -131,7 +123,7 @@
 	class:innerOverflow
 	bind:this={longstrip_root}
 	onwheel={(e) => {
-		if (isCtrlPressed) {
+		if (e.ctrlKey) {
 			e.preventDefault();
 			e.stopPropagation();
 			let width = $imageWidth;
@@ -150,7 +142,7 @@
 					alt={image.page.value}
 					width="{$imageWidth}%"
 					oncontextmenu={(e) => {
-						oncontextmenu?.({ ...e, pageNumber: page });
+						oncontextmenu?.(Object.assign(e, { pageNumber: page }));
 					}}
 				/>
 			{:else if image?.error}

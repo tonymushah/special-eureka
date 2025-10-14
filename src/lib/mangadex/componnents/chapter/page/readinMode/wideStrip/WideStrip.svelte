@@ -205,7 +205,7 @@
 						e.preventDefault();
 					}}
 					oncontextmenu={(e) => {
-						oncontextmenu?.({ ...e, pageNumber: page });
+						oncontextmenu?.(Object.assign(e, { pageNumber: page }));
 					}}
 				/>
 			{:else if image?.error}
