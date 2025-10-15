@@ -14,7 +14,7 @@ import openNewWindow from "@special-eureka/core/commands/openNewWindow";
 import { currentLocationWithNewPath } from "@special-eureka/core/utils/url";
 import { save } from "@tauri-apps/plugin-dialog";
 import { openUrl, revealItemInDir } from "@tauri-apps/plugin-opener";
-import { get } from "svelte/store";
+import { derived, get } from "svelte/store";
 import { isLogged } from "../auth";
 import { extractFromAccessor } from "$lib/index.svelte";
 
@@ -70,11 +70,11 @@ export default function customListElementContextMenu({
 	const isFollowed = isFollowingCustomList(id);
 	items.push(
 		ContextMenuItemProvider.menuItem({
-			text: isFollowed ? "Unfollow" : "Follow",
+			text: derived(isFollowed, (isFollowed) => isFollowed ? "Unfollow" : "Follow"),
 			action() {
 				isFollowed.update((value) => !value);
 			},
-			enabled: get(isLogged)
+			enabled: isLogged
 		}),
 		ContextMenuItemProvider.menuItem({
 			text: "Export custom list as CSV",
@@ -123,9 +123,9 @@ export default function customListElementContextMenu({
 				}
 			},
 			enabled: (() => {
-				using mut = extractFromAccessor(exportCustomListsToCSV);
-				return !mut.value.isPending
-			})(),
+				const mut = exportCustomListsToCSV();
+				return !mut.isPending
+			}),
 		})
 	);
 	if (isMine) {
@@ -154,7 +154,7 @@ export default function customListElementContextMenu({
 									}
 								}
 							);
-						}
+						},
 					}),
 					ContextMenuItemProvider.menuItem({
 						text: "Private",
@@ -180,7 +180,7 @@ export default function customListElementContextMenu({
 						}
 					})
 				],
-				enabled: get(isLogged)
+				enabled: isLogged
 			}),
 			ContextMenuItemProvider.menuItem({
 				text: "Delete",
