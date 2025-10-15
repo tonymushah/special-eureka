@@ -17,7 +17,7 @@ import openNewWindow from "@special-eureka/core/commands/openNewWindow";
 import { currentLocationWithNewPath } from "@special-eureka/core/utils/url";
 import { writeText } from "@tauri-apps/plugin-clipboard-manager";
 import { openUrl } from "@tauri-apps/plugin-opener";
-import { get } from "svelte/store";
+import { derived, get } from "svelte/store";
 
 type ChapterElemetContextMenuItems = {
 	id: string;
@@ -69,7 +69,7 @@ export default function chapterElementContextMenuItems({
 		ContextMenuItemProvider.seperator()
 	];
 	const isDownloading = get(isChapterDownloading({ id, deferred: true }));
-	const isDownloaded = get(isChapterDownloaded({ id, deferred: true }));
+	const isDownloaded = isChapterDownloaded({ id, deferred: true });
 	if (isDownloading) {
 		items.push(
 			ContextMenuItemProvider.menuItem({
@@ -83,14 +83,14 @@ export default function chapterElementContextMenuItems({
 	} else {
 		items.push(
 			ContextMenuItemProvider.menuItem({
-				text: isDownloaded ? "Re-download" : "Download",
+				text: derived(isDownloaded, (isDownloaded) => isDownloaded ? "Re-download" : "Download"),
 				action() {
 					using mut = extractFromAccessor(downloadMutation);
 					mut.value.mutateAsync({
 						id
 					});
 				},
-				enabled: get(isMounted)
+				enabled: isMounted
 			})
 		);
 		if (isDownloaded) {
@@ -100,7 +100,8 @@ export default function chapterElementContextMenuItems({
 					action() {
 						using mut = extractFromAccessor(removeMutation);
 						mut.value.mutateAsync(id);
-					}
+					},
+					enabled: isMounted
 				})
 			);
 		}
