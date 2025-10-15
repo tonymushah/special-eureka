@@ -2,7 +2,9 @@
 	import FlagIcon from "@mangadex/componnents/FlagIcon.svelte";
 	import type { Language } from "@mangadex/gql/graphql";
 	import mangaElementContextMenu from "@mangadex/utils/context-menu/manga";
-	import { setContextMenuContext } from "@special-eureka/core/utils/contextMenuContext";
+	import registerContextMenuEvent, {
+		setContextMenuContext
+	} from "@special-eureka/core/utils/contextMenuContext";
 	import type { Chapter } from "..";
 	import ChapterElement1 from "../../base/element1/ChapterElement1.svelte";
 
@@ -109,6 +111,9 @@
 					id: mangaId
 				});
 			}}
+			oncontextmenu={registerContextMenuEvent({
+				preventDefault: true
+			})}
 		>
 			<div class="title">
 				<p>
