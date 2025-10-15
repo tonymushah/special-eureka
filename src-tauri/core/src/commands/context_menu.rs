@@ -24,6 +24,12 @@ pub enum MaybeEventStreamData<T> {
     },
 }
 
+impl<T: Default> Default for MaybeEventStreamData<T> {
+	fn default() -> Self {
+		Self::Data(Default::default())
+	}
+}
+
 impl<T> MaybeEventStreamData<T> {
     pub fn data(&self) -> &T {
         match self {
@@ -40,6 +46,7 @@ pub enum ContextMenuItem {
         text: MaybeEventStreamData<String>,
         action: CallbackFn,
         accelerator: Option<String>,
+		#[serde(default)]
         enabled: MaybeEventStreamData<Option<bool>>,
         icon: Option<String>,
     },
@@ -47,6 +54,7 @@ pub enum ContextMenuItem {
         text: MaybeEventStreamData<String>,
         #[serde(default)]
         items: Vec<ContextMenuItem>,
+		#[serde(default)]
         enabled: MaybeEventStreamData<Option<bool>>,
     },
     Seperator,
