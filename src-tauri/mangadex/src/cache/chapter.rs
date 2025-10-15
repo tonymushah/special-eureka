@@ -31,7 +31,10 @@ use reqwest::Client;
 use tauri::{AppHandle, Runtime};
 use tempfile::TempDir;
 use tokio::{
-    sync::mpsc::{UnboundedReceiver, UnboundedSender, unbounded_channel},
+    sync::{
+        mpsc::{UnboundedReceiver, UnboundedSender, unbounded_channel},
+        oneshot,
+    },
     task::JoinHandle,
 };
 use url::Url;
@@ -95,6 +98,11 @@ enum Instructions {
     ResendPage(u32),
     ResendAll,
     RefetchIncompletes,
+    ExportPage {
+        page: u32,
+        export_path: String,
+        response_tx: Option<oneshot::Sender<crate::Result<String>>>,
+    },
 }
 
 /// Any error that could happen during the fetching process
@@ -268,8 +276,113 @@ impl<R: Runtime> SpawnHandle<R> {
                         self.send_message(Err(err));
                     }
                 }
+                Instructions::ExportPage {
+                    page,
+                    export_path,
+                    response_tx,
+                } => {
+                    let res = self.export_page(page, export_path).await;
+                    if let Some(tx) = response_tx {
+                        let _ = tx.send(res);
+                    }
+                }
             }
         }
+    }
+    async fn export_page(&self, page: u32, mut export_path: String) -> crate::Result<String> {
+        let page_data = {
+            let Ok(read) = self.pages.read() else {
+                return Err(crate::Error::CannotReadChapterPagesData(self.chapter_id));
+            };
+            let Some(page_data) = read.get(&page) else {
+                return Err(crate::Error::ChapterPageNotLoaded {
+                    page,
+                    chapter: self.chapter_id,
+                });
+            };
+            page_data.clone()
+        };
+        let mut file_to_copy = match page_data.url.domain() {
+            Some("chapter-cache") => {
+                let to_use_path = Path::new(page_data.url.path());
+                let filename = to_use_path
+                    .file_name()
+                    .and_then(|d| d.to_str().map(String::from))
+                    .ok_or(crate::Error::ChapterPageNotLoaded {
+                        page,
+                        chapter: self.chapter_id,
+                    })?;
+                if let Some(extension) = to_use_path.extension().and_then(|e| e.to_str()) {
+                    export_path = format!("{export_path}.{extension}");
+                }
+                File::open(self.dir.join(filename))?
+            }
+            Some("chapter") => {
+                let mode = match page_data
+                    .url
+                    .path_segments()
+                    .and_then(|mut d| d.nth(1))
+                    .ok_or(crate::Error::ChapterPageNotLoaded {
+                        page,
+                        chapter: self.chapter_id,
+                    })? {
+                    "data" => Mode::Normal,
+                    "data-saver" => Mode::DataSaver,
+                    _ => {
+                        return Err(crate::Error::ChapterPageNotLoaded {
+                            page,
+                            chapter: self.chapter_id,
+                        });
+                    }
+                };
+
+                let to_use_path = Path::new(page_data.url.path());
+                let filename = to_use_path
+                    .file_name()
+                    .and_then(|d| d.to_str().map(String::from))
+                    .ok_or(crate::Error::ChapterPageNotLoaded {
+                        page,
+                        chapter: self.chapter_id,
+                    })?;
+                if let Some(extension) = to_use_path.extension().and_then(|e| e.to_str()) {
+                    export_path = format!("{export_path}.{extension}");
+                }
+
+                let offline_state = self.app_handle.get_offline_app_state()?;
+                let read = offline_state.read().await;
+                let offline_data = read
+                    .as_ref()
+                    .ok_or(crate::Error::OfflineAppStateNotLoaded)?;
+                match mode {
+                    Mode::Normal => {
+                        offline_data
+                            .app_state
+                            .get_chapter_image(self.chapter_id, filename)
+                            .await?
+                    }
+                    Mode::DataSaver => {
+                        offline_data
+                            .app_state
+                            .get_chapter_image_data_saver(self.chapter_id, filename)
+                            .await?
+                    }
+                }
+            }
+            _ => {
+                return Err(crate::Error::ChapterPageNotLoaded {
+                    page,
+                    chapter: self.chapter_id,
+                });
+            }
+        };
+        let mut export_file = File::create(&export_path)?;
+        {
+            let mut export_file_buffer = BufWriter::new(&mut export_file);
+            let mut file_to_copy_buffer = BufReader::new(&mut file_to_copy);
+            io::copy(&mut file_to_copy_buffer, &mut export_file_buffer)?;
+            export_file_buffer.flush()?;
+        }
+        Ok(export_path)
     }
     async fn refetch_incompletes(&mut self) -> Result<(), FetchingError> {
         self.pages.clear_poison();
@@ -736,6 +849,22 @@ impl ChapterPagesHandle {
     }
     pub fn resend_all(&self) {
         self.send_instruction(Instructions::ResendAll);
+    }
+    pub async fn export_page(&self, page: u32, export_path: String) -> crate::Result<String> {
+        let (tx, rx) = oneshot::channel();
+        self.send_instruction(Instructions::ExportPage {
+            page,
+            export_path,
+            response_tx: Some(tx),
+        });
+        rx.await?
+    }
+    pub fn export_page_defer(&self, page: u32, export_path: String) {
+        self.send_instruction(Instructions::ExportPage {
+            page,
+            export_path,
+            response_tx: None,
+        });
     }
 }
 

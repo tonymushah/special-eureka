@@ -14,6 +14,7 @@
 	import type { DoublePageState } from "@mangadex/stores/chapter/pages";
 	import DangerButtonOnlyLabel from "@mangadex/componnents/theme/buttons/DangerButtonOnlyLabel.svelte";
 	import ChapterPages from "@mangadex/stores/chapter/pages";
+	import type { OnReadingModeContextMenu } from "..";
 
 	const readingDirection = getCurrentChapterDirection();
 	const currentChapterPage = getChapterCurrentPageContext();
@@ -36,13 +37,14 @@
 	interface Events {
 		onnext?: () => any;
 		onprevious?: () => any;
+		oncontextmenu?: OnReadingModeContextMenu;
 	}
 
 	interface Props extends Events {
 		children?: Snippet;
 	}
 
-	let { onnext, onprevious, children }: Props = $props();
+	let { onnext, onprevious, children, oncontextmenu }: Props = $props();
 
 	/// BUG or more like shit code xd
 	/// Required or else the component may not work proprely
@@ -144,11 +146,46 @@
 				<ZoomableImage
 					src={[p1.page.value, p2.page.value]}
 					alt={[p1.page.value, p2.page.value]}
+					oncontextmenu={(e) => {
+						console.log(e);
+						let pageNumber: number;
+						switch (e.source) {
+							case "left":
+								pageNumber = p1.num;
+								break;
+							case "right":
+								pageNumber = p2.num;
+								break;
+							default:
+								console.error(
+									new Error("no source", {
+										cause: e
+									})
+								);
+								return;
+						}
+						oncontextmenu?.(
+							Object.assign(
+								e,
+								{ pageNumber },
+								{
+									source: undefined as never
+								}
+							)
+						);
+					}}
 				/>
 			{:else}
 				<div class="disabled-zoom">
 					{#if p1?.page}
-						<ZoomableImage src={p1.page.value} alt={p1.page.value} noZoom />
+						<ZoomableImage
+							src={p1.page.value}
+							alt={p1.page.value}
+							noZoom
+							oncontextmenu={({ source, ...e }) => {
+								oncontextmenu?.({ ...e, pageNumber: p1.num });
+							}}
+						/>
 					{:else if p1?.error}
 						<div class="error">
 							<div class="_inner">
@@ -184,7 +221,14 @@
 					{/if}
 
 					{#if p2?.page}
-						<ZoomableImage src={p2.page.value} alt={p2.page.value} noZoom />
+						<ZoomableImage
+							src={p2.page.value}
+							alt={p2.page.value}
+							noZoom
+							oncontextmenu={({ source, ...e }) => {
+								oncontextmenu?.({ ...e, pageNumber: p2.num });
+							}}
+						/>
 					{:else if p2?.error}
 						<div class="error">
 							<div class="_inner">

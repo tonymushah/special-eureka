@@ -530,12 +530,19 @@ export type ChapterPages = {
 
 export type ChapterPagesStoreMutation = {
 	__typename?: "ChapterPagesStoreMutation";
+	exportPage?: Maybe<Scalars["String"]["output"]>;
 	fetchMetadata: Scalars["Boolean"]["output"];
 	refetchIncompletes: Scalars["Boolean"]["output"];
 	refetchPage: Scalars["Boolean"]["output"];
 	resendAll: Scalars["Boolean"]["output"];
 	resendPage: Scalars["Boolean"]["output"];
 	startCaching: Scalars["Boolean"]["output"];
+};
+
+export type ChapterPagesStoreMutationExportPageArgs = {
+	defer?: InputMaybe<Scalars["Boolean"]["input"]>;
+	exportPath: Scalars["String"]["input"];
+	page: Scalars["Int"]["input"];
 };
 
 export type ChapterPagesStoreMutationRefetchPageArgs = {
@@ -5111,6 +5118,21 @@ export type GetChapterPageDataQuery = {
 				};
 			};
 		};
+	};
+};
+
+export type ExportChapterPageMutationVariables = Exact<{
+	id: Scalars["UUID"]["input"];
+	page: Scalars["Int"]["input"];
+	exportPath: Scalars["String"]["input"];
+	mode?: InputMaybe<DownloadMode>;
+}>;
+
+export type ExportChapterPageMutation = {
+	__typename?: "Mutation";
+	chapter: {
+		__typename?: "ChapterMutations";
+		pagesCache: { __typename?: "ChapterPagesStoreMutation"; exportPage?: string | null };
 	};
 };
 
@@ -14098,6 +14120,113 @@ export const GetChapterPageDataDocument = {
 		}
 	]
 } as unknown as DocumentNode<GetChapterPageDataQuery, GetChapterPageDataQueryVariables>;
+export const ExportChapterPageDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "exportChapterPage" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "page" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "Int" } }
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "exportPath" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "String" } }
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "mode" } },
+					type: { kind: "NamedType", name: { kind: "Name", value: "DownloadMode" } }
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "chapter" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "pagesCache" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "id" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "id" }
+											}
+										},
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "mode" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "mode" }
+											}
+										}
+									],
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "exportPage" },
+												arguments: [
+													{
+														kind: "Argument",
+														name: { kind: "Name", value: "page" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "page" }
+														}
+													},
+													{
+														kind: "Argument",
+														name: { kind: "Name", value: "exportPath" },
+														value: {
+															kind: "Variable",
+															name: {
+																kind: "Name",
+																value: "exportPath"
+															}
+														}
+													}
+												]
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<ExportChapterPageMutation, ExportChapterPageMutationVariables>;
 export const SetContentProfileBlurDocument = {
 	kind: "Document",
 	definitions: [

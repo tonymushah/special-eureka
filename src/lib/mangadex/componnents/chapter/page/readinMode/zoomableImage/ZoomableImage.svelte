@@ -6,14 +6,16 @@
 	import { getCurrentChapterImageFit } from "../../contexts/imageFit";
 	import { addListenerToResetZoomEventTarget } from "../../contexts/resetZoomEventTarget";
 	import { resetZoomKey, zoomSpeedValue } from "./settings";
+	import type { OnContextMenu } from ".";
 
 	interface Props {
 		src: string | [string, string];
 		alt: string | [string, string];
 		noZoom?: boolean;
+		oncontextmenu?: OnContextMenu;
 	}
 
-	let { src, alt, noZoom }: Props = $props();
+	let { src, alt, noZoom, oncontextmenu }: Props = $props();
 
 	const imageFitStore = getCurrentChapterImageFit();
 	let toZoom: HTMLElement | undefined = $state(undefined);
@@ -23,11 +25,13 @@
 			toZoomPanZoom = panzoom(toZoom, {
 				animate: true
 			});
+			return () => {
+				toZoomPanZoom?.destroy();
+			};
 		}
 	});
 	onDestroy(() => {
 		toZoomPanZoom?.reset({ animate: true });
-		toZoomPanZoom?.destroy();
 	});
 	onMount(() =>
 		addListenerToResetZoomEventTarget(() => {
@@ -65,19 +69,39 @@
 		}
 	}}
 >
-	<div class="toZoom" bind:this={toZoom}>
+	<!-- svelte-ignore a11y_no_static_element_interactions -->
+	<div
+		class="toZoom"
+		bind:this={toZoom}
+		oncontextmenu={(e) => {
+			const target = e.target;
+			if (target instanceof HTMLImageElement) {
+				if (target.hasAttribute("data-image-left")) {
+					oncontextmenu?.(
+						Object.assign(e, {
+							source: "left" as "left"
+						})
+					);
+				} else if (target.hasAttribute("data-image-right")) {
+					oncontextmenu?.(
+						Object.assign(e, {
+							source: "right" as "right"
+						})
+					);
+				} else {
+					oncontextmenu?.(e);
+				}
+			}
+		}}
+	>
 		{#if Array.isArray(src) && Array.isArray(alt)}
 			<div
 				class="double-image"
 				class:fitWidth={$shouldFitWidth}
 				class:fitHeight={$shouldFitHeight}
 			>
-				{#key src[0]}
-					<img src={src[0]} alt={alt[0]} />
-				{/key}
-				{#key src[1]}
-					<img src={src[1]} alt={alt[1]} />
-				{/key}
+				<img data-image-left src={src[0]} alt={alt[0]} />
+				<img data-image-right src={src[1]} alt={alt[1]} />
 			</div>
 		{:else if typeof src == "string" && typeof alt == "string"}
 			<div
@@ -85,9 +109,7 @@
 				class:fitWidth={$shouldFitWidth}
 				class:fitHeight={$shouldFitHeight}
 			>
-				{#key src}
-					<img {src} {alt} />
-				{/key}
+				<img {src} {alt} />
 			</div>
 		{/if}
 	</div>

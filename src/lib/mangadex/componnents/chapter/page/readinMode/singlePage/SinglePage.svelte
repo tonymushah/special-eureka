@@ -9,6 +9,7 @@
 	import { derived as der } from "svelte/store";
 	import DangerButtonOnlyLabel from "@mangadex/componnents/theme/buttons/DangerButtonOnlyLabel.svelte";
 	import ChapterPages from "@mangadex/stores/chapter/pages";
+	import type { OnReadingModeContextMenu } from "..";
 
 	const readingDirection = getCurrentChapterDirection();
 	const currentChapterPage = getChapterCurrentPageContext();
@@ -16,11 +17,12 @@
 	interface Events {
 		onnext?: () => any;
 		onprevious?: () => any;
+		oncontextmenu?: OnReadingModeContextMenu;
 	}
 
 	interface Props extends Events {}
 
-	let { onnext, onprevious }: Props = $props();
+	let { onnext, onprevious, oncontextmenu }: Props = $props();
 
 	const images = getCurrentChapterImages();
 
@@ -105,7 +107,13 @@
 	<div class="single-page">
 		{#if current_page.page}
 			{@const page = current_page.page}
-			<ZoomableImage src={page.value} alt={page.value} />
+			<ZoomableImage
+				src={page.value}
+				alt={page.value}
+				oncontextmenu={(e) => {
+					oncontextmenu?.(Object.assign(e, { pageNumber: current_page.num }));
+				}}
+			/>
 		{:else}
 			{@const error = current_page.error}
 			<div class="error">

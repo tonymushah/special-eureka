@@ -424,6 +424,7 @@ type ChapterPagesStoreMutation {
 	resendPage(page: Int!): Boolean!
 	resendAll: Boolean!
 	refetchIncompletes: Boolean!
+	exportPage(exportPath: String!, page: Int!, defer: Boolean): String
 }
 
 type ChapterQueries {
