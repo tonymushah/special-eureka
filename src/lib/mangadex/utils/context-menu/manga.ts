@@ -192,7 +192,7 @@ export default function mangaElementContextMenu({
 		ContextMenuItemProvider.subMenu({
 			text: "Rating",
 			items: [
-				...range(1, 10)
+				...range(1, 11)
 					.toReversed()
 					.map((rating) =>
 						ContextMenuItemProvider.menuItem({
