@@ -69,6 +69,10 @@ export default function isFollowingUser(id: string, options?: {
 			}).toPromise();
 			if (res.error) {
 				throw res.error;
+			} else if (res.data) {
+				return res.data.follows.isFollowingUser
+			} else {
+				throw new Error("no data???");
 			}
 		}
 	}), () => mangadexQueryClient);
