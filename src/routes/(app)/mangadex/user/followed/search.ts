@@ -20,7 +20,7 @@ type UserSearchResultConstructorParams = {
 	total: number;
 };
 
-export class UserGroupSearchResult extends AbstractSearchResult<UserListItemData> {
+export class UserFollowingSearchResult extends AbstractSearchResult<UserListItemData> {
 	client: Client;
 	params: UserFollowingParams;
 	offset: number;
@@ -69,7 +69,7 @@ export default async function executeSearchQuery(
 		.toPromise();
 	if (result.data) {
 		const data = result.data.follows.users;
-		return new UserGroupSearchResult({
+		return new UserFollowingSearchResult({
 			client,
 			params,
 			offset: data.offset,
