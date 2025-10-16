@@ -69,6 +69,10 @@ export default function isFollowingCustomList(id: string, options?: {
 			}).toPromise();
 			if (res.error) {
 				throw res.error;
+			} else if (res.data) {
+				return res.data.follows.isFollowingCustomList
+			} else {
+				throw new Error("no data??");
 			}
 		}
 	}), () => mangadexQueryClient);
