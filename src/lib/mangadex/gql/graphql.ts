@@ -5510,6 +5510,7 @@ export type UserFollowedGroupsQuery = {
 							roles: Array<UserRole>;
 						};
 					} | null;
+					members: Array<{ __typename?: "User"; id: any }>;
 				};
 			}>;
 		};
@@ -16329,6 +16330,25 @@ export const UserFollowedGroupsDocument = {
 																									}
 																								}
 																							]
+																					}
+																				}
+																			]
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "members"
+																		},
+																		selectionSet: {
+																			kind: "SelectionSet",
+																			selections: [
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "id"
 																					}
 																				}
 																			]
