@@ -131,7 +131,9 @@
 
 <MangaList list={titles}>
 	{#snippet additionalContent()}
-		<p>Note: This section is <strong>NOT</strong> filtered. Be careful!</p>
+		<div class="additional-content">
+			<p>Note: This section is <strong>NOT</strong> filtered. Be careful!</p>
+		</div>
 	{/snippet}
 </MangaList>
 
@@ -158,5 +160,12 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
+	}
+	.additional-content {
+		display: flex;
+		align-items: center;
+	}
+	p {
+		margin: 0px;
 	}
 </style>

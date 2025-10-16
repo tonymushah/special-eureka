@@ -6,6 +6,14 @@
 
 <AppTitle title="Following MD lists | MangaDex" />
 
-<PageTitle title="Following MD Lists" withReturn />
+<div>
+	<PageTitle title="Following MD Lists" withReturn />
 
-<SearchContent />
+	<SearchContent />
+</div>
+
+<style lang="scss">
+	div {
+		margin: 0px 16px;
+	}
+</style>

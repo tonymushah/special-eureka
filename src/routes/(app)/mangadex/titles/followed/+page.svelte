@@ -6,6 +6,14 @@
 
 <AppTitle title="Following titles" />
 
-<PageTitle title="Following titles" withReturn />
+<div>
+	<PageTitle title="Following titles" withReturn />
 
-<SearchContent />
+	<SearchContent />
+</div>
+
+<style lang="scss">
+	div {
+		margin: 0px 16px;
+	}
+</style>

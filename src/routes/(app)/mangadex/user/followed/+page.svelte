@@ -6,6 +6,14 @@
 
 <AppTitle title="Following Users" />
 
-<PageTitle title="Following Users" withReturn />
+<div>
+	<PageTitle title="Following Users" withReturn />
 
-<SearchContent />
+	<SearchContent />
+</div>
+
+<style lang="scss">
+	div {
+		margin: 0px 16px;
+	}
+</style>

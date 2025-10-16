@@ -5,7 +5,14 @@
 </script>
 
 <AppTitle title="Following scanlation groups | Mangadex" />
+<div>
+	<PageTitle withReturn title="Following scanlation groups" />
 
-<PageTitle withReturn title="Following scanlation groups" />
+	<SearchContent />
+</div>
 
-<SearchContent />
+<style lang="scss">
+	div {
+		margin: 0px 16px;
+	}
+</style>
