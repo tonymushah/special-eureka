@@ -6119,7 +6119,11 @@ export type UserFollowedCustomListsQuery = {
 			data: Array<{
 				__typename?: "CustomList";
 				id: any;
-				attributes: { __typename?: "CustomListAttributes"; name: string };
+				attributes: {
+					__typename?: "CustomListAttributes";
+					name: string;
+					visibility: CustomListVisibility;
+				};
 				relationships: {
 					__typename?: "CustomListRelationships";
 					titlesIds: Array<any>;
@@ -19445,6 +19449,13 @@ export const UserFollowedCustomListsDocument = {
 																		name: {
 																			kind: "Name",
 																			value: "name"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "visibility"
 																		}
 																	}
 																]

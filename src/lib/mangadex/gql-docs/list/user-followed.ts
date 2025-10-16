@@ -14,6 +14,7 @@ export const userFollowedCustomListsGQL = graphql(`
 					id
 					attributes {
 						name
+						visibility
 					}
 					relationships {
 						titlesIds
