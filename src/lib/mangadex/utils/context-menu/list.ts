@@ -22,14 +22,16 @@ type CustomListElementContextMenuOptions = {
 	id: string;
 	name?: string;
 	isMine?: boolean;
-	onVisibilityChange?: () => any;
+	onVisibilityChange?: (newVis: CustomListVisibility) => any;
+	onDelete?: () => any
 };
 
 export default function customListElementContextMenu({
 	id,
 	name,
 	isMine,
-	onVisibilityChange
+	onVisibilityChange,
+	onDelete
 }: CustomListElementContextMenuOptions): ContextMenuItem[] {
 	const items = [
 		ContextMenuItemProvider.menuItem({
@@ -147,7 +149,7 @@ export default function customListElementContextMenu({
 												description: name ?? id
 											}
 										});
-										onVisibilityChange?.();
+										onVisibilityChange?.(CustomListVisibility.Public);
 									},
 									onError(error, variables, context) {
 										addErrorToast("Cannot update custom list visibity", error);
@@ -170,7 +172,7 @@ export default function customListElementContextMenu({
 												description: name ?? id
 											}
 										});
-										onVisibilityChange?.();
+										onVisibilityChange?.(CustomListVisibility.Private);
 									},
 									onError(error, variables, context) {
 										addErrorToast("Cannot update custom list visibity", error);
@@ -198,7 +200,7 @@ export default function customListElementContextMenu({
 									variant: "yellow"
 								}
 							});
-							onVisibilityChange?.();
+							onDelete?.()
 						}
 					});
 				}

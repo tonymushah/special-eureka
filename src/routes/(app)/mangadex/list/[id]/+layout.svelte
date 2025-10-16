@@ -21,6 +21,7 @@
 	import type { Snippet } from "svelte";
 	import { BookmarkIcon } from "svelte-feather-icons";
 	import type { LayoutData } from "./$types";
+	import deleteCustomListMutation from "@mangadex/gql-docs/list/id/delete";
 
 	interface Props {
 		data: LayoutData;
@@ -45,6 +46,35 @@
 	const isFollowed = isFollowingCustomList(data.id);
 	let followMut = followCustomListMutation();
 	let unfollowMut = unfollowCustomListMutation();
+	setContextMenuContext(
+		customListElementContextMenu({
+			id: data.id,
+			name: data.attributes.name,
+			isMine: data.isMine,
+			onVisibilityChange(vis) {
+				switch (vis) {
+					case CustomListVisibility.Private:
+						route("/mangadex/list/[id]", {
+							id: `private:${data.id}`
+						});
+						break;
+					case CustomListVisibility.Public:
+						route("/mangadex/list/[id]", {
+							id: data.id
+						});
+						break;
+					default:
+						break;
+				}
+			},
+			onDelete() {
+				route("/mangadex/list/[id]", {
+					id: `${data.id}`
+				});
+			}
+		})
+	);
+	let deleteCustomList = deleteCustomListMutation();
 </script>
 
 <UsersPageBase title={data.attributes.name}>
@@ -115,6 +145,28 @@
 					disabled={updateCustomListVisibilityMutation.isPending}
 				/>
 			{/if}
+			<DangerButtonOnlyLabel
+				variant="2"
+				label="Delete"
+				onclick={() => {
+					deleteCustomList.mutate(data.id, {
+						onError(error) {
+							addErrorToast("Cannot delete custom list", error);
+						},
+						onSuccess() {
+							addToast({
+								data: {
+									title: "Deleted custom list",
+									description: data.attributes.name ?? data.id,
+									variant: "yellow"
+								}
+							});
+							goto(route("/mangadex/list"));
+						}
+					});
+				}}
+				disabled={deleteCustomList.isPending}
+			/>
 		{:else}
 			<PrimaryButton
 				isBase
