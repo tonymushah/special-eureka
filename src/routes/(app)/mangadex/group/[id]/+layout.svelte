@@ -35,6 +35,9 @@
 			<PrimaryButton
 				isBase
 				disabled={followMut.isPending || unfollowMut.isPending || !$isLogged}
+				onclick={() => {
+					$isFollowed = !$isFollowed;
+				}}
 			>
 				<p>
 					{#if $isFollowed}

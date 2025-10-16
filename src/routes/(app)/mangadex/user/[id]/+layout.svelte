@@ -22,7 +22,12 @@
 	}
 
 	let { data, children }: Props = $props();
-	const isFollowed = isFollowingUser(data.id);
+	const isFollowed = isFollowingUser(data.id, {
+		toast: true,
+		onSettled(error, variables) {
+			console.log(error);
+		}
+	});
 	let followMut = followUserMutation();
 	let unfollowMut = unfollowUserMutation();
 </script>
@@ -38,6 +43,9 @@
 			<PrimaryButton
 				isBase
 				disabled={followMut.isPending || unfollowMut.isPending || !$isLogged}
+				onclick={() => {
+					$isFollowed = !$isFollowed;
+				}}
 			>
 				<p>
 					{#if $isFollowed}

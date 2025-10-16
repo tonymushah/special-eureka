@@ -75,6 +75,7 @@
 		})
 	);
 	let deleteCustomList = deleteCustomListMutation();
+	let isFollowing = $derived($isFollowed);
 </script>
 
 <UsersPageBase title={data.attributes.name}>
@@ -171,9 +172,12 @@
 			<PrimaryButton
 				isBase
 				disabled={followMut.isPending || unfollowMut.isPending || !$isLogged}
+				onclick={() => {
+					$isFollowed = !$isFollowed;
+				}}
 			>
 				<p>
-					{#if $isFollowed}
+					{#if isFollowing}
 						<BookmarkIcon /> Unfollow
 					{:else}
 						Follow
