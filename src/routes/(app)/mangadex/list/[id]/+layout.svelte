@@ -1,19 +1,26 @@
 <script lang="ts">
-	import type { Snippet } from "svelte";
-	import type { LayoutData } from "./$types";
-	import { CustomListVisibility } from "@mangadex/gql/graphql";
-	import UserLink from "@mangadex/componnents/user/UserLink.svelte";
-	import MidToneLine from "@mangadex/componnents/theme/lines/MidToneLine.svelte";
-	import { derived as storeDerived } from "svelte/store";
-	import { goto, invalidate } from "$app/navigation";
-	import { route } from "$lib/ROUTES";
-	import { setContextMenuContext } from "@special-eureka/core/utils/contextMenuContext";
-	import customListElementContextMenu from "@mangadex/utils/context-menu/list";
-	import DangerButtonOnlyLabel from "@mangadex/componnents/theme/buttons/DangerButtonOnlyLabel.svelte";
-	import updateCustomListVisibilityMutationLoader from "@mangadex/gql-docs/list/id/update-visibilty";
-	import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
-	import ButtonAccentOnlyLabel from "@mangadex/componnents/theme/buttons/ButtonAccentOnlyLabel.svelte";
+	import { goto } from "$app/navigation";
 	import { page } from "$app/state";
+	import { route } from "$lib/ROUTES";
+	import ButtonAccentOnlyLabel from "@mangadex/componnents/theme/buttons/ButtonAccentOnlyLabel.svelte";
+	import DangerButtonOnlyLabel from "@mangadex/componnents/theme/buttons/DangerButtonOnlyLabel.svelte";
+	import PrimaryButton from "@mangadex/componnents/theme/buttons/PrimaryButton.svelte";
+	import MidToneLine from "@mangadex/componnents/theme/lines/MidToneLine.svelte";
+	import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
+	import UserLink from "@mangadex/componnents/user/UserLink.svelte";
+	import UsersPageBase from "@mangadex/componnents/users/page/UsersPageBase.svelte";
+	import isFollowingCustomList, {
+		followCustomListMutation,
+		unfollowCustomListMutation
+	} from "@mangadex/gql-docs/list/id/follow";
+	import updateCustomListVisibilityMutationLoader from "@mangadex/gql-docs/list/id/update-visibilty";
+	import { CustomListVisibility } from "@mangadex/gql/graphql";
+	import { isLogged } from "@mangadex/utils/auth";
+	import customListElementContextMenu from "@mangadex/utils/context-menu/list";
+	import { setContextMenuContext } from "@special-eureka/core/utils/contextMenuContext";
+	import type { Snippet } from "svelte";
+	import { BookmarkIcon } from "svelte-feather-icons";
+	import type { LayoutData } from "./$types";
 
 	interface Props {
 		data: LayoutData;
@@ -35,84 +42,101 @@
 		customListElementContextMenu({ id: data.id, name: data.attributes.name })
 	);
 	let updateCustomListVisibilityMutation = updateCustomListVisibilityMutationLoader();
+	const isFollowed = isFollowingCustomList(data.id);
+	let followMut = followCustomListMutation();
+	let unfollowMut = unfollowCustomListMutation();
 </script>
 
-<div class="layout">
-	<div class="top-layout">
-		<h1>{data.attributes.name}</h1>
+<UsersPageBase title={data.attributes.name}>
+	{#snippet _left()}
+		{#if data.isMine}
+			{#if isPrivate}
+				<DangerButtonOnlyLabel
+					label="Make Public"
+					onclick={() => {
+						updateCustomListVisibilityMutation.mutate(
+							{
+								id: data.id,
+								visibility: CustomListVisibility.Public
+							},
+							{
+								onSuccess() {
+									addToast({
+										data: {
+											title: "Sucefully made custom list public",
+											description: data.attributes.name,
+											variant: "yellow"
+										}
+									});
+									goto(
+										route("/mangadex/list/[id]", {
+											id: data.id
+										})
+									);
+								},
+								onError(error, variables, context) {
+									addErrorToast("Cannot update visibility", error);
+								}
+							}
+						);
+					}}
+					disabled={updateCustomListVisibilityMutation.isPending}
+				/>
+			{:else}
+				<ButtonAccentOnlyLabel
+					label="Make Private"
+					onclick={() => {
+						updateCustomListVisibilityMutation.mutate(
+							{
+								id: data.id,
+								visibility: CustomListVisibility.Private
+							},
+							{
+								onSuccess() {
+									addToast({
+										data: {
+											title: "Sucefully made custom list private",
+											description: data.attributes.name,
+											variant: "yellow"
+										}
+									});
+									goto(
+										route("/mangadex/list/[id]", {
+											id: `private:${data.id}`
+										})
+									);
+								},
+								onError(error, variables, context) {
+									addErrorToast("Cannot update visibility", error);
+								}
+							}
+						);
+					}}
+					disabled={updateCustomListVisibilityMutation.isPending}
+				/>
+			{/if}
+		{:else}
+			<PrimaryButton
+				isBase
+				disabled={followMut.isPending || unfollowMut.isPending || !$isLogged}
+			>
+				<p>
+					{#if $isFollowed}
+						<BookmarkIcon /> Unfollow
+					{:else}
+						Follow
+					{/if}
+				</p>
+			</PrimaryButton>
+		{/if}
+	{/snippet}
+	{#snippet topRight()}
 		<div class="visibility">
 			<p>
 				Visibility: {data.attributes.visibility == CustomListVisibility.Public
 					? "Public"
 					: "Private"}
 			</p>
-			{#if data.isMine}
-				{#if isPrivate}
-					<DangerButtonOnlyLabel
-						label="Make Public"
-						onclick={() => {
-							updateCustomListVisibilityMutation.mutate(
-								{
-									id: data.id,
-									visibility: CustomListVisibility.Public
-								},
-								{
-									onSuccess() {
-										addToast({
-											data: {
-												title: "Sucefully made custom list public",
-												description: data.attributes.name,
-												variant: "yellow"
-											}
-										});
-										goto(
-											route("/mangadex/list/[id]", {
-												id: data.id
-											})
-										);
-									},
-									onError(error, variables, context) {
-										addErrorToast("Cannot update visibility", error);
-									}
-								}
-							);
-						}}
-						disabled={updateCustomListVisibilityMutation.isPending}
-					/>
-				{:else}
-					<ButtonAccentOnlyLabel
-						label="Make Private"
-						onclick={() => {
-							updateCustomListVisibilityMutation.mutate(
-								{
-									id: data.id,
-									visibility: CustomListVisibility.Private
-								},
-								{
-									onSuccess() {
-										addToast({
-											data: {
-												title: "Sucefully made custom list private",
-												description: data.attributes.name,
-												variant: "yellow"
-											}
-										});
-										goto(
-											route("/mangadex/list/[id]", {
-												id: `private:${data.id}`
-											})
-										);
-									},
-									onError(error, variables, context) {
-										addErrorToast("Cannot update visibility", error);
-									}
-								}
-							);
-						}}
-						disabled={updateCustomListVisibilityMutation.isPending}
-					/>
-				{/if}
-			{/if}
 		</div>
 		<p>
 			Created by <UserLink
@@ -121,42 +145,44 @@
 				id={user.id}
 			/>
 		</p>
-	</div>
-	<nav class="custom-list-nav">
-		<button
-			class:active={path ==
-				route("/mangadex/list/[id]", {
-					id: isPrivate ? `private:${data.id}` : data.id
-				})}
-			onclick={() => {
-				goto(
+	{/snippet}
+	{#snippet _right()}
+		<nav class="custom-list-nav">
+			<button
+				class:active={path ==
 					route("/mangadex/list/[id]", {
 						id: isPrivate ? `private:${data.id}` : data.id
-					})
-				);
-			}}
-		>
-			Titles
-		</button>
-		<button
-			class:active={path ==
-				route("/mangadex/list/[id]/feed", {
-					id: isPrivate ? `private:${data.id}` : data.id
-				})}
-			onclick={() => {
-				goto(
+					})}
+				onclick={() => {
+					goto(
+						route("/mangadex/list/[id]", {
+							id: isPrivate ? `private:${data.id}` : data.id
+						})
+					);
+				}}
+			>
+				Titles
+			</button>
+			<button
+				class:active={path ==
 					route("/mangadex/list/[id]/feed", {
 						id: isPrivate ? `private:${data.id}` : data.id
-					})
-				);
-			}}
-		>
-			Feed
-		</button>
-	</nav>
-	<MidToneLine />
-	{@render children?.()}
-</div>
+					})}
+				onclick={() => {
+					goto(
+						route("/mangadex/list/[id]/feed", {
+							id: isPrivate ? `private:${data.id}` : data.id
+						})
+					);
+				}}
+			>
+				Feed
+			</button>
+		</nav>
+		<MidToneLine />
+		{@render children?.()}
+	{/snippet}
+</UsersPageBase>
 
 <style lang="scss">
 	.custom-list-nav {
@@ -191,9 +217,6 @@
 		button.active:active {
 			background-color: var(--accent-l3-active);
 		}
-	}
-	.layout {
-		margin: 0px 10px;
 	}
 	.visibility {
 		display: flex;

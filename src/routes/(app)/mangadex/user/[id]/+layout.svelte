@@ -10,6 +10,11 @@
 	import NavTab from "./NavTab.svelte";
 	import dexChanReading from "@mangadex/assets/artworks/dex-chan-reading.png";
 	import dexChanXIndex from "@mangadex/assets/artworks/dex-and-index.png";
+	import isFollowingUser, {
+		followUserMutation,
+		unfollowUserMutation
+	} from "@mangadex/gql-docs/user/id/follow";
+	import { isLogged } from "@mangadex/utils/auth";
 
 	interface Props {
 		data: LayoutData;
@@ -17,6 +22,9 @@
 	}
 
 	let { data, children }: Props = $props();
+	const isFollowed = isFollowingUser(data.id);
+	let followMut = followUserMutation();
+	let unfollowMut = unfollowUserMutation();
 </script>
 
 <UsersPageBase
@@ -27,8 +35,17 @@
 >
 	{#snippet _left()}
 		<div class="buttons">
-			<PrimaryButton isBase disabled>
-				<p><BookmarkIcon />Follow</p>
+			<PrimaryButton
+				isBase
+				disabled={followMut.isPending || unfollowMut.isPending || !$isLogged}
+			>
+				<p>
+					{#if $isFollowed}
+						<BookmarkIcon /> Unfollow
+					{:else}
+						Follow
+					{/if}
+				</p>
 			</PrimaryButton>
 			<ButtonAccent
 				isBase

@@ -9,6 +9,11 @@
 	import type { LayoutData } from "./$types";
 	import NavTab from "./NavTab.svelte";
 	import ScanalationGroupLinkButtons from "./ScanalationGroupLinkButtons.svelte";
+	import isFollowingGroup, {
+		followGroupMutation,
+		unfollowGroupMutation
+	} from "@mangadex/gql-docs/group/id/follow";
+	import { isLogged } from "@mangadex/utils/auth";
 
 	interface Props {
 		data: LayoutData;
@@ -19,13 +24,25 @@
 	let description = $derived(data.description ?? undefined);
 	let createdSince = $derived(data.createdAt);
 	//$: console.log(`since date: ${createdSince}`);
+	const isFollowed = isFollowingGroup(data.id);
+	let followMut = followGroupMutation();
+	let unfollowMut = unfollowGroupMutation();
 </script>
 
 <UsersPageBase title={data.name} {description}>
 	{#snippet _left()}
 		<div class="buttons">
-			<PrimaryButton isBase>
-				<p><BookmarkIcon />Follow</p>
+			<PrimaryButton
+				isBase
+				disabled={followMut.isPending || unfollowMut.isPending || !$isLogged}
+			>
+				<p>
+					{#if $isFollowed}
+						<BookmarkIcon /> Unfollow
+					{:else}
+						Follow
+					{/if}
+				</p>
 			</PrimaryButton>
 			<ButtonAccent
 				isBase
