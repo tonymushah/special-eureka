@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { graphql } from "@mangadex/gql/exports";
-	import specialQueryStore from "@mangadex/utils/gql-stores/specialQueryStore";
 	import { getContextClient } from "@urql/svelte";
 	import { onMount } from "svelte";
 	import Content from "./latest-updates/Content.svelte";
@@ -9,42 +7,48 @@
 	import TopTitle from "./utils/TopTitle.svelte";
 	import { latest_updates_query } from "./latest-updates";
 	import defaultContentProfile from "@mangadex/content-profile/graphql/defaultProfile";
+	import { createQuery } from "@tanstack/svelte-query";
 	const client = getContextClient();
 
-	const latest_updates_query_store = specialQueryStore({
-		client,
-		query: latest_updates_query,
-		variable: {}
-	});
-	let chapters = $derived($latest_updates_query_store?.data);
-	const latest_updates_fetching = latest_updates_query_store.isFetching;
-
-	let global_fetching = $derived($latest_updates_fetching);
-	let error = $derived($latest_updates_query_store?.error);
+	let latest_updates = createQuery(() => ({
+		queryKey: ["home", "latest_updates"],
+		async queryFn() {
+			const res = await client.query(latest_updates_query, {}).toPromise();
+			if (res.data) {
+				return res.data;
+			} else if (res.error) {
+				throw res.error;
+			} else {
+				throw new Error("no data??");
+			}
+		}
+	}));
 
 	//const
 	//let isFetching =
 	onMount(() => {
-		return defaultContentProfile.subscribe(() => latest_updates_query_store.execute());
+		return defaultContentProfile.subscribe(() => {
+			latest_updates.refetch();
+		});
 	});
 </script>
 
 <TopTitle
 	label="Recent Uploads"
-	fetching={global_fetching}
+	fetching={latest_updates.isFetching}
 	onrefresh={async () => {
-		if (!global_fetching) {
-			await latest_updates_query_store.execute();
+		if (!latest_updates.isFetching) {
+			await latest_updates.refetch();
 		}
 	}}
 />
 
-{#if chapters}
-	<Content {chapters} />
-{:else if error}
+{#if latest_updates.isSuccess}
+	<Content chapters={latest_updates.data} />
+{:else if latest_updates.isError}
 	<HomeErrorComponnent
 		label="Oops! Something happens when loading the latest uploaded chapters"
-		{error}
+		error={latest_updates.error}
 	/>
 {:else}
 	<PopularTitleSpinner --height="13em" />
