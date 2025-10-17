@@ -11,7 +11,7 @@
 
 	const client = getContextClient();
 	let seasonal = createQuery(() => ({
-		queryKey: ["home", "popular", "titles"],
+		queryKey: ["home", "seasonal", "titles"],
 		async queryFn() {
 			const res = await client.query(query, {}).toPromise();
 			if (res.data) {
