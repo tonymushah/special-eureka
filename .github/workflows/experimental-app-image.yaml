@@ -34,8 +34,8 @@ jobs:
                   TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
                   TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_PASSWORD }}
               with:
-                  tagName: v__VERSION__.1
-                  releaseName: "Special Eureka v__VERSION__ app-image experimental 1"
+                  tagName: v__VERSION__.2
+                  releaseName: "Special Eureka v__VERSION__ app-image experimental 2"
                   releaseBody: "An experimental app image release using the [tauri/feat/truly-portable-app-image](https://github.com/tauri-apps/tauri/pull/12491).\n Unlike the previous one, this uses `ubuntu-latest` instead."
                   releaseDraft: true
                   prerelease: true
