@@ -76,7 +76,9 @@
 <div class="layout">
 	<div class="input" use:melt={$trigger}>
 		<ButtonAccent>
-			{$currentSortText}
+			<p class="input-text">
+				{$currentSortText}
+			</p>
 		</ButtonAccent>
 	</div>
 </div>
@@ -167,5 +169,9 @@
 	}
 	.input {
 		display: grid;
+	}
+	.input-text {
+		min-width: 250px;
+		margin: 0px;
 	}
 </style>
