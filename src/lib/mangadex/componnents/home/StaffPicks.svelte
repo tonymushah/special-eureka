@@ -5,16 +5,13 @@
 	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
 	import { createQuery } from "@tanstack/svelte-query";
 	import { getContextClient } from "@urql/svelte";
-	import { debounce } from "lodash";
 	import { onMount } from "svelte";
-	import { derived as der, toStore } from "svelte/store";
 	import type { StaffPicksTitle } from "./staff-picks";
-	import Inner from "./staff-picks/Inner.svelte";
-	import query from "./staff-picks/query";
-	import TopTitle from "./utils/TopTitle.svelte";
 	import Content from "./staff-picks/Content.svelte";
+	import query from "./staff-picks/query";
 	import HomeErrorComponnent from "./utils/HomeErrorComponnent.svelte";
 	import PopularTitleSpinner from "./utils/PopularTitleSpinner.svelte";
+	import TopTitle from "./utils/TopTitle.svelte";
 
 	const client = getContextClient();
 	let staff_picks = createQuery(() => ({
