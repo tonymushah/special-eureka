@@ -6,6 +6,7 @@
 	import openTitle from "@mangadex/utils/links/title/[id]";
 	import type { SwiperOptions } from "swiper/types";
 	import { readManga } from "@mangadex/componnents/manga/read/ReadDialog.svelte";
+	import NothingToShow from "../NothingToShow.svelte";
 
 	interface Props {
 		mangas: StaffPicksTitle[];
@@ -47,30 +48,34 @@
 	});
 </script>
 
-<div class="result">
-	<swiper-container bind:this={swiper_container} init="false">
-		{#each mangas as { id, coverImage, coverImageAlt, title, description } (id)}
-			<swiper-slide>
-				<MangaElementBase5WithReadableCoverImage
-					{coverImage}
-					{coverImageAlt}
-					{title}
-					{description}
-					onmoreInfoClick={() => {
-						openTitle(id);
-					}}
-					onreadClick={() => {
-						readManga(id);
-					}}
-					mangaId={id}
-				/>
-			</swiper-slide>
-		{/each}
-	</swiper-container>
-</div>
+{#if mangas.length > 0}
+	<div class="result">
+		<swiper-container bind:this={swiper_container} init="false">
+			{#each mangas as { id, coverImage, coverImageAlt, title, description } (id)}
+				<swiper-slide>
+					<MangaElementBase5WithReadableCoverImage
+						{coverImage}
+						{coverImageAlt}
+						{title}
+						{description}
+						onmoreInfoClick={() => {
+							openTitle(id);
+						}}
+						onreadClick={() => {
+							readManga(id);
+						}}
+						mangaId={id}
+					/>
+				</swiper-slide>
+			{/each}
+		</swiper-container>
+	</div>
 
-<style lang="scss">
-	.result {
-		margin: 1em;
-	}
-</style>
+	<style lang="scss">
+		.result {
+			margin: 1em;
+		}
+	</style>
+{:else}
+	<NothingToShow />
+{/if}

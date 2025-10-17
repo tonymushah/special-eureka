@@ -7,6 +7,7 @@
 	import { ChapterDownloadState } from "@mangadex/utils/types/DownloadState";
 	import { getContextClient } from "@urql/svelte";
 	import getChapterDownloadState from "./getChapterDownloadState";
+	import NothingToShow from "../NothingToShow.svelte";
 	const client = getContextClient();
 	interface Props {
 		chapters: RecentlyAddedHomeQuery;
@@ -66,50 +67,54 @@
 	let data2 = $derived(data.slice(halfwayThrough, data.length));
 </script>
 
-<div class="content">
-	<div class="chapter-col data1">
-		{#each data1 as { chapterId, mangaId, coverImage, upload_date, lang, uploader, groups, mangaTitle, chapterTitle, coverImageAlt, download_state } (chapterId)}
-			<div class="chapter">
-				<ChapterFeedElement1
-					{mangaId}
-					{chapterId}
-					{coverImage}
-					{upload_date}
-					{lang}
-					{uploader}
-					{groups}
-					{mangaTitle}
-					{coverImageAlt}
-					{chapterTitle}
-					onmangaClick={() => {
-						openTitle(mangaId);
-					}}
-				/>
-			</div>
-		{/each}
+{#if data.length > 0}
+	<div class="content">
+		<div class="chapter-col data1">
+			{#each data1 as { chapterId, mangaId, coverImage, upload_date, lang, uploader, groups, mangaTitle, chapterTitle, coverImageAlt, download_state } (chapterId)}
+				<div class="chapter">
+					<ChapterFeedElement1
+						{mangaId}
+						{chapterId}
+						{coverImage}
+						{upload_date}
+						{lang}
+						{uploader}
+						{groups}
+						{mangaTitle}
+						{coverImageAlt}
+						{chapterTitle}
+						onmangaClick={() => {
+							openTitle(mangaId);
+						}}
+					/>
+				</div>
+			{/each}
+		</div>
+		<div class="chapter-col data2">
+			{#each data2 as { chapterId, mangaId, coverImage, upload_date, lang, uploader, groups, mangaTitle, chapterTitle, coverImageAlt, download_state } (chapterId)}
+				<div class="chapter">
+					<ChapterFeedElement1
+						{mangaId}
+						{chapterId}
+						{coverImage}
+						{upload_date}
+						{lang}
+						{uploader}
+						{groups}
+						{mangaTitle}
+						{coverImageAlt}
+						{chapterTitle}
+						onmangaClick={() => {
+							openTitle(mangaId);
+						}}
+					/>
+				</div>
+			{/each}
+		</div>
 	</div>
-	<div class="chapter-col data2">
-		{#each data2 as { chapterId, mangaId, coverImage, upload_date, lang, uploader, groups, mangaTitle, chapterTitle, coverImageAlt, download_state } (chapterId)}
-			<div class="chapter">
-				<ChapterFeedElement1
-					{mangaId}
-					{chapterId}
-					{coverImage}
-					{upload_date}
-					{lang}
-					{uploader}
-					{groups}
-					{mangaTitle}
-					{coverImageAlt}
-					{chapterTitle}
-					onmangaClick={() => {
-						openTitle(mangaId);
-					}}
-				/>
-			</div>
-		{/each}
-	</div>
-</div>
+{:else}
+	<NothingToShow />
+{/if}
 
 <style lang="scss">
 	:root {
