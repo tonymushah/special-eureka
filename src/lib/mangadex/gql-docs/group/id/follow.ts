@@ -4,7 +4,7 @@ import { graphql } from "@mangadex/gql/gql";
 import { client } from "@mangadex/gql/urql";
 import { mangadexQueryClient } from "@mangadex/index";
 import { createMutation, createQuery, type CreateQueryResult } from "@tanstack/svelte-query";
-import { derived, get, toStore, type Writable } from "svelte/store";
+import { derived, get, readonly, writable, type Writable } from "svelte/store";
 
 export const followGroupGQLMutation = graphql(`
 	mutation followScanlationGroupMutation($id: UUID!) {
@@ -29,6 +29,11 @@ export const isFollowingGroupQuery = graphql(`
 		}
 	}
 `);
+
+
+const globalIsMutatingInner = writable(false);
+
+export const isChangingGroupFollowing = readonly(globalIsMutatingInner);
 
 export const followGroupMutation = () => createMutation(() => ({
 	mutationKey: ["scanlation-group", "follow"],
@@ -61,26 +66,14 @@ export default function isFollowingGroup(id: string, options?: {
 	toast?: boolean
 }): Writable<boolean> {
 	const toast = options?.toast ?? true;
-	const query = () => createQuery(() => ({
-		queryKey: ["scanlation-group", id, "is-following"],
-		async queryFn() {
-			const res = await client.query(isFollowingGroupQuery, {
-				id
-			}).toPromise();
-			if (res.error) {
-				throw res.error;
-			} else if (res.data) {
-				return res.data.follows.isFollowingGroup
-			} else {
-				throw new Error("no data??");
-			}
-		}
-	}), () => mangadexQueryClient);
+	const query = isFollowingGroupQuery_(id);
 	const queryDerived = derived(internalToStore(query), ($query) => {
 		return $query.data ?? false
 	}, false);
 	return {
-		subscribe: queryDerived.subscribe,
+		subscribe(run, invalidate) {
+			return queryDerived.subscribe(run, invalidate);
+		},
 		set(value) {
 			using q = extractFromAccessor(query);
 			setFollowingStatus(value, id, toast, q.value, options);
@@ -91,6 +84,24 @@ export default function isFollowingGroup(id: string, options?: {
 			setFollowingStatus(value, id, toast, q.value, options);
 		}
 	};
+}
+
+export function isFollowingGroupQuery_(id: string) {
+	return () => createQuery(() => ({
+		queryKey: ["scanlation-group", id, "is-following"],
+		async queryFn() {
+			const res = await client.query(isFollowingGroupQuery, {
+				id
+			}).toPromise();
+			if (res.error) {
+				throw res.error;
+			} else if (res.data) {
+				return res.data.follows.isFollowingGroup;
+			} else {
+				throw new Error("no data??");
+			}
+		}
+	}), () => mangadexQueryClient);
 }
 
 function setFollowingStatus(

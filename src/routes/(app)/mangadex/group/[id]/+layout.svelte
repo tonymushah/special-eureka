@@ -3,17 +3,14 @@
 	import PrimaryButton from "@mangadex/componnents/theme/buttons/PrimaryButton.svelte";
 	import TimeAgo from "@mangadex/componnents/TimeAgo.svelte";
 	import UsersPageBase from "@mangadex/componnents/users/page/UsersPageBase.svelte";
+	import isFollowingGroup, { isChangingGroupFollowing } from "@mangadex/gql-docs/group/id/follow";
+	import { isLogged } from "@mangadex/utils/auth";
 	import { writeText } from "@tauri-apps/plugin-clipboard-manager";
 	import { openUrl as shellOpen } from "@tauri-apps/plugin-opener";
 	import { BookmarkIcon, ExternalLinkIcon, FlagIcon } from "svelte-feather-icons";
 	import type { LayoutData } from "./$types";
 	import NavTab from "./NavTab.svelte";
 	import ScanalationGroupLinkButtons from "./ScanalationGroupLinkButtons.svelte";
-	import isFollowingGroup, {
-		followGroupMutation,
-		unfollowGroupMutation
-	} from "@mangadex/gql-docs/group/id/follow";
-	import { isLogged } from "@mangadex/utils/auth";
 
 	interface Props {
 		data: LayoutData;
@@ -25,8 +22,6 @@
 	let createdSince = $derived(data.createdAt);
 	//$: console.log(`since date: ${createdSince}`);
 	const isFollowed = isFollowingGroup(data.id);
-	let followMut = followGroupMutation();
-	let unfollowMut = unfollowGroupMutation();
 </script>
 
 <UsersPageBase title={data.name} {description}>
@@ -34,7 +29,7 @@
 		<div class="buttons">
 			<PrimaryButton
 				isBase
-				disabled={followMut.isPending || unfollowMut.isPending || !$isLogged}
+				disabled={$isChangingGroupFollowing || !$isLogged}
 				onclick={() => {
 					$isFollowed = !$isFollowed;
 				}}

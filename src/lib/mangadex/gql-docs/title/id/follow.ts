@@ -4,7 +4,7 @@ import { graphql } from "@mangadex/gql/gql";
 import { client } from "@mangadex/gql/urql";
 import { mangadexQueryClient } from "@mangadex/index";
 import { createMutation, createQuery, type CreateQueryResult } from "@tanstack/svelte-query";
-import { derived, type Writable, get, toStore } from "svelte/store";
+import { derived, type Writable, get, toStore, readonly, writable } from "svelte/store";
 
 export const followTitleGQLMutation = graphql(`
 	mutation followTitleMutation($id: UUID!) {
@@ -30,6 +30,10 @@ export const isFollowingTitleQuery = graphql(`
 	}
 `);
 
+const globalIsMutatingInner = writable(false);
+
+export const isChangingTitleFollowing = readonly(globalIsMutatingInner);
+
 export const followTitleMutation = () => createMutation(() => ({
 	mutationKey: ["custom-list", "follow"],
 	async mutationFn(id: string) {
@@ -39,7 +43,13 @@ export const followTitleMutation = () => createMutation(() => ({
 		if (res.error) {
 			throw res.error;
 		}
-	}
+	},
+	onMutate(variables, context) {
+		globalIsMutatingInner.set(true);
+	},
+	onSettled(data, error, variables, onMutateResult, context) {
+		globalIsMutatingInner.set(false);
+	},
 }), () => mangadexQueryClient);
 
 export const unfollowTitleMutation = () => createMutation(() => ({
@@ -51,7 +61,13 @@ export const unfollowTitleMutation = () => createMutation(() => ({
 		if (res.error) {
 			throw res.error;
 		}
-	}
+	},
+	onMutate(variables, context) {
+		globalIsMutatingInner.set(true);
+	},
+	onSettled(data, error, variables, onMutateResult, context) {
+		globalIsMutatingInner.set(false);
+	},
 }), () => mangadexQueryClient);
 
 export default function isFollowingTitle(id: string, options?: {
@@ -61,26 +77,14 @@ export default function isFollowingTitle(id: string, options?: {
 	toast?: boolean
 }): Writable<boolean> {
 	const toast = options?.toast ?? true;
-	const query = () => createQuery(() => ({
-		queryKey: ["title", id, "is-following"],
-		async queryFn() {
-			const res = await client.query(isFollowingTitleQuery, {
-				id
-			}).toPromise();
-			if (res.error) {
-				throw res.error;
-			} else if (res.data) {
-				return res.data.follows.isFollowingManga
-			} else {
-				throw new Error("no data??");
-			}
-		}
-	}), () => mangadexQueryClient);
+	const query = isFollowingTitle_(id);
 	const queryDerived = derived(internalToStore(query), ($query) => {
 		return $query.data ?? false
 	}, false);
 	return {
-		subscribe: queryDerived.subscribe,
+		subscribe(run, invalidate) {
+			return queryDerived.subscribe(run, invalidate);
+		},
 		set(value) {
 			using q_ = extractFromAccessor(query);
 			setFollowingStatus(value, id, toast, q_.value, options);
@@ -91,6 +95,24 @@ export default function isFollowingTitle(id: string, options?: {
 			setFollowingStatus(value, id, toast, q_.value, options);
 		}
 	};
+}
+
+export function isFollowingTitle_(id: string) {
+	return () => createQuery(() => ({
+		queryKey: ["title", id, "is-following"],
+		async queryFn() {
+			const res = await client.query(isFollowingTitleQuery, {
+				id
+			}).toPromise();
+			if (res.error) {
+				throw res.error;
+			} else if (res.data) {
+				return res.data.follows.isFollowingManga;
+			} else {
+				throw new Error("no data??");
+			}
+		}
+	}), () => mangadexQueryClient);
 }
 
 function setFollowingStatus(
@@ -108,7 +130,7 @@ function setFollowingStatus(
 		| undefined
 ) {
 	if (value) {
-		using mut = extractFromAccessor(followTitleMutation);
+		const mut = extractFromAccessor(followTitleMutation);
 		mut.value.mutate(id, {
 			onError(error, variables, context) {
 				if (toast) {
@@ -131,10 +153,12 @@ function setFollowingStatus(
 			onSettled(data, error, variables, context) {
 				query.refetch();
 				options?.onSettled?.(error, variables);
+				using _ = mut;
 			}
 		});
+
 	} else {
-		using mut = extractFromAccessor(unfollowTitleMutation);
+		const mut = extractFromAccessor(unfollowTitleMutation);
 		mut.value.mutate(id, {
 			onError(error, variables, context) {
 				if (toast) {
@@ -157,6 +181,7 @@ function setFollowingStatus(
 			onSettled(data, error, variables, context) {
 				query.refetch();
 				options?.onSettled?.(error, variables);
+				using _ = mut;
 			}
 		});
 	}

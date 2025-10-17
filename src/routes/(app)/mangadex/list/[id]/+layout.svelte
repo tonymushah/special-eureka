@@ -4,24 +4,18 @@
 	import { route } from "$lib/ROUTES";
 	import ButtonAccentOnlyLabel from "@mangadex/componnents/theme/buttons/ButtonAccentOnlyLabel.svelte";
 	import DangerButtonOnlyLabel from "@mangadex/componnents/theme/buttons/DangerButtonOnlyLabel.svelte";
-	import PrimaryButton from "@mangadex/componnents/theme/buttons/PrimaryButton.svelte";
 	import MidToneLine from "@mangadex/componnents/theme/lines/MidToneLine.svelte";
 	import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 	import UserLink from "@mangadex/componnents/user/UserLink.svelte";
 	import UsersPageBase from "@mangadex/componnents/users/page/UsersPageBase.svelte";
-	import isFollowingCustomList, {
-		followCustomListMutation,
-		unfollowCustomListMutation
-	} from "@mangadex/gql-docs/list/id/follow";
 	import updateCustomListVisibilityMutationLoader from "@mangadex/gql-docs/list/id/update-visibilty";
 	import { CustomListVisibility } from "@mangadex/gql/graphql";
-	import { isLogged } from "@mangadex/utils/auth";
 	import customListElementContextMenu from "@mangadex/utils/context-menu/list";
 	import { setContextMenuContext } from "@special-eureka/core/utils/contextMenuContext";
 	import type { Snippet } from "svelte";
-	import { BookmarkIcon } from "svelte-feather-icons";
 	import type { LayoutData } from "./$types";
 	import deleteCustomListMutation from "@mangadex/gql-docs/list/id/delete";
+	import FollowButton from "./FollowButton.svelte";
 
 	interface Props {
 		data: LayoutData;
@@ -43,9 +37,7 @@
 		customListElementContextMenu({ id: data.id, name: data.attributes.name })
 	);
 	let updateCustomListVisibilityMutation = updateCustomListVisibilityMutationLoader();
-	const isFollowed = isFollowingCustomList(data.id);
-	let followMut = followCustomListMutation();
-	let unfollowMut = unfollowCustomListMutation();
+
 	setContextMenuContext(
 		customListElementContextMenu({
 			id: data.id,
@@ -75,7 +67,6 @@
 		})
 	);
 	let deleteCustomList = deleteCustomListMutation();
-	let isFollowing = $derived($isFollowed);
 </script>
 
 <UsersPageBase title={data.attributes.name}>
@@ -169,21 +160,7 @@
 				disabled={deleteCustomList.isPending}
 			/>
 		{:else}
-			<PrimaryButton
-				isBase
-				disabled={followMut.isPending || unfollowMut.isPending || !$isLogged}
-				onclick={() => {
-					$isFollowed = !$isFollowed;
-				}}
-			>
-				<p>
-					{#if isFollowing}
-						<BookmarkIcon /> Unfollow
-					{:else}
-						Follow
-					{/if}
-				</p>
-			</PrimaryButton>
+			<FollowButton id={data.id} />
 		{/if}
 	{/snippet}
 	{#snippet topRight()}
