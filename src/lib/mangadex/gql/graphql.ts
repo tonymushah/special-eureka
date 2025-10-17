@@ -3035,6 +3035,7 @@ export type ScanlationGroupRelationships = {
 	__typename?: "ScanlationGroupRelationships";
 	leader?: Maybe<User>;
 	members: Array<User>;
+	membersLen: Scalars["Int"]["output"];
 };
 
 export type ScanlationGroupResults = {
@@ -5501,6 +5502,7 @@ export type UserFollowedGroupsQuery = {
 				};
 				relationships: {
 					__typename?: "ScanlationGroupRelationships";
+					membersLen: number;
 					leader?: {
 						__typename?: "User";
 						id: any;
@@ -5510,7 +5512,6 @@ export type UserFollowedGroupsQuery = {
 							roles: Array<UserRole>;
 						};
 					} | null;
-					members: Array<{ __typename?: "User"; id: any }>;
 				};
 			}>;
 		};
@@ -16343,19 +16344,7 @@ export const UserFollowedGroupsDocument = {
 																		kind: "Field",
 																		name: {
 																			kind: "Name",
-																			value: "members"
-																		},
-																		selectionSet: {
-																			kind: "SelectionSet",
-																			selections: [
-																				{
-																					kind: "Field",
-																					name: {
-																						kind: "Name",
-																						value: "id"
-																					}
-																				}
-																			]
+																			value: "membersLen"
 																		}
 																	}
 																]

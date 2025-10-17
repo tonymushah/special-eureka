@@ -30,9 +30,7 @@ export const userFollowedGroupsGQL = graphql(`
 								roles
 							}
 						}
-						members{
-							id
-						}
+						membersLen
 					}
 				}
 				limit

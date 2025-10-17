@@ -2326,6 +2326,7 @@ type ScanlationGroupQueries {
 
 type ScanlationGroupRelationships {
 	leader: User
+	membersLen: Int!
 	members: [User!]!
 }
 

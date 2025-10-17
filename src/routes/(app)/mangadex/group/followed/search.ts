@@ -1,10 +1,10 @@
-import type { ScanlationGroupListParams, UserFollowedGroupsQueryVariables } from "@mangadex/gql/graphql";
+import { userFollowedGroupsGQL } from "@mangadex/gql-docs/group/user-followed";
+import type { UserFollowedGroupsQueryVariables } from "@mangadex/gql/graphql";
 import AbstractSearchResult, {
 	type PaginationData
 } from "@mangadex/utils/searchResult/AbstractSearchResult";
 import type { Client } from "@urql/svelte";
 import type { ScanlationGroupListItemData } from "../(search)/search";
-import { userFollowedGroupsGQL } from "@mangadex/gql-docs/group/user-followed";
 
 type UserFollowedScanlationGroupResultConstructorParams = {
 	data: ScanlationGroupListItemData[];
@@ -73,7 +73,7 @@ export default async function executeSearchQuery(
 				return {
 					id: e.id,
 					name: e.attributes.name,
-					members: e.relationships.members.length,
+					members: e.relationships.membersLen,
 					leader,
 					discord: e.attributes.discord ?? undefined,
 					website: e.attributes.website ?? undefined
