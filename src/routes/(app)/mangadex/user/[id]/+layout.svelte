@@ -20,6 +20,7 @@
 
 	let { data, children }: Props = $props();
 	const isFollowed = isFollowingUser(data.id);
+	let isFollowing = $derived($isFollowed);
 </script>
 
 <UsersPageBase
@@ -38,7 +39,7 @@
 				}}
 			>
 				<p>
-					{#if $isFollowed}
+					{#if isFollowing}
 						<BookmarkIcon /> Unfollow
 					{:else}
 						Follow
