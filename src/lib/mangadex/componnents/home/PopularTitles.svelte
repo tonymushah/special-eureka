@@ -1,38 +1,56 @@
 <script lang="ts">
-	import { graphql } from "@mangadex/gql/exports";
+	import defaultContentProfile from "@mangadex/content-profile/graphql/defaultProfile";
 	import { CoverImageQuality } from "@mangadex/gql/graphql";
 	import get_cover_art from "@mangadex/utils/cover-art/get_cover_art";
-	import specialQueryStore from "@mangadex/utils/gql-stores/specialQueryStore";
+	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
 	import type { Tag } from "@mangadex/utils/types/Tag";
+	import { createQuery } from "@tanstack/svelte-query";
 	import { getContextClient } from "@urql/svelte";
 	import { onMount } from "svelte";
+	import { popular_title_query } from "./popular-titles";
 	import Content from "./popular-titles/Content.svelte";
 	import HomeErrorComponnent from "./utils/HomeErrorComponnent.svelte";
 	import PopularTitleSpinner from "./utils/PopularTitleSpinner.svelte";
 	import TopTitle from "./utils/TopTitle.svelte";
-	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
-	import { popular_title_query } from "./popular-titles";
-	import defaultContentProfile from "@mangadex/content-profile/graphql/defaultProfile";
 
 	const client = getContextClient();
 
-	const popular_titles_query = specialQueryStore({
-		client,
-		query: popular_title_query,
-		variable: {}
-	});
-	const _isFetching = popular_titles_query.isFetching;
+	let popular_titles_query = createQuery(() => ({
+		queryKey: ["home", "popular", "titles"],
+		async queryFn() {
+			const res = await client.query(popular_title_query, {}).toPromise();
+			if (res.data) {
+				return res.data.home.popularTitles.data;
+			} else if (res.error) {
+				throw res.error;
+			} else {
+				throw new Error("no data??");
+			}
+		}
+	}));
 
 	onMount(() => {
 		return defaultContentProfile.subscribe(() => {
-			popular_titles_query.execute();
+			popular_titles_query.refetch();
 		});
 	});
-	let fetching = $derived($_isFetching);
+</script>
 
-	let error = $derived($popular_titles_query?.error);
-	let popular_titles = $derived(
-		$popular_titles_query?.data?.home.popularTitles.data.map((manga) => ({
+<div class="title">
+	<TopTitle
+		label="Popular Title"
+		fetching={popular_titles_query.isFetching}
+		onrefresh={async () => {
+			if (!popular_titles_query.isFetching) {
+				await popular_titles_query.refetch();
+			}
+		}}
+	/>
+</div>
+
+{#if popular_titles_query.isSuccess}
+	<Content
+		popular_titles={popular_titles_query.data.map((manga) => ({
 			id: manga.id,
 			title: get_value_from_title_and_random_if_undefined(manga.attributes.title, "en") ?? "",
 			description:
@@ -57,27 +75,19 @@
 					name: author_artist.attributes.name
 				})
 			)
-		}))
-	);
-</script>
-
-<TopTitle
-	label="Popular Title"
-	{fetching}
-	onrefresh={async () => {
-		if (!fetching) {
-			await popular_titles_query.execute();
-		}
-	}}
-/>
-
-{#if popular_titles}
-	<Content {popular_titles} />
-{:else if error}
+		}))}
+	/>
+{:else if popular_titles_query.isError}
 	<HomeErrorComponnent
 		label={"Oops! Something happens when loading the popular titles"}
-		{error}
+		error={popular_titles_query.error}
 	/>
 {:else}
 	<PopularTitleSpinner --height="20em" />
 {/if}
+
+<style lang="scss">
+	.title {
+		padding-top: 1em;
+	}
+</style>
