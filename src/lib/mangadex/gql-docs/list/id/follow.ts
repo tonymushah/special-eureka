@@ -151,9 +151,9 @@ function setFollowingStatus(
 				options?.onSucess?.(variables);
 			},
 			onSettled(data, error, variables, context) {
+				using _ = mut;
 				query.refetch();
 				options?.onSettled?.(error, variables);
-				using _ = mut;
 			}
 		});
 	} else {
@@ -178,9 +178,9 @@ function setFollowingStatus(
 				options?.onSucess?.(variables);
 			},
 			onSettled(data, error, variables, context) {
+				using _ = mut;
 				query.refetch();
 				options?.onSettled?.(error, variables);
-				using _ = mut;
 			}
 		});
 	}
