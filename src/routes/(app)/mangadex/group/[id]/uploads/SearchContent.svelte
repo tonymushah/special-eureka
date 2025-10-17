@@ -180,7 +180,9 @@
 		display: flex;
 		align-items: center;
 		section {
-			display: grid;
+			display: flex;
+			align-items: center;
+			gap: 10px;
 			p {
 				margin: 0px;
 			}
