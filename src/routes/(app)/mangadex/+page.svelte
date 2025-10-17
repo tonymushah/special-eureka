@@ -39,7 +39,7 @@
 
 <style lang="scss">
 	section.popular-titles {
-		margin-top: 0.5em;
+		padding-top: 0em;
 	}
 	section.recently-added {
 		padding-bottom: 0.5em;

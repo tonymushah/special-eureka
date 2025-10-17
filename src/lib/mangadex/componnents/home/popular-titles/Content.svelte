@@ -131,8 +131,10 @@
 							);
 						}
 					}
-				}}>{current_page}</ButtonAccent
+				}}
 			>
+				<span class="current-page">{current_page}</span>
+			</ButtonAccent>
 			<ButtonAccent
 				isBase={false}
 				onclick={() => {
@@ -154,11 +156,12 @@
 		--popular-element-layout-margin: 0em 0em 0em 0em;
 		--popular-element-layout-padding: 3em 0em 0em 0em;
 	}
-	div.result {
+	.result {
+		margin: 0px;
 		position: relative;
-		top: -3em;
+		top: -4em;
 		margin-bottom: -3em;
-		div.pagination {
+		.pagination {
 			align-items: end;
 			display: flex;
 			gap: 1em;
@@ -168,5 +171,8 @@
 			z-index: 1;
 			margin-right: 2em;
 		}
+	}
+	.current-page {
+		width: 25px;
 	}
 </style>
