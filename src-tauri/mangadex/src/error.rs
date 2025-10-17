@@ -1,6 +1,7 @@
 use std::{backtrace::Backtrace, ops::Deref};
 
 use async_graphql::ErrorExtensions;
+use uuid::Uuid;
 
 #[derive(Debug, thiserror::Error, enum_kinds::EnumKind)]
 #[enum_kind(
@@ -141,6 +142,10 @@ pub enum Error {
     PathToStr,
     #[error(transparent)]
     Csv(#[from] csv::Error),
+    #[error("the {} page {} is not loaded (yet)", .chapter, .page)]
+    ChapterPageNotLoaded { page: u32, chapter: Uuid },
+    #[error("the {} chapter pages data can't be read", .0)]
+    CannotReadChapterPagesData(Uuid),
 }
 
 impl Error {

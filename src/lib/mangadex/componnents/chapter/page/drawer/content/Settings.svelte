@@ -1,4 +1,5 @@
 <script lang="ts">
+	import AllowSync from "./settings/AllowSync.svelte";
 	import ImageFit from "./settings/ImageFit.svelte";
 	import LongstripImageWidth from "./settings/LongstripImageWidth.svelte";
 	import ProgressSettings from "./settings/ProgressSettings.svelte";
@@ -16,6 +17,7 @@
 	<LongstripImageWidth />
 	<SideBarSettings />
 	<ProgressSettings />
+	<AllowSync />
 </section>
 
 <style lang="scss">

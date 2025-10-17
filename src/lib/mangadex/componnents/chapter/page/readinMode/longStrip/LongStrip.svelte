@@ -11,16 +11,16 @@
 	import DangerButtonOnlyLabel from "@mangadex/componnents/theme/buttons/DangerButtonOnlyLabel.svelte";
 	import ChapterPages from "@mangadex/stores/chapter/pages";
 	import { zoomSpeedValue } from "../zoomableImage/settings";
-	import { debounce } from "lodash";
-	import type { WheelEventHandler } from "svelte/elements";
+	import type { OnReadingModeContextMenu } from "..";
 
 	interface Props {
 		innerOverflow?: boolean;
 		top?: import("svelte").Snippet;
 		bottom?: import("svelte").Snippet;
+		oncontextmenu?: OnReadingModeContextMenu;
 	}
 
-	let { innerOverflow = true, top, bottom }: Props = $props();
+	let { innerOverflow = true, top, bottom, oncontextmenu }: Props = $props();
 	const currentChapterPage = getChapterCurrentPageContext();
 	let longstrip_root: HTMLDivElement | undefined = undefined;
 	const images_root_data = getCurrentChapterImages();
@@ -110,19 +110,11 @@
 	};
 	const widthWritable = getLongStripImagesWidthContextWritable();
 	//onMount(() => currentChapter.subscribe(([p]) => console.debug(p)));
-	let isCtrlPressed = $state(false);
 </script>
 
 <svelte:window
 	onkeydown={(e) => {
-		if (e.ctrlKey) {
-			isCtrlPressed = true;
-		}
-	}}
-	onkeyup={(e) => {
-		if (e.ctrlKey) {
-			isCtrlPressed = false;
-		}
+		console.log(e);
 	}}
 />
 
@@ -131,7 +123,7 @@
 	class:innerOverflow
 	bind:this={longstrip_root}
 	onwheel={(e) => {
-		if (isCtrlPressed) {
+		if (e.ctrlKey) {
 			e.preventDefault();
 			e.stopPropagation();
 			let width = $imageWidth;
@@ -149,6 +141,9 @@
 					src={image.page.value}
 					alt={image.page.value}
 					width="{$imageWidth}%"
+					oncontextmenu={(e) => {
+						oncontextmenu?.(Object.assign(e, { pageNumber: page }));
+					}}
 				/>
 			{:else if image?.error}
 				<div class="error">

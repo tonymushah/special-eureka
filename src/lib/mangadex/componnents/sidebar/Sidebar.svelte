@@ -18,6 +18,7 @@
 	import { isSidebarFloating } from "./states/isSidebarFloating";
 	import { showSidebar } from "./states/showSidebar";
 	import registerContextMenuEvent from "@special-eureka/core/utils/contextMenuContext";
+	import { addErrorToast } from "../theme/toast/Toaster.svelte";
 </script>
 
 <div
@@ -51,9 +52,17 @@
 					text: $isMounted ? "Unmount Offline Server" : "Mount OfflineServer",
 					action() {
 						if ($isMounted) {
-							unmount(client).then(console.debug).catch(console.error);
+							unmount(client)
+								.catch((e) => {
+									addErrorToast("Cannot unmount offline data", e);
+								})
+								.then(console.debug);
 						} else {
-							mount(client).then(console.debug).catch(console.error);
+							mount(client)
+								.catch((e) => {
+									addErrorToast("Cannot mount offline data", e);
+								})
+								.then(console.debug);
 						}
 					}
 				}),

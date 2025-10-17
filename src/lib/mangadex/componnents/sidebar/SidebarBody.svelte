@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { dev } from "$app/environment";
+	import { isLogged } from "@mangadex/utils/auth";
 	import Follows from "./body/Follows.svelte";
 	import Graphql from "./body/Graphql.svelte";
 	import Home from "./body/Home.svelte";
@@ -11,7 +12,9 @@
 
 <Home />
 
-<Follows />
+{#if $isLogged || dev}
+	<Follows />
+{/if}
 
 <OfflineServer />
 

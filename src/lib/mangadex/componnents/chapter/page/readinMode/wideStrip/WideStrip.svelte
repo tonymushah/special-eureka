@@ -12,6 +12,7 @@
 	import getCurrentChapterImages from "../../utils/getCurrentChapterImages";
 	import DangerButtonOnlyLabel from "@mangadex/componnents/theme/buttons/DangerButtonOnlyLabel.svelte";
 	import ChapterPages from "@mangadex/stores/chapter/pages";
+	import type { OnReadingModeContextMenu } from "..";
 
 	const readingDirection = getCurrentChapterDirection();
 	let widestrip_root: HTMLDivElement | undefined = $state();
@@ -62,9 +63,10 @@
 		before?: import("svelte").Snippet;
 		after?: import("svelte").Snippet;
 		bottom?: import("svelte").Snippet;
+		oncontextmenu?: OnReadingModeContextMenu;
 	}
 
-	let { innerOverflow = true, top, before, after, bottom }: Props = $props();
+	let { innerOverflow = true, top, before, after, bottom, oncontextmenu }: Props = $props();
 
 	let toObserve: Element[] = $state([]);
 	// TODO Add support with the intersection observer API
@@ -201,6 +203,9 @@
 					alt={image.page.value}
 					ondrag={(e) => {
 						e.preventDefault();
+					}}
+					oncontextmenu={(e) => {
+						oncontextmenu?.(Object.assign(e, { pageNumber: page }));
 					}}
 				/>
 			{:else if image?.error}

@@ -13,7 +13,12 @@ export async function mount(client: Client) {
 			`),
 			{}
 		)
-		.toPromise();
+		.toPromise()
+		.then((res) => {
+			if (res.error) {
+				throw res.error
+			}
+		});
 }
 export async function unmount(client: Client) {
 	return await client
@@ -27,5 +32,10 @@ export async function unmount(client: Client) {
 			`),
 			{}
 		)
-		.toPromise();
+		.toPromise()
+		.then((res) => {
+			if (res.error) {
+				throw res.error
+			}
+		});
 }

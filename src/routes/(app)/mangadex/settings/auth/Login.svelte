@@ -10,6 +10,7 @@
 	import { onDestroy } from "svelte";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import { slide } from "svelte/transition";
+	import LogoutButton from "./LogoutButton.svelte";
 	let error: Error | undefined = $state(undefined);
 	let isErrorOpen = $state(false);
 	let isFetching = $state(false);
@@ -142,6 +143,7 @@
 			>
 				<p>Clear personal client information</p>
 			</DangerButton>
+			<LogoutButton />
 		</div>
 	</form>
 </section>

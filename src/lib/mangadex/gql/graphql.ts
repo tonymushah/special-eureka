@@ -530,12 +530,19 @@ export type ChapterPages = {
 
 export type ChapterPagesStoreMutation = {
 	__typename?: "ChapterPagesStoreMutation";
+	exportPage?: Maybe<Scalars["String"]["output"]>;
 	fetchMetadata: Scalars["Boolean"]["output"];
 	refetchIncompletes: Scalars["Boolean"]["output"];
 	refetchPage: Scalars["Boolean"]["output"];
 	resendAll: Scalars["Boolean"]["output"];
 	resendPage: Scalars["Boolean"]["output"];
 	startCaching: Scalars["Boolean"]["output"];
+};
+
+export type ChapterPagesStoreMutationExportPageArgs = {
+	defer?: InputMaybe<Scalars["Boolean"]["input"]>;
+	exportPath: Scalars["String"]["input"];
+	page: Scalars["Int"]["input"];
 };
 
 export type ChapterPagesStoreMutationRefetchPageArgs = {
@@ -944,6 +951,13 @@ export type CoverUploadParam = {
 	 * * Pattern: `^(0|[1-9]\\d*)((\\.\\d+){1,2})?[a-z]?$`
 	 */
 	volume?: InputMaybe<Scalars["String"]["input"]>;
+};
+
+export type CreateForumTheardResponse = {
+	__typename?: "CreateForumTheardResponse";
+	forumId: Scalars["Int"]["output"];
+	forumUrl: Scalars["Url"]["output"];
+	repliesCount: Scalars["Int"]["output"];
 };
 
 export type CreateForumThreadParams = {
@@ -1538,7 +1552,7 @@ export enum ForumThreadType {
 export type ForumsMutations = {
 	__typename?: "ForumsMutations";
 	/** create a forum thread and return the generated forum id */
-	createThread: Scalars["Int"]["output"];
+	createThread: CreateForumTheardResponse;
 };
 
 export type ForumsMutationsCreateThreadArgs = {
@@ -3021,6 +3035,7 @@ export type ScanlationGroupRelationships = {
 	__typename?: "ScanlationGroupRelationships";
 	leader?: Maybe<User>;
 	members: Array<User>;
+	membersLen: Scalars["Int"]["output"];
 };
 
 export type ScanlationGroupResults = {
@@ -5107,6 +5122,21 @@ export type GetChapterPageDataQuery = {
 	};
 };
 
+export type ExportChapterPageMutationVariables = Exact<{
+	id: Scalars["UUID"]["input"];
+	page: Scalars["Int"]["input"];
+	exportPath: Scalars["String"]["input"];
+	mode?: InputMaybe<DownloadMode>;
+}>;
+
+export type ExportChapterPageMutation = {
+	__typename?: "Mutation";
+	chapter: {
+		__typename?: "ChapterMutations";
+		pagesCache: { __typename?: "ChapterPagesStoreMutation"; exportPage?: string | null };
+	};
+};
+
 export type SetContentProfileBlurMutationVariables = Exact<{
 	blur: Scalars["Boolean"]["input"];
 }>;
@@ -5305,6 +5335,29 @@ export type IsFollowingScanlationGroupQueryQuery = {
 	follows: { __typename?: "FollowsQueries"; isFollowingGroup: boolean };
 };
 
+export type GroupStatisticsQueryQueryVariables = Exact<{
+	id: Scalars["UUID"]["input"];
+}>;
+
+export type GroupStatisticsQueryQuery = {
+	__typename?: "Query";
+	statistics: {
+		__typename?: "StatisticsQueries";
+		group: {
+			__typename?: "GroupStatisticsQueries";
+			get: {
+				__typename?: "Statistics";
+				comments?: {
+					__typename?: "StatisticsComments";
+					threadId: number;
+					repliesCount: number;
+					threadUrl: any;
+				} | null;
+			};
+		};
+	};
+};
+
 export type ScanlationUploadsFeedQueryVariables = Exact<{
 	group: Scalars["UUID"]["input"];
 	translatedLanguages?: Array<Language> | Language;
@@ -5410,6 +5463,55 @@ export type ScanalationGroupSearchQuery = {
 						attributes: { __typename?: "UserAttributes"; username: string };
 					} | null;
 					members: Array<{ __typename?: "User"; id: any }>;
+				};
+			}>;
+		};
+	};
+};
+
+export type UserFollowedGroupsQueryVariables = Exact<{
+	offset?: InputMaybe<Scalars["Int"]["input"]>;
+	limit?: InputMaybe<Scalars["Int"]["input"]>;
+}>;
+
+export type UserFollowedGroupsQuery = {
+	__typename?: "Query";
+	follows: {
+		__typename?: "FollowsQueries";
+		groups: {
+			__typename?: "ScanlationGroupResults";
+			limit: number;
+			offset: number;
+			total: number;
+			data: Array<{
+				__typename?: "ScanlationGroup";
+				id: any;
+				attributes: {
+					__typename?: "ScanlationGroupAttributes";
+					name: string;
+					altNames: Array<any>;
+					discord?: string | null;
+					ircServer?: string | null;
+					ircChannel?: string | null;
+					official: boolean;
+					verified: boolean;
+					website?: any | null;
+					twitter?: any | null;
+					mangaUpdates?: any | null;
+					contactEmail?: string | null;
+				};
+				relationships: {
+					__typename?: "ScanlationGroupRelationships";
+					membersLen: number;
+					leader?: {
+						__typename?: "User";
+						id: any;
+						attributes: {
+							__typename?: "UserAttributes";
+							username: string;
+							roles: Array<UserRole>;
+						};
+					} | null;
 				};
 			}>;
 		};
@@ -5998,6 +6100,46 @@ export type UpdateCustomListVisibility1Mutation = {
 	customList: {
 		__typename?: "CustomListMutations";
 		update: { __typename?: "CustomList"; id: any };
+	};
+};
+
+export type UserFollowedCustomListsQueryVariables = Exact<{
+	limit?: InputMaybe<Scalars["Int"]["input"]>;
+	offset?: InputMaybe<Scalars["Int"]["input"]>;
+}>;
+
+export type UserFollowedCustomListsQuery = {
+	__typename?: "Query";
+	follows: {
+		__typename?: "FollowsQueries";
+		customLists: {
+			__typename?: "CustomListResults";
+			limit: number;
+			offset: number;
+			total: number;
+			data: Array<{
+				__typename?: "CustomList";
+				id: any;
+				attributes: {
+					__typename?: "CustomListAttributes";
+					name: string;
+					visibility: CustomListVisibility;
+				};
+				relationships: {
+					__typename?: "CustomListRelationships";
+					titlesIds: Array<any>;
+					user: {
+						__typename?: "User";
+						id: any;
+						attributes: {
+							__typename?: "UserAttributes";
+							username: string;
+							roles: Array<UserRole>;
+						};
+					};
+				};
+			}>;
+		};
 	};
 };
 
@@ -6706,6 +6848,56 @@ export type OfflineMangaSearchQueryQuery = {
 	};
 };
 
+export type UserFollowedTitlesQueryVariables = Exact<{
+	limit?: InputMaybe<Scalars["Int"]["input"]>;
+	offset?: InputMaybe<Scalars["Int"]["input"]>;
+}>;
+
+export type UserFollowedTitlesQuery = {
+	__typename?: "Query";
+	follows: {
+		__typename?: "FollowsQueries";
+		mangas: {
+			__typename?: "MangaResults";
+			limit: number;
+			offset: number;
+			total: number;
+			data: Array<{
+				__typename?: "MangaObject";
+				id: any;
+				attributes: {
+					__typename?: "GraphQLMangaAttributes";
+					description: any;
+					year?: number | null;
+					title: any;
+					status: MangaStatus;
+					state: MangaState;
+					originalLanguage: Language;
+					contentRating?: ContentRating | null;
+					publicationDemographic?: Demographic | null;
+					tags: Array<{
+						__typename?: "Tag";
+						id: any;
+						attributes: { __typename?: "TagAttributes"; name: any };
+					}>;
+				};
+				relationships: {
+					__typename?: "MangaRelationships";
+					coverArt: {
+						__typename?: "Cover";
+						id: any;
+						attributes: {
+							__typename?: "CoverAttributes";
+							description: string;
+							fileName: string;
+						};
+					};
+				};
+			}>;
+		};
+	};
+};
+
 export type UserPageQueryQueryVariables = Exact<{
 	id: Scalars["UUID"]["input"];
 }>;
@@ -6887,6 +7079,37 @@ export type UserSearchQuery = {
 					__typename?: "UserAttributes";
 					username: string;
 					roles: Array<UserRole>;
+				};
+			}>;
+		};
+	};
+};
+
+export type UserFollowedUsersQueryVariables = Exact<{
+	offset?: InputMaybe<Scalars["Int"]["input"]>;
+	limit?: InputMaybe<Scalars["Int"]["input"]>;
+}>;
+
+export type UserFollowedUsersQuery = {
+	__typename?: "Query";
+	follows: {
+		__typename?: "FollowsQueries";
+		users: {
+			__typename?: "UserResults";
+			limit: number;
+			offset: number;
+			total: number;
+			data: Array<{
+				__typename?: "User";
+				id: any;
+				attributes: {
+					__typename?: "UserAttributes";
+					username: string;
+					roles: Array<UserRole>;
+				};
+				relationships: {
+					__typename?: "UserRelationships";
+					groups: Array<{ __typename?: "ScanlationGroup"; id: any }>;
 				};
 			}>;
 		};
@@ -7100,6 +7323,24 @@ export type ResetAuthClientMutationVariables = Exact<{ [key: string]: never }>;
 export type ResetAuthClientMutation = {
 	__typename?: "Mutation";
 	oauth: { __typename?: "OauthMutations"; clearClientInfo: boolean };
+};
+
+export type CreateForumThreadMutationVariables = Exact<{
+	id: Scalars["UUID"]["input"];
+	threadType: ForumThreadType;
+}>;
+
+export type CreateForumThreadMutation = {
+	__typename?: "Mutation";
+	forums: {
+		__typename?: "ForumsMutations";
+		createThread: {
+			__typename?: "CreateForumTheardResponse";
+			forumId: number;
+			forumUrl: any;
+			repliesCount: number;
+		};
+	};
 };
 
 export type MangaFollowingStatusSubscriptionSubscriptionVariables = Exact<{
@@ -14050,6 +14291,113 @@ export const GetChapterPageDataDocument = {
 		}
 	]
 } as unknown as DocumentNode<GetChapterPageDataQuery, GetChapterPageDataQueryVariables>;
+export const ExportChapterPageDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "exportChapterPage" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "page" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "Int" } }
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "exportPath" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "String" } }
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "mode" } },
+					type: { kind: "NamedType", name: { kind: "Name", value: "DownloadMode" } }
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "chapter" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "pagesCache" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "id" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "id" }
+											}
+										},
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "mode" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "mode" }
+											}
+										}
+									],
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "exportPage" },
+												arguments: [
+													{
+														kind: "Argument",
+														name: { kind: "Name", value: "page" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "page" }
+														}
+													},
+													{
+														kind: "Argument",
+														name: { kind: "Name", value: "exportPath" },
+														value: {
+															kind: "Variable",
+															name: {
+																kind: "Name",
+																value: "exportPath"
+															}
+														}
+													}
+												]
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<ExportChapterPageMutation, ExportChapterPageMutationVariables>;
 export const SetContentProfileBlurDocument = {
 	kind: "Document",
 	definitions: [
@@ -15010,6 +15358,101 @@ export const IsFollowingScanlationGroupQueryDocument = {
 	IsFollowingScanlationGroupQueryQuery,
 	IsFollowingScanlationGroupQueryQueryVariables
 >;
+export const GroupStatisticsQueryDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "groupStatisticsQuery" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "statistics" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "group" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "get" },
+												arguments: [
+													{
+														kind: "Argument",
+														name: { kind: "Name", value: "id" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "id" }
+														}
+													}
+												],
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "comments"
+															},
+															selectionSet: {
+																kind: "SelectionSet",
+																selections: [
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "threadId"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "repliesCount"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "threadUrl"
+																		}
+																	}
+																]
+															}
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<GroupStatisticsQueryQuery, GroupStatisticsQueryQueryVariables>;
 export const ScanlationUploadsFeedDocument = {
 	kind: "Document",
 	definitions: [
@@ -15682,6 +16125,257 @@ export const ScanalationGroupSearchDocument = {
 		}
 	]
 } as unknown as DocumentNode<ScanalationGroupSearchQuery, ScanalationGroupSearchQueryVariables>;
+export const UserFollowedGroupsDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "userFollowedGroups" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "offset" } },
+					type: { kind: "NamedType", name: { kind: "Name", value: "Int" } }
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "limit" } },
+					type: { kind: "NamedType", name: { kind: "Name", value: "Int" } }
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "follows" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "groups" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "params" },
+											value: {
+												kind: "ObjectValue",
+												fields: [
+													{
+														kind: "ObjectField",
+														name: { kind: "Name", value: "limit" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "limit" }
+														}
+													},
+													{
+														kind: "ObjectField",
+														name: { kind: "Name", value: "offset" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "offset" }
+														}
+													}
+												]
+											}
+										}
+									],
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "data" },
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "id" }
+														},
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "attributes"
+															},
+															selectionSet: {
+																kind: "SelectionSet",
+																selections: [
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "name"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "altNames"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "discord"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "ircServer"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "ircChannel"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "official"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "verified"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "website"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "twitter"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "mangaUpdates"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "contactEmail"
+																		}
+																	}
+																]
+															}
+														},
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "relationships"
+															},
+															selectionSet: {
+																kind: "SelectionSet",
+																selections: [
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "leader"
+																		},
+																		selectionSet: {
+																			kind: "SelectionSet",
+																			selections: [
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "id"
+																					}
+																				},
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "attributes"
+																					},
+																					selectionSet: {
+																						kind: "SelectionSet",
+																						selections:
+																							[
+																								{
+																									kind: "Field",
+																									name: {
+																										kind: "Name",
+																										value: "username"
+																									}
+																								},
+																								{
+																									kind: "Field",
+																									name: {
+																										kind: "Name",
+																										value: "roles"
+																									}
+																								}
+																							]
+																					}
+																				}
+																			]
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "membersLen"
+																		}
+																	}
+																]
+															}
+														}
+													]
+												}
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "limit" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "offset" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "total" }
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<UserFollowedGroupsQuery, UserFollowedGroupsQueryVariables>;
 export const CurrentUserLibraryCompletedDocument = {
 	kind: "Document",
 	definitions: [
@@ -18647,6 +19341,194 @@ export const UpdateCustomListVisibility1Document = {
 	UpdateCustomListVisibility1Mutation,
 	UpdateCustomListVisibility1MutationVariables
 >;
+export const UserFollowedCustomListsDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "userFollowedCustomLists" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "limit" } },
+					type: { kind: "NamedType", name: { kind: "Name", value: "Int" } }
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "offset" } },
+					type: { kind: "NamedType", name: { kind: "Name", value: "Int" } }
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "follows" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "customLists" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "param" },
+											value: {
+												kind: "ObjectValue",
+												fields: [
+													{
+														kind: "ObjectField",
+														name: { kind: "Name", value: "limit" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "limit" }
+														}
+													},
+													{
+														kind: "ObjectField",
+														name: { kind: "Name", value: "offset" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "offset" }
+														}
+													}
+												]
+											}
+										}
+									],
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "limit" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "offset" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "total" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "data" },
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "id" }
+														},
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "attributes"
+															},
+															selectionSet: {
+																kind: "SelectionSet",
+																selections: [
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "name"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "visibility"
+																		}
+																	}
+																]
+															}
+														},
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "relationships"
+															},
+															selectionSet: {
+																kind: "SelectionSet",
+																selections: [
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "titlesIds"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "user"
+																		},
+																		selectionSet: {
+																			kind: "SelectionSet",
+																			selections: [
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "id"
+																					}
+																				},
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "attributes"
+																					},
+																					selectionSet: {
+																						kind: "SelectionSet",
+																						selections:
+																							[
+																								{
+																									kind: "Field",
+																									name: {
+																										kind: "Name",
+																										value: "username"
+																									}
+																								},
+																								{
+																									kind: "Field",
+																									name: {
+																										kind: "Name",
+																										value: "roles"
+																									}
+																								}
+																							]
+																					}
+																				}
+																			]
+																		}
+																	}
+																]
+															}
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<UserFollowedCustomListsQuery, UserFollowedCustomListsQueryVariables>;
 export const ListenToChapterReadMarkerDocument = {
 	kind: "Document",
 	definitions: [
@@ -22551,6 +23433,268 @@ export const OfflineMangaSearchQueryDocument = {
 		}
 	]
 } as unknown as DocumentNode<OfflineMangaSearchQueryQuery, OfflineMangaSearchQueryQueryVariables>;
+export const UserFollowedTitlesDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "userFollowedTitles" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "limit" } },
+					type: { kind: "NamedType", name: { kind: "Name", value: "Int" } }
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "offset" } },
+					type: { kind: "NamedType", name: { kind: "Name", value: "Int" } }
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "follows" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "mangas" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "params" },
+											value: {
+												kind: "ObjectValue",
+												fields: [
+													{
+														kind: "ObjectField",
+														name: { kind: "Name", value: "limit" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "limit" }
+														}
+													},
+													{
+														kind: "ObjectField",
+														name: { kind: "Name", value: "offset" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "offset" }
+														}
+													}
+												]
+											}
+										}
+									],
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "limit" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "offset" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "total" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "data" },
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "id" }
+														},
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "attributes"
+															},
+															selectionSet: {
+																kind: "SelectionSet",
+																selections: [
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "description"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "year"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "title"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "status"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "state"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "originalLanguage"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "tags"
+																		},
+																		selectionSet: {
+																			kind: "SelectionSet",
+																			selections: [
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "id"
+																					}
+																				},
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "attributes"
+																					},
+																					selectionSet: {
+																						kind: "SelectionSet",
+																						selections:
+																							[
+																								{
+																									kind: "Field",
+																									name: {
+																										kind: "Name",
+																										value: "name"
+																									}
+																								}
+																							]
+																					}
+																				}
+																			]
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "contentRating"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "publicationDemographic"
+																		}
+																	}
+																]
+															}
+														},
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "relationships"
+															},
+															selectionSet: {
+																kind: "SelectionSet",
+																selections: [
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "coverArt"
+																		},
+																		selectionSet: {
+																			kind: "SelectionSet",
+																			selections: [
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "id"
+																					}
+																				},
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "attributes"
+																					},
+																					selectionSet: {
+																						kind: "SelectionSet",
+																						selections:
+																							[
+																								{
+																									kind: "Field",
+																									name: {
+																										kind: "Name",
+																										value: "description"
+																									}
+																								},
+																								{
+																									kind: "Field",
+																									name: {
+																										kind: "Name",
+																										value: "fileName"
+																									}
+																								}
+																							]
+																					}
+																				}
+																			]
+																		}
+																	}
+																]
+															}
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<UserFollowedTitlesQuery, UserFollowedTitlesQueryVariables>;
 export const UserPageQueryDocument = {
 	kind: "Document",
 	definitions: [
@@ -23612,6 +24756,160 @@ export const UserSearchDocument = {
 		}
 	]
 } as unknown as DocumentNode<UserSearchQuery, UserSearchQueryVariables>;
+export const UserFollowedUsersDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "userFollowedUsers" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "offset" } },
+					type: { kind: "NamedType", name: { kind: "Name", value: "Int" } }
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "limit" } },
+					type: { kind: "NamedType", name: { kind: "Name", value: "Int" } }
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "follows" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "users" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "param" },
+											value: {
+												kind: "ObjectValue",
+												fields: [
+													{
+														kind: "ObjectField",
+														name: { kind: "Name", value: "limit" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "limit" }
+														}
+													},
+													{
+														kind: "ObjectField",
+														name: { kind: "Name", value: "offset" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "offset" }
+														}
+													}
+												]
+											}
+										}
+									],
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "data" },
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "id" }
+														},
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "attributes"
+															},
+															selectionSet: {
+																kind: "SelectionSet",
+																selections: [
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "username"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "roles"
+																		}
+																	}
+																]
+															}
+														},
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "relationships"
+															},
+															selectionSet: {
+																kind: "SelectionSet",
+																selections: [
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "groups"
+																		},
+																		selectionSet: {
+																			kind: "SelectionSet",
+																			selections: [
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "id"
+																					}
+																				}
+																			]
+																		}
+																	}
+																]
+															}
+														}
+													]
+												}
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "limit" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "offset" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "total" }
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<UserFollowedUsersQuery, UserFollowedUsersQueryVariables>;
 export const UserMeDocument = {
 	kind: "Document",
 	definitions: [
@@ -24612,6 +25910,102 @@ export const ResetAuthClientDocument = {
 		}
 	]
 } as unknown as DocumentNode<ResetAuthClientMutation, ResetAuthClientMutationVariables>;
+export const CreateForumThreadDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "createForumThread" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "threadType" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "NamedType",
+							name: { kind: "Name", value: "ForumThreadType" }
+						}
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "forums" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "createThread" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "params" },
+											value: {
+												kind: "ObjectValue",
+												fields: [
+													{
+														kind: "ObjectField",
+														name: { kind: "Name", value: "id" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "id" }
+														}
+													},
+													{
+														kind: "ObjectField",
+														name: { kind: "Name", value: "type" },
+														value: {
+															kind: "Variable",
+															name: {
+																kind: "Name",
+																value: "threadType"
+															}
+														}
+													}
+												]
+											}
+										}
+									],
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "forumId" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "forumUrl" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "repliesCount" }
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<CreateForumThreadMutation, CreateForumThreadMutationVariables>;
 export const MangaFollowingStatusSubscriptionDocument = {
 	kind: "Document",
 	definitions: [

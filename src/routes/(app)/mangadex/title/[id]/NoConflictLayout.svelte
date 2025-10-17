@@ -55,6 +55,8 @@
 	import type { LayoutData } from "./layout.context";
 	import { setTitleLayoutData } from "./layout.context";
 	import { isLogged } from "@mangadex/utils/auth";
+	import { createForumThread } from "@mangadex/stores/create-forum-thread";
+	import { ForumThreadType } from "@mangadex/gql/graphql";
 
 	type TopMangaStatisticsStoreData = TopMangaStatistics & {
 		threadUrl?: string;
@@ -89,7 +91,7 @@
 				follows: _data.followCount,
 				comments: _data.comments?.repliesCount,
 				threadUrl: _data.comments?.threadUrl
-			} satisfies TopMangaStatisticsStoreData;
+			} as TopMangaStatisticsStoreData;
 		}
 	});
 	let isOnInfoPage = $derived.by(
@@ -252,6 +254,23 @@
 	let removeMutation = removeMutationLoader();
 	let downloadMutationQuery = downloadMutationQueryLoader();
 	let cancelMutation = cancelMutationLoader();
+	let createForumThreadMutation = createForumThread();
+	function createForumThreadAndOpen() {
+		createForumThreadMutation.mutate(
+			{
+				id: layoutData.id,
+				threadType: ForumThreadType.Manga
+			},
+			{
+				onError(error) {
+					addErrorToast("Cannot create forum thread", error);
+				},
+				onSuccess(data) {
+					open(data.forumUrl);
+				}
+			}
+		);
+	}
 </script>
 
 <svelte:window onfocus={refetchReadingFollowingStatus} />
@@ -269,7 +288,12 @@
 	stats={$stats}
 	oncomments={() => {
 		if ($stats != undefined) {
-			open($stats?.threadUrl);
+			const url = $stats?.threadUrl;
+			if (url) {
+				open(url);
+			} else {
+				createForumThreadAndOpen();
+			}
 		}
 	}}
 	contentRating={layoutData.contentRating ?? undefined}
@@ -349,9 +373,15 @@
 		comments={$stats?.comments}
 		oncomment={() => {
 			if ($stats != undefined) {
-				open($stats?.threadUrl);
+				const url = $stats?.threadUrl;
+				if (url) {
+					open(url);
+				} else {
+					createForumThreadAndOpen();
+				}
 			}
 		}}
+		disableComments={createForumThreadMutation.isPending}
 	/>
 	{@render children?.()}
 </div>

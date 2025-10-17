@@ -259,21 +259,13 @@ export default function coverDownloadState({ id, deferred }: { id: string, defer
 					return CoverDownloadState.Done;
 				} else if (data.isOfflineAppStateNotLoaded) {
 					return CoverDownloadState.OfflineAppStateNotLoaded;
-				} else if (data.isPending) {
-					if ($query.data?.data?.downloadState.cover.hasFailed) {
-						return CoverDownloadState.Error;
-					} else if ($query.data?.data?.downloadState.cover.isDownloaded) {
-						return CoverDownloadState.Done;
-					} else {
-						return CoverDownloadState.Pending;
-					}
 				}
 			} else if ($state?.error) {
 				return CoverDownloadState.Error;
 			}
-			if ($query.data?.data?.downloadState.cover.hasFailed) {
+			if ($query.data?.data?.downloadState.cover.hasFailed == true) {
 				return CoverDownloadState.Error;
-			} else if ($query.data?.data?.downloadState.cover.isDownloaded) {
+			} else if ($query.data?.data?.downloadState.cover.isDownloaded == true) {
 				return CoverDownloadState.Done;
 			} else {
 				return CoverDownloadState.Pending;

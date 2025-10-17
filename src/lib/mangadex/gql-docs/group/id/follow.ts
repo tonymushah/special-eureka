@@ -4,7 +4,7 @@ import { graphql } from "@mangadex/gql/gql";
 import { client } from "@mangadex/gql/urql";
 import { mangadexQueryClient } from "@mangadex/index";
 import { createMutation, createQuery, type CreateQueryResult } from "@tanstack/svelte-query";
-import { derived, get, toStore, type Writable } from "svelte/store";
+import { derived, get, readonly, writable, type Writable } from "svelte/store";
 
 export const followGroupGQLMutation = graphql(`
 	mutation followScanlationGroupMutation($id: UUID!) {
@@ -30,6 +30,11 @@ export const isFollowingGroupQuery = graphql(`
 	}
 `);
 
+
+const globalIsMutatingInner = writable(false);
+
+export const isChangingGroupFollowing = readonly(globalIsMutatingInner);
+
 export const followGroupMutation = () => createMutation(() => ({
 	mutationKey: ["scanlation-group", "follow"],
 	async mutationFn(id: string) {
@@ -39,7 +44,13 @@ export const followGroupMutation = () => createMutation(() => ({
 		if (res.error) {
 			throw res.error;
 		}
-	}
+	},
+	onMutate(variables, context) {
+		globalIsMutatingInner.set(true);
+	},
+	onSettled(data, error, variables, onMutateResult, context) {
+		globalIsMutatingInner.set(false);
+	},
 }), () => mangadexQueryClient);
 
 export const unfollowGroupMutation = () => createMutation(() => ({
@@ -51,7 +62,13 @@ export const unfollowGroupMutation = () => createMutation(() => ({
 		if (res.error) {
 			throw res.error;
 		}
-	}
+	},
+	onMutate(variables, context) {
+		globalIsMutatingInner.set(true);
+	},
+	onSettled(data, error, variables, onMutateResult, context) {
+		globalIsMutatingInner.set(false);
+	},
 }), () => mangadexQueryClient);
 
 export default function isFollowingGroup(id: string, options?: {
@@ -61,22 +78,14 @@ export default function isFollowingGroup(id: string, options?: {
 	toast?: boolean
 }): Writable<boolean> {
 	const toast = options?.toast ?? true;
-	const query = () => createQuery(() => ({
-		queryKey: ["scanlation-group", id, "is-following"],
-		async queryFn() {
-			const res = await client.query(isFollowingGroupQuery, {
-				id
-			}).toPromise();
-			if (res.error) {
-				throw res.error;
-			}
-		}
-	}), () => mangadexQueryClient);
+	const query = isFollowingGroupQuery_(id);
 	const queryDerived = derived(internalToStore(query), ($query) => {
 		return $query.data ?? false
 	}, false);
 	return {
-		subscribe: queryDerived.subscribe,
+		subscribe(run, invalidate) {
+			return queryDerived.subscribe(run, invalidate);
+		},
 		set(value) {
 			using q = extractFromAccessor(query);
 			setFollowingStatus(value, id, toast, q.value, options);
@@ -87,6 +96,24 @@ export default function isFollowingGroup(id: string, options?: {
 			setFollowingStatus(value, id, toast, q.value, options);
 		}
 	};
+}
+
+export function isFollowingGroupQuery_(id: string) {
+	return () => createQuery(() => ({
+		queryKey: ["scanlation-group", id, "is-following"],
+		async queryFn() {
+			const res = await client.query(isFollowingGroupQuery, {
+				id
+			}).toPromise();
+			if (res.error) {
+				throw res.error;
+			} else if (res.data) {
+				return res.data.follows.isFollowingGroup;
+			} else {
+				throw new Error("no data??");
+			}
+		}
+	}), () => mangadexQueryClient);
 }
 
 function setFollowingStatus(
@@ -104,7 +131,7 @@ function setFollowingStatus(
 		| undefined
 ) {
 	if (value) {
-		using mut_ = extractFromAccessor(followGroupMutation);
+		const mut_ = extractFromAccessor(followGroupMutation);
 		mut_.value.mutate(id, {
 			onError(error, variables, context) {
 				if (toast) {
@@ -125,12 +152,13 @@ function setFollowingStatus(
 				options?.onSucess?.(variables);
 			},
 			onSettled(data, error, variables, context) {
+				using _ = mut_;
 				query.refetch()
 				options?.onSettled?.(error, variables);
 			}
 		});
 	} else {
-		using mut = extractFromAccessor(unfollowGroupMutation);
+		const mut = extractFromAccessor(unfollowGroupMutation);
 		mut.value.mutate(id, {
 			onError(error, variables, context) {
 				if (toast) {
@@ -151,6 +179,7 @@ function setFollowingStatus(
 				options?.onSucess?.(variables);
 			},
 			onSettled(data, error, variables, context) {
+				using _ = mut;
 				query.refetch()
 				options?.onSettled?.(error, variables);
 			}

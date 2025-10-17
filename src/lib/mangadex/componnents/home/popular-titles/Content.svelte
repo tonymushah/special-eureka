@@ -11,6 +11,7 @@
 	import { onMount } from "svelte";
 	import type { SwiperOptions } from "swiper/types";
 	import { random } from "lodash";
+	import NothingToShow from "../NothingToShow.svelte";
 
 	let swiper_container: SwiperContainer | undefined = $state(undefined);
 	let current_page_: number | undefined = $state(undefined);
@@ -71,89 +72,96 @@
 	let current_page = $derived((current_page_ ?? 0) + 1);
 </script>
 
-<div class="result">
-	<swiper-container bind:this={swiper_container} init="false">
-		{#each popular_titles as { coverImage, coverImageAlt, title, tags, contentRating, authors, description, id }, index (id)}
-			<swiper-slide>
-				<MangaPopularElement
-					mangaId={id}
-					{index}
-					{coverImage}
-					{coverImageAlt}
-					{tags}
-					{title}
-					{contentRating}
-					{authors}
-					onclick={() => {
-						openTitle(id);
-					}}
-					onauthorClick={(detail) => {
-						goto(
-							route("/mangadex/author/[id]", {
-								id: detail.id
-							})
-						);
-					}}
-					ontagClick={(detail) => {
-						goto(
-							route("/mangadex/tag/[id]", {
-								id: detail.id
-							})
-						);
-					}}
-					{description}
-				/>
-			</swiper-slide>
-		{/each}
-	</swiper-container>
-	<div class="pagination">
-		<ButtonAccent
-			isBase={false}
-			onclick={() => {
-				if (swiper_container != undefined) {
-					swiper_container.swiper.slidePrev();
-				}
-			}}
-		>
-			<ArrowLeftIcon />
-		</ButtonAccent>
-		<ButtonAccent
-			onclick={() => {
-				if (current_page_) {
-					const title = popular_titles[current_page_];
-					if (title != undefined) {
-						goto(
-							route("/mangadex/title/[id]", {
-								id: title.id
-							})
-						);
+{#if popular_titles.length > 0}
+	<div class="result">
+		<swiper-container bind:this={swiper_container} init="false">
+			{#each popular_titles as { coverImage, coverImageAlt, title, tags, contentRating, authors, description, id }, index (id)}
+				<swiper-slide>
+					<MangaPopularElement
+						mangaId={id}
+						{index}
+						{coverImage}
+						{coverImageAlt}
+						{tags}
+						{title}
+						{contentRating}
+						{authors}
+						onclick={() => {
+							openTitle(id);
+						}}
+						onauthorClick={(detail) => {
+							goto(
+								route("/mangadex/author/[id]", {
+									id: detail.id
+								})
+							);
+						}}
+						ontagClick={(detail) => {
+							goto(
+								route("/mangadex/tag/[id]", {
+									id: detail.id
+								})
+							);
+						}}
+						{description}
+					/>
+				</swiper-slide>
+			{/each}
+		</swiper-container>
+		<div class="pagination">
+			<ButtonAccent
+				isBase={false}
+				onclick={() => {
+					if (swiper_container != undefined) {
+						swiper_container.swiper.slidePrev();
 					}
-				}
-			}}>{current_page}</ButtonAccent
-		>
-		<ButtonAccent
-			isBase={false}
-			onclick={() => {
-				if (swiper_container != undefined) {
-					swiper_container.swiper.slideNext();
-				}
-			}}
-		>
-			<ArrowRightIcon />
-		</ButtonAccent>
+				}}
+			>
+				<ArrowLeftIcon />
+			</ButtonAccent>
+			<ButtonAccent
+				onclick={() => {
+					if (current_page_) {
+						const title = popular_titles[current_page_];
+						if (title != undefined) {
+							goto(
+								route("/mangadex/title/[id]", {
+									id: title.id
+								})
+							);
+						}
+					}
+				}}
+			>
+				<span class="current-page">{current_page}</span>
+			</ButtonAccent>
+			<ButtonAccent
+				isBase={false}
+				onclick={() => {
+					if (swiper_container != undefined) {
+						swiper_container.swiper.slideNext();
+					}
+				}}
+			>
+				<ArrowRightIcon />
+			</ButtonAccent>
+		</div>
 	</div>
-</div>
+{:else}
+	<NothingToShow />
+{/if}
 
 <style lang="scss">
 	:root {
 		--popular-element-layout-margin: 0em 0em 0em 0em;
 		--popular-element-layout-padding: 3em 0em 0em 0em;
 	}
-	div.result {
+	.result {
+		margin: 0px;
 		position: relative;
-		top: -3em;
+		top: -4em;
 		margin-bottom: -3em;
-		div.pagination {
+		.pagination {
 			align-items: end;
 			display: flex;
 			gap: 1em;
@@ -163,5 +171,8 @@
 			z-index: 1;
 			margin-right: 2em;
 		}
+	}
+	.current-page {
+		width: 25px;
 	}
 </style>

@@ -424,6 +424,7 @@ type ChapterPagesStoreMutation {
 	resendPage(page: Int!): Boolean!
 	resendAll: Boolean!
 	refetchIncompletes: Boolean!
+	exportPage(exportPath: String!, page: Int!, defer: Boolean): String
 }
 
 type ChapterQueries {
@@ -708,6 +709,12 @@ input CoverUploadParam {
 	volume: String = null
 	description: String! = ""
 	locale: Language!
+}
+
+type CreateForumTheardResponse {
+	forumId: Int!
+	forumUrl: Url!
+	repliesCount: Int!
 }
 
 input CreateForumThreadParams {
@@ -1189,7 +1196,7 @@ type ForumsMutations {
 	"""
 	create a forum thread and return the generated forum id
 	"""
-	createThread(params: CreateForumThreadParams!): Int!
+	createThread(params: CreateForumThreadParams!): CreateForumTheardResponse!
 }
 
 input GetAllChapterParams {
@@ -2319,6 +2326,7 @@ type ScanlationGroupQueries {
 
 type ScanlationGroupRelationships {
 	leader: User
+	membersLen: Int!
 	members: [User!]!
 }
 

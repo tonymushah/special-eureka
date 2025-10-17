@@ -9,7 +9,7 @@ import {
 	isMangaDownloading,
 	removeMutation
 } from "@mangadex/download/manga";
-import isFollowingTitle from "@mangadex/gql-docs/title/id/follow";
+import isFollowingTitle, { isChangingTitleFollowing } from "@mangadex/gql-docs/title/id/follow";
 import { ReadingStatus } from "@mangadex/gql/graphql";
 import { set_manga_rating } from "@mangadex/stores/manga/manga_rating";
 import { set_manga_reading_status } from "@mangadex/stores/manga/manga_reading_status";
@@ -23,7 +23,7 @@ import { currentLocationWithNewPath } from "@special-eureka/core/utils/url";
 import { writeText } from "@tauri-apps/plugin-clipboard-manager";
 import { openUrl } from "@tauri-apps/plugin-opener";
 import { range } from "lodash";
-import { get } from "svelte/store";
+import { derived, get } from "svelte/store";
 import { isLogged } from "../auth";
 import get_value_and_random_if_undefined from "../lang/get_value_and_random_if_undefined";
 import { extractFromAccessor } from "$lib/index.svelte";
@@ -93,7 +93,7 @@ export default function mangaElementContextMenu({
 		ContextMenuItemProvider.seperator()
 	];
 	const isDownloading = get(isMangaDownloading({ id, deferred: true }));
-	const isDownloaded = get(isMangaDownloaded({ id, deferred: true }));
+	const isDownloaded = isMangaDownloaded({ id, deferred: true });
 	const isFollowed = isFollowingTitle(id);
 	const set_manga_reading_status_success_toast = () => {
 		addToast({
@@ -121,11 +121,11 @@ export default function mangaElementContextMenu({
 	};
 	items.push(
 		ContextMenuItemProvider.menuItem({
-			text: get(isFollowed) ? "Unfollow title" : "Follow title",
+			text: derived(isFollowed, (isFollowed) => isFollowed ? "Unfollow title" : "Follow title"),
 			action() {
 				isFollowed.update((v) => !v);
 			},
-			enabled: get(isLogged)
+			enabled: derived([isLogged, isChangingTitleFollowing], ([logged, changing]) => logged && !changing)
 		}),
 		ContextMenuItemProvider.subMenu({
 			text: "Reading status",
@@ -187,12 +187,12 @@ export default function mangaElementContextMenu({
 					}
 				})
 			],
-			enabled: get(isLogged)
+			enabled: isLogged
 		}),
 		ContextMenuItemProvider.subMenu({
 			text: "Rating",
 			items: [
-				...range(1, 10)
+				...range(1, 11)
 					.toReversed()
 					.map((rating) =>
 						ContextMenuItemProvider.menuItem({
@@ -213,7 +213,7 @@ export default function mangaElementContextMenu({
 					}
 				})
 			],
-			enabled: get(isLogged)
+			enabled: isLogged
 		}),
 		ContextMenuItemProvider.seperator()
 	);
@@ -231,7 +231,7 @@ export default function mangaElementContextMenu({
 	} else {
 		items.push(
 			ContextMenuItemProvider.menuItem({
-				text: isDownloaded ? "Re-download" : "Download",
+				text: derived(isDownloaded, (isDownloaded) => isDownloaded ? "Re-download" : "Download"),
 				action() {
 					using mut = extractFromAccessor(downloadMutationQuery);
 					mut.value.mutateAsync(id, {
@@ -248,10 +248,10 @@ export default function mangaElementContextMenu({
 						}
 					});
 				},
-				enabled: get(isMounted)
+				enabled: isMounted
 			})
 		);
-		if (isDownloaded) {
+		if (get(isDownloaded)) {
 			items.push(
 				ContextMenuItemProvider.menuItem({
 					text: "Remove title locally",

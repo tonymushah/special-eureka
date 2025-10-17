@@ -5,7 +5,11 @@
 	import Fetching from "@mangadex/componnents/search/content/Fetching.svelte";
 	import HasNext from "@mangadex/componnents/search/content/HasNext.svelte";
 	import NothingToShow from "@mangadex/componnents/search/content/NothingToShow.svelte";
-	import { OrderDirection, type MangaFeedSortOrder } from "@mangadex/gql/graphql";
+	import {
+		ForumThreadType,
+		OrderDirection,
+		type MangaFeedSortOrder
+	} from "@mangadex/gql/graphql";
 	import chapterFeedStyle from "@mangadex/stores/chapterFeedStyle";
 	import type AbstractSearchResult from "@mangadex/utils/searchResult/AbstractSearchResult";
 	import { createInfiniteQuery, type CreateInfiniteQueryOptions } from "@tanstack/svelte-query";
@@ -23,6 +27,8 @@
 	import MangaFeedSortOrderSelection from "@mangadex/componnents/manga/feed/sort/MangaFeedSortOrderSelection.svelte";
 	import chapterThreadsFromChapterFeedQuery from "@mangadex/utils/threads/feed";
 	import { openUrl } from "@tauri-apps/plugin-opener";
+	import { createForumThread } from "@mangadex/stores/create-forum-thread";
+	import { addErrorToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 
 	interface Props {
 		customListId: Readable<string>;
@@ -110,6 +116,7 @@
 		}
 	});
 	const threads = chapterThreadsFromChapterFeedQuery(query);
+	const createForumThreadMutation = createForumThread();
 </script>
 
 <div class="result">
@@ -128,6 +135,21 @@
 			const url = $threads.get(id);
 			if (url) {
 				openUrl(url);
+			} else {
+				createForumThreadMutation.mutate(
+					{
+						id: id,
+						threadType: ForumThreadType.Chapter
+					},
+					{
+						onError(error) {
+							addErrorToast("Cannot create forum thread", error);
+						},
+						onSuccess(data) {
+							openUrl(data.forumUrl);
+						}
+					}
+				);
 			}
 		}}
 	>
@@ -135,7 +157,7 @@
 			<div class="additional-content">
 				<section>
 					<p>Sort by:</p>
-					<MangaFeedSortOrderSelection sort={order} />
+					<MangaFeedSortOrderSelection sort={order} addMinWidth />
 				</section>
 			</div>
 		{/snippet}

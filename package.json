@@ -1,6 +1,6 @@
 {
 	"name": "special-eureka",
-	"version": "0.2.0",
+	"version": "0.2.1",
 	"scripts": {
 		"vite:dev": "vite dev",
 		"codegen": "graphql-codegen",
@@ -27,7 +27,7 @@
 	},
 	"devDependencies": {
 		"@chromatic-com/storybook": "^4.1.1",
-		"@eslint/css": "^0.11.1",
+		"@eslint/css": "^0.13.0",
 		"@eslint/js": "^9.37.0",
 		"@graphql-codegen/cli": "^6.0.0",
 		"@graphql-codegen/client-preset": "^5.1.0",
@@ -39,7 +39,7 @@
 		"@storybook/addon-links": "^9.1.10",
 		"@storybook/sveltekit": "^9.1.10",
 		"@sveltejs/adapter-static": "^3.0.10",
-		"@sveltejs/kit": "^2.46.2",
+		"@sveltejs/kit": "^2.46.4",
 		"@sveltejs/vite-plugin-svelte": "^6.2.1",
 		"@tanstack/svelte-query-devtools": "^6.0.0",
 		"@tauri-apps/cli": "^2.8.4",
@@ -64,10 +64,10 @@
 		"sass": "^1.93.2",
 		"sharp": "^0.34.4",
 		"storybook": "^9.1.10",
-		"svelte": "^5.39.10",
+		"svelte": "^5.39.11",
 		"svelte-awesome-color-picker": "^4.0.2",
-		"svelte-check": "^4.3.2",
-		"svelte2tsx": "~0.7.44",
+		"svelte-check": "^4.3.3",
+		"svelte2tsx": "~0.7.45",
 		"svgo": "^4.0.0",
 		"tslib": "^2.8.1",
 		"typescript": "^5.9.3",
@@ -86,7 +86,7 @@
 		"@fontsource/poppins": "^5.2.7",
 		"@graphiql/toolkit": "~0.11.3",
 		"@graphql-typed-document-node/core": "^3.2.0",
-		"@humanspeak/svelte-markdown": "^0.8.12",
+		"@humanspeak/svelte-markdown": "^0.8.13",
 		"@panzoom/panzoom": "^4.6.0",
 		"@storybook/addon-a11y": "^9.1.10",
 		"@tanstack/svelte-query": "^6.0.0",
@@ -96,7 +96,7 @@
 		"@tauri-apps/plugin-dialog": "^2.4.0",
 		"@tauri-apps/plugin-opener": "^2.5.0",
 		"@urql/svelte": "^5.0.0",
-		"core-js": "^3.45.1",
+		"core-js": "^3.46.0",
 		"fast-xml-parser": "^5.3.0",
 		"flag-icons": "^7.5.0",
 		"graphiql": "^5.2.0",
@@ -108,12 +108,12 @@
 		"mizuki-urql-adapter": "^1.0.2",
 		"panzoom": "^9.4.3",
 		"svelte-feather-icons": "^4.2.0",
-		"svelte-remixicon": "^2.7.0",
+		"svelte-remixicon": "^2.7.1",
 		"swiper": "^12.0.2",
 		"timeago.js": "^4.0.2",
 		"uuid": "^13.0.0"
 	},
-	"packageManager": "pnpm@10.18.1",
+	"packageManager": "pnpm@10.18.3",
 	"engines": {
 		"node": ">=24"
 	}

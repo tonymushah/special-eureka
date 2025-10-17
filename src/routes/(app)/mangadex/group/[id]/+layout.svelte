@@ -3,6 +3,8 @@
 	import PrimaryButton from "@mangadex/componnents/theme/buttons/PrimaryButton.svelte";
 	import TimeAgo from "@mangadex/componnents/TimeAgo.svelte";
 	import UsersPageBase from "@mangadex/componnents/users/page/UsersPageBase.svelte";
+	import isFollowingGroup, { isChangingGroupFollowing } from "@mangadex/gql-docs/group/id/follow";
+	import { isLogged } from "@mangadex/utils/auth";
 	import { writeText } from "@tauri-apps/plugin-clipboard-manager";
 	import { openUrl as shellOpen } from "@tauri-apps/plugin-opener";
 	import { BookmarkIcon, ExternalLinkIcon, FlagIcon } from "svelte-feather-icons";
@@ -17,21 +19,29 @@
 
 	let { data, children }: Props = $props();
 	let description = $derived(data.description ?? undefined);
-	$effect(() => {
-		console.log(`duration: ${data.publishDelay}`);
-	});
-	$effect(() => {
-		console.log(`since: ${data.createdAt}`);
-	});
 	let createdSince = $derived(data.createdAt);
 	//$: console.log(`since date: ${createdSince}`);
+	const isFollowed = isFollowingGroup(data.id);
+	let isFollowing = $derived($isFollowed);
 </script>
 
 <UsersPageBase title={data.name} {description}>
 	{#snippet _left()}
 		<div class="buttons">
-			<PrimaryButton isBase>
-				<p><BookmarkIcon />Follow</p>
+			<PrimaryButton
+				isBase
+				disabled={$isChangingGroupFollowing || !$isLogged}
+				onclick={() => {
+					$isFollowed = !$isFollowed;
+				}}
+			>
+				<p>
+					{#if isFollowing}
+						<BookmarkIcon /> Unfollow
+					{:else}
+						Follow
+					{/if}
+				</p>
 			</PrimaryButton>
 			<ButtonAccent
 				isBase
@@ -95,8 +105,8 @@
 						exLicensed
 					{/if}
 				</p>
-				<p>
-					Created <TimeAgo date={createdSince} />
+				<p class="created">
+					Created: <TimeAgo date={createdSince} />
 				</p>
 			</section>
 		</div>
@@ -142,5 +152,10 @@
 	}
 	.content {
 		margin-top: 8px;
+	}
+	.created {
+		display: flex;
+		align-items: center;
+		gap: 8px;
 	}
 </style>

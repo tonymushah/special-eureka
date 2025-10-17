@@ -38,8 +38,8 @@
 		<ButtonAccentOnlyLabel
 			variant="3"
 			label="Download"
-			disabled={multiChapterDownload.isPending &&
-				removeMultipleChapterMutation.isPending &&
+			disabled={multiChapterDownload.isPending ||
+				removeMultipleChapterMutation.isPending ||
 				!$isMounted}
 			onclick={() => {
 				multiChapterDownload.mutate(chapters);
@@ -47,7 +47,9 @@
 		/>
 		<ButtonAccentOnlyLabel
 			variant="3"
-			disabled={multiChapterDownload.isPending && removeMultipleChapterMutation.isPending}
+			disabled={multiChapterDownload.isPending ||
+				removeMultipleChapterMutation.isPending ||
+				!$isMounted}
 			label="Remove them locally"
 			onclick={() => {
 				removeMultipleChapterMutation.mutate(chapters);

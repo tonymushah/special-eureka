@@ -1,6 +1,6 @@
 import { goto } from "$app/navigation";
 import { route } from "$lib/ROUTES";
-import isFollowingUser from "@mangadex/gql-docs/user/id/follow";
+import isFollowingUser, { isChangingUserFollowing } from "@mangadex/gql-docs/user/id/follow";
 import {
 	ContextMenuItemProvider,
 	type ContextMenuItem
@@ -8,7 +8,7 @@ import {
 import openNewWindow from "@special-eureka/core/commands/openNewWindow";
 import { currentLocationWithNewPath } from "@special-eureka/core/utils/url";
 import { openUrl } from "@tauri-apps/plugin-opener";
-import { get } from "svelte/store";
+import { derived } from "svelte/store";
 import { isLogged } from "../auth";
 
 type UserElementContextMenuOptions = {
@@ -59,11 +59,11 @@ export default function userElementContextMenu({
 	const isFollowed = isFollowingUser(id);
 	items.push(
 		ContextMenuItemProvider.menuItem({
-			text: isFollowed ? "Unfollow" : "Follow",
+			text: derived(isFollowed, (isFollowed) => isFollowed ? "Unfollow" : "Follow", "Follow"),
 			action() {
 				isFollowed.update((value) => !value);
 			},
-			enabled: get(isLogged)
+			enabled: derived([isLogged, isChangingUserFollowing], ([logged, changing]) => logged && !changing)
 		})
 	);
 	return items;
