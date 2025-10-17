@@ -44,7 +44,13 @@ export const followGroupMutation = () => createMutation(() => ({
 		if (res.error) {
 			throw res.error;
 		}
-	}
+	},
+	onMutate(variables, context) {
+		globalIsMutatingInner.set(true);
+	},
+	onSettled(data, error, variables, onMutateResult, context) {
+		globalIsMutatingInner.set(false);
+	},
 }), () => mangadexQueryClient);
 
 export const unfollowGroupMutation = () => createMutation(() => ({
@@ -56,7 +62,13 @@ export const unfollowGroupMutation = () => createMutation(() => ({
 		if (res.error) {
 			throw res.error;
 		}
-	}
+	},
+	onMutate(variables, context) {
+		globalIsMutatingInner.set(true);
+	},
+	onSettled(data, error, variables, onMutateResult, context) {
+		globalIsMutatingInner.set(false);
+	},
 }), () => mangadexQueryClient);
 
 export default function isFollowingGroup(id: string, options?: {
