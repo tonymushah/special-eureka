@@ -1,8 +1,8 @@
 <script lang="ts">
-	import type { CombinedError } from "@urql/svelte";
+	import { CombinedError } from "@urql/svelte";
 
 	interface Props {
-		error: CombinedError;
+		error: Error;
 		label: string;
 	}
 
@@ -11,12 +11,19 @@
 
 <div class="error with-margin">
 	<h3>{label}</h3>
-	{#each error.graphQLErrors as { name, message }}
+	{#if error instanceof CombinedError}
+		{#each error.graphQLErrors as { name, message }}
+			<div class="details">
+				<h4>{name}</h4>
+				<div>{message}</div>
+			</div>
+		{/each}
+	{:else}
 		<div class="details">
-			<h4>{name}</h4>
-			<div>{message}</div>
+			<h4>{error.name}</h4>
+			<div>{error.message}</div>
 		</div>
-	{/each}
+	{/if}
 </div>
 
 <style lang="scss">
