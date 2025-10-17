@@ -2,8 +2,8 @@
 	import { goto } from "$app/navigation";
 	import { page } from "$app/state";
 	import { route } from "$lib/ROUTES";
-	import ButtonAccentOnlyLabel from "@mangadex/componnents/theme/buttons/ButtonAccentOnlyLabel.svelte";
-	import DangerButtonOnlyLabel from "@mangadex/componnents/theme/buttons/DangerButtonOnlyLabel.svelte";
+	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
+	import DangerButton from "@mangadex/componnents/theme/buttons/DangerButton.svelte";
 	import MidToneLine from "@mangadex/componnents/theme/lines/MidToneLine.svelte";
 	import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 	import UserLink from "@mangadex/componnents/user/UserLink.svelte";
@@ -71,97 +71,105 @@
 
 <UsersPageBase title={data.attributes.name}>
 	{#snippet _left()}
-		{#if data.isMine}
-			{#if isPrivate}
-				<DangerButtonOnlyLabel
-					label="Make Public"
-					onclick={() => {
-						updateCustomListVisibilityMutation.mutate(
-							{
-								id: data.id,
-								visibility: CustomListVisibility.Public
-							},
-							{
-								onSuccess() {
-									addToast({
-										data: {
-											title: "Sucefully made custom list public",
-											description: data.attributes.name,
-											variant: "yellow"
-										}
-									});
-									goto(
-										route("/mangadex/list/[id]", {
-											id: data.id
-										})
-									);
+		<div class="buttons">
+			{#if data.isMine}
+				{#if isPrivate}
+					<DangerButton
+						isBase
+						onclick={() => {
+							updateCustomListVisibilityMutation.mutate(
+								{
+									id: data.id,
+									visibility: CustomListVisibility.Public
 								},
-								onError(error, variables, context) {
-									addErrorToast("Cannot update visibility", error);
+								{
+									onSuccess() {
+										addToast({
+											data: {
+												title: "Sucefully made custom list public",
+												description: data.attributes.name,
+												variant: "yellow"
+											}
+										});
+										goto(
+											route("/mangadex/list/[id]", {
+												id: data.id
+											})
+										);
+									},
+									onError(error, variables, context) {
+										addErrorToast("Cannot update visibility", error);
+									}
 								}
+							);
+						}}
+						disabled={updateCustomListVisibilityMutation.isPending}
+					>
+						<p>Make Public</p></DangerButton
+					>
+				{:else}
+					<ButtonAccent
+						isBase
+						onclick={() => {
+							updateCustomListVisibilityMutation.mutate(
+								{
+									id: data.id,
+									visibility: CustomListVisibility.Private
+								},
+								{
+									onSuccess() {
+										addToast({
+											data: {
+												title: "Sucefully made custom list private",
+												description: data.attributes.name,
+												variant: "yellow"
+											}
+										});
+										goto(
+											route("/mangadex/list/[id]", {
+												id: `private:${data.id}`
+											})
+										);
+									},
+									onError(error, variables, context) {
+										addErrorToast("Cannot update visibility", error);
+									}
+								}
+							);
+						}}
+						disabled={updateCustomListVisibilityMutation.isPending}
+					>
+						<p>Make Private</p>
+					</ButtonAccent>
+				{/if}
+				<DangerButton
+					isBase
+					variant="2"
+					onclick={() => {
+						deleteCustomList.mutate(data.id, {
+							onError(error) {
+								addErrorToast("Cannot delete custom list", error);
+							},
+							onSuccess() {
+								addToast({
+									data: {
+										title: "Deleted custom list",
+										description: data.attributes.name ?? data.id,
+										variant: "yellow"
+									}
+								});
+								goto(route("/mangadex/list"));
 							}
-						);
+						});
 					}}
-					disabled={updateCustomListVisibilityMutation.isPending}
-				/>
+					disabled={deleteCustomList.isPending}
+				>
+					<p>Delete</p>
+				</DangerButton>
 			{:else}
-				<ButtonAccentOnlyLabel
-					label="Make Private"
-					onclick={() => {
-						updateCustomListVisibilityMutation.mutate(
-							{
-								id: data.id,
-								visibility: CustomListVisibility.Private
-							},
-							{
-								onSuccess() {
-									addToast({
-										data: {
-											title: "Sucefully made custom list private",
-											description: data.attributes.name,
-											variant: "yellow"
-										}
-									});
-									goto(
-										route("/mangadex/list/[id]", {
-											id: `private:${data.id}`
-										})
-									);
-								},
-								onError(error, variables, context) {
-									addErrorToast("Cannot update visibility", error);
-								}
-							}
-						);
-					}}
-					disabled={updateCustomListVisibilityMutation.isPending}
-				/>
+				<FollowButton id={data.id} />
 			{/if}
-			<DangerButtonOnlyLabel
-				variant="2"
-				label="Delete"
-				onclick={() => {
-					deleteCustomList.mutate(data.id, {
-						onError(error) {
-							addErrorToast("Cannot delete custom list", error);
-						},
-						onSuccess() {
-							addToast({
-								data: {
-									title: "Deleted custom list",
-									description: data.attributes.name ?? data.id,
-									variant: "yellow"
-								}
-							});
-							goto(route("/mangadex/list"));
-						}
-					});
-				}}
-				disabled={deleteCustomList.isPending}
-			/>
-		{:else}
-			<FollowButton id={data.id} />
-		{/if}
+		</div>
 	{/snippet}
 	{#snippet topRight()}
 		<div class="visibility">
@@ -255,5 +263,19 @@
 		display: flex;
 		align-items: center;
 		gap: 2px;
+	}
+	.buttons {
+		display: grid;
+		gap: 10px;
+		margin: 10px;
+		p {
+			display: flex;
+			gap: 8px;
+			margin: 0px;
+			font-weight: 700;
+			font-size: 1.125em;
+			align-items: center;
+			justify-content: center;
+		}
 	}
 </style>
