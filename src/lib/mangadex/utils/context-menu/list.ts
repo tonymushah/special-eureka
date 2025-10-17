@@ -3,7 +3,7 @@ import { route } from "$lib/ROUTES";
 import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 import exportCustomListsToCSV from "@mangadex/gql-docs/list/export/csv";
 import deleteCustomListMutation from "@mangadex/gql-docs/list/id/delete";
-import isFollowingCustomList from "@mangadex/gql-docs/list/id/follow";
+import isFollowingCustomList, { isChangingListFollowing } from "@mangadex/gql-docs/list/id/follow";
 import updateCustomListVisibilityMutation from "@mangadex/gql-docs/list/id/update-visibilty";
 import { CustomListVisibility } from "@mangadex/gql/graphql";
 import {
@@ -76,7 +76,7 @@ export default function customListElementContextMenu({
 			action() {
 				isFollowed.update((value) => !value);
 			},
-			enabled: isLogged
+			enabled: derived([isLogged, isChangingListFollowing], ([isLogged, changing]) => isLogged && !changing)
 		}),
 		ContextMenuItemProvider.menuItem({
 			text: "Export custom list as CSV",
