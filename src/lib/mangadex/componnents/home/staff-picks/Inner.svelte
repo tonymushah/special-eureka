@@ -1,11 +1,10 @@
 <script lang="ts">
 	import type { Readable } from "svelte/store";
 	import type { StaffPicksTitle } from ".";
-	import type { CombinedError } from "@urql/svelte";
-	import TopTitle from "../utils/TopTitle.svelte";
-	import Content from "./Content.svelte";
 	import HomeErrorComponnent from "../utils/HomeErrorComponnent.svelte";
 	import PopularTitleSpinner from "../utils/PopularTitleSpinner.svelte";
+	import TopTitle from "../utils/TopTitle.svelte";
+	import Content from "./Content.svelte";
 
 	interface Props {
 		isFetching: Readable<boolean>;
@@ -17,7 +16,7 @@
 			| undefined
 		>;
 		execute: () => Promise<void> | undefined;
-		error: Readable<CombinedError | undefined>;
+		error: Readable<Error | undefined>;
 	}
 	let { isFetching, data_store, execute, error }: Props = $props();
 </script>
