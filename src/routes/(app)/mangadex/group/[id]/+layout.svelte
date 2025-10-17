@@ -22,6 +22,7 @@
 	let createdSince = $derived(data.createdAt);
 	//$: console.log(`since date: ${createdSince}`);
 	const isFollowed = isFollowingGroup(data.id);
+	let isFollowing = $derived($isFollowed);
 </script>
 
 <UsersPageBase title={data.name} {description}>
@@ -35,7 +36,7 @@
 				}}
 			>
 				<p>
-					{#if $isFollowed}
+					{#if isFollowing}
 						<BookmarkIcon /> Unfollow
 					{:else}
 						Follow

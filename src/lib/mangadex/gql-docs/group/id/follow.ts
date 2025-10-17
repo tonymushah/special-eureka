@@ -44,7 +44,13 @@ export const followGroupMutation = () => createMutation(() => ({
 		if (res.error) {
 			throw res.error;
 		}
-	}
+	},
+	onMutate(variables, context) {
+		globalIsMutatingInner.set(true);
+	},
+	onSettled(data, error, variables, onMutateResult, context) {
+		globalIsMutatingInner.set(false);
+	},
 }), () => mangadexQueryClient);
 
 export const unfollowGroupMutation = () => createMutation(() => ({
@@ -56,7 +62,13 @@ export const unfollowGroupMutation = () => createMutation(() => ({
 		if (res.error) {
 			throw res.error;
 		}
-	}
+	},
+	onMutate(variables, context) {
+		globalIsMutatingInner.set(true);
+	},
+	onSettled(data, error, variables, onMutateResult, context) {
+		globalIsMutatingInner.set(false);
+	},
 }), () => mangadexQueryClient);
 
 export default function isFollowingGroup(id: string, options?: {
@@ -119,7 +131,7 @@ function setFollowingStatus(
 		| undefined
 ) {
 	if (value) {
-		using mut_ = extractFromAccessor(followGroupMutation);
+		const mut_ = extractFromAccessor(followGroupMutation);
 		mut_.value.mutate(id, {
 			onError(error, variables, context) {
 				if (toast) {
@@ -140,12 +152,13 @@ function setFollowingStatus(
 				options?.onSucess?.(variables);
 			},
 			onSettled(data, error, variables, context) {
+				using _ = mut_;
 				query.refetch()
 				options?.onSettled?.(error, variables);
 			}
 		});
 	} else {
-		using mut = extractFromAccessor(unfollowGroupMutation);
+		const mut = extractFromAccessor(unfollowGroupMutation);
 		mut.value.mutate(id, {
 			onError(error, variables, context) {
 				if (toast) {
@@ -166,6 +179,7 @@ function setFollowingStatus(
 				options?.onSucess?.(variables);
 			},
 			onSettled(data, error, variables, context) {
+				using _ = mut;
 				query.refetch()
 				options?.onSettled?.(error, variables);
 			}

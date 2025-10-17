@@ -78,15 +78,15 @@ export default function isFollowingUser(id: string, options?: {
 }): Writable<boolean> {
 	const toast = options?.toast ?? true;
 	const query = isFollowingUserQuery_(id);
-	const queryDerived = derived(internalToStore(query), (query) => {
-		return query.data ?? false
+	const queryDerived = derived(internalToStore(query), (query, set) => {
+		set(query.data ?? false)
 	}, false);
 	return {
 		subscribe(run, invalidate) {
 			return queryDerived.subscribe(run, invalidate);
 		},
 		set(value) {
-			const q_ = extractFromAccessor(query);
+			using q_ = extractFromAccessor(query);
 			setFollowingStatus(value, id, toast, q_.value, options);
 		},
 		update(updater) {
@@ -151,9 +151,9 @@ function setFollowingStatus(
 				options?.onSucess?.(variables);
 			},
 			onSettled(data, error, variables, context) {
+				using _ = mut;
 				query.refetch();
 				options?.onSettled?.(error, variables);
-				using _ = mut;
 			}
 		})
 
@@ -179,9 +179,9 @@ function setFollowingStatus(
 				options?.onSucess?.(variables);
 			},
 			onSettled(data, error, variables, context) {
+				using _ = mut;
 				query.refetch()
 				options?.onSettled?.(error, variables);
-				using _ = mut;
 			}
 		});
 	}

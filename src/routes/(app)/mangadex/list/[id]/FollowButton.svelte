@@ -12,6 +12,7 @@
 
 	let { id }: Props = $props();
 	const isFollowed = isFollowingCustomList(id);
+	let isFollowing = $derived($isFollowed);
 </script>
 
 <PrimaryButton
@@ -22,7 +23,7 @@
 	}}
 >
 	<p>
-		{#if $isFollowed}
+		{#if isFollowing}
 			<BookmarkIcon /> Unfollow
 		{:else}
 			Follow
