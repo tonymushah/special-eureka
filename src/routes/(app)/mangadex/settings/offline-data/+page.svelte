@@ -2,7 +2,10 @@
 	import ErrorComponent from "@mangadex/componnents/ErrorComponent.svelte";
 	import ButtonAccentOnlyLabel from "@mangadex/componnents/theme/buttons/ButtonAccentOnlyLabel.svelte";
 	import WarningComponent from "@mangadex/componnents/WarningComponent.svelte";
-	import { mutationStore, queryStore as queryStoreLoader } from "@mangadex/stores/offlineConfig";
+	import {
+		mutationStore as mutationStoreLoader,
+		queryStore as queryStoreLoader
+	} from "@mangadex/stores/offlineConfig";
 	import { isMounted } from "@mangadex/stores/offlineIsMounted";
 	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
 	import { open as dialogOpen } from "@tauri-apps/plugin-dialog";
@@ -15,6 +18,8 @@
 	let chaptersDir = $derived(queryStore.data?.userOption.getOfflineConfig.chaptersDir);
 	let coversDir = $derived(queryStore.data?.userOption.getOfflineConfig.coversDir);
 	let mangasDir = $derived(queryStore.data?.userOption.getOfflineConfig.mangasDir);
+
+	let mutationStore = mutationStoreLoader();
 
 	async function setupDataDir(dir: string) {
 		return await mutationStore.mutateAsync({
