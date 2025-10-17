@@ -4,8 +4,7 @@
 </script>
 
 <!-- TODO find a way to fix this -->
-<!--
-<svelte:boundary>
+<!--<svelte:boundary>
 	{#snippet failed(err)}
 		<PageError
 			message={err instanceof Error
@@ -18,8 +17,7 @@
 	{#await import("@mangadex/componnents/GraphiQL.svelte").then((d) => d.default) then GraphiQL}
 		<GraphiQL />
 	{/await}
-</svelte:boundary>
--->
+</svelte:boundary>-->
 
 <AppTitle title="GraphiQL - MangaDex" />
 <PageError

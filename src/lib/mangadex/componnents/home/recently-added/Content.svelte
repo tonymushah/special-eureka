@@ -9,6 +9,7 @@
 	import MangaElementBase4 from "@mangadex/componnents/manga/base/base4/MangaElementBase4WithReadableCoverImage.svelte";
 	import openTitle from "@mangadex/utils/links/title/[id]";
 	import type { SwiperOptions } from "swiper/types";
+	import NothingToShow from "../NothingToShow.svelte";
 
 	interface Props {
 		data: RecentlyAddedHomeQueryQuery;
@@ -75,23 +76,27 @@
 	});
 </script>
 
-<div class="result">
-	<swiper-container bind:this={swiper_container} init="false">
-		{#each titles as { id, title, coverImage, coverImageAlt } (id)}
-			<swiper-slide>
-				<MangaElementBase4
-					onclick={() => {
-						openTitle(id);
-					}}
-					{title}
-					{coverImage}
-					{coverImageAlt}
-					mangaId={id}
-				/>
-			</swiper-slide>
-		{/each}
-	</swiper-container>
-</div>
+{#if titles.length > 0}
+	<div class="result">
+		<swiper-container bind:this={swiper_container} init="false">
+			{#each titles as { id, title, coverImage, coverImageAlt } (id)}
+				<swiper-slide>
+					<MangaElementBase4
+						onclick={() => {
+							openTitle(id);
+						}}
+						{title}
+						{coverImage}
+						{coverImageAlt}
+						mangaId={id}
+					/>
+				</swiper-slide>
+			{/each}
+		</swiper-container>
+	</div>
+{:else}
+	<NothingToShow />
+{/if}
 
 <style lang="scss">
 	.result {

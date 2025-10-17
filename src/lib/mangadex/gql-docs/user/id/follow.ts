@@ -4,7 +4,7 @@ import { graphql } from "@mangadex/gql/gql";
 import { client } from "@mangadex/gql/urql";
 import { mangadexQueryClient } from "@mangadex/index";
 import { createMutation, createQuery, type CreateQueryResult } from "@tanstack/svelte-query";
-import { derived, get, toStore, type Writable } from "svelte/store";
+import { derived, get, readonly, writable, type Writable } from "svelte/store";
 
 export const followUserGQLMutation = graphql(`
 	mutation followUserMutation($id: UUID!) {
@@ -30,6 +30,10 @@ export const isFollowingUserQuery = graphql(`
 	}
 `);
 
+const globalIsMutatingInner = writable(false);
+
+export const isChangingUserFollowing = readonly(globalIsMutatingInner);
+
 export const followUserMutation = () => createMutation(() => ({
 	mutationKey: ["user", "follow"],
 	async mutationFn(id: string) {
@@ -39,7 +43,13 @@ export const followUserMutation = () => createMutation(() => ({
 		if (res.error) {
 			throw res.error;
 		}
-	}
+	},
+	onMutate(variables, context) {
+		globalIsMutatingInner.set(true);
+	},
+	onSettled(data, error, variables, onMutateResult, context) {
+		globalIsMutatingInner.set(false);
+	},
 }), () => mangadexQueryClient);
 
 export const unfollowUserMutation = () => createMutation(() => ({
@@ -51,7 +61,13 @@ export const unfollowUserMutation = () => createMutation(() => ({
 		if (res.error) {
 			throw res.error;
 		}
-	}
+	},
+	onMutate(variables, context) {
+		globalIsMutatingInner.set(true);
+	},
+	onSettled(data, error, variables, onMutateResult, context) {
+		globalIsMutatingInner.set(false);
+	},
 }), () => mangadexQueryClient);
 
 export default function isFollowingUser(id: string, options?: {
@@ -61,24 +77,16 @@ export default function isFollowingUser(id: string, options?: {
 	toast?: boolean
 }): Writable<boolean> {
 	const toast = options?.toast ?? true;
-	const query = () => createQuery(() => ({
-		queryKey: ["user", id, "is-following"],
-		async queryFn() {
-			const res = await client.query(isFollowingUserQuery, {
-				id
-			}).toPromise();
-			if (res.error) {
-				throw res.error;
-			}
-		}
-	}), () => mangadexQueryClient);
-	const queryDerived = derived(internalToStore(query), ($query) => {
-		return $query.data ?? false
+	const query = isFollowingUserQuery_(id);
+	const queryDerived = derived(internalToStore(query), (query) => {
+		return query.data ?? false
 	}, false);
 	return {
-		subscribe: queryDerived.subscribe,
+		subscribe(run, invalidate) {
+			return queryDerived.subscribe(run, invalidate);
+		},
 		set(value) {
-			using q_ = extractFromAccessor(query);
+			const q_ = extractFromAccessor(query);
 			setFollowingStatus(value, id, toast, q_.value, options);
 		},
 		update(updater) {
@@ -89,24 +97,41 @@ export default function isFollowingUser(id: string, options?: {
 	};
 }
 
+export function isFollowingUserQuery_(id: string) {
+	return () => createQuery(() => ({
+		queryKey: ["user", id, "is-following"],
+		async queryFn() {
+			const res = await client.query(isFollowingUserQuery, {
+				id
+			}).toPromise();
+			if (res.error) {
+				throw res.error;
+			} else if (res.data) {
+				return res.data.follows.isFollowingUser;
+			} else {
+				throw new Error("no data???");
+			}
+		},
+	}), () => mangadexQueryClient);
+}
+
 function setFollowingStatus(
 	value: boolean,
 	id: string,
 	toast: boolean,
 	query: CreateQueryResult,
-	options:
-		| {
-			onSettled?: (error: Error | null, variables: string) => void;
-			onError?: (error: Error, variables: string) => void;
-			onSucess?: (variables: string) => void;
-			toast?: boolean;
-		}
-		| undefined
-) {
+	options?: {
+		onSettled?: (error: Error | null, variables: string) => void;
+		onError?: (error: Error, variables: string) => void;
+		onSucess?: (variables: string) => void;
+		toast?: boolean;
+	}) {
 	if (value) {
-		using mut = extractFromAccessor(followUserMutation);
+		const mut = extractFromAccessor(followUserMutation);
+
 		mut.value.mutate(id, {
 			onError(error, variables, context) {
+				query.refetch();
 				if (toast) {
 					addErrorToast("Cannot change user following status", error);
 				}
@@ -122,15 +147,18 @@ function setFollowingStatus(
 						}
 					});
 				}
+				query.refetch();
 				options?.onSucess?.(variables);
 			},
 			onSettled(data, error, variables, context) {
-				query.refetch()
+				query.refetch();
 				options?.onSettled?.(error, variables);
+				using _ = mut;
 			}
-		});
+		})
+
 	} else {
-		using mut = extractFromAccessor(unfollowUserMutation);
+		const mut = extractFromAccessor(unfollowUserMutation);
 		mut.value.mutate(id, {
 			onError(error, variables, context) {
 				if (toast) {
@@ -153,6 +181,7 @@ function setFollowingStatus(
 			onSettled(data, error, variables, context) {
 				query.refetch()
 				options?.onSettled?.(error, variables);
+				using _ = mut;
 			}
 		});
 	}

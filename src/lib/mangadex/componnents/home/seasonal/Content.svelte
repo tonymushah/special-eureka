@@ -9,6 +9,7 @@
 	import type { Readable } from "svelte/store";
 	import type { SwiperContainer } from "swiper/element";
 	import type { SwiperOptions } from "swiper/types";
+	import NothingToShow from "../NothingToShow.svelte";
 
 	const client = getContextClient();
 	interface Props {
@@ -75,23 +76,27 @@
 	});
 </script>
 
-<div class="result">
-	<swiper-container bind:this={swiper_container} init="false">
-		{#each seasonal as { id, title, coverImage, coverImageAlt } (id)}
-			<swiper-slide>
-				<MangaElementBase3
-					{title}
-					{coverImage}
-					{coverImageAlt}
-					onclick={() => {
-						openTitle(id);
-					}}
-					mangaId={id}
-				/>
-			</swiper-slide>
-		{/each}
-	</swiper-container>
-</div>
+{#if seasonal.length > 0}
+	<div class="result">
+		<swiper-container bind:this={swiper_container} init="false">
+			{#each seasonal as { id, title, coverImage, coverImageAlt } (id)}
+				<swiper-slide>
+					<MangaElementBase3
+						{title}
+						{coverImage}
+						{coverImageAlt}
+						onclick={() => {
+							openTitle(id);
+						}}
+						mangaId={id}
+					/>
+				</swiper-slide>
+			{/each}
+		</swiper-container>
+	</div>
+{:else}
+	<NothingToShow />
+{/if}
 
 <style lang="scss">
 	.result {

@@ -1,28 +1,34 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
 	import { route } from "$lib/ROUTES";
-	import ErrorComponent from "@mangadex/componnents/ErrorComponent.svelte";
 	import Fetching from "@mangadex/componnents/search/content/Fetching.svelte";
 	import HasNext from "@mangadex/componnents/search/content/HasNext.svelte";
 	import NothingToShow from "@mangadex/componnents/search/content/NothingToShow.svelte";
 	import UsersSimpleBase from "@mangadex/componnents/users/simple/UsersSimpleBase.svelte";
-	import { CustomListVisibility, type CurrentLoggedLists } from "@mangadex/gql/graphql";
+	import {
+		CustomListVisibility,
+		type CurrentLoggedLists,
+		type UserFollowedCustomListsQueryVariables
+	} from "@mangadex/gql/graphql";
 	import pageLimit from "@mangadex/stores/page-limit";
-	import customListElementContextMenu from "@mangadex/utils/context-menu/list";
 	import type AbstractSearchResult from "@mangadex/utils/searchResult/AbstractSearchResult";
-	import registerContextMenuEvent from "@special-eureka/core/utils/contextMenuContext";
 	import { createInfiniteQuery, type CreateInfiniteQueryOptions } from "@tanstack/svelte-query";
 	import { getContextClient } from "@urql/svelte";
 	import { debounce } from "lodash";
 	import { onDestroy } from "svelte";
-	import { flip } from "svelte/animate";
+	import executeSearchQuery, { type FollowedUserCustomListItemData } from "./search";
+	import ErrorComponent from "@mangadex/componnents/ErrorComponent.svelte";
+	import registerContextMenuEvent from "@special-eureka/core/utils/contextMenuContext";
+	import customListElementContextMenu from "@mangadex/utils/context-menu/list";
 	import { crossfade } from "svelte/transition";
-	import executeSearchQuery, { type CurrentUserCustomListItemData } from "./search";
+	import { flip } from "svelte/animate";
+	import UserRolesComp from "@mangadex/componnents/user/UserRolesComp.svelte";
+	import userElementContextMenu from "@mangadex/utils/context-menu/user";
 
 	const client = getContextClient();
 	let query = createInfiniteQuery(() => {
 		return {
-			queryKey: ["user", "current", "custom-lists", `limit:${$pageLimit}`],
+			queryKey: ["user", "following", "custom-lists", `limit:${$pageLimit}`],
 			async queryFn({ pageParam }) {
 				return await executeSearchQuery(client, pageParam);
 			},
@@ -41,13 +47,13 @@
 			},
 			initialPageParam: {
 				limit: $pageLimit
-			} satisfies CurrentLoggedLists
+			} satisfies UserFollowedCustomListsQueryVariables
 		} satisfies CreateInfiniteQueryOptions<
-			AbstractSearchResult<CurrentUserCustomListItemData>,
+			AbstractSearchResult<FollowedUserCustomListItemData>,
 			Error,
-			AbstractSearchResult<CurrentUserCustomListItemData>,
+			AbstractSearchResult<FollowedUserCustomListItemData>,
 			readonly string[],
-			CurrentLoggedLists
+			UserFollowedCustomListsQueryVariables
 		>;
 	});
 	let hasNext = $derived(query.hasNextPage);
@@ -138,6 +144,34 @@
 							title
 						{/if}
 					</p>
+					<p>
+						<!-- svelte-ignore a11y_click_events_have_key_events -->
+						By:
+						<span
+							role="link"
+							onclick={(e) => {
+								e.preventDefault();
+								e.stopPropagation();
+							}}
+							oncontextmenu={registerContextMenuEvent({
+								includeContext: false,
+								addSeparator: false,
+								preventDefault: true,
+								stopPropagation: true,
+								additionalMenus() {
+									return userElementContextMenu({
+										id: list.creator.id,
+										name: list.creator.name
+									});
+								}
+							})}
+							tabindex={0}
+							class="creator"
+						>
+							<UserRolesComp>{list.creator.name}</UserRolesComp>
+						</span>
+					</p>
+					<!-- TODO unfollow button -->
 				</div>
 			</UsersSimpleBase>
 		</span>
@@ -165,6 +199,15 @@
 </div>
 
 <style lang="scss">
+	.creator:hover {
+		text-decoration: wavy;
+	}
+	.creator:focus {
+		text-decoration: underline;
+	}
+	.creator:active {
+		text-decoration: dotted;
+	}
 	.observer-trigger {
 		display: flex;
 		align-items: center;

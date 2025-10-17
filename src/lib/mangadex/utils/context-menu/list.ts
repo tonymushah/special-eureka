@@ -3,7 +3,7 @@ import { route } from "$lib/ROUTES";
 import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 import exportCustomListsToCSV from "@mangadex/gql-docs/list/export/csv";
 import deleteCustomListMutation from "@mangadex/gql-docs/list/id/delete";
-import isFollowingCustomList from "@mangadex/gql-docs/list/id/follow";
+import isFollowingCustomList, { isChangingListFollowing } from "@mangadex/gql-docs/list/id/follow";
 import updateCustomListVisibilityMutation from "@mangadex/gql-docs/list/id/update-visibilty";
 import { CustomListVisibility } from "@mangadex/gql/graphql";
 import {
@@ -22,14 +22,16 @@ type CustomListElementContextMenuOptions = {
 	id: string;
 	name?: string;
 	isMine?: boolean;
-	onVisibilityChange?: () => any;
+	onVisibilityChange?: (newVis: CustomListVisibility) => any;
+	onDelete?: () => any
 };
 
 export default function customListElementContextMenu({
 	id,
 	name,
 	isMine,
-	onVisibilityChange
+	onVisibilityChange,
+	onDelete
 }: CustomListElementContextMenuOptions): ContextMenuItem[] {
 	const items = [
 		ContextMenuItemProvider.menuItem({
@@ -74,7 +76,7 @@ export default function customListElementContextMenu({
 			action() {
 				isFollowed.update((value) => !value);
 			},
-			enabled: isLogged
+			enabled: derived([isLogged, isChangingListFollowing], ([isLogged, changing]) => isLogged && !changing)
 		}),
 		ContextMenuItemProvider.menuItem({
 			text: "Export custom list as CSV",
@@ -147,7 +149,7 @@ export default function customListElementContextMenu({
 												description: name ?? id
 											}
 										});
-										onVisibilityChange?.();
+										onVisibilityChange?.(CustomListVisibility.Public);
 									},
 									onError(error, variables, context) {
 										addErrorToast("Cannot update custom list visibity", error);
@@ -170,7 +172,7 @@ export default function customListElementContextMenu({
 												description: name ?? id
 											}
 										});
-										onVisibilityChange?.();
+										onVisibilityChange?.(CustomListVisibility.Private);
 									},
 									onError(error, variables, context) {
 										addErrorToast("Cannot update custom list visibity", error);
@@ -198,7 +200,7 @@ export default function customListElementContextMenu({
 									variant: "yellow"
 								}
 							});
-							onVisibilityChange?.();
+							onDelete?.()
 						}
 					});
 				}

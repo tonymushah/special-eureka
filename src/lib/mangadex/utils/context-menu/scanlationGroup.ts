@@ -1,6 +1,6 @@
 import { goto } from "$app/navigation";
 import { route } from "$lib/ROUTES";
-import isFollowingGroup from "@mangadex/gql-docs/group/id/follow";
+import isFollowingGroup, { isChangingGroupFollowing } from "@mangadex/gql-docs/group/id/follow";
 import {
 	ContextMenuItemProvider,
 	type ContextMenuItem
@@ -72,7 +72,7 @@ export default function scanlationGroupElementContextMenu({
 			action() {
 				isFollowed.update((value) => !value);
 			},
-			enabled: isLogged
+			enabled: derived([isLogged, isChangingGroupFollowing], ([logged, following]) => logged && !following)
 		})
 	);
 	if (website) {

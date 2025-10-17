@@ -9,7 +9,7 @@ import {
 	isMangaDownloading,
 	removeMutation
 } from "@mangadex/download/manga";
-import isFollowingTitle from "@mangadex/gql-docs/title/id/follow";
+import isFollowingTitle, { isChangingTitleFollowing } from "@mangadex/gql-docs/title/id/follow";
 import { ReadingStatus } from "@mangadex/gql/graphql";
 import { set_manga_rating } from "@mangadex/stores/manga/manga_rating";
 import { set_manga_reading_status } from "@mangadex/stores/manga/manga_reading_status";
@@ -125,7 +125,7 @@ export default function mangaElementContextMenu({
 			action() {
 				isFollowed.update((v) => !v);
 			},
-			enabled: isLogged
+			enabled: derived([isLogged, isChangingTitleFollowing], ([logged, changing]) => logged && !changing)
 		}),
 		ContextMenuItemProvider.subMenu({
 			text: "Reading status",
@@ -248,7 +248,7 @@ export default function mangaElementContextMenu({
 						}
 					});
 				},
-				enabled: get(isMounted)
+				enabled: isMounted
 			})
 		);
 		if (get(isDownloaded)) {

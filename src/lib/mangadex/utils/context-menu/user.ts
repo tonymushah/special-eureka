@@ -1,6 +1,6 @@
 import { goto } from "$app/navigation";
 import { route } from "$lib/ROUTES";
-import isFollowingUser from "@mangadex/gql-docs/user/id/follow";
+import isFollowingUser, { isChangingUserFollowing } from "@mangadex/gql-docs/user/id/follow";
 import {
 	ContextMenuItemProvider,
 	type ContextMenuItem
@@ -63,7 +63,7 @@ export default function userElementContextMenu({
 			action() {
 				isFollowed.update((value) => !value);
 			},
-			enabled: isLogged
+			enabled: derived([isLogged, isChangingUserFollowing], ([logged, changing]) => logged && !changing)
 		})
 	);
 	return items;

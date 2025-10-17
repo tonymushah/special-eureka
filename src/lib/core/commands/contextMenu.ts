@@ -216,6 +216,7 @@ export default async function contextMenu(
 	await invoke("context_menu", {
 		items,
 		position: to_send_p
+	}).finally(() => {
+		unlisteners.forEach((e) => e());
 	});
-	unlisteners.forEach((e) => e());
 }

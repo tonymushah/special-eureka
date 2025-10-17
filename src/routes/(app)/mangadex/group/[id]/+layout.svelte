@@ -3,6 +3,8 @@
 	import PrimaryButton from "@mangadex/componnents/theme/buttons/PrimaryButton.svelte";
 	import TimeAgo from "@mangadex/componnents/TimeAgo.svelte";
 	import UsersPageBase from "@mangadex/componnents/users/page/UsersPageBase.svelte";
+	import isFollowingGroup, { isChangingGroupFollowing } from "@mangadex/gql-docs/group/id/follow";
+	import { isLogged } from "@mangadex/utils/auth";
 	import { writeText } from "@tauri-apps/plugin-clipboard-manager";
 	import { openUrl as shellOpen } from "@tauri-apps/plugin-opener";
 	import { BookmarkIcon, ExternalLinkIcon, FlagIcon } from "svelte-feather-icons";
@@ -19,13 +21,26 @@
 	let description = $derived(data.description ?? undefined);
 	let createdSince = $derived(data.createdAt);
 	//$: console.log(`since date: ${createdSince}`);
+	const isFollowed = isFollowingGroup(data.id);
 </script>
 
 <UsersPageBase title={data.name} {description}>
 	{#snippet _left()}
 		<div class="buttons">
-			<PrimaryButton isBase>
-				<p><BookmarkIcon />Follow</p>
+			<PrimaryButton
+				isBase
+				disabled={$isChangingGroupFollowing || !$isLogged}
+				onclick={() => {
+					$isFollowed = !$isFollowed;
+				}}
+			>
+				<p>
+					{#if $isFollowed}
+						<BookmarkIcon /> Unfollow
+					{:else}
+						Follow
+					{/if}
+				</p>
 			</PrimaryButton>
 			<ButtonAccent
 				isBase
