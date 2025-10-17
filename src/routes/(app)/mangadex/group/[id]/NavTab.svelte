@@ -96,7 +96,7 @@
 		disabled={createThreadMutation.isPending || groupThreadQuery.isFetching}
 	>
 		Comments {#if groupThreadQuery.data?.repliesCount != undefined}
-			{groupThreadQuery.data.repliesCount}
+			({groupThreadQuery.data.repliesCount})
 		{/if}
 	</button>
 </nav>
