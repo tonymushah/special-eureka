@@ -105,8 +105,8 @@
 						exLicensed
 					{/if}
 				</p>
-				<p>
-					Created <TimeAgo date={createdSince} />
+				<p class="created">
+					Created: <TimeAgo date={createdSince} />
 				</p>
 			</section>
 		</div>
@@ -152,5 +152,10 @@
 	}
 	.content {
 		margin-top: 8px;
+	}
+	.created {
+		display: flex;
+		align-items: center;
+		gap: 8px;
 	}
 </style>
