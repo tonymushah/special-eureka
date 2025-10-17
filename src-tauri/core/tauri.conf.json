@@ -1,5 +1,5 @@
 {
-	"$schema": "../../node_modules/@tauri-apps/cli/config.schema.json",
+	"$schema": "https://raw.githubusercontent.com/tauri-apps/tauri/f0511be705661dba2e505d7a86f513f5b4dbe240/crates/tauri-cli/config.schema.json",
 	"build": {
 		"beforeBuildCommand": "pnpm run vite:build",
 		"beforeDevCommand": "pnpm run vite:dev",
@@ -39,7 +39,8 @@
 				"depends": []
 			},
 			"appimage": {
-				"bundleMediaFramework": false
+				"bundleMediaFramework": false,
+				"useNewFormat": true
 			},
 			"rpm": {
 				"epoch": 0,
@@ -63,7 +64,6 @@
 		},
 		"resources": [],
 		"shortDescription": "Special Eureka",
-		"createUpdaterArtifacts": "v1Compatible",
 		"icon": [
 			"icons/32x32.png",
 			"icons/128x128.png",

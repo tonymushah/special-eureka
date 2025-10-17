@@ -3283,13 +3283,13 @@ dependencies = [
 
 [[package]]
 name = "mio"
-version = "1.0.4"
+version = "1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "78bed444cc8a2160f01cbcf811ef18cac863ad68ae8ca62092e8db51d51c761c"
+checksum = "69d83b0086dc8ecf3ce9ae2874b2d1290252e2a30720bea58a5c6639b0092873"
 dependencies = [
  "libc",
  "wasi 0.11.1+wasi-snapshot-preview1",
- "windows-sys 0.59.0",
+ "windows-sys 0.61.2",
 ]
 
 [[package]]
@@ -4966,9 +4966,9 @@ dependencies = [
 
 [[package]]
 name = "rustls"
-version = "0.23.32"
+version = "0.23.33"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cd3c25631629d034ce7cd9940adc9d45762d46de2b0f57193c4443b92c6d4d40"
+checksum = "751e04a496ca00bb97a5e043158d23d66b5aabf2e1d5aa2a0aaebb1aafe6f82c"
 dependencies = [
  "once_cell",
  "ring",
@@ -5790,8 +5790,7 @@ checksum = "61c41af27dd6d1e27b1b16b489db798443478cef1f06a660c96db617ba5de3b1"
 [[package]]
 name = "tauri"
 version = "2.8.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d4d1d3b3dc4c101ac989fd7db77e045cc6d91a25349cd410455cb5c57d510c1c"
+source = "git+https://github.com/tauri-apps/tauri?branch=feat%2Ftruly-portable-appimage#f0511be705661dba2e505d7a86f513f5b4dbe240"
 dependencies = [
  "anyhow",
  "bytes",
@@ -5843,8 +5842,7 @@ dependencies = [
 [[package]]
 name = "tauri-build"
 version = "2.4.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9c432ccc9ff661803dab74c6cd78de11026a578a9307610bbc39d3c55be7943f"
+source = "git+https://github.com/tauri-apps/tauri?branch=feat%2Ftruly-portable-appimage#f0511be705661dba2e505d7a86f513f5b4dbe240"
 dependencies = [
  "anyhow",
  "cargo_toml",
@@ -5867,8 +5865,7 @@ dependencies = [
 [[package]]
 name = "tauri-codegen"
 version = "2.4.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1ab3a62cf2e6253936a8b267c2e95839674e7439f104fa96ad0025e149d54d8a"
+source = "git+https://github.com/tauri-apps/tauri?branch=feat%2Ftruly-portable-appimage#f0511be705661dba2e505d7a86f513f5b4dbe240"
 dependencies = [
  "base64 0.22.1",
  "brotli",
@@ -5894,8 +5891,7 @@ dependencies = [
 [[package]]
 name = "tauri-macros"
 version = "2.4.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4368ea8094e7045217edb690f493b55b30caf9f3e61f79b4c24b6db91f07995e"
+source = "git+https://github.com/tauri-apps/tauri?branch=feat%2Ftruly-portable-appimage#f0511be705661dba2e505d7a86f513f5b4dbe240"
 dependencies = [
  "heck 0.5.0",
  "proc-macro2",
@@ -6147,8 +6143,7 @@ dependencies = [
 [[package]]
 name = "tauri-runtime"
 version = "2.8.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d4cfc9ad45b487d3fded5a4731a567872a4812e9552e3964161b08edabf93846"
+source = "git+https://github.com/tauri-apps/tauri?branch=feat%2Ftruly-portable-appimage#f0511be705661dba2e505d7a86f513f5b4dbe240"
 dependencies = [
  "cookie",
  "dpi",
@@ -6172,8 +6167,7 @@ dependencies = [
 [[package]]
 name = "tauri-runtime-wry"
 version = "2.8.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c1fe9d48bd122ff002064e88cfcd7027090d789c4302714e68fcccba0f4b7807"
+source = "git+https://github.com/tauri-apps/tauri?branch=feat%2Ftruly-portable-appimage#f0511be705661dba2e505d7a86f513f5b4dbe240"
 dependencies = [
  "gtk",
  "http",
@@ -6199,8 +6193,7 @@ dependencies = [
 [[package]]
 name = "tauri-utils"
 version = "2.7.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "41a3852fdf9a4f8fbeaa63dc3e9a85284dd6ef7200751f0bd66ceee30c93f212"
+source = "git+https://github.com/tauri-apps/tauri?branch=feat%2Ftruly-portable-appimage#f0511be705661dba2e505d7a86f513f5b4dbe240"
 dependencies = [
  "anyhow",
  "brotli",
