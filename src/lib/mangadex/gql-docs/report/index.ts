@@ -96,6 +96,7 @@ export function createCurrentUserReportsQuery(params?: ListReportParams) {
 				}
 			}
 		},
+		staleTime: 1000 * 60,
 		networkMode: "online",
 	}), () => mangadexQueryClient)
 }
