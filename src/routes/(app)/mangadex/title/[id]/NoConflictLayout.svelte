@@ -57,6 +57,7 @@
 	import { isLogged } from "@mangadex/utils/auth";
 	import { createForumThread } from "@mangadex/stores/create-forum-thread";
 	import { ForumThreadType } from "@mangadex/gql/graphql";
+	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
 
 	type TopMangaStatisticsStoreData = TopMangaStatistics & {
 		threadUrl?: string;
@@ -274,6 +275,8 @@
 </script>
 
 <svelte:window onfocus={refetchReadingFollowingStatus} />
+
+<AppTitle title={`${layoutData.title ?? ""} | MangaDex`} />
 
 <MangaPageTopInfo
 	bind:id={layoutData.id}
