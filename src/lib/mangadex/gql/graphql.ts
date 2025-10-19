@@ -6213,6 +6213,13 @@ export type MangasReadMarkersGroupedQuery = {
 	};
 };
 
+export type GetSidebarDirQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetSidebarDirQuery = {
+	__typename?: "Query";
+	userOption: { __typename?: "UserOptionQueries"; getSidebarDirection: Direction };
+};
+
 export type RtlSidebarSubSubscriptionVariables = Exact<{ [key: string]: never }>;
 
 export type RtlSidebarSubSubscription = {
@@ -19912,6 +19919,34 @@ export const MangasReadMarkersGroupedDocument = {
 		}
 	]
 } as unknown as DocumentNode<MangasReadMarkersGroupedQuery, MangasReadMarkersGroupedQueryVariables>;
+export const GetSidebarDirDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "getSidebarDir" },
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "userOption" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "getSidebarDirection" }
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<GetSidebarDirQuery, GetSidebarDirQueryVariables>;
 export const RtlSidebarSubDocument = {
 	kind: "Document",
 	definitions: [
