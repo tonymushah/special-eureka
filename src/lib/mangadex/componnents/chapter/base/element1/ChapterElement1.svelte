@@ -119,28 +119,24 @@
 	let readMarkers = readMarkersLoader();
 	let removeMutation = removeMutationLoader();
 
-	const downloading = isChapterDownloading({
+	const downloading_ = isChapterDownloading({
 		id
 	});
-	const failed = hasChapterDownloadingFailed({
+	const failed_ = hasChapterDownloadingFailed({
 		id
 	});
-	const downloaded = isChapterDownloaded({
+	const downloaded_ = isChapterDownloaded({
 		id
 	});
 	const handle_download_event = debounce(async function () {
-		if ($downloading) {
+		if ($downloading_) {
 			await cancelChapterDownload(id);
 		} else {
 			await downloadChapter(id);
 		}
 	});
-	const showTrashButton = derived(
-		[failed, downloaded, downloading],
-		([$failed, $downloaded, $downloading]) => {
-			return ($failed || $downloaded) && !$downloading;
-		}
-	);
+	let [failed, downloaded, downloading] = $derived([$failed_, $downloaded_, $downloading_]);
+	let showTrashButton = $derived((failed || downloaded) && !downloading);
 	setContextMenuContext(() => {
 		return chapterElementContextMenuItems({
 			id,
@@ -201,7 +197,7 @@
 			>
 				<DownloadStateComp {id} />
 			</div>
-			{#if $showTrashButton}
+			{#if showTrashButton}
 				<div
 					class="buttons remove"
 					aria-disabled={removeMutation.isPending}
