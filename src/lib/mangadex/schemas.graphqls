@@ -2231,7 +2231,7 @@ type ReportMutations {
 
 type ReportQueries {
 	list(params: ListReportParams! = {limit: null, offset: null, category: null, objectId: null, reasonId: null, status: null, order: null}): UserReportResults!
-	listByCaterogy(params: ListReasonsByCategory!): ReportReasonResults!
+	listReasonsByCaterogy(params: ListReasonsByCategory!): ReportReasonResults!
 }
 
 type ReportReason {

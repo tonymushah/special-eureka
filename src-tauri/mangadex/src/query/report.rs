@@ -37,7 +37,7 @@ impl ReportQueries {
         let res = params.send(&client).await?;
         Ok(res.body.into())
     }
-    pub async fn list_by_caterogy(
+    pub async fn list_reasons_by_caterogy(
         &self,
         ctx: &Context<'_>,
         params: ListReasonsByCategory,
