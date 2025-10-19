@@ -44,10 +44,6 @@ impl ReportQueries {
     ) -> Result<ReportReasonResults> {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
-        ctx.get_app_handle::<tauri::Wry>()?
-            .get_specific_rate_limit()?
-            .get_report()
-            .await;
         Ok(params.send(&client).await?.into())
     }
 }
