@@ -4,6 +4,7 @@
 	import SubMenuItem from "../base/SubMenuItem.svelte";
 	import { route } from "$lib/ROUTES";
 	import { isLogged } from "@mangadex/utils/auth";
+	import { dev } from "$app/environment";
 </script>
 
 <SubMenu label="Search">
@@ -13,7 +14,7 @@
 	<SubMenuItem label="Titles" href={route("/mangadex/titles")} />
 	<SubMenuItem label="Authors" href={route("/mangadex/author")} />
 	<SubMenuItem label="Groups" href={route("/mangadex/group")} />
-	{#if $isLogged}
+	{#if $isLogged || dev}
 		<SubMenuItem label="Users" href={route("/mangadex/user")} />
 	{/if}
 </SubMenu>
