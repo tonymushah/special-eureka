@@ -3,6 +3,7 @@
 	import { GridIcon, TableIcon } from "svelte-feather-icons";
 	import { ReportStatusMode, type ReportData } from "../types";
 	import Table from "./Table.svelte";
+	import MidToneLine from "@mangadex/componnents/theme/lines/MidToneLine.svelte";
 
 	let style: ReportStatusMode = $state(ReportStatusMode.Card);
 	const size = "20";
@@ -40,6 +41,8 @@
 	</div>
 </div>
 
+<MidToneLine />
+
 <div class="content">
 	{#if style == ReportStatusMode.Table}
 		<Table {data} />
@@ -64,8 +67,5 @@
 		flex-direction: row;
 		justify-content: space-between;
 		align-items: center;
-	}
-	.content {
-		margin-top: 12px;
 	}
 </style>

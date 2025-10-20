@@ -1,6 +1,5 @@
 <script lang="ts">
 	import PageTitle from "@mangadex/componnents/pages/PageTitle.svelte";
-	import MidToneLine from "@mangadex/componnents/theme/lines/MidToneLine.svelte";
 	import type { Snippet } from "svelte";
 	interface Props {
 		children?: Snippet;
@@ -10,7 +9,7 @@
 
 <div class="layout">
 	<PageTitle title="Your reports" withReturn />
-	<MidToneLine />
+
 	{@render children?.()}
 </div>
 
