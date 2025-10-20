@@ -4,20 +4,24 @@
 	import HasNext from "@mangadex/componnents/search/content/HasNext.svelte";
 	import NothingToShow from "@mangadex/componnents/search/content/NothingToShow.svelte";
 	import { createCurrentUserReportsQuery } from "@mangadex/gql-docs/report";
-	import type {
-		InputMaybe,
-		ReportCategory,
-		ReportSortOrder,
-		ReportStatus
+	import {
+		ReportStatus,
+		type InputMaybe,
+		type ReportAttributes,
+		type ReportCategory,
+		type ReportSortOrder
 	} from "@mangadex/gql/graphql";
 	import pageLimit from "@mangadex/stores/page-limit";
-	import { debounce } from "lodash";
+	import { debounce, random, range } from "lodash";
 	import { onDestroy } from "svelte";
 	import CategoryFilter from "./_filter/CategoryFilter.svelte";
 	import ObjectId from "./_filter/ObjectId.svelte";
 	import SortOrder from "./_filter/SortOrder.svelte";
 	import Status from "./_filter/Status.svelte";
 	import Reason from "./_filter/Reason.svelte";
+	import type { ReportData } from "./types";
+	import Content from "./_content/Content.svelte";
+	import { v4, v5, v7 } from "uuid";
 
 	let category: InputMaybe<ReportCategory> = $state();
 	let objectId: InputMaybe<string> = $state();
@@ -65,6 +69,37 @@
 	onDestroy(() => {
 		observer.disconnect();
 	});
+	/*let data = $derived.by(() => {
+		let map = new Map<string, ReportAttributes>();
+		if (reports.isSuccess) {
+			reports.data.pages
+				.flatMap((d) => d.data)
+				.forEach((e) => {
+					map.set(e.id, e.attributes);
+				});
+			return map
+				.entries()
+				.map(
+					([id, att]) =>
+						({
+							id,
+							...att
+						}) satisfies ReportData
+				)
+				.toArray();
+		}
+		return [];
+	});*/
+	const data: ReportData[] = range(0, 10).map(() => {
+		return {
+			id: v4(),
+			details:
+				"Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores expedita officia suscipit odit accusantium natus in perspiciatis ex doloribus ipsum cupiditate ad corporis aut, praesentium nulla, sit culpa. Aliquam, ipsam.",
+			objectId: v7(),
+			status: random(1, 3) == 2 ? ReportStatus.Waiting : ReportStatus.Accepted,
+			createdAt: new Date()
+		};
+	});
 </script>
 
 <div class="filters">
@@ -81,7 +116,9 @@
 		error={reports.error}
 		retry={() => reports.refetch()}
 	/>
-{:else if reports.isSuccess}{/if}
+{:else if data.length > 0}
+	<Content {data} />
+{/if}
 
 <div class="observer-trigger" bind:this={to_obserce_bind}>
 	{#if isFetching}
