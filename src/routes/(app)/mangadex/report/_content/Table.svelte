@@ -51,7 +51,7 @@
 			cell(props) {
 				return new Date(props.getValue());
 			},
-			header: "Created Since"
+			header: "Created"
 		})
 	];
 	let table = $derived(

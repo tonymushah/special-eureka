@@ -4,6 +4,7 @@
 	import { ReportStatusMode, type ReportData } from "../types";
 	import Table from "./Table.svelte";
 	import MidToneLine from "@mangadex/componnents/theme/lines/MidToneLine.svelte";
+	import Cards from "./Cards.svelte";
 
 	let style: ReportStatusMode = $state(ReportStatusMode.Card);
 	const size = "20";
@@ -46,6 +47,8 @@
 <div class="content">
 	{#if style == ReportStatusMode.Table}
 		<Table {data} />
+	{:else if style}
+		<Cards {data} />
 	{/if}
 </div>
 

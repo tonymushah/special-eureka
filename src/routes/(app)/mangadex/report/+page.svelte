@@ -22,6 +22,8 @@
 	import type { ReportData } from "./types";
 	import Content from "./_content/Content.svelte";
 	import { v4, v5, v7 } from "uuid";
+	import { dev } from "$app/environment";
+	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 
 	let category: InputMaybe<ReportCategory> = $state();
 	let objectId: InputMaybe<string> = $state();
@@ -69,7 +71,21 @@
 	onDestroy(() => {
 		observer.disconnect();
 	});
-	/*let data = $derived.by(() => {
+	let allowDevData = $state(false);
+	let data = $derived.by(() => {
+		if (allowDevData) {
+			const data: ReportData[] = range(0, 10).map(() => {
+				return {
+					id: v4(),
+					details:
+						"Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores expedita officia suscipit odit accusantium natus in perspiciatis ex doloribus ipsum cupiditate ad corporis aut, praesentium nulla, sit culpa. Aliquam, ipsam.",
+					objectId: v7(),
+					status: random(1, 3) == 2 ? ReportStatus.Waiting : ReportStatus.Accepted,
+					createdAt: new Date()
+				};
+			});
+			return data;
+		}
 		let map = new Map<string, ReportAttributes>();
 		if (reports.isSuccess) {
 			reports.data.pages
@@ -89,16 +105,6 @@
 				.toArray();
 		}
 		return [];
-	});*/
-	const data: ReportData[] = range(0, 10).map(() => {
-		return {
-			id: v4(),
-			details:
-				"Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores expedita officia suscipit odit accusantium natus in perspiciatis ex doloribus ipsum cupiditate ad corporis aut, praesentium nulla, sit culpa. Aliquam, ipsam.",
-			objectId: v7(),
-			status: random(1, 3) == 2 ? ReportStatus.Waiting : ReportStatus.Accepted,
-			createdAt: new Date()
-		};
 	});
 </script>
 
@@ -108,9 +114,23 @@
 	<Reason bind:reasonId {category} />
 	<SortOrder bind:order />
 	<Status bind:status />
+	{#if dev}
+		<ButtonAccent
+			onclick={() => {
+				allowDevData = !allowDevData;
+			}}
+			>{#if allowDevData}
+				Dev data
+			{:else}
+				Real data
+			{/if}</ButtonAccent
+		>
+	{/if}
 </div>
 
-{#if reports.isError}
+{#if allowDevData && data.length > 0}
+	<Content {data} />
+{:else if reports.isError}
 	<ErrorComponent
 		label="Error on loading your reports"
 		error={reports.error}
