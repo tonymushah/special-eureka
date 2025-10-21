@@ -118,7 +118,7 @@
 						updateHistory: false
 					},
 					{
-						onSuccess(data, variables, context) {
+						onSuccess() {
 							if (dev) {
 								addToast({
 									data: {
@@ -127,7 +127,7 @@
 								});
 							}
 						},
-						onError(error, variables, context) {
+						onError(error) {
 							addErrorToast("Cannot mark chapter as read", error);
 						}
 					}
@@ -139,12 +139,12 @@
 		}
 	});
 	const related = initRelatedChapters(writable([]));
-	const lsImgWidth = initLongStripImagesWidthContext(longstripImageWidthWritable);
+	initLongStripImagesWidthContext(longstripImageWidthWritable);
 	const pinnedDerived = derived(
 		drawerModeStore,
 		(drawerModeStore) => drawerModeStore == DrawerMode.Pinned
 	);
-	const fixed = initIsDrawerFixedWritable({
+	initIsDrawerFixedWritable({
 		subscribe(run, invalidate) {
 			return pinnedDerived.subscribe(run, invalidate);
 		},
@@ -157,11 +157,9 @@
 			);
 		}
 	});
-	const opened = initIsDrawerOpenWritable(writable(false));
+	initIsDrawerOpenWritable(writable(false));
 
-	const currentChapterData = initCurrentChapterData(
-		writable(layoutDataToCurrentChapterData(data))
-	);
+	const currentChapterData = initCurrentChapterData(writable(layoutDataToCurrentChapterData(data)));
 
 	const dataStore = toStore(() => data);
 	const readingModeCur = derived([readingModeWritable, dataStore], ([inner, data]) => {
@@ -218,13 +216,12 @@
 				if (res.error) {
 					throw res.error;
 				}
-				const rel = res.data?.manga.aggregate.default.volumes.flatMap(
-					({ volume, chapters }) =>
-						chapters.map<RelatedChapter>(({ chapter, ids }) => ({
-							volume,
-							chapter,
-							id: ids.includes(data.data.id) ? data.data.id : ids[0]
-						}))
+				const rel = res.data?.manga.aggregate.default.volumes.flatMap(({ volume, chapters }) =>
+					chapters.map<RelatedChapter>(({ chapter, ids }) => ({
+						volume,
+						chapter,
+						id: ids.includes(data.data.id) ? data.data.id : ids[0]
+					}))
 				);
 				if (rel) {
 					related.set(rel);
