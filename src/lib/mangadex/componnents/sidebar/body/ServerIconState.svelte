@@ -71,7 +71,7 @@
 	class:isLoading
 	onclick={async () => {
 		if (!isLoading) {
-			if ($isMounted) {
+			if (!$isMounted) {
 				await mount.mutateAsync();
 			} else {
 				await unmount.mutateAsync();
