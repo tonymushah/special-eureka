@@ -10,6 +10,10 @@
 	import defaultBehavior from "@mangadex/componnents/sidebar/states/actions";
 	import { isSidebarRtl } from "@mangadex/componnents/sidebar/states/isRtl";
 	import { onDestroy, onMount } from "svelte";
+	import type { PageData } from "./$types";
+	import ReportDialog from "@mangadex/componnents/report/dialog/ReportDialog.svelte";
+	import { ReportCategory } from "@mangadex/gql/graphql";
+	import { addListenerToReportChapterEventTarget } from "@mangadex/componnents/chapter/page/contexts/previousNextEventTarget";
 
 	const isFixed = isDrawerFixed();
 	const open = isDrawerOpenWritable();
@@ -19,7 +23,19 @@
 		defaultBehavior();
 		unregister();
 	});
+	interface Props {
+		data: PageData;
+	}
+	let { data }: Props = $props();
+	let openReportDialog = $state(false);
+	onMount(() =>
+		addListenerToReportChapterEventTarget(() => {
+			openReportDialog = true;
+		})
+	);
 </script>
+
+<ReportDialog bind:open={openReportDialog} objectId={data.id} category={ReportCategory.Chapter} />
 
 <!--
 <ChapterPagesTest data={$chap} />
