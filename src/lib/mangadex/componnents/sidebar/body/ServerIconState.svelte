@@ -1,66 +1,65 @@
 <script lang="ts">
+	// TODO migrate to mutations
 	import { isMounted } from "@mangadex/stores/offlineIsMounted";
-	import { getMangaDexThemeContext } from "@mangadex/utils/contexts";
 	import { mount as _mount, unmount as _unmount } from "@mangadex/utils/offline_app_state";
 	import { getContextClient } from "@urql/svelte";
-	import { onDestroy } from "svelte";
 	import { ServerIcon } from "svelte-feather-icons";
-	import { isSidebarRtl } from "../states/isRtl";
 	import { addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
+	import { createMutation } from "@tanstack/svelte-query";
 
 	const client = getContextClient();
-	const theme = getMangaDexThemeContext();
 
-	let isLoading = $state(false);
-	const mount = async () => {
-		if (!isLoading) {
-			isLoading = true;
-			const res = await _mount(client);
-			const error = res.error;
-			if (error) {
-				addToast({
-					data: {
-						title: "Error on loading offline data",
-						description: error.message,
-						variant: "danger"
-					}
-				});
-			} else {
-				addToast({
-					data: {
-						title: "Offline data loaded",
-						variant: "green"
-					}
-				});
-			}
+	let mount = createMutation(() => ({
+		mutationKey: ["sidebar", "offline", "mount"],
+		async mutationFn() {
+			await _mount(client);
+		},
+		networkMode: "always",
+		onError(error) {
+			addToast({
+				data: {
+					title: "Error on loading offline data",
+					description: error.message,
+					variant: "danger"
+				}
+			});
+		},
+		onSuccess() {
+			addToast({
+				data: {
+					title: "Offline data loaded",
+					variant: "green"
+				}
+			});
+		}
+	}));
 
-			isLoading = false;
+	let unmount = createMutation(() => ({
+		mutationKey: ["sidebar", "offline", "unmount"],
+		async mutationFn() {
+			await _unmount(client);
+		},
+		networkMode: "always",
+		onError(error) {
+			addToast({
+				data: {
+					title: "Error on unmounting offline data",
+					description: error.message,
+					variant: "danger"
+				}
+			});
+		},
+		onSuccess() {
+			addToast({
+				data: {
+					title: "Offline data unmounted",
+					variant: "green"
+				}
+			});
 		}
-	};
-	const unmount = async () => {
-		if (!isLoading) {
-			isLoading = true;
-			const res = await _unmount(client);
-			const error = res.error;
-			if (error) {
-				addToast({
-					data: {
-						title: "Error on unmounting offline data",
-						description: error.message,
-						variant: "danger"
-					}
-				});
-			} else {
-				addToast({
-					data: {
-						title: "Offline data unmounted",
-						variant: "green"
-					}
-				});
-			}
-			isLoading = false;
-		}
-	};
+	}));
+
+	let isLoading = $derived(mount.isPending);
 	let isEnabled = $derived($isMounted);
 	let isDisabled = $derived(!isEnabled);
 </script>
@@ -73,9 +72,9 @@
 	onclick={async () => {
 		if (!isLoading) {
 			if ($isMounted) {
-				await unmount();
+				await mount.mutateAsync();
 			} else {
-				await mount();
+				await unmount.mutateAsync();
 			}
 		}
 	}}
