@@ -5,9 +5,13 @@
 	import { writeText } from "@tauri-apps/plugin-clipboard-manager";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import { openUrl as shellOpen } from "@tauri-apps/plugin-opener";
-	import { ExternalLinkIcon } from "svelte-feather-icons";
+	import { ExternalLinkIcon, FlagIcon } from "svelte-feather-icons";
 	import AuthorLinkButtons from "./AuthorLinkButtons.svelte";
 	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
+	import { isLogged } from "@mangadex/utils/auth";
+	import { dev } from "$app/environment";
+	import ReportDialog from "@mangadex/componnents/report/dialog/ReportDialog.svelte";
+	import { ReportCategory } from "@mangadex/gql/graphql";
 
 	interface Props {
 		data: LayoutData;
@@ -16,9 +20,12 @@
 
 	let { data, children }: Props = $props();
 	let description = $derived(get_value_from_title_and_random_if_undefined(data.biography, "en"));
+	let openReportDialog = $state(false);
 </script>
 
 <AppTitle title={`${data.name} | MangaDex`} />
+
+<ReportDialog bind:open={openReportDialog} objectId={data.id} category={ReportCategory.Author} />
 
 <UsersPageBase title={data.name} {description}>
 	{#snippet _left()}
@@ -30,6 +37,15 @@
 				}}
 			>
 				<p><ExternalLinkIcon /> Open in browser</p>
+			</ButtonAccent>
+			<ButtonAccent
+				isBase
+				disabled={!$isLogged || dev}
+				onclick={() => {
+					openReportDialog = true;
+				}}
+			>
+				<p><FlagIcon /> Report</p>
 			</ButtonAccent>
 			<AuthorLinkButtons links={data.links} />
 		</div>
