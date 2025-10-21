@@ -1,14 +1,11 @@
 <script lang="ts">
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
-	import type { InputMaybe, ReportCategory } from "@mangadex/gql/graphql";
+	import { ReportCategory, type InputMaybe } from "@mangadex/gql/graphql";
 	import { createDialog, melt } from "@melt-ui/svelte";
 	import { toStore } from "svelte/store";
 	import { XIcon as CloseIcon } from "svelte-feather-icons";
 	import { fade } from "svelte/transition";
-	import {
-		createReportReasonListQuery,
-		createSendReportMutation
-	} from "@mangadex/gql-docs/report";
+	import { createReportReasonListQuery, createSendReportMutation } from "@mangadex/gql-docs/report";
 	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
 	import PrimaryButton from "@mangadex/componnents/theme/buttons/PrimaryButton.svelte";
 	import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
@@ -20,7 +17,7 @@
 	}
 	let { category, open: propsOpen = $bindable(), objectId }: Props = $props();
 	const {
-		elements: { trigger, portalled, overlay, content, title, description, close },
+		elements: { portalled, overlay, content, title, close },
 		states: { open }
 	} = createDialog({
 		portal: "#mangadex-scroll-container",
@@ -61,7 +58,19 @@
 			<div class="content">
 				<div class="top">
 					<div class="title-desc">
-						<h2 use:melt={$title}>Report</h2>
+						<h2 use:melt={$title}>
+							Report {#if category == ReportCategory.Manga}
+								Title
+							{:else if category == ReportCategory.Chapter}
+								Chapter
+							{:else if category == ReportCategory.Author}
+								Author (or Artist)
+							{:else if category == ReportCategory.ScanlationGroup}
+								ScanlationGroup
+							{:else if category == ReportCategory.User}
+								User
+							{/if}
+						</h2>
 					</div>
 					<div class="close">
 						<ButtonAccent meltElement={close}>
@@ -96,12 +105,18 @@
 							{/if}
 						</select>
 					</section>
-					<section>
-						<label for="details">Details</label>
+					<section class="details">
+						<label for="details">
+							<span class:detailRequired>Details:</span>
+							{#if detailRequired}
+								(required)
+							{/if}
+						</label>
 						<textarea
 							name=""
 							id="details"
 							disabled={!detailRequired || mutation.isPending}
+							required={detailRequired}
 							bind:value={details}
 						>
 						</textarea>
@@ -117,7 +132,7 @@
 										reason: reason?.id
 									},
 									{
-										onSuccess(data, variables, onMutateResult, context) {
+										onSuccess() {
 											propsOpen = false;
 											addToast({
 												data: {
@@ -125,7 +140,7 @@
 												}
 											});
 										},
-										onError(error, variables, onMutateResult, context) {
+										onError(error) {
 											addErrorToast("cannot send report", error);
 										}
 									}
@@ -134,7 +149,7 @@
 							isBase
 							disabled={mutation.isPending}
 						>
-							<p>Send</p>
+							<p class="send">Send</p>
 						</PrimaryButton>
 					</section>
 				</div>
@@ -144,6 +159,21 @@
 {/if}
 
 <style lang="scss">
+	.details {
+		display: grid;
+		grid-template-rows: 0fr auto;
+		height: 100%;
+	}
+	.buttons {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	.send {
+		margin: 8px 24px;
+		font-weight: 800;
+		font-size: 18px;
+	}
 	.icon {
 		display: flex;
 		align-items: center;
@@ -199,5 +229,43 @@
 				margin: 0px;
 			}
 		}
+	}
+	.body {
+		display: grid;
+		grid-template-rows: 0fr 0fr 1fr 0fr 61px;
+		height: -webkit-fill-available;
+		gap: 12px;
+		margin: 0px 12px;
+	}
+	span.detailRequired {
+		text-decoration: underline;
+	}
+	textarea {
+		transition: background-color 0.25s ease-in-out;
+		color: var(--text-color);
+		background-color: var(--accent);
+		box-shadow: 0px 0px 2px var(--accent);
+		font-family: var(--fonts);
+		font-size: var(--font-size);
+		border-style: solid;
+		border-radius: 0.25em;
+		padding: 5px;
+		border-color: var(--mid-tone);
+	}
+	textarea:hover {
+		background-color: var(--accent-hover);
+	}
+	textarea:focus {
+		background-color: var(--accent-active);
+		border-style: dashed;
+	}
+	textarea:focus-visible {
+		//border-style: dashed;
+		outline: none;
+	}
+	textarea:-internal-autofill-selected {
+		appearance: none;
+		background-color: var(--accent-l1) !important;
+		color: var(--text-color) !important;
 	}
 </style>
