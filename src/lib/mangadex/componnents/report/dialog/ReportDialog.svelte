@@ -147,7 +147,10 @@
 								);
 							}}
 							isBase
-							disabled={mutation.isPending}
+							disabled={mutation.isPending ||
+								reason == undefined ||
+								reason == null ||
+								(detailRequired && (details?.length ?? 0) == 0)}
 						>
 							<p class="send">Send</p>
 						</PrimaryButton>
