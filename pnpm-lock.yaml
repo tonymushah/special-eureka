@@ -100,7 +100,7 @@ importers:
         version: 2.8.0(svelte@5.41.1)
       swiper:
         specifier: ^12.0.2
-        version: 12.0.2
+        version: 12.0.3
       timeago.js:
         specifier: ^4.0.2
         version: 4.0.2
@@ -3933,8 +3933,8 @@ packages:
   swap-case@2.0.2:
     resolution: {integrity: sha512-kc6S2YS/2yXbtkSMunBtKdah4VFETZ8Oh6ONSmSd9bRxhqTrtARUCBUiWXH3xVPpvR7tz2CSnkuXVE42EcGnMw==}
 
-  swiper@12.0.2:
-    resolution: {integrity: sha512-y8F6fDGXmTVVgwqJj6I00l4FdGuhpFJn0U/9Ucn1MwWOw3NdLV8aH88pZOjyhBgU/6PyBlUx+JuAQ5KMWz906Q==}
+  swiper@12.0.3:
+    resolution: {integrity: sha512-BHd6U1VPEIksrXlyXjMmRWO0onmdNPaTAFduzqR3pgjvi7KfmUCAm/0cj49u2D7B0zNjMw02TSeXfinC1hDCXg==}
     engines: {node: '>= 4.7.0'}
 
   sync-fetch@0.6.0-2:
@@ -8166,7 +8166,7 @@ snapshots:
     dependencies:
       tslib: 2.8.1
 
-  swiper@12.0.2: {}
+  swiper@12.0.3: {}
 
   sync-fetch@0.6.0-2:
     dependencies:
