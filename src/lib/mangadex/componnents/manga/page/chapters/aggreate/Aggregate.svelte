@@ -10,7 +10,7 @@
 	import type { UnlistenFn } from "@tauri-apps/api/event";
 	import { openUrl as open } from "@tauri-apps/plugin-opener";
 	import { getContextClient } from "@urql/svelte";
-	import { debounce } from "lodash";
+	import { debounce, delay } from "lodash";
 	import { onDestroy, onMount } from "svelte";
 	import { writable } from "svelte/store";
 	import { fade } from "svelte/transition";
@@ -96,25 +96,32 @@
 		unlistens.push(
 			$effect.root(() => {
 				$effect(() => {
-					let ids: string[] = query?.data?.manga.aggregate.chunked.flatMap((d) => d.ids) ?? [];
-					if (ids.length > 0)
-						fetchChapters(ids, !hasConflicts(__res.conflicts))
-							.then(async (cs) => {
-								if (cs) chaptersStore.addByBatch(cs);
-								const comments = await fetchComments(ids);
-								comments.forEach((c) => {
-									threadUrls.set(c.id, c.stats.threadUrl);
-								});
-								chaptersStore.setComments(
-									comments.map((c) => ({
-										id: c.id,
-										comments: c.stats.comments
-									}))
-								);
-							})
-							.catch((e) => {
-								console.error(e);
-							});
+					let ids: string[] = query?.data?.manga.aggregate.chunked.at(selectedIndex)?.ids ?? [];
+					const task = delay(() => {
+						if (ids.length > 0)
+							if (!chaptersStore.isPresents(ids)) {
+								fetchChapters(ids, !hasConflicts(__res.conflicts))
+									.then(async (cs) => {
+										if (cs) chaptersStore.addByBatch(cs);
+										const comments = await fetchComments(ids);
+										comments.forEach((c) => {
+											threadUrls.set(c.id, c.stats.threadUrl);
+										});
+										chaptersStore.setComments(
+											comments.map((c) => ({
+												id: c.id,
+												comments: c.stats.comments
+											}))
+										);
+									})
+									.catch((e) => {
+										console.error(e);
+									});
+							}
+					}, 100);
+					return () => {
+						clearTimeout(task);
+					};
 				});
 			})
 		);
