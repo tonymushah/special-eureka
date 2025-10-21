@@ -1,7 +1,6 @@
 import type { Props as ChapterElement1Props } from "@mangadex/componnents/chapter/base/element1/ChapterElement1.svelte";
-import type { ChapterDownloadState } from "@mangadex/utils/types/DownloadState";
-import { setContext, type ComponentProps, getContext } from "svelte";
-import { writable, type Readable } from "svelte/store";
+import { getContext, setContext } from "svelte";
+import { get, writable, type Readable } from "svelte/store";
 
 type Chapter = ChapterElement1Props;
 
@@ -20,6 +19,8 @@ export type ChapterStores = Readable<ChapterMap> & {
 	addByBatch: (value: Chapter[]) => void;
 	setComment: (id: string, comments: number) => void;
 	setComments: (input: SetCommentsEntry[]) => void;
+	isPresents: (ids: string[]) => boolean;
+	isPresent: (id: string) => boolean;
 };
 
 export default function chapterStores(): ChapterStores {
@@ -77,6 +78,14 @@ export default function chapterStores(): ChapterStores {
 				});
 				return u;
 			});
+		},
+		isPresents(ids) {
+			const inner = get(store);
+			return ids.every((id) => inner.has(id));
+		},
+		isPresent(id) {
+			const inner = get(store);
+			return inner.has(id);
 		}
 	};
 }
