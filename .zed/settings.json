@@ -9,11 +9,9 @@
 		}
 	},
 	"file_types": {
-		"JSONC": [
-			"*.json5"
-		]
+		"JSONC": ["*.json5"]
 	},
-	"format_on_save": "language_server",
+	"format_on_save": "on",
 	"languages": {
 		"TypeScript": {
 			"code_actions_on_format": {

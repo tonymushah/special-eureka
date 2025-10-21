@@ -2900,14 +2900,14 @@ export type ReportMutationsCreateArgs = {
 export type ReportQueries = {
 	__typename?: "ReportQueries";
 	list: UserReportResults;
-	listByCaterogy: ReportReasonResults;
+	listReasonsByCaterogy: ReportReasonResults;
 };
 
 export type ReportQueriesListArgs = {
 	params?: ListReportParams;
 };
 
-export type ReportQueriesListByCaterogyArgs = {
+export type ReportQueriesListReasonsByCaterogyArgs = {
 	params: ListReasonsByCategory;
 };
 
@@ -6211,6 +6211,77 @@ export type MangasReadMarkersGroupedQuery = {
 			chapters: Array<any>;
 		}>;
 	};
+};
+
+export type CurrentUserReportsQueryVariables = Exact<{
+	params?: InputMaybe<ListReportParams>;
+}>;
+
+export type CurrentUserReportsQuery = {
+	__typename?: "Query";
+	report: {
+		__typename?: "ReportQueries";
+		list: {
+			__typename?: "UserReportResults";
+			limit: number;
+			offset: number;
+			total: number;
+			data: Array<{
+				__typename?: "UserReport";
+				id: any;
+				attributes: {
+					__typename?: "ReportAttributes";
+					details: string;
+					objectId: string;
+					status: ReportStatus;
+					createdAt: any;
+				};
+			}>;
+		};
+	};
+};
+
+export type CurrentUserReportReasonQueryVariables = Exact<{
+	category: ReportCategory;
+}>;
+
+export type CurrentUserReportReasonQuery = {
+	__typename?: "Query";
+	report: {
+		__typename?: "ReportQueries";
+		listReasonsByCaterogy: {
+			__typename?: "ReportReasonResults";
+			limit: number;
+			offset: number;
+			total: number;
+			data: Array<{
+				__typename?: "ReportReason";
+				id: any;
+				attributes: {
+					__typename?: "ReportReasonAttributes";
+					reason: any;
+					category: ReportCategory;
+					detailsRequired: boolean;
+				};
+			}>;
+		};
+	};
+};
+
+export type SendReportMutationVariables = Exact<{
+	params: CreateReportParam;
+}>;
+
+export type SendReportMutation = {
+	__typename?: "Mutation";
+	report: { __typename?: "ReportMutations"; create: boolean };
+};
+
+export type GetSidebarDirQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetSidebarDirQuery = {
+	__typename?: "Query";
+	userOption: { __typename?: "UserOptionQueries"; getSidebarDirection: Direction };
 };
 
 export type RtlSidebarSubSubscriptionVariables = Exact<{ [key: string]: never }>;
@@ -19912,6 +19983,323 @@ export const MangasReadMarkersGroupedDocument = {
 		}
 	]
 } as unknown as DocumentNode<MangasReadMarkersGroupedQuery, MangasReadMarkersGroupedQueryVariables>;
+export const CurrentUserReportsDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "currentUserReports" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "params" } },
+					type: { kind: "NamedType", name: { kind: "Name", value: "ListReportParams" } }
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "report" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "list" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "params" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "params" }
+											}
+										}
+									],
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "limit" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "offset" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "total" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "data" },
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "id" }
+														},
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "attributes"
+															},
+															selectionSet: {
+																kind: "SelectionSet",
+																selections: [
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "details"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "objectId"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "status"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "createdAt"
+																		}
+																	}
+																]
+															}
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<CurrentUserReportsQuery, CurrentUserReportsQueryVariables>;
+export const CurrentUserReportReasonDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "currentUserReportReason" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "category" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "ReportCategory" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "report" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "listReasonsByCaterogy" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "params" },
+											value: {
+												kind: "ObjectValue",
+												fields: [
+													{
+														kind: "ObjectField",
+														name: { kind: "Name", value: "category" },
+														value: {
+															kind: "Variable",
+															name: {
+																kind: "Name",
+																value: "category"
+															}
+														}
+													}
+												]
+											}
+										}
+									],
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "data" },
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "id" }
+														},
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "attributes"
+															},
+															selectionSet: {
+																kind: "SelectionSet",
+																selections: [
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "reason"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "category"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "detailsRequired"
+																		}
+																	}
+																]
+															}
+														}
+													]
+												}
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "limit" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "offset" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "total" }
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<CurrentUserReportReasonQuery, CurrentUserReportReasonQueryVariables>;
+export const SendReportDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "sendReport" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "params" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "NamedType",
+							name: { kind: "Name", value: "CreateReportParam" }
+						}
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "report" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "create" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "params" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "params" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<SendReportMutation, SendReportMutationVariables>;
+export const GetSidebarDirDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "getSidebarDir" },
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "userOption" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "getSidebarDirection" }
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<GetSidebarDirQuery, GetSidebarDirQueryVariables>;
 export const RtlSidebarSubDocument = {
 	kind: "Document",
 	definitions: [

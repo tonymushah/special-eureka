@@ -3,8 +3,6 @@
 	import MangaDexFlagIcon from "@mangadex/componnents/FlagIcon.svelte";
 	import TimeAgo from "@mangadex/componnents/TimeAgo.svelte";
 	import {
-		cancelDownloadMutation,
-		downloadMutation,
 		hasChapterDownloadingFailed,
 		isChapterDownloaded,
 		isChapterDownloading
@@ -131,20 +129,25 @@
 
 	/// TODO implement quality
 
-	const isDownloading = isChapterDownloading({
+	const isDownloading_ = isChapterDownloading({
 		id
 	});
 
-	const hasFailed = hasChapterDownloadingFailed({
+	const hasFailed_ = hasChapterDownloadingFailed({
 		id
 	});
 
-	const is_downloaded = isChapterDownloaded({
+	const is_downloaded_ = isChapterDownloaded({
 		id
 	});
+	let [isDownloading, hasFailed, is_downloaded] = $derived([
+		$isDownloading_,
+		$hasFailed_,
+		$is_downloaded_
+	]);
 
 	const handle_download_event = debounce(async function () {
-		if ($isDownloading) {
+		if (isDownloading) {
 			await cancelChapterDownload(id);
 		} else {
 			await downloadChapter(id);
@@ -184,11 +187,11 @@
 		}}
 		tabindex={0}
 	>
-		{#if $is_downloaded}
+		{#if is_downloaded}
 			<CheckIcon />
-		{:else if $isDownloading}
+		{:else if isDownloading}
 			<DownloadCloudIcon />
-		{:else if $hasFailed}
+		{:else if hasFailed}
 			<XIcon />
 		{:else}
 			<DownloadIcon />

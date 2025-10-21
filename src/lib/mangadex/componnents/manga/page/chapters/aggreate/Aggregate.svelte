@@ -96,8 +96,7 @@
 		unlistens.push(
 			$effect.root(() => {
 				$effect(() => {
-					const ids: string[] =
-						query?.data?.manga.aggregate.chunked.flatMap((d) => d.ids) ?? [];
+					let ids: string[] = query?.data?.manga.aggregate.chunked.flatMap((d) => d.ids) ?? [];
 					if (ids.length > 0)
 						fetchChapters(ids, !hasConflicts(__res.conflicts))
 							.then(async (cs) => {
@@ -128,9 +127,7 @@
 	onDestroy(() => {
 		unlistens.forEach((u) => u());
 	});
-	let selected = $derived(
-		$isReversed ? aggregateReverse[selectedIndex] : aggregate[selectedIndex]
-	);
+	let selected = $derived($isReversed ? aggregateReverse[selectedIndex] : aggregate[selectedIndex]);
 	/// Test if this work
 	onMount(() =>
 		defaultContentProfile.subscribe(() => {
@@ -144,9 +141,7 @@
 	}
 	const readMarkers = getContextReadChapterMarkers();
 	let unread = $derived.by(() => {
-		let chapters = new Set(
-			query.data?.manga.aggregate.chunked.flatMap((t) => t.ids as string[])
-		);
+		let chapters = new Set(query.data?.manga.aggregate.chunked.flatMap((t) => t.ids as string[]));
 
 		let readChapters = new Set(
 			$readMarkers
@@ -198,9 +193,7 @@
 									reads: hasUnread ? unread.values().toArray() : [],
 									unreads: hasUnread
 										? []
-										: (query.data?.manga.aggregate.chunked.flatMap(
-												(d) => d.ids as string[]
-											) ?? [])
+										: (query.data?.manga.aggregate.chunked.flatMap((d) => d.ids as string[]) ?? [])
 								},
 								{
 									onSuccess() {
@@ -253,17 +246,11 @@
 												},
 												{
 													onError(error) {
-														addErrorToast(
-															"Cannot create chapter theard",
-															error
-														);
+														addErrorToast("Cannot create chapter theard", error);
 													},
 													onSuccess(data) {
 														threadUrls.set(detail.id, data.forumUrl);
-														chaptersStore.setComment(
-															detail.id,
-															data.repliesCount
-														);
+														chaptersStore.setComment(detail.id, data.repliesCount);
 														open(data.forumUrl);
 													}
 												}

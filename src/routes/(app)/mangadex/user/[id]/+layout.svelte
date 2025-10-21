@@ -12,6 +12,9 @@
 	import { BookmarkIcon, ExternalLinkIcon, FlagIcon } from "svelte-feather-icons";
 	import type { LayoutData } from "./$types";
 	import NavTab from "./NavTab.svelte";
+	import { dev } from "$app/environment";
+	import ReportDialog from "@mangadex/componnents/report/dialog/ReportDialog.svelte";
+	import { ReportCategory } from "@mangadex/gql/graphql";
 
 	interface Props {
 		data: LayoutData;
@@ -21,7 +24,10 @@
 	let { data, children }: Props = $props();
 	const isFollowed = isFollowingUser(data.id);
 	let isFollowing = $derived($isFollowed);
+	let openReportDialog = $state(false);
 </script>
+
+<ReportDialog bind:open={openReportDialog} objectId={data.id} category={ReportCategory.User} />
 
 <UsersPageBase
 	title={data.username}
@@ -54,7 +60,13 @@
 			>
 				<p><ExternalLinkIcon /> Open in browser</p>
 			</ButtonAccent>
-			<ButtonAccent isBase>
+			<ButtonAccent
+				isBase
+				disabled={!$isLogged || dev}
+				onclick={() => {
+					openReportDialog = true;
+				}}
+			>
 				<p><FlagIcon />Report</p>
 			</ButtonAccent>
 		</div>

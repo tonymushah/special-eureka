@@ -136,6 +136,10 @@ type Documents = {
 	"\n\tquery mangaReadMarkers($id: UUID!) {\n\t\treadMarker {\n\t\t\tmangaReadMarkersByMangaId(mangaId: $id)\n\t\t}\n\t}\n": typeof types.MangaReadMarkersDocument;
 	"\n\tquery mangasReadMarkers($ids: [UUID!]!) {\n\t\treadMarker {\n\t\t\tmangaReadMarkers(mangaIds: $ids)\n\t\t}\n\t}\n": typeof types.MangasReadMarkersDocument;
 	"\n\tquery mangasReadMarkersGrouped($ids: [UUID!]!) {\n\t\treadMarker {\n\t\t\tmangaReadMarkersGrouped(mangaIds: $ids) {\n\t\t\t\tmangaId\n\t\t\t\tchapters\n\t\t\t}\n\t\t}\n\t}\n": typeof types.MangasReadMarkersGroupedDocument;
+	"\n\tquery currentUserReports($params: ListReportParams) {\n\t\treport {\n\t\t\tlist(params: $params) {\n\t\t\t\tlimit\n\t\t\t\toffset\n\t\t\t\ttotal\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\tdetails\n\t\t\t\t\t\tobjectId\n\t\t\t\t\t\tstatus\n\t\t\t\t\t\tcreatedAt\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.CurrentUserReportsDocument;
+	"\n\tquery currentUserReportReason($category: ReportCategory!) {\n\t\treport {\n\t\t\tlistReasonsByCaterogy(params:  {\n\t\t\t   category: $category\n\t\t\t}) {\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\treason\n\t\t\t\t\t\tcategory\n\t\t\t\t\t\tdetailsRequired\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t\tlimit\n\t\t\t\toffset\n\t\t\t\ttotal\n\t\t\t}\n\t\t}\n\t}\n": typeof types.CurrentUserReportReasonDocument;
+	"\n\tmutation sendReport($params: CreateReportParam!) {\n\t\treport {\n\t\t\tcreate(params: $params) \n\t\t}\n\t}\n": typeof types.SendReportDocument;
+	"\n\tquery getSidebarDir {\n\t\tuserOption {\n\t\t\tgetSidebarDirection\n\t\t}\n\t}\n": typeof types.GetSidebarDirDocument;
 	"\n\tsubscription rtlSidebarSub {\n\t\twatchSidebarDirection\n\t}\n": typeof types.RtlSidebarSubDocument;
 	"\n\tquery tagPopulatTitlesQuery($id: UUID!, $params: TagPopularList) {\n\t\ttag {\n\t\t\tpage(id: $id) {\n\t\t\t\tpopularInfSection(params: $params) {\n\t\t\t\t\tlimit\n\t\t\t\t\toffset\n\t\t\t\t\ttotal\n\t\t\t\t\tdata {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\tdescription\n\t\t\t\t\t\t\tyear\n\t\t\t\t\t\t\ttitle\n\t\t\t\t\t\t\tstatus\n\t\t\t\t\t\t\tstate\n\t\t\t\t\t\t\toriginalLanguage\n\t\t\t\t\t\t\ttags {\n\t\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\t\tname\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\tcontentRating\n\t\t\t\t\t\t}\n\t\t\t\t\t\trelationships {\n\t\t\t\t\t\t\tcoverArt {\n\t\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\t\tdescription\n\t\t\t\t\t\t\t\t\tfileName\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.TagPopulatTitlesQueryDocument;
 	"\n\tquery tagRecentlyPopularQuery($id: UUID!) {\n\t\ttag {\n\t\t\tpage(id: $id) {\n\t\t\t\trecentlyAdded {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\ttitle\n\t\t\t\t\t\ttags {\n\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\tname\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t\toriginalLanguage\n\t\t\t\t\t\tstatus\n\t\t\t\t\t\tdescription\n\t\t\t\t\t\tpublicationDemographic\n\t\t\t\t\t\tcontentRating\n\t\t\t\t\t\tyear\n\t\t\t\t\t\taltTitles\n\t\t\t\t\t}\n\t\t\t\t\trelationships {\n\t\t\t\t\t\tcoverArt {\n\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\tfileName\n\t\t\t\t\t\t\t\tdescription\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t\tauthorArtists {\n\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\tname\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.TagRecentlyPopularQueryDocument;
@@ -459,6 +463,14 @@ const documents: Documents = {
 		types.MangasReadMarkersDocument,
 	"\n\tquery mangasReadMarkersGrouped($ids: [UUID!]!) {\n\t\treadMarker {\n\t\t\tmangaReadMarkersGrouped(mangaIds: $ids) {\n\t\t\t\tmangaId\n\t\t\t\tchapters\n\t\t\t}\n\t\t}\n\t}\n":
 		types.MangasReadMarkersGroupedDocument,
+	"\n\tquery currentUserReports($params: ListReportParams) {\n\t\treport {\n\t\t\tlist(params: $params) {\n\t\t\t\tlimit\n\t\t\t\toffset\n\t\t\t\ttotal\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\tdetails\n\t\t\t\t\t\tobjectId\n\t\t\t\t\t\tstatus\n\t\t\t\t\t\tcreatedAt\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
+		types.CurrentUserReportsDocument,
+	"\n\tquery currentUserReportReason($category: ReportCategory!) {\n\t\treport {\n\t\t\tlistReasonsByCaterogy(params:  {\n\t\t\t   category: $category\n\t\t\t}) {\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\treason\n\t\t\t\t\t\tcategory\n\t\t\t\t\t\tdetailsRequired\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t\tlimit\n\t\t\t\toffset\n\t\t\t\ttotal\n\t\t\t}\n\t\t}\n\t}\n":
+		types.CurrentUserReportReasonDocument,
+	"\n\tmutation sendReport($params: CreateReportParam!) {\n\t\treport {\n\t\t\tcreate(params: $params) \n\t\t}\n\t}\n":
+		types.SendReportDocument,
+	"\n\tquery getSidebarDir {\n\t\tuserOption {\n\t\t\tgetSidebarDirection\n\t\t}\n\t}\n":
+		types.GetSidebarDirDocument,
 	"\n\tsubscription rtlSidebarSub {\n\t\twatchSidebarDirection\n\t}\n":
 		types.RtlSidebarSubDocument,
 	"\n\tquery tagPopulatTitlesQuery($id: UUID!, $params: TagPopularList) {\n\t\ttag {\n\t\t\tpage(id: $id) {\n\t\t\t\tpopularInfSection(params: $params) {\n\t\t\t\t\tlimit\n\t\t\t\t\toffset\n\t\t\t\t\ttotal\n\t\t\t\t\tdata {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\tdescription\n\t\t\t\t\t\t\tyear\n\t\t\t\t\t\t\ttitle\n\t\t\t\t\t\t\tstatus\n\t\t\t\t\t\t\tstate\n\t\t\t\t\t\t\toriginalLanguage\n\t\t\t\t\t\t\ttags {\n\t\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\t\tname\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\tcontentRating\n\t\t\t\t\t\t}\n\t\t\t\t\t\trelationships {\n\t\t\t\t\t\t\tcoverArt {\n\t\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\t\tdescription\n\t\t\t\t\t\t\t\t\tfileName\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
@@ -1362,6 +1374,30 @@ export function graphql(
 export function graphql(
 	source: "\n\tquery mangasReadMarkersGrouped($ids: [UUID!]!) {\n\t\treadMarker {\n\t\t\tmangaReadMarkersGrouped(mangaIds: $ids) {\n\t\t\t\tmangaId\n\t\t\t\tchapters\n\t\t\t}\n\t\t}\n\t}\n"
 ): (typeof documents)["\n\tquery mangasReadMarkersGrouped($ids: [UUID!]!) {\n\t\treadMarker {\n\t\t\tmangaReadMarkersGrouped(mangaIds: $ids) {\n\t\t\t\tmangaId\n\t\t\t\tchapters\n\t\t\t}\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tquery currentUserReports($params: ListReportParams) {\n\t\treport {\n\t\t\tlist(params: $params) {\n\t\t\t\tlimit\n\t\t\t\toffset\n\t\t\t\ttotal\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\tdetails\n\t\t\t\t\t\tobjectId\n\t\t\t\t\t\tstatus\n\t\t\t\t\t\tcreatedAt\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tquery currentUserReports($params: ListReportParams) {\n\t\treport {\n\t\t\tlist(params: $params) {\n\t\t\t\tlimit\n\t\t\t\toffset\n\t\t\t\ttotal\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\tdetails\n\t\t\t\t\t\tobjectId\n\t\t\t\t\t\tstatus\n\t\t\t\t\t\tcreatedAt\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tquery currentUserReportReason($category: ReportCategory!) {\n\t\treport {\n\t\t\tlistReasonsByCaterogy(params:  {\n\t\t\t   category: $category\n\t\t\t}) {\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\treason\n\t\t\t\t\t\tcategory\n\t\t\t\t\t\tdetailsRequired\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t\tlimit\n\t\t\t\toffset\n\t\t\t\ttotal\n\t\t\t}\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tquery currentUserReportReason($category: ReportCategory!) {\n\t\treport {\n\t\t\tlistReasonsByCaterogy(params:  {\n\t\t\t   category: $category\n\t\t\t}) {\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\treason\n\t\t\t\t\t\tcategory\n\t\t\t\t\t\tdetailsRequired\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t\tlimit\n\t\t\t\toffset\n\t\t\t\ttotal\n\t\t\t}\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tmutation sendReport($params: CreateReportParam!) {\n\t\treport {\n\t\t\tcreate(params: $params) \n\t\t}\n\t}\n"
+): (typeof documents)["\n\tmutation sendReport($params: CreateReportParam!) {\n\t\treport {\n\t\t\tcreate(params: $params) \n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tquery getSidebarDir {\n\t\tuserOption {\n\t\t\tgetSidebarDirection\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tquery getSidebarDir {\n\t\tuserOption {\n\t\t\tgetSidebarDirection\n\t\t}\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

@@ -8,6 +8,7 @@
 	import Search from "./body/Search.svelte";
 	import Settings from "./body/Settings.svelte";
 	import Titles from "./body/Titles.svelte";
+	import Reports from "./body/Reports.svelte";
 </script>
 
 <Home />
@@ -24,6 +25,10 @@
 
 {#if dev}
 	<Graphql />
+{/if}
+
+{#if $isLogged || dev}
+	<Reports />
 {/if}
 
 <Settings />

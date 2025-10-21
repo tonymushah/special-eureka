@@ -11,22 +11,22 @@
 
 	let { id }: Props = $props();
 
-	const downloading = isChapterDownloading({
+	const downloading_ = isChapterDownloading({
 		id
 	});
-	const failed = hasChapterDownloadingFailed({
+	const failed_ = hasChapterDownloadingFailed({
 		id
 	});
 	const downloaded_ = isChapterDownloaded({
 		id
 	});
-	let downloaded = $derived($downloaded_);
+	let [downloaded, downloading, failed] = $derived([$downloaded_, $downloading_, $failed_]);
 </script>
 
-<span class:downloaded class:downloading={$downloading} class:failed={$failed}>
-	{#if $downloading}
+<span class:downloaded class:downloading class:failed>
+	{#if downloading}
 		<DownloadCloudIcon />
-	{:else if $failed}
+	{:else if failed}
 		<XIcon />
 	{:else if downloaded}
 		<CheckIcon />

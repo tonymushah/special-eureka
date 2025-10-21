@@ -37,17 +37,13 @@ impl ReportQueries {
         let res = params.send(&client).await?;
         Ok(res.body.into())
     }
-    pub async fn list_by_caterogy(
+    pub async fn list_reasons_by_caterogy(
         &self,
         ctx: &Context<'_>,
         params: ListReasonsByCategory,
     ) -> Result<ReportReasonResults> {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
-        ctx.get_app_handle::<tauri::Wry>()?
-            .get_specific_rate_limit()?
-            .get_report()
-            .await;
         Ok(params.send(&client).await?.into())
     }
 }

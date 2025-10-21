@@ -56,7 +56,10 @@
 	import { setTitleLayoutData } from "./layout.context";
 	import { isLogged } from "@mangadex/utils/auth";
 	import { createForumThread } from "@mangadex/stores/create-forum-thread";
-	import { ForumThreadType } from "@mangadex/gql/graphql";
+	import { ForumThreadType, ReportCategory } from "@mangadex/gql/graphql";
+	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
+	import { dev } from "$app/environment";
+	import ReportDialog from "@mangadex/componnents/report/dialog/ReportDialog.svelte";
 
 	type TopMangaStatisticsStoreData = TopMangaStatistics & {
 		threadUrl?: string;
@@ -225,10 +228,7 @@
 			[readMarkerStores],
 			([query], set, update) => {
 				if (query.isSuccess) {
-					const tosend = new Map(query.data.map((d) => [d, true])) as Map<
-						string,
-						boolean
-					>;
+					const tosend = new Map(query.data.map((d) => [d, true])) as Map<string, boolean>;
 					set(tosend);
 					const sub = listenToAnyChapterReadMarkers.subscribe((a) => {
 						if (a != undefined) {
@@ -271,9 +271,12 @@
 			}
 		);
 	}
+	let openReportDialog = $state(false);
 </script>
 
 <svelte:window onfocus={refetchReadingFollowingStatus} />
+
+<AppTitle title={`${layoutData.title ?? ""} | MangaDex`} />
 
 <MangaPageTopInfo
 	bind:id={layoutData.id}
@@ -329,8 +332,17 @@
 	onaddToList={() => {
 		addMangaToAList(data.layoutData.id);
 	}}
-	disableReport
+	disableReport={!$isLogged && !dev}
+	onreport={() => {
+		openReportDialog = true;
+	}}
 	disableUpload
+/>
+
+<ReportDialog
+	bind:open={openReportDialog}
+	category={ReportCategory.Manga}
+	objectId={data.layoutData.id}
 />
 
 <div class="out-top">

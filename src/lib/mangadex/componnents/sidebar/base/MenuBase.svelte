@@ -3,6 +3,10 @@
 	import { Direction } from "@mangadex/gql/graphql";
 	import { getContextClient, subscriptionStore } from "@urql/svelte";
 	import { isContextSidebarCollapsed } from "./CollapsedProvider.svelte";
+	import { onMount } from "svelte";
+	import { client } from "@mangadex/gql/urql";
+	import sidebarDir from "@mangadex/gql-docs/sidebarDir";
+
 	const rlt_sub = subscriptionStore({
 		client: getContextClient(),
 		query: sideDirGQLDoc,
@@ -15,6 +19,10 @@
 
 	let { collapsed = isContextSidebarCollapsed(), children }: Props = $props();
 	let rtl = $derived($rlt_sub.data?.watchSidebarDirection == Direction.Rtl);
+	onMount(async () => {
+		const res = await client.query(sidebarDir, {}).toPromise();
+		rtl = res.data?.userOption.getSidebarDirection == Direction.Rtl;
+	});
 </script>
 
 <div class="base" class:collapsed class:rtl>
