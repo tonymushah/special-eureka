@@ -11,6 +11,9 @@
 	import type { LayoutData } from "./$types";
 	import NavTab from "./NavTab.svelte";
 	import ScanalationGroupLinkButtons from "./ScanalationGroupLinkButtons.svelte";
+	import { ReportCategory } from "@mangadex/gql/graphql";
+	import ReportDialog from "@mangadex/componnents/report/dialog/ReportDialog.svelte";
+	import { dev } from "$app/environment";
 
 	interface Props {
 		data: LayoutData;
@@ -23,7 +26,14 @@
 	//$: console.log(`since date: ${createdSince}`);
 	const isFollowed = isFollowingGroup(data.id);
 	let isFollowing = $derived($isFollowed);
+	let openReportDialog = $state(false);
 </script>
+
+<ReportDialog
+	bind:open={openReportDialog}
+	objectId={data.id}
+	category={ReportCategory.ScanlationGroup}
+/>
 
 <UsersPageBase title={data.name} {description}>
 	{#snippet _left()}
@@ -51,7 +61,13 @@
 			>
 				<p><ExternalLinkIcon /> Open in browser</p>
 			</ButtonAccent>
-			<ButtonAccent isBase>
+			<ButtonAccent
+				isBase
+				disabled={!$isLogged || dev}
+				onclick={() => {
+					openReportDialog = true;
+				}}
+			>
 				<p><FlagIcon />Report</p>
 			</ButtonAccent>
 			<ScanalationGroupLinkButtons
