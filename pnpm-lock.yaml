@@ -85,7 +85,7 @@ importers:
         version: 6.1.0
       mizuki-graphiql-fetcher:
         specifier: ^1.0.1
-        version: 1.0.1(@types/node@24.9.1)(graphql-ws@6.0.6(graphql@16.11.0)(ws@8.18.3))
+        version: 1.1.0(@types/node@24.9.1)(graphql-ws@6.0.6(graphql@16.11.0)(ws@8.18.3))
       mizuki-urql-adapter:
         specifier: ^1.0.2
         version: 1.0.2(graphql@16.11.0)
@@ -3345,8 +3345,8 @@ packages:
     resolution: {integrity: sha512-G6T0ZX48xgozx7587koeX9Ys2NYy6Gmv//P89sEte9V9whIapMNF4idKxnW2QtCcLiTWlb/wfCabAtAFWhhBow==}
     engines: {node: '>=16 || 14 >=14.17'}
 
-  mizuki-graphiql-fetcher@1.0.1:
-    resolution: {integrity: sha512-NhAQYSgGWvY3eXKOmxpG1PU+8OlghJinVSxC8bPDFaxyr3qrJdVshzXXeiau1XZPJ/C6rsIZSCKwlyOwLxEVtw==}
+  mizuki-graphiql-fetcher@1.1.0:
+    resolution: {integrity: sha512-cnq2M/5WqyOe+nvDcd7/735EzoEckEzYy0Fsjj3Xl6TazYlZtXnVMhd8zDS752mo9WoGpubUPZnUVkAzjyckBQ==}
 
   mizuki-urql-adapter@1.0.2:
     resolution: {integrity: sha512-up2l/OMkC/9+zCQIvtOQyoLgFIvzzeANw6t9zEHEzbM0vsAZZAwLJIxN7grvJTdmYVuz/rehXfPZVVzHJYphEw==}
@@ -7541,7 +7541,7 @@ snapshots:
     dependencies:
       brace-expansion: 2.0.2
 
-  mizuki-graphiql-fetcher@1.0.1(@types/node@24.9.1)(graphql-ws@6.0.6(graphql@16.11.0)(ws@8.18.3)):
+  mizuki-graphiql-fetcher@1.1.0(@types/node@24.9.1)(graphql-ws@6.0.6(graphql@16.11.0)(ws@8.18.3)):
     dependencies:
       '@graphiql/toolkit': 0.11.3(@types/node@24.9.1)(graphql-ws@6.0.6(graphql@16.11.0)(ws@8.18.3))(graphql@16.11.0)
       '@tauri-apps/api': 2.9.0
