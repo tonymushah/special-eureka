@@ -88,7 +88,7 @@ importers:
         version: 1.0.1(@types/node@24.9.1)(graphql-ws@6.0.6(graphql@16.11.0)(ws@8.18.3))
       mizuki-urql-adapter:
         specifier: ^1.0.2
-        version: 1.0.2(graphql@16.11.0)
+        version: 1.1.0(graphql@16.11.0)
       panzoom:
         specifier: ^9.4.3
         version: 9.4.3
@@ -3348,8 +3348,8 @@ packages:
   mizuki-graphiql-fetcher@1.0.1:
     resolution: {integrity: sha512-NhAQYSgGWvY3eXKOmxpG1PU+8OlghJinVSxC8bPDFaxyr3qrJdVshzXXeiau1XZPJ/C6rsIZSCKwlyOwLxEVtw==}
 
-  mizuki-urql-adapter@1.0.2:
-    resolution: {integrity: sha512-up2l/OMkC/9+zCQIvtOQyoLgFIvzzeANw6t9zEHEzbM0vsAZZAwLJIxN7grvJTdmYVuz/rehXfPZVVzHJYphEw==}
+  mizuki-urql-adapter@1.1.0:
+    resolution: {integrity: sha512-sp5lvFL8kkRVd9cR9uoeEw3QvPQFKVPFFH6YZqRzNzvBeNQ5eK22QBNoHPy4hLdsoNolscOgxaU89C9yFbfeVw==}
 
   monaco-editor@0.52.2:
     resolution: {integrity: sha512-GEQWEZmfkOGLdd3XK8ryrfWz3AIP8YymVXiPHEdewrUq7mh0qrKrfHLNCXcbB6sTnMLnOZ3ztSiKcciFUkIJwQ==}
@@ -7550,7 +7550,7 @@ snapshots:
       - '@types/node'
       - graphql-ws
 
-  mizuki-urql-adapter@1.0.2(graphql@16.11.0):
+  mizuki-urql-adapter@1.1.0(graphql@16.11.0):
     dependencies:
       '@tauri-apps/api': 2.9.0
       '@urql/core': 6.0.1(graphql@16.11.0)
