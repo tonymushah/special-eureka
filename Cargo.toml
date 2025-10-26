@@ -35,6 +35,7 @@ image = "0"
 serde-xml-rs = "0.8"
 clap = "4"
 csv = "1"
+hotpath = { version = "0.5" }
 
 [workspace.dependencies.tauri-plugin-notification]
 git = "https://github.com/tauri-apps/plugins-workspace"

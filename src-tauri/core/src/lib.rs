@@ -15,19 +15,30 @@ pub(crate) mod states;
 
 pub fn run() {
     let runtime_guard = RuntimeGuard::new(|| {
-        RuntimeBuilder::new_current_thread()
-            .enable_all()
-            .build()
-            .unwrap()
+        #[cfg(not(feature = "actix-mutli-threaded"))]
+        {
+            RuntimeBuilder::new_current_thread()
+                .enable_all()
+                .build()
+                .unwrap()
+        }
+        #[cfg(feature = "actix-multi-threaded")]
+        {
+            RuntimeBuilder::new_multi_thread()
+                .enable_all()
+                .build()
+                .unwrap()
+        }
     })
     .unwrap();
     let context = tauri::tauri_build_context!();
     System::set_current(runtime_guard.sys().clone());
-    /*let tauri_async_runtime = RuntimeBuilder::new_current_thread()
-        .enable_all()
-        .build()
-        .unwrap();
-    tauri::async_runtime::set(tauri_async_runtime.handle().clone());*/
+
+    #[cfg(feature = "single-runtime")]
+    {
+        tauri::async_runtime::set(runtime_guard.handle().clone());
+    }
+
     let runtime_guard = Arc::new(Mutex::new(Some(runtime_guard)));
 
     match get_builder().build(context) {
