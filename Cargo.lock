@@ -1567,9 +1567,9 @@ checksum = "dea2df4cf52843e0452895c455a1a2cfbb842a1e7329671acf418fdc53ed4c59"
 
 [[package]]
 name = "eureka-mmanager"
-version = "0.3.3"
+version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "62f26a09008babea205d25f00c2e2d5918fd13199b08fee094f68543aaf3dfda"
+checksum = "fb1cd253402f32f00d0b5fda714e5e2df115bf0324013413b5a6e17a1cd3156f"
 dependencies = [
  "actix",
  "bytes",
@@ -1585,6 +1585,7 @@ dependencies = [
  "reqwest",
  "serde",
  "serde_json",
+ "shrink_fit_wrapper",
  "thiserror 2.0.17",
  "tokio",
  "tokio-stream",
@@ -5395,6 +5396,12 @@ name = "shlex"
 version = "1.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0fda2ff0d084019ba4d7c6f371c95d8fd75ce3524c3cb8fb653a3023f6323e64"
+
+[[package]]
+name = "shrink_fit_wrapper"
+version = "1.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "21d85740902d57b4b8d2f8c77e4efce63ec0143f461bee889e92e179407c24fc"
 
 [[package]]
 name = "signal-hook-registry"

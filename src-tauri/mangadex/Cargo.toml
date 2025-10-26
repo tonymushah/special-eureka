@@ -58,7 +58,7 @@ serde-xml-rs.workspace = true
 csv.workspace = true
 
 [dependencies.eureka-mmanager]
-version = "0.3"
+version = "0.4"
 default-features = false
 
 [dependencies.mangadex-api-input-types]
