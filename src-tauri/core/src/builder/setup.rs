@@ -10,6 +10,7 @@ use crate::states::last_focused_window::LastFocusedWindow;
 
 type SetupResult = Result<(), Box<dyn std::error::Error>>;
 
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub fn setup<R: Runtime>(app: &mut App<R>) -> SetupResult {
     #[cfg(all(desktop, feature = "updater"))]
     app.handle()

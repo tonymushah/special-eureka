@@ -25,9 +25,9 @@ pub enum MaybeEventStreamData<T> {
 }
 
 impl<T: Default> Default for MaybeEventStreamData<T> {
-	fn default() -> Self {
-		Self::Data(Default::default())
-	}
+    fn default() -> Self {
+        Self::Data(Default::default())
+    }
 }
 
 impl<T> MaybeEventStreamData<T> {
@@ -46,7 +46,7 @@ pub enum ContextMenuItem {
         text: MaybeEventStreamData<String>,
         action: CallbackFn,
         accelerator: Option<String>,
-		#[serde(default)]
+        #[serde(default)]
         enabled: MaybeEventStreamData<Option<bool>>,
         icon: Option<String>,
     },
@@ -54,7 +54,7 @@ pub enum ContextMenuItem {
         text: MaybeEventStreamData<String>,
         #[serde(default)]
         items: Vec<ContextMenuItem>,
-		#[serde(default)]
+        #[serde(default)]
         enabled: MaybeEventStreamData<Option<bool>>,
     },
     Seperator,
@@ -224,6 +224,7 @@ impl ContextMenuItem {
 }
 
 #[tauri::command]
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub async fn context_menu<R: Runtime>(
     webview: Webview<R>,
     items: Vec<ContextMenuItem>,

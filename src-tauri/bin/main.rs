@@ -3,6 +3,7 @@
     windows_subsystem = "windows"
 )]
 
+#[cfg_attr(feature = "hotpath", hotpath::main)]
 fn main() {
     special_eureka::run()
 }

@@ -13,9 +13,10 @@ pub(crate) mod logging;
 pub(crate) mod runtime;
 pub(crate) mod states;
 
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub fn run() {
     let runtime_guard = RuntimeGuard::new(|| {
-        #[cfg(not(feature = "actix-mutli-threaded"))]
+        #[cfg(not(feature = "actix-multi-threaded"))]
         {
             RuntimeBuilder::new_current_thread()
                 .enable_all()
@@ -80,3 +81,17 @@ pub fn run() {
 
 #[allow(unused)]
 pub(crate) const SPECIAL_EUREKA_ERROR_EVENT_KEY: &str = "special-eureka://internal-error";
+
+#[macro_export]
+macro_rules! measure_block {
+    ($label:expr, $expr:expr) => {
+        #[cfg(feature = "hotpath")]
+        {
+            hotpath::measure_block!($label, $expr)
+        }
+        #[cfg(not(feature = "hotpath"))]
+        {
+            $expr
+        }
+    };
+}
