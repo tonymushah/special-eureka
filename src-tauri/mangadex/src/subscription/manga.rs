@@ -11,6 +11,7 @@ use super::utils::{FilterWatchOptionDataById, WatchSubscriptionStream};
 pub struct MangaSubscriptions;
 
 #[Subscription]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl MangaSubscriptions {
     pub async fn listen_by_id<'ctx>(
         &'ctx self,

@@ -10,6 +10,7 @@ use crate::subscription::utils::{OptionFlattenStream, WatchSubscriptionStream};
 pub struct UserMeSubscriptions;
 
 #[Subscription]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl UserMeSubscriptions {
     pub async fn listen<'ctx>(
         &'ctx self,

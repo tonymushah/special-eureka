@@ -70,6 +70,7 @@ use crate::{
 pub struct LegacySubscriptions;
 
 #[Subscription]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl LegacySubscriptions {
     pub async fn watch_api_client<'ctx>(
         &'ctx self,

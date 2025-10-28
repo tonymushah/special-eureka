@@ -33,6 +33,8 @@ where
         Self::new(self._recv.clone())
     }
 }
+
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl<T> WatchSubscriptionStream<T>
 where
     T: Clone + 'static + Send + Sync,
@@ -97,6 +99,7 @@ where
 {
     type Item = T;
 
+    #[cfg_attr(feature = "hotpath", hotpath::measure)]
     fn poll_next(mut self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Option<Self::Item>> {
         let res = self.recv.next();
         Box::pin(res).as_mut().poll(cx)

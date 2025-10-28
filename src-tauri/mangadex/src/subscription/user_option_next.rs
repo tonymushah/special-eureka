@@ -14,6 +14,7 @@ use crate::{
 pub struct UserOptionNextSubscriptions;
 
 #[Subscription]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl UserOptionNextSubscriptions {
     pub async fn watch_force_port_443<'ctx>(
         &'ctx self,

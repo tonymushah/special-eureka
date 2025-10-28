@@ -168,6 +168,7 @@ impl ChapterDownloadState {
 pub struct ChapterDownloadSubs;
 
 #[Subscription]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl ChapterDownloadSubs {
     pub async fn listen_to_chapter_tasks<'ctx>(
         &'ctx self,

@@ -15,6 +15,7 @@ pub struct ChapterReadMarkerSubItem {
 }
 
 #[Subscription]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl ChapterReadMarkerSubscriptions {
     pub async fn watch_read_marker<'ctx>(
         &'ctx self,
