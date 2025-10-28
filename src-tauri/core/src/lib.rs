@@ -13,7 +13,7 @@ pub(crate) mod logging;
 pub(crate) mod runtime;
 pub(crate) mod states;
 
-#[cfg_attr(feature = "hotpath", hotpath::measure)]
+#[cfg_attr(feature = "hotpath", hotpath::main)]
 pub fn run() {
     let runtime_guard = RuntimeGuard::new(|| {
         #[cfg(not(feature = "actix-multi-threaded"))]
