@@ -51,6 +51,7 @@ fn check_and_notify<R: Runtime>(
                 ))
                 .show();
             handle.clear();
+            handle.shrink_to_fit();
             res?;
         }
     }
