@@ -9,12 +9,16 @@ use std::sync::{Arc, Mutex};
 
 pub(crate) mod builder;
 pub(crate) mod commands;
+#[cfg(feature = "hotpath")]
+mod hot_path;
 pub(crate) mod logging;
 pub(crate) mod runtime;
 pub(crate) mod states;
 
-#[cfg_attr(feature = "hotpath", hotpath::main)]
 pub fn run() {
+    #[cfg(feature = "hotpath")]
+    let _hot_guard = hot_path::init_hotpath();
+
     let runtime_guard = RuntimeGuard::new(|| {
         #[cfg(not(feature = "actix-multi-threaded"))]
         {
