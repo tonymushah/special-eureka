@@ -25,6 +25,7 @@ impl From<tauri_plugin_updater::Update> for Update {
 }
 
 #[tauri::command]
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub async fn check_for_updates<R: Runtime>(_app: AppHandle<R>) -> tauri::Result<Option<Update>> {
     #[cfg(feature = "updater")]
     {
@@ -55,6 +56,7 @@ pub enum UpdatePayload {
 const UPDATE_PAYLOAD_EVENT_KEY: &str = "special-eureka://update-state";
 
 #[tauri::command]
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub async fn download_and_install_updates<R: Runtime>(_app: AppHandle<R>) -> tauri::Result<()> {
     #[cfg(feature = "updater")]
     {

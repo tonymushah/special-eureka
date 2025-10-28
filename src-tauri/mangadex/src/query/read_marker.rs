@@ -29,6 +29,7 @@ use crate::{
 pub struct ReadMarkerQueries;
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl ReadMarkerQueries {
     pub async fn manga_read_markers_by_manga_id(
         &self,

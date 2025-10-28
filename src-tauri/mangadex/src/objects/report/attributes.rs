@@ -33,6 +33,7 @@ impl From<ReportAttributes> for Attributes {
 }
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl ReportAttributes {
     pub async fn details(&self) -> &String {
         &self.details

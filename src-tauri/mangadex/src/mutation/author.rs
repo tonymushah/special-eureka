@@ -17,6 +17,7 @@ use crate::{
 pub struct AuthorMutations;
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl AuthorMutations {
     pub async fn create(&self, ctx: &Context<'_>, params: AuthorCreateParams) -> Result<Author> {
         let client =

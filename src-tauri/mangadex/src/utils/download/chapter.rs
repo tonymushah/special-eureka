@@ -24,6 +24,7 @@ use crate::{
     },
 };
 
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub async fn raw_chapter_download(
     manager: &Addr<DownloadManager>,
     id: Uuid,
@@ -42,6 +43,7 @@ pub async fn raw_chapter_download(
     Ok(task.wait().await?.await?)
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub async fn download_chapter<R, M>(
     app: &M,
     id: Uuid,

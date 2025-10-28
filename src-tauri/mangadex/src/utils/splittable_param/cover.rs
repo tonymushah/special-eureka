@@ -31,6 +31,7 @@ impl SplittableParam for CoverListParam {
 
 impl SendableParam for CoverListParam {
     type Item = CoverObject;
+    #[cfg_attr(feature = "hotpath", hotpath::measure)]
     async fn send(
         self,
         client: &mangadex_api::MangaDexClient,

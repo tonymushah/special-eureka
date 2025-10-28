@@ -19,6 +19,7 @@ use crate::{
 pub struct UserQueries;
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl UserQueries {
     pub async fn get(&self, ctx: &Context<'_>, id: Uuid) -> Result<User> {
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;

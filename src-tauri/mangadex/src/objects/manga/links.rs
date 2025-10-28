@@ -22,6 +22,7 @@ impl From<Links> for MangaLinks {
 }
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl MangaLinks {
     pub async fn has_no_links(&self) -> bool {
         self.amazon.is_none()

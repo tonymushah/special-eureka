@@ -50,6 +50,7 @@ pub struct ContentProfile {
 }
 
 impl ContentProfile {
+    #[cfg_attr(feature = "hotpath", hotpath::measure)]
     pub fn is_empty(&self) -> bool {
         self.original_languages.is_empty()
             && self.excluded_original_language.is_empty()
@@ -70,6 +71,7 @@ pub trait Feedable {
 
 #[impl_for_tuples(10)]
 impl Feedable for Tuple {
+    #[cfg_attr(feature = "hotpath", hotpath::measure)]
     fn feed(mut self, content_profile: &ContentProfile) -> Self {
         for_tuples!(#( self.Tuple = Tuple.feed(content_profile); )*);
         self
@@ -82,10 +84,12 @@ pub trait GetContentProfile {
 }
 
 pub trait ContentFeeder<F: Feedable>: GetContentProfile {
+    #[cfg_attr(feature = "hotpath", hotpath::measure)]
     fn try_feed(&self, feedable: F) -> Result<F, Self::Error> {
         let content_profile = self.get_content_profile()?;
         Ok(feedable.feed(&content_profile))
     }
+    #[cfg_attr(feature = "hotpath", hotpath::measure)]
     fn feed(&self, feedable: F) -> F {
         let content_profile = self.get_content_profile().unwrap_or_default();
         feedable.feed(&content_profile)
@@ -97,6 +101,7 @@ where
     R: Runtime,
 {
     type Error = crate::Error;
+    #[cfg_attr(feature = "hotpath", hotpath::measure)]
     fn get_content_profile(&self) -> Result<ContentProfile, Self::Error> {
         let watches = self.get_watches()?;
         let content_profiles_ref = watches.content_profiles.borrow();
@@ -117,6 +122,7 @@ where
 {
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub fn try_feed_from_gql_ctx<R, TF>(
     ctx: &async_graphql::Context<'_>,
     to_feed: TF,
@@ -129,6 +135,7 @@ where
     app_handle.try_feed(to_feed)
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub fn feed_from_gql_ctx<R, TF>(ctx: &async_graphql::Context<'_>, to_feed: TF) -> TF
 where
     R: Runtime,

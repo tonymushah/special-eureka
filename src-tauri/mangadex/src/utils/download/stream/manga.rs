@@ -38,6 +38,7 @@ impl Actor for MangaDownloadStreamActor {
 impl Handler<TaskSubscriberMessages<MangaDownloadTaskState>> for MangaDownloadStreamActor {
     type Result = ();
 
+    #[cfg_attr(feature = "hotpath", hotpath::measure)]
     fn handle(
         &mut self,
         msg: TaskSubscriberMessages<MangaDownloadTaskState>,
@@ -57,6 +58,7 @@ impl Handler<TaskSubscriberMessages<MangaDownloadTaskState>> for MangaDownloadSt
 
 impl Handler<super::OfflineAppStateNotLoadedMsg> for MangaDownloadStreamActor {
     type Result = ();
+    #[cfg_attr(feature = "hotpath", hotpath::measure)]
     fn handle(
         &mut self,
         _: super::OfflineAppStateNotLoadedMsg,
@@ -82,6 +84,7 @@ pub struct MangaDownloadStream {
 
 impl Stream for MangaDownloadStream {
     type Item = MangaDownloadState;
+    #[cfg_attr(feature = "hotpath", hotpath::measure)]
     fn poll_next(
         mut self: std::pin::Pin<&mut Self>,
         cx: &mut std::task::Context<'_>,
@@ -107,6 +110,7 @@ impl Stream for MangaDownloadStream {
     }
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl MangaDownloadStream {
     pub fn recipient(&self) -> WeakRecipient<TaskSubscriberMessages<MangaDownloadTaskState>> {
         self.actor.downgrade().recipient()

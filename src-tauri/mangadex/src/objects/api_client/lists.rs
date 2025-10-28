@@ -43,6 +43,7 @@ impl From<Results<ApiClientObject>> for ApiClientResults {
     }
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl ExtractReferenceExpansion<'_> for ApiClientResults {
     fn exctract(
         field: async_graphql::SelectionField<'_>,

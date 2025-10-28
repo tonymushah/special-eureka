@@ -38,6 +38,7 @@ impl<T> DownloadEntries<T> {
         self.0.clear();
     }
 }
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl<T> DownloadEntries<T>
 where
     T: Clone,
@@ -92,10 +93,14 @@ where
     }
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl<T> DownloadEntries<T>
 where
     T: Eq + Hash,
 {
+    pub fn shrink_to_fit(&mut self) {
+        self.0.shrink_to_fit();
+    }
     pub fn add_in_queue(&mut self, to_insert: T) -> Result<()> {
         match self.0.entry(to_insert) {
             Entry::Occupied(_) => {

@@ -14,6 +14,7 @@ use crate::utils::{
 pub struct ReadingStateMutations;
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl ReadingStateMutations {
     pub async fn set_page(
         &self,

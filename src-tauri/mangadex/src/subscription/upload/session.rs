@@ -11,6 +11,7 @@ use crate::subscription::utils::{FilterWatchOptionDataById, WatchSubscriptionStr
 pub struct UploadSessionSubscriptions;
 
 #[Subscription]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl UploadSessionSubscriptions {
     pub async fn listen_by_id<'ctx>(
         &'ctx self,

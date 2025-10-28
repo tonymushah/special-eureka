@@ -20,6 +20,7 @@ use crate::{
 pub struct CustomListQueries;
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl CustomListQueries {
     pub async fn get(
         &self,

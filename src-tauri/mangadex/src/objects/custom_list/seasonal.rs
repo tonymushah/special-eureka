@@ -11,6 +11,7 @@ pub struct SeasonalData {
     pub id: Uuid,
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl SeasonalData {
     pub async fn get(client: &Client) -> Result<Self> {
         Ok(client.get(Url::parse("https://raw.githubusercontent.com/tonymushah/special-eureka/master/public/mangadex/json/seasonal.json")?).send().await?.json().await?)

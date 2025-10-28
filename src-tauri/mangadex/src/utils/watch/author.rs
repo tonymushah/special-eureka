@@ -34,6 +34,7 @@ impl<T> SendData<T> for AuthorWatch
 where
     T: Into<InnerData>,
 {
+    #[cfg_attr(feature = "hotpath", hotpath::measure)]
     fn send_data(&self, data: T) -> super::SendDataResult {
         self.send_replace(Some(data.into()));
         Ok(())

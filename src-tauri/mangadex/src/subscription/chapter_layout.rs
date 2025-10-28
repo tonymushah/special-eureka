@@ -12,6 +12,7 @@ use super::utils::WatchSubscriptionStream;
 pub struct ChapterLayoutSubscription;
 
 #[Subscription]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl ChapterLayoutSubscription {
     pub async fn watch_chapter_layout<'ctx>(
         &'ctx self,

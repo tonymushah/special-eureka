@@ -81,6 +81,7 @@ impl<R> ExtractFromStore<'_, R> for ChapterLayoutStore
 where
     R: Runtime,
 {
+    #[cfg_attr(feature = "hotpath", hotpath::measure)]
     fn extract_from_store(
         store: &tauri_plugin_store::Store<R>,
     ) -> Result<Self, tauri_plugin_store::Error> {
@@ -97,6 +98,7 @@ impl<R> StoreCrud<R> for ChapterLayoutStore
 where
     R: Runtime,
 {
+    #[cfg_attr(feature = "hotpath", hotpath::measure)]
     fn insert(
         &self,
         store: &tauri_plugin_store::Store<R>,
@@ -104,6 +106,7 @@ where
         store.set(CHAPTER_LAYOUT.to_string(), serde_json::to_value(*self)?);
         Ok(())
     }
+    #[cfg_attr(feature = "hotpath", hotpath::measure)]
     fn delete(
         &self,
         store: &tauri_plugin_store::Store<R>,
@@ -117,6 +120,7 @@ impl<R> DefaulStore<R> for ChapterLayoutStore
 where
     R: Runtime,
 {
+    #[cfg_attr(feature = "hotpath", hotpath::measure)]
     fn default_store(
         store_builder: tauri_plugin_store::StoreBuilder<R>,
     ) -> Result<tauri_plugin_store::StoreBuilder<R>, tauri_plugin_store::Error> {

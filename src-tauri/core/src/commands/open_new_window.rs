@@ -3,6 +3,7 @@ use uuid::Uuid;
 
 // use crate::builder::menu::set_menu_window;
 
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub fn open_new_window_sync_from_app<R: Runtime>(
     app: &AppHandle<R>,
     url: Option<WebviewUrl>,
@@ -20,6 +21,7 @@ pub fn open_new_window_sync_from_app<R: Runtime>(
     Ok(())
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub fn open_new_window_sync<R: Runtime>(
     webview: &WebviewWindow<R>,
     url: Option<Url>,
@@ -46,6 +48,7 @@ pub fn open_new_window_sync<R: Runtime>(
 }
 
 #[command]
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub async fn open_new_window<R: Runtime>(window: WebviewWindow<R>, url: Option<Url>) -> Result<()> {
     open_new_window_sync(&window, url)
 }

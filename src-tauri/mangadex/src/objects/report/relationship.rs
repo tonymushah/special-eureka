@@ -29,6 +29,7 @@ impl DerefMut for ReportRelationship {
 }
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl ReportRelationship {
     pub async fn user(&self) -> Result<User> {
         self.iter()

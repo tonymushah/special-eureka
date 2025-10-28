@@ -27,6 +27,7 @@ impl From<UploadSessionAttributes> for Attributes {
 }
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl UploadSessionAttributes {
     pub async fn is_committed(&self) -> bool {
         self.is_committed

@@ -12,6 +12,7 @@ use mangadex_api_input_types::{
 use super::Feedable;
 
 impl Feedable for MangaListParams {
+    #[cfg_attr(feature = "hotpath", hotpath::measure)]
     fn feed(mut self, content_profile: &super::ContentProfile) -> Self {
         if self.original_language.is_empty() {
             self.original_language = content_profile.original_languages.clone();
@@ -48,6 +49,7 @@ impl Feedable for MangaListParams {
 }
 
 impl Feedable for ChapterListParams {
+    #[cfg_attr(feature = "hotpath", hotpath::measure)]
     fn feed(mut self, content_profile: &super::ContentProfile) -> Self {
         if self.content_rating.is_empty() {
             self.content_rating = content_profile.content_rating.clone();
@@ -72,6 +74,7 @@ impl Feedable for ChapterListParams {
 }
 
 impl Feedable for MangaAggregateParam {
+    #[cfg_attr(feature = "hotpath", hotpath::measure)]
     fn feed(mut self, content_profile: &super::ContentProfile) -> Self {
         if self.translated_language.is_empty() {
             self.translated_language = content_profile.translated_languages.clone();
@@ -81,6 +84,7 @@ impl Feedable for MangaAggregateParam {
 }
 
 impl Feedable for MangaRandomParams {
+    #[cfg_attr(feature = "hotpath", hotpath::measure)]
     fn feed(mut self, content_profile: &super::ContentProfile) -> Self {
         if self.included_tags.is_empty() {
             self.included_tags = content_profile.included_tags.clone();
@@ -102,6 +106,7 @@ impl Feedable for MangaRandomParams {
 }
 
 impl Feedable for MangaFeedParams {
+    #[cfg_attr(feature = "hotpath", hotpath::measure)]
     fn feed(mut self, content_profile: &super::ContentProfile) -> Self {
         if self.content_rating.is_empty() {
             self.content_rating = content_profile.content_rating.clone();
@@ -129,6 +134,7 @@ impl Feedable for MangaFeedParams {
 }
 
 impl Feedable for CustomListMangaFeedParams {
+    #[cfg_attr(feature = "hotpath", hotpath::measure)]
     fn feed(mut self, content_profile: &super::ContentProfile) -> Self {
         if self.content_rating.is_empty() {
             self.content_rating = content_profile.content_rating.clone();
@@ -156,6 +162,7 @@ impl Feedable for CustomListMangaFeedParams {
 }
 
 impl Feedable for FollowedMangaFeedParams {
+    #[cfg_attr(feature = "hotpath", hotpath::measure)]
     fn feed(mut self, content_profile: &super::ContentProfile) -> Self {
         if self.excluded_groups.is_empty() {
             self.excluded_groups = content_profile.excluded_groups.clone();

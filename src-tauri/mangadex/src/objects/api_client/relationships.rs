@@ -26,6 +26,7 @@ impl Deref for ApiClientRelationships {
 }
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl ApiClientRelationships {
     pub async fn creator(&self) -> Result<User> {
         self.iter()

@@ -13,6 +13,7 @@ use super::utils::{FilterWatchOptionDataById, OptionFlattenStream, WatchSubscrip
 pub struct StatisticsSubscriptions;
 
 #[Subscription]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl StatisticsSubscriptions {
     pub async fn listen_by_id<'ctx>(
         &'ctx self,

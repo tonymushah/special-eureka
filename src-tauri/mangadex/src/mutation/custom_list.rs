@@ -22,6 +22,7 @@ use crate::{
 pub struct CustomListMutations;
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl CustomListMutations {
     pub async fn create(
         &self,

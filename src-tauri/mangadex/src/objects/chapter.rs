@@ -84,6 +84,7 @@ impl ExtractRelationships for Chapter {
 }
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl Chapter {
     pub async fn id(&self) -> Uuid {
         self.get_id()
@@ -107,6 +108,7 @@ impl Chapter {
     }
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl ExtractReferenceExpansion<'_> for Chapter {
     fn exctract(field: async_graphql::SelectionField<'_>) -> Vec<ReferenceExpansionResource> {
         let mut includes: Vec<ReferenceExpansionResource> = Vec::new();

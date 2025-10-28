@@ -16,6 +16,7 @@ use crate::{
     utils::watch::{SendData, Watches},
 };
 
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub fn init_client_state<R: Runtime>(
     app: &tauri::AppHandle<R>,
     store: &Store<R>,

@@ -38,6 +38,7 @@ impl Actor for CoverDownloadStreamActor {
 impl Handler<TaskSubscriberMessages<CoverDownloadTaskState>> for CoverDownloadStreamActor {
     type Result = ();
 
+    #[cfg_attr(feature = "hotpath", hotpath::measure)]
     fn handle(
         &mut self,
         msg: TaskSubscriberMessages<CoverDownloadTaskState>,
@@ -57,6 +58,7 @@ impl Handler<TaskSubscriberMessages<CoverDownloadTaskState>> for CoverDownloadSt
 
 impl Handler<super::OfflineAppStateNotLoadedMsg> for CoverDownloadStreamActor {
     type Result = ();
+    #[cfg_attr(feature = "hotpath", hotpath::measure)]
     fn handle(
         &mut self,
         _: super::OfflineAppStateNotLoadedMsg,
@@ -82,6 +84,7 @@ pub struct CoverDownloadStream {
 
 impl Stream for CoverDownloadStream {
     type Item = CoverDownloadState;
+    #[cfg_attr(feature = "hotpath", hotpath::measure)]
     fn poll_next(
         mut self: std::pin::Pin<&mut Self>,
         cx: &mut std::task::Context<'_>,
@@ -107,6 +110,7 @@ impl Stream for CoverDownloadStream {
     }
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl CoverDownloadStream {
     pub fn recipient(&self) -> WeakRecipient<TaskSubscriberMessages<CoverDownloadTaskState>> {
         self.actor.downgrade().recipient()

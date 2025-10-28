@@ -12,6 +12,7 @@ pub mod favicon;
 pub struct UtilsQuery;
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl UtilsQuery {
     pub async fn favicon(&self, ctx: &Context<'_>, url: Url) -> crate::Result<Url> {
         get_favicon::<tauri::Wry>(&url, ctx).await

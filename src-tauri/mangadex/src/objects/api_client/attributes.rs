@@ -27,6 +27,7 @@ impl From<ApiClientAttributes> for Attributes {
 }
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl ApiClientAttributes {
     pub async fn name(&self) -> &String {
         &self.name

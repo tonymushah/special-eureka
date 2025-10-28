@@ -8,6 +8,7 @@ use super::utils::WatchSubscriptionStream;
 pub struct OauthSubscriptions;
 
 #[Subscription]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl OauthSubscriptions {
     pub async fn listen<'ctx>(
         &'ctx self,

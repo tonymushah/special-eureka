@@ -42,6 +42,7 @@ impl Clone for LegacyMappingIdAttributes {
 }
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl LegacyMappingIdAttributes {
     pub async fn type_(&self) -> LegacyMappingType {
         self.type_

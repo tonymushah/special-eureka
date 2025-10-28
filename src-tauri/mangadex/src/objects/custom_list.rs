@@ -70,6 +70,7 @@ impl GetAttributes for CustomList {
 }
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl CustomList {
     pub async fn id(&self) -> Uuid {
         self.get_id()

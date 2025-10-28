@@ -25,6 +25,7 @@ impl SplittableParam for UserFollowedListParams {
 
 impl SendableParam for UserFollowedListParams {
     type Item = CustomListObject;
+    #[cfg_attr(feature = "hotpath", hotpath::measure)]
     async fn send(
         self,
         client: &mangadex_api::MangaDexClient,

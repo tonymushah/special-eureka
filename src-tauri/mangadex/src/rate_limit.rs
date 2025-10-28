@@ -230,14 +230,17 @@ specific! {
     },
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub fn default_jitter() -> Jitter {
     Jitter::new(Duration::from_millis(500), Duration::from_secs(2))
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub async fn until_ready(rate_limiter: &DefaultDirectRateLimiter) {
     rate_limiter.until_ready_with_jitter(default_jitter()).await;
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub async fn until_key_ready<K>(rate_limiter: &DefaultKeyedRateLimiter<K>, key: &K)
 where
     K: Eq + Hash + Clone,
@@ -247,6 +250,7 @@ where
         .await
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 async fn until_no_key_ready(rate_limiter: &RateLimiter) {
     rate_limiter
         .until_key_ready_with_jitter(&NoKey, default_jitter())

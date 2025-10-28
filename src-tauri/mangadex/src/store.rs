@@ -133,9 +133,11 @@ where
         SD: for<'de> ExtractFromStore<'de, R>,
     {
         async {
-            let store = self.get_mangadex_store()?;
-            let store_read = store.read().await;
-            Ok(SD::extract_from_store(&*store_read)?)
+            crate::measure_block!("TauriManagerMangadexStoreExtractor::extract_store", {
+                let store = self.get_mangadex_store()?;
+                let store_read = store.read().await;
+                Ok(SD::extract_from_store(&*store_read)?)
+            })
         }
     }
 }
@@ -157,10 +159,12 @@ where
         SD: StoreCrud<R> + Sync + Send,
     {
         async {
-            let store = self.get_mangadex_store()?;
-            let store_read = store.write().await;
-            store_data.insert(&*store_read)?;
-            Ok(())
+            crate::measure_block!("TauriManagerMangadexStoreCrud::insert", {
+                let store = self.get_mangadex_store()?;
+                let store_read = store.write().await;
+                store_data.insert(&*store_read)?;
+                Ok(())
+            })
         }
     }
     fn insert_and_save<SD>(&self, store_data: &SD) -> impl Future<Output = crate::Result<()>>
@@ -168,10 +172,12 @@ where
         SD: StoreCrud<R> + Sync + Send,
     {
         async {
-            let store = self.get_mangadex_store()?;
-            let store_read = store.write().await;
-            store_data.insert_and_save(&*store_read)?;
-            Ok(())
+            crate::measure_block!("TauriManagerMangadexStoreCrud::insert_and_save", {
+                let store = self.get_mangadex_store()?;
+                let store_read = store.write().await;
+                store_data.insert_and_save(&*store_read)?;
+                Ok(())
+            })
         }
     }
     fn delete<SD>(&self, store_data: &SD) -> impl Future<Output = crate::Result<()>>
@@ -179,10 +185,12 @@ where
         SD: StoreCrud<R> + Sync + Send,
     {
         async {
-            let store = self.get_mangadex_store()?;
-            let store_read = store.write().await;
-            store_data.delete(&*store_read)?;
-            Ok(())
+            crate::measure_block!("TauriManagerMangadexStoreCrud::delete", {
+                let store = self.get_mangadex_store()?;
+                let store_read = store.write().await;
+                store_data.delete(&*store_read)?;
+                Ok(())
+            })
         }
     }
     fn delete_and_save<SD>(&self, store_data: &SD) -> impl Future<Output = crate::Result<()>>
@@ -190,10 +198,12 @@ where
         SD: StoreCrud<R> + Sync + Send,
     {
         async {
-            let store = self.get_mangadex_store()?;
-            let store_read = store.write().await;
-            store_data.delete_and_save(&*store_read)?;
-            Ok(())
+            crate::measure_block!("TauriManagerMangadexStoreCrud::delete_and_save", {
+                let store = self.get_mangadex_store()?;
+                let store_read = store.write().await;
+                store_data.delete_and_save(&*store_read)?;
+                Ok(())
+            })
         }
     }
 }

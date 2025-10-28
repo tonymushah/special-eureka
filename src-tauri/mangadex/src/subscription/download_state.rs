@@ -16,6 +16,7 @@ use super::utils::{FilterWatchOptionDataById, WatchSubscriptionStream};
 pub struct DownloadStateSubscriptions;
 
 #[Subscription]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl DownloadStateSubscriptions {
     pub async fn listen_by_id<'ctx>(
         &'ctx self,

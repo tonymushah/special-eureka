@@ -56,9 +56,11 @@ futures-util.workspace = true
 image.workspace = true
 serde-xml-rs.workspace = true
 csv.workspace = true
+hotpath = { workspace = true, optional = true }
+shrink_fit_wrapper.workspace = true
 
 [dependencies.eureka-mmanager]
-version = "0.3"
+version = "0.4"
 default-features = false
 
 [dependencies.mangadex-api-input-types]
@@ -82,3 +84,6 @@ features = ["serde-human-readable", "large-dates", "local-offset"]
 
 [dependencies.tauri-plugin-store]
 workspace = true
+
+[features]
+hotpath = ["dep:hotpath"]

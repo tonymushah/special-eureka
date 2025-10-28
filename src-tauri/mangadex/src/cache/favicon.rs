@@ -11,6 +11,7 @@ use reqwest::Client;
 use tauri::{AppHandle, Manager, Runtime};
 use url::Url;
 
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub fn get_favicons_dir<R: Runtime>(app: &AppHandle<R>) -> crate::Result<PathBuf> {
     let dir = app
         .path()
@@ -21,6 +22,7 @@ pub fn get_favicons_dir<R: Runtime>(app: &AppHandle<R>) -> crate::Result<PathBuf
     Ok(dir)
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub fn clear_favicons_dir<R: Runtime>(app: &AppHandle<R>) -> crate::Result<()> {
     let dir = get_favicons_dir(app)?;
     let _ = remove_dir_all(&dir);
@@ -28,6 +30,7 @@ pub fn clear_favicons_dir<R: Runtime>(app: &AppHandle<R>) -> crate::Result<()> {
     Ok(())
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub fn get_favicon_file_path_from_cache_by_domain<R: Runtime>(
     domain: &str,
     app: &AppHandle<R>,
@@ -36,6 +39,7 @@ pub fn get_favicon_file_path_from_cache_by_domain<R: Runtime>(
     Ok(dir.join(domain))
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub fn get_favicon_file_path_from_cache<R: Runtime>(
     base_url: &Url,
     app: &AppHandle<R>,
@@ -44,6 +48,7 @@ pub fn get_favicon_file_path_from_cache<R: Runtime>(
     get_favicon_file_path_from_cache_by_domain(domain, app)
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub fn get_favicon_file_buf_read_from_cache<R: Runtime>(
     base_url: &Url,
     app: &AppHandle<R>,
@@ -53,6 +58,7 @@ pub fn get_favicon_file_buf_read_from_cache<R: Runtime>(
     )?))
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub fn get_favicon_file_buf_write_from_cache<R: Runtime>(
     base_url: &Url,
     app: &AppHandle<R>,
@@ -62,6 +68,7 @@ pub fn get_favicon_file_buf_write_from_cache<R: Runtime>(
     )?))
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub fn get_favicon_from_cache<R: Runtime>(
     base_url: &Url,
     app: &AppHandle<R>,
@@ -72,6 +79,7 @@ pub fn get_favicon_from_cache<R: Runtime>(
     Ok(buf.into())
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub async fn get_favicon_online<R: Runtime>(
     base_url: &Url,
     client: Client,
@@ -100,6 +108,7 @@ pub async fn get_favicon_online<R: Runtime>(
     Ok(favicon)
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub async fn get_favicon<R: Runtime>(base_url: &Url, app: &AppHandle<R>) -> crate::Result<Bytes> {
     if let Ok(res) = get_favicon_from_cache(base_url, app) {
         Ok(res)

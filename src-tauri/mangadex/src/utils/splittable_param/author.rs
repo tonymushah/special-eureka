@@ -31,6 +31,7 @@ impl SplittableParam for AuthorListParams {
 
 impl SendableParam for AuthorListParams {
     type Item = AuthorObject;
+    #[cfg_attr(feature = "hotpath", hotpath::measure)]
     async fn send(
         self,
         client: &mangadex_api::MangaDexClient,

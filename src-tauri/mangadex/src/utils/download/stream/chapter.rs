@@ -31,6 +31,7 @@ pub struct ChapterDownloadStream {
     _handle: AbortHandleGuard,
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl ChapterDownloadStream {
     pub fn recipient(&self) -> WeakRecipient<TaskSubscriberMessages<ChapterDownloadTaskState>> {
         self.actor.downgrade().recipient()
@@ -83,6 +84,7 @@ impl ChapterDownloadStream {
 
 impl Stream for ChapterDownloadStream {
     type Item = ChapterDownloadState;
+    #[cfg_attr(feature = "hotpath", hotpath::measure)]
     fn poll_next(
         mut self: std::pin::Pin<&mut Self>,
         cx: &mut std::task::Context<'_>,
@@ -121,6 +123,7 @@ impl Actor for ChapterDownloadStreamActor {
 impl Handler<TaskSubscriberMessages<ChapterDownloadTaskState>> for ChapterDownloadStreamActor {
     type Result = ();
 
+    #[cfg_attr(feature = "hotpath", hotpath::measure)]
     fn handle(
         &mut self,
         msg: TaskSubscriberMessages<ChapterDownloadTaskState>,
@@ -140,6 +143,7 @@ impl Handler<TaskSubscriberMessages<ChapterDownloadTaskState>> for ChapterDownlo
 
 impl Handler<super::OfflineAppStateNotLoadedMsg> for ChapterDownloadStreamActor {
     type Result = ();
+    #[cfg_attr(feature = "hotpath", hotpath::measure)]
     fn handle(
         &mut self,
         _: super::OfflineAppStateNotLoadedMsg,

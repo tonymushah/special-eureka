@@ -25,6 +25,7 @@ use super::download_state::DownloadStateQueries;
 pub struct CoverQueries;
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl CoverQueries {
     pub async fn list(
         &self,

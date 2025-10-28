@@ -58,6 +58,7 @@ impl From<&MangaListQueries> for MangaListParams {
     }
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl MangaListQueries {
     pub fn new_with_exclude_feed<CF: ContentFeeder<MangaListParams>>(
         param: MangaListParams,

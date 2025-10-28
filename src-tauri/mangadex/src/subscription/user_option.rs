@@ -34,6 +34,7 @@ use super::utils::WatchSubscriptionStream;
 pub struct UserOptionSubscriptions;
 
 #[Subscription]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl UserOptionSubscriptions {
     pub async fn listen_to_page_direction<'ctx>(
         &'ctx self,

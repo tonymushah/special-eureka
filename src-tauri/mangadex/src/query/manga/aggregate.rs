@@ -56,6 +56,7 @@ impl From<MangaAggregateQueries> for Uuid {
 }
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl MangaAggregateQueries {
     pub async fn chunked(
         &self,

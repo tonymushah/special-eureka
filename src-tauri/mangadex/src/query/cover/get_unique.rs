@@ -18,6 +18,7 @@ pub struct CoverGetUniqueQuery {
 }
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl CoverGetUniqueQuery {
     #[graphql(skip)]
     pub async fn get_online(&self, ctx: &Context<'_>) -> Result<Cover> {

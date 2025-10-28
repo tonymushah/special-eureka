@@ -21,6 +21,7 @@ impl TryFrom<&Request<Vec<u8>>> for HandleFaviconParams {
     }
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub fn handle_favicon<'a, R: Runtime>(
     app: &'a AppHandle<R>,
     req: &'a Request<Vec<u8>>,

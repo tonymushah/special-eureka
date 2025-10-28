@@ -6,10 +6,19 @@ use tauri::{Builder, Wry};
 use crate::commands::open_new_window::open_new_window_sync_from_app;
 
 pub fn get_builder() -> Builder<Wry> {
-    let builder = tauri::Builder::default();
+    #[allow(unused_mut)]
+    let mut builder = tauri::Builder::default();
     /*builder = builder
     .menu(menu::get_menu())*/
     // .on_menu_event(menu::on_menu_event);
+    #[cfg(feature = "devtools")]
+    {
+        builder = builder.plugin(tauri_plugin_devtools::init());
+    }
+    #[cfg(feature = "embedded-devtools")]
+    {
+        builder = builder.plugin(tauri_plugin_devtools_app::init());
+    }
     builder
         /*
             .register_uri_scheme_protocol("tony", |_app, req| {

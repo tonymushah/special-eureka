@@ -10,6 +10,7 @@ fn menu_handle<R: Runtime>(window: &Window<R>) -> Result<()> {
 }
 
 #[command]
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub fn toggle_decoration<R: Runtime>(window: Window<R>, decoration: Option<bool>) -> Result<()> {
     window.set_decorations(decoration.unwrap_or(!window.is_decorated()?))?;
     let _ = menu_handle(&window);

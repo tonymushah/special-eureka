@@ -8,6 +8,7 @@ use super::utils::WatchSubscriptionStream;
 pub struct IsAppStateMountedSubscriptions;
 
 #[Subscription]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl IsAppStateMountedSubscriptions {
     pub async fn listen<'ctx>(
         &'ctx self,

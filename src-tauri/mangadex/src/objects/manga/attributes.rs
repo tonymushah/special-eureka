@@ -39,6 +39,7 @@ impl From<GraphQLMangaAttributes> for MangaAttributes {
 }
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl GraphQLMangaAttributes {
     pub async fn title(&self) -> &LocalizedString {
         &self.title

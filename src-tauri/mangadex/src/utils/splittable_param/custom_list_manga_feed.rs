@@ -26,12 +26,14 @@ impl SplittableParam for CustomListMangaFeedParams {
 
 impl SendableParam for CustomListMangaFeedParams {
     type Item = ChapterObject;
+    #[cfg_attr(feature = "hotpath", hotpath::measure)]
     async fn send(
         self,
         client: &mangadex_api::MangaDexClient,
     ) -> crate::Result<mangadex_api_schema_rust::v5::Results<Self::Item>> {
         Ok(Self::send(self, client).await?)
     }
+    #[cfg_attr(feature = "hotpath", hotpath::measure)]
     async fn send_with_auth(
         self,
         client: &mangadex_api::MangaDexClient,

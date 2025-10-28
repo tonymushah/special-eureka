@@ -33,6 +33,7 @@ use crate::{
 pub struct ChapterMutations;
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl ChapterMutations {
     pub async fn update(&self, ctx: &Context<'_>, params: ChapterUpdateParams) -> Result<Chapter> {
         let client =

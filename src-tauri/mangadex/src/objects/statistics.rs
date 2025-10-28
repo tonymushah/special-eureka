@@ -72,6 +72,7 @@ impl From<Comments> for StatisticsComments {
 }
 
 #[ComplexObject]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl StatisticsComments {
     pub async fn thread_url(&self) -> Result<Url> {
         let comments: Comments = (*self).into();

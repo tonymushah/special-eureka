@@ -11,6 +11,7 @@ use crate::{
 pub struct ChapterPagesSubscription;
 
 #[Subscription]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl ChapterPagesSubscription {
     pub async fn get_chapter_pages(
         &self,

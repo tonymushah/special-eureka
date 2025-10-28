@@ -28,6 +28,7 @@ impl From<AuthorAttributes> for Attributes {
 }
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl AuthorAttributes {
     pub async fn name(&self) -> &String {
         &self.name

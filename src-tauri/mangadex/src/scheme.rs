@@ -96,10 +96,11 @@ impl<E: Error + 'static> From<E> for SchemeResponseError {
         SchemeResponseError::InternalError(Box::new(err))
     }
 }
-
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub fn parse_uri(req: &Request<Vec<u8>>) -> SchemeResponseResult<Url> {
     Ok(Url::parse(req.uri().to_string().as_str())?)
 }
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub fn get_offline_app_state<R: Runtime>(
     app: &AppHandle<R>,
 ) -> SchemeResponseResult<State<'_, OfflineAppState>> {
@@ -107,6 +108,7 @@ pub fn get_offline_app_state<R: Runtime>(
         .ok_or(SchemeResponseError::NotLoaded)
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 fn handle<R: Runtime>(app: AppHandle<R>, req: Request<Vec<u8>>) -> Response<Vec<u8>> {
     match parse_uri(&req) {
         Ok(uri) => {
@@ -132,6 +134,7 @@ fn handle<R: Runtime>(app: AppHandle<R>, req: Request<Vec<u8>>) -> Response<Vec<
     }
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub fn register_scheme<R: Runtime>(
     app: &AppHandle<R>,
     config: serde_json::Value,

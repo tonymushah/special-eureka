@@ -3,6 +3,7 @@ use tauri::{AppHandle, Runtime};
 
 use crate::scheme::register_scheme;
 
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub fn register_uri_scheme_protocol<R: Runtime>(
     app: &AppHandle<R>,
     config: Value,

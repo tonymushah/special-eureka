@@ -42,6 +42,7 @@ impl From<&MangaGetUniqueQueries> for Uuid {
     }
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl ExtractReferenceExpansion<'_> for MangaGetUniqueQueries {
     fn exctract(field: async_graphql::SelectionField<'_>) -> Vec<ReferenceExpansionResource> {
         field
@@ -54,6 +55,7 @@ impl ExtractReferenceExpansion<'_> for MangaGetUniqueQueries {
 
 impl ExtractReferenceExpansionFromContext<'_> for MangaGetUniqueQueries {}
 
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl MangaGetUniqueQueries {
     pub async fn get_online(&self, ctx: &Context<'_>) -> Result<Manga> {
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;

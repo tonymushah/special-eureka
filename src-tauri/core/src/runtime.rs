@@ -17,6 +17,7 @@ impl Drop for RuntimeGuard {
     }
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl RuntimeGuard {
     pub fn handle(&self) -> &Handle {
         &self.handle

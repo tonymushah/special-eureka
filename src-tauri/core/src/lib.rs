@@ -9,25 +9,41 @@ use std::sync::{Arc, Mutex};
 
 pub(crate) mod builder;
 pub(crate) mod commands;
+#[cfg(feature = "hotpath")]
+mod hot_path;
 pub(crate) mod logging;
 pub(crate) mod runtime;
 pub(crate) mod states;
 
 pub fn run() {
+    #[cfg(feature = "hotpath")]
+    let _hot_guard = hot_path::init_hotpath();
+
     let runtime_guard = RuntimeGuard::new(|| {
-        RuntimeBuilder::new_current_thread()
-            .enable_all()
-            .build()
-            .unwrap()
+        #[cfg(not(feature = "actix-multi-threaded"))]
+        {
+            RuntimeBuilder::new_current_thread()
+                .enable_all()
+                .build()
+                .unwrap()
+        }
+        #[cfg(feature = "actix-multi-threaded")]
+        {
+            RuntimeBuilder::new_multi_thread()
+                .enable_all()
+                .build()
+                .unwrap()
+        }
     })
     .unwrap();
     let context = tauri::tauri_build_context!();
     System::set_current(runtime_guard.sys().clone());
-    /*let tauri_async_runtime = RuntimeBuilder::new_current_thread()
-        .enable_all()
-        .build()
-        .unwrap();
-    tauri::async_runtime::set(tauri_async_runtime.handle().clone());*/
+
+    #[cfg(feature = "single-runtime")]
+    {
+        tauri::async_runtime::set(runtime_guard.handle().clone());
+    }
+
     let runtime_guard = Arc::new(Mutex::new(Some(runtime_guard)));
 
     match get_builder().build(context) {
@@ -69,3 +85,17 @@ pub fn run() {
 
 #[allow(unused)]
 pub(crate) const SPECIAL_EUREKA_ERROR_EVENT_KEY: &str = "special-eureka://internal-error";
+
+#[macro_export]
+macro_rules! measure_block {
+    ($label:expr, $expr:expr) => {
+        #[cfg(feature = "hotpath")]
+        {
+            hotpath::measure_block!($label, $expr)
+        }
+        #[cfg(not(feature = "hotpath"))]
+        {
+            $expr
+        }
+    };
+}

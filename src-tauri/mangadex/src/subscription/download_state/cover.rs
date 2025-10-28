@@ -141,6 +141,7 @@ impl CoverDownloadState {
 pub struct CoverDownloadSubs;
 
 #[Subscription]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl CoverDownloadSubs {
     pub async fn listen_to_cover_tasks<'ctx>(
         &'ctx self,

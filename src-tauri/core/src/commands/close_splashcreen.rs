@@ -1,6 +1,7 @@
 use tauri::{Emitter, Manager, Runtime};
 
 #[tauri::command]
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub async fn close_splashscreen<R: Runtime>(
     webview: tauri::WebviewWindow<R>,
 ) -> Result<(), String> {

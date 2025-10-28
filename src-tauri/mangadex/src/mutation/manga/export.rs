@@ -11,6 +11,7 @@ use crate::{
 pub struct MangaExportMutations;
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl MangaExportMutations {
     pub async fn ids_as_my_anime_list(
         &self,

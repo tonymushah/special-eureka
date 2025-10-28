@@ -161,6 +161,7 @@ impl From<favicon_picker::error::Error> for Error {
 }
 
 impl ErrorExtensions for Error {
+    #[cfg_attr(feature = "hotpath", hotpath::measure)]
     fn extend(&self) -> async_graphql::Error {
         async_graphql::Error::new(format!("{self}")).extend_with(|_err, exts| {
             exts.set("code", ErrorKind::from(self).repr());
@@ -234,6 +235,7 @@ impl AsRef<Error> for ErrorWrapper {
 }
 
 impl ErrorWrapper {
+    #[cfg_attr(feature = "hotpath", hotpath::measure)]
     pub fn into_inner(self) -> Option<Error> {
         std::sync::Arc::into_inner(self.0)
     }

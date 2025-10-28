@@ -11,6 +11,7 @@ use crate::{
 pub struct LegacyQueries;
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl LegacyQueries {
     pub async fn id_mapping(
         &self,

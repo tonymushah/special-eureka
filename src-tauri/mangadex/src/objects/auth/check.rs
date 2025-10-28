@@ -21,6 +21,7 @@ impl Deref for AuthCheck {
 }
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl AuthCheck {
     pub async fn is_authenticated(&self) -> bool {
         self.is_authenticated

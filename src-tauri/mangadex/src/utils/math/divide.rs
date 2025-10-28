@@ -6,6 +6,7 @@ pub struct DivideResult<T> {
     pub quot: T,
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub fn divide<T>(num: T, dem: T) -> DivideResult<T>
 where
     T: Sub<Output = T> + Div<Output = T> + Rem<Output = T> + Copy,

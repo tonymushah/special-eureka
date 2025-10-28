@@ -133,6 +133,7 @@ impl MangaDownloadState {
 pub struct MangaDownloadSubs;
 
 #[Subscription]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl MangaDownloadSubs {
     pub async fn listen_to_manga_tasks<'ctx>(
         &'ctx self,

@@ -43,6 +43,7 @@ impl Default for LastTimeTokenWhenFecthed {
     }
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl LastTimeTokenWhenFecthed {
     pub async fn clear(&self) {
         let _ = self.write().await.take();

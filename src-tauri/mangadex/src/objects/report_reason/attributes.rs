@@ -33,6 +33,7 @@ impl From<ReportReasonAttributes> for Attributes {
 }
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl ReportReasonAttributes {
     pub async fn reason(&self) -> &LocalizedString {
         &self.reason

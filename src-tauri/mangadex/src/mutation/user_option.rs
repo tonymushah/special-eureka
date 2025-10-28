@@ -58,6 +58,7 @@ use crate::{
 pub struct UserOptionMutations;
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl UserOptionMutations {
     pub async fn set_reading_mode(
         &self,

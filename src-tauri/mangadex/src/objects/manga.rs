@@ -74,6 +74,7 @@ impl ExtractRelationships for MangaObject {
 }
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl MangaObject {
     pub async fn id(&self) -> Uuid {
         self.get_id()
@@ -117,6 +118,7 @@ impl From<ApiObjectNoRelationships<MangaAttributes>> for MangaObject {
     }
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl ExtractReferenceExpansion<'_> for MangaObject {
     fn exctract(field: async_graphql::SelectionField<'_>) -> Vec<ReferenceExpansionResource> {
         let mut includes: Vec<ReferenceExpansionResource> = Vec::new();

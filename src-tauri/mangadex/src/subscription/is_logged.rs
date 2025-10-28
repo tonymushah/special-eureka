@@ -8,6 +8,7 @@ use super::utils::WatchSubscriptionStream;
 pub struct IsLoggedSubscriptions;
 
 #[Subscription]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl IsLoggedSubscriptions {
     pub async fn listen<'ctx>(
         &'ctx self,

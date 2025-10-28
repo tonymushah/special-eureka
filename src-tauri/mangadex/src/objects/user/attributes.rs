@@ -27,6 +27,7 @@ impl From<UserAttributes> for Attributes {
 }
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl UserAttributes {
     pub async fn username(&self) -> &String {
         &self.username

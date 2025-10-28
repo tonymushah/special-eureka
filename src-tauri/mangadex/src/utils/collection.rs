@@ -16,6 +16,7 @@ where
     total: usize,
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl<T> Collection<T>
 where
     T: Serialize,

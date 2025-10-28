@@ -18,6 +18,7 @@ use crate::{
 pub struct ApiClientMutation;
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl ApiClientMutation {
     pub async fn create(
         &self,

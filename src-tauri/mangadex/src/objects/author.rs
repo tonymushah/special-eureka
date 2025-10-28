@@ -71,6 +71,7 @@ impl GetAttributes for Author {
 }
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl Author {
     pub async fn id(&self) -> Uuid {
         self.get_id()

@@ -11,6 +11,7 @@ use crate::subscription::utils::{FilterWatchOptionDataById, WatchSubscriptionStr
 pub struct MangaStatisticsSubscriptions;
 
 #[Subscription]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl MangaStatisticsSubscriptions {
     pub async fn listen_by_id<'ctx>(
         &'ctx self,

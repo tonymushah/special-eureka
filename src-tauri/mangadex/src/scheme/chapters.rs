@@ -14,12 +14,14 @@ enum ChapterMode {
     DataSaver,
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 fn not_found_chapter_image(chapter_id: Uuid, filename: &str) -> SchemeResponseError {
     SchemeResponseError::NotFound(
         format!("the given chapter `{chapter_id}`/{filename} is not found").into_bytes(),
     )
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 fn get_chapters_params(
     req: &Request<Vec<u8>>,
 ) -> SchemeResponseResult<(Uuid, ChapterMode, String)> {
@@ -49,6 +51,7 @@ fn get_chapters_params(
     Ok((chapter_id, mode, filename))
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub fn handle_chapters<'a, R: Runtime>(
     app: &'a AppHandle<R>,
     req: &'a Request<Vec<u8>>,

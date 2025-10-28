@@ -41,6 +41,7 @@ pub enum ChapterUploadError {
 pub struct UploadMutations;
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl UploadMutations {
     pub async fn begin_session(
         &self,

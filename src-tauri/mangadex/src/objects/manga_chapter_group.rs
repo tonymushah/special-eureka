@@ -22,6 +22,7 @@ pub struct MangaChapterGroup {
     info: ResultsInfo,
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl MangaChapterGroup {
     pub fn get_chapter_references_expansions(
         field: SelectionField<'_>,
@@ -67,6 +68,7 @@ impl MangaChapterGroup {
     }
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub async fn group_results(
     chapter_results: Results<ChapterObject>,
     ctx: &Context<'_>,

@@ -30,6 +30,7 @@ pub trait SplittableParam: Clone {
     fn set_offset(&mut self, offset: u32);
     fn set_limit(&mut self, limit: u32);
     fn set_ids(&mut self, _ids: Vec<Uuid>) {}
+    #[cfg_attr(feature = "hotpath", hotpath::measure)]
     fn split_param(&self, chunck: usize) -> Result<Vec<Self>, std::num::TryFromIntError> {
         let res = if !self.ids().is_empty() {
             self.ids()
@@ -97,27 +98,29 @@ pub trait SendSplitted: SendableParam + SplittableParam {
         chunck: usize,
     ) -> impl Future<Output = crate::Result<Results<<Self as SendableParam>::Item>>> + Send {
         async move {
-            let params = self.split_param(chunck)?;
-            let mut results = Vec::<Results<<Self as SendableParam>::Item>>::new();
-            for val in params {
-                results.push(val.send(client).await?);
-            }
-            Ok(results.into_iter().fold(
-                Results {
-                    response: mangadex_api_types_rust::ResponseType::Collection,
-                    offset: self.offset(),
-                    total: 0,
-                    limit: 0,
-                    data: Vec::new(),
-                    result: mangadex_api_types_rust::ResultType::Ok,
-                },
-                |mut agg, res| {
-                    agg.total = res.total;
-                    agg.limit += res.limit;
-                    agg.data.extend(res.data);
-                    agg
-                },
-            ))
+            crate::measure_block!("SendSplitted::send_splitted", {
+                let params = self.split_param(chunck)?;
+                let mut results = Vec::<Results<<Self as SendableParam>::Item>>::new();
+                for val in params {
+                    results.push(val.send(client).await?);
+                }
+                Ok(results.into_iter().fold(
+                    Results {
+                        response: mangadex_api_types_rust::ResponseType::Collection,
+                        offset: self.offset(),
+                        total: 0,
+                        limit: 0,
+                        data: Vec::new(),
+                        result: mangadex_api_types_rust::ResultType::Ok,
+                    },
+                    |mut agg, res| {
+                        agg.total = res.total;
+                        agg.limit += res.limit;
+                        agg.data.extend(res.data);
+                        agg
+                    },
+                ))
+            })
         }
     }
     fn send_splitted_default(
@@ -125,8 +128,10 @@ pub trait SendSplitted: SendableParam + SplittableParam {
         client: &MangaDexClient,
     ) -> impl Future<Output = crate::Result<Results<<Self as SendableParam>::Item>>> + Send {
         async move {
-            self.send_splitted(client, MANGADEX_PAGE_LIMIT.try_into()?)
-                .await
+            crate::measure_block!("SendSplitted::send_splitter_default", {
+                self.send_splitted(client, MANGADEX_PAGE_LIMIT.try_into()?)
+                    .await
+            })
         }
     }
     fn send_splitted_with_auth(
@@ -138,27 +143,29 @@ pub trait SendSplitted: SendableParam + SplittableParam {
         Self: Sized,
     {
         async move {
-            let params = self.split_param(chunck)?;
-            let mut results = Vec::<Results<<Self as SendableParam>::Item>>::new();
-            for val in params {
-                results.push(val.send_with_auth(client).await?);
-            }
-            Ok(results.into_iter().fold(
-                Results {
-                    response: mangadex_api_types_rust::ResponseType::Collection,
-                    offset: self.offset(),
-                    total: 0,
-                    limit: 0,
-                    data: Vec::new(),
-                    result: mangadex_api_types_rust::ResultType::Ok,
-                },
-                |mut agg, res| {
-                    agg.total = res.total;
-                    agg.limit += res.limit;
-                    agg.data.extend(res.data);
-                    agg
-                },
-            ))
+            crate::measure_block!("SendSplitted::send_splitted_with_auth", {
+                let params = self.split_param(chunck)?;
+                let mut results = Vec::<Results<<Self as SendableParam>::Item>>::new();
+                for val in params {
+                    results.push(val.send_with_auth(client).await?);
+                }
+                Ok(results.into_iter().fold(
+                    Results {
+                        response: mangadex_api_types_rust::ResponseType::Collection,
+                        offset: self.offset(),
+                        total: 0,
+                        limit: 0,
+                        data: Vec::new(),
+                        result: mangadex_api_types_rust::ResultType::Ok,
+                    },
+                    |mut agg, res| {
+                        agg.total = res.total;
+                        agg.limit += res.limit;
+                        agg.data.extend(res.data);
+                        agg
+                    },
+                ))
+            })
         }
     }
     fn send_splitted_default_with_auth(
@@ -169,8 +176,10 @@ pub trait SendSplitted: SendableParam + SplittableParam {
         Self: Sized,
     {
         async move {
-            self.send_splitted_with_auth(client, MANGADEX_PAGE_LIMIT.try_into()?)
-                .await
+            crate::measure_block!("SendSplitte::send_splitted_default_with_auth", {
+                self.send_splitted_with_auth(client, MANGADEX_PAGE_LIMIT.try_into()?)
+                    .await
+            })
         }
     }
 }

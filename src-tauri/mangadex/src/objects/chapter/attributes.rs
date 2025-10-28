@@ -30,6 +30,7 @@ impl From<ChapterAttributes> for Attributes {
 }
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl ChapterAttributes {
     pub async fn title(&self) -> Option<&String> {
         self.title.as_ref()

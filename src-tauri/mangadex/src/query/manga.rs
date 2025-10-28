@@ -44,6 +44,7 @@ use super::download_state::DownloadStateQueries;
 pub struct MangaQueries;
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl MangaQueries {
     pub async fn is_downloaded(&self, ctx: &Context<'_>, id: Uuid) -> Result<DownloadState> {
         DownloadStateQueries.manga(ctx, id).await

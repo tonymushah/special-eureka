@@ -40,6 +40,7 @@ use crate::{
 pub struct UserOptionQueries;
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl UserOptionQueries {
     pub async fn get_reading_mode(&self, ctx: &Context<'_>) -> Result<ReadingMode> {
         let store = get_store::<tauri::Wry>(ctx)?;

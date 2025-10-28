@@ -64,6 +64,7 @@ pub struct CoverImageCache {
     pub mode: Option<CoverImageQuality>,
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl CoverImageCache {
     fn get_online_filename(&self) -> String {
         self.mode

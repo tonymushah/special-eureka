@@ -23,6 +23,7 @@ use super::{chapter::list::ChapterListQueries, manga::list::MangaListQueries};
 pub struct HomeQueries;
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl HomeQueries {
     pub async fn seasonal(&self, ctx: &Context<'_>) -> Result<CustomList> {
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;

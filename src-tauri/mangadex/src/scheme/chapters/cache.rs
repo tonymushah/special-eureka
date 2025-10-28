@@ -16,6 +16,7 @@ use crate::{
     utils::traits_utils::MangadexTauriManagerExt,
 };
 
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 fn get_chapters_params(
     req: &Request<Vec<u8>>,
 ) -> SchemeResponseResult<(Uuid, DownloadMode, String)> {
@@ -45,6 +46,7 @@ fn get_chapters_params(
     Ok((chapter_id, mode, filename))
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub fn handle_chapters_cache<'a, R: Runtime>(
     app: &'a AppHandle<R>,
     req: &'a Request<Vec<u8>>,

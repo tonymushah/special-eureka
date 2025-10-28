@@ -44,6 +44,7 @@ impl From<Vec<VolumeAggregate>> for MangaAggregate {
     }
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl MangaAggregate {
     pub fn chapter_ids(&self) -> Vec<Uuid> {
         self.volumes.iter().flat_map(|v| v.chapter_ids()).collect()
@@ -70,6 +71,7 @@ impl MangaAggregate {
 }
 
 #[ComplexObject]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl MangaAggregate {
     pub async fn ids(&self) -> Vec<Uuid> {
         self.chapter_ids()

@@ -31,6 +31,7 @@ impl ChapterAggregate {
 }
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl ChapterAggregate {
     pub async fn chapter(&self) -> &String {
         &self.chapter

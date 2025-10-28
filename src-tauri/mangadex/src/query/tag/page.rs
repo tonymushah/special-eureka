@@ -35,6 +35,7 @@ pub struct TagPopularList {
 }
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl TagPageQueries {
     pub async fn top_ten(&self, ctx: &Context<'_>) -> crate::Result<Vec<MangaObject>> {
         let app = ctx.get_app_handle::<tauri::Wry>()?;

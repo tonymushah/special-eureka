@@ -25,6 +25,7 @@ pub struct CoverListQuery {
 }
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl CoverListQuery {
     #[graphql(skip)]
     pub async fn list_offline(&self, ctx: &Context<'_>) -> Result<CoverResults> {

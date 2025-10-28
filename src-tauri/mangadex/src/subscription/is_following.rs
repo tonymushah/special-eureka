@@ -11,6 +11,7 @@ use super::utils::{FilterWatchOptionDataById, WatchSubscriptionStream};
 pub struct IsFollowingSubscriptions;
 
 #[Subscription]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl IsFollowingSubscriptions {
     pub async fn listen_by_manga_id<'ctx>(
         &'ctx self,

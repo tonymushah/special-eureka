@@ -25,6 +25,7 @@ impl SplittableParam for UserFollowedUserParams {
 
 impl SendableParam for UserFollowedUserParams {
     type Item = UserObject;
+    #[cfg_attr(feature = "hotpath", hotpath::measure)]
     async fn send(
         self,
         client: &mangadex_api::MangaDexClient,

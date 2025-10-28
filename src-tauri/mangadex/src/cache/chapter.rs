@@ -28,6 +28,7 @@ use eureka_mmanager::prelude::ChapterDataPullAsyncTrait;
 use futures_util::Stream;
 use mangadex_api_schema_rust::v5::AtHomeServer;
 use reqwest::Client;
+use shrink_fit_wrapper::ShrinkFitWrapper;
 use tauri::{AppHandle, Runtime};
 use tempfile::TempDir;
 use tokio::{
@@ -70,6 +71,7 @@ pub struct ChapterImageSize {
     pub height: u32,
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl ChapterImageSize {
     pub fn from_buffer(buf: &[u8]) -> Option<ChapterImageSize> {
         image::load_from_memory(buf).ok().map(|d| Self {
@@ -157,6 +159,7 @@ impl From<crate::Error> for FetchingError {
 
 impl async_graphql::ErrorExtensions for FetchingError {
     fn extend(&self) -> async_graphql::Error {
+        log::trace!("Extending fetching error to GQL");
         match self {
             FetchingError::Internal(d) => d.extend(),
             _ => async_graphql::Error::new(self.to_string()).extend_with(|_, extion| match self {
@@ -206,6 +209,7 @@ struct SpawnHandle<R: Runtime> {
     last_fetched: Option<Instant>,
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 fn get_urls(at_home: &AtHomeServer, mode: Mode) -> Vec<(Url, String)> {
     match mode {
         Mode::Normal => &at_home.chapter.data,
@@ -230,6 +234,7 @@ fn get_urls(at_home: &AtHomeServer, mode: Mode) -> Vec<(Url, String)> {
     .collect()
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl<R: Runtime> SpawnHandle<R> {
     fn send_message(&self, message: ChapterPageMessage) {
         self.subs.clear_poison();
@@ -754,6 +759,7 @@ impl Deref for ChapterPagesStream {
     }
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl Stream for ChapterPagesStream {
     type Item = async_graphql::Result<ChapterPage>;
     fn poll_next(
@@ -769,6 +775,7 @@ impl Stream for ChapterPagesStream {
     }
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl ChapterPagesHandle {
     pub fn subscribe_with_rx(&self) -> UnboundedReceiver<ChapterPageMessage> {
         let (tx, rx) = unbounded_channel();
@@ -880,11 +887,21 @@ struct StoreKey {
     mode: Mode,
 }
 
-#[derive(Debug, Default)]
+#[derive(Debug)]
 pub struct ChapterPagesStore {
-    pages: HashMap<StoreKey, Weak<ChapterPagesHandle>>,
+    pages: ShrinkFitWrapper<HashMap<StoreKey, Weak<ChapterPagesHandle>>>,
 }
 
+impl Default for ChapterPagesStore {
+    fn default() -> Self {
+        Self {
+            pages: ShrinkFitWrapper::new(HashMap::new())
+                .set_shrink_duration_cycle(Duration::from_secs(10 * 60)),
+        }
+    }
+}
+
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl ChapterPagesStore {
     pub fn get_handle<R: Runtime>(
         &mut self,
@@ -892,7 +909,8 @@ impl ChapterPagesStore {
         mode: Mode,
         app: AppHandle<R>,
     ) -> io::Result<Arc<ChapterPagesHandle>> {
-        match self.pages.entry(StoreKey { id, mode }) {
+        let mut guard = self.pages.as_mut();
+        let res = match guard.entry(StoreKey { id, mode }) {
             Entry::Occupied(mut d) => {
                 if let Some(e) = d.get().upgrade() {
                     Ok(e)
@@ -907,7 +925,9 @@ impl ChapterPagesStore {
                 d.insert(Arc::downgrade(&task));
                 Ok(task)
             }
-        }
+        };
+        guard.retain(|_, h| h.strong_count() > 0);
+        res
     }
     pub fn get_handle_maybe_not_loaded(
         &self,

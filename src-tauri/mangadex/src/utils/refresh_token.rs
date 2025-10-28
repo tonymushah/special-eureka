@@ -4,6 +4,7 @@ use tauri::{AppHandle, Runtime};
 
 use crate::utils::{traits_utils::MangadexTauriManagerExt, watch::SendData};
 
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub async fn refresh_token<R: Runtime>(app: AppHandle<R>) -> crate::Result<()> {
     let client = app.get_mangadex_client()?;
     let last_time_fetched = app.get_last_time_token_when_fetched()?;

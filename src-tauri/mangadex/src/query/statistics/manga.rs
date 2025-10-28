@@ -16,6 +16,7 @@ use crate::{
 pub struct MangaStatisticsQueries;
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl MangaStatisticsQueries {
     pub async fn get(&self, ctx: &Context<'_>, id: Uuid) -> Result<Statistics> {
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;

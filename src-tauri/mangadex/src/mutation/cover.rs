@@ -34,6 +34,7 @@ use crate::{
 pub struct CoverMutations;
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl CoverMutations {
     pub async fn upload(&self, ctx: &Context<'_>, params: CoverUploadParam) -> Result<Cover> {
         let client =
