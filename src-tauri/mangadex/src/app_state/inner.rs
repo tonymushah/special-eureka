@@ -43,6 +43,7 @@ impl Deref for AppStateInner {
     }
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl AppStateInner {
     pub async fn init<R, M>(app: &M) -> crate::Result<Self>
     where

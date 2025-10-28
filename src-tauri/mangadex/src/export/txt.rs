@@ -6,6 +6,7 @@ use std::{
 
 use uuid::Uuid;
 
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub async fn export_uuids_as_txt(uuids: Vec<Uuid>, file: String) -> crate::Result<String> {
     let export_path = Path::new(&file);
     let mut file = File::create(export_path)?;

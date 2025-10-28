@@ -280,6 +280,7 @@ struct ExportCoreOptions<'a, R: Runtime> {
     allow_none_status: bool,
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 async fn export_core<R: Runtime>(options: ExportCoreOptions<'_, R>) -> crate::Result<String> {
     let priorities = options.priorities.unwrap_or_default();
     let mut progress = options.progress;
@@ -653,6 +654,7 @@ pub struct MDCustomListsToMyAnimeListExportOption {
     pub include_private: Option<bool>,
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub async fn export_custom_lists_to_my_anime_list<R>(
     app: &AppHandle<R>,
     option: MDCustomListsToMyAnimeListExportOption,

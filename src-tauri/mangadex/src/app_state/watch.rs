@@ -17,6 +17,7 @@ use crate::{
 };
 
 /// Need to be used inside of an tokio runtime
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub fn weak_download_manager_watch<R: Runtime, M: Manager<R> + Clone + Send + 'static>(
     app: &M,
 ) -> crate::Result<Receiver<Option<WeakAddr<DownloadManager>>>> {
@@ -61,6 +62,7 @@ pub fn weak_download_manager_watch<R: Runtime, M: Manager<R> + Clone + Send + 's
 
 type ArcRwLock<T> = Arc<RwLock<T>>;
 
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub fn weak_download_manager<R: Runtime, M: Manager<R> + Clone + Send + 'static>(
     app: &M,
 ) -> crate::Result<ArcRwLock<Option<WeakAddr<DownloadManager>>>> {

@@ -63,6 +63,7 @@ struct ExportCoreOptions<'a, R: Runtime> {
     include_forum_url: Option<bool>,
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 async fn export_core<R: Runtime>(options: ExportCoreOptions<'_, R>) -> crate::Result<String> {
     let mut mangas = {
         let client = options.app.get_mangadex_client()?;
@@ -390,6 +391,7 @@ pub struct ExportCustomListsToCSVOptions {
     pub include_private: Option<bool>,
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub async fn export_custom_lists_to_csv<R>(
     app: &AppHandle<R>,
     option: ExportCustomListsToCSVOptions,

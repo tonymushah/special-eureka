@@ -57,6 +57,7 @@ image.workspace = true
 serde-xml-rs.workspace = true
 csv.workspace = true
 hotpath = { workspace = true, optional = true }
+shrink_fit_wrapper.workspace = true
 
 [dependencies.eureka-mmanager]
 version = "0.4"
