@@ -16,6 +16,7 @@ use crate::{
 pub struct RatingMutations;
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl RatingMutations {
     pub async fn create_update(
         &self,

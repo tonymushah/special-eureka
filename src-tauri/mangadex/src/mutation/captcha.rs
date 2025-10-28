@@ -11,6 +11,7 @@ use crate::utils::{
 pub struct CaptchaMutations;
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl CaptchaMutations {
     pub async fn solve(&self, ctx: &Context<'_>, params: CaptchaSolveParams) -> Result<bool> {
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;

@@ -27,6 +27,7 @@ use crate::{
 #[derive(Debug, Clone, Copy)]
 pub struct OauthMutations;
 
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl OauthMutations {
     pub fn refetch_me_data(watches: Watches, client: MangaDexClient) -> JoinHandle<()> {
         tauri::async_runtime::spawn(async move {
@@ -39,6 +40,7 @@ impl OauthMutations {
 }
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl OauthMutations {
     pub async fn login(
         &self,

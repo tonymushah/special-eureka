@@ -11,6 +11,7 @@ use crate::{
 pub struct LibraryMutations;
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl LibraryMutations {
     pub async fn export_as_my_anime_list(
         &self,

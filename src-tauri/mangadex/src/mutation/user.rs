@@ -12,6 +12,7 @@ use crate::utils::{
 pub struct UserMutations;
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl UserMutations {
     pub async fn follow(&self, ctx: &Context<'_>, id: Uuid) -> Result<bool> {
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;

@@ -23,6 +23,7 @@ use crate::{
 pub struct ScanlationGroupMutation;
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl ScanlationGroupMutation {
     pub async fn create(
         &self,

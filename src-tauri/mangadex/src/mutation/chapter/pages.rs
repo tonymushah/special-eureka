@@ -12,6 +12,7 @@ pub struct ChapterPagesStoreMutation {
 }
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl ChapterPagesStoreMutation {
     pub async fn fetch_metadata(&self, ctx: &Context<'_>) -> crate::Result<bool> {
         let app = ctx.get_app_handle::<tauri::Wry>()?;

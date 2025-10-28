@@ -48,6 +48,7 @@ use super::custom_list::CustomListMutations;
 pub struct MangaMutations;
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl MangaMutations {
     pub async fn download(&self, ctx: &Context<'_>, id: Uuid) -> Result<DownloadState> {
         let tauri_handle = ctx.get_app_handle::<tauri::Wry>()?.clone();

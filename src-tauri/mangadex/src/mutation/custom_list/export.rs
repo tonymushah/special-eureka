@@ -13,6 +13,7 @@ use crate::{
 pub struct CustomListExportMutations;
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl CustomListExportMutations {
     pub async fn as_my_anime_list(
         &self,

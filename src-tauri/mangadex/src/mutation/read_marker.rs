@@ -26,6 +26,7 @@ use crate::utils::{
 pub struct ReadMarkerMutations;
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl ReadMarkerMutations {
     pub async fn manga_read_markers_batch(
         &self,
@@ -69,8 +70,8 @@ impl ReadMarkerMutations {
             if feed_content.unwrap_or(true) {
                 params = app.feed(params);
             } else {
-				params.content_rating = crate::constants::ALL_CONTENT_RATING.into();
-			}
+                params.content_rating = crate::constants::ALL_CONTENT_RATING.into();
+            }
             let client = app.get_mangadex_client()?;
             let chapters = params.send_splitted_default(&client).await?;
             chapters

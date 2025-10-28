@@ -11,6 +11,7 @@ use crate::utils::get_mangadex_client_from_graphql_context_with_auth_refresh;
 pub struct ReportMutations;
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl ReportMutations {
     pub async fn create(&self, ctx: &Context<'_>, params: CreateReportParam) -> Result<bool> {
         let client =

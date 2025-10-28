@@ -6,6 +6,7 @@ use crate::export::txt::export_uuids_as_txt;
 pub struct ExportMutations;
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl ExportMutations {
     pub async fn uuids_to_as_txt(
         &self,

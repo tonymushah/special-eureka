@@ -19,6 +19,7 @@ pub struct CreateForumTheardResponse {
 }
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl ForumsMutations {
     /// create a forum thread and return the generated forum id
     pub async fn create_thread(
