@@ -10,7 +10,7 @@ use super::{
     plugin_config::PluginConfig,
 };
 
-#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub fn init_states<R: Runtime>(
     app: &tauri::AppHandle<R>,
     cfg: &PluginConfig,

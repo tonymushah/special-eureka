@@ -68,7 +68,7 @@ impl MangaChapterGroup {
     }
 }
 
-#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub async fn group_results(
     chapter_results: Results<ChapterObject>,
     ctx: &Context<'_>,
