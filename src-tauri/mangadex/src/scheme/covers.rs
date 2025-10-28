@@ -48,6 +48,7 @@ impl TryFrom<HandleCoversParams> for CoverImageCache {
 
 impl TryFrom<&Request<Vec<u8>>> for HandleCoversParams {
     type Error = SchemeResponseError;
+    #[cfg_attr(feature = "hotpath", hotpath::measure)]
     fn try_from(value: &Request<Vec<u8>>) -> Result<Self, Self::Error> {
         let uri = parse_uri(value)?;
         let regex = Regex::new(
@@ -100,6 +101,7 @@ struct CoverImagesOfflineHandler<'a, R: Runtime> {
     app: &'a AppHandle<R>,
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl<'a, R: Runtime> CoverImagesOfflineHandler<'a, R> {
     pub fn new(param: &'a HandleCoversParams, app: &'a AppHandle<R>) -> Self {
         Self { param, app }
@@ -141,6 +143,7 @@ impl<'a, R: Runtime> CoverImagesOfflineHandler<'a, R> {
     }
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub fn handle_covers<'a, R: Runtime>(
     app: &'a AppHandle<R>,
     req: &'a Request<Vec<u8>>,

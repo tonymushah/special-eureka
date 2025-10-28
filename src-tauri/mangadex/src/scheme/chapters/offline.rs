@@ -21,6 +21,7 @@ pub struct ChaptersHandlerOffline<'a, R: Runtime> {
     pub filename: String,
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl<'a, R: Runtime> ChaptersHandlerOffline<'a, R> {
     fn get_image(&'a self) -> SchemeResponseResult<Vec<u8>> {
         let inner__ = self
