@@ -48,3 +48,17 @@ pub fn init<R: Runtime>() -> MizukiPlugin<R, Q, M, S> {
     might be usefule in the future
 
 */
+
+#[macro_export]
+macro_rules! measure_block {
+    ($label:expr, $expr:expr) => {{
+        #[cfg(feature = "hotpath")]
+        {
+            hotpath::measure_block!($label, $expr)
+        }
+        #[cfg(not(feature = "hotpath"))]
+        {
+            $expr
+        }
+    }};
+}
