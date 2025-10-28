@@ -64,6 +64,7 @@ setup_watch! {
     content_profile_warning <= ContentProfileWarningModeStore,
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 pub fn init_watches_states<R: Runtime>(
     app: &tauri::AppHandle<R>,
     store: &Store<R>,
