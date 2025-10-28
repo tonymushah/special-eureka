@@ -24,6 +24,7 @@ use register_uri_scheme_protocol::register_uri_scheme_protocol;
 
 pub type PluginSetupResult<T> = Result<T, Box<dyn std::error::Error>>;
 
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub fn setup<R: Runtime>(
     app: &AppHandle<R>,
     config: Value,
