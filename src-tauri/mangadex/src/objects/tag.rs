@@ -55,6 +55,7 @@ impl GetAttributes for Tag {
 }
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl Tag {
     pub async fn id(&self) -> Uuid {
         self.get_id()

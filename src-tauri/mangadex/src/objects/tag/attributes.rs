@@ -27,6 +27,7 @@ impl From<TagAttributes> for Attributes {
 }
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl TagAttributes {
     pub async fn name(&self) -> &LocalizedString {
         &self.name

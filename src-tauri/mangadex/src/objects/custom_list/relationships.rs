@@ -31,6 +31,7 @@ impl Deref for CustomListRelationships {
 }
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl CustomListRelationships {
     pub async fn titles_ids(&self) -> Vec<Uuid> {
         self.iter()

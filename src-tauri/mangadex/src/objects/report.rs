@@ -60,6 +60,7 @@ impl GetAttributes for UserReport {
 }
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl UserReport {
     pub async fn id(&self) -> Uuid {
         self.get_id()

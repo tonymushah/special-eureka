@@ -59,6 +59,7 @@ impl GetAttributes for LegacyIdMapping {
 }
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl LegacyIdMapping {
     pub async fn id(&self) -> Uuid {
         self.get_id()

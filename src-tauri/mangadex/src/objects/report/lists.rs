@@ -29,6 +29,7 @@ impl From<UserReportsCollection> for UserReportResults {
     }
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl ExtractReferenceExpansion<'_> for UserReportResults {
     fn exctract(field: async_graphql::SelectionField<'_>) -> Vec<ReferenceExpansionResource> {
         if let Some(rel) = field

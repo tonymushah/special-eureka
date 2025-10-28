@@ -26,9 +26,10 @@ impl From<Vec<Relationship>> for ScanlationGroupRelationships {
 }
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl ScanlationGroupRelationships {
     pub async fn leader(&self) -> GraphQLResult<Option<User>> {
-		// TODO add leader fetching even if its attributes data is not available
+        // TODO add leader fetching even if its attributes data is not available
         Ok(self
             .iter()
             .find(|e| e.type_ == RelationshipType::Leader)
@@ -53,12 +54,13 @@ impl ScanlationGroupRelationships {
             .and_then(|inner| inner.ok())
             .map(<User as From<ApiObjectNoRelationships<UserAttributes>>>::from))
     }
-	pub async fn members_len(&self) -> GraphQLResult<u32> {
-		Ok(self.iter()
+    pub async fn members_len(&self) -> GraphQLResult<u32> {
+        Ok(self
+            .iter()
             .filter(|e| e.type_ == RelationshipType::Member || e.type_ == RelationshipType::Leader)
-			.count()
-			.try_into()?)
-	}
+            .count()
+            .try_into()?)
+    }
     pub async fn members(&self) -> Vec<User> {
         self.iter()
             .filter(|e| e.type_ == RelationshipType::Member)

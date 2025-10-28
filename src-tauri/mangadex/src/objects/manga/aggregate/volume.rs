@@ -26,6 +26,7 @@ impl From<VA> for VolumeAggregate {
     }
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl VolumeAggregate {
     pub fn chapter_ids(&self) -> Vec<Uuid> {
         self.chapters.iter().flat_map(|i| i.chapter_ids()).collect()
@@ -40,6 +41,7 @@ impl VolumeAggregate {
 }
 
 #[ComplexObject]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl VolumeAggregate {
     pub async fn ids(&self) -> Vec<Uuid> {
         self.chapter_ids()

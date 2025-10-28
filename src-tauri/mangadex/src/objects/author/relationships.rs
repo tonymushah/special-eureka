@@ -26,6 +26,7 @@ impl Deref for AuthorRelationships {
 }
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl AuthorRelationships {
     pub async fn works(&self) -> Vec<MangaObject> {
         self.iter()

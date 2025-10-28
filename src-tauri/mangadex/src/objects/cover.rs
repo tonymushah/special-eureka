@@ -81,6 +81,7 @@ impl ExtractRelationships for Cover {
 }
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl Cover {
     pub async fn id(&self) -> Uuid {
         self.get_id()
@@ -101,6 +102,7 @@ impl Cover {
     }
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl ExtractReferenceExpansion<'_> for Cover {
     fn exctract(field: async_graphql::SelectionField<'_>) -> Vec<ReferenceExpansionResource> {
         let mut includes: Vec<ReferenceExpansionResource> = Vec::new();

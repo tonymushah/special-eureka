@@ -46,6 +46,7 @@ impl From<Results<AuthorObject>> for AuthorResults {
     }
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl ExtractReferenceExpansion<'_> for AuthorResults {
     fn exctract(
         field: async_graphql::SelectionField<'_>,

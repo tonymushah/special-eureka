@@ -15,6 +15,7 @@ use crate::{
 pub struct OfflineConfigObject;
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl OfflineConfigObject {
     pub async fn data_dir(&self, ctx: &Context<'_>) -> crate::Result<String> {
         let app = ctx.get_app_handle::<tauri::Wry>()?;

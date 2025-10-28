@@ -45,6 +45,7 @@ impl From<Results<MangaObject>> for MangaResults {
     }
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl ExtractReferenceExpansion<'_> for MangaResults {
     fn exctract(
         field: async_graphql::SelectionField<'_>,

@@ -28,6 +28,7 @@ impl Deref for ChapterRelationships {
 }
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl ChapterRelationships {
     pub async fn manga(&self) -> GraphQLResult<Manga> {
         self.iter()

@@ -30,6 +30,7 @@ impl From<Vec<Relationship>> for UserRelationships {
 }
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl UserRelationships {
     pub async fn groups(&self, ctx: &Context<'_>) -> GraphQLResult<Vec<ScanlationGroup>> {
         let group_ids: Vec<Uuid> = self

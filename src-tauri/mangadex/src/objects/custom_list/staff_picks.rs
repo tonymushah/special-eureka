@@ -11,6 +11,7 @@ pub struct StaffPicksData {
     pub id: Uuid,
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl StaffPicksData {
     pub async fn get(client: &Client) -> Result<Self> {
         Ok(client.get(Url::parse("https://raw.githubusercontent.com/tonymushah/special-eureka/master/public/mangadex/json/staff-pics.json")?).send().await?.json().await?)

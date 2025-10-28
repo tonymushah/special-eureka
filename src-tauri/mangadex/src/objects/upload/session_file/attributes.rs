@@ -27,6 +27,7 @@ impl From<UploadSessionFileAttributes> for Attributes {
 }
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl UploadSessionFileAttributes {
     pub async fn original_file_name(&self) -> &String {
         &self.original_file_name

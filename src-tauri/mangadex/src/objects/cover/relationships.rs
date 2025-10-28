@@ -26,6 +26,7 @@ impl Deref for CoverRelationships {
 }
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl CoverRelationships {
     pub async fn manga(&self) -> GraphQLResult<MangaObject> {
         self.iter()

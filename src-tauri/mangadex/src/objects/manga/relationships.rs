@@ -20,6 +20,7 @@ pub struct MangaRelationships {
 }
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl MangaRelationships {
     pub async fn manga(&self) -> Vec<MangaRelated> {
         self.relationships

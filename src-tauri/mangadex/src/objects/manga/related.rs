@@ -14,6 +14,7 @@ pub struct MangaRelated {
 }
 
 #[ComplexObject]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl MangaRelated {
     pub async fn attributes(&self, ctx: &Context<'_>) -> Result<GraphQLMangaAttributes> {
         self.obj.attributes(ctx).await

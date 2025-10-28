@@ -47,6 +47,7 @@ impl From<Results<CoverObject>> for CoverResults {
     }
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl ExtractReferenceExpansion<'_> for CoverResults {
     fn exctract(field: async_graphql::SelectionField<'_>) -> Vec<ReferenceExpansionResource> {
         let mut includes: Vec<ReferenceExpansionResource> = Vec::new();

@@ -32,6 +32,7 @@ impl DerefMut for ReportReason {
 }
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl ReportReason {
     pub async fn id(&self) -> Uuid {
         self.id

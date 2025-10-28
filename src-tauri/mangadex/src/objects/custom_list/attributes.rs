@@ -28,6 +28,7 @@ impl Deref for CustomListAttributes {
 }
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl CustomListAttributes {
     pub async fn name(&self) -> &String {
         &self.name

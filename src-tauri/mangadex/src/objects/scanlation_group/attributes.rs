@@ -28,6 +28,7 @@ impl From<ScanlationGroupAttributes> for Attributes {
 }
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl ScanlationGroupAttributes {
     pub async fn name(&self) -> &String {
         &self.name

@@ -71,6 +71,7 @@ impl From<&ApiClient> for Attributes {
 }
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl ApiClient {
     pub async fn id(&self) -> Uuid {
         self.get_id()

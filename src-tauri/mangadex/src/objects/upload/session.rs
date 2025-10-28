@@ -60,6 +60,7 @@ impl GetAttributes for UploadSession {
 }
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl UploadSession {
     pub async fn id(&self) -> Uuid {
         self.get_id()

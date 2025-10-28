@@ -28,6 +28,7 @@ impl Deref for CoverAttributes {
 }
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl CoverAttributes {
     pub async fn description(&self) -> &String {
         &self.description

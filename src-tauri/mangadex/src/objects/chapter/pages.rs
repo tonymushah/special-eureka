@@ -13,6 +13,7 @@ pub struct ChapterPages {
 }
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl ChapterPages {
     pub async fn data(&self) -> Result<Vec<Url>> {
         let regex = Regex::new(r"\d+")?;
