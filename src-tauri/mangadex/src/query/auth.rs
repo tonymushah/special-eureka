@@ -10,6 +10,7 @@ use crate::{
 pub struct AuthQuery;
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl AuthQuery {
     pub async fn check(&self, ctx: &Context<'_>) -> Result<AuthCheck> {
         let client =

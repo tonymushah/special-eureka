@@ -7,6 +7,7 @@ use crate::utils::{get_offline_app_state, get_watches_from_graphql_context, watc
 pub struct OfflineAppStateQueries;
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl OfflineAppStateQueries {
     pub async fn is_mounted(&self, ctx: &Context<'_>) -> Result<bool> {
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;

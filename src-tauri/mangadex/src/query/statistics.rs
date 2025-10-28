@@ -12,6 +12,7 @@ use async_graphql::Object;
 pub struct StatisticsQueries;
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl StatisticsQueries {
     pub async fn chapter(&self) -> ChapterStatisticsQueries {
         ChapterStatisticsQueries

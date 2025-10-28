@@ -20,6 +20,7 @@ use crate::{
 pub struct AuthorQueries;
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl AuthorQueries {
     pub async fn list(
         &self,

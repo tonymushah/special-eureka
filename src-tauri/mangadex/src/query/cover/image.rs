@@ -18,6 +18,7 @@ pub struct CoverImageQuery {
     pub mode: Option<CoverImageQuality>,
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl CoverImageQuery {
     async fn fetch_online<'a, R: Runtime>(&'a self, ctx: &'a Context<'a>) -> Result<()> {
         let cache: CoverImageCache = self.clone().into();

@@ -19,6 +19,7 @@ use crate::{
 pub struct ApiClientQueries;
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl ApiClientQueries {
     pub async fn list(
         &self,

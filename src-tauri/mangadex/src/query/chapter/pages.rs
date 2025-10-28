@@ -21,6 +21,7 @@ pub struct ChapterPagesQuery {
 }
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl ChapterPagesQuery {
     #[graphql(skip)]
     pub async fn pages_online(&self, ctx: &Context<'_>) -> Result<ChapterPages> {

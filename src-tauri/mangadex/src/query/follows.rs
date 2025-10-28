@@ -28,6 +28,7 @@ use crate::{
 pub struct FollowsQueries;
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl FollowsQueries {
     pub async fn groups(
         &self,

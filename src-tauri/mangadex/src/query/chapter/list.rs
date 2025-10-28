@@ -93,6 +93,7 @@ impl ChapterListQueries {
     }
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl ChapterListQueries {
     pub async fn get_offline(
         &self,
@@ -202,6 +203,7 @@ impl ChapterListQueries {
 }
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl ChapterListQueries {
     pub async fn default(
         &self,

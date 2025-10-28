@@ -31,6 +31,7 @@ pub struct FeedQueries;
 
 // TODO Implement
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl FeedQueries {
     pub async fn user_logged_manga_feed(
         &self,

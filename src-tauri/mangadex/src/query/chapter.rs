@@ -31,6 +31,7 @@ use super::download_state::DownloadStateQueries;
 pub struct ChapterQueries;
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl ChapterQueries {
     pub async fn list(
         &self,

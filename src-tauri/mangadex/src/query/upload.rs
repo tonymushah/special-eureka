@@ -19,6 +19,7 @@ use mangadex_api_types_rust::error::Error as MangaDexErrors;
 pub struct UploadQueries;
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl UploadQueries {
     pub async fn get_current(&self, ctx: &Context<'_>) -> Result<Option<UploadSession>> {
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;

@@ -16,6 +16,7 @@ use crate::{
 pub struct GetUniqueChapterQuery(pub Vec<ReferenceExpansionResource>);
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl GetUniqueChapterQuery {
     #[graphql(skip)]
     pub async fn get_online(&self, ctx: &Context<'_>, id: Uuid) -> Result<Chapter> {

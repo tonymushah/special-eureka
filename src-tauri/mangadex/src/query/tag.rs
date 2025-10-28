@@ -22,6 +22,7 @@ use crate::{
 pub struct TagQueries;
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl TagQueries {
     #[graphql(skip)]
     pub async fn get_online(&self, ctx: &Context<'_>) -> Result<TagResults> {

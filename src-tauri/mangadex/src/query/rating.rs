@@ -17,6 +17,7 @@ use crate::{
 pub struct RatingQueries;
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl RatingQueries {
     pub async fn lists(
         &self,

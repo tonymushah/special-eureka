@@ -21,6 +21,7 @@ use crate::{
 pub struct ScanlationGroupQueries;
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl ScanlationGroupQueries {
     pub async fn list(
         &self,

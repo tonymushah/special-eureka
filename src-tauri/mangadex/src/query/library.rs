@@ -27,6 +27,7 @@ pub struct CurrentUserLibrarySize {
     pub on_hold: u32,
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl CurrentUserLibrary {
     pub async fn new(client: &MangaDexClient) -> crate::Result<Self> {
         let res = client.manga().status().get().send().await?;
@@ -155,6 +156,7 @@ impl From<UserLibrarySectionParam> for MangaListParams {
 }
 
 #[Object]
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl CurrentUserLibrary {
     pub async fn size(&self) -> CurrentUserLibrarySize {
         CurrentUserLibrarySize {
