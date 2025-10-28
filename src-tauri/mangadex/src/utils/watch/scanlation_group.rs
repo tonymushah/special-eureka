@@ -38,6 +38,7 @@ impl<T> SendData<T> for ScanlationGroupWatch
 where
     T: GetId + GetAttributes<Attributes = ScanlationGroupAttributes>,
 {
+    #[cfg_attr(feature = "hotpath", hotpath::measure)]
     fn send_data(&self, data: T) -> super::SendDataResult {
         self.send_replace(Some(data.into()));
         Ok(())

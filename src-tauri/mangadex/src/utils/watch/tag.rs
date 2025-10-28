@@ -34,6 +34,7 @@ impl<T> SendData<T> for TagWatch
 where
     T: GetId + GetAttributes<Attributes = TagAttributes>,
 {
+    #[cfg_attr(feature = "hotpath", hotpath::measure)]
     fn send_data(&self, data: T) -> super::SendDataResult {
         self.send_replace(Some(data.into()));
         Ok(())

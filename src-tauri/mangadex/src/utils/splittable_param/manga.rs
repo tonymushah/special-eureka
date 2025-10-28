@@ -31,6 +31,7 @@ impl SplittableParam for MangaListParams {
 
 impl SendableParam for MangaListParams {
     type Item = MangaObject;
+    #[cfg_attr(feature = "hotpath", hotpath::measure)]
     async fn send(
         self,
         client: &mangadex_api::MangaDexClient,

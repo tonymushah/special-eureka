@@ -28,6 +28,7 @@ impl<T> SendData<T> for IsLoggedWatch
 where
     T: Into<InnerData>,
 {
+    #[cfg_attr(feature = "hotpath", hotpath::measure)]
     fn send_data(&self, data: T) -> SendDataResult {
         self.send_replace(data.into());
         Ok(())

@@ -10,6 +10,7 @@ use uuid::Uuid;
 
 type INSHandle = Mutex<DownloadEntries<Uuid>>;
 
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub fn get_ins_handle<R: Runtime>(app: &AppHandle<R>) -> State<'_, INSHandle> {
     if let Some(handle) = app.try_state::<INSHandle>() {
         handle
@@ -19,6 +20,7 @@ pub fn get_ins_handle<R: Runtime>(app: &AppHandle<R>) -> State<'_, INSHandle> {
     }
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub fn add_in_queue<R: Runtime>(app: &AppHandle<R>, id: Uuid) -> crate::Result<()> {
     let handle = get_ins_handle(app);
     let Ok(mut guard) = handle.lock() else {
@@ -28,6 +30,7 @@ pub fn add_in_queue<R: Runtime>(app: &AppHandle<R>, id: Uuid) -> crate::Result<(
     Ok(())
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 fn check_and_notify<R: Runtime>(
     app: &AppHandle<R>,
     handle: &mut DownloadEntries<Uuid>,
@@ -54,6 +57,7 @@ fn check_and_notify<R: Runtime>(
     Ok(())
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub fn add_in_success<R: Runtime>(app: &AppHandle<R>, id: Uuid) -> crate::Result<()> {
     let handle = get_ins_handle(app);
     let Ok(mut guard) = handle.lock() else {
@@ -64,6 +68,7 @@ pub fn add_in_success<R: Runtime>(app: &AppHandle<R>, id: Uuid) -> crate::Result
     Ok(())
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub fn add_in_failed<R: Runtime>(app: &AppHandle<R>, id: Uuid) -> crate::Result<()> {
     let handle = get_ins_handle(app);
     let Ok(mut guard) = handle.lock() else {

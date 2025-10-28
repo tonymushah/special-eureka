@@ -17,6 +17,7 @@ use crate::utils::traits_utils::MangadexTauriManagerExt;
 
 use super::manga::raw_manga_download;
 
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub async fn raw_cover_download(
     manager: &Addr<DownloadManager>,
     id: Uuid,
@@ -28,6 +29,7 @@ pub async fn raw_cover_download(
     Ok(task.wait().await?.await?)
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub async fn cover_download<R, M>(app: &M, id: Uuid) -> crate::Result<CoverObject>
 where
     R: Runtime,

@@ -25,6 +25,7 @@ impl SplittableParam for FollowedMangaFeedParams {
 
 impl SendableParam for FollowedMangaFeedParams {
     type Item = ChapterObject;
+    #[cfg_attr(feature = "hotpath", hotpath::measure)]
     async fn send(
         self,
         client: &mangadex_api::MangaDexClient,

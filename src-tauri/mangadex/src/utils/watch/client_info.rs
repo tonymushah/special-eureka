@@ -30,6 +30,7 @@ impl<T> SendData<T> for ClientInfoWatch
 where
     T: Into<Option<ClientInfo>>,
 {
+    #[cfg_attr(feature = "hotpath", hotpath::measure)]
     fn send_data(&self, data: T) -> super::SendDataResult {
         self.send_replace(data.into());
         Ok(())

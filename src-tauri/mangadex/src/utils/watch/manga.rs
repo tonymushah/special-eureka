@@ -37,6 +37,7 @@ impl<T> SendMultiSourceData<T> for MangaWatch
 where
     T: GetId + GetAttributes<Attributes = MangaAttributes>,
 {
+    #[cfg_attr(feature = "hotpath", hotpath::measure)]
     fn send_offline(&self, data: T) -> super::SendDataResult {
         self.send_data(
             (
@@ -46,6 +47,7 @@ where
                 .into(),
         )
     }
+    #[cfg_attr(feature = "hotpath", hotpath::measure)]
     fn send_online(&self, data: T) -> super::SendDataResult {
         self.send_data(
             (
@@ -58,6 +60,7 @@ where
 }
 
 impl SendData<InnerData> for MangaWatch {
+    #[cfg_attr(feature = "hotpath", hotpath::measure)]
     fn send_data(&self, data: InnerData) -> super::SendDataResult {
         self.send_replace(Some(data));
         Ok(())
