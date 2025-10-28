@@ -22,18 +22,21 @@ pub use collection::Collection;
 
 use traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt};
 
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub(crate) fn get_mangadex_client_from_graphql_context<'ctx, R: Runtime>(
     ctx: &'ctx async_graphql::Context<'ctx>,
 ) -> crate::Result<State<'ctx, MangaDexClient>> {
     get_app_handle_from_async_graphql::<R>(ctx)?.get_mangadex_client()
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub(crate) fn get_watches_from_graphql_context<'ctx, R: Runtime>(
     ctx: &'ctx async_graphql::Context<'ctx>,
 ) -> crate::Result<State<'ctx, Watches>> {
     get_app_handle_from_async_graphql::<R>(ctx)?.get_watches()
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub(crate) fn get_app_handle_from_async_graphql<'ctx, R: Runtime>(
     ctx: &'ctx async_graphql::Context<'ctx>,
 ) -> crate::Result<&'ctx AppHandle<R>> {
@@ -41,24 +44,28 @@ pub(crate) fn get_app_handle_from_async_graphql<'ctx, R: Runtime>(
 }
 
 #[allow(dead_code)]
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub(crate) fn get_window_from_async_graphql<'ctx, R: Runtime>(
     ctx: &'ctx async_graphql::Context<'ctx>,
 ) -> crate::Result<&'ctx Window<R>> {
     ctx.get_window()
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub(crate) fn get_offline_app_state<'ctx, R: Runtime>(
     ctx: &'ctx async_graphql::Context<'ctx>,
 ) -> crate::Result<State<'ctx, OfflineAppState>> {
     get_app_handle_from_async_graphql::<R>(ctx)?.get_offline_app_state()
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub(crate) fn get_last_time_token_when_fetched<'ctx, R: Runtime>(
     ctx: &'ctx async_graphql::Context<'ctx>,
 ) -> crate::Result<State<'ctx, LastTimeTokenWhenFecthed>> {
     get_app_handle_from_async_graphql::<R>(ctx)?.get_last_time_token_when_fetched()
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub(crate) async fn get_mangadex_client_from_graphql_context_with_auth_refresh<'ctx, R: Runtime>(
     ctx: &'ctx async_graphql::Context<'ctx>,
 ) -> crate::Result<State<'ctx, MangaDexClient>> {
@@ -67,6 +74,7 @@ pub(crate) async fn get_mangadex_client_from_graphql_context_with_auth_refresh<'
         .await
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub(crate) async fn mount_offline_app_state<'ctx, R: Runtime>(
     ctx: &'ctx async_graphql::Context<'ctx>,
 ) -> crate::Result<bool> {
@@ -76,6 +84,7 @@ pub(crate) async fn mount_offline_app_state<'ctx, R: Runtime>(
     Ok(true)
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub(crate) async fn unmount_offline_app_state<'ctx, R: Runtime>(
     ctx: &'ctx async_graphql::Context<'ctx>,
 ) -> crate::Result<bool> {
@@ -85,12 +94,14 @@ pub(crate) async fn unmount_offline_app_state<'ctx, R: Runtime>(
     Ok(true)
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub(crate) fn get_store<'ctx, R: Runtime>(
     ctx: &'ctx async_graphql::Context<'ctx>,
 ) -> crate::Result<State<'ctx, MangaDexStoreState<R>>> {
     get_app_handle_from_async_graphql::<R>(ctx)?.get_mangadex_store()
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub fn block_on<F>(fut: F) -> F::Output
 where
     F: Future + Send + 'static,
@@ -101,6 +112,7 @@ where
         .unwrap()
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub fn print_instant(instant: Instant) {
     use mangadex_api_types_rust::MangaDexDateTime;
     use time::OffsetDateTime;
