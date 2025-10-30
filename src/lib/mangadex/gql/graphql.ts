@@ -1178,6 +1178,7 @@ export type CustomListMutations = {
 	delete: Scalars["Boolean"]["output"];
 	export: CustomListExportMutations;
 	follow: Scalars["Boolean"]["output"];
+	fork: CustomList;
 	removeManga: Scalars["Boolean"]["output"];
 	removeMangaBatch: Scalars["Boolean"]["output"];
 	unfollow: Scalars["Boolean"]["output"];
@@ -1203,6 +1204,13 @@ export type CustomListMutationsDeleteArgs = {
 
 export type CustomListMutationsFollowArgs = {
 	id: Scalars["UUID"]["input"];
+};
+
+export type CustomListMutationsForkArgs = {
+	filterContent?: InputMaybe<Scalars["Boolean"]["input"]>;
+	name: Scalars["String"]["input"];
+	toFork: Scalars["UUID"]["input"];
+	visibility?: InputMaybe<CustomListVisibility>;
 };
 
 export type CustomListMutationsRemoveMangaArgs = {

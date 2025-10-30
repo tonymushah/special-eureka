@@ -931,6 +931,7 @@ type CustomListMutations {
 	addMangaBatch(listId: UUID!, mangaIds: [UUID!]!): Boolean!
 	removeMangaBatch(listId: UUID!, mangaIds: [UUID!]!): Boolean!
 	export: CustomListExportMutations!
+	fork(toFork: UUID!, name: String!, visibility: CustomListVisibility, filterContent: Boolean): CustomList!
 }
 
 type CustomListQueries {
