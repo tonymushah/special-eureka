@@ -1,12 +1,22 @@
 pub mod export;
 
-use crate::Result;
-use async_graphql::{Context, Object};
-use mangadex_api_input_types::custom_list::{
-    add_manga::CustomListAddMangaParam, create::CustomListCreateParam,
-    remove_manga::CustomListRemoveMangaParam, update::CustomListUpdateParams,
+use crate::{
+    Result,
+    store::types::structs::content::ContentFeeder,
+    utils::{
+        splittable_param::SendSplitted,
+        traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
+    },
 };
-use mangadex_api_types_rust::RelationshipType;
+use async_graphql::{Context, Object};
+use mangadex_api_input_types::{
+    custom_list::{
+        add_manga::CustomListAddMangaParam, create::CustomListCreateParam,
+        remove_manga::CustomListRemoveMangaParam, update::CustomListUpdateParams,
+    },
+    manga::list::MangaListParams,
+};
+use mangadex_api_types_rust::{CustomListVisibility, RelationshipType};
 use uuid::Uuid;
 
 use crate::{
@@ -146,5 +156,99 @@ impl CustomListMutations {
     }
     pub async fn export(&self) -> export::CustomListExportMutations {
         export::CustomListExportMutations
+    }
+    pub async fn fork(
+        &self,
+        ctx: &Context<'_>,
+        to_fork: Uuid,
+        name: String,
+        visibility: Option<CustomListVisibility>,
+        filter_content: Option<bool>,
+    ) -> Result<CustomList> {
+        let to_fork = {
+            let client =
+                get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx)
+                    .await?;
+            client
+                .custom_list()
+                .id(to_fork)
+                .get()
+                .with_auth(true)
+                .send()
+                .await?
+        };
+        let manga_ids = {
+            let ids = to_fork
+                .data
+                .find_relationships(RelationshipType::Manga)
+                .into_iter()
+                .map(|r| r.id)
+                .collect::<Vec<_>>();
+            if filter_content.unwrap_or_default() {
+                let app = ctx.get_app_handle::<tauri::Wry>()?;
+                let client = app.get_mangadex_client()?;
+                app.feed(MangaListParams {
+                    manga_ids: ids,
+                    ..Default::default()
+                })
+                .send_splitted_default(&client)
+                .await?
+                .data
+                .into_iter()
+                .map(|manga| manga.id)
+                .collect()
+            } else {
+                ids
+            }
+        };
+        let mut create = CustomListCreateParam {
+            name,
+            visibility,
+            version: None,
+            manga: {
+                let mut m = manga_ids.clone();
+                m.reverse();
+                m
+            },
+        };
+
+        let mut skipped = 0;
+        loop {
+            if size_of_val(&create) >= 8000 {
+                skipped += 10;
+                create.manga = create.manga.into_iter().skip(skipped).collect();
+            } else {
+                break;
+            }
+        }
+        let new_custom_list = {
+            let client =
+                get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx)
+                    .await?;
+            create.send(&client).await?
+        };
+
+        if skipped > 0 {
+            self.add_manga_batch(
+                ctx,
+                new_custom_list.data.id,
+                manga_ids.iter().skip(skipped).cloned().collect(),
+            )
+            .await?;
+        }
+        {
+            let client =
+                get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx)
+                    .await?;
+            Ok(client
+                .custom_list()
+                .id(new_custom_list.data.id)
+                .get()
+                .with_auth(true)
+                .send()
+                .await?
+                .data
+                .into())
+        }
     }
 }
