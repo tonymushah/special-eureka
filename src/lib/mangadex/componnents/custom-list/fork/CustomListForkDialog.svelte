@@ -74,19 +74,23 @@
 					<section>
 						MD List id: {listToFork}
 					</section>
-					<section>
+					<section class="fork-name">
 						<label for="fork-name">Name:</label>
 						<FormInput
 							bind:value={name}
-							widthFull
 							inputProps={{
-								id: "fork-name"
+								id: "fork-name",
+								required: true
 							}}
 						/>
 					</section>
-					<section>
-						<p>Visibility</p>
-						<div>
+					<section class="visb">
+						<h4>
+							Visibility: {#if visiblity == undefined}
+								<span class="default">(private if not set)</span>
+							{/if}
+						</h4>
+						<div class="vis-input">
 							<input
 								type="radio"
 								value={CustomListVisibility.Public}
@@ -95,7 +99,7 @@
 							/>
 							<label for="vis-public">Public</label>
 						</div>
-						<div>
+						<div class="vis-input">
 							<input
 								type="radio"
 								value={CustomListVisibility.Private}
@@ -105,13 +109,17 @@
 							<label for="vis-private">Private</label>
 						</div>
 					</section>
-					<section>
+					<section class="vis-input">
 						<input type="checkbox" bind:checked={filterTitles} />
 						<label for="filter-titles">Filter titles </label>
 					</section>
 					<section class="buttons">
 						<PrimaryButton
 							onclick={() => {
+								if (name.trim().length == 0) {
+									addErrorToast("Invalid name input", "Please insert a valid name");
+									return;
+								}
 								forkCustomListMutation.mutate(
 									{
 										name,
@@ -130,7 +138,10 @@
 											if ($open) {
 												goto(
 													route("/mangadex/list/[id]", {
-														id: data.id
+														id:
+															data.visibility == CustomListVisibility.Private
+																? `private:${data.id}`
+																: data.id
 													})
 												);
 											}
@@ -154,11 +165,6 @@
 {/if}
 
 <style lang="scss">
-	.buttons {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-	}
 	.icon {
 		display: flex;
 		align-items: center;
@@ -217,9 +223,43 @@
 	}
 	.body {
 		display: grid;
-		grid-template-rows: 0fr 0fr 1fr 0fr 61px;
+		grid-template-rows: 0fr 0fr 0fr 0fr 61px;
 		height: -webkit-fill-available;
 		gap: 12px;
 		margin: 0px 12px;
+		overflow-y: auto;
+		overflow-x: auto;
+	}
+	.buttons {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	.send {
+		margin: 8px 24px;
+		font-weight: 800;
+		font-size: 18px;
+	}
+	input {
+		width: 24px;
+		height: 24px;
+	}
+	.vis-input {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+	}
+	.fork-name {
+		display: grid;
+		padding-right: 12px;
+	}
+	.visb {
+		h4 {
+			margin: 0px;
+			font-weight: 500;
+			.default {
+				font-style: italic;
+			}
+		}
 	}
 </style>
