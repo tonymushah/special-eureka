@@ -103,10 +103,7 @@
 				onclick={() => {
 					goto(
 						route("/mangadex/list/[id]", {
-							id:
-								list.visibility == CustomListVisibility.Private
-									? `private:${list.id}`
-									: list.id
+							id: list.visibility == CustomListVisibility.Private ? `private:${list.id}` : list.id
 						})
 					);
 				}}
@@ -154,7 +151,14 @@
 	/>
 {/if}
 
-<div class="observer-trigger" bind:this={to_obserce_bind}>
+<!-- svelte-ignore a11y_no_static_element_interactions -->
+<div
+	class="observer-trigger"
+	bind:this={to_obserce_bind}
+	onmouseenter={() => {
+		query.fetchNextPage();
+	}}
+>
 	{#if isFetching}
 		<Fetching />
 	{:else if hasNext}

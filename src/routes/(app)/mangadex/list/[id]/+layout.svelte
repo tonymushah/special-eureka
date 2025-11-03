@@ -16,6 +16,8 @@
 	import type { LayoutData } from "./$types";
 	import deleteCustomListMutation from "@mangadex/gql-docs/list/id/delete";
 	import FollowButton from "./FollowButton.svelte";
+	import { GitBranchIcon } from "svelte-feather-icons";
+	import CustomListForkDialog from "@mangadex/componnents/custom-list/fork/CustomListForkDialog.svelte";
 
 	interface Props {
 		data: LayoutData;
@@ -67,6 +69,7 @@
 		})
 	);
 	let deleteCustomList = deleteCustomListMutation();
+	let openForkDialog = $state(false);
 </script>
 
 <UsersPageBase title={data.attributes.name}>
@@ -97,7 +100,7 @@
 											})
 										);
 									},
-									onError(error, variables, context) {
+									onError(error) {
 										addErrorToast("Cannot update visibility", error);
 									}
 								}
@@ -131,7 +134,7 @@
 											})
 										);
 									},
-									onError(error, variables, context) {
+									onError(error) {
 										addErrorToast("Cannot update visibility", error);
 									}
 								}
@@ -169,6 +172,15 @@
 			{:else}
 				<FollowButton id={data.id} />
 			{/if}
+			<ButtonAccent
+				isBase
+				disabled={openForkDialog}
+				onclick={() => {
+					openForkDialog = !openForkDialog;
+				}}
+			>
+				<p><GitBranchIcon /> Fork</p>
+			</ButtonAccent>
 		</div>
 	{/snippet}
 	{#snippet topRight()}
@@ -224,6 +236,12 @@
 		{@render children?.()}
 	{/snippet}
 </UsersPageBase>
+
+<CustomListForkDialog
+	bind:open={openForkDialog}
+	listToFork={data.id}
+	listToForkName={data.attributes.name}
+/>
 
 <style lang="scss">
 	.custom-list-nav {
