@@ -6081,6 +6081,30 @@ export type IsFollowingCustomListQueryQuery = {
 	follows: { __typename?: "FollowsQueries"; isFollowingCustomList: boolean };
 };
 
+export type ForkCustomListMutationVariables = Exact<{
+	name: Scalars["String"]["input"];
+	visibility?: InputMaybe<CustomListVisibility>;
+	toFork: Scalars["UUID"]["input"];
+	filter?: InputMaybe<Scalars["Boolean"]["input"]>;
+}>;
+
+export type ForkCustomListMutation = {
+	__typename?: "Mutation";
+	customList: {
+		__typename?: "CustomListMutations";
+		fork: {
+			__typename?: "CustomList";
+			id: any;
+			attributes: {
+				__typename?: "CustomListAttributes";
+				name: string;
+				visibility: CustomListVisibility;
+			};
+			relationships: { __typename?: "CustomListRelationships"; titlesIds: Array<any> };
+		};
+	};
+};
+
 export type GetCustomListVersion1QueryVariables = Exact<{
 	id: Scalars["UUID"]["input"];
 }>;
@@ -19244,6 +19268,141 @@ export const IsFollowingCustomListQueryDocument = {
 	IsFollowingCustomListQueryQuery,
 	IsFollowingCustomListQueryQueryVariables
 >;
+export const ForkCustomListDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "forkCustomList" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "name" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "String" } }
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "visibility" } },
+					type: {
+						kind: "NamedType",
+						name: { kind: "Name", value: "CustomListVisibility" }
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "toFork" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "filter" } },
+					type: { kind: "NamedType", name: { kind: "Name", value: "Boolean" } }
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "customList" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "fork" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "filterContent" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "filter" }
+											}
+										},
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "name" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "name" }
+											}
+										},
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "visibility" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "visibility" }
+											}
+										},
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "toFork" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "toFork" }
+											}
+										}
+									],
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{ kind: "Field", name: { kind: "Name", value: "id" } },
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "attributes" },
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "name" }
+														},
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "visibility"
+															}
+														}
+													]
+												}
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "relationships" },
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "titlesIds"
+															}
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<ForkCustomListMutation, ForkCustomListMutationVariables>;
 export const GetCustomListVersion1Document = {
 	kind: "Document",
 	definitions: [
