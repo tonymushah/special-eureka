@@ -7,6 +7,7 @@ use crate::{
     utils::watch::{
         content_blur::ContentProfileBlurWatch,
         content_profile_warning::ContentProfileWarningModeWatch, force_443::ForcePort443Watch,
+        toast_notify::ToastNotifyWatch,
     },
 };
 
@@ -45,6 +46,16 @@ impl UserOptionNextSubscriptions {
     > {
         WatchSubscriptionStream::from_async_graphql_context_watch_as_ref::<
             ContentProfileWarningModeWatch,
+            tauri::Wry,
+        >(ctx)
+        .map_err(crate::error::ErrorWrapper::from)
+    }
+    pub async fn watch_notify_toast<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+    ) -> crate::Result<impl Stream<Item = bool> + 'ctx, crate::error::ErrorWrapper> {
+        WatchSubscriptionStream::from_async_graphql_context_watch_as_ref::<
+            ToastNotifyWatch,
             tauri::Wry,
         >(ctx)
         .map_err(crate::error::ErrorWrapper::from)

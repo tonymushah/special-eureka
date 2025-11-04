@@ -7,18 +7,15 @@ use serde::{Deserialize, Serialize};
 use std::ops::{Deref, DerefMut};
 use tauri::Runtime;
 
-#[derive(Debug, Clone, Copy, Enum, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
+#[derive(
+    Debug, Clone, Copy, Enum, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize, Default,
+)]
 pub enum ReadingMode {
     LongStrip,
     WideStrip,
     SinglePage,
+    #[default]
     DoublePage,
-}
-
-impl Default for ReadingMode {
-    fn default() -> Self {
-        Self::DoublePage
-    }
 }
 
 #[derive(Debug, Clone, Default, Deserialize, Serialize)]

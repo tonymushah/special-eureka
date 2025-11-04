@@ -1,4 +1,3 @@
-pub mod chapter_language;
 pub mod chapter_layout;
 pub mod client_info;
 pub mod content;
@@ -9,3 +8,4 @@ pub mod offline_config;
 pub mod page_limit;
 pub mod refresh_token;
 pub mod theme;
+pub mod toast_notify;

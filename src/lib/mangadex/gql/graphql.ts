@@ -3123,7 +3123,6 @@ export type Subscriptions = {
 	watchChapter: ChapterAttributes;
 	watchChapterDownloadState: ChapterDownloadState;
 	watchChapterFeedStyle: ChapterFeedStyle;
-	watchChapterLanguages: Array<Language>;
 	watchChapterLayout: ChapterLayoutStore;
 	watchChapterQuality: DownloadMode;
 	watchChaptersTasksList: Array<Scalars["UUID"]["output"]>;
@@ -3153,6 +3152,7 @@ export type Subscriptions = {
 	watchMangaReadingState?: Maybe<ReadingStatus>;
 	watchMangaStatistics: MangaStatisticsAttributes;
 	watchMangaTasksList: Array<Scalars["UUID"]["output"]>;
+	watchNotifyToast: Scalars["Boolean"]["output"];
 	watchPageDirection: Direction;
 	watchPageLimit: Scalars["Int"]["output"];
 	watchPaginationStyle: PaginationStyle;
@@ -3565,7 +3565,6 @@ export type UserOptionMutations = {
 	deleteContentProfile?: Maybe<ContentProfile>;
 	deleteThemeProfile?: Maybe<MangaDexTheme>;
 	setChapterFeedStyle: ChapterFeedStyle;
-	setChapterLanguages: Array<Language>;
 	setChapterLayout: ChapterLayoutStore;
 	setChapterQuality: DownloadMode;
 	setContentProfile: ContentProfile;
@@ -3586,6 +3585,7 @@ export type UserOptionMutations = {
 	setSidebarDirection: Direction;
 	setThemeProfile: MangaDexTheme;
 	setThemeProfiles: Scalars["Int"]["output"];
+	setToastNotify: Scalars["Boolean"]["output"];
 	updateDefaultContentProfile: ContentProfile;
 	updateDefaultTheme: MangaDexTheme;
 };
@@ -3600,10 +3600,6 @@ export type UserOptionMutationsDeleteThemeProfileArgs = {
 
 export type UserOptionMutationsSetChapterFeedStyleArgs = {
 	style: ChapterFeedStyle;
-};
-
-export type UserOptionMutationsSetChapterLanguagesArgs = {
-	languages: Array<Language>;
 };
 
 export type UserOptionMutationsSetChapterLayoutArgs = {
@@ -3690,6 +3686,10 @@ export type UserOptionMutationsSetThemeProfilesArgs = {
 	entries: Array<ThemeProfileEntryInput>;
 };
 
+export type UserOptionMutationsSetToastNotifyArgs = {
+	notify: Scalars["Boolean"]["input"];
+};
+
 export type UserOptionMutationsUpdateDefaultContentProfileArgs = {
 	profile?: InputMaybe<ContentProfileInput>;
 };
@@ -3701,7 +3701,6 @@ export type UserOptionMutationsUpdateDefaultThemeArgs = {
 export type UserOptionQueries = {
 	__typename?: "UserOptionQueries";
 	getAuthDateTimeLimit?: Maybe<Scalars["MangaDexDateTime"]["output"]>;
-	getChapterLanguages: Array<Language>;
 	getContentProfileBlur: Scalars["Boolean"]["output"];
 	getContentProfileWarningMode: ContentProfileWarningMode;
 	getDefaultContentProfile: ContentProfile;
@@ -7621,6 +7620,22 @@ export type UpdatePaginationStyleMutationVariables = Exact<{
 export type UpdatePaginationStyleMutation = {
 	__typename?: "Mutation";
 	userOption: { __typename?: "UserOptionMutations"; setPaginationStyle: PaginationStyle };
+};
+
+export type UpdateToastNotifyMutationVariables = Exact<{
+	notify: Scalars["Boolean"]["input"];
+}>;
+
+export type UpdateToastNotifyMutation = {
+	__typename?: "Mutation";
+	userOption: { __typename?: "UserOptionMutations"; setToastNotify: boolean };
+};
+
+export type ListenToToastNotifyStoreSubscriptionVariables = Exact<{ [key: string]: never }>;
+
+export type ListenToToastNotifyStoreSubscription = {
+	__typename?: "Subscriptions";
+	watchNotifyToast: boolean;
 };
 
 export type DefaultThemeProfileSubscriptionSubscriptionVariables = Exact<{ [key: string]: never }>;
@@ -27391,6 +27406,71 @@ export const UpdatePaginationStyleDocument = {
 		}
 	]
 } as unknown as DocumentNode<UpdatePaginationStyleMutation, UpdatePaginationStyleMutationVariables>;
+export const UpdateToastNotifyDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "updateToastNotify" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "notify" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "Boolean" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "userOption" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "setToastNotify" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "notify" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "notify" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<UpdateToastNotifyMutation, UpdateToastNotifyMutationVariables>;
+export const ListenToToastNotifyStoreDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "subscription",
+			name: { kind: "Name", value: "listenToToastNotifyStore" },
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [{ kind: "Field", name: { kind: "Name", value: "watchNotifyToast" } }]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	ListenToToastNotifyStoreSubscription,
+	ListenToToastNotifyStoreSubscriptionVariables
+>;
 export const DefaultThemeProfileSubscriptionDocument = {
 	kind: "Document",
 	definitions: [

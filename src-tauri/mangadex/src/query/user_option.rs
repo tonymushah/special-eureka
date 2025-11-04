@@ -19,7 +19,7 @@ use crate::{
     utils::traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
 };
 use async_graphql::{Context, Object};
-use mangadex_api_types_rust::{Language, MangaDexDateTime};
+use mangadex_api_types_rust::MangaDexDateTime;
 use tokio_stream::StreamExt;
 
 use crate::{
@@ -31,7 +31,6 @@ use crate::{
             },
             reading_mode::{ReadingMode, ReadingModeStore},
         },
-        structs::chapter_language::ChapterLanguagesStore,
     },
     utils::{get_store, get_watches_from_graphql_context, watch::SendData},
 };
@@ -65,14 +64,6 @@ impl UserOptionQueries {
         let sds = SidebarDirectionStore::extract_from_store(store_read.deref())?;
         let _ = watches.sidebar_direction.send_data(sds.clone());
         Ok(sds.into())
-    }
-    pub async fn get_chapter_languages(&self, ctx: &Context<'_>) -> Result<Vec<Language>> {
-        let store = get_store::<tauri::Wry>(ctx)?;
-        let store_read = store.read().await;
-        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
-        let cls = ChapterLanguagesStore::extract_from_store(store_read.deref())?;
-        let _ = watches.chapter_languages.send_data(cls.clone());
-        Ok(cls.into())
     }
     pub async fn get_default_content_profile(&self, ctx: &Context<'_>) -> Result<ContentProfile> {
         let stream = UserOptionSubscriptions

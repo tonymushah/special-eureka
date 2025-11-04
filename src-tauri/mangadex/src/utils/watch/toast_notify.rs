@@ -2,31 +2,29 @@ use std::{ops::Deref, sync::Arc};
 
 use tokio::sync::watch::Sender;
 
-use mangadex_api_types_rust::language::Language;
-
 use super::{SendData, SendDataResult};
 
-type InnerData = Vec<Language>;
+type InnerData = bool;
 
 type Inner = Sender<InnerData>;
 
 #[derive(Clone, Debug)]
-pub struct ChapterLanguagesWatch(Arc<Inner>);
+pub struct ToastNotifyWatch(Arc<Inner>);
 
-impl Deref for ChapterLanguagesWatch {
+impl Deref for ToastNotifyWatch {
     type Target = Inner;
     fn deref(&self) -> &Self::Target {
         &self.0
     }
 }
 
-impl Default for ChapterLanguagesWatch {
+impl Default for ToastNotifyWatch {
     fn default() -> Self {
-        Self(Arc::new(Sender::new(InnerData::default())))
+        Self(Arc::new(Sender::new(false)))
     }
 }
 
-impl<T> SendData<T> for ChapterLanguagesWatch
+impl<T> SendData<T> for ToastNotifyWatch
 where
     T: Into<InnerData>,
 {

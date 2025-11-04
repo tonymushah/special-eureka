@@ -2412,7 +2412,6 @@ type Subscriptions {
 	watchSidebarDirection: Direction!
 	watchPageDirection: Direction!
 	watchReadingMode: ReadingMode!
-	watchChapterLanguages: [Language!]!
 	watchIsAppMounted: Boolean!
 	watchIsLogged: Boolean!
 	watchDownloadState(objectId: UUID!): DownloadState!
@@ -2447,6 +2446,7 @@ type Subscriptions {
 	watchForcePort443: Boolean!
 	watchContentProfileBlur: Boolean!
 	watchContentProfileWarningMode: ContentProfileWarningMode!
+	watchNotifyToast: Boolean!
 	watchReadMarker(chapterId: UUID!): Boolean!
 	watchReadMarkers: ChapterReadMarkerSubItem!
 }
@@ -2701,7 +2701,6 @@ type UserOptionMutations {
 	setReadingMode(mode: ReadingMode!): ReadingMode!
 	setPageDirection(direction: Direction!): Direction!
 	setSidebarDirection(direction: Direction!): Direction!
-	setChapterLanguages(languages: [Language!]!): [Language!]!
 	setImageFit(imageFit: ImageFit!): ImageFit!
 	setLongstripImageWidth(width: Float!): Float!
 	clearCoverImagesCaches: Boolean!
@@ -2728,13 +2727,13 @@ type UserOptionMutations {
 	setForcePort443(force: Boolean!): Boolean!
 	setContentProfileBlur(blur: Boolean!): Boolean!
 	setContentProfileWarningMode(mode: ContentProfileWarningMode!): ContentProfileWarningMode!
+	setToastNotify(notify: Boolean!): Boolean!
 }
 
 type UserOptionQueries {
 	getReadingMode: ReadingMode!
 	getPageDirection: Direction!
 	getSidebarDirection: Direction!
-	getChapterLanguages: [Language!]!
 	getDefaultContentProfile: ContentProfile!
 	getOfflineConfig: OfflineConfigObject!
 	getAuthDateTimeLimit: MangaDexDateTime

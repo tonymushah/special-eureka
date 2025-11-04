@@ -12,7 +12,6 @@ pub mod api_client;
 pub mod author;
 pub mod chapter;
 pub mod chapter_feed_style;
-pub mod chapter_languages;
 pub mod chapter_layout;
 pub mod chapter_quality;
 pub mod client_info;
@@ -43,6 +42,7 @@ pub mod sidebar_direction;
 pub mod statistics;
 pub mod tag;
 pub mod theme;
+pub mod toast_notify;
 pub mod upload;
 pub mod user;
 pub mod user_me;
@@ -51,7 +51,6 @@ use self::{
     api_client::ApiClientWatch,
     author::AuthorWatch,
     chapter::ChapterWatch,
-    chapter_languages::ChapterLanguagesWatch,
     chapter_layout::ChapterLayoutWatch,
     chapter_quality::ChapterQualityWatch,
     content::{ContentProfilesWatch, key::ContentProfileDefaultKeyWatch},
@@ -79,6 +78,7 @@ use self::{
     statistics::{StatisticsWatch, manga::MangaStatisticsWatch},
     tag::TagWatch,
     theme::{ThemeProfilesWatch, key::ThemeProfileDefaultKeyWatch},
+    toast_notify::ToastNotifyWatch,
     upload::{session::UploadSessionWatch, session_file::UploadSessionFileWatch},
     user::UserWatch,
     user_me::UserMeWatch,
@@ -237,7 +237,6 @@ watches_implementation! {
     page_direction => PageDirectionWatch,
     reading_mode => ReadingModeWatch,
     sidebar_direction => SideBarDirectionWatch,
-    chapter_languages => ChapterLanguagesWatch,
     is_appstate_mounted => IsAppStateMountedWatch,
     download_state => DownloadStateWatch,
     reading_state => ReadingStateWatch,
@@ -260,4 +259,5 @@ watches_implementation! {
     force_port_443 => ForcePort443Watch,
     content_profile_blur => ContentProfileBlurWatch,
     content_profile_warning => ContentProfileWarningModeWatch,
+    toast_notify => ToastNotifyWatch,
 }

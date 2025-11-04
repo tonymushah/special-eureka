@@ -31,6 +31,9 @@
 		"core:webview:allow-create-webview-window",
 		"dialog:allow-open",
 		"dialog:allow-save",
-		"opener:allow-reveal-item-in-dir"
+		"opener:allow-reveal-item-in-dir",
+		"notification:allow-notify",
+		"notification:allow-is-permission-granted",
+		"notification:deny-request-permission"
 	]
 }

@@ -15,7 +15,6 @@ use crate::{
             reading_mode::ReadingModeStore,
         },
         structs::{
-            chapter_language::ChapterLanguagesStore,
             chapter_layout::ChapterLayoutStore,
             client_info::ClientInfoStore,
             content::profiles::{ContentProfileDefaultKey, ContentProfiles},
@@ -24,6 +23,7 @@ use crate::{
             longstrip_image_width::LongstripImageWidthStore,
             page_limit::PageLimitStore,
             theme::profiles::{ThemeProfileDefaultKey, ThemeProfiles},
+            toast_notify::ToastNotifyStore,
         },
     },
     utils::watch::{SendData, Watches},
@@ -43,7 +43,6 @@ macro_rules! setup_watch {
 
 setup_watch! {
     reading_mode <= ReadingModeStore,
-    chapter_languages <= ChapterLanguagesStore,
     page_direction <= ReadingDirectionStore,
     sidebar_direction <= SidebarDirectionStore,
     image_fit <= ImageFitStore,
@@ -62,6 +61,7 @@ setup_watch! {
     force_port_443 <= ForcePort443Store,
     content_profile_blur <= ContentProfileBlurStore,
     content_profile_warning <= ContentProfileWarningModeStore,
+    toast_notify <= ToastNotifyStore,
 }
 
 #[cfg_attr(feature = "hotpath", hotpath::measure)]

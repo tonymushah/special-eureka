@@ -32,9 +32,9 @@ use self::{
             reading_mode::ReadingModeStore,
         },
         structs::{
-            chapter_language::ChapterLanguagesStore, chapter_layout::ChapterLayoutStore,
-            client_info::ClientInfoStore, page_limit::PageLimitStore,
-            refresh_token::RefreshTokenStore,
+            chapter_layout::ChapterLayoutStore, client_info::ClientInfoStore,
+            page_limit::PageLimitStore, refresh_token::RefreshTokenStore,
+            toast_notify::ToastNotifyStore,
         },
     },
 };
@@ -62,7 +62,6 @@ get_store_builder! {
     ReadingDirectionStore,
     ReadingModeStore,
     SidebarDirectionStore,
-    ChapterLanguagesStore,
     ImageFitStore,
     LongstripImageWidthStore,
     MangaListStyleStore,
@@ -79,6 +78,7 @@ get_store_builder! {
     ForcePort443Store,
     ContentProfileBlurStore,
     ContentProfileWarningModeStore,
+    ToastNotifyStore,
 }
 
 // [x] refactor into a macro!

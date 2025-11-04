@@ -20,7 +20,6 @@ use crate::{
 };
 use async_graphql::{Context, Subscription};
 use async_stream::stream;
-use mangadex_api_types_rust::Language;
 use tokio::select;
 use tokio_stream::{Stream, StreamExt};
 
@@ -58,14 +57,6 @@ impl UserOptionSubscriptions {
     ) -> Result<impl Stream<Item = ReadingMode> + 'ctx> {
         WatchSubscriptionStream::<_>::from_async_graphql_context::<_, tauri::Wry>(ctx, |w| {
             w.reading_mode.subscribe()
-        })
-    }
-    pub async fn listen_to_chapter_languages<'ctx>(
-        &'ctx self,
-        ctx: &'ctx Context<'ctx>,
-    ) -> Result<impl Stream<Item = Vec<Language>> + 'ctx> {
-        WatchSubscriptionStream::<_>::from_async_graphql_context::<_, tauri::Wry>(ctx, |w| {
-            w.chapter_languages.subscribe()
         })
     }
     pub async fn listen_to_image_fit<'ctx>(
