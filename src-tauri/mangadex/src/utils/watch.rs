@@ -12,7 +12,6 @@ pub mod api_client;
 pub mod author;
 pub mod chapter;
 pub mod chapter_feed_style;
-pub mod chapter_languages;
 pub mod chapter_layout;
 pub mod chapter_quality;
 pub mod client_info;
@@ -51,7 +50,6 @@ use self::{
     api_client::ApiClientWatch,
     author::AuthorWatch,
     chapter::ChapterWatch,
-    chapter_languages::ChapterLanguagesWatch,
     chapter_layout::ChapterLayoutWatch,
     chapter_quality::ChapterQualityWatch,
     content::{ContentProfilesWatch, key::ContentProfileDefaultKeyWatch},
@@ -237,7 +235,6 @@ watches_implementation! {
     page_direction => PageDirectionWatch,
     reading_mode => ReadingModeWatch,
     sidebar_direction => SideBarDirectionWatch,
-    chapter_languages => ChapterLanguagesWatch,
     is_appstate_mounted => IsAppStateMountedWatch,
     download_state => DownloadStateWatch,
     reading_state => ReadingStateWatch,

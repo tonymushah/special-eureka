@@ -18,7 +18,6 @@ use async_graphql::{Context, Subscription};
 use tokio_stream::Stream;
 use uuid::Uuid;
 
-use mangadex_api_types_rust::Language;
 use mangadex_api_types_rust::ReadingStatus;
 
 use super::{
@@ -198,14 +197,6 @@ impl LegacySubscriptions {
         ctx: &'ctx Context<'ctx>,
     ) -> Result<impl Stream<Item = ReadingMode> + 'ctx> {
         UserOptionSubscriptions.listen_to_reading_mode(ctx).await
-    }
-    pub async fn watch_chapter_languages<'ctx>(
-        &'ctx self,
-        ctx: &'ctx Context<'ctx>,
-    ) -> Result<impl Stream<Item = Vec<Language>> + 'ctx> {
-        UserOptionSubscriptions
-            .listen_to_chapter_languages(ctx)
-            .await
     }
     pub async fn watch_is_app_mounted<'ctx>(
         &'ctx self,
