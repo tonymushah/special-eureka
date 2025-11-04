@@ -41,3 +41,5 @@ pub const FORCE_443: &str = "force_443";
 pub const CONTENT_PROFILE_WARNING_MODE: &str = "content_profile_warning_mode";
 
 pub const CONTENT_PROFILE_BLUR: &str = "content_profile_blur";
+
+pub const TOAST_NOTIFY: &str = "toast_notify";

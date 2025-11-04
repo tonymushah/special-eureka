@@ -8,3 +8,4 @@ pub mod offline_config;
 pub mod page_limit;
 pub mod refresh_token;
 pub mod theme;
+pub mod toast_notify;
