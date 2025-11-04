@@ -5,6 +5,7 @@
 	import IsDataSaver from "./IsDataSaver.svelte";
 	import PageLimit from "./PageLimit.svelte";
 	import ReadingModeSetting from "./ReadingModeSetting.svelte";
+	import ToastNotify from "./ToastNotify.svelte";
 </script>
 
 <div class="layout">
@@ -30,6 +31,10 @@
 	<hr />
 	<section>
 		<ReadingModeSetting />
+	</section>
+	<hr />
+	<section>
+		<ToastNotify />
 	</section>
 </div>
 
