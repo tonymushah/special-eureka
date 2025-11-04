@@ -33,7 +33,7 @@
 			if (notify) {
 				Promise.resolve()
 					.then(async () => {
-						if (await getCurrentWindow().isFocused()) {
+						if (!await getCurrentWindow().isFocused()) {
 							// Do you have permission to send a notification?
 							let permissionGranted = await isPermissionGranted();
 
