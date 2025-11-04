@@ -34,6 +34,7 @@
 		"opener:allow-reveal-item-in-dir",
 		"notification:allow-notify",
 		"notification:allow-is-permission-granted",
-		"notification:deny-request-permission"
+		"notification:deny-request-permission",
+		"core:window:allow-is-focused"
 	]
 }
