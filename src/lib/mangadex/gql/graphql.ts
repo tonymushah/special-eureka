@@ -7622,6 +7622,22 @@ export type UpdatePaginationStyleMutation = {
 	userOption: { __typename?: "UserOptionMutations"; setPaginationStyle: PaginationStyle };
 };
 
+export type UpdateToastNotifyMutationVariables = Exact<{
+	notify: Scalars["Boolean"]["input"];
+}>;
+
+export type UpdateToastNotifyMutation = {
+	__typename?: "Mutation";
+	userOption: { __typename?: "UserOptionMutations"; setToastNotify: boolean };
+};
+
+export type ListenToToastNotifyStoreSubscriptionVariables = Exact<{ [key: string]: never }>;
+
+export type ListenToToastNotifyStoreSubscription = {
+	__typename?: "Subscriptions";
+	watchNotifyToast: boolean;
+};
+
 export type DefaultThemeProfileSubscriptionSubscriptionVariables = Exact<{ [key: string]: never }>;
 
 export type DefaultThemeProfileSubscriptionSubscription = {
@@ -27390,6 +27406,71 @@ export const UpdatePaginationStyleDocument = {
 		}
 	]
 } as unknown as DocumentNode<UpdatePaginationStyleMutation, UpdatePaginationStyleMutationVariables>;
+export const UpdateToastNotifyDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "updateToastNotify" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "notify" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "Boolean" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "userOption" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "setToastNotify" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "notify" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "notify" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<UpdateToastNotifyMutation, UpdateToastNotifyMutationVariables>;
+export const ListenToToastNotifyStoreDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "subscription",
+			name: { kind: "Name", value: "listenToToastNotifyStore" },
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [{ kind: "Field", name: { kind: "Name", value: "watchNotifyToast" } }]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	ListenToToastNotifyStoreSubscription,
+	ListenToToastNotifyStoreSubscriptionVariables
+>;
 export const DefaultThemeProfileSubscriptionDocument = {
 	kind: "Document",
 	definitions: [
