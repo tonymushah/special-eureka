@@ -24,7 +24,37 @@
 		hover: "pause"
 	});
 
-	export const addToast = helpers.addToast;
+	export const addToast: typeof helpers.addToast = (param) => {
+		let notify = false;
+		const unsub = toastNotify.subscribe((d) => {
+			notify = d;
+		});
+		try {
+			if (notify) {
+				Promise.resolve()
+					.then(async () => {
+						// Do you have permission to send a notification?
+						let permissionGranted = await isPermissionGranted();
+
+						// If not we need to request it
+						if (!permissionGranted) {
+							const permission = await requestPermission();
+							permissionGranted = permission === "granted";
+						}
+						if (permissionGranted) {
+							sendNotification({
+								title: param.data.title,
+								body: param.data.description
+							});
+						}
+					})
+					.catch(console.error);
+			}
+			return helpers.addToast(param);
+		} finally {
+			unsub();
+		}
+	};
 	export const removeToast = helpers.removeToast;
 	export const updateToast = helpers.updateToast;
 	export function addErrorToast(title: string, error: unknown) {
@@ -57,6 +87,12 @@
 	import { flip } from "svelte/animate";
 	import { fly } from "svelte/transition";
 	import ToastProgress from "./ToastProgress.svelte";
+	import { toastNotify } from "@mangadex/stores/toastNotify";
+	import {
+		isPermissionGranted,
+		requestPermission,
+		sendNotification
+	} from "@tauri-apps/plugin-notification";
 </script>
 
 <div use:portal class="portal" class:rtl={$isSidebarRtl} style="--decoH: {$decoHStore}px">
@@ -74,8 +110,7 @@
 						<div>
 							<h3 use:melt={$title(id)}>
 								{data.title}
-								<span data-toast-variant={data.variant ?? "accent"} class="status"
-								></span>
+								<span data-toast-variant={data.variant ?? "accent"} class="status"></span>
 							</h3>
 							<div use:melt={$description(id)} class="description">
 								{data.description}
