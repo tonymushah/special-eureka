@@ -42,6 +42,7 @@ pub mod sidebar_direction;
 pub mod statistics;
 pub mod tag;
 pub mod theme;
+pub mod toast_notify;
 pub mod upload;
 pub mod user;
 pub mod user_me;
@@ -77,6 +78,7 @@ use self::{
     statistics::{StatisticsWatch, manga::MangaStatisticsWatch},
     tag::TagWatch,
     theme::{ThemeProfilesWatch, key::ThemeProfileDefaultKeyWatch},
+    toast_notify::ToastNotifyWatch,
     upload::{session::UploadSessionWatch, session_file::UploadSessionFileWatch},
     user::UserWatch,
     user_me::UserMeWatch,
@@ -257,4 +259,5 @@ watches_implementation! {
     force_port_443 => ForcePort443Watch,
     content_profile_blur => ContentProfileBlurWatch,
     content_profile_warning => ContentProfileWarningModeWatch,
+    toast_notify => ToastNotifyWatch,
 }
