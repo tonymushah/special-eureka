@@ -15,7 +15,6 @@ use crate::{
             reading_mode::ReadingModeStore,
         },
         structs::{
-            chapter_language::ChapterLanguagesStore,
             chapter_layout::ChapterLayoutStore,
             client_info::ClientInfoStore,
             content::profiles::{ContentProfileDefaultKey, ContentProfiles},
@@ -43,7 +42,6 @@ macro_rules! setup_watch {
 
 setup_watch! {
     reading_mode <= ReadingModeStore,
-    chapter_languages <= ChapterLanguagesStore,
     page_direction <= ReadingDirectionStore,
     sidebar_direction <= SidebarDirectionStore,
     image_fit <= ImageFitStore,

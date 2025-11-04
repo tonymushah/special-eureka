@@ -32,9 +32,8 @@ use self::{
             reading_mode::ReadingModeStore,
         },
         structs::{
-            chapter_language::ChapterLanguagesStore, chapter_layout::ChapterLayoutStore,
-            client_info::ClientInfoStore, page_limit::PageLimitStore,
-            refresh_token::RefreshTokenStore,
+            chapter_layout::ChapterLayoutStore, client_info::ClientInfoStore,
+            page_limit::PageLimitStore, refresh_token::RefreshTokenStore,
         },
     },
 };
@@ -62,7 +61,6 @@ get_store_builder! {
     ReadingDirectionStore,
     ReadingModeStore,
     SidebarDirectionStore,
-    ChapterLanguagesStore,
     ImageFitStore,
     LongstripImageWidthStore,
     MangaListStyleStore,

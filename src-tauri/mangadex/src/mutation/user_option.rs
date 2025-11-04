@@ -37,7 +37,6 @@ use crate::{
     utils::{get_app_handle_from_async_graphql, traits_utils::MangadexAsyncGraphQLContextExt},
 };
 use async_graphql::{Context, Object};
-use mangadex_api_types_rust::Language;
 
 use crate::{
     store::types::{
@@ -49,7 +48,6 @@ use crate::{
             manga_list_style::{MangaListStyle, MangaListStyleStore},
             reading_mode::{ReadingMode, ReadingModeStore},
         },
-        structs::chapter_language::ChapterLanguagesStore,
     },
     utils::{get_store, get_watches_from_graphql_context, watch::SendData},
 };
@@ -98,19 +96,6 @@ impl UserOptionMutations {
         inner.insert_and_save(&store_write)?;
         watches.sidebar_direction.send_data(inner)?;
         Ok(SidebarDirectionStore::extract_from_store(&store_write)?.into())
-    }
-    pub async fn set_chapter_languages(
-        &self,
-        ctx: &Context<'_>,
-        languages: Vec<Language>,
-    ) -> Result<Vec<Language>> {
-        let store = get_store::<tauri::Wry>(ctx)?;
-        let store_write = store.write().await;
-        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
-        let inner = ChapterLanguagesStore::from(languages);
-        inner.insert_and_save(&store_write)?;
-        watches.chapter_languages.send_data(inner)?;
-        Ok(ChapterLanguagesStore::extract_from_store(&store_write)?.into())
     }
     pub async fn set_image_fit(&self, ctx: &Context<'_>, image_fit: ImageFit) -> Result<ImageFit> {
         let store = get_store::<tauri::Wry>(ctx)?;
