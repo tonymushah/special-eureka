@@ -31,6 +31,7 @@ use crate::{
                     MangaDexTheme,
                     profiles::{ThemeProfileDefaultKey, ThemeProfileEntry, ThemeProfiles},
                 },
+                toast_notify::ToastNotifyStore,
             },
         },
     },
@@ -427,6 +428,19 @@ impl UserOptionMutations {
         *store = mode;
         app.insert_and_save(&store).await?;
         watches.content_profile_warning.send_data(*store)?;
+        Ok(*store)
+    }
+    pub async fn set_toast_notify(
+        &self,
+        ctx: &Context<'_>,
+        notify: bool,
+    ) -> crate::Result<bool, crate::error::ErrorWrapper> {
+        let app = ctx.get_app_handle::<tauri::Wry>()?;
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
+        let mut store = app.extract::<ToastNotifyStore>().await?;
+        *store = notify;
+        app.insert_and_save(&store).await?;
+        watches.toast_notify.send_data(*store)?;
         Ok(*store)
     }
 }
