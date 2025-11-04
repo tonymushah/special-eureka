@@ -33,19 +33,21 @@
 			if (notify) {
 				Promise.resolve()
 					.then(async () => {
-						// Do you have permission to send a notification?
-						let permissionGranted = await isPermissionGranted();
+						if (await getCurrentWindow().isFocused()) {
+							// Do you have permission to send a notification?
+							let permissionGranted = await isPermissionGranted();
 
-						// If not we need to request it
-						if (!permissionGranted) {
-							const permission = await requestPermission();
-							permissionGranted = permission === "granted";
-						}
-						if (permissionGranted) {
-							sendNotification({
-								title: param.data.title,
-								body: param.data.description
-							});
+							// If not we need to request it
+							if (!permissionGranted) {
+								const permission = await requestPermission();
+								permissionGranted = permission === "granted";
+							}
+							if (permissionGranted) {
+								sendNotification({
+									title: param.data.title,
+									body: param.data.description
+								});
+							}
 						}
 					})
 					.catch(console.error);
@@ -93,6 +95,7 @@
 		requestPermission,
 		sendNotification
 	} from "@tauri-apps/plugin-notification";
+	import { getCurrentWindow } from "@tauri-apps/api/window";
 </script>
 
 <div use:portal class="portal" class:rtl={$isSidebarRtl} style="--decoH: {$decoHStore}px">
