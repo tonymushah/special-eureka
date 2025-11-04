@@ -3123,7 +3123,6 @@ export type Subscriptions = {
 	watchChapter: ChapterAttributes;
 	watchChapterDownloadState: ChapterDownloadState;
 	watchChapterFeedStyle: ChapterFeedStyle;
-	watchChapterLanguages: Array<Language>;
 	watchChapterLayout: ChapterLayoutStore;
 	watchChapterQuality: DownloadMode;
 	watchChaptersTasksList: Array<Scalars["UUID"]["output"]>;
@@ -3153,6 +3152,7 @@ export type Subscriptions = {
 	watchMangaReadingState?: Maybe<ReadingStatus>;
 	watchMangaStatistics: MangaStatisticsAttributes;
 	watchMangaTasksList: Array<Scalars["UUID"]["output"]>;
+	watchNotifyToast: Scalars["Boolean"]["output"];
 	watchPageDirection: Direction;
 	watchPageLimit: Scalars["Int"]["output"];
 	watchPaginationStyle: PaginationStyle;
@@ -3565,7 +3565,6 @@ export type UserOptionMutations = {
 	deleteContentProfile?: Maybe<ContentProfile>;
 	deleteThemeProfile?: Maybe<MangaDexTheme>;
 	setChapterFeedStyle: ChapterFeedStyle;
-	setChapterLanguages: Array<Language>;
 	setChapterLayout: ChapterLayoutStore;
 	setChapterQuality: DownloadMode;
 	setContentProfile: ContentProfile;
@@ -3586,6 +3585,7 @@ export type UserOptionMutations = {
 	setSidebarDirection: Direction;
 	setThemeProfile: MangaDexTheme;
 	setThemeProfiles: Scalars["Int"]["output"];
+	setToastNotify: Scalars["Boolean"]["output"];
 	updateDefaultContentProfile: ContentProfile;
 	updateDefaultTheme: MangaDexTheme;
 };
@@ -3600,10 +3600,6 @@ export type UserOptionMutationsDeleteThemeProfileArgs = {
 
 export type UserOptionMutationsSetChapterFeedStyleArgs = {
 	style: ChapterFeedStyle;
-};
-
-export type UserOptionMutationsSetChapterLanguagesArgs = {
-	languages: Array<Language>;
 };
 
 export type UserOptionMutationsSetChapterLayoutArgs = {
@@ -3690,6 +3686,10 @@ export type UserOptionMutationsSetThemeProfilesArgs = {
 	entries: Array<ThemeProfileEntryInput>;
 };
 
+export type UserOptionMutationsSetToastNotifyArgs = {
+	notify: Scalars["Boolean"]["input"];
+};
+
 export type UserOptionMutationsUpdateDefaultContentProfileArgs = {
 	profile?: InputMaybe<ContentProfileInput>;
 };
@@ -3701,7 +3701,6 @@ export type UserOptionMutationsUpdateDefaultThemeArgs = {
 export type UserOptionQueries = {
 	__typename?: "UserOptionQueries";
 	getAuthDateTimeLimit?: Maybe<Scalars["MangaDexDateTime"]["output"]>;
-	getChapterLanguages: Array<Language>;
 	getContentProfileBlur: Scalars["Boolean"]["output"];
 	getContentProfileWarningMode: ContentProfileWarningMode;
 	getDefaultContentProfile: ContentProfile;
