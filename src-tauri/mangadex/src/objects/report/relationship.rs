@@ -1,6 +1,6 @@
 use std::ops::{Deref, DerefMut};
 
-use async_graphql::{Error, Object, Result};
+use async_graphql::Object;
 use convert_case::{Case, Casing};
 use mangadex_api_schema_rust::{
     ApiObjectNoRelationships,
@@ -31,7 +31,7 @@ impl DerefMut for ReportRelationship {
 #[Object]
 #[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl ReportRelationship {
-    pub async fn user(&self) -> Result<User> {
+    pub async fn user(&self) -> Result<User, crate::ErrorWrapper> {
         self.iter()
             .flat_map(|o| {
                 <ApiObjectNoRelationships<UserAttributes> as TryFrom<Relationship>>::try_from(
@@ -40,7 +40,8 @@ impl ReportRelationship {
             })
             .next()
             .map(|o| -> User { o.into() })
-            .ok_or(Error::new("User Relationship not found"))
+            .ok_or(crate::Error::ObjectCreatorNotFound)
+            .map_err(crate::ErrorWrapper::from)
     }
 }
 
