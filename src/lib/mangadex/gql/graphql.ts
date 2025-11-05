@@ -160,7 +160,7 @@ export type ApiClientQueriesGetArgs = {
 };
 
 export type ApiClientQueriesListArgs = {
-	params?: ApiClientListParam;
+	params?: InputMaybe<ApiClientListParam>;
 };
 
 export type ApiClientRelationships = {
@@ -916,7 +916,7 @@ export type CoverQueriesIsDownloadedArgs = {
 };
 
 export type CoverQueriesListArgs = {
-	params?: CoverListParam;
+	params?: InputMaybe<CoverListParam>;
 };
 
 export type CoverRelationships = {
@@ -1238,7 +1238,7 @@ export type CustomListQueries = {
 };
 
 export type CustomListQueriesCurrentLoggedListsArgs = {
-	params?: CurrentLoggedLists;
+	params?: InputMaybe<CurrentLoggedLists>;
 };
 
 export type CustomListQueriesGetArgs = {
