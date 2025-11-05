@@ -1,4 +1,4 @@
-use async_graphql::{Context, Object, Result as GraphQLResult};
+use async_graphql::{Context, Object};
 use mangadex_api_schema_rust::{
     ApiObjectNoRelationships,
     v5::{CustomListAttributes as Attributes, CustomListObject},
@@ -78,7 +78,10 @@ impl CustomList {
     pub async fn attributes(&self) -> CustomListAttributes {
         self.get_attributes()
     }
-    pub async fn relationships(&self, ctx: &Context<'_>) -> GraphQLResult<CustomListRelationships> {
+    pub async fn relationships(
+        &self,
+        ctx: &Context<'_>,
+    ) -> Result<CustomListRelationships, crate::ErrorWrapper> {
         match self {
             CustomList::WithRelationship(o) => Ok(o.relationships.clone().into()),
             CustomList::WithoutRelationship(o) => {
