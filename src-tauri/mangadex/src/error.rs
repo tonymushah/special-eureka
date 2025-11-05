@@ -146,6 +146,8 @@ pub enum Error {
     ChapterPageNotLoaded { page: u32, chapter: Uuid },
     #[error("the {} chapter pages data can't be read", .0)]
     CannotReadChapterPagesData(Uuid),
+    #[error("Object creator not found")]
+    ObjectCreatorNotFound,
 }
 
 impl Error {
