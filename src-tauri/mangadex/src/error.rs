@@ -148,6 +148,8 @@ pub enum Error {
     CannotReadChapterPagesData(Uuid),
     #[error("Object creator not found")]
     ObjectCreatorNotFound,
+    #[error("Related manga not found")]
+    RelatedMangaNotFound,
 }
 
 impl Error {
