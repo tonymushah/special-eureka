@@ -1,7 +1,7 @@
 use std::ops::Deref;
 
+use crate::error::wrapped::Result;
 use crate::{
-    Result,
     objects::offline_config::OfflineConfigObject,
     store::{
         TauriManagerMangadexStoreExtractor,
