@@ -1,4 +1,4 @@
-use std::{backtrace::Backtrace, ops::Deref};
+use std::backtrace::Backtrace;
 
 use async_graphql::ErrorExtensions;
 use uuid::Uuid;
@@ -226,28 +226,28 @@ impl ErrorExtensions for Error {
     }
 }
 
-#[derive(Debug, Clone)]
-pub struct ErrorWrapper(std::sync::Arc<Error>);
+#[derive(Debug)]
+pub struct ErrorWrapper(Error);
 
 impl<E> From<E> for ErrorWrapper
 where
     E: Into<Error>,
 {
     fn from(value: E) -> Self {
-        Self(std::sync::Arc::new(value.into()))
+        Self(value.into())
     }
 }
 
 impl AsRef<Error> for ErrorWrapper {
     fn as_ref(&self) -> &Error {
-        self.0.deref()
+        &self.0
     }
 }
 
 impl ErrorWrapper {
     #[cfg_attr(feature = "hotpath", hotpath::measure)]
-    pub fn into_inner(self) -> Option<Error> {
-        std::sync::Arc::into_inner(self.0)
+    pub fn into_inner(self) -> Error {
+        self.0
     }
 }
 
