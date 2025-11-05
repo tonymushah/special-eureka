@@ -1,4 +1,4 @@
-use crate::{Result, subscription::utils::OptionFlattenStream};
+use crate::{error::wrapped::Result, subscription::utils::OptionFlattenStream};
 use async_graphql::{Context, SimpleObject, Subscription};
 use tokio_stream::{Stream, StreamExt};
 use uuid::Uuid;

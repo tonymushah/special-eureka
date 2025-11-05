@@ -18,7 +18,7 @@ impl ChapterPagesSubscription {
         ctx: &Context<'_>,
         chapter: Uuid,
         mode: Option<DownloadMode>,
-    ) -> crate::Result<ChapterPagesStream> {
+    ) -> crate::error::wrapped::Result<ChapterPagesStream> {
         let app_handle = ctx.get_app_handle::<tauri::Wry>()?;
         let store = app_handle.get_chapter_pages_store();
         if let Ok(mut store_write) = store.write() {
@@ -27,7 +27,7 @@ impl ChapterPagesSubscription {
             handle.fetch_metadata();
             Ok(ChapterPagesHandle::subscribe_with_stream(handle))
         } else {
-            Err(crate::Error::SyncPoison)
+            Err(crate::Error::SyncPoison.into())
         }
     }
 }
