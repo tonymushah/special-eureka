@@ -12,10 +12,22 @@
 <div class="error with-margin">
 	<h3>{label}</h3>
 	{#if error instanceof CombinedError}
-		{#each error.graphQLErrors as { name, message }}
+		{#each error.graphQLErrors as { name, message, extensions }}
+			{@const errorCode = extensions["code"]}
+			{@const statusCode = extensions["status"]}
 			<div class="details">
 				<h4>{name}</h4>
-				<div>{message}</div>
+				<div>
+					{#if typeof errorCode == "string" || typeof errorCode == "number"}
+						<span><span class="status-description">Internal Error Code:</span> {errorCode}</span>
+						<br />
+					{/if}
+					{#if typeof statusCode == "string" || typeof statusCode == "number"}
+						<span><span class="status-description">Status code Code:</span> {statusCode}</span>
+						<br />
+					{/if}
+					<span>{message}</span>
+				</div>
 			</div>
 		{/each}
 	{:else}
@@ -51,5 +63,8 @@
 			flex-direction: row;
 			overflow: hidden;
 		}
+	}
+	.status-description {
+		text-decoration: underline;
 	}
 </style>
