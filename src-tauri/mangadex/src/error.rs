@@ -150,6 +150,8 @@ pub enum Error {
     ObjectCreatorNotFound,
     #[error("Related manga not found")]
     RelatedMangaNotFound,
+    #[error("Related user not found")]
+    RelatedUserNotFound,
 }
 
 impl Error {

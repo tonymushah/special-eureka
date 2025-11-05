@@ -77,7 +77,7 @@ impl ChapterRelationships {
             )
             .and_then(|inner| inner.ok())
             .map(<User as From<ApiObjectNoRelationships<UserAttributes>>>::from)
-            .ok_or(crate::Error::ObjectCreatorNotFound)
+            .ok_or(crate::Error::RelatedUserNotFound)
             .map_err(crate::ErrorWrapper::from)
     }
 }
