@@ -5,7 +5,7 @@ pub mod list;
 use std::{collections::HashMap, ops::Deref};
 
 use crate::{
-    Result,
+    error::wrapped::Result,
     store::types::structs::content::{feed_from_gql_ctx, try_feed_from_gql_ctx},
     utils::traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
 };
@@ -47,20 +47,17 @@ pub struct MangaQueries;
 #[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl MangaQueries {
     pub async fn is_downloaded(&self, ctx: &Context<'_>, id: Uuid) -> Result<DownloadState> {
-        DownloadStateQueries
-            .manga(ctx, id)
-            .await
-            .map_err(|e| e.into_inner())
+        DownloadStateQueries.manga(ctx, id).await
     }
     pub async fn get(&self, ctx: &Context<'_>, id: Uuid) -> Result<Manga> {
-        MangaGetUniqueQueries {
+        Ok(MangaGetUniqueQueries {
             id,
             includes: <MangaGetUniqueQueries as ExtractReferenceExpansionFromContext>::exctract(
                 ctx,
             ),
         }
         .get(ctx)
-        .await
+        .await?)
     }
     pub async fn list(
         &self,
@@ -73,13 +70,13 @@ impl MangaQueries {
         if !params.manga_ids.is_empty() {
             params.limit.replace(params.manga_ids.len().try_into()?);
         }
-        MangaListQueries::new_with_exclude_feed(
+        Ok(MangaListQueries::new_with_exclude_feed(
             params,
             exclude_content_profile.unwrap_or_default(),
             ctx.get_app_handle::<tauri::Wry>()?,
         )
         .list(ctx)
-        .await
+        .await?)
     }
     pub async fn list_offline(
         &self,
@@ -92,13 +89,13 @@ impl MangaQueries {
         if params.limit.is_none() && !params.manga_ids.is_empty() {
             params.limit.replace(params.manga_ids.len().try_into()?);
         }
-        MangaListQueries::new_with_exclude_feed(
+        Ok(MangaListQueries::new_with_exclude_feed(
             params,
             exclude_content_profile.unwrap_or_default(),
             ctx.get_app_handle::<tauri::Wry>()?,
         )
         .list_offline(ctx)
-        .await
+        .await?)
     }
     pub async fn random(
         &self,
@@ -256,7 +253,7 @@ impl MangaQueries {
         ctx: &Context<'_>,
         params: MangaAggregateParam,
         exclude_content_profile: Option<bool>,
-    ) -> crate::Result<MangaAggregateQueries> {
+    ) -> Result<MangaAggregateQueries> {
         let mut params = params;
         if !exclude_content_profile.unwrap_or(false) {
             params = try_feed_from_gql_ctx::<tauri::Wry, _>(ctx, params)?;
