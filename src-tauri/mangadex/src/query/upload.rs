@@ -1,5 +1,5 @@
+use crate::error::wrapped::Result;
 use crate::{
-    Result,
     error::Error,
     utils::traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
 };
@@ -41,7 +41,7 @@ impl UploadQueries {
                         return Ok(None);
                     }
                 }
-                Err(Error::MangadexApi(e))
+                Err(Error::MangadexApi(e).into())
             }
         }
     }
