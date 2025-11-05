@@ -1,4 +1,3 @@
-use crate::Result;
 use async_graphql::{Context, Object};
 
 use crate::{
