@@ -256,3 +256,7 @@ impl From<ErrorWrapper> for async_graphql::Error {
         value.0.extend()
     }
 }
+
+pub(crate) mod wrapped {
+    pub type Result<T, E = super::ErrorWrapper> = std::result::Result<T, E>;
+}

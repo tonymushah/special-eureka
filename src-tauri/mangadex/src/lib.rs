@@ -31,7 +31,6 @@ type S = Subscriptions;
 
 pub(crate) type Result<T, E = error::Error> = std::result::Result<T, E>;
 pub(crate) use plugin_setup::PluginSetupResult;
-pub(crate) type WrappedErrorResult<T, E = error::ErrorWrapper> = std::result::Result<T, E>;
 
 pub use error::Error;
 pub(crate) use error::ErrorWrapper;
