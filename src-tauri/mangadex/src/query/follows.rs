@@ -1,6 +1,7 @@
 use std::ops::Deref;
 
-use crate::{Result, utils::splittable_param::SendSplitted};
+use crate::error::wrapped::Result;
+use crate::utils::splittable_param::SendSplitted;
 use async_graphql::{Context, Object};
 use mangadex_api_input_types::follows::{
     groups::UserFollowedGroupsParams, lists::UserFollowedListParams,
