@@ -47,7 +47,10 @@ pub struct MangaQueries;
 #[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl MangaQueries {
     pub async fn is_downloaded(&self, ctx: &Context<'_>, id: Uuid) -> Result<DownloadState> {
-        DownloadStateQueries.manga(ctx, id).await
+        DownloadStateQueries
+            .manga(ctx, id)
+            .await
+            .map_err(|e| e.into_inner())
     }
     pub async fn get(&self, ctx: &Context<'_>, id: Uuid) -> Result<Manga> {
         MangaGetUniqueQueries {
