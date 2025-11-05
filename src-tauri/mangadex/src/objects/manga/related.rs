@@ -20,6 +20,6 @@ impl MangaRelated {
         self.obj.attributes(ctx).await
     }
     pub async fn relationships(&self, ctx: &Context<'_>) -> Result<MangaRelationships> {
-        self.obj.relationships(ctx).await?
+        Ok(self.obj.relationships(ctx).await?)
     }
 }
