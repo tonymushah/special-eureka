@@ -1,6 +1,6 @@
 use std::ops::Deref;
 
-use async_graphql::{Error as GraphQLError, Object, Result as GraphQLResult};
+use async_graphql::Object;
 use mangadex_api_schema_rust::{
     ApiObjectNoRelationships,
     v5::{
@@ -30,7 +30,7 @@ impl Deref for ChapterRelationships {
 #[Object]
 #[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl ChapterRelationships {
-    pub async fn manga(&self) -> GraphQLResult<Manga> {
+    pub async fn manga(&self) -> Result<Manga, crate::ErrorWrapper> {
         self.iter()
             .find(|rel| rel.type_ == RelationshipType::Manga)
             .map(|rel| {
@@ -40,7 +40,8 @@ impl ChapterRelationships {
             })
             .and_then(|rel| rel.ok())
             .map(<Manga as From<ApiObjectNoRelationships<MangaAttributes>>>::from)
-            .ok_or(GraphQLError::new("Related manga not found"))
+            .ok_or(crate::Error::RelatedMangaNotFound)
+            .map_err(crate::ErrorWrapper::from)
     }
     pub async fn scanlation_groups(&self) -> Vec<ScanlationGroup> {
         self.iter()
@@ -53,7 +54,7 @@ impl ChapterRelationships {
             .map(<ScanlationGroup as From<ApiObjectNoRelationships<ScanlationGroupAttributes>>>::from)
             .collect::<Vec<ScanlationGroup>>()
     }
-    pub async fn user(&self) -> GraphQLResult<User> {
+    pub async fn user(&self) -> Result<User, crate::ErrorWrapper> {
         self.iter()
             .find(|e| e.type_ == RelationshipType::Creator || e.type_ == RelationshipType::User)
             .map(
@@ -76,6 +77,7 @@ impl ChapterRelationships {
             )
             .and_then(|inner| inner.ok())
             .map(<User as From<ApiObjectNoRelationships<UserAttributes>>>::from)
-            .ok_or(GraphQLError::new("Related Uploader or User not found"))
+            .ok_or(crate::Error::ObjectCreatorNotFound)
+            .map_err(crate::ErrorWrapper::from)
     }
 }
