@@ -1,4 +1,4 @@
-use async_graphql::{Context, Error, Object, Result as GraphQLResult};
+use async_graphql::{Context, Object};
 use mangadex_api_schema_rust::{
     ApiObjectNoRelationships,
     v5::{CoverAttributes as Attributes, CoverObject},
@@ -89,7 +89,10 @@ impl Cover {
     pub async fn attributes(&self) -> CoverAttributes {
         self.get_attributes()
     }
-    pub async fn relationships(&self, ctx: &Context<'_>) -> GraphQLResult<CoverRelationships> {
+    pub async fn relationships(
+        &self,
+        ctx: &Context<'_>,
+    ) -> Result<CoverRelationships, crate::ErrorWrapper> {
         match self {
             Cover::WithRelationship(o) => Ok(o.relationships.clone().into()),
             Cover::WithoutRelationship(o) => CoverGetUniqueQuery { id: o.id }
@@ -97,7 +100,8 @@ impl Cover {
                 .await?
                 .get_relationships()
                 .map(|rel| -> CoverRelationships { rel.into() })
-                .ok_or(Error::new("Empty Relationship Table")),
+                .ok_or(crate::Error::EmptyRelationshipTable)
+                .map_err(crate::ErrorWrapper::from),
         }
     }
 }
