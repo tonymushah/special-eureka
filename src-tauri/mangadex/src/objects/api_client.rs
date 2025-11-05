@@ -1,4 +1,4 @@
-use async_graphql::{Context, Object, Result as GraphQLResult};
+use async_graphql::{Context, Object};
 use mangadex_api_schema_rust::{
     ApiObjectNoRelationships,
     v5::{ApiClientAttributes as Attributes, ApiClientObject as ApiClientData},
@@ -79,7 +79,10 @@ impl ApiClient {
     pub async fn attributes(&self) -> ApiClientAttributes {
         self.get_attributes()
     }
-    pub async fn relationships(&self, ctx: &Context<'_>) -> GraphQLResult<ApiClientRelationships> {
+    pub async fn relationships(
+        &self,
+        ctx: &Context<'_>,
+    ) -> Result<ApiClientRelationships, crate::ErrorWrapper> {
         match self {
             ApiClient::WithRelationship(o) => Ok(o.relationships.clone().into()),
             ApiClient::WithoutRelationship(o) => {
@@ -100,12 +103,12 @@ impl ApiClient {
             }
         }
     }
-    pub async fn secret(&self, ctx: &Context<'_>) -> GraphQLResult<String> {
+    pub async fn secret(&self, ctx: &Context<'_>) -> Result<String, crate::ErrorWrapper> {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         Ok(client
             .client()
-            .id(self.id(ctx).await?)
+            .id(self.get_id())
             .secret()
             .get()
             .send()
