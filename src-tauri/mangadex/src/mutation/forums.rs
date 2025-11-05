@@ -1,4 +1,5 @@
-use crate::Result;
+use crate::error::wrapped::Result;
+
 use async_graphql::{Context, Object, SimpleObject};
 use mangadex_api_input_types::forums::create::CreateForumThreadParams;
 use url::Url;

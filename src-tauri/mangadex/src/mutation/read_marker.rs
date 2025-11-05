@@ -1,7 +1,8 @@
 use std::collections::HashMap;
 
+use crate::error::wrapped::Result;
+
 use crate::{
-    Result,
     objects::chapter::Chapter,
     store::types::structs::content::ContentFeeder,
     utils::{

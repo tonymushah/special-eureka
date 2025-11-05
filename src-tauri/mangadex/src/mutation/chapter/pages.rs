@@ -1,6 +1,7 @@
 use async_graphql::{Context, Object};
 use uuid::Uuid;
 
+use crate::error::wrapped::Result;
 use crate::{
     store::types::enums::chapter_quality::DownloadMode,
     utils::traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
@@ -14,7 +15,7 @@ pub struct ChapterPagesStoreMutation {
 #[Object]
 #[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl ChapterPagesStoreMutation {
-    pub async fn fetch_metadata(&self, ctx: &Context<'_>) -> crate::Result<bool> {
+    pub async fn fetch_metadata(&self, ctx: &Context<'_>) -> Result<bool> {
         let app = ctx.get_app_handle::<tauri::Wry>()?;
         let store = app.get_chapter_pages_store();
         if let Ok(store_read) = store.read() {
@@ -27,7 +28,7 @@ impl ChapterPagesStoreMutation {
             Ok(false)
         }
     }
-    pub async fn start_caching(&self, ctx: &Context<'_>) -> crate::Result<bool> {
+    pub async fn start_caching(&self, ctx: &Context<'_>) -> Result<bool> {
         let app = ctx.get_app_handle::<tauri::Wry>()?;
         let store = app.get_chapter_pages_store();
         if let Ok(store_read) = store.read() {
@@ -40,7 +41,7 @@ impl ChapterPagesStoreMutation {
             Ok(false)
         }
     }
-    pub async fn refetch_page(&self, ctx: &Context<'_>, page: u32) -> crate::Result<bool> {
+    pub async fn refetch_page(&self, ctx: &Context<'_>, page: u32) -> Result<bool> {
         let app = ctx.get_app_handle::<tauri::Wry>()?;
         let store = app.get_chapter_pages_store();
         if let Ok(store_read) = store.read() {
@@ -53,7 +54,7 @@ impl ChapterPagesStoreMutation {
             Ok(false)
         }
     }
-    pub async fn resend_page(&self, ctx: &Context<'_>, page: u32) -> crate::Result<bool> {
+    pub async fn resend_page(&self, ctx: &Context<'_>, page: u32) -> Result<bool> {
         let app = ctx.get_app_handle::<tauri::Wry>()?;
         let store = app.get_chapter_pages_store();
         if let Ok(store_read) = store.read() {
@@ -66,7 +67,7 @@ impl ChapterPagesStoreMutation {
             Ok(false)
         }
     }
-    pub async fn resend_all(&self, ctx: &Context<'_>) -> crate::Result<bool> {
+    pub async fn resend_all(&self, ctx: &Context<'_>) -> Result<bool> {
         let app = ctx.get_app_handle::<tauri::Wry>()?;
         let store = app.get_chapter_pages_store();
         if let Ok(store_read) = store.read() {
@@ -79,7 +80,7 @@ impl ChapterPagesStoreMutation {
             Ok(false)
         }
     }
-    pub async fn refetch_incompletes(&self, ctx: &Context<'_>) -> crate::Result<bool> {
+    pub async fn refetch_incompletes(&self, ctx: &Context<'_>) -> Result<bool> {
         let app = ctx.get_app_handle::<tauri::Wry>()?;
         let store = app.get_chapter_pages_store();
         if let Ok(store_read) = store.read() {
@@ -98,7 +99,7 @@ impl ChapterPagesStoreMutation {
         export_path: String,
         page: u32,
         defer: Option<bool>,
-    ) -> crate::Result<Option<String>> {
+    ) -> Result<Option<String>> {
         let app = ctx.get_app_handle::<tauri::Wry>()?;
         let store = app.get_chapter_pages_store();
         let handle = {

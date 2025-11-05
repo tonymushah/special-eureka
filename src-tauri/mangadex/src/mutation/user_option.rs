@@ -1,7 +1,7 @@
 use std::num::NonZero;
 
+use crate::error::wrapped::Result;
 use crate::{
-    Result,
     cache::{cover::CoverImageCache, favicon::clear_favicons_dir},
     objects::offline_config::{OfflineConfigInput, OfflineConfigObject},
     store::{

@@ -1,8 +1,8 @@
 pub mod pages;
 
 use crate::{
-    Result,
     error::Error,
+    error::wrapped::Result,
     query::download_state::DownloadStateQueries,
     store::{
         TauriManagerMangadexStoreExtractor, types::enums::chapter_quality::ChapterQualityStore,
@@ -85,7 +85,10 @@ impl ChapterMutations {
         ins_handle::add_in_queue(&tauri_handle, id)?;
 
         let res = download_chapter(&tauri_handle, id, quality.into()).await;
-        let state = DownloadStateQueries.chapter(ctx, id).await?;
+        let state = DownloadStateQueries
+            .chapter(ctx, id)
+            .await
+            .map_err(|e| e.into_inner())?;
         if let Err(_err) = res {
             ins_handle::add_in_failed(&tauri_handle, id)?;
             Ok(state)

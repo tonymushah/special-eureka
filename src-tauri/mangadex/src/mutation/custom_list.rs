@@ -1,7 +1,7 @@
 pub mod export;
 
+use crate::error::wrapped::Result;
 use crate::{
-    Result,
     store::types::structs::content::ContentFeeder,
     utils::{
         splittable_param::SendSplitted,
