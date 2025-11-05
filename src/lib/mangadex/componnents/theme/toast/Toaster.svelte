@@ -64,7 +64,12 @@
 			data: {
 				title,
 				description: (() => {
-					if (error instanceof Error) {
+					if (error instanceof CombinedError && dev) {
+						return JSON.stringify({
+							extensions: error.graphQLErrors.map((d) => d.extensions),
+							message: error.message
+						});
+					} else if (error instanceof Error) {
 						return error.message;
 					} else if (typeof error == "string") {
 						return error;
@@ -96,6 +101,8 @@
 		sendNotification
 	} from "@tauri-apps/plugin-notification";
 	import { getCurrentWindow } from "@tauri-apps/api/window";
+	import { CombinedError } from "@urql/svelte";
+	import { dev } from "$app/environment";
 </script>
 
 <div use:portal class="portal" class:rtl={$isSidebarRtl} style="--decoH: {$decoHStore}px">

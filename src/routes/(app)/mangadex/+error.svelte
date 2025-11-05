@@ -6,4 +6,4 @@
 
 <AppTitle title={$page.error?.title ?? "MangaDex Page Error"} />
 
-<PageError message={$page.error?.message} />
+<PageError message={$page.error?.message} extensions={$page.error?.extensions} />

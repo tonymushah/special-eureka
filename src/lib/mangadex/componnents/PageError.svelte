@@ -6,10 +6,14 @@
 	let isTitleHovered = $state(false);
 	interface Props {
 		message?: string | undefined;
+		extensions?: {
+			[extension: string]: unknown;
+		}[];
 		retry?: () => void;
 	}
 
-	let { message = undefined, retry }: Props = $props();
+	let { message = undefined, retry, extensions: exts }: Props = $props();
+	let extensions = $derived(exts?.flatMap((o) => Object.entries(o)));
 </script>
 
 <div class="error">
@@ -30,6 +34,14 @@
 	{#if message}
 		<div class="message" transition:slide>
 			<p>{message}</p>
+		</div>
+	{/if}
+	{#if extensions}
+		<div class="extensions">
+			<h6>Extensions</h6>
+			{#each extensions as [key, value]}
+				<p>{key}: {value}</p>
+			{/each}
 		</div>
 	{/if}
 	<div class="buttons">

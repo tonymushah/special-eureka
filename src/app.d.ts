@@ -7,7 +7,7 @@ declare global {
 			title?: string;
 			extensions?: {
 				[extension: string]: unknown;
-			};
+			}[];
 		}
 		// interface Locals {}
 		// interface PageData {}

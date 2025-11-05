@@ -2,15 +2,21 @@
 	import { XCircleIcon } from "svelte-feather-icons";
 	import ButtonAccent from "./theme/buttons/ButtonAccent.svelte";
 	import PrimaryButtonOnlyLabel from "./theme/buttons/PrimaryButtonOnlyLabel.svelte";
+	import { CombinedError } from "@urql/svelte";
 
 	interface Props {
 		error: Error;
 		label: string;
-		retry?: () => any;
-		close?: () => any;
+		retry?: () => unknown;
+		close?: () => unknown;
 	}
 
 	let { error, label, retry, close }: Props = $props();
+	let extensions = $derived.by(() => {
+		if (error instanceof CombinedError) {
+			return error.graphQLErrors.flatMap((e) => Object.entries(e.extensions));
+		}
+	});
 </script>
 
 <div class="error with-margin">
@@ -36,6 +42,15 @@
 		<h4>{error.name}</h4>
 		<div>{error.message}</div>
 	</div>
+	{#if extensions}
+		<div class="extensions">
+			{#each extensions as [key, value]}
+				<ul>
+					<li>{key}: {value}</li>
+				</ul>
+			{/each}
+		</div>
+	{/if}
 </div>
 
 <style lang="scss">
