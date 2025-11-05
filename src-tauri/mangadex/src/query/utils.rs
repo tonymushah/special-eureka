@@ -17,7 +17,7 @@ pub struct UtilsQuery;
 #[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl UtilsQuery {
     pub async fn favicon(&self, ctx: &Context<'_>, url: Url) -> Result<Url> {
-        get_favicon::<tauri::Wry>(&url, ctx).await
+        Ok(get_favicon::<tauri::Wry>(&url, ctx).await?)
     }
     pub async fn str_to_language(&self, input: String) -> Result<Language> {
         Ok(Language::from_str(&input)?)
