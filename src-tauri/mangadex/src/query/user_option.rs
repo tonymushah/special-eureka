@@ -70,7 +70,7 @@ impl UserOptionQueries {
             .listen_to_content_profile_default(ctx)
             .await?;
         let mut stream = Box::pin(stream);
-        stream.next().await.ok_or(crate::Error::EndStream)
+        stream.next().await.ok_or(crate::Error::EndStream.into())
     }
     pub async fn get_offline_config(&self, _ctx: &Context<'_>) -> OfflineConfigObject {
         OfflineConfigObject
