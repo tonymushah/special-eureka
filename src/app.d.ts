@@ -5,6 +5,9 @@ declare global {
 		interface Error {
 			message: string;
 			title?: string;
+			extensions?: {
+				[extension: string]: unknown;
+			};
 		}
 		// interface Locals {}
 		// interface PageData {}
