@@ -1,4 +1,4 @@
-use crate::Result;
+use crate::error::wrapped::Result;
 use async_graphql::{Context, Object};
 
 use crate::utils::get_mangadex_client_from_graphql_context;
