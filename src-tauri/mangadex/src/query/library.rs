@@ -173,55 +173,61 @@ impl CurrentUserLibrary {
         &self,
         ctx: &Context<'_>,
         param: Option<UserLibrarySectionParam>,
-    ) -> crate::Result<MangaResults> {
-        self.extract_result(ctx, None, param).await
+    ) -> crate::error::wrapped::Result<MangaResults> {
+        Ok(self.extract_result(ctx, None, param).await?)
     }
     pub async fn completed(
         &self,
         ctx: &Context<'_>,
         param: Option<UserLibrarySectionParam>,
-    ) -> crate::Result<MangaResults> {
-        self.extract_result(ctx, Some(ReadingStatus::Completed), param)
-            .await
+    ) -> crate::error::wrapped::Result<MangaResults> {
+        Ok(self
+            .extract_result(ctx, Some(ReadingStatus::Completed), param)
+            .await?)
     }
     pub async fn dropped(
         &self,
         ctx: &Context<'_>,
         param: Option<UserLibrarySectionParam>,
-    ) -> crate::Result<MangaResults> {
-        self.extract_result(ctx, Some(ReadingStatus::Dropped), param)
-            .await
+    ) -> crate::error::wrapped::Result<MangaResults> {
+        Ok(self
+            .extract_result(ctx, Some(ReadingStatus::Dropped), param)
+            .await?)
     }
     pub async fn on_hold(
         &self,
         ctx: &Context<'_>,
         param: Option<UserLibrarySectionParam>,
-    ) -> crate::Result<MangaResults> {
-        self.extract_result(ctx, Some(ReadingStatus::OnHold), param)
-            .await
+    ) -> crate::error::wrapped::Result<MangaResults> {
+        Ok(self
+            .extract_result(ctx, Some(ReadingStatus::OnHold), param)
+            .await?)
     }
     pub async fn plan_to_read(
         &self,
         ctx: &Context<'_>,
         param: Option<UserLibrarySectionParam>,
-    ) -> crate::Result<MangaResults> {
-        self.extract_result(ctx, Some(ReadingStatus::PlanToRead), param)
-            .await
+    ) -> crate::error::wrapped::Result<MangaResults> {
+        Ok(self
+            .extract_result(ctx, Some(ReadingStatus::PlanToRead), param)
+            .await?)
     }
     pub async fn reading(
         &self,
         ctx: &Context<'_>,
         param: Option<UserLibrarySectionParam>,
-    ) -> crate::Result<MangaResults> {
-        self.extract_result(ctx, Some(ReadingStatus::Reading), param)
-            .await
+    ) -> crate::error::wrapped::Result<MangaResults> {
+        Ok(self
+            .extract_result(ctx, Some(ReadingStatus::Reading), param)
+            .await?)
     }
     pub async fn re_reading(
         &self,
         ctx: &Context<'_>,
         param: Option<UserLibrarySectionParam>,
-    ) -> crate::Result<MangaResults> {
-        self.extract_result(ctx, Some(ReadingStatus::ReReading), param)
-            .await
+    ) -> crate::error::wrapped::Result<MangaResults> {
+        Ok(self
+            .extract_result(ctx, Some(ReadingStatus::ReReading), param)
+            .await?)
     }
 }
