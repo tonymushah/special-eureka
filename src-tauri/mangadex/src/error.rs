@@ -154,6 +154,8 @@ pub enum Error {
     RelatedUserNotFound,
     #[error("Related cover_art not found")]
     RelatedCoverArtNotFound,
+    #[error(transparent)]
+    RelationshipConversion(mangadex_api_types_rust::error::RelationshipConversionError),
 }
 
 impl Error {
