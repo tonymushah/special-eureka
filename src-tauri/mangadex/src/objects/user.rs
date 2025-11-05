@@ -1,4 +1,4 @@
-use async_graphql::{Context, Object, Result as GraphQLResult};
+use async_graphql::{Context, Object};
 use convert_case::{Case, Casing};
 use mangadex_api_schema_rust::{
     ApiObjectNoRelationships,
@@ -94,7 +94,7 @@ impl User {
     pub async fn relationships<'ctx>(
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
-    ) -> GraphQLResult<UserRelationships> {
+    ) -> crate::error::wrapped::Result<UserRelationships> {
         match self {
             User::WithRelationship(o) => Ok(UserRelationships(o.relationships.clone())),
             User::WithoutRelationship(o) => Ok(UserRelationships(
