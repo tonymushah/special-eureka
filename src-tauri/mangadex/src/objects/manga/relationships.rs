@@ -54,7 +54,8 @@ impl MangaRelationships {
             .find(|r| r.type_ == RelationshipType::CoverArt)
             .ok_or(crate::Error::RelatedCoverArtNotFound)?
             .clone()
-            .try_into()?;
+            .try_into()
+            .map_err(crate::Error::RelationshipConversion)?;
         Ok(Cover::WithoutRelationship(rel))
     }
     pub async fn authors(&self) -> Vec<Author> {
