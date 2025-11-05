@@ -1,4 +1,4 @@
-use crate::{Result, error::Error};
+use crate::error::Error;
 use async_graphql::{Context, Object};
 use eureka_mmanager::prelude::*;
 use mangadex_api_types_rust::ReferenceExpansionResource;
@@ -19,7 +19,7 @@ pub struct GetUniqueChapterQuery(pub Vec<ReferenceExpansionResource>);
 #[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl GetUniqueChapterQuery {
     #[graphql(skip)]
-    pub async fn get_online(&self, ctx: &Context<'_>, id: Uuid) -> Result<Chapter> {
+    pub async fn get_online(&self, ctx: &Context<'_>, id: Uuid) -> crate::Result<Chapter> {
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let data: Chapter = client
@@ -35,7 +35,7 @@ impl GetUniqueChapterQuery {
         Ok(data)
     }
     #[graphql(skip)]
-    pub async fn get_offline(&self, ctx: &Context<'_>, id: Uuid) -> Result<Chapter> {
+    pub async fn get_offline(&self, ctx: &Context<'_>, id: Uuid) -> crate::Result<Chapter> {
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let off_state = get_offline_app_state::<tauri::Wry>(ctx)?;
         let read_off_state = off_state.read().await;
@@ -46,11 +46,11 @@ impl GetUniqueChapterQuery {
         let _ = watches.chapter.send_offline(chapter.clone());
         Ok(chapter)
     }
-    pub async fn get(&self, ctx: &Context<'_>, id: Uuid) -> Result<Chapter> {
+    pub async fn get(&self, ctx: &Context<'_>, id: Uuid) -> crate::error::wrapped::Result<Chapter> {
         if let Ok(online) = self.get_online(ctx, id).await {
             Ok(online)
         } else {
-            self.get_offline(ctx, id).await
+            Ok(self.get_offline(ctx, id).await?)
         }
     }
 }

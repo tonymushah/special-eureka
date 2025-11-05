@@ -209,9 +209,10 @@ impl ChapterListQueries {
         &self,
         ctx: &Context<'_>,
         offline_params: Option<GetAllChapterParams>,
-    ) -> Result<ChapterResults> {
-        self._default(ctx, offline_params)
+    ) -> crate::error::wrapped::Result<ChapterResults> {
+        Ok(self
+            ._default(ctx, offline_params)
             .await
-            .map(|res| res.into())
+            .map(|res| res.into())?)
     }
 }
