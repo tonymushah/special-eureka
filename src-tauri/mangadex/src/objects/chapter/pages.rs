@@ -15,7 +15,7 @@ pub struct ChapterPages {
 #[Object]
 #[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl ChapterPages {
-    pub async fn data(&self) -> Result<Vec<Url>> {
+    pub async fn data(&self) -> Result<Vec<Url>, crate::ErrorWrapper> {
         let regex = Regex::new(r"\d+")?;
         let mut data = self.data.clone();
         data.sort_by(|a, b| {
@@ -39,7 +39,7 @@ impl ChapterPages {
         });
         Ok(data)
     }
-    pub async fn data_saver(&self) -> Result<Vec<Url>> {
+    pub async fn data_saver(&self) -> Result<Vec<Url>, crate::ErrorWrapper> {
         let regex = Regex::new(r"\d+")?;
         let mut data = self.data_saver.clone();
         data.sort_by(|a, b| {
