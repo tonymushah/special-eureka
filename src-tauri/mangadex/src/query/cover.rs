@@ -60,6 +60,6 @@ impl CoverQueries {
         ctx: &Context<'_>,
         id: Uuid,
     ) -> crate::error::wrapped::Result<DownloadState> {
-        Ok(DownloadStateQueries.cover(ctx, id).await?)
+        DownloadStateQueries.cover(ctx, id).await
     }
 }

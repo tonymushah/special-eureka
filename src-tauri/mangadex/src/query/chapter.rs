@@ -107,6 +107,6 @@ impl ChapterQueries {
         ctx: &Context<'_>,
         id: Uuid,
     ) -> crate::error::wrapped::Result<DownloadState> {
-        Ok(DownloadStateQueries.chapter(ctx, id).await?)
+        DownloadStateQueries.chapter(ctx, id).await
     }
 }
