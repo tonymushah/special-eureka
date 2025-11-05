@@ -152,6 +152,8 @@ pub enum Error {
     RelatedMangaNotFound,
     #[error("Related user not found")]
     RelatedUserNotFound,
+    #[error("Related cover_art not found")]
+    RelatedCoverArtNotFound,
 }
 
 impl Error {
