@@ -4,7 +4,7 @@
 	import { mount as _mount, unmount as _unmount } from "@mangadex/utils/offline_app_state";
 	import { getContextClient } from "@urql/svelte";
 	import { ServerIcon } from "svelte-feather-icons";
-	import { addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
+	import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 	import { createMutation } from "@tanstack/svelte-query";
 
 	const client = getContextClient();
@@ -16,13 +16,7 @@
 		},
 		networkMode: "always",
 		onError(error) {
-			addToast({
-				data: {
-					title: "Error on loading offline data",
-					description: error.message,
-					variant: "danger"
-				}
-			});
+			addErrorToast("Error on loading offline data", error);
 		},
 		onSuccess() {
 			addToast({
@@ -41,13 +35,7 @@
 		},
 		networkMode: "always",
 		onError(error) {
-			addToast({
-				data: {
-					title: "Error on unmounting offline data",
-					description: error.message,
-					variant: "danger"
-				}
-			});
+			addErrorToast("Error on unmounting offline data", error);
 		},
 		onSuccess() {
 			addToast({

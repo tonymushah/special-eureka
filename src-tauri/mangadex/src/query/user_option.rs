@@ -1,7 +1,7 @@
 use std::ops::Deref;
 
+use crate::error::wrapped::Result;
 use crate::{
-    Result,
     objects::offline_config::OfflineConfigObject,
     store::{
         TauriManagerMangadexStoreExtractor,
@@ -70,7 +70,7 @@ impl UserOptionQueries {
             .listen_to_content_profile_default(ctx)
             .await?;
         let mut stream = Box::pin(stream);
-        stream.next().await.ok_or(crate::Error::EndStream)
+        stream.next().await.ok_or(crate::Error::EndStream.into())
     }
     pub async fn get_offline_config(&self, _ctx: &Context<'_>) -> OfflineConfigObject {
         OfflineConfigObject

@@ -92,7 +92,10 @@ impl Chapter {
     pub async fn attributes(&self) -> ChapterAttributes {
         self.get_attributes()
     }
-    pub async fn relationships(&self, ctx: &Context<'_>) -> Result<ChapterRelationships> {
+    pub async fn relationships(
+        &self,
+        ctx: &Context<'_>,
+    ) -> Result<ChapterRelationships, crate::ErrorWrapper> {
         match self {
             Chapter::WithRelationship(o) => Ok(o.relationships.clone().into()),
             Chapter::WithoutRelationship(o) => {

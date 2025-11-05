@@ -1,4 +1,4 @@
-use async_graphql::{Context, Object, Result as GraphQLResult};
+use async_graphql::{Context, Object};
 use mangadex_api_schema_rust::{
     ApiObjectNoRelationships,
     v5::{GroupObject, ScanlationGroupAttributes as Attributes},
@@ -82,7 +82,7 @@ impl ScanlationGroup {
     pub async fn relationships(
         &self,
         ctx: &Context<'_>,
-    ) -> GraphQLResult<ScanlationGroupRelationships> {
+    ) -> Result<ScanlationGroupRelationships, crate::ErrorWrapper> {
         match self {
             ScanlationGroup::WithRelationship(o) => Ok(o.relationships.clone().into()),
             ScanlationGroup::WithoutRelationship(o) => {

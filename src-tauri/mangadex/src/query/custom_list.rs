@@ -1,6 +1,5 @@
 use std::ops::Deref;
 
-use crate::Result;
 use async_graphql::{Context, InputObject, Object};
 use mangadex_api::MangaDexClient;
 use mangadex_api_input_types::custom_list::get_user_lists::UserCustomListParams;
@@ -27,7 +26,7 @@ impl CustomListQueries {
         ctx: &Context<'_>,
         id: Uuid,
         private: Option<bool>,
-    ) -> Result<CustomList> {
+    ) -> crate::error::wrapped::Result<CustomList> {
         let private = private.unwrap_or_default();
         let client = if private {
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?
@@ -50,14 +49,14 @@ impl CustomListQueries {
     pub async fn current_logged_lists(
         &self,
         ctx: &Context<'_>,
-        #[graphql(default)] params: CurrentLoggedLists,
-    ) -> Result<CustomListResults> {
+        params: Option<CurrentLoggedLists>,
+    ) -> crate::error::wrapped::Result<CustomListResults> {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?
             .deref()
             .clone();
-        let res: CustomListResults = params.send(&client).await?.into();
+        let res: CustomListResults = params.unwrap_or_default().send(&client).await?.into();
         {
             let _res = res.clone();
             tauri::async_runtime::spawn(async move {
@@ -72,7 +71,7 @@ impl CustomListQueries {
         &self,
         ctx: &Context<'_>,
         params: UserCustomListParams,
-    ) -> Result<CustomListResults> {
+    ) -> crate::error::wrapped::Result<CustomListResults> {
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?
             .deref()

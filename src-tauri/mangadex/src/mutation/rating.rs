@@ -1,4 +1,4 @@
-use crate::Result;
+use crate::error::wrapped::Result;
 use async_graphql::{Context, Object};
 use mangadex_api_input_types::rating::create_or_update::CreateUpdateRating;
 use mangadex_api_types_rust::MangaDexDateTime;

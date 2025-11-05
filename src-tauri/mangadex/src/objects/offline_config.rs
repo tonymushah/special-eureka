@@ -17,7 +17,7 @@ pub struct OfflineConfigObject;
 #[Object]
 #[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl OfflineConfigObject {
-    pub async fn data_dir(&self, ctx: &Context<'_>) -> crate::Result<String> {
+    pub async fn data_dir(&self, ctx: &Context<'_>) -> crate::Result<String, crate::ErrorWrapper> {
         let app = ctx.get_app_handle::<tauri::Wry>()?;
         let store_data = app.extract::<OfflineConfigStore>().await?;
         store_data
@@ -26,9 +26,13 @@ impl OfflineConfigObject {
             .to_str()
             .map(String::from)
             .ok_or(crate::Error::OsStrToString)
+            .map_err(crate::ErrorWrapper::from)
     }
     /// Often relative to [`Self::data_dir`]
-    pub async fn chapters_dir(&self, ctx: &Context<'_>) -> crate::Result<String> {
+    pub async fn chapters_dir(
+        &self,
+        ctx: &Context<'_>,
+    ) -> crate::Result<String, crate::ErrorWrapper> {
         let app = ctx.get_app_handle::<tauri::Wry>()?;
         let store_data = app.extract::<OfflineConfigStore>().await?;
         let dir_options = store_data.get_dir_options(app)?;
@@ -38,9 +42,13 @@ impl OfflineConfigObject {
             .to_str()
             .map(String::from)
             .ok_or(crate::Error::OsStrToString)
+            .map_err(crate::ErrorWrapper::from)
     }
     /// Often relative to [`Self::data_dir`]
-    pub async fn mangas_dir(&self, ctx: &Context<'_>) -> crate::Result<String> {
+    pub async fn mangas_dir(
+        &self,
+        ctx: &Context<'_>,
+    ) -> crate::Result<String, crate::ErrorWrapper> {
         let app = ctx.get_app_handle::<tauri::Wry>()?;
         let store_data = app.extract::<OfflineConfigStore>().await?;
         let dir_options = store_data.get_dir_options(app)?;
@@ -50,9 +58,13 @@ impl OfflineConfigObject {
             .to_str()
             .map(String::from)
             .ok_or(crate::Error::OsStrToString)
+            .map_err(crate::ErrorWrapper::from)
     }
     /// Often relative to [`Self::data_dir`]
-    pub async fn covers_dir(&self, ctx: &Context<'_>) -> crate::Result<String> {
+    pub async fn covers_dir(
+        &self,
+        ctx: &Context<'_>,
+    ) -> crate::Result<String, crate::ErrorWrapper> {
         let app = ctx.get_app_handle::<tauri::Wry>()?;
         let store_data = app.extract::<OfflineConfigStore>().await?;
         let dir_options = store_data.get_dir_options(app)?;
@@ -62,6 +74,7 @@ impl OfflineConfigObject {
             .to_str()
             .map(String::from)
             .ok_or(crate::Error::OsStrToString)
+            .map_err(crate::ErrorWrapper::from)
     }
 }
 

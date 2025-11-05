@@ -3,7 +3,7 @@ pub mod list;
 pub mod pages;
 
 use crate::{
-    Result, store::types::structs::content::feed_from_gql_ctx,
+    store::types::structs::content::feed_from_gql_ctx,
     utils::traits_utils::MangadexAsyncGraphQLContextExt,
 };
 use async_graphql::{Context, Object};
@@ -39,7 +39,7 @@ impl ChapterQueries {
         params: Option<ChapterListParams>,
         offline_params: Option<GetAllChapterParams>,
         feed_content: Option<bool>,
-    ) -> Result<ChapterResults> {
+    ) -> crate::error::wrapped::Result<ChapterResults> {
         let feed_content = feed_content.unwrap_or(true);
         let mut params = params.unwrap_or_default();
         if feed_content {
@@ -51,7 +51,7 @@ impl ChapterQueries {
             .await
     }
 
-    pub async fn get(&self, ctx: &Context<'_>, id: Uuid) -> Result<Chapter> {
+    pub async fn get(&self, ctx: &Context<'_>, id: Uuid) -> crate::error::wrapped::Result<Chapter> {
         GetUniqueChapterQuery({
             let mut includes: Vec<ReferenceExpansionResource> = Vec::new();
             if let Some(rel) = ctx
@@ -68,8 +68,12 @@ impl ChapterQueries {
         .get(ctx, id)
         .await
     }
-    pub async fn pages(&self, ctx: &Context<'_>, id: Uuid) -> Result<ChapterPages> {
-        ChapterPagesQuery { id }.pages(ctx).await
+    pub async fn pages(
+        &self,
+        ctx: &Context<'_>,
+        id: Uuid,
+    ) -> crate::error::wrapped::Result<ChapterPages> {
+        Ok(ChapterPagesQuery { id }.pages(ctx).await?)
     }
     pub async fn list_with_group_by_manga(
         &self,
@@ -77,7 +81,7 @@ impl ChapterQueries {
         chapter_list_params: Option<ChapterListParams>,
         manga_list_params: Option<MangaListParams>,
         feed_content: Option<bool>,
-    ) -> Result<MangaChapterGroup> {
+    ) -> crate::error::wrapped::Result<MangaChapterGroup> {
         let feed_content = feed_content.unwrap_or_default();
         let mut chapter_list_params: ChapterListParams = chapter_list_params.unwrap_or_default();
         if feed_content {
@@ -89,16 +93,20 @@ impl ChapterQueries {
             MangaChapterGroup::get_chapter_references_expansions_from_context(ctx);
         manga_list_params.includes =
             MangaChapterGroup::get_manga_references_expansions_from_context(ctx);
-        group_results(
+        Ok(group_results(
             ChapterListQueries::new(chapter_list_params, ctx.get_app_handle::<tauri::Wry>()?)
                 ._default(ctx, None)
                 .await?,
             ctx,
             manga_list_params,
         )
-        .await
+        .await?)
     }
-    pub async fn is_downloaded(&self, ctx: &Context<'_>, id: Uuid) -> Result<DownloadState> {
+    pub async fn is_downloaded(
+        &self,
+        ctx: &Context<'_>,
+        id: Uuid,
+    ) -> crate::error::wrapped::Result<DownloadState> {
         DownloadStateQueries.chapter(ctx, id).await
     }
 }

@@ -1,4 +1,4 @@
-use crate::{Result, utils::traits_utils::MangadexAsyncGraphQLContextExt};
+use crate::utils::traits_utils::MangadexAsyncGraphQLContextExt;
 
 use async_graphql::{Context, Object};
 use mangadex_api_input_types::{chapter::list::ChapterListParams, manga::list::MangaListParams};
@@ -25,7 +25,7 @@ pub struct HomeQueries;
 #[Object]
 #[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl HomeQueries {
-    pub async fn seasonal(&self, ctx: &Context<'_>) -> Result<CustomList> {
+    pub async fn seasonal(&self, ctx: &Context<'_>) -> crate::error::wrapped::Result<CustomList> {
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let res = {
@@ -39,7 +39,10 @@ impl HomeQueries {
             data
         })
     }
-    pub async fn staff_picks(&self, ctx: &Context<'_>) -> Result<CustomList> {
+    pub async fn staff_picks(
+        &self,
+        ctx: &Context<'_>,
+    ) -> crate::error::wrapped::Result<CustomList> {
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let res = {
@@ -57,7 +60,7 @@ impl HomeQueries {
         &self,
         ctx: &Context<'_>,
         params: Option<ChapterListParams>,
-    ) -> Result<ChapterResults> {
+    ) -> crate::error::wrapped::Result<ChapterResults> {
         let mut params: ChapterListParams = params.unwrap_or_default();
         params.includes = <ChapterResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
         params.order = Some(ChapterSortOrder::ReadableAt(OrderDirection::Descending));
@@ -71,7 +74,7 @@ impl HomeQueries {
         &self,
         ctx: &Context<'_>,
         params: Option<MangaListParams>,
-    ) -> Result<MangaResults> {
+    ) -> crate::error::wrapped::Result<MangaResults> {
         let mut params = params.unwrap_or_default();
         params.includes = <MangaResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
         params.order = Some(MangaSortOrder::CreatedAt(OrderDirection::Descending));
@@ -89,7 +92,7 @@ impl HomeQueries {
         &self,
         ctx: &Context<'_>,
         params: Option<MangaListParams>,
-    ) -> Result<MangaResults> {
+    ) -> crate::error::wrapped::Result<MangaResults> {
         let mut params = params.unwrap_or_default();
         params.includes = <MangaResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
         params.order = Some(MangaSortOrder::FollowedCount(OrderDirection::Descending));

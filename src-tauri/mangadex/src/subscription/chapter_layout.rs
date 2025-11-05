@@ -17,10 +17,11 @@ impl ChapterLayoutSubscription {
     pub async fn watch_chapter_layout<'ctx>(
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
-    ) -> crate::Result<impl Stream<Item = ChapterLayoutStore> + 'ctx> {
+    ) -> crate::Result<impl Stream<Item = ChapterLayoutStore> + 'ctx, crate::ErrorWrapper> {
         WatchSubscriptionStream::from_async_graphql_context_watch_as_ref::<
             ChapterLayoutWatch,
             tauri::Wry,
         >(ctx)
+        .map_err(crate::ErrorWrapper::from)
     }
 }

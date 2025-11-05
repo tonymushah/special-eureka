@@ -1,4 +1,4 @@
-use async_graphql::{Error as GraphQLError, Object, Result as GraphQLResult};
+use async_graphql::Object;
 use mangadex_api_schema_rust::{
     ApiObjectNoRelationships,
     v5::{
@@ -47,14 +47,15 @@ impl MangaRelationships {
             )
             .collect::<Vec<MangaRelated>>()
     }
-    pub async fn cover_art(&self) -> GraphQLResult<Cover> {
+    pub async fn cover_art(&self) -> Result<Cover, crate::ErrorWrapper> {
         let rel: ApiObjectNoRelationships<CoverAttributes> = self
             .relationships
             .iter()
             .find(|r| r.type_ == RelationshipType::CoverArt)
-            .ok_or(GraphQLError::new("Cover Art Not Found"))?
+            .ok_or(crate::Error::RelatedCoverArtNotFound)?
             .clone()
-            .try_into()?;
+            .try_into()
+            .map_err(crate::Error::RelationshipConversion)?;
         Ok(Cover::WithoutRelationship(rel))
     }
     pub async fn authors(&self) -> Vec<Author> {

@@ -1,7 +1,5 @@
-use crate::{
-    Result,
-    utils::traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
-};
+use crate::error::wrapped::Result;
+use crate::utils::traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt};
 use async_graphql::{Context, Object};
 use mangadex_api::{
     utils::upload::{abandon_session, check_and_abandon_session_if_exists},

@@ -3,8 +3,8 @@ pub mod export;
 use std::{collections::HashMap, time::Duration};
 
 use crate::{
-    Result,
     error::Error,
+    error::wrapped::Result,
     query::download_state::DownloadStateQueries,
     store::types::structs::content::feed_from_gql_ctx,
     utils::{
@@ -54,7 +54,10 @@ impl MangaMutations {
         let tauri_handle = ctx.get_app_handle::<tauri::Wry>()?.clone();
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let res = download_manga(&tauri_handle, id).await?;
-        let state = DownloadStateQueries.manga(ctx, id).await?;
+        let state = DownloadStateQueries
+            .manga(ctx, id)
+            .await
+            .map_err(|e| e.into_inner())?;
         let manga = res;
         let _ = watches.manga.send_offline(Into::<Manga>::into(manga));
         Ok(state)

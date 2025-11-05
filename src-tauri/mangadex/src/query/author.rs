@@ -1,6 +1,6 @@
 use std::ops::Deref;
 
-use crate::{Result, utils::splittable_param::SendSplitted};
+use crate::utils::splittable_param::SendSplitted;
 use async_graphql::{Context, Object};
 use mangadex_api_input_types::author::list::AuthorListParams;
 use mangadex_api_types_rust::ReferenceExpansionResource;
@@ -26,7 +26,7 @@ impl AuthorQueries {
         &self,
         ctx: &Context<'_>,
         params: Option<AuthorListParams>,
-    ) -> Result<AuthorResults> {
+    ) -> crate::error::wrapped::Result<AuthorResults> {
         let mut param: AuthorListParams = params.unwrap_or_else(list_default_params);
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
         let _watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
@@ -42,7 +42,7 @@ impl AuthorQueries {
         });
         Ok(res)
     }
-    pub async fn get(&self, ctx: &Context<'_>, id: Uuid) -> Result<Author> {
+    pub async fn get(&self, ctx: &Context<'_>, id: Uuid) -> crate::error::wrapped::Result<Author> {
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let mut includes: Vec<ReferenceExpansionResource> = Vec::new();

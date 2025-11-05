@@ -1,6 +1,7 @@
 use async_graphql::Object;
 use uuid::Uuid;
 
+use crate::error::wrapped::Result;
 use crate::export::txt::export_uuids_as_txt;
 
 pub struct ExportMutations;
@@ -12,7 +13,7 @@ impl ExportMutations {
         &self,
         uuids: Vec<Uuid>,
         file: String,
-    ) -> crate::Result<String, crate::error::ErrorWrapper> {
+    ) -> Result<String, crate::error::ErrorWrapper> {
         export_uuids_as_txt(uuids, file).await.map_err(Into::into)
     }
 }

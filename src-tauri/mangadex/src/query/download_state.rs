@@ -1,4 +1,3 @@
-use crate::Result;
 use async_graphql::{Context, Object};
 use eureka_mmanager::prelude::{
     AsyncIsIn, ChapterDataPullAsyncTrait, CoverDataPullAsyncTrait, GetManagerStateData,
@@ -18,7 +17,11 @@ pub struct DownloadStateQueries;
 #[Object]
 #[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl DownloadStateQueries {
-    pub async fn chapter(&self, ctx: &Context<'_>, chapter_id: Uuid) -> Result<DownloadState> {
+    pub async fn chapter(
+        &self,
+        ctx: &Context<'_>,
+        chapter_id: Uuid,
+    ) -> crate::error::wrapped::Result<DownloadState> {
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let ola = get_offline_app_state::<tauri::Wry>(ctx)?;
         let offline_app_state_write = ola.read().await;
@@ -40,7 +43,11 @@ impl DownloadStateQueries {
         });
         Ok(state)
     }
-    pub async fn cover(&self, ctx: &Context<'_>, cover_id: Uuid) -> Result<DownloadState> {
+    pub async fn cover(
+        &self,
+        ctx: &Context<'_>,
+        cover_id: Uuid,
+    ) -> crate::error::wrapped::Result<DownloadState> {
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let ola = get_offline_app_state::<tauri::Wry>(ctx)?;
         let offline_app_state_write = ola.read().await;
@@ -62,7 +69,11 @@ impl DownloadStateQueries {
         });
         Ok(state)
     }
-    pub async fn manga(&self, ctx: &Context<'_>, manga_id: Uuid) -> Result<DownloadState> {
+    pub async fn manga(
+        &self,
+        ctx: &Context<'_>,
+        manga_id: Uuid,
+    ) -> crate::error::wrapped::Result<DownloadState> {
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let ola = get_offline_app_state::<tauri::Wry>(ctx)?;
         let offline_app_state_write = ola.read().await;

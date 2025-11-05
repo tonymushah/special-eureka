@@ -33,6 +33,7 @@ pub(crate) type Result<T, E = error::Error> = std::result::Result<T, E>;
 pub(crate) use plugin_setup::PluginSetupResult;
 
 pub use error::Error;
+pub(crate) use error::ErrorWrapper;
 
 pub fn init<R: Runtime>() -> MizukiPlugin<R, Q, M, S> {
     mizuki::Builder::new(

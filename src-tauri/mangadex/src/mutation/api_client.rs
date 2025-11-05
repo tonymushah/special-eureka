@@ -5,7 +5,7 @@ use mangadex_api_input_types::api_client::{
 use mangadex_api_schema_rust::{ApiObjectNoRelationships, v5::ApiClientAttributes};
 use uuid::Uuid;
 
-use crate::Result;
+use crate::error::wrapped::Result;
 use crate::{
     objects::api_client::ApiClient,
     utils::{

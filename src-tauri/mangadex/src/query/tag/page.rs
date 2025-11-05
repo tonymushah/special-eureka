@@ -3,6 +3,7 @@ use mangadex_api_input_types::manga::list::MangaListParams;
 use mangadex_api_types_rust::{MangaDexDateTime, MangaSortOrder, OrderDirection};
 use uuid::Uuid;
 
+use crate::error::wrapped::Result;
 use crate::{
     objects::{
         ExtractReferenceExpansion, ExtractReferenceExpansionFromContext,
@@ -37,7 +38,7 @@ pub struct TagPopularList {
 #[Object]
 #[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl TagPageQueries {
-    pub async fn top_ten(&self, ctx: &Context<'_>) -> crate::Result<Vec<MangaObject>> {
+    pub async fn top_ten(&self, ctx: &Context<'_>) -> Result<Vec<MangaObject>> {
         let app = ctx.get_app_handle::<tauri::Wry>()?;
         let current_content_profile: ContentProfile = app.get_content_profile()?;
         let mut params = MangaListParams {
@@ -81,7 +82,7 @@ impl TagPageQueries {
         &self,
         ctx: &Context<'_>,
         params: Option<TagPopularList>,
-    ) -> crate::Result<MangaResults> {
+    ) -> Result<MangaResults> {
         let params: TagPopularList = params.unwrap_or_default();
         let app = ctx.get_app_handle::<tauri::Wry>()?;
         let current_content_profile: ContentProfile = app.get_content_profile()?;
@@ -130,11 +131,11 @@ impl TagPageQueries {
             includes: <MangaResults as ExtractReferenceExpansionFromContext>::exctract(ctx),
             ..Default::default()
         };
-        MangaListQueries::new_with_exclude_feed(params, false, app)
+        Ok(MangaListQueries::new_with_exclude_feed(params, false, app)
             .list(ctx)
-            .await
+            .await?)
     }
-    pub async fn recently_added(&self, ctx: &Context<'_>) -> crate::Result<Vec<MangaObject>> {
+    pub async fn recently_added(&self, ctx: &Context<'_>) -> Result<Vec<MangaObject>> {
         let app = ctx.get_app_handle::<tauri::Wry>()?;
         let current_content_profile: ContentProfile = app.get_content_profile()?;
         let mut params = MangaListParams {

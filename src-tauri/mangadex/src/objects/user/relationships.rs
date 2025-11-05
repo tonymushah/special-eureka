@@ -7,7 +7,7 @@ use uuid::Uuid;
 
 use std::ops::Deref;
 
-use async_graphql::{Context, Object, Result as GraphQLResult};
+use async_graphql::{Context, Object};
 
 use crate::{
     objects::scanlation_group::ScanlationGroup, utils::get_mangadex_client_from_graphql_context,
@@ -32,7 +32,10 @@ impl From<Vec<Relationship>> for UserRelationships {
 #[Object]
 #[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl UserRelationships {
-    pub async fn groups(&self, ctx: &Context<'_>) -> GraphQLResult<Vec<ScanlationGroup>> {
+    pub async fn groups(
+        &self,
+        ctx: &Context<'_>,
+    ) -> Result<Vec<ScanlationGroup>, crate::ErrorWrapper> {
         let group_ids: Vec<Uuid> = self
             .iter()
             .filter(|rel| rel.type_ == RelationshipType::ScanlationGroup)

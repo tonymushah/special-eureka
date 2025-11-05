@@ -1,6 +1,6 @@
 use std::ops::Deref;
 
-use async_graphql::{Error as GraphQLError, Object, Result as GraphQLResult};
+use async_graphql::Object;
 use mangadex_api_schema_rust::{
     ApiObjectNoRelationships,
     v5::{MangaAttributes, RelatedAttributes, Relationship, UserAttributes},
@@ -28,7 +28,7 @@ impl Deref for CoverRelationships {
 #[Object]
 #[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl CoverRelationships {
-    pub async fn manga(&self) -> GraphQLResult<MangaObject> {
+    pub async fn manga(&self) -> Result<MangaObject, crate::ErrorWrapper> {
         self.iter()
             .find(|rel| rel.type_ == RelationshipType::Manga)
             .map(|rel| {
@@ -38,9 +38,10 @@ impl CoverRelationships {
             })
             .and_then(|rel| rel.ok())
             .map(<MangaObject as From<ApiObjectNoRelationships<MangaAttributes>>>::from)
-            .ok_or(GraphQLError::new("Related manga not found"))
+            .ok_or(crate::Error::RelatedMangaNotFound)
+            .map_err(crate::ErrorWrapper::from)
     }
-    pub async fn user(&self) -> GraphQLResult<User> {
+    pub async fn user(&self) -> Result<User, crate::ErrorWrapper> {
         self.iter()
             .find(|e| e.type_ == RelationshipType::Creator || e.type_ == RelationshipType::User)
             .map(
@@ -63,6 +64,7 @@ impl CoverRelationships {
             )
             .and_then(|inner| inner.ok())
             .map(<User as From<ApiObjectNoRelationships<UserAttributes>>>::from)
-            .ok_or(GraphQLError::new("Related Uploader or User not found"))
+            .ok_or(crate::Error::RelatedUserNotFound)
+            .map_err(crate::ErrorWrapper::from)
     }
 }

@@ -1,7 +1,7 @@
 use std::collections::HashSet;
 
+use crate::error::wrapped::Result;
 use crate::{
-    Result,
     error::Error,
     objects::chapter::Chapter,
     utils::{
@@ -63,7 +63,7 @@ impl ReadMarkerQueries {
                     let _ = watches.read_marker.send_data((id, true));
                 });
             } else {
-                return Err(Error::GotReadMarkersGrouped);
+                return Err(Error::GotReadMarkersGrouped.into());
             }
         }
 
@@ -98,7 +98,7 @@ impl ReadMarkerQueries {
                     });
                 });
             } else {
-                return Err(Error::GotReadMarkersUnGrouped);
+                return Err(Error::GotReadMarkersUnGrouped.into());
             }
         }
 

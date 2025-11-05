@@ -1,6 +1,6 @@
 use std::ops::Deref;
 
-use async_graphql::{Error, Object, Result};
+use async_graphql::Object;
 use mangadex_api_schema_rust::{
     ApiObjectNoRelationships,
     v5::{RelatedAttributes, Relationship, UserAttributes},
@@ -28,7 +28,7 @@ impl Deref for ApiClientRelationships {
 #[Object]
 #[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl ApiClientRelationships {
-    pub async fn creator(&self) -> Result<User> {
+    pub async fn creator(&self) -> crate::Result<User, crate::ErrorWrapper> {
         self.iter()
             .find(|rel| {
                 rel.type_ == RelationshipType::Creator || rel.type_ == RelationshipType::User
@@ -53,6 +53,7 @@ impl ApiClientRelationships {
             )
             .and_then(|inner| inner.ok())
             .map(<User as From<ApiObjectNoRelationships<UserAttributes>>>::from)
-            .ok_or(Error::new("Creator not found"))
+            .ok_or(crate::Error::ObjectCreatorNotFound)
+            .map_err(crate::ErrorWrapper::from)
     }
 }

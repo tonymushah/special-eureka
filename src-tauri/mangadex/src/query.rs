@@ -120,9 +120,12 @@ impl Query {
     pub async fn auth(&self) -> AuthQuery {
         AuthQuery
     }
-    pub async fn library(&self, ctx: &Context<'_>) -> crate::Result<library::CurrentUserLibrary> {
+    pub async fn library(
+        &self,
+        ctx: &Context<'_>,
+    ) -> crate::error::wrapped::Result<library::CurrentUserLibrary> {
         let app = ctx.get_app_handle::<tauri::Wry>()?;
         let client = app.get_mangadex_client_with_auth_refresh().await?;
-        library::CurrentUserLibrary::new(&client).await
+        Ok(library::CurrentUserLibrary::new(&client).await?)
     }
 }

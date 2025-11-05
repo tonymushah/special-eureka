@@ -15,8 +15,8 @@ use mangadex_api_schema_rust::{ApiObjectNoRelationships, v5::CoverAttributes};
 use uuid::Uuid;
 
 use crate::{
-    Result,
     error::Error,
+    error::wrapped::Result,
     query::download_state::DownloadStateQueries,
     utils::{download::cover::cover_download, traits_utils::MangadexAsyncGraphQLContextExt},
 };
@@ -77,7 +77,10 @@ impl CoverMutations {
     pub async fn download(&self, ctx: &Context<'_>, id: Uuid) -> Result<DownloadState> {
         let app = ctx.get_app_handle::<tauri::Wry>()?;
         let res = cover_download(app, id).await;
-        let state = DownloadStateQueries.cover(ctx, id).await?;
+        let state = DownloadStateQueries
+            .cover(ctx, id)
+            .await
+            .map_err(|e| e.into_inner())?;
         res?;
         Ok(state)
     }

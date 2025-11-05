@@ -2,7 +2,6 @@ pub mod get_unique;
 pub mod image;
 pub mod list;
 
-use crate::Result;
 use async_graphql::{Context, Object};
 use mangadex_api_input_types::cover::list::CoverListParam;
 use url::Url;
@@ -30,14 +29,14 @@ impl CoverQueries {
     pub async fn list(
         &self,
         ctx: &Context<'_>,
-        #[graphql(default)] params: CoverListParam,
-    ) -> Result<CoverResults> {
-        let mut params: CoverListParam = params;
+        params: Option<CoverListParam>,
+    ) -> crate::error::wrapped::Result<CoverResults> {
+        let mut params: CoverListParam = params.unwrap_or_default();
         params.includes = <CoverResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
-        CoverListQuery { params }.list(ctx).await
+        Ok(CoverListQuery { params }.list(ctx).await?)
     }
-    pub async fn get(&self, ctx: &Context<'_>, id: Uuid) -> Result<Cover> {
-        CoverGetUniqueQuery { id }.get(ctx).await
+    pub async fn get(&self, ctx: &Context<'_>, id: Uuid) -> crate::error::wrapped::Result<Cover> {
+        Ok(CoverGetUniqueQuery { id }.get(ctx).await?)
     }
     pub async fn get_image(
         &self,
@@ -46,17 +45,21 @@ impl CoverQueries {
         cover_id: Uuid,
         filename: String,
         mode: Option<CoverImageQuality>,
-    ) -> Result<Url> {
-        CoverImageQuery {
+    ) -> crate::error::wrapped::Result<Url> {
+        Ok(CoverImageQuery {
             manga_id,
             cover_id,
             filename,
             mode,
         }
         .get::<tauri::Wry>(ctx)
-        .await
+        .await?)
     }
-    pub async fn is_downloaded(&self, ctx: &Context<'_>, id: Uuid) -> Result<DownloadState> {
+    pub async fn is_downloaded(
+        &self,
+        ctx: &Context<'_>,
+        id: Uuid,
+    ) -> crate::error::wrapped::Result<DownloadState> {
         DownloadStateQueries.cover(ctx, id).await
     }
 }

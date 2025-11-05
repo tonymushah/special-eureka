@@ -1,4 +1,5 @@
-use crate::{Result, error::Error};
+use crate::error::Error;
+use crate::error::wrapped::Result;
 use async_graphql::{Context, Object};
 use uuid::Uuid;
 

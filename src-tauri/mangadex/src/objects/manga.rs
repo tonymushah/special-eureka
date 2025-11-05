@@ -6,7 +6,7 @@ pub mod manga_reading_status;
 pub mod related;
 pub mod relationships;
 
-use async_graphql::{Context, Object, Result as GraphQLResult};
+use async_graphql::{Context, Object};
 use convert_case::{Case, Casing};
 use mangadex_api_schema_rust::{
     ApiObjectNoRelationships,
@@ -85,7 +85,7 @@ impl MangaObject {
     pub async fn relationships<'ctx>(
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
-    ) -> GraphQLResult<MangaRelationships> {
+    ) -> Result<MangaRelationships, crate::ErrorWrapper> {
         match self {
             MangaObject::WithRel(o) => Ok(MangaRelationships {
                 id: o.id,

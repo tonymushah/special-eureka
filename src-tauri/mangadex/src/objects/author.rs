@@ -2,7 +2,7 @@ pub mod attributes;
 pub mod lists;
 pub mod relationships;
 
-use async_graphql::{Context, Object, Result as GraphQLResult};
+use async_graphql::{Context, Object};
 use mangadex_api_schema_rust::{
     ApiObjectNoRelationships,
     v5::{AuthorAttributes as Attributes, AuthorObject},
@@ -79,7 +79,10 @@ impl Author {
     pub async fn attributes(&self) -> AuthorAttributes {
         self.get_attributes()
     }
-    pub async fn relationships(&self, ctx: &Context<'_>) -> GraphQLResult<AuthorRelationships> {
+    pub async fn relationships(
+        &self,
+        ctx: &Context<'_>,
+    ) -> Result<AuthorRelationships, crate::ErrorWrapper> {
         match self {
             Author::WithRel(o) => Ok(o.relationships.clone().into()),
             Author::WithoutRel(o) => {

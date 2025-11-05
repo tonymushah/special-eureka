@@ -1,6 +1,6 @@
 use std::ops::Deref;
 
-use async_graphql::{Context, Error as GraphQLError, Object, Result as GraphQLResult};
+use async_graphql::{Context, Object};
 use mangadex_api_schema_rust::{
     ApiObject,
     v5::{MangaAttributes, Relationship},
@@ -30,6 +30,16 @@ impl Deref for CustomListRelationships {
     }
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
+impl CustomListRelationships {
+    pub fn titles_ids_pure(&self) -> Vec<Uuid> {
+        self.iter()
+            .filter(|e| e.type_ == RelationshipType::Manga)
+            .map(|rel| rel.id)
+            .collect::<Vec<Uuid>>()
+    }
+}
+
 #[Object]
 #[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl CustomListRelationships {
@@ -44,10 +54,10 @@ impl CustomListRelationships {
         ctx: &Context<'_>,
         offset: Option<u32>,
         limit: Option<u32>,
-    ) -> GraphQLResult<Vec<MangaObject>> {
+    ) -> Result<Vec<MangaObject>, crate::ErrorWrapper> {
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
         let mut req = client.manga().get();
-        let manga_ids = self.titles_ids(ctx).await?;
+        let manga_ids = self.titles_ids_pure();
         let manga_len: u32 = manga_ids.len().try_into()?;
         req.manga_ids(manga_ids);
         if let Some(o) = offset {
@@ -189,13 +199,13 @@ impl CustomListRelationships {
             .map(|d| <MangaObject as From<ApiObject<MangaAttributes>>>::from(d.clone()))
             .collect::<Vec<MangaObject>>())
     }
-    pub async fn user(&self, ctx: &Context<'_>) -> GraphQLResult<User> {
+    pub async fn user(&self, ctx: &Context<'_>) -> Result<User, crate::ErrorWrapper> {
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
         let id = self
             .iter()
             .find(|e| e.type_ == RelationshipType::Creator || e.type_ == RelationshipType::User)
             .map(|rel| rel.id)
-            .ok_or(GraphQLError::new("Related Uploader or User not found"))?;
+            .ok_or(crate::Error::RelatedUserNotFound)?;
         let req = client.user().id(id).get();
         Ok(req.send().await?.data.into())
     }

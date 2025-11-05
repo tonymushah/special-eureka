@@ -1,4 +1,3 @@
-use crate::Result;
 use async_graphql::{Context, Object};
 use mangadex_api_input_types::api_client::list::ApiClientListParam;
 use mangadex_api_types_rust::ReferenceExpansionResource;
@@ -24,9 +23,9 @@ impl ApiClientQueries {
     pub async fn list(
         &self,
         ctx: &Context<'_>,
-        #[graphql(default_with = "default_params()")] params: ApiClientListParam,
-    ) -> Result<ApiClientResults> {
-        let mut params: ApiClientListParam = params;
+        params: Option<ApiClientListParam>,
+    ) -> crate::error::wrapped::Result<ApiClientResults> {
+        let mut params: ApiClientListParam = params.unwrap_or_else(default_params);
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
@@ -37,7 +36,11 @@ impl ApiClientQueries {
         });
         Ok(res)
     }
-    pub async fn get(&self, ctx: &Context<'_>, id: Uuid) -> Result<ApiClient> {
+    pub async fn get(
+        &self,
+        ctx: &Context<'_>,
+        id: Uuid,
+    ) -> crate::error::wrapped::Result<ApiClient> {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;

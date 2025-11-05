@@ -1,7 +1,7 @@
 use std::ops::{Add, Deref};
 
 use crate::{
-    Result,
+    error::wrapped::Result,
     utils::traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
 };
 use async_graphql::{Context, Object};

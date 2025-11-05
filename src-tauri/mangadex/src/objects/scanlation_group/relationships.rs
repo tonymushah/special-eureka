@@ -1,6 +1,6 @@
 use std::ops::Deref;
 
-use async_graphql::{Object, Result as GraphQLResult};
+use async_graphql::Object;
 use mangadex_api_schema_rust::{
     ApiObjectNoRelationships,
     v5::{RelatedAttributes, Relationship, UserAttributes},
@@ -28,7 +28,7 @@ impl From<Vec<Relationship>> for ScanlationGroupRelationships {
 #[Object]
 #[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl ScanlationGroupRelationships {
-    pub async fn leader(&self) -> GraphQLResult<Option<User>> {
+    pub async fn leader(&self) -> Result<Option<User>, crate::ErrorWrapper> {
         // TODO add leader fetching even if its attributes data is not available
         Ok(self
             .iter()
@@ -54,7 +54,7 @@ impl ScanlationGroupRelationships {
             .and_then(|inner| inner.ok())
             .map(<User as From<ApiObjectNoRelationships<UserAttributes>>>::from))
     }
-    pub async fn members_len(&self) -> GraphQLResult<u32> {
+    pub async fn members_len(&self) -> Result<u32, crate::ErrorWrapper> {
         Ok(self
             .iter()
             .filter(|e| e.type_ == RelationshipType::Member || e.type_ == RelationshipType::Leader)
