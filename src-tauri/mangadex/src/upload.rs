@@ -3,7 +3,7 @@ mod sessions;
 
 use std::sync::Arc;
 
-use mangadex_api::utils::upload::check_and_abandon_session_if_exists;
+use mangadex_api::{MangaDexClient, utils::upload::check_and_abandon_session_if_exists};
 use queue::UploadQueue;
 use serde::{Deserialize, Serialize};
 use sessions::UploadSessions;
@@ -126,7 +126,7 @@ where
             UPLOAD_MANAGER_EVENT_KEY,
             UploadManagerEventPayload::QueueEntryUpdate { id: session_id },
         );
-        if let Err(err) = upload_intern_session(session_id, &queue, &sessions).await {
+        if let Err(err) = upload_intern_session(session_id, &queue, &sessions, &client).await {
             let _ = queue
                 .set_state(session_id, UploadSessionState::Error(err.into()))
                 .await
@@ -156,6 +156,7 @@ async fn upload_intern_session(
     id: Uuid,
     queue: &UploadQueue,
     sessions: &UploadSessions,
+    client: &MangaDexClient,
 ) -> crate::Result<()> {
     todo!()
 }
