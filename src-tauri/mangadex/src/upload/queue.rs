@@ -1,5 +1,6 @@
 use std::{collections::VecDeque, sync::Arc};
 
+use tokio::sync::Notify;
 use uuid::Uuid;
 
 use super::ArcRwLock;
@@ -19,8 +20,11 @@ pub enum UploadQueueError {
     NotInQueue(Uuid),
 }
 
-#[derive(Debug, Clone)]
-pub struct UploadQueue(ArcRwLock<VecDeque<(Uuid, UploadSessionState)>>);
+#[derive(Debug, Clone, Default)]
+pub struct UploadQueue {
+    queue: ArcRwLock<VecDeque<(Uuid, UploadSessionState)>>,
+    push_notify: Arc<Notify>,
+}
 
 #[derive(Debug, Default, Clone)]
 pub enum UploadSessionState {
@@ -32,16 +36,20 @@ pub enum UploadSessionState {
 
 impl UploadQueue {
     pub async fn push_entry(&self, id: Uuid) -> Result<(), UploadQueueError> {
-        let mut write = self.0.write().await;
+        let mut write = self.queue.write().await;
         if write.iter().any(|(key, _)| id == *key) {
             Err(UploadQueueError::AlreadyInQueue(id))
         } else {
             write.push_back((id, Default::default()));
+            self.push_notify.notify_waiters();
             Ok(())
         }
     }
+    pub fn push_back_notify(&self) -> Arc<Notify> {
+        self.push_notify.clone()
+    }
     pub async fn get_state(&self, id: Uuid) -> Option<UploadSessionState> {
-        self.0
+        self.queue
             .read()
             .await
             .iter()
@@ -53,7 +61,7 @@ impl UploadQueue {
         id: Uuid,
         state: UploadSessionState,
     ) -> Result<UploadSessionState, UploadQueueError> {
-        let mut write = self.0.write().await;
+        let mut write = self.queue.write().await;
         Ok(std::mem::replace(
             write
                 .iter_mut()
@@ -64,10 +72,10 @@ impl UploadQueue {
         ))
     }
     pub async fn front(&self) -> Option<(Uuid, UploadSessionState)> {
-        self.0.read().await.front().cloned()
+        self.queue.read().await.front().cloned()
     }
     pub async fn pop_front(&self) -> Option<(Uuid, UploadSessionState)> {
-        let mut write = self.0.write().await;
+        let mut write = self.queue.write().await;
         let front = write.pop_front();
         if front.is_none() {
             write.shrink_to_fit();
@@ -75,7 +83,7 @@ impl UploadQueue {
         front
     }
     pub async fn get_queue_order(&self) -> Vec<Uuid> {
-        self.0
+        self.queue
             .read()
             .await
             .iter()
@@ -84,7 +92,7 @@ impl UploadQueue {
             .collect()
     }
     pub async fn swap(&self, a: Uuid, b: Uuid) -> Result<(), UploadQueueError> {
-        let mut write = self.0.write().await;
+        let mut write = self.queue.write().await;
 
         let a_pos = write
             .iter()

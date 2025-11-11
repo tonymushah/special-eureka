@@ -32,6 +32,14 @@ impl<R> UploadManager<R>
 where
     R: Runtime,
 {
+    pub fn new(app_handle: AppHandle<R>) -> Self {
+        Self {
+            sessions: Default::default(),
+            queue: Default::default(),
+            runner: Default::default(),
+            app: app_handle,
+        }
+    }
     pub async fn create_session(
         &self,
         manga_id: Uuid,

@@ -26,7 +26,7 @@ pub struct InternUploadSession {
     pub(super) commit_data: Option<InternUploadSessionCommitData>,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Default)]
 pub struct UploadSessions(ArcRwLock<BTreeMap<Uuid, InternUploadSession>>);
 
 impl Deref for UploadSessions {
