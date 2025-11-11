@@ -1,0 +1,108 @@
+use std::{collections::VecDeque, sync::Arc};
+
+use uuid::Uuid;
+
+use super::ArcRwLock;
+
+#[derive(Debug, thiserror::Error)]
+pub enum UploadQueueError {
+    CurrentlyUploading(Uuid),
+    AlreadyInQueue(Uuid),
+    NotInQueue(Uuid),
+}
+
+#[derive(Debug, Clone)]
+pub struct UploadQueue(ArcRwLock<VecDeque<(Uuid, UploadSessionState)>>);
+
+#[derive(Debug, Default, Clone)]
+pub enum UploadSessionState {
+    #[default]
+    Pending,
+    Uploading,
+    Error(Arc<crate::Error>),
+}
+
+impl UploadQueue {
+    pub async fn push_entry(&self, id: Uuid) -> Result<(), UploadQueueError> {
+        let mut write = self.0.write().await;
+        if write.iter().any(|(key, _)| id == key) {
+            Err(UploadQueueError::AlreadyInQueue(id))
+        } else {
+            write.push_back((id, Default::default()));
+            Ok(())
+        }
+    }
+    pub async fn get_state(&self, id: Uuid) -> Option<UploadSessionState> {
+        self.0
+            .read()
+            .await
+            .iter()
+            .find(|(key, _)| key == id)
+            .map(|(_, state)| state.clone())
+    }
+    pub async fn set_state(
+        &self,
+        id: Uuid,
+        state: UploadSessionState,
+    ) -> Result<UploadSessionState, UploadQueueError> {
+        let mut write = self.0.write().await;
+        Ok(std::mem::replace(
+            write
+                .iter_mut()
+                .find(|(key, _)| key == id)
+                .map((|(_, state)| state))
+                .ok_or(UploadQueueError::NotInQueue(id))?,
+            state,
+        ))
+    }
+    pub async fn front(&self) -> Option<(Uuid, UploadSessionState)> {
+        self.0.read().await.front().cloned()
+    }
+    pub async fn pop_front(&self) -> Option<(Uuid, UploadSessionState)> {
+        let mut write = self.0.write().await;
+        let front = write.pop_front();
+        if front.is_none() {
+            write.shrink_to_fit();
+        }
+        front
+    }
+    pub async fn get_queue_order(&self) -> Vec<Uuid> {
+        self.0
+            .read()
+            .await
+            .iter()
+            .map(|(key, _)| key)
+            .copied()
+            .collect()
+    }
+    pub async fn swap(&self, a: Uuid, b: Uuid) -> Result<(), UploadQueueError> {
+        let mut write = self.0.write().await;
+
+        let a_pos = write
+            .iter()
+            .position(|(key, _)| key == a)
+            .ok_or(UploadQueueError::NotInQueue(a))?;
+        if write
+            .iter()
+            .find(|(key, _)| key == a)
+            .is_some_and(|(_, state)| matches!(state, UploadSessionState::Uploading))
+        {
+            return Err(UploadQueueError::CurrentlyUploading(a));
+        }
+
+        let b_pos = write
+            .iter()
+            .position(|(key, _)| key == b)
+            .ok_or(UploadQueueError::NotInQueue(b))?;
+        if write
+            .iter()
+            .find(|(key, _)| key == a)
+            .is_some_and(|(_, state)| matches!(state, UploadSessionState::Uploading))
+        {
+            return Err(UploadQueueError::CurrentlyUploading(b));
+        }
+
+        write.swap(a_pos, b_pos);
+        Ok(())
+    }
+}
