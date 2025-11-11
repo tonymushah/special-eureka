@@ -158,6 +158,8 @@ pub enum Error {
     RelationshipConversion(mangadex_api_types_rust::error::RelationshipConversionError),
     #[error(transparent)]
     UploadQueue(#[from] crate::upload::UploadQueueError),
+    #[error("Internal upload session {} not found", .0)]
+    InternalUploadSessionNotFound(Uuid),
 }
 
 impl Error {
