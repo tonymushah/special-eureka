@@ -1,6 +1,5 @@
 use std::{collections::VecDeque, sync::Arc};
 
-use tokio::sync::Notify;
 use uuid::Uuid;
 
 use super::ArcRwLock;
@@ -23,7 +22,6 @@ pub enum UploadQueueError {
 #[derive(Debug, Clone, Default)]
 pub struct UploadQueue {
     queue: ArcRwLock<VecDeque<(Uuid, UploadSessionState)>>,
-    push_notify: Arc<Notify>,
 }
 
 #[derive(Debug, Default, Clone)]
@@ -41,12 +39,8 @@ impl UploadQueue {
             Err(UploadQueueError::AlreadyInQueue(id))
         } else {
             write.push_back((id, Default::default()));
-            self.push_notify.notify_waiters();
             Ok(())
         }
-    }
-    pub fn push_back_notify(&self) -> Arc<Notify> {
-        self.push_notify.clone()
     }
     pub async fn get_state(&self, id: Uuid) -> Option<UploadSessionState> {
         self.queue
