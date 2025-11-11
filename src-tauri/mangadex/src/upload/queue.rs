@@ -4,10 +4,18 @@ use uuid::Uuid;
 
 use super::ArcRwLock;
 
-#[derive(Debug, thiserror::Error)]
+#[derive(Debug, thiserror::Error, enum_kinds::EnumKind)]
+#[enum_kind(
+    ErrorKind,
+    derive(PartialOrd, Ord, Hash),
+    enum_repr::EnumRepr(type = "u16", implicit = true)
+)]
 pub enum UploadQueueError {
+    #[error("Currently Uploading {} session", .0)]
     CurrentlyUploading(Uuid),
+    #[error("{} is already in queue", .0)]
     AlreadyInQueue(Uuid),
+    #[error("{} is not in queue", .0)]
     NotInQueue(Uuid),
 }
 
@@ -25,7 +33,7 @@ pub enum UploadSessionState {
 impl UploadQueue {
     pub async fn push_entry(&self, id: Uuid) -> Result<(), UploadQueueError> {
         let mut write = self.0.write().await;
-        if write.iter().any(|(key, _)| id == key) {
+        if write.iter().any(|(key, _)| id == *key) {
             Err(UploadQueueError::AlreadyInQueue(id))
         } else {
             write.push_back((id, Default::default()));
@@ -37,7 +45,7 @@ impl UploadQueue {
             .read()
             .await
             .iter()
-            .find(|(key, _)| key == id)
+            .find(|(key, _)| *key == id)
             .map(|(_, state)| state.clone())
     }
     pub async fn set_state(
@@ -49,8 +57,8 @@ impl UploadQueue {
         Ok(std::mem::replace(
             write
                 .iter_mut()
-                .find(|(key, _)| key == id)
-                .map((|(_, state)| state))
+                .find(|(key, _)| *key == id)
+                .map(|(_, state)| state)
                 .ok_or(UploadQueueError::NotInQueue(id))?,
             state,
         ))
@@ -80,11 +88,11 @@ impl UploadQueue {
 
         let a_pos = write
             .iter()
-            .position(|(key, _)| key == a)
+            .position(|(key, _)| *key == a)
             .ok_or(UploadQueueError::NotInQueue(a))?;
         if write
             .iter()
-            .find(|(key, _)| key == a)
+            .find(|(key, _)| *key == a)
             .is_some_and(|(_, state)| matches!(state, UploadSessionState::Uploading))
         {
             return Err(UploadQueueError::CurrentlyUploading(a));
@@ -92,11 +100,11 @@ impl UploadQueue {
 
         let b_pos = write
             .iter()
-            .position(|(key, _)| key == b)
+            .position(|(key, _)| *key == b)
             .ok_or(UploadQueueError::NotInQueue(b))?;
         if write
             .iter()
-            .find(|(key, _)| key == a)
+            .find(|(key, _)| *key == a)
             .is_some_and(|(_, state)| matches!(state, UploadSessionState::Uploading))
         {
             return Err(UploadQueueError::CurrentlyUploading(b));
