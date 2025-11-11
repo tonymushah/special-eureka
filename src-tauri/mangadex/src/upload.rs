@@ -3,6 +3,7 @@ mod sessions;
 
 use std::sync::Arc;
 
+use mangadex_api::utils::upload::check_and_abandon_session_if_exists;
 use queue::UploadQueue;
 use serde::{Deserialize, Serialize};
 use sessions::UploadSessions;
@@ -16,6 +17,8 @@ use uuid::Uuid;
 
 pub use queue::{UploadQueueError, UploadQueueErrorKind, UploadSessionState};
 pub use sessions::{InternUploadSession, InternUploadSessionCommitData};
+
+use crate::utils::traits_utils::MangadexTauriManagerExt;
 
 type ArcRwLock<T> = Arc<RwLock<T>>;
 
@@ -103,4 +106,56 @@ async fn inner_runner<R>(queue: UploadQueue, sessions: UploadSessions, app: AppH
 where
     R: Runtime,
 {
+    let Ok(client) = app
+        .get_mangadex_client()
+        .inspect_err(|e| log::error!("{e}"))
+    else {
+        return;
+    };
+    while let Some((session_id, _)) = queue.front().await {
+        let Ok(_) = queue
+            .set_state(session_id, UploadSessionState::Uploading)
+            .await
+            .inspect_err(|err| {
+                log::error!("{err}");
+            })
+        else {
+            continue;
+        };
+        let _ = app.emit(
+            UPLOAD_MANAGER_EVENT_KEY,
+            UploadManagerEventPayload::QueueEntryUpdate { id: session_id },
+        );
+        if let Err(err) = upload_intern_session(session_id, &queue, &sessions).await {
+            queue
+                .set_state(session_id, UploadSessionState::Error(err.into()))
+                .await
+                .inspect_err(|e| {
+                    log::error!("{e}");
+                });
+            let _ = app.emit(
+                UPLOAD_MANAGER_EVENT_KEY,
+                UploadManagerEventPayload::QueueEntryUpdate { id: session_id },
+            );
+        } else {
+            queue.pop_front().await;
+            let _ = app.emit(
+                UPLOAD_MANAGER_EVENT_KEY,
+                UploadManagerEventPayload::QueueListUpdate,
+            );
+            sessions.write().await.remove(&session_id);
+            let _ = app.emit(
+                UPLOAD_MANAGER_EVENT_KEY,
+                UploadManagerEventPayload::SessionListUpdate,
+            );
+        }
+    }
+}
+
+async fn upload_intern_session(
+    id: Uuid,
+    queue: &UploadQueue,
+    sessions: &UploadSessions,
+) -> crate::Result<()> {
+    todo!()
 }
