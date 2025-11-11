@@ -127,7 +127,7 @@ where
             UploadManagerEventPayload::QueueEntryUpdate { id: session_id },
         );
         if let Err(err) = upload_intern_session(session_id, &queue, &sessions).await {
-            queue
+            let _ = queue
                 .set_state(session_id, UploadSessionState::Error(err.into()))
                 .await
                 .inspect_err(|e| {
