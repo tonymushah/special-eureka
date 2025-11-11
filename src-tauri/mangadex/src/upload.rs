@@ -75,10 +75,10 @@ where
         Ok(session_id)
     }
     pub async fn send_session_in_queue(&self, session_id: Uuid) -> crate::Result<()> {
-        if !self.sessions.read().await.contains_key(session_id) {
+        if !self.sessions.read().await.contains_key(&session_id) {
             return Err(crate::Error::InternalUploadSessionNotFound(session_id));
         }
-        self.queue.push_entry(session_id)?;
+        self.queue.push_entry(session_id).await?;
         self.app.emit(
             UPLOAD_MANAGER_EVENT_KEY,
             UploadManagerEventPayload::QueueListUpdate,
