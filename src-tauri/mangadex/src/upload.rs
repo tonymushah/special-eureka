@@ -13,7 +13,7 @@ use tokio::{
 };
 use uuid::Uuid;
 
-pub use queue::UploadSessionState;
+pub use queue::{UploadQueueError, UploadSessionState};
 pub use sessions::{InternUploadSession, InternUploadSessionCommitData};
 
 type ArcRwLock<T> = Arc<RwLock<T>>;
