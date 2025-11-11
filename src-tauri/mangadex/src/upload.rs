@@ -4,6 +4,7 @@ mod sessions;
 use std::sync::Arc;
 
 use queue::UploadQueue;
+use serde::{Deserialize, Serialize};
 use sessions::UploadSessions;
 use tauri::{AppHandle, Runtime};
 use tempfile::TempDir;
@@ -13,7 +14,7 @@ use tokio::{
 };
 use uuid::Uuid;
 
-pub use queue::{UploadQueueError, UploadSessionState};
+pub use queue::{UploadQueueError, UploadQueueErrorKind, UploadSessionState};
 pub use sessions::{InternUploadSession, InternUploadSessionCommitData};
 
 type ArcRwLock<T> = Arc<RwLock<T>>;
@@ -26,6 +27,14 @@ where
     queue: UploadQueue,
     runner: Arc<Mutex<Option<JoinHandle<()>>>>,
     app: AppHandle<R>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub enum UploadManagerEventPayload {
+    CreatedNewSession,
+    QueueListUpdate,
+    SessionUpdate { id: Uuid },
+    QueueEntryUpdate { id: Uuid },
 }
 
 impl<R> UploadManager<R>

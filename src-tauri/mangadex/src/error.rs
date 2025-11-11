@@ -156,6 +156,8 @@ pub enum Error {
     RelatedCoverArtNotFound,
     #[error(transparent)]
     RelationshipConversion(mangadex_api_types_rust::error::RelationshipConversionError),
+    #[error(transparent)]
+    UploadQueue(#[from] crate::upload::UploadQueueError),
 }
 
 impl Error {
@@ -219,6 +221,20 @@ impl ErrorExtensions for Error {
                 )) => {
                     exts.set("status", *status);
                     exts.set("detail", detail.clone());
+                }
+                Self::UploadQueue(err) => {
+                    exts.set(
+                        "upload_queue_err",
+                        crate::upload::UploadQueueErrorKind::from(err).repr(),
+                    );
+                    exts.set(
+                        "internal_upload_session_id",
+                        match err {
+                            crate::upload::UploadQueueError::AlreadyInQueue(id)
+                            | crate::upload::UploadQueueError::CurrentlyUploading(id)
+                            | crate::upload::UploadQueueError::NotInQueue(id) => id.to_string(),
+                        },
+                    )
                 }
                 _ => {}
             }

@@ -6,7 +6,7 @@ use super::ArcRwLock;
 
 #[derive(Debug, thiserror::Error, enum_kinds::EnumKind)]
 #[enum_kind(
-    ErrorKind,
+    UploadQueueErrorKind,
     derive(PartialOrd, Ord, Hash),
     enum_repr::EnumRepr(type = "u16", implicit = true)
 )]
