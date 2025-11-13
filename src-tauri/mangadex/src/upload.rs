@@ -1,9 +1,13 @@
 mod queue;
 mod sessions;
 
-use std::sync::Arc;
+use std::{collections::HashMap, fs::File, path::PathBuf, sync::Arc};
 
-use mangadex_api::{MangaDexClient, utils::upload::check_and_abandon_session_if_exists};
+use mangadex_api::{
+    MangaDexClient, utils::upload::check_and_abandon_session_if_exists,
+    v5::upload::upload_session_id::post::UploadImage,
+};
+use mangadex_api_schema_rust::v5::ChapterObject;
 use queue::UploadQueue;
 use serde::{Deserialize, Serialize};
 use sessions::UploadSessions;
@@ -49,6 +53,12 @@ impl<R> UploadManager<R>
 where
     R: Runtime,
 {
+    async fn can_update_internal_session(&self, id: Uuid) -> bool {
+        !matches!(
+            self.queue.get_state(id).await,
+            Some(UploadSessionState::Uploading)
+        )
+    }
     pub fn new(app_handle: AppHandle<R>) -> Self {
         Self {
             sessions: Default::default(),
@@ -111,18 +121,54 @@ where
 
         Ok(())
     }
+    pub async fn add_file_to_session(
+        &self,
+        session_id: Uuid,
+        path: PathBuf,
+        index: Option<u32>,
+    ) -> crate::Result<()> {
+        if self.can_update_internal_session(session_id).await {
+            return Err(UploadQueueError::CurrentlyUploading(session_id).into());
+        }
+        todo!()
+    }
+    pub async fn add_files_to_session(
+        &self,
+        session_id: Uuid,
+        path: PathBuf,
+        index: Option<u32>,
+    ) -> crate::Result<()> {
+        if self.can_update_internal_session(session_id).await {
+            return Err(UploadQueueError::CurrentlyUploading(session_id).into());
+        }
+        todo!()
+    }
+    pub async fn get_file_from_session(
+        &self,
+        session_id: Uuid,
+        path: PathBuf,
+    ) -> crate::Result<File> {
+        todo!()
+    }
+    pub async fn get_intern_session_object(
+        &self,
+        session_id: Uuid,
+    ) -> Option<InternUploadSessionGQLObject> {
+        self.sessions
+            .read()
+            .await
+            .get(&session_id)
+            .map(|d| d.to_gql_object())
+    }
+    pub async fn get_session_queue_state(&self, session_id: Uuid) -> Option<UploadSessionState> {
+        self.queue.get_state(session_id).await
+    }
 }
 
 async fn inner_runner<R>(queue: UploadQueue, sessions: UploadSessions, app: AppHandle<R>)
 where
     R: Runtime,
 {
-    let Ok(client) = app
-        .get_mangadex_client()
-        .inspect_err(|e| log::error!("{e}"))
-    else {
-        return;
-    };
     while let Some((session_id, _)) = queue.front().await {
         let Ok(_) = queue
             .set_state(session_id, UploadSessionState::Uploading)
@@ -137,37 +183,148 @@ where
             UPLOAD_MANAGER_EVENT_KEY,
             UploadManagerEventPayload::QueueEntryUpdate { id: session_id },
         );
-        if let Err(err) = upload_intern_session(session_id, &queue, &sessions, &client).await {
-            let _ = queue
-                .set_state(session_id, UploadSessionState::Error(err.into()))
-                .await
-                .inspect_err(|e| {
-                    log::error!("{e}");
-                });
-            let _ = app.emit(
-                UPLOAD_MANAGER_EVENT_KEY,
-                UploadManagerEventPayload::QueueEntryUpdate { id: session_id },
-            );
-        } else {
-            queue.pop_front().await;
-            let _ = app.emit(
-                UPLOAD_MANAGER_EVENT_KEY,
-                UploadManagerEventPayload::QueueListUpdate,
-            );
-            sessions.write().await.remove(&session_id);
-            let _ = app.emit(
-                UPLOAD_MANAGER_EVENT_KEY,
-                UploadManagerEventPayload::SessionListUpdate,
-            );
+        match upload_intern_session(session_id, &sessions, &app).await {
+            Err(err) => {
+                let _ = queue
+                    .set_state(session_id, UploadSessionState::Error(err.into()))
+                    .await
+                    .inspect_err(|e| {
+                        log::error!("{e}");
+                    });
+                let _ = app.emit(
+                    UPLOAD_MANAGER_EVENT_KEY,
+                    UploadManagerEventPayload::QueueEntryUpdate { id: session_id },
+                );
+            }
+            // TODO find a way to do this shit
+            Ok(_chapter) => {
+                queue.pop_front().await;
+                let _ = app.emit(
+                    UPLOAD_MANAGER_EVENT_KEY,
+                    UploadManagerEventPayload::QueueListUpdate,
+                );
+                sessions.write().await.remove(&session_id);
+                let _ = app.emit(
+                    UPLOAD_MANAGER_EVENT_KEY,
+                    UploadManagerEventPayload::SessionListUpdate,
+                );
+            }
         }
     }
 }
 
-async fn upload_intern_session(
-    id: Uuid,
-    queue: &UploadQueue,
+const FILES_PER_PUT: u8 = 5;
+
+async fn upload_intern_session<R>(
+    internal_session_id: Uuid,
     sessions: &UploadSessions,
-    client: &MangaDexClient,
-) -> crate::Result<()> {
-    todo!()
+    app: &AppHandle<R>,
+) -> crate::Result<ChapterObject>
+where
+    R: Runtime,
+{
+    {
+        let client = app.get_mangadex_client_with_auth_refresh().await?;
+        let rate_limit = app.get_specific_rate_limit()?;
+        let _ = tokio::join!(rate_limit.get_upload(), rate_limit.delete_upload());
+        check_and_abandon_session_if_exists(&client).await?;
+    }
+
+    let (md_session, (images_to_upload, file_name_order, mut files_ids, commit_data)) = tokio::try_join!(
+        async {
+            let client = app.get_mangadex_client_with_auth_refresh().await?;
+
+            let mut endpoint = client.upload().begin().post();
+            {
+                let read = sessions.read().await;
+                let internal_session = read.get(&internal_session_id).ok_or(
+                    crate::Error::InternalUploadSessionNotFound(internal_session_id),
+                )?;
+                endpoint
+                    .manga_id(internal_session.manga_id)
+                    .groups(internal_session.groups.clone());
+            }
+            app.get_specific_rate_limit()?.begin_upload().await;
+            Ok::<_, crate::Error>(endpoint.send().await?.body.data)
+        },
+        async {
+            let read = sessions.read().await;
+            let session = read.get(&internal_session_id).ok_or(
+                crate::Error::InternalUploadSessionNotFound(internal_session_id),
+            )?;
+            Ok((
+                session
+                    .images
+                    .iter()
+                    .map(|path| session.temp_dir.path().join(path))
+                    .collect::<Vec<_>>(),
+                session.images.clone(),
+                HashMap::<String, Uuid>::with_capacity(session.images.len()),
+                session
+                    .commit_data
+                    .clone()
+                    .ok_or(crate::Error::UploadCommitDataMissing(internal_session_id))?,
+            ))
+        }
+    )?;
+
+    for files in images_to_upload.chunks(FILES_PER_PUT as _) {
+        let files = files
+            .iter()
+            .map(|p| UploadImage::try_from(p.to_path_buf()))
+            .collect::<std::io::Result<Vec<UploadImage>>>()?;
+
+        app.get_specific_rate_limit()?.upload_files().await;
+        let client = app.get_mangadex_client_with_auth_refresh().await?;
+
+        let mut endpoint = client.upload().upload_session_id(md_session.id).post();
+        endpoint.files(files);
+        let res = endpoint.send().await?;
+        if !res.body.errors.is_empty() {
+            return Err(crate::Error::UploadFilesError(res.body.errors));
+        }
+        for upload_file in res.data.iter() {
+            files_ids.insert(
+                upload_file.attributes.original_file_name.clone(),
+                upload_file.id,
+            );
+        }
+    }
+
+    let chapter = {
+        let client = app.get_mangadex_client_with_auth_refresh().await?;
+        let mut endpoint = client
+            .upload()
+            .upload_session_id(md_session.id)
+            .commit()
+            .post();
+        endpoint = endpoint
+            .chapter(commit_data.chapter)
+            .volume(commit_data.volume)
+            .translated_language(commit_data.translated_language)
+            .external_url(commit_data.external_url);
+        if let Some(publish_date) = commit_data.publish_at {
+            endpoint = endpoint.publish_at(publish_date);
+        }
+        let page_order = file_name_order
+            .into_iter()
+            .map(|filename| {
+                files_ids
+                    .get(&filename)
+                    .copied()
+                    .ok_or(crate::Error::FileNotYetUploaded(
+                        filename,
+                        internal_session_id,
+                    ))
+            })
+            .collect::<crate::Result<Vec<_>>>()?;
+        endpoint = endpoint.page_order(page_order);
+
+        // TODO compliance
+
+        app.get_specific_rate_limit()?.commit_upload().await;
+        endpoint.send().await?
+    };
+
+    Ok(chapter.body.data)
 }

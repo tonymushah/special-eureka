@@ -1,5 +1,6 @@
 use std::{collections::BTreeMap, ops::Deref, path::PathBuf};
 
+use async_graphql::{InputObject, SimpleObject};
 use mangadex_api_types_rust::{Language, MangaDexDateTime};
 use tempfile::TempDir;
 use url::Url;
@@ -7,7 +8,8 @@ use uuid::Uuid;
 
 use super::ArcRwLock;
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, SimpleObject, InputObject)]
+#[graphql(input_name = "InternUploadSessionCommitDataInput")]
 pub struct InternUploadSessionCommitData {
     pub volume: Option<String>,
     pub chapter: Option<String>,
@@ -22,7 +24,7 @@ pub struct InternUploadSession {
     pub(super) manga_id: Uuid,
     pub(super) groups: Vec<Uuid>,
     pub(super) temp_dir: TempDir,
-    pub(super) images: Vec<PathBuf>,
+    pub(super) images: Vec<String>,
     pub(super) commit_data: Option<InternUploadSessionCommitData>,
 }
 

@@ -1,6 +1,7 @@
 use std::backtrace::Backtrace;
 
 use async_graphql::ErrorExtensions;
+use mangadex_api_schema_rust::v5::error::MangaDexError_;
 use uuid::Uuid;
 
 #[derive(Debug, thiserror::Error, enum_kinds::EnumKind)]
@@ -162,6 +163,13 @@ pub enum Error {
     InternalUploadSessionNotFound(Uuid),
     #[error(transparent)]
     CheckUploadSession(#[from] crate::upload::CheckUploadSessionError),
+    #[error("Missing commit data for {}", .0)]
+    UploadCommitDataMissing(Uuid),
+    // TODO extend
+    #[error("UploadFilesErrors")]
+    UploadFilesError(Vec<MangaDexError_>),
+    #[error("the file `{}` in the `{}` session is not yet uploaded", .0, .1)]
+    FileNotYetUploaded(String, Uuid),
 }
 
 impl Error {
@@ -181,6 +189,7 @@ impl ErrorExtensions for Error {
     fn extend(&self) -> async_graphql::Error {
         async_graphql::Error::new(format!("{self}")).extend_with(|_err, exts| {
             exts.set("code", ErrorKind::from(self).repr());
+            #[cfg(debug_assertions)]
             exts.set("backtrace", Backtrace::capture().to_string());
             match self {
                 Self::Reqwest(err)
@@ -239,6 +248,9 @@ impl ErrorExtensions for Error {
                             | crate::upload::UploadQueueError::NotInQueue(id) => id.to_string(),
                         },
                     )
+                }
+                Self::UploadCommitDataMissing(err) => {
+                    exts.set("internal_session_id", err.to_string());
                 }
                 _ => {}
             }
