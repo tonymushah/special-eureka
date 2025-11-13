@@ -26,6 +26,34 @@ pub struct InternUploadSession {
     pub(super) commit_data: Option<InternUploadSessionCommitData>,
 }
 
+#[derive(Debug, thiserror::Error)]
+pub enum CheckUploadSessionError {}
+
+impl InternUploadSession {
+    pub fn check(&self) -> Result<(), CheckUploadSessionError> {
+        todo!()
+    }
+}
+
+impl InternUploadSession {
+    pub fn to_gql_object(&self) -> InternUploadSessionGQLObject {
+        InternUploadSessionGQLObject {
+            manga_id: self.manga_id,
+            groups: self.groups.clone(),
+            images: self.images.clone(),
+            commit_data: self.commit_data.clone(),
+        }
+    }
+}
+
+#[derive(Debug, Clone, SimpleObject)]
+pub struct InternUploadSessionGQLObject {
+    pub manga_id: Uuid,
+    pub groups: Vec<Uuid>,
+    pub images: Vec<String>,
+    pub commit_data: Option<InternUploadSessionCommitData>,
+}
+
 #[derive(Debug, Clone, Default)]
 pub struct UploadSessions(ArcRwLock<BTreeMap<Uuid, InternUploadSession>>);
 

@@ -160,6 +160,8 @@ pub enum Error {
     UploadQueue(#[from] crate::upload::UploadQueueError),
     #[error("Internal upload session {} not found", .0)]
     InternalUploadSessionNotFound(Uuid),
+    #[error(transparent)]
+    CheckUploadSession(#[from] crate::upload::CheckUploadSessionError),
 }
 
 impl Error {

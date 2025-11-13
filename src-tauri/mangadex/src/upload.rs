@@ -16,7 +16,10 @@ use tokio::{
 use uuid::Uuid;
 
 pub use queue::{UploadQueueError, UploadQueueErrorKind, UploadSessionState};
-pub use sessions::{InternUploadSession, InternUploadSessionCommitData};
+pub use sessions::{
+    CheckUploadSessionError, InternUploadSession, InternUploadSessionCommitData,
+    InternUploadSessionGQLObject,
+};
 
 use crate::utils::traits_utils::MangadexTauriManagerExt;
 
@@ -78,8 +81,16 @@ where
         Ok(session_id)
     }
     pub async fn send_session_in_queue(&self, session_id: Uuid) -> crate::Result<()> {
-        if !self.sessions.read().await.contains_key(&session_id) {
-            return Err(crate::Error::InternalUploadSessionNotFound(session_id));
+        {
+            let read = self.sessions.read().await;
+            match read.get(&session_id) {
+                Some(intern) => {
+                    intern.check()?;
+                }
+                None => {
+                    return Err(crate::Error::InternalUploadSessionNotFound(session_id));
+                }
+            }
         }
         self.queue.push_entry(session_id).await?;
         self.app.emit(
