@@ -23,6 +23,7 @@ pub mod rate_limit;
 pub mod scheme;
 pub mod store;
 pub mod subscription;
+pub mod upload;
 pub mod utils;
 
 type Q = Query;

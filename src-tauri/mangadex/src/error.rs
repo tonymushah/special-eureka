@@ -1,6 +1,7 @@
 use std::backtrace::Backtrace;
 
 use async_graphql::ErrorExtensions;
+use mangadex_api_schema_rust::v5::error::MangaDexError_;
 use uuid::Uuid;
 
 #[derive(Debug, thiserror::Error, enum_kinds::EnumKind)]
@@ -156,6 +157,19 @@ pub enum Error {
     RelatedCoverArtNotFound,
     #[error(transparent)]
     RelationshipConversion(mangadex_api_types_rust::error::RelationshipConversionError),
+    #[error(transparent)]
+    UploadQueue(#[from] crate::upload::UploadQueueError),
+    #[error("Internal upload session {} not found", .0)]
+    InternalUploadSessionNotFound(Uuid),
+    #[error(transparent)]
+    CheckUploadSession(#[from] crate::upload::CheckUploadSessionError),
+    #[error("Missing commit data for {}", .0)]
+    UploadCommitDataMissing(Uuid),
+    // TODO extend
+    #[error("UploadFilesErrors")]
+    UploadFilesError(Vec<MangaDexError_>),
+    #[error("the file `{}` in the `{}` session is not yet uploaded", .0, .1)]
+    FileNotYetUploaded(String, Uuid),
 }
 
 impl Error {
@@ -175,6 +189,7 @@ impl ErrorExtensions for Error {
     fn extend(&self) -> async_graphql::Error {
         async_graphql::Error::new(format!("{self}")).extend_with(|_err, exts| {
             exts.set("code", ErrorKind::from(self).repr());
+            #[cfg(debug_assertions)]
             exts.set("backtrace", Backtrace::capture().to_string());
             match self {
                 Self::Reqwest(err)
@@ -219,6 +234,23 @@ impl ErrorExtensions for Error {
                 )) => {
                     exts.set("status", *status);
                     exts.set("detail", detail.clone());
+                }
+                Self::UploadQueue(err) => {
+                    exts.set(
+                        "upload_queue_err",
+                        crate::upload::UploadQueueErrorKind::from(err).repr(),
+                    );
+                    exts.set(
+                        "internal_upload_session_id",
+                        match err {
+                            crate::upload::UploadQueueError::AlreadyInQueue(id)
+                            | crate::upload::UploadQueueError::CurrentlyUploading(id)
+                            | crate::upload::UploadQueueError::NotInQueue(id) => id.to_string(),
+                        },
+                    )
+                }
+                Self::UploadCommitDataMissing(err) => {
+                    exts.set("internal_session_id", err.to_string());
                 }
                 _ => {}
             }

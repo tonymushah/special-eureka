@@ -76,7 +76,7 @@ features = ["serde"]
 
 [dependencies.uuid]
 workspace = true
-features = ["serde", "v4"]
+features = ["serde", "v4", "v7", "std"]
 
 [dependencies.time]
 workspace = true
