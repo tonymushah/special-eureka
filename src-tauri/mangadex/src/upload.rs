@@ -4,7 +4,7 @@ mod sessions;
 use std::{collections::HashMap, fs::File, path::PathBuf, sync::Arc};
 
 use mangadex_api::{
-    MangaDexClient, utils::upload::check_and_abandon_session_if_exists,
+    utils::upload::check_and_abandon_session_if_exists,
     v5::upload::upload_session_id::post::UploadImage,
 };
 use mangadex_api_schema_rust::v5::ChapterObject;
@@ -124,7 +124,7 @@ where
     pub async fn add_file_to_session(
         &self,
         session_id: Uuid,
-        path: PathBuf,
+        img_path: PathBuf,
         index: Option<u32>,
     ) -> crate::Result<()> {
         if self.can_update_internal_session(session_id).await {
@@ -135,7 +135,7 @@ where
     pub async fn add_files_to_session(
         &self,
         session_id: Uuid,
-        path: PathBuf,
+        paths: Vec<PathBuf>,
         index: Option<u32>,
     ) -> crate::Result<()> {
         if self.can_update_internal_session(session_id).await {
@@ -146,8 +146,28 @@ where
     pub async fn get_file_from_session(
         &self,
         session_id: Uuid,
-        path: PathBuf,
+        filename: String,
     ) -> crate::Result<File> {
+        todo!()
+    }
+    pub async fn remove_file_from_session(
+        &self,
+        session_id: Uuid,
+        filename: String,
+    ) -> crate::Result<()> {
+        if self.can_update_internal_session(session_id).await {
+            return Err(UploadQueueError::CurrentlyUploading(session_id).into());
+        }
+        todo!()
+    }
+    pub async fn remove_files_from_session(
+        &self,
+        session_id: Uuid,
+        filenames: Vec<String>,
+    ) -> crate::Result<()> {
+        if self.can_update_internal_session(session_id).await {
+            return Err(UploadQueueError::CurrentlyUploading(session_id).into());
+        }
         todo!()
     }
     pub async fn get_intern_session_object(
@@ -224,7 +244,10 @@ where
                     UPLOAD_MANAGER_EVENT_KEY,
                     UploadManagerEventPayload::QueueListUpdate,
                 );
-                sessions.write().await.remove(&session_id);
+                {
+                    let mut write = sessions.write().await;
+                    write.remove(&session_id);
+                }
                 let _ = app.emit(
                     UPLOAD_MANAGER_EVENT_KEY,
                     UploadManagerEventPayload::SessionListUpdate,
