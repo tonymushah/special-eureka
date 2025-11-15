@@ -5,7 +5,7 @@ use std::{
 };
 
 use async_graphql::{InputObject, SimpleObject};
-use image::{GenericImageView, ImageFormat};
+use image::ImageFormat;
 use mangadex_api_types_rust::{Language, MangaDexDateTime};
 use tempfile::TempDir;
 use url::Url;
@@ -85,8 +85,8 @@ impl InternUploadSession {
             .collect::<std::io::Result<HashMap<_, _>>>()?;
         {
             let total_len = images_metadata
-                .iter()
-                .map(|(_, metadata)| metadata.len())
+                .values()
+                .map(|metadata| metadata.len())
                 .sum::<u64>();
             if total_len > CHAPTER_TOTAL_SIZE_LIMIT {
                 return Err(CheckUploadSessionError::ChapterTotalSizeTooBig(total_len));
