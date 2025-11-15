@@ -1,7 +1,13 @@
 mod queue;
 mod sessions;
 
-use std::{collections::HashMap, fs::File, path::PathBuf, sync::Arc};
+use std::{
+    collections::HashMap,
+    fs::File,
+    io::{BufReader, BufWriter, Write},
+    path::PathBuf,
+    sync::Arc,
+};
 
 use mangadex_api::{
     utils::upload::check_and_abandon_session_if_exists,
@@ -53,6 +59,9 @@ impl<R> UploadManager<R>
 where
     R: Runtime,
 {
+    fn emit_manager_event(&self, e: UploadManagerEventPayload) -> tauri::Result<()> {
+        self.app.emit(UPLOAD_MANAGER_EVENT_KEY, e)
+    }
     async fn can_update_internal_session(&self, id: Uuid) -> bool {
         !matches!(
             self.queue.get_state(id).await,
@@ -103,10 +112,7 @@ where
             }
         }
         self.queue.push_entry(session_id).await?;
-        self.app.emit(
-            UPLOAD_MANAGER_EVENT_KEY,
-            UploadManagerEventPayload::QueueListUpdate,
-        )?;
+        self.emit_manager_event(UploadManagerEventPayload::QueueListUpdate)?;
         {
             let mut lock = self.runner.lock().await;
             if lock.as_ref().is_none() || lock.as_ref().is_some_and(|r| r.is_finished()) {
@@ -127,38 +133,88 @@ where
         img_path: PathBuf,
         index: Option<u32>,
     ) -> crate::Result<()> {
-        if self.can_update_internal_session(session_id).await {
-            return Err(UploadQueueError::CurrentlyUploading(session_id).into());
-        }
-        todo!()
+        self.add_files_to_session(session_id, vec![img_path], index)
+            .await
     }
     pub async fn add_files_to_session(
         &self,
         session_id: Uuid,
         paths: Vec<PathBuf>,
-        index: Option<u32>,
+        mut index: Option<u32>,
     ) -> crate::Result<()> {
         if self.can_update_internal_session(session_id).await {
             return Err(UploadQueueError::CurrentlyUploading(session_id).into());
         }
-        todo!()
+        let to_import = paths
+            .into_iter()
+            .flat_map(|path| {
+                let extension = path
+                    .extension()
+                    .and_then(|d| d.to_str().map(String::from))?;
+
+                Some((
+                    format!(
+                        "{}.{}",
+                        todo!("random filenames is not yet implemented") as String,
+                        extension
+                    ),
+                    path,
+                ))
+            })
+            .collect::<Vec<_>>();
+        {
+            if let Some(i) = index {
+                let read = self.sessions.read().await;
+                if (read.len() as u32) <= i {
+                    index = None;
+                }
+            }
+        }
+        {
+            let mut write = self.sessions.write().await;
+            let session = write
+                .get_mut(&session_id)
+                .ok_or(crate::Error::InternalUploadSessionNotFound(session_id))?;
+            for (filename, path) in to_import {
+                {
+                    let mut image_file = File::create(session.temp_dir.path().join(&filename))?;
+                    let mut to_copy = File::open(path)?;
+                    {
+                        let mut image_file = BufWriter::new(&mut image_file);
+                        let mut to_copy = BufReader::new(&mut to_copy);
+                        std::io::copy(&mut to_copy, &mut image_file)?;
+                        image_file.flush()?;
+                    }
+                }
+                if let Some(index) = index.as_mut() {
+                    session.images.insert((*index) as _, filename);
+                    *index += 1;
+                } else {
+                    session.images.push(filename);
+                }
+            }
+        }
+        self.emit_manager_event(UploadManagerEventPayload::SessionUpdate { id: session_id })?;
+        Ok(())
     }
-    pub async fn get_file_from_session(
+    pub async fn get_read_file_from_session(
         &self,
         session_id: Uuid,
         filename: String,
     ) -> crate::Result<File> {
-        todo!()
+        let read = self.sessions.read().await;
+        let session = read
+            .get(&session_id)
+            .ok_or(crate::Error::InternalUploadSessionNotFound(session_id))?;
+        Ok(File::open(session.temp_dir.path().join(filename))?)
     }
     pub async fn remove_file_from_session(
         &self,
         session_id: Uuid,
         filename: String,
     ) -> crate::Result<()> {
-        if self.can_update_internal_session(session_id).await {
-            return Err(UploadQueueError::CurrentlyUploading(session_id).into());
-        }
-        todo!()
+        self.remove_files_from_session(session_id, vec![filename])
+            .await
     }
     pub async fn remove_files_from_session(
         &self,
@@ -168,7 +224,16 @@ where
         if self.can_update_internal_session(session_id).await {
             return Err(UploadQueueError::CurrentlyUploading(session_id).into());
         }
-        todo!()
+        {
+            let mut write = self.sessions.write().await;
+            let session = write
+                .get_mut(&session_id)
+                .ok_or(crate::Error::InternalUploadSessionNotFound(session_id))?;
+            session.images.retain(|d| !filenames.contains(d));
+            session.images.shrink_to_fit();
+        }
+        self.emit_manager_event(UploadManagerEventPayload::SessionUpdate { id: session_id })?;
+        Ok(())
     }
     pub async fn get_intern_session_object(
         &self,
