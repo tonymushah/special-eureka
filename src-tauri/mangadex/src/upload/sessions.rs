@@ -1,6 +1,11 @@
-use std::{collections::BTreeMap, ops::Deref, path::PathBuf};
+use std::{
+    collections::{BTreeMap, HashMap},
+    fs::Metadata,
+    ops::Deref,
+};
 
 use async_graphql::{InputObject, SimpleObject};
+use image::{GenericImageView, ImageFormat};
 use mangadex_api_types_rust::{Language, MangaDexDateTime};
 use tempfile::TempDir;
 use url::Url;
@@ -30,12 +35,89 @@ pub struct InternUploadSession {
     pub(super) commit_data: Option<InternUploadSessionCommitData>,
 }
 
+pub const CHAPTER_TOTAL_SIZE_LIMIT: u64 = 150_000_000;
+
+pub const CHAPTER_IMAGE_FILE_LIMIT: u64 = 20_000_000;
+
+pub const SIZE_LIMIT: u32 = 10_000;
+
+pub const FILES_LIMIT: u32 = 500;
+
 #[derive(Debug, thiserror::Error)]
-pub enum CheckUploadSessionError {}
+pub enum CheckUploadSessionError {
+    #[error(transparent)]
+    Io(#[from] std::io::Error),
+    #[error(transparent)]
+    Image(#[from] image::ImageError),
+    #[error("Reached files number limit ({} > {})", .0, FILES_LIMIT)]
+    ReachedFilesNumberLimit(u32),
+    #[error("Chapter total size is to big ({} > 300 MB)", .0)]
+    ChapterTotalSizeTooBig(u64),
+    #[error("Chapter image `{}` size is too big ({} + {} > {}px)", .filename, .width, .height, SIZE_LIMIT)]
+    ImageSizeTooBig {
+        width: u32,
+        height: u32,
+        filename: String,
+    },
+    #[error("Chapter image `{}` file size is too big ({} > 500MB)", .filename, .size)]
+    ImageFileSizeTooBig { size: u64, filename: String },
+    #[error("Chapter image `{}` file format is invalid", .filename)]
+    InvalidFormat { filename: String },
+}
 
 impl InternUploadSession {
     pub fn check(&self) -> Result<(), CheckUploadSessionError> {
-        todo!()
+        if self.images.len() > FILES_LIMIT as usize {
+            return Err(CheckUploadSessionError::ReachedFilesNumberLimit(
+                self.images.len() as _,
+            ));
+        }
+        let images_metadata = self
+            .images
+            .iter()
+            .map(|filename| {
+                let path = self.temp_dir.path().join(filename);
+                Ok::<(String, Metadata), std::io::Error>((
+                    filename.clone(),
+                    std::fs::metadata(path)?,
+                ))
+            })
+            .collect::<std::io::Result<HashMap<_, _>>>()?;
+        {
+            let total_len = images_metadata
+                .iter()
+                .map(|(_, metadata)| metadata.len())
+                .sum::<u64>();
+            if total_len > CHAPTER_TOTAL_SIZE_LIMIT {
+                return Err(CheckUploadSessionError::ChapterTotalSizeTooBig(total_len));
+            }
+        }
+        for (filename, metadata) in images_metadata {
+            if metadata.len() > CHAPTER_IMAGE_FILE_LIMIT {
+                return Err(CheckUploadSessionError::ImageFileSizeTooBig {
+                    size: metadata.len(),
+                    filename,
+                });
+            }
+            let img_path = self.temp_dir.path().join(&filename);
+            if !matches!(
+                image::ImageFormat::from_path(&img_path)?,
+                ImageFormat::Jpeg | ImageFormat::Gif | ImageFormat::Png
+            ) {
+                return Err(CheckUploadSessionError::InvalidFormat { filename });
+            }
+            {
+                let img = image::open(&img_path)?;
+                if img.width() + img.height() > SIZE_LIMIT {
+                    return Err(CheckUploadSessionError::ImageSizeTooBig {
+                        width: img.width(),
+                        height: img.height(),
+                        filename,
+                    });
+                }
+            }
+        }
+        Ok(())
     }
 }
 
