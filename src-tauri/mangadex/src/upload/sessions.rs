@@ -17,6 +17,8 @@ pub struct InternUploadSessionCommitData {
     pub translated_language: Language,
     pub external_url: Option<Url>,
     pub publish_at: Option<MangaDexDateTime>,
+    /// Required after the May 15th incident
+    pub terms_accepted: Option<bool>,
 }
 
 #[derive(Debug)]

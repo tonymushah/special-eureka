@@ -306,6 +306,9 @@ where
         if let Some(publish_date) = commit_data.publish_at {
             endpoint = endpoint.publish_at(publish_date);
         }
+        if let Some(terms_accepted) = commit_data.terms_accepted {
+            endpoint = endpoint.terms_accepted(terms_accepted);
+        }
         let page_order = file_name_order
             .into_iter()
             .map(|filename| {
