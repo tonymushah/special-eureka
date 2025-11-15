@@ -163,6 +163,27 @@ where
     pub async fn get_session_queue_state(&self, session_id: Uuid) -> Option<UploadSessionState> {
         self.queue.get_state(session_id).await
     }
+    pub async fn set_commit_data(
+        &self,
+        session_id: Uuid,
+        commit_data: Option<InternUploadSessionCommitData>,
+    ) -> crate::Result<()> {
+        let mut write = self.sessions.write().await;
+        let session = write
+            .get_mut(&session_id)
+            .ok_or(crate::Error::InternalUploadSessionNotFound(session_id))?;
+        session.commit_data = commit_data;
+        Ok(())
+    }
+    pub async fn set_commit_data_and_send_to_queue(
+        &self,
+        session_id: Uuid,
+        commit_data: Option<InternUploadSessionCommitData>,
+    ) -> crate::Result<()> {
+        self.set_commit_data(session_id, commit_data).await?;
+        self.send_session_in_queue(session_id).await?;
+        Ok(())
+    }
 }
 
 async fn inner_runner<R>(queue: UploadQueue, sessions: UploadSessions, app: AppHandle<R>)
