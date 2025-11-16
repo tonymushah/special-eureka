@@ -9,6 +9,7 @@ use std::{
     sync::Arc,
 };
 
+use futures_util::Stream;
 use mangadex_api::{
     utils::upload::check_and_abandon_session_if_exists,
     v5::upload::upload_session_id::post::UploadImage,
@@ -17,10 +18,13 @@ use mangadex_api_schema_rust::v5::ChapterObject;
 use queue::UploadQueue;
 use serde::{Deserialize, Serialize};
 use sessions::UploadSessions;
-use tauri::{AppHandle, Emitter, Runtime};
+use tauri::{AppHandle, Emitter, EventId, Listener, Runtime};
 use tempfile::TempDir;
 use tokio::{
-    sync::{Mutex, RwLock},
+    sync::{
+        Mutex, RwLock,
+        mpsc::{UnboundedReceiver, unbounded_channel},
+    },
     task::JoinHandle,
 };
 use uuid::Uuid;
@@ -461,4 +465,66 @@ where
     };
 
     Ok(chapter.body.data)
+}
+
+pub struct UploadManagerEventStream<R>
+where
+    R: Runtime,
+{
+    app_handle: AppHandle<R>,
+    rx: UnboundedReceiver<UploadManagerEventPayload>,
+    event_id: EventId,
+}
+
+impl<R> UploadManagerEventStream<R>
+where
+    R: Runtime,
+{
+    pub fn new(app_handle: AppHandle<R>) -> tauri::Result<Self> {
+        let (tx, rx) = unbounded_channel::<UploadManagerEventPayload>();
+        let event_id =
+            app_handle.listen(
+                UPLOAD_MANAGER_EVENT_KEY,
+                move |ev| match serde_json::from_str(ev.payload()) {
+                    Ok(payload) => {
+                        if let Err(err) = tx.send(payload) {
+                            log::error!("{err}");
+                        }
+                    }
+                    Err(err) => {
+                        log::error!("{err}");
+                    }
+                },
+            );
+        Ok(Self {
+            app_handle,
+            rx,
+            event_id,
+        })
+    }
+}
+
+impl<R> Drop for UploadManagerEventStream<R>
+where
+    R: Runtime,
+{
+    fn drop(&mut self) {
+        self.app_handle.unlisten(self.event_id);
+    }
+}
+
+impl<R> Unpin for UploadManagerEventStream<R> where R: Runtime {}
+
+impl<R> Stream for UploadManagerEventStream<R>
+where
+    R: Runtime,
+{
+    type Item = UploadManagerEventPayload;
+    fn poll_next(
+        self: std::pin::Pin<&mut Self>,
+        cx: &mut std::task::Context<'_>,
+    ) -> std::task::Poll<Option<Self::Item>> {
+        let this = self.get_mut();
+        this.rx.poll_recv(cx)
+    }
 }
