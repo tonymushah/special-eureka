@@ -113,19 +113,20 @@ where
         }
         self.queue.push_entry(session_id).await?;
         self.emit_manager_event(UploadManagerEventPayload::QueueListUpdate)?;
-        {
-            let mut lock = self.runner.lock().await;
-            if lock.as_ref().is_none() || lock.as_ref().is_some_and(|r| r.is_finished()) {
-                let sessions = self.sessions.clone();
-                let queue = self.queue.clone();
-                let app = self.app.clone();
-                lock.replace(tokio::spawn(async move {
-                    inner_runner(queue, sessions, app).await;
-                }));
-            }
-        }
 
         Ok(())
+    }
+
+    pub async fn start_queue_runner(&self) {
+        let mut lock = self.runner.lock().await;
+        if lock.as_ref().is_none() || lock.as_ref().is_some_and(|r| r.is_finished()) {
+            let sessions = self.sessions.clone();
+            let queue = self.queue.clone();
+            let app = self.app.clone();
+            lock.replace(tokio::spawn(async move {
+                inner_runner(queue, sessions, app).await;
+            }));
+        }
     }
     pub async fn add_file_to_session(
         &self,
@@ -155,7 +156,13 @@ where
                 Some((
                     format!(
                         "{}.{}",
-                        todo!("random filenames is not yet implemented") as String,
+                        {
+                            use rand::distr::{Alphanumeric, SampleString};
+                            let mut rng = rand::rng();
+                            let mut filename = Alphanumeric.sample_string(&mut rng, 8);
+                            filename.shrink_to_fit();
+                            filename
+                        },
                         extension
                     ),
                     path,
@@ -269,6 +276,22 @@ where
         self.send_session_in_queue(session_id).await?;
         Ok(())
     }
+
+    pub async fn get_queue_order(&self) -> Vec<Uuid> {
+        self.queue.get_queue_order().await
+    }
+
+    pub async fn swap(&self, a: Uuid, b: Uuid) -> crate::Result<()> {
+        self.queue.swap(a, b).await?;
+        Ok(())
+    }
+    pub async fn remove_session(&self, session_id: Uuid) -> crate::Result<()> {
+        if self.can_update_internal_session(session_id).await {
+            return Err(UploadQueueError::CurrentlyUploading(session_id).into());
+        }
+        self.sessions.write().await.remove(&session_id);
+        Ok(())
+    }
 }
 
 async fn inner_runner<R>(queue: UploadQueue, sessions: UploadSessions, app: AppHandle<R>)
@@ -302,7 +325,6 @@ where
                     UploadManagerEventPayload::QueueEntryUpdate { id: session_id },
                 );
             }
-            // TODO find a way to do this shit
             Ok(_chapter) => {
                 queue.pop_front().await;
                 let _ = app.emit(
