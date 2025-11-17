@@ -264,11 +264,14 @@ where
         session_id: Uuid,
         commit_data: Option<InternUploadSessionCommitData>,
     ) -> crate::Result<()> {
-        let mut write = self.sessions.write().await;
-        let session = write
-            .get_mut(&session_id)
-            .ok_or(crate::Error::InternalUploadSessionNotFound(session_id))?;
-        session.commit_data = commit_data;
+        {
+            let mut write = self.sessions.write().await;
+            let session = write
+                .get_mut(&session_id)
+                .ok_or(crate::Error::InternalUploadSessionNotFound(session_id))?;
+            session.commit_data = commit_data;
+        }
+        self.emit_manager_event(UploadManagerEventPayload::SessionUpdate { id: session_id })?;
         Ok(())
     }
     pub async fn set_commit_data_and_send_to_queue(
@@ -287,6 +290,7 @@ where
 
     pub async fn swap(&self, a: Uuid, b: Uuid) -> crate::Result<()> {
         self.queue.swap(a, b).await?;
+        self.emit_manager_event(UploadManagerEventPayload::QueueListUpdate)?;
         Ok(())
     }
     pub async fn remove_session(&self, session_id: Uuid) -> crate::Result<()> {
@@ -294,6 +298,8 @@ where
             return Err(UploadQueueError::CurrentlyUploading(session_id).into());
         }
         self.sessions.write().await.remove(&session_id);
+        self.emit_manager_event(UploadManagerEventPayload::SessionUpdate { id: session_id })?;
+
         Ok(())
     }
 }
