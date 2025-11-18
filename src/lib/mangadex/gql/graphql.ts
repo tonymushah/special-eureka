@@ -1726,6 +1726,99 @@ export type InfrastructureQueries = {
 	ping: Scalars["Boolean"]["output"];
 };
 
+export enum InternUploadQueueState {
+	Pending = "PENDING",
+	Uploading = "UPLOADING"
+}
+
+export type InternUploadSessionCommitData = {
+	__typename?: "InternUploadSessionCommitData";
+	chapter?: Maybe<Scalars["String"]["output"]>;
+	externalUrl?: Maybe<Scalars["Url"]["output"]>;
+	publishAt?: Maybe<Scalars["MangaDexDateTime"]["output"]>;
+	/** Required after the May 15th incident */
+	termsAccepted?: Maybe<Scalars["Boolean"]["output"]>;
+	title?: Maybe<Scalars["String"]["output"]>;
+	translatedLanguage: Language;
+	volume?: Maybe<Scalars["String"]["output"]>;
+};
+
+export type InternUploadSessionCommitDataInput = {
+	chapter?: InputMaybe<Scalars["String"]["input"]>;
+	externalUrl?: InputMaybe<Scalars["Url"]["input"]>;
+	publishAt?: InputMaybe<Scalars["MangaDexDateTime"]["input"]>;
+	/** Required after the May 15th incident */
+	termsAccepted?: InputMaybe<Scalars["Boolean"]["input"]>;
+	title?: InputMaybe<Scalars["String"]["input"]>;
+	translatedLanguage: Language;
+	volume?: InputMaybe<Scalars["String"]["input"]>;
+};
+
+export type InternUploadSessionGqlObject = {
+	__typename?: "InternUploadSessionGQLObject";
+	commitData?: Maybe<InternUploadSessionCommitData>;
+	groups: Array<Scalars["UUID"]["output"]>;
+	images: Array<Scalars["String"]["output"]>;
+	mangaId: Scalars["UUID"]["output"];
+};
+
+export type InternalSessionMutation = {
+	__typename?: "InternalSessionMutation";
+	addFile?: Maybe<Scalars["Boolean"]["output"]>;
+	addFiles?: Maybe<Scalars["Boolean"]["output"]>;
+	remove?: Maybe<Scalars["Boolean"]["output"]>;
+	removeFile?: Maybe<Scalars["Boolean"]["output"]>;
+	removeFiles?: Maybe<Scalars["Boolean"]["output"]>;
+	sendInQueue?: Maybe<Scalars["Boolean"]["output"]>;
+	setCommitData?: Maybe<Scalars["Boolean"]["output"]>;
+};
+
+export type InternalSessionMutationAddFileArgs = {
+	imgPath: Scalars["String"]["input"];
+	index?: InputMaybe<Scalars["Int"]["input"]>;
+};
+
+export type InternalSessionMutationAddFilesArgs = {
+	imgPaths: Array<Scalars["String"]["input"]>;
+	index?: InputMaybe<Scalars["Int"]["input"]>;
+};
+
+export type InternalSessionMutationRemoveFileArgs = {
+	imgPath: Scalars["String"]["input"];
+};
+
+export type InternalSessionMutationRemoveFilesArgs = {
+	imgPaths: Array<Scalars["String"]["input"]>;
+};
+
+export type InternalSessionMutationSetCommitDataArgs = {
+	commitData?: InputMaybe<InternUploadSessionCommitDataInput>;
+	startRunner?: InputMaybe<Scalars["Boolean"]["input"]>;
+};
+
+export type InternalSessionsMutations = {
+	__typename?: "InternalSessionsMutations";
+	/** Returns the internal session id */
+	createSession: Scalars["UUID"]["output"];
+	session: InternalSessionMutation;
+	startQueueRunner?: Maybe<Scalars["Boolean"]["output"]>;
+	swapQueueOrder?: Maybe<Scalars["Boolean"]["output"]>;
+};
+
+export type InternalSessionsMutationsCreateSessionArgs = {
+	groups?: InputMaybe<Array<Scalars["UUID"]["input"]>>;
+	mangaId: Scalars["UUID"]["input"];
+};
+
+export type InternalSessionsMutationsSessionArgs = {
+	id: Scalars["UUID"]["input"];
+};
+
+export type InternalSessionsMutationsSwapQueueOrderArgs = {
+	a: Scalars["UUID"]["input"];
+	b: Scalars["UUID"]["input"];
+};
+
 /** Languages supported by MangaDex. */
 export enum Language {
 	Afrikaans = "AFRIKAANS",
@@ -3139,6 +3232,10 @@ export type Subscriptions = {
 	watchDownloadState: DownloadState;
 	watchForcePort443: Scalars["Boolean"]["output"];
 	watchImageFit: ImageFit;
+	watchInternalUploadQueueListIds: Array<Scalars["UUID"]["output"]>;
+	watchInternalUploadQueueState?: Maybe<InternUploadQueueState>;
+	watchInternalUploadSessionObj?: Maybe<InternUploadSessionGqlObject>;
+	watchInternalUploadSessionsListIds: Array<Scalars["UUID"]["output"]>;
 	watchIsAppMounted: Scalars["Boolean"]["output"];
 	watchIsFollowingCustomList: Scalars["Boolean"]["output"];
 	watchIsFollowingGroup: Scalars["Boolean"]["output"];
@@ -3210,6 +3307,14 @@ export type SubscriptionsWatchCustomListArgs = {
 
 export type SubscriptionsWatchDownloadStateArgs = {
 	objectId: Scalars["UUID"]["input"];
+};
+
+export type SubscriptionsWatchInternalUploadQueueStateArgs = {
+	id: Scalars["UUID"]["input"];
+};
+
+export type SubscriptionsWatchInternalUploadSessionObjArgs = {
+	id: Scalars["UUID"]["input"];
 };
 
 export type SubscriptionsWatchIsFollowingCustomListArgs = {
@@ -3395,6 +3500,7 @@ export type UploadMutations = {
 	commitSession: Chapter;
 	deleteFileFromUploadSession: Scalars["Boolean"]["output"];
 	deleteFilesFromUploadSession: Scalars["Boolean"]["output"];
+	internal: InternalSessionsMutations;
 	uploadImagesToSession: UploadSessionFile;
 };
 

@@ -1293,6 +1293,64 @@ type InfrastructureQueries {
 	ping: Boolean!
 }
 
+enum InternUploadQueueState {
+	PENDING
+	UPLOADING
+}
+
+type InternUploadSessionCommitData {
+	volume: String
+	chapter: String
+	title: String
+	translatedLanguage: Language!
+	externalUrl: Url
+	publishAt: MangaDexDateTime
+	"""
+	Required after the May 15th incident
+	"""
+	termsAccepted: Boolean
+}
+
+input InternUploadSessionCommitDataInput {
+	volume: String
+	chapter: String
+	title: String
+	translatedLanguage: Language!
+	externalUrl: Url
+	publishAt: MangaDexDateTime
+	"""
+	Required after the May 15th incident
+	"""
+	termsAccepted: Boolean
+}
+
+type InternUploadSessionGQLObject {
+	mangaId: UUID!
+	groups: [UUID!]!
+	images: [String!]!
+	commitData: InternUploadSessionCommitData
+}
+
+type InternalSessionMutation {
+	sendInQueue: Boolean
+	remove: Boolean
+	addFile(imgPath: String!, index: Int): Boolean
+	addFiles(imgPaths: [String!]!, index: Int): Boolean
+	removeFile(imgPath: String!): Boolean
+	removeFiles(imgPaths: [String!]!): Boolean
+	setCommitData(commitData: InternUploadSessionCommitDataInput, startRunner: Boolean): Boolean
+}
+
+type InternalSessionsMutations {
+	session(id: UUID!): InternalSessionMutation!
+	"""
+	Returns the internal session id
+	"""
+	createSession(mangaId: UUID!, groups: [UUID!]): UUID!
+	startQueueRunner: Boolean
+	swapQueueOrder(a: UUID!, b: UUID!): Boolean
+}
+
 """
 A scalar that can represent any JSON Object value.
 """
@@ -2449,6 +2507,10 @@ type Subscriptions {
 	watchNotifyToast: Boolean!
 	watchReadMarker(chapterId: UUID!): Boolean!
 	watchReadMarkers: ChapterReadMarkerSubItem!
+	watchInternalUploadQueueListIds: [UUID!]!
+	watchInternalUploadSessionsListIds: [UUID!]!
+	watchInternalUploadSessionObj(id: UUID!): InternUploadSessionGQLObject
+	watchInternalUploadQueueState(id: UUID!): InternUploadQueueState
 }
 
 type Tag {
@@ -2567,6 +2629,7 @@ input UpdateMangaParam {
 }
 
 type UploadMutations {
+	internal: InternalSessionsMutations!
 	beginSession(params: BeginUploadSessionParam!, abandonIfExists: Boolean! = true): UploadSession!
 	beginEditSession(params: BeginEditUploadSessionParam!, abandonIfExists: Boolean! = true): UploadSession!
 	uploadImagesToSession(sessionId: UUID!, path: PathBuf!): UploadSessionFile!
