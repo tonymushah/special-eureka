@@ -4,7 +4,7 @@ use uuid::Uuid;
 
 use crate::{
     ErrorWrapper,
-    upload::UploadManagerEventPayload,
+    upload::{InternUploadSessionGQLObject, UploadManagerEventPayload},
     utils::traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
 };
 
@@ -47,6 +47,32 @@ impl InternalUploadSubscriptions {
                 if matches!(event, UploadManagerEventPayload::SessionListUpdate) {
                     ids = manager.get_session_ids().await;
                     yield ids;
+                }
+            }
+        })
+    }
+    pub async fn watch_internal_upload_session_obj<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        id: Uuid,
+    ) -> Result<impl Stream<Item = Option<InternUploadSessionGQLObject>> + 'ctx, ErrorWrapper> {
+        let app = ctx.get_app_handle::<tauri::Wry>()?;
+        let manager = app.upload_manager();
+        let mut event_stream = manager.event_stream()?;
+        Ok(async_stream::stream! {
+            let mut obj = manager.get_intern_session_object(id).await;
+            yield obj;
+            while let Some(event) = event_stream.next().await {
+                match event {
+                    UploadManagerEventPayload::SessionListUpdate => {
+                        obj = manager.get_intern_session_object(id).await;
+                        yield obj;
+                    },
+                    UploadManagerEventPayload::SessionUpdate { id: got_id } if id == got_id => {
+                        obj = manager.get_intern_session_object(id).await;
+                        yield obj;
+                    },
+                    _ => {}
                 }
             }
         })
