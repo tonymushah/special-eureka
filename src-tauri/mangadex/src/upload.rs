@@ -306,6 +306,9 @@ where
     pub fn event_stream(&self) -> crate::Result<UploadManagerEventStream<R>> {
         Ok(UploadManagerEventStream::new(self.app.clone())?)
     }
+    pub async fn get_session_ids(&self) -> Vec<Uuid> {
+        self.sessions.read().await.keys().copied().collect()
+    }
 }
 
 async fn inner_runner<R>(queue: UploadQueue, sessions: UploadSessions, app: AppHandle<R>)
