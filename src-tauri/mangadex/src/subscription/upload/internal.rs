@@ -1,10 +1,11 @@
-use async_graphql::{Context, Subscription};
+use async_graphql::{Context, Enum, ErrorExtensions, Subscription};
 use futures_util::{Stream, StreamExt};
+use std::hash::Hash;
 use uuid::Uuid;
 
 use crate::{
     ErrorWrapper,
-    upload::{InternUploadSessionGQLObject, UploadManagerEventPayload},
+    upload::{InternUploadSessionGQLObject, UploadManagerEventPayload, UploadSessionState},
     utils::traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
 };
 
@@ -12,6 +13,22 @@ use crate::{
 pub struct InternalUploadSubscriptions;
 
 type IUSResult<T> = Result<T, async_graphql::Error>;
+
+#[derive(Debug, Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Enum)]
+pub enum InternUploadQueueState {
+    Pending,
+    Uploading,
+}
+
+impl From<UploadSessionState> for IUSResult<Option<InternUploadQueueState>> {
+    fn from(value: UploadSessionState) -> Self {
+        match value {
+            UploadSessionState::Pending => Ok(Some(InternUploadQueueState::Pending)),
+            UploadSessionState::Uploading => Ok(Some(InternUploadQueueState::Pending)),
+            UploadSessionState::Error(error) => Err(ErrorExtensions::extend(error.as_ref())),
+        }
+    }
+}
 
 #[Subscription]
 impl InternalUploadSubscriptions {
@@ -63,17 +80,55 @@ impl InternalUploadSubscriptions {
             let mut obj = manager.get_intern_session_object(id).await;
             yield obj;
             while let Some(event) = event_stream.next().await {
-                match event {
+                obj = match event {
                     UploadManagerEventPayload::SessionListUpdate => {
-                        obj = manager.get_intern_session_object(id).await;
-                        yield obj;
+                        manager.get_intern_session_object(id).await
                     },
                     UploadManagerEventPayload::SessionUpdate { id: got_id } if id == got_id => {
-                        obj = manager.get_intern_session_object(id).await;
-                        yield obj;
+                        manager.get_intern_session_object(id).await
                     },
-                    _ => {}
-                }
+                    _ => {
+                        continue
+                    }
+                };
+                yield obj;
+            }
+        })
+    }
+    pub async fn watch_internal_upload_queue_state<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        id: Uuid,
+    ) -> Result<impl Stream<Item = IUSResult<Option<InternUploadQueueState>>> + 'ctx, ErrorWrapper>
+    {
+        let app = ctx.get_app_handle::<tauri::Wry>()?;
+        let manager = app.upload_manager();
+        let mut event_stream = manager.event_stream()?;
+        Ok(async_stream::stream! {
+            let mut obj: IUSResult<Option<InternUploadQueueState>> = if let Some(inner) = manager.get_session_queue_state(id).await {
+               inner.into()
+            } else {
+                Ok(None)
+            };
+            yield obj;
+            while let Some(event) = event_stream.next().await {
+                let state = match event {
+                    UploadManagerEventPayload::QueueListUpdate => {
+                        manager.get_session_queue_state(id).await
+                    },
+                    UploadManagerEventPayload::QueueEntryUpdate { id: got_id } if id == got_id => {
+                        manager.get_session_queue_state(id).await
+                    },
+                    _ => {
+                        continue;
+                    }
+                };
+                obj = if let Some(inner) = state {
+                    inner.into()
+                } else {
+                    Ok(None)
+                };
+                yield obj;
             }
         })
     }
