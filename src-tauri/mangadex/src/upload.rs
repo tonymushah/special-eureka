@@ -303,7 +303,7 @@ where
 
         Ok(())
     }
-    pub async fn event_stream(&self) -> crate::Result<UploadManagerEventStream<R>> {
+    pub fn event_stream(&self) -> crate::Result<UploadManagerEventStream<R>> {
         Ok(UploadManagerEventStream::new(self.app.clone())?)
     }
 }
