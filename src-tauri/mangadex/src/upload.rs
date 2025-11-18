@@ -41,6 +41,7 @@ type ArcRwLock<T> = Arc<RwLock<T>>;
 
 const UPLOAD_MANAGER_EVENT_KEY: &str = "special-eureka://upload-manager-event";
 
+#[derive(Clone, Debug)]
 pub struct UploadManager<R>
 where
     R: Runtime,
@@ -301,6 +302,9 @@ where
         self.emit_manager_event(UploadManagerEventPayload::SessionUpdate { id: session_id })?;
 
         Ok(())
+    }
+    pub async fn event_stream(&self) -> crate::Result<UploadManagerEventStream<R>> {
+        Ok(UploadManagerEventStream::new(self.app.clone())?)
     }
 }
 
