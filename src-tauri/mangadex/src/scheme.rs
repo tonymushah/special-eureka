@@ -1,6 +1,7 @@
 pub mod chapters;
 pub mod covers;
 pub mod favicon;
+pub mod upload_image;
 
 use std::error::Error;
 
@@ -123,6 +124,9 @@ fn handle<R: Runtime>(app: AppHandle<R>, req: Request<Vec<u8>>) -> Response<Vec<
                     "favicons" => handle_favicon(&app, &req).into_response(),
                     "chapter-cache" => {
                         chapters::cache::handle_chapters_cache(&app, &req).into_response()
+                    }
+                    "upload-image" => {
+                        upload_image::handle_upload_image_req(&app, &req).into_response()
                     }
                     _ => not_found,
                 }
