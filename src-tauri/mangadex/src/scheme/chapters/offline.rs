@@ -5,7 +5,7 @@ use crate::{
 use eureka_mmanager::prelude::ChapterDataPullAsyncTrait;
 use reqwest::header::{ACCESS_CONTROL_ALLOW_ORIGIN, CONTENT_LENGTH, CONTENT_TYPE};
 use std::{
-    io::{self, Write},
+    io::{self, BufReader, Write},
     ops::Deref,
     path::Path,
 };
@@ -53,7 +53,7 @@ impl<'a, R: Runtime> ChaptersHandlerOffline<'a, R> {
                 .map_err(|_| not_found_chapter_image(self.chapter_id, &self.filename))?,
             }
         };
-        io::copy(&mut file, &mut buf)?;
+        io::copy(&mut BufReader::new(&mut file), &mut buf)?;
         buf.flush()?;
         Ok(buf)
     }
