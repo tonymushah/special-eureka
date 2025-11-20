@@ -66,6 +66,8 @@ export function sessionObjStore(id: string) {
 							})()
 						});
 					}
+				} else if (res.error) {
+					console.error(res.error);
 				}
 			});
 		return () => {
