@@ -35,7 +35,7 @@ image = "0"
 serde-xml-rs = "0.8"
 clap = "4"
 csv = "1"
-hotpath = { version = "0.6" }
+hotpath = { version = "0.7" }
 shrink_fit_wrapper = "1"
 
 [workspace.dependencies.tauri-plugin-notification]
