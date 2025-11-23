@@ -4,12 +4,14 @@ use std::{
     ops::Deref,
 };
 
-use async_graphql::{InputObject, SimpleObject};
+use async_graphql::{ComplexObject, InputObject, SimpleObject};
 use image::ImageFormat;
 use mangadex_api_types_rust::{Language, MangaDexDateTime};
 use tempfile::TempDir;
 use url::Url;
 use uuid::Uuid;
+
+use crate::constants::PROTOCOL;
 
 use super::ArcRwLock;
 
@@ -122,8 +124,9 @@ impl InternUploadSession {
 }
 
 impl InternUploadSession {
-    pub fn to_gql_object(&self) -> InternUploadSessionGQLObject {
+    pub fn to_gql_object(&self, session_id: Uuid) -> InternUploadSessionGQLObject {
         InternUploadSessionGQLObject {
+            session_id,
             manga_id: self.manga_id,
             groups: self.groups.clone(),
             images: self.images.clone(),
@@ -133,11 +136,27 @@ impl InternUploadSession {
 }
 
 #[derive(Debug, Clone, SimpleObject)]
+#[graphql(complex)]
 pub struct InternUploadSessionGQLObject {
+    #[graphql(skip)]
+    pub session_id: Uuid,
     pub manga_id: Uuid,
     pub groups: Vec<Uuid>,
     pub images: Vec<String>,
     pub commit_data: Option<InternUploadSessionCommitData>,
+}
+
+#[ComplexObject]
+impl InternUploadSessionGQLObject {
+    pub async fn images_url(&self) -> Result<Vec<Url>, crate::ErrorWrapper> {
+        Ok(self
+            .images
+            .iter()
+            .map(|image| -> Result<Url, url::ParseError> {
+                format!("{PROTOCOL}upload-image/{}/{}", self.session_id, image).parse()
+            })
+            .collect::<Result<_, url::ParseError>>()?)
+    }
 }
 
 #[derive(Debug, Clone, Default)]

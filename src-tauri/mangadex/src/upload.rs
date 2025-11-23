@@ -255,7 +255,7 @@ where
             .read()
             .await
             .get(&session_id)
-            .map(|d| d.to_gql_object())
+            .map(|d| d.to_gql_object(session_id))
     }
     pub async fn get_session_queue_state(&self, session_id: Uuid) -> Option<UploadSessionState> {
         self.queue.get_state(session_id).await
