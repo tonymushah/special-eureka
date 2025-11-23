@@ -1329,6 +1329,7 @@ type InternUploadSessionGQLObject {
 	groups: [UUID!]!
 	images: [String!]!
 	commitData: InternUploadSessionCommitData
+	imagesUrl: [Url!]!
 }
 
 type InternalSessionMutation {

@@ -1759,6 +1759,7 @@ export type InternUploadSessionGqlObject = {
 	commitData?: Maybe<InternUploadSessionCommitData>;
 	groups: Array<Scalars["UUID"]["output"]>;
 	images: Array<Scalars["String"]["output"]>;
+	imagesUrl: Array<Scalars["Url"]["output"]>;
 	mangaId: Scalars["UUID"]["output"];
 };
 
