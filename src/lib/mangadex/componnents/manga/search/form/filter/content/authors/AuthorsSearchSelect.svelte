@@ -47,7 +47,7 @@
 	let nextFetch: (() => Promise<AuthorSearchFetcherResultData>) | undefined = $state(undefined);
 	let hasNext = $derived(nextFetch != undefined && typeof nextFetch == "function");
 	const isFetching = writable(false);
-	const start: DebouncedFunc<(...args: any) => any> = debounce(() => {
+	const start: DebouncedFunc<() => void> = debounce(() => {
 		if (!get(isFetching)) {
 			currentAuthorSearch.set([]);
 			isFetching.set(true);
@@ -86,7 +86,7 @@
 		}
 	}, 300);
 	let toObserve: HTMLElement | undefined = $state(undefined);
-	const obs_debounce_func = debounce<IntersectionObserverCallback>((entries, obs) => {
+	const obs_debounce_func = debounce<IntersectionObserverCallback>((entries) => {
 		entries.forEach((entry) => {
 			if (entry.intersectionRatio <= 0) return;
 			next();
