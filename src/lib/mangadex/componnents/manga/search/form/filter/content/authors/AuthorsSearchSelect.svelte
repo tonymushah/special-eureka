@@ -37,7 +37,7 @@
 		portal
 	});
 	const {
-		elements: { root, tag, deleteTrigger, edit, input: inputTags },
+		elements: { root, tag, deleteTrigger },
 		states: { tags }
 	} = createTagsInput({
 		tags: store,
