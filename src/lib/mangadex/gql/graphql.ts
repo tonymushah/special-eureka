@@ -7154,6 +7154,7 @@ export type InternalUploadSessionDataSubscription = {
 		mangaId: any;
 		groups: Array<any>;
 		images: Array<string>;
+		imagesUrl: Array<any>;
 		commitData?: {
 			__typename?: "InternUploadSessionCommitData";
 			chapter?: string | null;
@@ -24797,7 +24798,8 @@ export const InternalUploadSessionDataDocument = {
 										]
 									}
 								},
-								{ kind: "Field", name: { kind: "Name", value: "images" } }
+								{ kind: "Field", name: { kind: "Name", value: "images" } },
+								{ kind: "Field", name: { kind: "Name", value: "imagesUrl" } }
 							]
 						}
 					}

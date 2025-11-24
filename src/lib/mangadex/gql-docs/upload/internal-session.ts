@@ -14,6 +14,7 @@ export const internalSessionGQLDocs = graphql(`
 				termsAccepted
 			}
 			images
+			imagesUrl
 		}
 	}
 `);

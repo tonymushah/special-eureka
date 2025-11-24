@@ -22,6 +22,7 @@ export type InternalSessionObj = {
 	groups: string[];
 	images: string[];
 	commitData?: InternalSessionObjCommitData;
+	imagesUrl: string[];
 };
 
 export type InternalSessionObjCommitData = {
@@ -63,7 +64,8 @@ export function sessionObjStore(id: string) {
 								} else {
 									return undefined;
 								}
-							})()
+							})(),
+							imagesUrl: data.imagesUrl
 						});
 					}
 				} else if (res.error) {
