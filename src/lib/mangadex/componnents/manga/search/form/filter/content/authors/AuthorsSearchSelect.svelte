@@ -127,7 +127,6 @@
 					<XIcon size={"24"} />
 				</button>
 			</div>
-			<div class="edit" use:melt={$edit(t)}>{t.value}</div>
 		{/each}
 		<FormInput element={input} />
 	</div>
