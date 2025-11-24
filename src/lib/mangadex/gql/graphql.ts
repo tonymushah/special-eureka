@@ -5583,6 +5583,30 @@ export type ScanalationGroupSearchQuery = {
 	};
 };
 
+export type GroupSearchAndGetNameOnlyQueryVariables = Exact<{
+	limit?: InputMaybe<Scalars["Int"]["input"]>;
+	offset?: InputMaybe<Scalars["Int"]["input"]>;
+	name?: InputMaybe<Scalars["String"]["input"]>;
+}>;
+
+export type GroupSearchAndGetNameOnlyQuery = {
+	__typename?: "Query";
+	scanlationGroup: {
+		__typename?: "ScanlationGroupQueries";
+		list: {
+			__typename?: "ScanlationGroupResults";
+			limit: number;
+			offset: number;
+			total: number;
+			data: Array<{
+				__typename?: "ScanlationGroup";
+				id: any;
+				attributes: { __typename?: "ScanlationGroupAttributes"; name: string };
+			}>;
+		};
+	};
+};
+
 export type UserFollowedGroupsQueryVariables = Exact<{
 	offset?: InputMaybe<Scalars["Int"]["input"]>;
 	limit?: InputMaybe<Scalars["Int"]["input"]>;
@@ -16546,6 +16570,138 @@ export const ScanalationGroupSearchDocument = {
 		}
 	]
 } as unknown as DocumentNode<ScanalationGroupSearchQuery, ScanalationGroupSearchQueryVariables>;
+export const GroupSearchAndGetNameOnlyDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "groupSearchAndGetNameOnly" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "limit" } },
+					type: { kind: "NamedType", name: { kind: "Name", value: "Int" } }
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "offset" } },
+					type: { kind: "NamedType", name: { kind: "Name", value: "Int" } }
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "name" } },
+					type: { kind: "NamedType", name: { kind: "Name", value: "String" } }
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "scanlationGroup" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "list" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "params" },
+											value: {
+												kind: "ObjectValue",
+												fields: [
+													{
+														kind: "ObjectField",
+														name: { kind: "Name", value: "limit" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "limit" }
+														}
+													},
+													{
+														kind: "ObjectField",
+														name: { kind: "Name", value: "offset" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "offset" }
+														}
+													},
+													{
+														kind: "ObjectField",
+														name: { kind: "Name", value: "name" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "name" }
+														}
+													}
+												]
+											}
+										}
+									],
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "data" },
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "id" }
+														},
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "attributes"
+															},
+															selectionSet: {
+																kind: "SelectionSet",
+																selections: [
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "name"
+																		}
+																	}
+																]
+															}
+														}
+													]
+												}
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "limit" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "offset" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "total" }
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	GroupSearchAndGetNameOnlyQuery,
+	GroupSearchAndGetNameOnlyQueryVariables
+>;
 export const UserFollowedGroupsDocument = {
 	kind: "Document",
 	definitions: [
