@@ -90,10 +90,11 @@
 <span
 	bind:this={layout}
 	tabindex="0"
-	onclick={() => {
-		if (openOnLayoutClick) {
-			open = !open;
-		}
+	onmouseenter={() => {
+		open = true;
+	}}
+	onmouseleave={() => {
+		open = false;
 	}}
 >
 	{@render triggerContent()}
@@ -103,3 +104,26 @@
 	{@render tooltipContent()}
 	<div class="arrow" bind:this={arrowElement}></div>
 </div>
+
+<style lang="scss">
+	.arrow {
+		position: absolute;
+		background: var(--accent-l5);
+		width: 8px;
+		height: 8px;
+		transform: rotate(45deg);
+	}
+	.tooltip {
+		display: none;
+		background: var(--accent-l5);
+		color: var(--text-color);
+		font-weight: bold;
+		padding: 5px;
+		border-radius: 4px;
+		font-size: 90%;
+		width: max-content;
+		position: absolute;
+		top: 0;
+		left: 0;
+	}
+</style>
