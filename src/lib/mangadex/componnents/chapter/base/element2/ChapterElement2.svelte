@@ -108,7 +108,6 @@
 					top: arrowY != null ? `${arrowY}px` : "",
 					right: "",
 					bottom: "",
-					// @ts-ignore
 					[staticSide]: "-4px"
 				});
 			}
