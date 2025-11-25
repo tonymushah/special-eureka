@@ -248,6 +248,8 @@
 		gap: 0.25em;
 		border-radius: 0.25em;
 		padding: 5px;
+	}
+	.groups:hover {
 		background-color: var(--accent);
 	}
 	.edit {
@@ -266,7 +268,6 @@
 		padding-right: 10px;
 		padding-top: 2px;
 		padding-bottom: 2px;
-		background-color: var(--accent-l1);
 		border-radius: 0.25em;
 		button {
 			transition: background-color 200ms ease-in-out;

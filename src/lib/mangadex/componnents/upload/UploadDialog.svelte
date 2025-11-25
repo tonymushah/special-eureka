@@ -5,6 +5,7 @@
 	import ButtonAccent from "../theme/buttons/ButtonAccent.svelte";
 	import { fade } from "svelte/transition";
 	import UploadDialogBody from "./dialog/UploadDialogBody.svelte";
+	import type { PortalConfig } from "@melt-ui/svelte/internal/actions";
 
 	interface Props {
 		mangaId: string;
@@ -25,6 +26,7 @@
 			}
 		)
 	});
+	let bodyPortal: PortalConfig | undefined = $state();
 </script>
 
 {#if $open}
@@ -36,6 +38,7 @@
 			transition:fade={{
 				duration: 150
 			}}
+			bind:this={bodyPortal}
 		>
 			<div class="content">
 				<div class="top">
@@ -56,6 +59,7 @@
 					ondone={(sessionId) => {
 						ondone?.(sessionId);
 					}}
+					portal={bodyPortal}
 				/>
 			</div>
 		</div>
@@ -72,7 +76,7 @@
 	.dialog {
 		background-color: var(--main-background);
 		color: var(--text-color);
-		width: 75vw;
+		width: 50vw;
 		border: 3px solid var(--primary);
 		border-radius: 0.5rem;
 		position: fixed;
@@ -82,7 +86,7 @@
 		top: 10vh;
 		left: 50%;
 		padding: 0.5rem; /* 24px */
-		height: 75vh;
+		max-height: 75vh;
 	}
 	.content {
 		height: 100%;
