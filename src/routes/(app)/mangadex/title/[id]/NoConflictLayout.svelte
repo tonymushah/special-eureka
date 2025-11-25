@@ -60,6 +60,7 @@
 	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
 	import { dev } from "$app/environment";
 	import ReportDialog from "@mangadex/componnents/report/dialog/ReportDialog.svelte";
+	import UploadDialog from "@mangadex/componnents/upload/UploadDialog.svelte";
 
 	type TopMangaStatisticsStoreData = TopMangaStatistics & {
 		threadUrl?: string;
@@ -272,6 +273,7 @@
 		);
 	}
 	let openReportDialog = $state(false);
+	let openUploadDialog = $state(false);
 </script>
 
 <svelte:window onfocus={refetchReadingFollowingStatus} />
@@ -343,6 +345,16 @@
 	bind:open={openReportDialog}
 	category={ReportCategory.Manga}
 	objectId={data.layoutData.id}
+/>
+
+<UploadDialog
+	bind:open={openUploadDialog}
+	mangaId={data.layoutData.id}
+	ondone={(sessionId) => {
+		route("/mangadex/upload/[id]", {
+			id: sessionId
+		});
+	}}
 />
 
 <div class="out-top">
