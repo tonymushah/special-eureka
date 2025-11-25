@@ -74,6 +74,7 @@
 	$effect(() => {
 		if (open == true) {
 			showTooltip();
+			// I wonder if it is a good idea though?
 			if (layout && tooltip && arrowElement) {
 				return autoUpdate(layout, tooltip, update);
 			}
