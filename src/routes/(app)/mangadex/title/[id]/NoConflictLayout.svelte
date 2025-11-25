@@ -338,7 +338,9 @@
 	onreport={() => {
 		openReportDialog = true;
 	}}
-	disableUpload
+	onupload={() => {
+		openUploadDialog = true;
+	}}
 />
 
 <ReportDialog
