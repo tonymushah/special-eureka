@@ -9,13 +9,12 @@
 	import type { MangaListParams, MangaSortOrder } from "@mangadex/gql/graphql";
 	import { createInfiniteQuery, type CreateInfiniteQueryOptions } from "@tanstack/svelte-query";
 	import { getContextClient } from "@urql/svelte";
-	import { debounce, last, range } from "lodash";
+	import { debounce /* , last, range */ } from "lodash";
 	import { onDestroy } from "svelte";
 	import { derived, get, writable, type Readable, type Writable } from "svelte/store";
 	import executeSearchQuery from "./search";
 
 	const client = getContextClient();
-	const debounce_wait = 450;
 	interface Props {
 		params: Readable<MangaListParams>;
 		offlineStore: Readable<boolean>;
@@ -57,12 +56,7 @@
 					...res.paginationData
 				};
 			},
-			getPreviousPageParam(
-				firstPage,
-				allPages,
-				[firstPageParam, firstPageOffline],
-				allPageParams
-			) {
+			getPreviousPageParam(firstPage, allPages, [firstPageParam, firstPageOffline]) {
 				const next_offset = firstPage.limit - firstPage.offset;
 				if (next_offset < 0) {
 					return null;
@@ -96,12 +90,12 @@
 	let isFetching = $derived(infiniteQuery.isFetching);
 	let hasNext = $derived(infiniteQuery.hasNextPage);
 	/// TODO implement this
-	let pages = $derived.by(() => {
+	/*let pages = $derived.by(() => {
 		const initalPage = infiniteQuery.data?.pages[0];
 		if (initalPage) {
 			return Math.floor(initalPage.total / initalPage.limit);
 		}
-	});
+	}); 
 	let currentPage = $derived.by(() => {
 		const result = infiniteQuery;
 		const current = last(result.data?.pages);
@@ -112,6 +106,7 @@
 			);
 		}
 	});
+	*/
 	const fetchNext = debounce(async function () {
 		const inf = infiniteQuery;
 		return await inf.fetchNextPage();
