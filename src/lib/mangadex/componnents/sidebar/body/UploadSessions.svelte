@@ -6,6 +6,6 @@
 
 <Menu label="Upload sessions" href={route("/mangadex/upload")}>
 	{#snippet icon()}
-		<UploadIcon size="26px" />
+		<UploadIcon size="28px" />
 	{/snippet}
 </Menu>
