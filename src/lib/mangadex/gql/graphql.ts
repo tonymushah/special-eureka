@@ -6852,6 +6852,22 @@ export type MangaStatisticsQuery = {
 	};
 };
 
+export type GetMangaTitleOnlyQueryQueryVariables = Exact<{
+	mangaId: Scalars["UUID"]["input"];
+}>;
+
+export type GetMangaTitleOnlyQueryQuery = {
+	__typename?: "Query";
+	manga: {
+		__typename?: "MangaQueries";
+		get: {
+			__typename?: "MangaObject";
+			id: any;
+			attributes: { __typename?: "GraphQLMangaAttributes"; title: any };
+		};
+	};
+};
+
 export type LatestUploadsPageQueryQueryVariables = Exact<{
 	offset?: InputMaybe<Scalars["Int"]["input"]>;
 	limit?: InputMaybe<Scalars["Int"]["input"]>;
@@ -23189,6 +23205,73 @@ export const MangaStatisticsDocument = {
 		}
 	]
 } as unknown as DocumentNode<MangaStatisticsQuery, MangaStatisticsQueryVariables>;
+export const GetMangaTitleOnlyQueryDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "getMangaTitleOnlyQuery" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "mangaId" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "manga" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "get" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "id" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "mangaId" }
+											}
+										}
+									],
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{ kind: "Field", name: { kind: "Name", value: "id" } },
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "attributes" },
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "title" }
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<GetMangaTitleOnlyQueryQuery, GetMangaTitleOnlyQueryQueryVariables>;
 export const LatestUploadsPageQueryDocument = {
 	kind: "Document",
 	definitions: [
