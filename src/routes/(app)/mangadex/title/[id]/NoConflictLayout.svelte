@@ -48,7 +48,7 @@
 	import { createQuery, type CreateQueryOptions } from "@tanstack/svelte-query";
 	import { writeText } from "@tauri-apps/plugin-clipboard-manager";
 	import { openUrl as open } from "@tauri-apps/plugin-opener";
-	import { debounce, delay } from "lodash";
+	import { debounce } from "lodash";
 	import { type Snippet } from "svelte";
 	import { derived as der, derived, toStore } from "svelte/store";
 	import { v4 } from "uuid";
@@ -353,9 +353,11 @@
 	bind:open={openUploadDialog}
 	mangaId={data.layoutData.id}
 	ondone={(sessionId) => {
-		route("/mangadex/upload/[id]", {
-			id: sessionId
-		});
+		goto(
+			route("/mangadex/upload/[id]", {
+				id: sessionId
+			})
+		);
 	}}
 />
 
