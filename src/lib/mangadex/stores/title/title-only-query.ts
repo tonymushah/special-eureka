@@ -1,22 +1,22 @@
 import { getMangaTitleOnlyQuery } from "@mangadex/gql-docs/title/id/title-only";
-import { createQuery, QueryClient } from "@tanstack/svelte-query";
+import { createQuery, QueryClient, type Accessor } from "@tanstack/svelte-query";
 import type { Client } from "@urql/svelte";
 
 type TitleOnlyQuery = {
-	mangaId: string;
+	mangaId: Accessor<string>;
 	client: Client;
-	enabled?: boolean;
-	queryClient?: QueryClient;
+	enabled?: Accessor<boolean>;
+	queryClient?: Accessor<QueryClient>;
 };
 
 export const titleOnlyQuery = ({ mangaId, client, enabled, queryClient }: TitleOnlyQuery) =>
 	createQuery(
 		() => ({
-			queryKey: ["manga", mangaId, "title-only"],
+			queryKey: ["manga", mangaId(), "title-only"],
 			async queryFn() {
 				const res = await client
 					.query(getMangaTitleOnlyQuery, {
-						mangaId
+						mangaId: mangaId()
 					})
 					.toPromise();
 				if (res.data) {
@@ -27,7 +27,7 @@ export const titleOnlyQuery = ({ mangaId, client, enabled, queryClient }: TitleO
 					throw new Error("no data");
 				}
 			},
-			enabled
+			enabled: enabled?.()
 		}),
-		queryClient ? () => queryClient : undefined
+		queryClient
 	);

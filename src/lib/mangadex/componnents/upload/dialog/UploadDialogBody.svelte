@@ -129,9 +129,9 @@
 		observer.disconnect();
 	});
 	let mangaTitleQuery = titleOnlyQuery({
-		mangaId,
+		mangaId: () => mangaId,
 		client,
-		enabled: !title
+		enabled: () => !title
 	});
 	let toShowTitle = $derived.by(() => {
 		if (title) {
