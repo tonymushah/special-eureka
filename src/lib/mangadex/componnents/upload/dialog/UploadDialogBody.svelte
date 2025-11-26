@@ -7,17 +7,17 @@
 	import pageLimit from "@mangadex/stores/page-limit";
 	import { createCombobox, createTagsInput, melt } from "@melt-ui/svelte";
 	import type { PortalConfig } from "@melt-ui/svelte/internal/actions";
-	import { createInfiniteQuery, createQuery } from "@tanstack/svelte-query";
+	import { createInfiniteQuery } from "@tanstack/svelte-query";
 	import { onDestroy } from "svelte";
 	import { XIcon } from "svelte-feather-icons";
 	import { slide } from "svelte/transition";
-	import { getMangaTitleOnlyQuery } from "@mangadex/gql-docs/title/id/title-only";
 	import Tooltip from "@mangadex/componnents/Tooltip.svelte";
 	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
 	import PrimaryButtonOnlyLabel from "@mangadex/componnents/theme/buttons/PrimaryButtonOnlyLabel.svelte";
 	import UploadIcon from "@mangadex/componnents/manga/page/top-info/buttons/upload/UploadIcon.svelte";
 	import { createSessionMutation } from "@mangadex/gql-docs/upload/mutations/create-session";
 	import { addErrorToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
+	import { titleOnlyQuery } from "@mangadex/stores/title/title-only-query";
 
 	interface Props {
 		mangaId: string;
@@ -128,24 +128,11 @@
 	onDestroy(() => {
 		observer.disconnect();
 	});
-	let mangaTitleQuery = createQuery(() => ({
-		queryKey: ["manga", mangaId, "title-only"],
-		async queryFn() {
-			const res = await client
-				.query(getMangaTitleOnlyQuery, {
-					mangaId
-				})
-				.toPromise();
-			if (res.data) {
-				return res.data.manga.get.attributes.title as Record<string, string>;
-			} else if (res.error) {
-				throw res.error;
-			} else {
-				throw new Error("no data");
-			}
-		},
+	let mangaTitleQuery = titleOnlyQuery({
+		mangaId,
+		client,
 		enabled: !title
-	}));
+	});
 	let toShowTitle = $derived.by(() => {
 		if (title) {
 			return title;
