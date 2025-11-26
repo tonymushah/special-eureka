@@ -148,7 +148,7 @@ where
         paths: Vec<PathBuf>,
         mut index: Option<u32>,
     ) -> crate::Result<()> {
-        if self.can_update_internal_session(session_id).await {
+        if !self.can_update_internal_session(session_id).await {
             return Err(UploadQueueError::CurrentlyUploading(session_id).into());
         }
         let to_import = paths
@@ -233,7 +233,7 @@ where
         session_id: Uuid,
         filenames: Vec<String>,
     ) -> crate::Result<()> {
-        if self.can_update_internal_session(session_id).await {
+        if !self.can_update_internal_session(session_id).await {
             return Err(UploadQueueError::CurrentlyUploading(session_id).into());
         }
         {
@@ -295,7 +295,7 @@ where
         Ok(())
     }
     pub async fn remove_session(&self, session_id: Uuid) -> crate::Result<()> {
-        if self.can_update_internal_session(session_id).await {
+        if !self.can_update_internal_session(session_id).await {
             return Err(UploadQueueError::CurrentlyUploading(session_id).into());
         }
         self.sessions.write().await.remove(&session_id);
