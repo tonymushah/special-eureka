@@ -5547,6 +5547,25 @@ export type ScanlationUploadsFeedQuery = {
 	};
 };
 
+export type OnlyScanlationGroupNameQueryVariables = Exact<{
+	scanGroupsId: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
+}>;
+
+export type OnlyScanlationGroupNameQuery = {
+	__typename?: "Query";
+	scanlationGroup: {
+		__typename?: "ScanlationGroupQueries";
+		list: {
+			__typename?: "ScanlationGroupResults";
+			data: Array<{
+				__typename?: "ScanlationGroup";
+				id: any;
+				attributes: { __typename?: "ScanlationGroupAttributes"; name: string };
+			}>;
+		};
+	};
+};
+
 export type ScanalationGroupSearchQueryVariables = Exact<{
 	params: ScanlationGroupListParams;
 }>;
@@ -16402,6 +16421,109 @@ export const ScanlationUploadsFeedDocument = {
 		}
 	]
 } as unknown as DocumentNode<ScanlationUploadsFeedQuery, ScanlationUploadsFeedQueryVariables>;
+export const OnlyScanlationGroupNameDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "onlyScanlationGroupName" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "scanGroupsId" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "ListType",
+							type: {
+								kind: "NonNullType",
+								type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+							}
+						}
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "scanlationGroup" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "list" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "params" },
+											value: {
+												kind: "ObjectValue",
+												fields: [
+													{
+														kind: "ObjectField",
+														name: { kind: "Name", value: "groupIds" },
+														value: {
+															kind: "Variable",
+															name: {
+																kind: "Name",
+																value: "scanGroupsId"
+															}
+														}
+													}
+												]
+											}
+										}
+									],
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "data" },
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "id" }
+														},
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "attributes"
+															},
+															selectionSet: {
+																kind: "SelectionSet",
+																selections: [
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "name"
+																		}
+																	}
+																]
+															}
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<OnlyScanlationGroupNameQuery, OnlyScanlationGroupNameQueryVariables>;
 export const ScanalationGroupSearchDocument = {
 	kind: "Document",
 	definitions: [
