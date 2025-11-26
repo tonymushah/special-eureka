@@ -90,11 +90,14 @@
 <span
 	bind:this={layout}
 	tabindex="0"
+	onclick={() => {
+		if (openOnLayoutClick) open = !open;
+	}}
 	onmouseenter={() => {
-		open = true;
+		if (!openOnLayoutClick) open = true;
 	}}
 	onmouseleave={() => {
-		open = false;
+		if (!openOnLayoutClick) open = false;
 	}}
 >
 	{@render triggerContent()}
