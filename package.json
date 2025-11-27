@@ -114,7 +114,7 @@
 		"timeago.js": "^4.0.2",
 		"uuid": "^13.0.0"
 	},
-	"packageManager": "pnpm@10.23.0",
+	"packageManager": "pnpm@10.24.0",
 	"engines": {
 		"node": ">=24"
 	}
