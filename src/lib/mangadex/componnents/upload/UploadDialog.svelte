@@ -5,7 +5,6 @@
 	import ButtonAccent from "../theme/buttons/ButtonAccent.svelte";
 	import { fade } from "svelte/transition";
 	import UploadDialogBody from "./dialog/UploadDialogBody.svelte";
-	import type { PortalConfig } from "@melt-ui/svelte/internal/actions";
 
 	interface Props {
 		mangaId: string;
