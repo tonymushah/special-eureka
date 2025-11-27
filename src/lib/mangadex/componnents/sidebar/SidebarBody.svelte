@@ -9,6 +9,7 @@
 	import Settings from "./body/Settings.svelte";
 	import Titles from "./body/Titles.svelte";
 	import Reports from "./body/Reports.svelte";
+	import UploadSessions from "./body/UploadSessions.svelte";
 </script>
 
 <Home />
@@ -29,6 +30,10 @@
 
 {#if $isLogged || dev}
 	<Reports />
+{/if}
+
+{#if $isLogged || dev}
+	<UploadSessions />
 {/if}
 
 <Settings />

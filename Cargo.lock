@@ -6956,6 +6956,7 @@ dependencies = [
  "mizuki",
  "mizuki-build",
  "once_cell",
+ "rand 0.9.2",
  "regex",
  "reqwest",
  "serde",

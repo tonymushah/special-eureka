@@ -1726,6 +1726,100 @@ export type InfrastructureQueries = {
 	ping: Scalars["Boolean"]["output"];
 };
 
+export enum InternUploadQueueState {
+	Pending = "PENDING",
+	Uploading = "UPLOADING"
+}
+
+export type InternUploadSessionCommitData = {
+	__typename?: "InternUploadSessionCommitData";
+	chapter?: Maybe<Scalars["String"]["output"]>;
+	externalUrl?: Maybe<Scalars["Url"]["output"]>;
+	publishAt?: Maybe<Scalars["MangaDexDateTime"]["output"]>;
+	/** Required after the May 15th incident */
+	termsAccepted?: Maybe<Scalars["Boolean"]["output"]>;
+	title?: Maybe<Scalars["String"]["output"]>;
+	translatedLanguage: Language;
+	volume?: Maybe<Scalars["String"]["output"]>;
+};
+
+export type InternUploadSessionCommitDataInput = {
+	chapter?: InputMaybe<Scalars["String"]["input"]>;
+	externalUrl?: InputMaybe<Scalars["Url"]["input"]>;
+	publishAt?: InputMaybe<Scalars["MangaDexDateTime"]["input"]>;
+	/** Required after the May 15th incident */
+	termsAccepted?: InputMaybe<Scalars["Boolean"]["input"]>;
+	title?: InputMaybe<Scalars["String"]["input"]>;
+	translatedLanguage: Language;
+	volume?: InputMaybe<Scalars["String"]["input"]>;
+};
+
+export type InternUploadSessionGqlObject = {
+	__typename?: "InternUploadSessionGQLObject";
+	commitData?: Maybe<InternUploadSessionCommitData>;
+	groups: Array<Scalars["UUID"]["output"]>;
+	images: Array<Scalars["String"]["output"]>;
+	imagesUrl: Array<Scalars["Url"]["output"]>;
+	mangaId: Scalars["UUID"]["output"];
+};
+
+export type InternalSessionMutation = {
+	__typename?: "InternalSessionMutation";
+	addFile?: Maybe<Scalars["Boolean"]["output"]>;
+	addFiles?: Maybe<Scalars["Boolean"]["output"]>;
+	remove?: Maybe<Scalars["Boolean"]["output"]>;
+	removeFile?: Maybe<Scalars["Boolean"]["output"]>;
+	removeFiles?: Maybe<Scalars["Boolean"]["output"]>;
+	sendInQueue?: Maybe<Scalars["Boolean"]["output"]>;
+	setCommitData?: Maybe<Scalars["Boolean"]["output"]>;
+};
+
+export type InternalSessionMutationAddFileArgs = {
+	imgPath: Scalars["String"]["input"];
+	index?: InputMaybe<Scalars["Int"]["input"]>;
+};
+
+export type InternalSessionMutationAddFilesArgs = {
+	imgPaths: Array<Scalars["String"]["input"]>;
+	index?: InputMaybe<Scalars["Int"]["input"]>;
+};
+
+export type InternalSessionMutationRemoveFileArgs = {
+	imgPath: Scalars["String"]["input"];
+};
+
+export type InternalSessionMutationRemoveFilesArgs = {
+	imgPaths: Array<Scalars["String"]["input"]>;
+};
+
+export type InternalSessionMutationSetCommitDataArgs = {
+	commitData?: InputMaybe<InternUploadSessionCommitDataInput>;
+	startRunner?: InputMaybe<Scalars["Boolean"]["input"]>;
+};
+
+export type InternalSessionsMutations = {
+	__typename?: "InternalSessionsMutations";
+	/** Returns the internal session id */
+	createSession: Scalars["UUID"]["output"];
+	session: InternalSessionMutation;
+	startQueueRunner?: Maybe<Scalars["Boolean"]["output"]>;
+	swapQueueOrder?: Maybe<Scalars["Boolean"]["output"]>;
+};
+
+export type InternalSessionsMutationsCreateSessionArgs = {
+	groups?: InputMaybe<Array<Scalars["UUID"]["input"]>>;
+	mangaId: Scalars["UUID"]["input"];
+};
+
+export type InternalSessionsMutationsSessionArgs = {
+	id: Scalars["UUID"]["input"];
+};
+
+export type InternalSessionsMutationsSwapQueueOrderArgs = {
+	a: Scalars["UUID"]["input"];
+	b: Scalars["UUID"]["input"];
+};
+
 /** Languages supported by MangaDex. */
 export enum Language {
 	Afrikaans = "AFRIKAANS",
@@ -3139,6 +3233,10 @@ export type Subscriptions = {
 	watchDownloadState: DownloadState;
 	watchForcePort443: Scalars["Boolean"]["output"];
 	watchImageFit: ImageFit;
+	watchInternalUploadQueueListIds: Array<Scalars["UUID"]["output"]>;
+	watchInternalUploadQueueState?: Maybe<InternUploadQueueState>;
+	watchInternalUploadSessionObj?: Maybe<InternUploadSessionGqlObject>;
+	watchInternalUploadSessionsListIds: Array<Scalars["UUID"]["output"]>;
 	watchIsAppMounted: Scalars["Boolean"]["output"];
 	watchIsFollowingCustomList: Scalars["Boolean"]["output"];
 	watchIsFollowingGroup: Scalars["Boolean"]["output"];
@@ -3210,6 +3308,14 @@ export type SubscriptionsWatchCustomListArgs = {
 
 export type SubscriptionsWatchDownloadStateArgs = {
 	objectId: Scalars["UUID"]["input"];
+};
+
+export type SubscriptionsWatchInternalUploadQueueStateArgs = {
+	id: Scalars["UUID"]["input"];
+};
+
+export type SubscriptionsWatchInternalUploadSessionObjArgs = {
+	id: Scalars["UUID"]["input"];
 };
 
 export type SubscriptionsWatchIsFollowingCustomListArgs = {
@@ -3395,6 +3501,7 @@ export type UploadMutations = {
 	commitSession: Chapter;
 	deleteFileFromUploadSession: Scalars["Boolean"]["output"];
 	deleteFilesFromUploadSession: Scalars["Boolean"]["output"];
+	internal: InternalSessionsMutations;
 	uploadImagesToSession: UploadSessionFile;
 };
 
@@ -5440,6 +5547,25 @@ export type ScanlationUploadsFeedQuery = {
 	};
 };
 
+export type OnlyScanlationGroupNameQueryVariables = Exact<{
+	scanGroupsId: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
+}>;
+
+export type OnlyScanlationGroupNameQuery = {
+	__typename?: "Query";
+	scanlationGroup: {
+		__typename?: "ScanlationGroupQueries";
+		list: {
+			__typename?: "ScanlationGroupResults";
+			data: Array<{
+				__typename?: "ScanlationGroup";
+				id: any;
+				attributes: { __typename?: "ScanlationGroupAttributes"; name: string };
+			}>;
+		};
+	};
+};
+
 export type ScanalationGroupSearchQueryVariables = Exact<{
 	params: ScanlationGroupListParams;
 }>;
@@ -5471,6 +5597,30 @@ export type ScanalationGroupSearchQuery = {
 					} | null;
 					members: Array<{ __typename?: "User"; id: any }>;
 				};
+			}>;
+		};
+	};
+};
+
+export type GroupSearchAndGetNameOnlyQueryVariables = Exact<{
+	limit?: InputMaybe<Scalars["Int"]["input"]>;
+	offset?: InputMaybe<Scalars["Int"]["input"]>;
+	name?: InputMaybe<Scalars["String"]["input"]>;
+}>;
+
+export type GroupSearchAndGetNameOnlyQuery = {
+	__typename?: "Query";
+	scanlationGroup: {
+		__typename?: "ScanlationGroupQueries";
+		list: {
+			__typename?: "ScanlationGroupResults";
+			limit: number;
+			offset: number;
+			total: number;
+			data: Array<{
+				__typename?: "ScanlationGroup";
+				id: any;
+				attributes: { __typename?: "ScanlationGroupAttributes"; name: string };
 			}>;
 		};
 	};
@@ -6721,6 +6871,22 @@ export type MangaStatisticsQuery = {
 	};
 };
 
+export type GetMangaTitleOnlyQueryQueryVariables = Exact<{
+	mangaId: Scalars["UUID"]["input"];
+}>;
+
+export type GetMangaTitleOnlyQueryQuery = {
+	__typename?: "Query";
+	manga: {
+		__typename?: "MangaQueries";
+		get: {
+			__typename?: "MangaObject";
+			id: any;
+			attributes: { __typename?: "GraphQLMangaAttributes"; title: any };
+		};
+	};
+};
+
 export type LatestUploadsPageQueryQueryVariables = Exact<{
 	offset?: InputMaybe<Scalars["Int"]["input"]>;
 	limit?: InputMaybe<Scalars["Int"]["input"]>;
@@ -6997,6 +7163,202 @@ export type UserFollowedTitlesQuery = {
 				};
 			}>;
 		};
+	};
+};
+
+export type CreateInternalSessionMutationMutationVariables = Exact<{
+	mangaId: Scalars["UUID"]["input"];
+	groups?: InputMaybe<Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"]>;
+}>;
+
+export type CreateInternalSessionMutationMutation = {
+	__typename?: "Mutation";
+	upload: {
+		__typename?: "UploadMutations";
+		internal: { __typename?: "InternalSessionsMutations"; createSession: any };
+	};
+};
+
+export type InternalQueueEntryStateSubscriptionVariables = Exact<{
+	id: Scalars["UUID"]["input"];
+}>;
+
+export type InternalQueueEntryStateSubscription = {
+	__typename?: "Subscriptions";
+	watchInternalUploadQueueState?: InternUploadQueueState | null;
+};
+
+export type InternalSessionQueueOrderIDsSubscriptionVariables = Exact<{ [key: string]: never }>;
+
+export type InternalSessionQueueOrderIDsSubscription = {
+	__typename?: "Subscriptions";
+	watchInternalUploadQueueListIds: Array<any>;
+};
+
+export type InternalSessionListIDsSubscriptionVariables = Exact<{ [key: string]: never }>;
+
+export type InternalSessionListIDsSubscription = {
+	__typename?: "Subscriptions";
+	watchInternalUploadSessionsListIds: Array<any>;
+};
+
+export type InternalUploadSessionDataSubscriptionVariables = Exact<{
+	id: Scalars["UUID"]["input"];
+}>;
+
+export type InternalUploadSessionDataSubscription = {
+	__typename?: "Subscriptions";
+	watchInternalUploadSessionObj?: {
+		__typename?: "InternUploadSessionGQLObject";
+		mangaId: any;
+		groups: Array<any>;
+		images: Array<string>;
+		imagesUrl: Array<any>;
+		commitData?: {
+			__typename?: "InternUploadSessionCommitData";
+			chapter?: string | null;
+			title?: string | null;
+			translatedLanguage: Language;
+			externalUrl?: any | null;
+			publishAt?: any | null;
+			termsAccepted?: boolean | null;
+		} | null;
+	} | null;
+};
+
+export type AddFileInternalSessionMutationVariables = Exact<{
+	sessionId: Scalars["UUID"]["input"];
+	imgPath: Scalars["String"]["input"];
+	index?: InputMaybe<Scalars["Int"]["input"]>;
+}>;
+
+export type AddFileInternalSessionMutation = {
+	__typename?: "Mutation";
+	upload: {
+		__typename?: "UploadMutations";
+		internal: {
+			__typename?: "InternalSessionsMutations";
+			session: { __typename?: "InternalSessionMutation"; addFile?: boolean | null };
+		};
+	};
+};
+
+export type AddFilesInternalSessionMutationVariables = Exact<{
+	sessionId: Scalars["UUID"]["input"];
+	imgPaths: Array<Scalars["String"]["input"]> | Scalars["String"]["input"];
+	index?: InputMaybe<Scalars["Int"]["input"]>;
+}>;
+
+export type AddFilesInternalSessionMutation = {
+	__typename?: "Mutation";
+	upload: {
+		__typename?: "UploadMutations";
+		internal: {
+			__typename?: "InternalSessionsMutations";
+			session: { __typename?: "InternalSessionMutation"; addFiles?: boolean | null };
+		};
+	};
+};
+
+export type RemoveFileInternalSessionMutationVariables = Exact<{
+	sessionId: Scalars["UUID"]["input"];
+	imgPath: Scalars["String"]["input"];
+}>;
+
+export type RemoveFileInternalSessionMutation = {
+	__typename?: "Mutation";
+	upload: {
+		__typename?: "UploadMutations";
+		internal: {
+			__typename?: "InternalSessionsMutations";
+			session: { __typename?: "InternalSessionMutation"; removeFile?: boolean | null };
+		};
+	};
+};
+
+export type RemoveFilesInternalSessionMutationVariables = Exact<{
+	sessionId: Scalars["UUID"]["input"];
+	imgPaths: Array<Scalars["String"]["input"]> | Scalars["String"]["input"];
+}>;
+
+export type RemoveFilesInternalSessionMutation = {
+	__typename?: "Mutation";
+	upload: {
+		__typename?: "UploadMutations";
+		internal: {
+			__typename?: "InternalSessionsMutations";
+			session: { __typename?: "InternalSessionMutation"; removeFiles?: boolean | null };
+		};
+	};
+};
+
+export type RemoveInternalSessionMutationVariables = Exact<{
+	sessionId: Scalars["UUID"]["input"];
+}>;
+
+export type RemoveInternalSessionMutation = {
+	__typename?: "Mutation";
+	upload: {
+		__typename?: "UploadMutations";
+		internal: {
+			__typename?: "InternalSessionsMutations";
+			session: { __typename?: "InternalSessionMutation"; remove?: boolean | null };
+		};
+	};
+};
+
+export type SendInternalSessionInQueueMutationVariables = Exact<{
+	sessionId: Scalars["UUID"]["input"];
+}>;
+
+export type SendInternalSessionInQueueMutation = {
+	__typename?: "Mutation";
+	upload: {
+		__typename?: "UploadMutations";
+		internal: {
+			__typename?: "InternalSessionsMutations";
+			session: { __typename?: "InternalSessionMutation"; sendInQueue?: boolean | null };
+		};
+	};
+};
+
+export type SetCommitDataInternalSessionMutationVariables = Exact<{
+	sessionId: Scalars["UUID"]["input"];
+	commitData: InternUploadSessionCommitDataInput;
+	startRunner?: InputMaybe<Scalars["Boolean"]["input"]>;
+}>;
+
+export type SetCommitDataInternalSessionMutation = {
+	__typename?: "Mutation";
+	upload: {
+		__typename?: "UploadMutations";
+		internal: {
+			__typename?: "InternalSessionsMutations";
+			session: { __typename?: "InternalSessionMutation"; setCommitData?: boolean | null };
+		};
+	};
+};
+
+export type StartInternalQueueRunnerMutationVariables = Exact<{ [key: string]: never }>;
+
+export type StartInternalQueueRunnerMutation = {
+	__typename?: "Mutation";
+	upload: {
+		__typename?: "UploadMutations";
+		internal: { __typename?: "InternalSessionsMutations"; startQueueRunner?: boolean | null };
+	};
+};
+
+export type SwapInternalQueueOrderMutationVariables = Exact<{
+	a: Scalars["UUID"]["input"];
+	b: Scalars["UUID"]["input"];
+}>;
+
+export type SwapInternalQueueOrderMutation = {
+	__typename?: "Mutation";
+	upload: {
+		__typename?: "UploadMutations";
+		internal: { __typename?: "InternalSessionsMutations"; swapQueueOrder?: boolean | null };
 	};
 };
 
@@ -16059,6 +16421,109 @@ export const ScanlationUploadsFeedDocument = {
 		}
 	]
 } as unknown as DocumentNode<ScanlationUploadsFeedQuery, ScanlationUploadsFeedQueryVariables>;
+export const OnlyScanlationGroupNameDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "onlyScanlationGroupName" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "scanGroupsId" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "ListType",
+							type: {
+								kind: "NonNullType",
+								type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+							}
+						}
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "scanlationGroup" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "list" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "params" },
+											value: {
+												kind: "ObjectValue",
+												fields: [
+													{
+														kind: "ObjectField",
+														name: { kind: "Name", value: "groupIds" },
+														value: {
+															kind: "Variable",
+															name: {
+																kind: "Name",
+																value: "scanGroupsId"
+															}
+														}
+													}
+												]
+											}
+										}
+									],
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "data" },
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "id" }
+														},
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "attributes"
+															},
+															selectionSet: {
+																kind: "SelectionSet",
+																selections: [
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "name"
+																		}
+																	}
+																]
+															}
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<OnlyScanlationGroupNameQuery, OnlyScanlationGroupNameQueryVariables>;
 export const ScanalationGroupSearchDocument = {
 	kind: "Document",
 	definitions: [
@@ -16243,6 +16708,138 @@ export const ScanalationGroupSearchDocument = {
 		}
 	]
 } as unknown as DocumentNode<ScanalationGroupSearchQuery, ScanalationGroupSearchQueryVariables>;
+export const GroupSearchAndGetNameOnlyDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "groupSearchAndGetNameOnly" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "limit" } },
+					type: { kind: "NamedType", name: { kind: "Name", value: "Int" } }
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "offset" } },
+					type: { kind: "NamedType", name: { kind: "Name", value: "Int" } }
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "name" } },
+					type: { kind: "NamedType", name: { kind: "Name", value: "String" } }
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "scanlationGroup" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "list" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "params" },
+											value: {
+												kind: "ObjectValue",
+												fields: [
+													{
+														kind: "ObjectField",
+														name: { kind: "Name", value: "limit" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "limit" }
+														}
+													},
+													{
+														kind: "ObjectField",
+														name: { kind: "Name", value: "offset" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "offset" }
+														}
+													},
+													{
+														kind: "ObjectField",
+														name: { kind: "Name", value: "name" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "name" }
+														}
+													}
+												]
+											}
+										}
+									],
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "data" },
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "id" }
+														},
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "attributes"
+															},
+															selectionSet: {
+																kind: "SelectionSet",
+																selections: [
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "name"
+																		}
+																	}
+																]
+															}
+														}
+													]
+												}
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "limit" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "offset" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "total" }
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	GroupSearchAndGetNameOnlyQuery,
+	GroupSearchAndGetNameOnlyQueryVariables
+>;
 export const UserFollowedGroupsDocument = {
 	kind: "Document",
 	definitions: [
@@ -22730,6 +23327,73 @@ export const MangaStatisticsDocument = {
 		}
 	]
 } as unknown as DocumentNode<MangaStatisticsQuery, MangaStatisticsQueryVariables>;
+export const GetMangaTitleOnlyQueryDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "getMangaTitleOnlyQuery" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "mangaId" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "manga" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "get" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "id" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "mangaId" }
+											}
+										}
+									],
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{ kind: "Field", name: { kind: "Name", value: "id" } },
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "attributes" },
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "title" }
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<GetMangaTitleOnlyQueryQuery, GetMangaTitleOnlyQueryQueryVariables>;
 export const LatestUploadsPageQueryDocument = {
 	kind: "Document",
 	definitions: [
@@ -24265,6 +24929,1076 @@ export const UserFollowedTitlesDocument = {
 		}
 	]
 } as unknown as DocumentNode<UserFollowedTitlesQuery, UserFollowedTitlesQueryVariables>;
+export const CreateInternalSessionMutationDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "createInternalSessionMutation" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "mangaId" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "groups" } },
+					type: {
+						kind: "ListType",
+						type: {
+							kind: "NonNullType",
+							type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+						}
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "upload" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "internal" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "createSession" },
+												arguments: [
+													{
+														kind: "Argument",
+														name: { kind: "Name", value: "groups" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "groups" }
+														}
+													},
+													{
+														kind: "Argument",
+														name: { kind: "Name", value: "mangaId" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "mangaId" }
+														}
+													}
+												]
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	CreateInternalSessionMutationMutation,
+	CreateInternalSessionMutationMutationVariables
+>;
+export const InternalQueueEntryStateDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "subscription",
+			name: { kind: "Name", value: "internalQueueEntryState" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "watchInternalUploadQueueState" },
+						arguments: [
+							{
+								kind: "Argument",
+								name: { kind: "Name", value: "id" },
+								value: { kind: "Variable", name: { kind: "Name", value: "id" } }
+							}
+						]
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	InternalQueueEntryStateSubscription,
+	InternalQueueEntryStateSubscriptionVariables
+>;
+export const InternalSessionQueueOrderIDsDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "subscription",
+			name: { kind: "Name", value: "internalSessionQueueOrderIDs" },
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "watchInternalUploadQueueListIds" }
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	InternalSessionQueueOrderIDsSubscription,
+	InternalSessionQueueOrderIDsSubscriptionVariables
+>;
+export const InternalSessionListIDsDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "subscription",
+			name: { kind: "Name", value: "internalSessionListIDs" },
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "watchInternalUploadSessionsListIds" }
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	InternalSessionListIDsSubscription,
+	InternalSessionListIDsSubscriptionVariables
+>;
+export const InternalUploadSessionDataDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "subscription",
+			name: { kind: "Name", value: "internalUploadSessionData" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "watchInternalUploadSessionObj" },
+						arguments: [
+							{
+								kind: "Argument",
+								name: { kind: "Name", value: "id" },
+								value: { kind: "Variable", name: { kind: "Name", value: "id" } }
+							}
+						],
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{ kind: "Field", name: { kind: "Name", value: "mangaId" } },
+								{ kind: "Field", name: { kind: "Name", value: "groups" } },
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "commitData" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "chapter" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "title" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "translatedLanguage" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "externalUrl" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "publishAt" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "termsAccepted" }
+											}
+										]
+									}
+								},
+								{ kind: "Field", name: { kind: "Name", value: "images" } },
+								{ kind: "Field", name: { kind: "Name", value: "imagesUrl" } }
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	InternalUploadSessionDataSubscription,
+	InternalUploadSessionDataSubscriptionVariables
+>;
+export const AddFileInternalSessionDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "addFileInternalSession" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "sessionId" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "imgPath" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "String" } }
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "index" } },
+					type: { kind: "NamedType", name: { kind: "Name", value: "Int" } }
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "upload" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "internal" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "session" },
+												arguments: [
+													{
+														kind: "Argument",
+														name: { kind: "Name", value: "id" },
+														value: {
+															kind: "Variable",
+															name: {
+																kind: "Name",
+																value: "sessionId"
+															}
+														}
+													}
+												],
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "addFile"
+															},
+															arguments: [
+																{
+																	kind: "Argument",
+																	name: {
+																		kind: "Name",
+																		value: "imgPath"
+																	},
+																	value: {
+																		kind: "Variable",
+																		name: {
+																			kind: "Name",
+																			value: "imgPath"
+																		}
+																	}
+																},
+																{
+																	kind: "Argument",
+																	name: {
+																		kind: "Name",
+																		value: "index"
+																	},
+																	value: {
+																		kind: "Variable",
+																		name: {
+																			kind: "Name",
+																			value: "index"
+																		}
+																	}
+																}
+															]
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	AddFileInternalSessionMutation,
+	AddFileInternalSessionMutationVariables
+>;
+export const AddFilesInternalSessionDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "addFilesInternalSession" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "sessionId" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "imgPaths" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "ListType",
+							type: {
+								kind: "NonNullType",
+								type: { kind: "NamedType", name: { kind: "Name", value: "String" } }
+							}
+						}
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "index" } },
+					type: { kind: "NamedType", name: { kind: "Name", value: "Int" } }
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "upload" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "internal" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "session" },
+												arguments: [
+													{
+														kind: "Argument",
+														name: { kind: "Name", value: "id" },
+														value: {
+															kind: "Variable",
+															name: {
+																kind: "Name",
+																value: "sessionId"
+															}
+														}
+													}
+												],
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "addFiles"
+															},
+															arguments: [
+																{
+																	kind: "Argument",
+																	name: {
+																		kind: "Name",
+																		value: "imgPaths"
+																	},
+																	value: {
+																		kind: "Variable",
+																		name: {
+																			kind: "Name",
+																			value: "imgPaths"
+																		}
+																	}
+																},
+																{
+																	kind: "Argument",
+																	name: {
+																		kind: "Name",
+																		value: "index"
+																	},
+																	value: {
+																		kind: "Variable",
+																		name: {
+																			kind: "Name",
+																			value: "index"
+																		}
+																	}
+																}
+															]
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	AddFilesInternalSessionMutation,
+	AddFilesInternalSessionMutationVariables
+>;
+export const RemoveFileInternalSessionDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "removeFileInternalSession" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "sessionId" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "imgPath" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "String" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "upload" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "internal" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "session" },
+												arguments: [
+													{
+														kind: "Argument",
+														name: { kind: "Name", value: "id" },
+														value: {
+															kind: "Variable",
+															name: {
+																kind: "Name",
+																value: "sessionId"
+															}
+														}
+													}
+												],
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "removeFile"
+															},
+															arguments: [
+																{
+																	kind: "Argument",
+																	name: {
+																		kind: "Name",
+																		value: "imgPath"
+																	},
+																	value: {
+																		kind: "Variable",
+																		name: {
+																			kind: "Name",
+																			value: "imgPath"
+																		}
+																	}
+																}
+															]
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	RemoveFileInternalSessionMutation,
+	RemoveFileInternalSessionMutationVariables
+>;
+export const RemoveFilesInternalSessionDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "removeFilesInternalSession" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "sessionId" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "imgPaths" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "ListType",
+							type: {
+								kind: "NonNullType",
+								type: { kind: "NamedType", name: { kind: "Name", value: "String" } }
+							}
+						}
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "upload" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "internal" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "session" },
+												arguments: [
+													{
+														kind: "Argument",
+														name: { kind: "Name", value: "id" },
+														value: {
+															kind: "Variable",
+															name: {
+																kind: "Name",
+																value: "sessionId"
+															}
+														}
+													}
+												],
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "removeFiles"
+															},
+															arguments: [
+																{
+																	kind: "Argument",
+																	name: {
+																		kind: "Name",
+																		value: "imgPaths"
+																	},
+																	value: {
+																		kind: "Variable",
+																		name: {
+																			kind: "Name",
+																			value: "imgPaths"
+																		}
+																	}
+																}
+															]
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	RemoveFilesInternalSessionMutation,
+	RemoveFilesInternalSessionMutationVariables
+>;
+export const RemoveInternalSessionDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "removeInternalSession" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "sessionId" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "upload" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "internal" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "session" },
+												arguments: [
+													{
+														kind: "Argument",
+														name: { kind: "Name", value: "id" },
+														value: {
+															kind: "Variable",
+															name: {
+																kind: "Name",
+																value: "sessionId"
+															}
+														}
+													}
+												],
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "remove" }
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<RemoveInternalSessionMutation, RemoveInternalSessionMutationVariables>;
+export const SendInternalSessionInQueueDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "sendInternalSessionInQueue" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "sessionId" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "upload" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "internal" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "session" },
+												arguments: [
+													{
+														kind: "Argument",
+														name: { kind: "Name", value: "id" },
+														value: {
+															kind: "Variable",
+															name: {
+																kind: "Name",
+																value: "sessionId"
+															}
+														}
+													}
+												],
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "sendInQueue"
+															}
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	SendInternalSessionInQueueMutation,
+	SendInternalSessionInQueueMutationVariables
+>;
+export const SetCommitDataInternalSessionDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "setCommitDataInternalSession" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "sessionId" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "commitData" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "NamedType",
+							name: { kind: "Name", value: "InternUploadSessionCommitDataInput" }
+						}
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "startRunner" } },
+					type: { kind: "NamedType", name: { kind: "Name", value: "Boolean" } }
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "upload" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "internal" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "session" },
+												arguments: [
+													{
+														kind: "Argument",
+														name: { kind: "Name", value: "id" },
+														value: {
+															kind: "Variable",
+															name: {
+																kind: "Name",
+																value: "sessionId"
+															}
+														}
+													}
+												],
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "setCommitData"
+															},
+															arguments: [
+																{
+																	kind: "Argument",
+																	name: {
+																		kind: "Name",
+																		value: "commitData"
+																	},
+																	value: {
+																		kind: "Variable",
+																		name: {
+																			kind: "Name",
+																			value: "commitData"
+																		}
+																	}
+																},
+																{
+																	kind: "Argument",
+																	name: {
+																		kind: "Name",
+																		value: "startRunner"
+																	},
+																	value: {
+																		kind: "Variable",
+																		name: {
+																			kind: "Name",
+																			value: "startRunner"
+																		}
+																	}
+																}
+															]
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	SetCommitDataInternalSessionMutation,
+	SetCommitDataInternalSessionMutationVariables
+>;
+export const StartInternalQueueRunnerDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "startInternalQueueRunner" },
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "upload" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "internal" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "startQueueRunner" }
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	StartInternalQueueRunnerMutation,
+	StartInternalQueueRunnerMutationVariables
+>;
+export const SwapInternalQueueOrderDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "swapInternalQueueOrder" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "a" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "b" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "upload" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "internal" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "swapQueueOrder" },
+												arguments: [
+													{
+														kind: "Argument",
+														name: { kind: "Name", value: "a" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "a" }
+														}
+													},
+													{
+														kind: "Argument",
+														name: { kind: "Name", value: "b" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "b" }
+														}
+													}
+												]
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	SwapInternalQueueOrderMutation,
+	SwapInternalQueueOrderMutationVariables
+>;
 export const UserPageQueryDocument = {
 	kind: "Document",
 	definitions: [

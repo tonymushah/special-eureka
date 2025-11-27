@@ -48,7 +48,7 @@
 	import { createQuery, type CreateQueryOptions } from "@tanstack/svelte-query";
 	import { writeText } from "@tauri-apps/plugin-clipboard-manager";
 	import { openUrl as open } from "@tauri-apps/plugin-opener";
-	import { debounce, delay } from "lodash";
+	import { debounce } from "lodash";
 	import { type Snippet } from "svelte";
 	import { derived as der, derived, toStore } from "svelte/store";
 	import { v4 } from "uuid";
@@ -60,6 +60,7 @@
 	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
 	import { dev } from "$app/environment";
 	import ReportDialog from "@mangadex/componnents/report/dialog/ReportDialog.svelte";
+	import UploadDialog from "@mangadex/componnents/upload/UploadDialog.svelte";
 
 	type TopMangaStatisticsStoreData = TopMangaStatistics & {
 		threadUrl?: string;
@@ -272,6 +273,7 @@
 		);
 	}
 	let openReportDialog = $state(false);
+	let openUploadDialog = $state(false);
 </script>
 
 <svelte:window onfocus={refetchReadingFollowingStatus} />
@@ -336,13 +338,27 @@
 	onreport={() => {
 		openReportDialog = true;
 	}}
-	disableUpload
+	onupload={() => {
+		openUploadDialog = true;
+	}}
 />
 
 <ReportDialog
 	bind:open={openReportDialog}
 	category={ReportCategory.Manga}
 	objectId={data.layoutData.id}
+/>
+
+<UploadDialog
+	bind:open={openUploadDialog}
+	mangaId={data.layoutData.id}
+	ondone={(sessionId) => {
+		goto(
+			route("/mangadex/upload/[id]", {
+				id: sessionId
+			})
+		);
+	}}
 />
 
 <div class="out-top">

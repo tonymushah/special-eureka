@@ -1,11 +1,11 @@
+import { extractFromAccessor } from "$lib/index.svelte";
 import { graphql } from "@mangadex/gql";
 import { DownloadMode } from "@mangadex/gql/graphql";
 import { client } from "@mangadex/gql/urql";
 import { createMutation } from "@tanstack/svelte-query";
 import { subscriptionStore } from "@urql/svelte";
-import { derived, get, toStore, type Writable } from "svelte/store";
+import { derived, get, type Writable } from "svelte/store";
 import { mangadexQueryClient } from "..";
-import { extractFromAccessor, root_effect } from "$lib/index.svelte";
 
 export const subscription = graphql(`
 	subscription chapterQualitySubscription {

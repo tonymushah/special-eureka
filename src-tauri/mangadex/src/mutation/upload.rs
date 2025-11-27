@@ -1,4 +1,7 @@
+pub mod inner_queue;
+
 use crate::error::wrapped::Result;
+use crate::mutation::upload::inner_queue::InternalSessionsMutations;
 use crate::utils::traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt};
 use async_graphql::{Context, Object};
 use mangadex_api::{
@@ -41,6 +44,9 @@ pub struct UploadMutations;
 #[Object]
 #[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl UploadMutations {
+    pub async fn internal(&self) -> InternalSessionsMutations {
+        InternalSessionsMutations
+    }
     pub async fn begin_session(
         &self,
         ctx: &Context<'_>,

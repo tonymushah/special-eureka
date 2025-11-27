@@ -11,6 +11,7 @@ use crate::{
     app_state::{LastTimeTokenWhenFecthed, OfflineAppState, inner::AppStateInner},
     cache::chapter::ChapterPagesStore,
     rate_limit::SpecificRateLimits,
+    upload::UploadManager,
     utils::watch::SendData,
 };
 
@@ -110,6 +111,15 @@ where
             d
         } else {
             self.manage(std::sync::RwLock::<ChapterPagesStore>::default());
+            self.state()
+        }
+    }
+    #[cfg_attr(feature = "hotpath", hotpath::measure)]
+    fn upload_manager(&self) -> State<'_, UploadManager<R>> {
+        if let Some(d) = self.try_state() {
+            d
+        } else {
+            self.manage(UploadManager::new(self.app_handle().clone()));
             self.state()
         }
     }

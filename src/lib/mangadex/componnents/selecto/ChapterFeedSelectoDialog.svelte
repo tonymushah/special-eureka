@@ -10,7 +10,7 @@
 		return ($selected?.chapters?.length ?? 0) == 0 && ($selected?.titles?.length ?? 0) == 0;
 	});
 	const {
-		elements: { trigger, portalled, overlay, content, title, description, close },
+		elements: { portalled, overlay, content, title, description, close },
 		states: { open }
 	} = createDialog({
 		portal: "#mangadex-scroll-container"
@@ -65,10 +65,7 @@
 					</div>
 				</div>
 				{#if $selected?.titles && $selected?.chapters}
-					<ChapterFeedSelectoDialogBody
-						titles={$selected?.titles}
-						chapters={$selected?.chapters}
-					/>
+					<ChapterFeedSelectoDialogBody titles={$selected?.titles} chapters={$selected?.chapters} />
 				{/if}
 			</div>
 		</div>

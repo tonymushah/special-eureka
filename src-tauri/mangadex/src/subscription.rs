@@ -34,4 +34,5 @@ pub struct Subscriptions(
     chapter_pages::ChapterPagesSubscription,
     user_option_next::UserOptionNextSubscriptions,
     read_marker::ChapterReadMarkerSubscriptions,
+    upload::internal::InternalUploadSubscriptions,
 );

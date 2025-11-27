@@ -27,6 +27,12 @@
 				},
 				1360: {
 					slidesPerView: 4
+				},
+				1500: {
+					slidesPerView: 5
+				},
+				1920: {
+					slidesPerView: 6
 				}
 			},
 			mousewheel: true,

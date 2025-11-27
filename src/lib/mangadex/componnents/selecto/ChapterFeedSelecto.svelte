@@ -5,7 +5,7 @@
 </script>
 
 <script lang="ts">
-	import "./styles.css";
+	import cssMod from "./ChapterFeedSelecto.module.css";
 	import SelectionArea from "@viselect/vanilla";
 	import { validate } from "uuid";
 	import { uniq } from "lodash";
@@ -32,7 +32,7 @@
 	}: Props = $props();
 	let selected_mangas = $derived(uniq(selectedMangas));
 	let selected_chapters = $derived(uniq(selectedChapters));
-	const selectionAreaClass = "chapter-feed-selecto-area";
+	const selectionAreaClass = cssMod.selectoArea;
 	function pushSelected(element: Element) {
 		const maybeChapterId = element?.getAttribute("data-chapter-id");
 		if (maybeChapterId != null) {
@@ -85,12 +85,8 @@
 					}
 				})
 				.on("move", (ev) => {
-					ev.store.changed.added.forEach((item) =>
-						item.setAttribute("data-selecto-selected", "")
-					);
-					ev.store.changed.removed.forEach((item) =>
-						item.removeAttribute("data-selecto-selected")
-					);
+					ev.store.changed.added.forEach((item) => item.setAttribute("data-selecto-selected", ""));
+					ev.store.changed.removed.forEach((item) => item.removeAttribute("data-selecto-selected"));
 				});
 			return () => {
 				dragselect.getSelection().forEach((item) => {
@@ -155,7 +151,7 @@
 			$canSelect = false;
 		}
 	}}
-	onfocusout={(e) => {
+	onfocusout={() => {
 		$canSelect = false;
 	}}
 />
