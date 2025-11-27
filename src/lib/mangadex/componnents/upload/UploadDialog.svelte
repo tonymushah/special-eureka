@@ -24,9 +24,10 @@
 			(inner) => {
 				propsOpen = inner;
 			}
-		)
+		),
+		preventScroll: true
 	});
-	let bodyPortal: PortalConfig | undefined = $state();
+	let bodyPortal: ParentNode | undefined = $state();
 </script>
 
 {#if $open}
@@ -59,7 +60,7 @@
 					ondone={(sessionId) => {
 						ondone?.(sessionId);
 					}}
-					portal={bodyPortal}
+					rootElement={bodyPortal}
 				/>
 			</div>
 		</div>

@@ -6,7 +6,6 @@
 	import { client } from "@mangadex/gql/urql";
 	import pageLimit from "@mangadex/stores/page-limit";
 	import { createCombobox, createTagsInput, melt } from "@melt-ui/svelte";
-	import type { PortalConfig } from "@melt-ui/svelte/internal/actions";
 	import { createInfiniteQuery } from "@tanstack/svelte-query";
 	import { onDestroy } from "svelte";
 	import { XIcon } from "svelte-feather-icons";
@@ -23,10 +22,10 @@
 		mangaId: string;
 		title?: string;
 		ondone?: (sessionId: string) => void;
-		portal?: PortalConfig | undefined;
+		rootElement?: ParentNode | undefined;
 		onclose?: () => void;
 	}
-	let { mangaId, title, ondone, portal }: Props = $props();
+	let { mangaId, title, ondone, rootElement: portal }: Props = $props();
 	let mutation = createSessionMutation();
 	const {
 		elements: { root, tag, deleteTrigger },
@@ -43,12 +42,12 @@
 		forceVisible: true,
 		multiple: true,
 		positioning: {
-			placement: "top",
+			placement: "bottom",
 			fitViewport: true,
 			sameWidth: true
 			// strategy: "fixed"
 		},
-		portal
+		rootElement: portal
 	});
 	type GroupSearchQueryParams = {
 		limit?: number;
@@ -82,9 +81,10 @@
 				throw new Error("no data");
 			}
 		},
-		enabled: $touchedInput && mutation.isPending,
+		enabled: $touchedInput && !mutation.isPending,
 		initialPageParam: {
-			limit: $pageLimit
+			limit: $pageLimit,
+			name: $inputValue.length == 0 ? undefined : $inputValue
 		} as GroupSearchQueryParams,
 		getNextPageParam(lastPage, _, lastPageParam) {
 			const nextOffset = lastPage.limit + lastPage.limit;
