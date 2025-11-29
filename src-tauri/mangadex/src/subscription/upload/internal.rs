@@ -24,7 +24,7 @@ impl From<UploadSessionState> for IUSResult<Option<InternUploadQueueState>> {
     fn from(value: UploadSessionState) -> Self {
         match value {
             UploadSessionState::Pending => Ok(Some(InternUploadQueueState::Pending)),
-            UploadSessionState::Uploading => Ok(Some(InternUploadQueueState::Pending)),
+            UploadSessionState::Uploading => Ok(Some(InternUploadQueueState::Uploading)),
             UploadSessionState::Error(error) => Err(ErrorExtensions::extend(error.as_ref())),
         }
     }
