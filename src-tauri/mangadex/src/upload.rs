@@ -300,7 +300,8 @@ where
         }
         self.sessions.write().await.remove(&session_id);
         self.emit_manager_event(UploadManagerEventPayload::SessionUpdate { id: session_id })?;
-
+        self.queue.remove(session_id).await;
+        self.emit_manager_event(UploadManagerEventPayload::QueueListUpdate)?;
         Ok(())
     }
     pub fn event_stream(&self) -> crate::Result<UploadManagerEventStream<R>> {
