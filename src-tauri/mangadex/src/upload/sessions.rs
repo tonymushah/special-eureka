@@ -65,10 +65,18 @@ pub enum CheckUploadSessionError {
     ImageFileSizeTooBig { size: u64, filename: String },
     #[error("Chapter image `{}` file format is invalid", .filename)]
     InvalidFormat { filename: String },
+    #[error("Commit data not found")]
+    CommitDataNotFound,
 }
 
 impl InternUploadSession {
     pub fn check(&self) -> Result<(), CheckUploadSessionError> {
+        #[cfg(not(debug_assertions))]
+        {
+            if self.commit_data.is_none() {
+                return Err(CheckUploadSessionError::CommitDataNotFound);
+            }
+        }
         if self.images.len() > FILES_LIMIT as usize {
             return Err(CheckUploadSessionError::ReachedFilesNumberLimit(
                 self.images.len() as _,
