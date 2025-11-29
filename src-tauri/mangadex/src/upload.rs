@@ -300,7 +300,7 @@ where
             return Err(UploadQueueError::CurrentlyUploading(session_id).into());
         }
         self.sessions.write().await.remove(&session_id);
-        self.emit_manager_event(UploadManagerEventPayload::SessionUpdate { id: session_id })?;
+        self.emit_manager_event(UploadManagerEventPayload::SessionListUpdate)?;
         self.queue.remove(session_id).await;
         self.emit_manager_event(UploadManagerEventPayload::QueueListUpdate)?;
         Ok(())
