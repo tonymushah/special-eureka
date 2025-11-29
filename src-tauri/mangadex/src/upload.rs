@@ -60,6 +60,7 @@ pub enum UploadManagerEventPayload {
     QueueEntryUpdate { id: Uuid },
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl<R> UploadManager<R>
 where
     R: Runtime,
@@ -312,6 +313,7 @@ where
     }
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 async fn inner_runner<R>(queue: UploadQueue, sessions: UploadSessions, app: AppHandle<R>)
 where
     R: Runtime,
@@ -364,6 +366,7 @@ where
 
 const FILES_PER_PUT: u8 = 5;
 
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 async fn upload_intern_session<R>(
     internal_session_id: Uuid,
     sessions: &UploadSessions,
