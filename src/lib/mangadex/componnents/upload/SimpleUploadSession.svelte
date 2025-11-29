@@ -21,11 +21,15 @@
 	import { removeInternalSessionMutation } from "@mangadex/gql-docs/upload/session/mutations/remove";
 	import { addFileToInternalSessionMutation } from "@mangadex/gql-docs/upload/session/mutations/add-file";
 	import { addFilesToInternalSessionMutation } from "@mangadex/gql-docs/upload/session/mutations/add-files";
+	import type { MouseEventHandler } from "svelte/elements";
 
 	interface Props {
 		sessionId: string;
+		onmouseenter?: MouseEventHandler<HTMLElement>;
+		onmouseleave?: MouseEventHandler<HTMLElement>;
+		highlighted?: boolean;
 	}
-	let { sessionId }: Props = $props();
+	let { sessionId, onmouseenter, onmouseleave, highlighted }: Props = $props();
 	const sessionS = sessionObjStore(sessionId);
 	let session = $derived($sessionS);
 	let titleQuery = titleOnlyQuery({
@@ -56,6 +60,7 @@
 <a
 	href={route("/mangadex/upload/[id]", { id: sessionId })}
 	class="top-a"
+	class:highlighted
 	oncontextmenu={registerContextMenuEvent({
 		includeContext: false,
 		addSeparator: false,
@@ -141,6 +146,8 @@
 			})
 		]
 	})}
+	{onmouseenter}
+	{onmouseleave}
 >
 	{#if session}
 		<article
@@ -263,6 +270,11 @@
 	.top-a {
 		text-decoration: none;
 		color: inherit;
+	}
+	.top-a.highlighted {
+		article {
+			border-color: var(--indication-blue);
+		}
 	}
 	.top-a:focus {
 		article {

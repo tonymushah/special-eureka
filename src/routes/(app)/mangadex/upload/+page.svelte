@@ -5,6 +5,9 @@
 	import { queueOrderIDs } from "@mangadex/stores/upload/queue";
 	import { sessionsIDs } from "@mangadex/stores/upload/sessions";
 	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
+
+	let hiSource: "sessions" | "queue" | undefined = $state();
+	let hiID: string | undefined = $state();
 </script>
 
 <AppTitle title="Upload Sessions | MangaDex" />
@@ -16,7 +19,18 @@
 			<h2>Sessions</h2>
 			<div class="list" class:empty={$sessionsIDs.length == 0}>
 				{#each $sessionsIDs as id (id)}
-					<SimpleUploadSession sessionId={id} />
+					<SimpleUploadSession
+						sessionId={id}
+						onmouseenter={() => {
+							hiSource = "sessions";
+							hiID = id;
+						}}
+						onmouseleave={() => {
+							hiSource = undefined;
+							hiID = undefined;
+						}}
+						highlighted={hiSource != "sessions" && hiID == id}
+					/>
 				{:else}
 					<NothingToShow />
 				{/each}
