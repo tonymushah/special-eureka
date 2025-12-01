@@ -1,6 +1,6 @@
 [package]
 name = "special-eureka"
-version = "0.2.2-4"
+version = "0.2.2-5"
 description = "a manga reader desktop app build with tauri"
 authors = ["tonymushah"]
 license = ""
@@ -61,9 +61,7 @@ default = ["custom-protocol", "updater"]
 custom-protocol = ["tauri/custom-protocol"]
 updater = ["tauri-plugin-updater"]
 hotpath = ["dep:hotpath", "hotpath/hotpath", "mangadex/hotpath"]
-hotpath-alloc-bytes-total = ["hotpath/hotpath-alloc-bytes-total", "single-runtime"]
-hotpath-alloc-count-total = ["hotpath/hotpath-alloc-count-total", "single-runtime"]
-hotpath-alloc-self = ["hotpath/hotpath-alloc-self", "single-runtime"]
+hotpath-alloc = ["hotpath/hotpath-alloc"]
 hotpath-off = ["hotpath/hotpath-off"]
 single-runtime = []
 actix-multi-threaded = []
