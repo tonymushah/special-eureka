@@ -1,6 +1,6 @@
 <script lang="ts">
 	import defaultContentProfile from "@mangadex/content-profile/graphql/defaultProfile";
-	import { CoverImageQuality, type StaffPicksQuery } from "@mangadex/gql/graphql";
+	import { CoverImageQuality } from "@mangadex/gql/graphql";
 	import get_cover_art from "@mangadex/utils/cover-art/get_cover_art";
 	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
 	import { createQuery } from "@tanstack/svelte-query";
@@ -27,8 +27,8 @@
 			}
 		}
 	}));
-	function treatData(data: StaffPicksQuery) {
-		return data.home.staffPicks.relationships.titles.map<StaffPicksTitle>((t) => {
+	let treatedData = $derived.by(() => {
+		return staff_picks.data?.home.staffPicks.relationships.titles.map<StaffPicksTitle>((t) => {
 			const manga_id: string = t.id;
 			const cover_id: string = t.relationships.coverArt.id;
 			const filename: string = t.relationships.coverArt.attributes.fileName;
@@ -39,8 +39,7 @@
 				manga_id,
 				mode: CoverImageQuality.V256
 			});
-			const title =
-				get_value_from_title_and_random_if_undefined(t.attributes.title, "en") ?? "";
+			const title = get_value_from_title_and_random_if_undefined(t.attributes.title, "en") ?? "";
 			const description =
 				get_value_from_title_and_random_if_undefined(t.attributes.description, "en") ?? "";
 			return {
@@ -51,7 +50,7 @@
 				description
 			};
 		});
-	}
+	});
 	onMount(() => {
 		return defaultContentProfile.subscribe(() => {
 			staff_picks.refetch();
@@ -69,8 +68,8 @@
 	}}
 />
 
-{#if staff_picks.isSuccess}
-	<Content mangas={treatData(staff_picks.data)} />
+{#if staff_picks.isSuccess && treatedData != undefined}
+	<Content mangas={treatedData} />
 {:else if staff_picks.isError}
 	<HomeErrorComponnent
 		error={staff_picks.error}

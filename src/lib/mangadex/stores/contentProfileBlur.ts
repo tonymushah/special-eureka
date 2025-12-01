@@ -8,7 +8,9 @@ import { mangadexQueryClient } from "..";
 const sub_read = readable(true, (set) => {
 	const sub = client.subscription(gql_subscription, {}).subscribe((res) => {
 		const blur = res.data?.watchContentProfileBlur;
-		if (blur) {
+		// F*CK JS man...
+		// I hate this lang so much...
+		if (blur != undefined) {
 			set(blur);
 		}
 	});

@@ -1,4 +1,5 @@
 <script lang="ts">
+	// TODO refactor to `tanstack/query`
 	import FormInput from "@mangadex/componnents/theme/form/input/FormInput.svelte";
 	import { createCombobox, createTagsInput, melt, type Tag } from "@melt-ui/svelte";
 	import { debounce, type DebouncedFunc } from "lodash";
@@ -36,7 +37,7 @@
 		portal
 	});
 	const {
-		elements: { root, tag, deleteTrigger, edit, input: inputTags },
+		elements: { root, tag, deleteTrigger },
 		states: { tags }
 	} = createTagsInput({
 		tags: store,
@@ -47,7 +48,7 @@
 	let nextFetch: (() => Promise<AuthorSearchFetcherResultData>) | undefined = $state(undefined);
 	let hasNext = $derived(nextFetch != undefined && typeof nextFetch == "function");
 	const isFetching = writable(false);
-	const start: DebouncedFunc<(...args: any) => any> = debounce(() => {
+	const start: DebouncedFunc<() => void> = debounce(() => {
 		if (!get(isFetching)) {
 			currentAuthorSearch.set([]);
 			isFetching.set(true);
@@ -86,7 +87,7 @@
 		}
 	}, 300);
 	let toObserve: HTMLElement | undefined = $state(undefined);
-	const obs_debounce_func = debounce<IntersectionObserverCallback>((entries, obs) => {
+	const obs_debounce_func = debounce<IntersectionObserverCallback>((entries) => {
 		entries.forEach((entry) => {
 			if (entry.intersectionRatio <= 0) return;
 			next();
@@ -126,7 +127,6 @@
 					<XIcon size={"24"} />
 				</button>
 			</div>
-			<div class="edit" use:melt={$edit(t)}>{t.value}</div>
 		{/each}
 		<FormInput element={input} />
 	</div>

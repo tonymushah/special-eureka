@@ -191,7 +191,7 @@
 		justify-content: center;
 		flex-direction: column;
 		background-repeat: no-repeat;
-		background-size: contain;
+		background-size: cover;
 		background-position: bottom;
 		background-image: var(--top-background-image);
 		h1 {

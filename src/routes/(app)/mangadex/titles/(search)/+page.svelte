@@ -12,9 +12,7 @@
 	import type { MangaListParams } from "@mangadex/gql/graphql";
 	import pageLimit from "@mangadex/stores/page-limit";
 	import defaultContextMenuContent from "@mangadex/utils/defaultContextMenuContent";
-	import contextMenu, {
-		ContextMenuItemProvider
-	} from "@special-eureka/core/commands/contextMenu";
+	import contextMenu, { ContextMenuItemProvider } from "@special-eureka/core/commands/contextMenu";
 	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
 	import { setContextMenuContext } from "@special-eureka/core/utils/contextMenuContext";
 	import { delay } from "lodash";
@@ -31,8 +29,8 @@
 
 	$effect(() => {
 		return defaultContentProfile.subscribe((defaultProfile) => {
-			defaultParams.update((p) => {
-				p = mangaSearchParamsFromContentProfile(defaultProfile);
+			defaultParams.update(() => {
+				const p = structuredClone(mangaSearchParamsFromContentProfile(defaultProfile));
 				data.tags?.forEach((tag) => {
 					p.filter.tags.set(tag.id, {
 						state: TagOptionState.NONE,
@@ -58,14 +56,11 @@
 			});
 		});
 	});
-	const currentSearchParams = writable<MangaSearchParams | undefined>(
-		undefined,
-		(set, _update) => {
-			return defaultParams.subscribe((params) => {
-				set(params);
-			});
-		}
-	);
+	const currentSearchParams = writable<MangaSearchParams | undefined>(undefined, (set) => {
+		return defaultParams.subscribe((params) => {
+			set(params);
+		});
+	});
 	const preListParams = derived(currentSearchParams, ($p) => {
 		if ($p) {
 			return toMangaListParams($p);

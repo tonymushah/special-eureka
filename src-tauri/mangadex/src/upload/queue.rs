@@ -32,6 +32,7 @@ pub enum UploadSessionState {
     Error(Arc<crate::Error>),
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl UploadQueue {
     pub async fn push_entry(&self, id: Uuid) -> Result<(), UploadQueueError> {
         let mut write = self.queue.write().await;
@@ -114,5 +115,10 @@ impl UploadQueue {
 
         write.swap(a_pos, b_pos);
         Ok(())
+    }
+    pub async fn remove(&self, id: Uuid) {
+        let mut write = self.queue.write().await;
+        write.retain(|(inner_id, _)| *inner_id != id);
+        write.shrink_to_fit();
     }
 }

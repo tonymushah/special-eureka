@@ -4,8 +4,8 @@ use eureka_mmanager::{
     download::{manga::MangaDownloadMessage, state::DownloadMessageState},
     history::service::messages::is_in::IsInMessage,
     prelude::{
-        AsyncCanBeWaited, GetManager, GetManagerStateData, HistoryEntry, MangaDownloadManager,
-        TaskManagerAddr,
+        AsyncCanBeWaited, CoverDataPullAsyncTrait, GetManager, GetManagerStateData, HistoryEntry,
+        MangaDownloadManager, TaskManagerAddr,
     },
 };
 use mangadex_api_schema_rust::v5::MangaObject;
@@ -47,12 +47,23 @@ where
     {
         if !dirs
             .send(IsInMessage(HistoryEntry::new(
-                id,
+                cover,
                 RelationshipType::CoverArt,
             )))
             .await?
         {
             let _ = raw_cover_download(&manager, cover).await?;
+        } else {
+            match manager.get_cover_image(id).await {
+                Err(eureka_mmanager::Error::Io(io)) => {
+                    if io.kind() == std::io::ErrorKind::NotFound {
+                        let _ = raw_cover_download(&manager, cover).await?;
+                    }
+                }
+                _d => {
+                    let _ = _d?;
+                }
+            }
         }
     }
     Ok(manga)
