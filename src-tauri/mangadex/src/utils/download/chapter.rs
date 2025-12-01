@@ -18,10 +18,7 @@ use uuid::Uuid;
 
 use crate::{
     store::{TauriManagerMangadexStoreExtractor, types::structs::force_443::ForcePort443Store},
-    utils::{
-        download::{cover::raw_cover_download, manga::raw_manga_download},
-        traits_utils::MangadexTauriManagerExt,
-    },
+    utils::traits_utils::MangadexTauriManagerExt,
 };
 
 #[cfg_attr(feature = "hotpath", hotpath::measure)]
@@ -77,21 +74,7 @@ where
             )))
             .await?
         {
-            if let Some(cover) = raw_manga_download(&manager, manga)
-                .await?
-                .find_first_relationships(RelationshipType::CoverArt)
-                .map(|d| d.id)
-            {
-                if !dirs
-                    .send(IsInMessage(HistoryEntry::new(
-                        id,
-                        RelationshipType::CoverArt,
-                    )))
-                    .await?
-                {
-                    let _ = raw_cover_download(&manager, cover).await?;
-                }
-            }
+            super::manga::download_manga(app, manga).await?;
         }
     }
     Ok(chapter)
