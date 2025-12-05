@@ -2,6 +2,7 @@
 	import PageTitle from "@mangadex/componnents/pages/PageTitle.svelte";
 	import NothingToShow from "@mangadex/componnents/search/content/NothingToShow.svelte";
 	import SimpleUploadSession from "@mangadex/componnents/upload/SimpleUploadSession.svelte";
+	import SimpleUploadSessionQueueState from "@mangadex/componnents/upload/SimpleUploadSessionQueueState.svelte";
 	import { queueOrderIDs } from "@mangadex/stores/upload/queue";
 	import { sessionsIDs } from "@mangadex/stores/upload/sessions";
 	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
@@ -39,7 +40,20 @@
 		<div class="queue">
 			<h2>Queue</h2>
 			<div class="list" class:empty={$queueOrderIDs.length == 0}>
-				{#each $queueOrderIDs as queueId (`q-${queueId}`)}{:else}
+				{#each $queueOrderIDs as queueId (`q-${queueId}`)}
+					<SimpleUploadSessionQueueState
+						{queueId}
+						highlighted={hiID == queueId && hiSource != "queue"}
+						onmouseenter={() => {
+							hiSource = "queue";
+							hiID = queueId;
+						}}
+						onmouseleave={() => {
+							hiSource = undefined;
+							hiID = undefined;
+						}}
+					/>
+				{:else}
 					<NothingToShow />
 				{/each}
 			</div>

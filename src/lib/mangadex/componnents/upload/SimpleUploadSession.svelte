@@ -274,6 +274,7 @@
 	.top-a.highlighted {
 		article {
 			border-color: var(--indication-blue);
+			background-color: var(--accent-l5);
 		}
 	}
 	.top-a:focus {
