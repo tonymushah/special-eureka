@@ -42,4 +42,29 @@
 	</span>
 </button>
 
-<style lang="scss"></style>
+<style lang="scss">
+	button {
+		border: 1px solid var(--mid-tone);
+		border-radius: 3px;
+		background-color: var(--accent-l1);
+	}
+	.uploading {
+		border-color: var(--status-green);
+	}
+	.error {
+		border-color: var(--danger-l1);
+	}
+	.highlighted {
+		background-color: var(--accent-l5);
+	}
+	.not-there {
+		border-color: var(--status-gray);
+	}
+	.loading-state {
+		border-color: var(--status-gray);
+	}
+	button:disabled {
+		border-color: var(--contrast-l1);
+		background-color: var(--accent);
+	}
+</style>
