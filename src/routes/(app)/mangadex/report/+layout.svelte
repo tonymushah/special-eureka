@@ -8,7 +8,7 @@
 	let { children }: Props = $props();
 </script>
 
-<AppTitle title="Your reports" />
+<AppTitle title="Your reports | MangaDex" />
 
 <div class="layout">
 	<PageTitle title="Your reports" withReturn />
