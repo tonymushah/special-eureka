@@ -6,15 +6,18 @@
 		queueId: string;
 		highlighted?: boolean;
 		clicked?: boolean;
+		selected?: boolean;
+		index?: number;
 	}
 
-	let { queueId, highlighted, ...restProps }: Props = $props();
+	let { queueId, highlighted, selected, index, ...restProps }: Props = $props();
 	const _queueState = queueEntryState(queueId);
 	let queueState = $derived($_queueState);
 </script>
 
 <button
 	{...restProps}
+	class:selected
 	class:highlighted
 	class:not-there={queueState == null}
 	class:loading-state={queueState == undefined}
@@ -23,6 +26,9 @@
 	class:error={queueState?.state == "Error"}
 	data-queue-id={queueId}
 >
+	{#if typeof index == "number"}
+		<span>({index})</span>
+	{/if}
 	<span>{queueId}</span>
 	-
 	<span>
@@ -47,6 +53,16 @@
 		border: 1px solid var(--mid-tone);
 		border-radius: 3px;
 		background-color: var(--accent-l1);
+		transition: none;
+	}
+	button:hover {
+		background-color: var(--accent-l1-hover);
+	}
+	button:focus {
+		border-color: var(--status-gray);
+	}
+	button:active {
+		background-color: var(--accent-l1-active);
 	}
 	.uploading {
 		border-color: var(--status-green);
@@ -66,5 +82,14 @@
 	button:disabled {
 		border-color: var(--contrast-l1);
 		background-color: var(--accent);
+	}
+	.selected {
+		background-color: var(--primary-l2);
+	}
+	.selected:hover {
+		background-color: var(--primary-l1);
+	}
+	.selected:active {
+		background-color: var(--primary);
 	}
 </style>

@@ -1,14 +1,19 @@
 <script lang="ts">
 	import PageTitle from "@mangadex/componnents/pages/PageTitle.svelte";
 	import NothingToShow from "@mangadex/componnents/search/content/NothingToShow.svelte";
+	import { addErrorToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 	import SimpleUploadSession from "@mangadex/componnents/upload/SimpleUploadSession.svelte";
 	import SimpleUploadSessionQueueState from "@mangadex/componnents/upload/SimpleUploadSessionQueueState.svelte";
+	import { createSwapQueueOrderMutation } from "@mangadex/gql-docs/upload/mutations/swap-queue-order";
 	import { queueOrderIDs } from "@mangadex/stores/upload/queue";
 	import { sessionsIDs } from "@mangadex/stores/upload/sessions";
 	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
+	import { flip } from "svelte/animate";
 
 	let hiSource: "sessions" | "queue" | undefined = $state();
 	let hiID: string | undefined = $state();
+	let selectedQueue = $state<string | undefined>();
+	let swapMutation = createSwapQueueOrderMutation();
 </script>
 
 <AppTitle title="Upload Sessions | MangaDex" />
@@ -40,19 +45,46 @@
 		<div class="queue">
 			<h2>Queue</h2>
 			<div class="list" class:empty={$queueOrderIDs.length == 0}>
-				{#each $queueOrderIDs as queueId (`q-${queueId}`)}
-					<SimpleUploadSessionQueueState
-						{queueId}
-						highlighted={hiID == queueId && hiSource != "queue"}
-						onmouseenter={() => {
-							hiSource = "queue";
-							hiID = queueId;
-						}}
-						onmouseleave={() => {
-							hiSource = undefined;
-							hiID = undefined;
-						}}
-					/>
+				{#each $queueOrderIDs as queueId, index (`q-${queueId}`)}
+					<div class="list-item" animate:flip>
+						<SimpleUploadSessionQueueState
+							index={index + 1}
+							{queueId}
+							selected={queueId == selectedQueue}
+							highlighted={hiID == queueId && hiSource != "queue"}
+							onmouseenter={() => {
+								hiSource = "queue";
+								hiID = queueId;
+							}}
+							disabled={swapMutation.isPending}
+							onclick={() => {
+								if (selectedQueue == queueId) {
+									selectedQueue = undefined;
+								} else if (selectedQueue == undefined) {
+									selectedQueue = queueId;
+								} else {
+									swapMutation.mutate(
+										{
+											a: selectedQueue,
+											b: queueId
+										},
+										{
+											onSettled() {
+												selectedQueue = undefined;
+											},
+											onError(error) {
+												addErrorToast("Cannot swap queue order", error);
+											}
+										}
+									);
+								}
+							}}
+							onmouseleave={() => {
+								hiSource = undefined;
+								hiID = undefined;
+							}}
+						/>
+					</div>
 				{:else}
 					<NothingToShow />
 				{/each}
@@ -85,5 +117,8 @@
 		.content {
 			grid-template-columns: repeat(2, 1fr);
 		}
+	}
+	.list-item {
+		display: grid;
 	}
 </style>
