@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { autoUpdate } from "@floating-ui/dom";
+	import { autoUpdate, type Placement } from "@floating-ui/dom";
 	import { computePosition, offset, flip, shift, arrow } from "@floating-ui/dom";
 	import type { Snippet } from "svelte";
 
@@ -11,19 +11,21 @@
 		triggerContent: Snippet;
 		tooltipContent: Snippet;
 		openOnLayoutClick?: boolean;
+		placement?: Placement;
 	}
 
 	let {
 		open = $bindable(false),
 		tooltipContent,
 		triggerContent,
-		openOnLayoutClick
+		openOnLayoutClick,
+		placement: plc = "bottom"
 	}: Props = $props();
 
 	async function update() {
 		if (layout && tooltip && arrowElement) {
 			const { x, y, placement, middlewareData } = await computePosition(layout, tooltip, {
-				placement: "bottom",
+				placement: plc,
 				middleware: [
 					offset(6),
 					flip(),
