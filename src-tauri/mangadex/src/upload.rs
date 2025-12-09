@@ -311,6 +311,21 @@ where
     pub async fn get_session_ids(&self) -> Vec<Uuid> {
         self.sessions.read().await.keys().copied().collect()
     }
+    pub async fn swap_file_order(&self, session_id: Uuid, a: usize, b: usize) -> crate::Result<()> {
+        {
+            let mut write = self.sessions.write().await;
+            let session = write
+                .get_mut(&session_id)
+                .ok_or(crate::Error::InternalUploadSessionNotFound(session_id))?;
+            if a < session.images.len() && b < session.images.len() {
+                session.images.swap(a, b);
+            } else {
+                log::error!("Out bounds a or b to swap file order");
+            }
+        }
+        self.emit_manager_event(UploadManagerEventPayload::QueueEntryUpdate { id: session_id })?;
+        Ok(())
+    }
 }
 
 #[cfg_attr(feature = "hotpath", hotpath::measure)]

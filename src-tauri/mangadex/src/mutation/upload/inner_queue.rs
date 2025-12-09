@@ -132,4 +132,18 @@ impl InternalSessionMutation {
         }
         Ok(None)
     }
+    pub async fn swap_file_order(
+        &self,
+        ctx: &Context<'_>,
+        session_id: Uuid,
+        a: u32,
+        b: u32,
+    ) -> Result<Option<bool>, ErrorWrapper> {
+        let app_handle = ctx.get_app_handle::<tauri::Wry>()?;
+        let manager = app_handle.upload_manager();
+        manager
+            .swap_file_order(session_id, a.try_into()?, b.try_into()?)
+            .await?;
+        Ok(None)
+    }
 }
