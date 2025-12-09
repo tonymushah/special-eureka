@@ -1772,6 +1772,7 @@ export type InternalSessionMutation = {
 	removeFiles?: Maybe<Scalars["Boolean"]["output"]>;
 	sendInQueue?: Maybe<Scalars["Boolean"]["output"]>;
 	setCommitData?: Maybe<Scalars["Boolean"]["output"]>;
+	swapFileOrder?: Maybe<Scalars["Boolean"]["output"]>;
 };
 
 export type InternalSessionMutationAddFileArgs = {
@@ -1795,6 +1796,12 @@ export type InternalSessionMutationRemoveFilesArgs = {
 export type InternalSessionMutationSetCommitDataArgs = {
 	commitData?: InputMaybe<InternUploadSessionCommitDataInput>;
 	startRunner?: InputMaybe<Scalars["Boolean"]["input"]>;
+};
+
+export type InternalSessionMutationSwapFileOrderArgs = {
+	a: Scalars["Int"]["input"];
+	b: Scalars["Int"]["input"];
+	sessionId: Scalars["UUID"]["input"];
 };
 
 export type InternalSessionsMutations = {

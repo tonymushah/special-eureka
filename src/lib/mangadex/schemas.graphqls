@@ -1340,6 +1340,7 @@ type InternalSessionMutation {
 	removeFile(imgPath: String!): Boolean
 	removeFiles(imgPaths: [String!]!): Boolean
 	setCommitData(commitData: InternUploadSessionCommitDataInput, startRunner: Boolean): Boolean
+	swapFileOrder(sessionId: UUID!, a: Int!, b: Int!): Boolean
 }
 
 type InternalSessionsMutations {
