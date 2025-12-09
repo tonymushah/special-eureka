@@ -323,7 +323,7 @@ where
                 log::error!("Out bounds a or b to swap file order");
             }
         }
-        self.emit_manager_event(UploadManagerEventPayload::QueueEntryUpdate { id: session_id })?;
+        self.emit_manager_event(UploadManagerEventPayload::SessionUpdate { id: session_id })?;
         Ok(())
     }
 }
