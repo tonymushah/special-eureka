@@ -174,6 +174,7 @@ type Documents = {
 	"\n\tmutation removeInternalSession($sessionId: UUID!) {\n\t\tupload {\n\t\t\tinternal {\n\t\t\t\tsession(id: $sessionId) {\n\t\t\t\t\tremove\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.RemoveInternalSessionDocument;
 	"\n\tmutation sendInternalSessionInQueue($sessionId: UUID!) {\n\t\tupload {\n\t\t\tinternal {\n\t\t\t\tsession(id: $sessionId) {\n\t\t\t\t\tsendInQueue\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.SendInternalSessionInQueueDocument;
 	"\n\tmutation setCommitDataInternalSession(\n\t\t$sessionId: UUID!\n\t\t$commitData: InternUploadSessionCommitDataInput!\n\t\t$startRunner: Boolean\n\t) {\n\t\tupload {\n\t\t\tinternal {\n\t\t\t\tsession(id: $sessionId) {\n\t\t\t\t\tsetCommitData(commitData: $commitData, startRunner: $startRunner)\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.SetCommitDataInternalSessionDocument;
+	"\n\tmutation swapInternalUploadSessionFiles($sessionId: UUID!, $a: Int!, $b: Int!) {\n\t\tupload {\n\t\t\tinternal {\n\t\t\t\tsession(id: $sessionId) {\n\t\t\t\t\tswapFileOrder(a: $a, b: $b)\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.SwapInternalUploadSessionFilesDocument;
 	"\n\tmutation startInternalQueueRunner {\n\t\tupload {\n\t\t\tinternal {\n\t\t\t\tstartQueueRunner\n\t\t\t}\n\t\t}\n\t}\n": typeof types.StartInternalQueueRunnerDocument;
 	"\n\tmutation swapInternalQueueOrder($a: UUID!, $b: UUID!) {\n\t\tupload {\n\t\t\tinternal {\n\t\t\t\tswapQueueOrder(a: $a, b: $b)\n\t\t\t}\n\t\t}\n\t}\n": typeof types.SwapInternalQueueOrderDocument;
 	"\n\tquery userPageQuery($id: UUID!) {\n\t\tuser {\n\t\t\tget(id: $id) {\n\t\t\t\tid\n\t\t\t\tattributes {\n\t\t\t\t\tusername\n\t\t\t\t\troles\n\t\t\t\t}\n\t\t\t\trelationships {\n\t\t\t\t\tgroups {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\tname\n\t\t\t\t\t\t}\n\t\t\t\t\t\trelationships {\n\t\t\t\t\t\t\tleader {\n\t\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\tchapter {\n\t\t\tlist(params: { uploaders: [$id] }) {\n\t\t\t\ttotal\n\t\t\t}\n\t\t}\n\t}\n": typeof types.UserPageQueryDocument;
@@ -559,6 +560,8 @@ const documents: Documents = {
 		types.SendInternalSessionInQueueDocument,
 	"\n\tmutation setCommitDataInternalSession(\n\t\t$sessionId: UUID!\n\t\t$commitData: InternUploadSessionCommitDataInput!\n\t\t$startRunner: Boolean\n\t) {\n\t\tupload {\n\t\t\tinternal {\n\t\t\t\tsession(id: $sessionId) {\n\t\t\t\t\tsetCommitData(commitData: $commitData, startRunner: $startRunner)\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
 		types.SetCommitDataInternalSessionDocument,
+	"\n\tmutation swapInternalUploadSessionFiles($sessionId: UUID!, $a: Int!, $b: Int!) {\n\t\tupload {\n\t\t\tinternal {\n\t\t\t\tsession(id: $sessionId) {\n\t\t\t\t\tswapFileOrder(a: $a, b: $b)\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
+		types.SwapInternalUploadSessionFilesDocument,
 	"\n\tmutation startInternalQueueRunner {\n\t\tupload {\n\t\t\tinternal {\n\t\t\t\tstartQueueRunner\n\t\t\t}\n\t\t}\n\t}\n":
 		types.StartInternalQueueRunnerDocument,
 	"\n\tmutation swapInternalQueueOrder($a: UUID!, $b: UUID!) {\n\t\tupload {\n\t\t\tinternal {\n\t\t\t\tswapQueueOrder(a: $a, b: $b)\n\t\t\t}\n\t\t}\n\t}\n":
@@ -1662,6 +1665,12 @@ export function graphql(
 export function graphql(
 	source: "\n\tmutation setCommitDataInternalSession(\n\t\t$sessionId: UUID!\n\t\t$commitData: InternUploadSessionCommitDataInput!\n\t\t$startRunner: Boolean\n\t) {\n\t\tupload {\n\t\t\tinternal {\n\t\t\t\tsession(id: $sessionId) {\n\t\t\t\t\tsetCommitData(commitData: $commitData, startRunner: $startRunner)\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"
 ): (typeof documents)["\n\tmutation setCommitDataInternalSession(\n\t\t$sessionId: UUID!\n\t\t$commitData: InternUploadSessionCommitDataInput!\n\t\t$startRunner: Boolean\n\t) {\n\t\tupload {\n\t\t\tinternal {\n\t\t\t\tsession(id: $sessionId) {\n\t\t\t\t\tsetCommitData(commitData: $commitData, startRunner: $startRunner)\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tmutation swapInternalUploadSessionFiles($sessionId: UUID!, $a: Int!, $b: Int!) {\n\t\tupload {\n\t\t\tinternal {\n\t\t\t\tsession(id: $sessionId) {\n\t\t\t\t\tswapFileOrder(a: $a, b: $b)\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tmutation swapInternalUploadSessionFiles($sessionId: UUID!, $a: Int!, $b: Int!) {\n\t\tupload {\n\t\t\tinternal {\n\t\t\t\tsession(id: $sessionId) {\n\t\t\t\t\tswapFileOrder(a: $a, b: $b)\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
