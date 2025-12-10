@@ -60,6 +60,8 @@
 	let selectedIndex = $state<number | undefined>();
 </script>
 
+<h4>Images</h4>
+
 <div class="images-actions">
 	<PrimaryButton
 		disabled={addFilesMutation.isPending || removeFileMutation.isPending}
@@ -72,8 +74,10 @@
 					}
 				}
 			);
-		}}>Add images</PrimaryButton
+		}}
 	>
+		Add images
+	</PrimaryButton>
 </div>
 
 <div class="images">
@@ -162,6 +166,7 @@
 		display: flex;
 		flex-wrap: wrap;
 		gap: 6px;
+		margin-bottom: 6px;
 	}
 	.images {
 		display: grid;
@@ -210,5 +215,9 @@
 		img {
 			border: 3px solid var(--mid-tone);
 		}
+	}
+	h4 {
+		margin: 0px;
+		text-decoration: underline;
 	}
 </style>

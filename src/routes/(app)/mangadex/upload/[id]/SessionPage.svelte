@@ -126,6 +126,7 @@
 		</p>
 		<!-- TODO implement this commit-data thingy -->
 		<div class="commit-data"></div>
+		<hr />
 		<Images images={session.imagesUrl} {sessionId} imagesPaths={session.images} />
 	</div>
 {:else if session == undefined}
@@ -150,5 +151,8 @@
 	}
 	.layout {
 		margin: 0px 12px;
+	}
+	hr {
+		color: var(--mid-tone);
 	}
 </style>
