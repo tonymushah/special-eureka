@@ -6,6 +6,7 @@
 	import { derived as der, get, type Writable } from "svelte/store";
 	import LanguagesBaseMenu from "./LanguagesBaseMenu.svelte";
 	import type { PortalConfig } from "@melt-ui/svelte/internal/actions";
+	import { startCase } from "lodash";
 
 	interface Props {
 		title: string;
@@ -24,8 +25,19 @@
 			| "left-start"
 			| "left-end";
 		portal?: PortalConfig | null;
+		showLangName?: boolean;
+		rowLayout?: boolean;
+		titleAsParagraph?: boolean;
 	}
-	let { title, selecteds, placement = "top", portal }: Props = $props();
+	let {
+		title,
+		selecteds,
+		placement = "top",
+		portal,
+		showLangName,
+		rowLayout,
+		titleAsParagraph
+	}: Props = $props();
 	const selecteds_options = der(selecteds, ($s) => {
 		return $s.map<SelectOption<Language>>((ss) => ({
 			value: ss
@@ -67,8 +79,12 @@
 	});
 </script>
 
-<section class="layout">
-	<Title type={3}>{title}</Title>
+<section class="layout" class:rowLayout>
+	{#if titleAsParagraph}
+		<p class="title">{title}</p>
+	{:else}
+		<Title type={3}>{title}</Title>
+	{/if}
 	<div class="content">
 		<button
 			use:melt={$trigger}
@@ -80,9 +96,18 @@
 		>
 			{#if $selected}
 				{#each $selected as s}
-					<div class="icon">
-						<FlagIcon lang={s.value} />
-					</div>
+					{#if showLangName}
+						<div class="lang">
+							<div class="icon">
+								<FlagIcon lang={s.value} />
+							</div>
+							<span>{startCase(s.value)}</span>
+						</div>
+					{:else}
+						<div class="icon">
+							<FlagIcon lang={s.value} />
+						</div>
+					{/if}
 				{:else}
 					Select language
 				{/each}
@@ -105,14 +130,17 @@
 		align-items: center;
 	}
 	.layout {
-		display: flex;
-		flex-direction: column;
-		gap: 10px;
-	}
-
-	.layout {
 		display: grid;
 		gap: 5px;
+	}
+	.layout.rowLayout {
+		display: flex;
+		align-items: center;
+		gap: 5px;
+		flex-direction: row;
+	}
+	.title {
+		margin: 0px;
 	}
 	.content {
 		display: flex;
@@ -142,5 +170,11 @@
 	}
 	button:active {
 		background-color: var(--accent-l1-active);
+	}
+	.lang {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 4px;
 	}
 </style>

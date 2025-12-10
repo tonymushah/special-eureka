@@ -13,6 +13,7 @@
 	import registerContextMenuEvent from "@special-eureka/core/utils/contextMenuContext";
 	import mangaElementContextMenu from "@mangadex/utils/context-menu/manga";
 	import Images from "./Images.svelte";
+	import CommitData from "./CommitData.svelte";
 
 	interface Props {
 		sessionId: string;
@@ -124,8 +125,7 @@
 				{/each}
 			{/if}
 		</p>
-		<!-- TODO implement this commit-data thingy -->
-		<div class="commit-data"></div>
+		<CommitData commitData={session.commitData} {sessionId} />
 		<hr />
 		<Images images={session.imagesUrl} {sessionId} imagesPaths={session.images} />
 	</div>
