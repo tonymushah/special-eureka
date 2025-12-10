@@ -1793,6 +1793,10 @@ export type InternalSessionMutationRemoveFilesArgs = {
 	imgPaths: Array<Scalars["String"]["input"]>;
 };
 
+export type InternalSessionMutationSendInQueueArgs = {
+	startRunner?: InputMaybe<Scalars["Boolean"]["input"]>;
+};
+
 export type InternalSessionMutationSetCommitDataArgs = {
 	commitData?: InputMaybe<InternUploadSessionCommitDataInput>;
 	startRunner?: InputMaybe<Scalars["Boolean"]["input"]>;
