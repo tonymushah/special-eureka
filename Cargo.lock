@@ -1117,24 +1117,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "cookie_store"
-version = "0.22.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3fc4bff745c9b4c7fb1e97b25d13153da2bc7796260141df62378998d070207f"
-dependencies = [
- "cookie",
- "document-features",
- "idna",
- "indexmap 2.12.1",
- "log",
- "serde",
- "serde_derive",
- "serde_json",
- "time",
- "url",
-]
-
-[[package]]
 name = "core-foundation"
 version = "0.9.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1901,7 +1883,7 @@ dependencies = [
  "bytes",
  "eureka-mmanager-core",
  "futures-util",
- "itertools 0.12.1",
+ "itertools 0.14.0",
  "log",
  "mangadex-api",
  "mangadex-api-input-types",
@@ -1929,7 +1911,7 @@ dependencies = [
  "actix",
  "bytes",
  "ciborium",
- "itertools 0.12.1",
+ "itertools 0.14.0",
  "mangadex-api-input-types",
  "mangadex-api-schema-rust",
  "mangadex-api-types-rust",
@@ -2773,9 +2755,9 @@ checksum = "7f24254aa9a54b5c858eaee2f5bccdb46aaf0e486a595ed5fd8f86ba55232a70"
 
 [[package]]
 name = "hotpath"
-version = "0.8.0"
+version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4b0a2c66c081fe3684a54a7e5d059c9d9ad6b3ee5ccea14f6e4f056dbd77becf"
+checksum = "1bff4650da2df45a71a2f5c2c51fdcd5bea79270e0cc2a9984942d57fc77c0d7"
 dependencies = [
  "arc-swap",
  "base64 0.22.1",
@@ -2797,14 +2779,13 @@ dependencies = [
  "serde_json",
  "tiny_http",
  "tokio",
- "ureq",
 ]
 
 [[package]]
 name = "hotpath-macros"
-version = "0.8.0"
+version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a38fa43ca80cf906cd05127e490d740a51abb38316db7bce9d95e89724a81761"
+checksum = "9a8d87ff506da0e93bac1a7ba104aa79fac048edab9d8ef922e75ba54106ee3d"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -5552,7 +5533,7 @@ dependencies = [
  "base64 0.22.1",
  "bytes",
  "cookie",
- "cookie_store 0.21.1",
+ "cookie_store",
  "encoding_rs",
  "futures-core",
  "futures-util",
@@ -5705,7 +5686,6 @@ version = "0.23.35"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "533f54bc6a7d4f647e46ad909549eda97bf5afc1585190ef692b4286b198bd8f"
 dependencies = [
- "log",
  "once_cell",
  "ring",
  "rustls-pki-types",
@@ -7781,38 +7761,6 @@ name = "untrusted"
 version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8ecb6da28b8a351d773b68d5825ac39017e680750f980f3a1a85cd8dd28a47c1"
-
-[[package]]
-name = "ureq"
-version = "3.1.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d39cb1dbab692d82a977c0392ffac19e188bd9186a9f32806f0aaa859d75585a"
-dependencies = [
- "base64 0.22.1",
- "cookie_store 0.22.0",
- "flate2",
- "log",
- "percent-encoding",
- "rustls",
- "rustls-pki-types",
- "serde",
- "serde_json",
- "ureq-proto",
- "utf-8",
- "webpki-roots",
-]
-
-[[package]]
-name = "ureq-proto"
-version = "0.5.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d81f9efa9df032be5934a46a068815a10a042b494b6a58cb0a1a97bb5467ed6f"
-dependencies = [
- "base64 0.22.1",
- "http 1.4.0",
- "httparse",
- "log",
-]
 
 [[package]]
 name = "url"
