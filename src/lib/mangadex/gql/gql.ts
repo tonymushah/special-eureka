@@ -166,7 +166,7 @@ type Documents = {
 	"\n\tsubscription internalQueueEntryState($id: UUID!) {\n\t\twatchInternalUploadQueueState(id: $id)\n\t}\n": typeof types.InternalQueueEntryStateDocument;
 	"\n\tsubscription internalSessionQueueOrderIDs {\n\t\twatchInternalUploadQueueListIds\n\t}\n": typeof types.InternalSessionQueueOrderIDsDocument;
 	"\n\tsubscription internalSessionListIDs {\n\t\twatchInternalUploadSessionsListIds\n\t}\n": typeof types.InternalSessionListIDsDocument;
-	"\n\tsubscription internalUploadSessionData($id: UUID!) {\n\t\twatchInternalUploadSessionObj(id: $id) {\n\t\t\tmangaId\n\t\t\tgroups\n\t\t\tcommitData {\n\t\t\t\tchapter\n\t\t\t\ttitle\n\t\t\t\ttranslatedLanguage\n\t\t\t\texternalUrl\n\t\t\t\tpublishAt\n\t\t\t\ttermsAccepted\n\t\t\t}\n\t\t\timages\n\t\t\timagesUrl\n\t\t}\n\t}\n": typeof types.InternalUploadSessionDataDocument;
+	"\n\tsubscription internalUploadSessionData($id: UUID!) {\n\t\twatchInternalUploadSessionObj(id: $id) {\n\t\t\tmangaId\n\t\t\tgroups\n\t\t\tcommitData {\n\t\t\t\tvolume\n\t\t\t\tchapter\n\t\t\t\ttitle\n\t\t\t\ttranslatedLanguage\n\t\t\t\texternalUrl\n\t\t\t\tpublishAt\n\t\t\t\ttermsAccepted\n\t\t\t}\n\t\t\timages\n\t\t\timagesUrl\n\t\t}\n\t}\n": typeof types.InternalUploadSessionDataDocument;
 	"\n\tmutation addFileInternalSession($sessionId: UUID!, $imgPath: String!, $index: Int) {\n\t\tupload {\n\t\t\tinternal {\n\t\t\t\tsession(id: $sessionId) {\n\t\t\t\t\taddFile(imgPath: $imgPath, index: $index)\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.AddFileInternalSessionDocument;
 	"\n\tmutation addFilesInternalSession($sessionId: UUID!, $imgPaths: [String!]!, $index: Int) {\n\t\tupload {\n\t\t\tinternal {\n\t\t\t\tsession(id: $sessionId) {\n\t\t\t\t\taddFiles(imgPaths: $imgPaths, index: $index)\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.AddFilesInternalSessionDocument;
 	"\n\tmutation removeFileInternalSession($sessionId: UUID!, $imgPath: String!) {\n\t\tupload {\n\t\t\tinternal {\n\t\t\t\tsession(id: $sessionId) {\n\t\t\t\t\tremoveFile(imgPath: $imgPath)\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.RemoveFileInternalSessionDocument;
@@ -544,7 +544,7 @@ const documents: Documents = {
 		types.InternalSessionQueueOrderIDsDocument,
 	"\n\tsubscription internalSessionListIDs {\n\t\twatchInternalUploadSessionsListIds\n\t}\n":
 		types.InternalSessionListIDsDocument,
-	"\n\tsubscription internalUploadSessionData($id: UUID!) {\n\t\twatchInternalUploadSessionObj(id: $id) {\n\t\t\tmangaId\n\t\t\tgroups\n\t\t\tcommitData {\n\t\t\t\tchapter\n\t\t\t\ttitle\n\t\t\t\ttranslatedLanguage\n\t\t\t\texternalUrl\n\t\t\t\tpublishAt\n\t\t\t\ttermsAccepted\n\t\t\t}\n\t\t\timages\n\t\t\timagesUrl\n\t\t}\n\t}\n":
+	"\n\tsubscription internalUploadSessionData($id: UUID!) {\n\t\twatchInternalUploadSessionObj(id: $id) {\n\t\t\tmangaId\n\t\t\tgroups\n\t\t\tcommitData {\n\t\t\t\tvolume\n\t\t\t\tchapter\n\t\t\t\ttitle\n\t\t\t\ttranslatedLanguage\n\t\t\t\texternalUrl\n\t\t\t\tpublishAt\n\t\t\t\ttermsAccepted\n\t\t\t}\n\t\t\timages\n\t\t\timagesUrl\n\t\t}\n\t}\n":
 		types.InternalUploadSessionDataDocument,
 	"\n\tmutation addFileInternalSession($sessionId: UUID!, $imgPath: String!, $index: Int) {\n\t\tupload {\n\t\t\tinternal {\n\t\t\t\tsession(id: $sessionId) {\n\t\t\t\t\taddFile(imgPath: $imgPath, index: $index)\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
 		types.AddFileInternalSessionDocument,
@@ -1621,8 +1621,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-	source: "\n\tsubscription internalUploadSessionData($id: UUID!) {\n\t\twatchInternalUploadSessionObj(id: $id) {\n\t\t\tmangaId\n\t\t\tgroups\n\t\t\tcommitData {\n\t\t\t\tchapter\n\t\t\t\ttitle\n\t\t\t\ttranslatedLanguage\n\t\t\t\texternalUrl\n\t\t\t\tpublishAt\n\t\t\t\ttermsAccepted\n\t\t\t}\n\t\t\timages\n\t\t\timagesUrl\n\t\t}\n\t}\n"
-): (typeof documents)["\n\tsubscription internalUploadSessionData($id: UUID!) {\n\t\twatchInternalUploadSessionObj(id: $id) {\n\t\t\tmangaId\n\t\t\tgroups\n\t\t\tcommitData {\n\t\t\t\tchapter\n\t\t\t\ttitle\n\t\t\t\ttranslatedLanguage\n\t\t\t\texternalUrl\n\t\t\t\tpublishAt\n\t\t\t\ttermsAccepted\n\t\t\t}\n\t\t\timages\n\t\t\timagesUrl\n\t\t}\n\t}\n"];
+	source: "\n\tsubscription internalUploadSessionData($id: UUID!) {\n\t\twatchInternalUploadSessionObj(id: $id) {\n\t\t\tmangaId\n\t\t\tgroups\n\t\t\tcommitData {\n\t\t\t\tvolume\n\t\t\t\tchapter\n\t\t\t\ttitle\n\t\t\t\ttranslatedLanguage\n\t\t\t\texternalUrl\n\t\t\t\tpublishAt\n\t\t\t\ttermsAccepted\n\t\t\t}\n\t\t\timages\n\t\t\timagesUrl\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tsubscription internalUploadSessionData($id: UUID!) {\n\t\twatchInternalUploadSessionObj(id: $id) {\n\t\t\tmangaId\n\t\t\tgroups\n\t\t\tcommitData {\n\t\t\t\tvolume\n\t\t\t\tchapter\n\t\t\t\ttitle\n\t\t\t\ttranslatedLanguage\n\t\t\t\texternalUrl\n\t\t\t\tpublishAt\n\t\t\t\ttermsAccepted\n\t\t\t}\n\t\t\timages\n\t\t\timagesUrl\n\t\t}\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

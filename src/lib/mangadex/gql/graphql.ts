@@ -7226,6 +7226,7 @@ export type InternalUploadSessionDataSubscription = {
 		imagesUrl: Array<any>;
 		commitData?: {
 			__typename?: "InternUploadSessionCommitData";
+			volume?: string | null;
 			chapter?: string | null;
 			title?: string | null;
 			translatedLanguage: Language;
@@ -25159,6 +25160,10 @@ export const InternalUploadSessionDataDocument = {
 									selectionSet: {
 										kind: "SelectionSet",
 										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "volume" }
+											},
 											{
 												kind: "Field",
 												name: { kind: "Name", value: "chapter" }

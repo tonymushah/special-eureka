@@ -29,6 +29,7 @@ export type InternalSessionObj = {
 
 export type InternalSessionObjCommitData = {
 	chapter?: string;
+	volume?: string;
 	title?: string;
 	translatedLanguage: Language;
 	externalUrl?: string;
@@ -73,7 +74,8 @@ export function sessionObjStore(id: string) {
 											publishAt: cData.publishAt,
 											termsAccepted: cData.termsAccepted ?? undefined,
 											title: cData.title ?? undefined,
-											translatedLanguage: cData.translatedLanguage
+											translatedLanguage: cData.translatedLanguage,
+											volume: cData.volume ?? undefined
 										} satisfies InternalSessionObjCommitData;
 									} else {
 										return undefined;

@@ -6,6 +6,7 @@ export const internalSessionGQLDocs = graphql(`
 			mangaId
 			groups
 			commitData {
+				volume
 				chapter
 				title
 				translatedLanguage
