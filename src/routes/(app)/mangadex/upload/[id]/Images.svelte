@@ -17,8 +17,9 @@
 		images: string[];
 		sessionId: string;
 		imagesPaths: string[];
+		isUploading?: boolean;
 	}
-	let { images, sessionId, imagesPaths }: Props = $props();
+	let { images, sessionId, imagesPaths, isUploading }: Props = $props();
 	let addFilesMutation = addFilesToInternalSessionMutation();
 	let removeFileMutation = removeFileToInternalSessionMutation();
 	const t_window = getCurrentWindow();
@@ -64,7 +65,7 @@
 
 <div class="images-actions">
 	<PrimaryButton
-		disabled={addFilesMutation.isPending || removeFileMutation.isPending}
+		disabled={addFilesMutation.isPending || removeFileMutation.isPending || isUploading}
 		onclick={() => {
 			addFilesMutation.mutate(
 				{ sessionId },

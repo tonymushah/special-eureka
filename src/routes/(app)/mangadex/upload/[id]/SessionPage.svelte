@@ -5,7 +5,6 @@
 	import { client } from "@mangadex/gql/urql";
 	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
 	import { onlyGroupNames } from "@mangadex/stores/scanlation-groups/only-name";
-	import { sendInternalSessionInQueueMutation } from "@mangadex/gql-docs/upload/session/mutations/send-in-queue";
 	import { onMount } from "svelte";
 	import LoadingPage from "@mangadex/componnents/pages/LoadingPage.svelte";
 	import Tooltip from "@mangadex/componnents/Tooltip.svelte";
@@ -14,6 +13,7 @@
 	import mangaElementContextMenu from "@mangadex/utils/context-menu/manga";
 	import Images from "./Images.svelte";
 	import CommitData from "./CommitData.svelte";
+	import { queueEntryState } from "@mangadex/stores/upload/queue";
 
 	interface Props {
 		sessionId: string;
@@ -40,13 +40,13 @@
 	let groupNames = $derived(
 		new Map(groupNamesQuery.data?.map((d) => [d.id as string, d.attributes.name]) ?? [])
 	);
-	let sendInQueueMutation = sendInternalSessionInQueueMutation();
-
 	onMount(() =>
 		sessionS.subscribe((d) => {
 			console.debug(d);
 		})
 	);
+	const entryState = queueEntryState(sessionId);
+	let isUploading = $derived($entryState?.state == "Uploading");
 </script>
 
 {#if session != null && session != undefined}
@@ -125,9 +125,9 @@
 				{/each}
 			{/if}
 		</p>
-		<CommitData commitData={session.commitData} {sessionId} />
+		<CommitData commitData={session.commitData} {sessionId} {isUploading} />
 		<hr />
-		<Images images={session.imagesUrl} {sessionId} imagesPaths={session.images} />
+		<Images images={session.imagesUrl} {sessionId} imagesPaths={session.images} {isUploading} />
 	</div>
 {:else if session == undefined}
 	<LoadingPage />

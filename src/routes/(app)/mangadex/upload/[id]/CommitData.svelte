@@ -1,5 +1,10 @@
 <script lang="ts">
+	import UploadIcon from "@mangadex/componnents/manga/page/top-info/buttons/upload/UploadIcon.svelte";
 	import LanguagesBase from "@mangadex/componnents/manga/search/form/filter/content/languages/LanguagesBase.svelte";
+	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
+	import PrimaryButton from "@mangadex/componnents/theme/buttons/PrimaryButton.svelte";
+	import FormInput from "@mangadex/componnents/theme/form/input/FormInput.svelte";
+	import Tooltip from "@mangadex/componnents/Tooltip.svelte";
 	import { setInternalSessionCommitDataMutation } from "@mangadex/gql-docs/upload/session/mutations/set-commit-data";
 	import type { Language } from "@mangadex/gql/graphql";
 	import type { InternalSessionObjCommitData } from "@mangadex/stores/upload/sessions";
@@ -8,6 +13,7 @@
 	interface Props {
 		commitData?: InternalSessionObjCommitData;
 		sessionId: string;
+		isUploading?: boolean;
 	}
 	type InnerInternalSessionObjCommitData = Omit<
 		InternalSessionObjCommitData,
@@ -15,7 +21,7 @@
 	> & {
 		translatedLanguage?: Language;
 	};
-	let { commitData: pCommitData, sessionId }: Props = $props();
+	let { commitData: pCommitData, sessionId, isUploading }: Props = $props();
 	let commitData = $state<InnerInternalSessionObjCommitData | undefined>(
 		structuredClone(pCommitData)
 	);
@@ -61,6 +67,183 @@
 				)}
 			/>
 		</div>
+		<div class="input">
+			<p class="label">Chapter:</p>
+			<FormInput
+				inputProps={{
+					placeholder: "Chapter number here"
+				}}
+				bind:value={
+					() => {
+						return commitData?.chapter;
+					},
+					(value) => {
+						if (commitData) {
+							commitData.chapter = value;
+						} else {
+							commitData = {
+								chapter: value
+							};
+						}
+					}
+				}
+			/>
+		</div>
+		<div class="input">
+			<p class="label">Title:</p>
+			<FormInput
+				inputProps={{
+					placeholder: "Chapter title here"
+				}}
+				bind:value={
+					() => {
+						return commitData?.title;
+					},
+					(value) => {
+						if (commitData) {
+							commitData.title = value;
+						} else {
+							commitData = {
+								title: value
+							};
+						}
+					}
+				}
+			/>
+		</div>
+		<div class="input">
+			<p class="label">Volume:</p>
+			<FormInput
+				inputProps={{
+					placeholder: "Volume number here"
+				}}
+				bind:value={
+					() => {
+						return commitData?.volume;
+					},
+					(value) => {
+						if (commitData) {
+							commitData.volume = value;
+						} else {
+							commitData = {
+								volume: value
+							};
+						}
+					}
+				}
+			/>
+		</div>
+		<div class="input">
+			<p class="label">Publish at:</p>
+			<FormInput
+				inputProps={{
+					placeholder: "Chapter number here",
+					type: "datetime-local"
+				}}
+				bind:value={
+					() => {
+						return commitData?.publishAt;
+					},
+					(value) => {
+						if (commitData) {
+							commitData.publishAt = value;
+						} else {
+							commitData = {
+								publishAt: value
+							};
+						}
+					}
+				}
+			/>
+		</div>
+		<div class="input">
+			<p class="label">External url:</p>
+			<FormInput
+				inputProps={{
+					placeholder: "External url here"
+				}}
+				bind:value={
+					() => {
+						return commitData?.externalUrl;
+					},
+					(value) => {
+						if (commitData) {
+							commitData.externalUrl = value;
+						} else {
+							commitData = {
+								externalUrl: value
+							};
+						}
+					}
+				}
+			/>
+		</div>
+		<div class="input">
+			<input
+				type="checkbox"
+				bind:checked={
+					() => commitData?.termsAccepted,
+					(value) => {
+						if (commitData) {
+							commitData.termsAccepted = value;
+						} else {
+							commitData = {
+								termsAccepted: value
+							};
+						}
+					}
+				}
+				class="termsAccepted"
+			/>
+			<p class="label">
+				<Tooltip>
+					{#snippet triggerContent()}
+						Terms Accepted
+					{/snippet}
+					{#snippet tooltipContent()}
+						This is required since the MD Nuke Day of May 15th 2025
+					{/snippet}
+				</Tooltip>
+			</p>
+		</div>
+	</div>
+	<div class="buttons">
+		<PrimaryButton
+			disabled={mutation.isPending || isUploading}
+			onclick={() => {
+				if (commitData?.translatedLanguage != undefined) {
+					mutation.mutate({
+						commitData: {
+							translatedLanguage: commitData.translatedLanguage,
+							...commitData
+						},
+						sessionId,
+						startRunner: true
+					});
+				}
+			}}
+		>
+			<div class="inner">
+				<UploadIcon />
+				Commit and upload
+			</div>
+		</PrimaryButton>
+		<ButtonAccent
+			disabled={mutation.isPending || isUploading}
+			onclick={() => {
+				if (commitData?.translatedLanguage != undefined) {
+					mutation.mutate({
+						commitData: {
+							translatedLanguage: commitData.translatedLanguage,
+							...commitData
+						},
+						sessionId
+					});
+				}
+			}}
+		>
+			Set commit data
+		</ButtonAccent>
 	</div>
 </div>
 
@@ -69,10 +252,13 @@
 	@use "sass:map";
 
 	.commit-data-form {
-		display: grid;
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: 12px;
 		.input {
-			display: grid;
-			grid-template-columns: repeat(2, 1fr);
+			display: flex;
+			align-items: center;
 			gap: 4px;
 			.label {
 				margin: 0px;
@@ -82,5 +268,20 @@
 	h4 {
 		margin: 0px;
 		text-decoration: underline;
+	}
+	.termsAccepted {
+		width: 24px;
+		height: 24px;
+	}
+	.buttons {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		.inner {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 6px;
+		}
 	}
 </style>
