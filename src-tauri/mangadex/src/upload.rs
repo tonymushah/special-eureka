@@ -333,7 +333,8 @@ async fn inner_runner<R>(queue: UploadQueue, sessions: UploadSessions, app: AppH
 where
     R: Runtime,
 {
-    while let Some((session_id, _)) = queue.front().await {
+    let mut index = 0_usize;
+    while let Some((session_id, _)) = queue.get_at_index(index).await {
         let Ok(_) = queue
             .set_state(session_id, UploadSessionState::Uploading)
             .await
@@ -359,9 +360,10 @@ where
                     UPLOAD_MANAGER_EVENT_KEY,
                     UploadManagerEventPayload::QueueEntryUpdate { id: session_id },
                 );
+                index += 1;
             }
             Ok(_chapter) => {
-                queue.pop_front().await;
+                queue.remove_at_index(index).await;
                 let _ = app.emit(
                     UPLOAD_MANAGER_EVENT_KEY,
                     UploadManagerEventPayload::QueueListUpdate,
