@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { queueEntryState } from "@mangadex/stores/upload/queue";
 	import type { HTMLButtonAttributes } from "svelte/elements";
+	import Tooltip from "../Tooltip.svelte";
 
 	interface Props extends Omit<HTMLButtonAttributes, "children"> {
 		queueId: string;
@@ -43,7 +44,14 @@
 		{:else if queueState.state == "Error"}
 			{@const error = queueState.error}
 			{@const errorCode = error.graphQLErrors.at(0)?.extensions["code"]}
-			Error ({errorCode})
+			<Tooltip>
+				{#snippet triggerContent()}
+					Error (code: {errorCode})
+				{/snippet}
+				{#snippet tooltipContent()}
+					<p class="err-msg">{error.message}</p>
+				{/snippet}
+			</Tooltip>
 		{/if}
 	</span>
 </button>
@@ -54,6 +62,7 @@
 		border-radius: 3px;
 		background-color: var(--accent-l1);
 		transition: none;
+		color: var(--text-color);
 	}
 	button:hover {
 		background-color: var(--accent-l1-hover);
@@ -91,5 +100,8 @@
 	}
 	.selected:active {
 		background-color: var(--primary);
+	}
+	.err-msg {
+		max-width: 300px;
 	}
 </style>
