@@ -230,8 +230,7 @@
 			</p>
 			<p class="commit-data">
 				{#if session.commitData}
-					{@const commitData = session.commitData};
-
+					{@const commitData = session.commitData}
 					<FlagIcon lang={commitData.translatedLanguage} />
 					{#if commitData.chapter}Chap. {commitData.chapter}
 					{/if}
