@@ -4,6 +4,7 @@
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import PrimaryButton from "@mangadex/componnents/theme/buttons/PrimaryButton.svelte";
 	import FormInput from "@mangadex/componnents/theme/form/input/FormInput.svelte";
+	import { addErrorToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 	import Tooltip from "@mangadex/componnents/Tooltip.svelte";
 	import { setInternalSessionCommitDataMutation } from "@mangadex/gql-docs/upload/session/mutations/set-commit-data";
 	import type { Language } from "@mangadex/gql/graphql";
@@ -26,6 +27,9 @@
 		structuredClone(pCommitData)
 	);
 	let mutation = setInternalSessionCommitDataMutation();
+	let disabledButtons = $derived(
+		mutation.isPending || isUploading || commitData?.translatedLanguage == undefined
+	);
 </script>
 
 <!-- TODO implement this commit-data thingy -->
@@ -209,17 +213,24 @@
 	</div>
 	<div class="buttons">
 		<PrimaryButton
-			disabled={mutation.isPending || isUploading}
+			disabled={disabledButtons}
 			onclick={() => {
 				if (commitData?.translatedLanguage != undefined) {
-					mutation.mutate({
-						commitData: {
-							translatedLanguage: commitData.translatedLanguage,
-							...commitData
+					mutation.mutate(
+						{
+							commitData: {
+								translatedLanguage: commitData.translatedLanguage,
+								...commitData
+							},
+							sessionId,
+							startRunner: true
 						},
-						sessionId,
-						startRunner: true
-					});
+						{
+							onError(err) {
+								addErrorToast("Cannot commit or upload", err);
+							}
+						}
+					);
 				}
 			}}
 		>
@@ -229,16 +240,23 @@
 			</div>
 		</PrimaryButton>
 		<ButtonAccent
-			disabled={mutation.isPending || isUploading}
+			disabled={disabledButtons}
 			onclick={() => {
 				if (commitData?.translatedLanguage != undefined) {
-					mutation.mutate({
-						commitData: {
-							translatedLanguage: commitData.translatedLanguage,
-							...commitData
+					mutation.mutate(
+						{
+							commitData: {
+								translatedLanguage: commitData.translatedLanguage,
+								...commitData
+							},
+							sessionId
 						},
-						sessionId
-					});
+						{
+							onError(err) {
+								addErrorToast("Cannot set commit data", err);
+							}
+						}
+					);
 				}
 			}}
 		>
