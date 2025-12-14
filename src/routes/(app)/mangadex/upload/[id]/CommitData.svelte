@@ -9,6 +9,7 @@
 	import { setInternalSessionCommitDataMutation } from "@mangadex/gql-docs/upload/session/mutations/set-commit-data";
 	import type { Language } from "@mangadex/gql/graphql";
 	import type { InternalSessionObjCommitData } from "@mangadex/stores/upload/sessions";
+	import format_js_date_to_rs_md_date_time_str from "@mangadex/utils/date/md-formatter";
 	import { toStore } from "svelte/store";
 
 	interface Props {
@@ -220,6 +221,9 @@
 						{
 							commitData: {
 								translatedLanguage: commitData.translatedLanguage,
+								publishAt: commitData.publishAt
+									? format_js_date_to_rs_md_date_time_str(new Date(commitData.publishAt))
+									: undefined,
 								...commitData
 							},
 							sessionId,
@@ -247,6 +251,9 @@
 						{
 							commitData: {
 								translatedLanguage: commitData.translatedLanguage,
+								publishAt: commitData.publishAt
+									? format_js_date_to_rs_md_date_time_str(new Date(commitData.publishAt))
+									: undefined,
 								...commitData
 							},
 							sessionId
