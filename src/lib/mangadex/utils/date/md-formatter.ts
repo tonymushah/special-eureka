@@ -14,6 +14,7 @@ function get_js_date_offset_str(date: Date): string {
 	} else {
 		offset_min_str = `0${offset_min}`;
 	}
+	// NOTE check if this is correct
 	if (offset_hour >= 0) {
 		return `+${offset_hour_str}:${offset_min_str}`;
 	} else {
