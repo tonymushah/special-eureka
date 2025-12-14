@@ -66,16 +66,16 @@ impl UploadQueue {
             state,
         ))
     }
-    pub async fn front(&self) -> Option<(Uuid, UploadSessionState)> {
-        self.queue.read().await.front().cloned()
+    pub async fn get_at_index(&self, index: usize) -> Option<(Uuid, UploadSessionState)> {
+        self.queue.read().await.get(index).cloned()
     }
-    pub async fn pop_front(&self) -> Option<(Uuid, UploadSessionState)> {
+    pub async fn remove_at_index(&self, index: usize) -> Option<(Uuid, UploadSessionState)> {
         let mut write = self.queue.write().await;
-        let front = write.pop_front();
-        if front.is_none() {
+        let val = write.remove(index);
+        if val.is_none() {
             write.shrink_to_fit();
         }
-        front
+        val
     }
     pub async fn get_queue_order(&self) -> Vec<Uuid> {
         self.queue

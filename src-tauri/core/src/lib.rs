@@ -17,7 +17,7 @@ pub(crate) mod states;
 
 pub fn run() {
     #[cfg(feature = "hotpath")]
-    let _hot_guard = hot_path::init_hotpath();
+    let _hot_guard = Arc::new(Mutex::new(Some(hot_path::init_hotpath())));
 
     let runtime_guard = RuntimeGuard::new(|| {
         #[cfg(not(feature = "actix-multi-threaded"))]
@@ -72,6 +72,12 @@ pub fn run() {
                         if let Some(runtime) = lock.take() {
                             runtime.cleanup().unwrap()
                         }
+                    }
+                    #[cfg(feature = "hotpath")]
+                    {
+                    		if let Ok(mut lock) = _hot_guard.lock() {
+                    			let _ = lock.take();
+                    		}
                     }
                 }
                 _ => {}

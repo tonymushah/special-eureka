@@ -1772,6 +1772,7 @@ export type InternalSessionMutation = {
 	removeFiles?: Maybe<Scalars["Boolean"]["output"]>;
 	sendInQueue?: Maybe<Scalars["Boolean"]["output"]>;
 	setCommitData?: Maybe<Scalars["Boolean"]["output"]>;
+	swapFileOrder?: Maybe<Scalars["Boolean"]["output"]>;
 };
 
 export type InternalSessionMutationAddFileArgs = {
@@ -1792,9 +1793,18 @@ export type InternalSessionMutationRemoveFilesArgs = {
 	imgPaths: Array<Scalars["String"]["input"]>;
 };
 
+export type InternalSessionMutationSendInQueueArgs = {
+	startRunner?: InputMaybe<Scalars["Boolean"]["input"]>;
+};
+
 export type InternalSessionMutationSetCommitDataArgs = {
 	commitData?: InputMaybe<InternUploadSessionCommitDataInput>;
 	startRunner?: InputMaybe<Scalars["Boolean"]["input"]>;
+};
+
+export type InternalSessionMutationSwapFileOrderArgs = {
+	a: Scalars["Int"]["input"];
+	b: Scalars["Int"]["input"];
 };
 
 export type InternalSessionsMutations = {
@@ -7216,6 +7226,7 @@ export type InternalUploadSessionDataSubscription = {
 		imagesUrl: Array<any>;
 		commitData?: {
 			__typename?: "InternUploadSessionCommitData";
+			volume?: string | null;
 			chapter?: string | null;
 			title?: string | null;
 			translatedLanguage: Language;
@@ -7335,6 +7346,23 @@ export type SetCommitDataInternalSessionMutation = {
 		internal: {
 			__typename?: "InternalSessionsMutations";
 			session: { __typename?: "InternalSessionMutation"; setCommitData?: boolean | null };
+		};
+	};
+};
+
+export type SwapInternalUploadSessionFilesMutationVariables = Exact<{
+	sessionId: Scalars["UUID"]["input"];
+	a: Scalars["Int"]["input"];
+	b: Scalars["Int"]["input"];
+}>;
+
+export type SwapInternalUploadSessionFilesMutation = {
+	__typename?: "Mutation";
+	upload: {
+		__typename?: "UploadMutations";
+		internal: {
+			__typename?: "InternalSessionsMutations";
+			session: { __typename?: "InternalSessionMutation"; swapFileOrder?: boolean | null };
 		};
 	};
 };
@@ -25134,6 +25162,10 @@ export const InternalUploadSessionDataDocument = {
 										selections: [
 											{
 												kind: "Field",
+												name: { kind: "Name", value: "volume" }
+											},
+											{
+												kind: "Field",
 												name: { kind: "Name", value: "chapter" }
 											},
 											{
@@ -25882,6 +25914,127 @@ export const SetCommitDataInternalSessionDocument = {
 } as unknown as DocumentNode<
 	SetCommitDataInternalSessionMutation,
 	SetCommitDataInternalSessionMutationVariables
+>;
+export const SwapInternalUploadSessionFilesDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "swapInternalUploadSessionFiles" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "sessionId" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "a" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "Int" } }
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "b" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "Int" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "upload" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "internal" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "session" },
+												arguments: [
+													{
+														kind: "Argument",
+														name: { kind: "Name", value: "id" },
+														value: {
+															kind: "Variable",
+															name: {
+																kind: "Name",
+																value: "sessionId"
+															}
+														}
+													}
+												],
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "swapFileOrder"
+															},
+															arguments: [
+																{
+																	kind: "Argument",
+																	name: {
+																		kind: "Name",
+																		value: "a"
+																	},
+																	value: {
+																		kind: "Variable",
+																		name: {
+																			kind: "Name",
+																			value: "a"
+																		}
+																	}
+																},
+																{
+																	kind: "Argument",
+																	name: {
+																		kind: "Name",
+																		value: "b"
+																	},
+																	value: {
+																		kind: "Variable",
+																		name: {
+																			kind: "Name",
+																			value: "b"
+																		}
+																	}
+																}
+															]
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	SwapInternalUploadSessionFilesMutation,
+	SwapInternalUploadSessionFilesMutationVariables
 >;
 export const StartInternalQueueRunnerDocument = {
 	kind: "Document",

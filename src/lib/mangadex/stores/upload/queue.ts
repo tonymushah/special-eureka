@@ -3,6 +3,7 @@ import { internalSessionQueueOrderIDsGQLDocs } from "@mangadex/gql-docs/upload/i
 import { InternUploadQueueState, type InputMaybe } from "@mangadex/gql/graphql";
 import { client } from "@mangadex/gql/urql";
 import type { CombinedError } from "@urql/svelte";
+import { delay } from "lodash";
 import { readable } from "svelte/store";
 
 export const queueOrderIDs = readable<string[]>([], (set) => {
@@ -12,10 +13,10 @@ export const queueOrderIDs = readable<string[]>([], (set) => {
 		} else if (res.error) {
 			console.error(res.error);
 		}
-		return () => {
-			sub.unsubscribe();
-		};
 	});
+	return () => {
+		sub.unsubscribe();
+	};
 });
 
 export type QueueEntryState =
@@ -34,42 +35,48 @@ export type QueueEntryState =
 
 export function queueEntryState(id: string) {
 	return readable<InputMaybe<QueueEntryState>>(undefined, (set) => {
-		const sub = client
-			.subscription(internalQueueEntryStateGQLDocs, {
-				id
-			})
-			.subscribe((res) => {
-				if (res.data) {
-					const state = res.data.watchInternalUploadQueueState;
-					if (state == null || state == undefined) {
-						set(null);
-					} else {
-						switch (state) {
-							case InternUploadQueueState.Pending:
-								set({
-									state: "Pending",
-									error: undefined
-								});
-								break;
-							case InternUploadQueueState.Uploading:
-								set({
-									state: "Uploading",
-									error: undefined
-								});
-								break;
-							default:
-								break;
+		let unsub: (() => void) | undefined = undefined;
+		const dl = delay(() => {
+			const sub = client
+				.subscription(internalQueueEntryStateGQLDocs, {
+					id
+				})
+				.subscribe((res) => {
+					if (res.data) {
+						const state = res.data.watchInternalUploadQueueState;
+						if (state == null || state == undefined) {
+							set(null);
+						} else {
+							switch (state) {
+								case InternUploadQueueState.Pending:
+									set({
+										state: "Pending",
+										error: undefined
+									});
+									break;
+								case InternUploadQueueState.Uploading:
+									set({
+										state: "Uploading",
+										error: undefined
+									});
+									break;
+								default:
+									break;
+							}
 						}
+					} else if (res.error) {
+						set({
+							state: "Error",
+							error: res.error
+						});
 					}
-				} else if (res.error) {
-					set({
-						state: "Error",
-						error: res.error
-					});
-				}
-			});
+				});
+			unsub = () => sub.unsubscribe();
+		}, 1);
+
 		return () => {
-			sub.unsubscribe();
+			clearTimeout(dl);
+			unsub?.();
 		};
 	});
 }

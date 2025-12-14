@@ -73,12 +73,15 @@ impl InternalUploadSubscriptions {
         ctx: &'ctx Context<'ctx>,
         id: Uuid,
     ) -> Result<impl Stream<Item = Option<InternUploadSessionGQLObject>> + 'ctx, ErrorWrapper> {
+        #[cfg(debug_assertions)]
+        log::debug!("called watch_internal_upload_session_obj {id}");
         let app = ctx.get_app_handle::<tauri::Wry>()?;
         let manager = app.upload_manager();
         let mut event_stream = manager.event_stream()?;
-        Ok(async_stream::stream! {
+        let stream = async_stream::stream! {
             let mut obj = manager.get_intern_session_object(id).await;
             yield obj;
+
             while let Some(event) = event_stream.next().await {
                 obj = match event {
                     UploadManagerEventPayload::SessionListUpdate => {
@@ -93,7 +96,18 @@ impl InternalUploadSubscriptions {
                 };
                 yield obj;
             }
-        })
+        };
+
+        #[cfg(feature = "hotpath")]
+        let stream = hotpath::stream!(stream, label = "internal_upload_session_obj");
+        #[cfg(debug_assertions)]
+        let stream = {
+            let id_c = id;
+            stream.inspect(move |d| {
+                log::debug!("upload session {id_c} => {:#?}", d);
+            })
+        };
+        Ok(stream)
     }
     pub async fn watch_internal_upload_queue_state<'ctx>(
         &'ctx self,
