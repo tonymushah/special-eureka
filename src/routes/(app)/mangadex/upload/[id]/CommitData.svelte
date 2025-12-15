@@ -138,6 +138,8 @@
 				}
 			/>
 		</div>
+		<!-- TODO Implement publish at with custom date input -->
+		<!-- 
 		<div class="input">
 			<p class="label">Publish at:</p>
 			<FormInput
@@ -160,7 +162,8 @@
 					}
 				}
 			/>
-		</div>
+			</div>
+		-->
 		<div class="input">
 			<p class="label">External url:</p>
 			<FormInput
@@ -220,11 +223,11 @@
 					mutation.mutate(
 						{
 							commitData: {
+								...commitData,
 								translatedLanguage: commitData.translatedLanguage,
 								publishAt: commitData.publishAt
 									? format_js_date_to_rs_md_date_time_str(new Date(commitData.publishAt))
-									: undefined,
-								...commitData
+									: undefined
 							},
 							sessionId,
 							startRunner: true
@@ -250,11 +253,11 @@
 					mutation.mutate(
 						{
 							commitData: {
+								...commitData,
 								translatedLanguage: commitData.translatedLanguage,
 								publishAt: commitData.publishAt
 									? format_js_date_to_rs_md_date_time_str(new Date(commitData.publishAt))
-									: undefined,
-								...commitData
+									: undefined
 							},
 							sessionId
 						},
@@ -302,6 +305,7 @@
 		display: flex;
 		align-items: center;
 		gap: 12px;
+		margin-top: 12px;
 		.inner {
 			display: flex;
 			align-items: center;
