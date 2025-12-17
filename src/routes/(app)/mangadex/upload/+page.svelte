@@ -1,9 +1,11 @@
 <script lang="ts">
 	import PageTitle from "@mangadex/componnents/pages/PageTitle.svelte";
 	import NothingToShow from "@mangadex/componnents/search/content/NothingToShow.svelte";
+	import PrimaryButton from "@mangadex/componnents/theme/buttons/PrimaryButton.svelte";
 	import { addErrorToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 	import SimpleUploadSession from "@mangadex/componnents/upload/SimpleUploadSession.svelte";
 	import SimpleUploadSessionQueueState from "@mangadex/componnents/upload/SimpleUploadSessionQueueState.svelte";
+	import { startQueueRunnerMutation } from "@mangadex/gql-docs/upload/mutations/start-queue-runner";
 	import { createSwapQueueOrderMutation } from "@mangadex/gql-docs/upload/mutations/swap-queue-order";
 	import { queueOrderIDs } from "@mangadex/stores/upload/queue";
 	import { sessionsIDs } from "@mangadex/stores/upload/sessions";
@@ -14,12 +16,23 @@
 	let hiID: string | undefined = $state();
 	let selectedQueue = $state<string | undefined>();
 	let swapMutation = createSwapQueueOrderMutation();
+	let startRunnerMutation = startQueueRunnerMutation();
 </script>
 
 <AppTitle title="Upload Sessions | MangaDex" />
 
 <div class="layout">
 	<PageTitle withReturn title="Upload Sessions" />
+	<div class="buttons">
+		<PrimaryButton
+			onclick={() => {
+				startRunnerMutation.mutate();
+			}}
+			disabled={$queueOrderIDs.length == 0 || startRunnerMutation.isPending}
+		>
+			Start upload!
+		</PrimaryButton>
+	</div>
 	<div class="content">
 		<div class="sessions">
 			<h2>Sessions</h2>
