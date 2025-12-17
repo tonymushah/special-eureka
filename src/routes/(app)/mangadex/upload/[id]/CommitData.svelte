@@ -6,6 +6,7 @@
 	import FormInput from "@mangadex/componnents/theme/form/input/FormInput.svelte";
 	import { addErrorToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 	import Tooltip from "@mangadex/componnents/Tooltip.svelte";
+	import { sendInternalSessionInQueueMutation } from "@mangadex/gql-docs/upload/session/mutations/send-in-queue";
 	import { setInternalSessionCommitDataMutation } from "@mangadex/gql-docs/upload/session/mutations/set-commit-data";
 	import type { Language } from "@mangadex/gql/graphql";
 	import type { InternalSessionObjCommitData } from "@mangadex/stores/upload/sessions";
@@ -28,8 +29,12 @@
 		structuredClone(pCommitData)
 	);
 	let mutation = setInternalSessionCommitDataMutation();
+	let sendInQueue = sendInternalSessionInQueueMutation();
 	let disabledButtons = $derived(
-		mutation.isPending || isUploading || commitData?.translatedLanguage == undefined
+		mutation.isPending ||
+			isUploading ||
+			commitData?.translatedLanguage == undefined ||
+			sendInQueue.isPending
 	);
 </script>
 
@@ -246,6 +251,39 @@
 				Commit and upload
 			</div>
 		</PrimaryButton>
+		<ButtonAccent
+			disabled={disabledButtons}
+			onclick={() => {
+				if (commitData?.translatedLanguage != undefined) {
+					mutation.mutate(
+						{
+							commitData: {
+								...commitData,
+								translatedLanguage: commitData.translatedLanguage,
+								publishAt: commitData.publishAt
+									? format_js_date_to_rs_md_date_time_str(new Date(commitData.publishAt))
+									: undefined
+							},
+							sessionId
+						},
+						{
+							onSuccess() {
+								sendInQueue.mutate(sessionId, {
+									onError(err) {
+										addErrorToast("Cannot send this session in queue", err);
+									}
+								});
+							},
+							onError(err) {
+								addErrorToast("Cannot set commit data", err);
+							}
+						}
+					);
+				}
+			}}
+		>
+			Set commit data and send in queue
+		</ButtonAccent>
 		<ButtonAccent
 			disabled={disabledButtons}
 			onclick={() => {
