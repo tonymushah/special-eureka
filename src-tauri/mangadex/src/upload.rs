@@ -178,8 +178,8 @@ where
         {
             if let Some(i) = index {
                 let read = self.sessions.read().await;
-                let session = write
-                    .get_mut(&session_id)
+                let session = read
+                    .get(&session_id)
                     .ok_or(crate::Error::InternalUploadSessionNotFound(session_id))?;
                 if (session.images.len() as u32) <= i {
                     index = None;
