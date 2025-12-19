@@ -134,6 +134,77 @@
 							stopPropagation: true,
 							additionalMenus: () => [
 								ContextMenuItemProvider.menuItem({
+									text: "Add images previous",
+									action: () => {
+										addFilesMutation.mutate(
+											{
+												sessionId,
+												index: index
+											},
+											{
+												onError(error) {
+													addErrorToast("Cannot swap images", error);
+												}
+											}
+										);
+									}
+									// enabled: index > 0
+								}),
+								ContextMenuItemProvider.menuItem({
+									text: "Add images next",
+									action: () => {
+										addFilesMutation.mutate(
+											{
+												sessionId,
+												index: index + 1
+											},
+											{
+												onError(error) {
+													addErrorToast("Cannot swap images", error);
+												}
+											}
+										);
+									}
+								}),
+								ContextMenuItemProvider.seperator(),
+								ContextMenuItemProvider.menuItem({
+									text: "Swap with the previous image",
+									action: () => {
+										swapFileMutation.mutate(
+											{
+												sessionId,
+												a: index,
+												b: index - 1
+											},
+											{
+												onError(error) {
+													addErrorToast("Cannot swap images", error);
+												}
+											}
+										);
+									},
+									enabled: index > 0
+								}),
+								ContextMenuItemProvider.menuItem({
+									text: "Swap with the next image",
+									action: () => {
+										swapFileMutation.mutate(
+											{
+												sessionId,
+												a: index,
+												b: index + 1
+											},
+											{
+												onError(error) {
+													addErrorToast("Cannot swap images", error);
+												}
+											}
+										);
+									},
+									enabled: index < images.length - 1
+								}),
+								ContextMenuItemProvider.seperator(),
+								ContextMenuItemProvider.menuItem({
 									text: "Remove image",
 									action: () => {
 										const path = imagesPaths.at(index);
