@@ -10,8 +10,11 @@
 	import type { UnlistenFn } from "@tauri-apps/api/event";
 	import { getCurrentWindow, PhysicalPosition } from "@tauri-apps/api/window";
 	import { onDestroy, onMount } from "svelte";
+	import { ImageIcon } from "svelte-feather-icons";
+	import { RiFileDamageLine } from "svelte-remixicon";
 	import { flip } from "svelte/animate";
 	import { fade } from "svelte/transition";
+	import { imageIcon } from "./images.module.scss";
 
 	interface Props {
 		images: string[];
@@ -63,25 +66,27 @@
 
 <h4>Images</h4>
 
-<div class="images-actions">
-	<PrimaryButton
-		disabled={addFilesMutation.isPending || removeFileMutation.isPending || isUploading}
-		onclick={() => {
-			addFilesMutation.mutate(
-				{ sessionId },
-				{
-					onError(error) {
-						addErrorToast("Cannot import images", error);
+{#if images.length != 0}
+	<div class="images-actions">
+		<PrimaryButton
+			disabled={addFilesMutation.isPending || removeFileMutation.isPending || isUploading}
+			onclick={() => {
+				addFilesMutation.mutate(
+					{ sessionId },
+					{
+						onError(error) {
+							addErrorToast("Cannot import images", error);
+						}
 					}
-				}
-			);
-		}}
-	>
-		Add images
-	</PrimaryButton>
-</div>
+				);
+			}}
+		>
+			Add images
+		</PrimaryButton>
+	</div>
+{/if}
 
-<div class="images">
+<div class="images" class:empty={images.length == 0}>
 	{#each images as image, index (image)}
 		<button
 			class="img-sel"
@@ -156,6 +161,24 @@
 				{/snippet}
 			</Tooltip>
 		</button>
+	{:else}
+		<button
+			class="no-images"
+			disabled={addFilesMutation.isPending || removeFileMutation.isPending || isUploading}
+			onclick={() => {
+				addFilesMutation.mutate(
+					{ sessionId },
+					{
+						onError(error) {
+							addErrorToast("Cannot import images", error);
+						}
+					}
+				);
+			}}
+		>
+			<ImageIcon class={imageIcon} />
+			<h3>No images to upload</h3>
+		</button>
 	{/each}
 </div>
 
@@ -196,6 +219,34 @@
 	@include bp.media-only-screen-breakpoint-up(map.get(bp.$grid-breakpoints, "xxl")) {
 		.images {
 			grid-template-columns: repeat(5, 1fr);
+		}
+	}
+	.images.empty {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-bottom: 24px;
+		.no-images {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			flex-direction: column;
+			gap: 12px;
+			width: 50%;
+			height: 50cqh;
+			border: 3px dashed var(--mid-tone);
+			border-radius: 6px;
+			color: var(--mid-tone);
+			background-color: transparent;
+			font-family: var(--fonts);
+			h3 {
+				margin: 0px;
+			}
+		}
+		.no-images:hover {
+			border-color: var(--contrast-l1);
+			color: var(--contrast-l1);
+			border-style: solid;
 		}
 	}
 	.img-sel {
