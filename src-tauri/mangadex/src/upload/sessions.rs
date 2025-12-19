@@ -67,6 +67,8 @@ pub enum CheckUploadSessionError {
     InvalidFormat { filename: String },
     #[error("Commit data not found")]
     CommitDataNotFound,
+    #[error("No images")]
+    NoImages,
 }
 
 impl InternUploadSession {
@@ -81,6 +83,8 @@ impl InternUploadSession {
             return Err(CheckUploadSessionError::ReachedFilesNumberLimit(
                 self.images.len() as _,
             ));
+        } else if self.images.is_empty() {
+            return Err(CheckUploadSessionError::NoImages);
         }
         let images_metadata = self
             .images

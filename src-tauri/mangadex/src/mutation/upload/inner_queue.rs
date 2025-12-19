@@ -53,10 +53,13 @@ pub struct InternalSessionMutation(Uuid);
 
 #[Object]
 impl InternalSessionMutation {
-    pub async fn send_in_queue(&self, ctx: &Context<'_>) -> Result<Option<bool>, ErrorWrapper> {
+    pub async fn send_in_queue(&self, ctx: &Context<'_>, start_runner: Option<bool>) -> Result<Option<bool>, ErrorWrapper> {
         let app_handle = ctx.get_app_handle::<tauri::Wry>()?;
         let manager = app_handle.upload_manager();
         manager.send_session_in_queue(self.0).await?;
+        if start_runner.unwrap_or_default() {
+        		manager.start_queue_runner().await;
+        }
         Ok(None)
     }
     pub async fn remove(&self, ctx: &Context<'_>) -> Result<Option<bool>, ErrorWrapper> {
@@ -127,9 +130,23 @@ impl InternalSessionMutation {
             manager
                 .set_commit_data_and_send_to_queue(self.0, commit_data)
                 .await?;
+            manager.start_queue_runner().await;
         } else {
             manager.set_commit_data(self.0, commit_data).await?;
         }
+        Ok(None)
+    }
+    pub async fn swap_file_order(
+        &self,
+        ctx: &Context<'_>,
+        a: u32,
+        b: u32,
+    ) -> Result<Option<bool>, ErrorWrapper> {
+        let app_handle = ctx.get_app_handle::<tauri::Wry>()?;
+        let manager = app_handle.upload_manager();
+        manager
+            .swap_file_order(self.0, a.try_into()?, b.try_into()?)
+            .await?;
         Ok(None)
     }
 }

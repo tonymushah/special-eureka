@@ -8,7 +8,15 @@ export function addFilesToInternalSessionMutation() {
 	return createMutation(
 		() => ({
 			mutationKey: ["add", "files", "internal"],
-			async mutationFn({ sessionId, paths }: { sessionId: string; paths?: string[] }) {
+			async mutationFn({
+				sessionId,
+				paths,
+				index
+			}: {
+				sessionId: string;
+				paths?: string[];
+				index?: number;
+			}) {
 				let toImports: string[];
 				if (paths) {
 					toImports = paths;
@@ -32,7 +40,8 @@ export function addFilesToInternalSessionMutation() {
 				const res = await client
 					.mutation(addFilesToInternalSessionMutationGQLDocs, {
 						sessionId,
-						imgPaths: toImports
+						imgPaths: toImports,
+						index
 					})
 					.toPromise();
 				if (res.error) {

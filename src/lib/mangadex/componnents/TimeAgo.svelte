@@ -16,17 +16,22 @@
 	interface Props {
 		date: Date;
 		asDateUTC?: boolean;
+		asInline?: boolean;
 	}
 
-	let { date, asDateUTC = true }: Props = $props();
+	let { date, asDateUTC = true, asInline }: Props = $props();
 	let to_use_date = $derived(asDateUTC ? makeAsUTCDate(date) : date);
 </script>
 
-<timeago datetime={to_use_date.toJSON()} bind:this={timeago}></timeago>
+<timeago datetime={to_use_date.toJSON()} bind:this={timeago} class:asInline></timeago>
 
 <style>
 	timeago {
 		width: max-content;
 		display: block;
+	}
+	timeago.asInline {
+		width: fit-content;
+		display: inline;
 	}
 </style>

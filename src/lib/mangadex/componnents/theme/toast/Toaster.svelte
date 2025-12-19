@@ -33,7 +33,7 @@
 			if (notify) {
 				Promise.resolve()
 					.then(async () => {
-						if (!await getCurrentWindow().isFocused()) {
+						if (!(await getCurrentWindow().isFocused())) {
 							// Do you have permission to send a notification?
 							let permissionGranted = await isPermissionGranted();
 
@@ -59,7 +59,7 @@
 	};
 	export const removeToast = helpers.removeToast;
 	export const updateToast = helpers.updateToast;
-	export function addErrorToast(title: string, error: unknown) {
+	export function addErrorToast(title: string, error?: unknown) {
 		return addToast({
 			data: {
 				title,

@@ -230,8 +230,7 @@
 			</p>
 			<p class="commit-data">
 				{#if session.commitData}
-					{@const commitData = session.commitData};
-
+					{@const commitData = session.commitData}
 					<FlagIcon lang={commitData.translatedLanguage} />
 					{#if commitData.chapter}Chap. {commitData.chapter}
 					{/if}
@@ -242,7 +241,7 @@
 						{commitData.title}
 					{/if}
 					{#if commitData.publishAt}
-						(Publish <TimeAgo date={new Date(commitData.publishAt)} asDateUTC />)
+						(Publish <TimeAgo date={new Date(commitData.publishAt)} asDateUTC asInline />)
 					{/if}
 					{#if commitData.termsAccepted == true}
 						<span class="terms accepted">(Terms Accepted)</span>
@@ -274,6 +273,7 @@
 	.top-a.highlighted {
 		article {
 			border-color: var(--indication-blue);
+			background-color: var(--accent-l5);
 		}
 	}
 	.top-a:focus {

@@ -1333,13 +1333,14 @@ type InternUploadSessionGQLObject {
 }
 
 type InternalSessionMutation {
-	sendInQueue: Boolean
+	sendInQueue(startRunner: Boolean): Boolean
 	remove: Boolean
 	addFile(imgPath: String!, index: Int): Boolean
 	addFiles(imgPaths: [String!]!, index: Int): Boolean
 	removeFile(imgPath: String!): Boolean
 	removeFiles(imgPaths: [String!]!): Boolean
 	setCommitData(commitData: InternUploadSessionCommitDataInput, startRunner: Boolean): Boolean
+	swapFileOrder(a: Int!, b: Int!): Boolean
 }
 
 type InternalSessionsMutations {

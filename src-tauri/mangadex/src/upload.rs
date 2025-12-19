@@ -178,7 +178,10 @@ where
         {
             if let Some(i) = index {
                 let read = self.sessions.read().await;
-                if (read.len() as u32) <= i {
+                let session = read
+                    .get(&session_id)
+                    .ok_or(crate::Error::InternalUploadSessionNotFound(session_id))?;
+                if (session.images.len() as u32) <= i {
                     index = None;
                 }
             }
@@ -311,6 +314,21 @@ where
     pub async fn get_session_ids(&self) -> Vec<Uuid> {
         self.sessions.read().await.keys().copied().collect()
     }
+    pub async fn swap_file_order(&self, session_id: Uuid, a: usize, b: usize) -> crate::Result<()> {
+        {
+            let mut write = self.sessions.write().await;
+            let session = write
+                .get_mut(&session_id)
+                .ok_or(crate::Error::InternalUploadSessionNotFound(session_id))?;
+            if a < session.images.len() && b < session.images.len() {
+                session.images.swap(a, b);
+            } else {
+                log::error!("Out bounds a or b to swap file order");
+            }
+        }
+        self.emit_manager_event(UploadManagerEventPayload::SessionUpdate { id: session_id })?;
+        Ok(())
+    }
 }
 
 #[cfg_attr(feature = "hotpath", hotpath::measure)]
@@ -318,7 +336,8 @@ async fn inner_runner<R>(queue: UploadQueue, sessions: UploadSessions, app: AppH
 where
     R: Runtime,
 {
-    while let Some((session_id, _)) = queue.front().await {
+    let mut index = 0_usize;
+    while let Some((session_id, _)) = queue.get_at_index(index).await {
         let Ok(_) = queue
             .set_state(session_id, UploadSessionState::Uploading)
             .await
@@ -344,9 +363,10 @@ where
                     UPLOAD_MANAGER_EVENT_KEY,
                     UploadManagerEventPayload::QueueEntryUpdate { id: session_id },
                 );
+                index += 1;
             }
             Ok(_chapter) => {
-                queue.pop_front().await;
+                queue.remove_at_index(index).await;
                 let _ = app.emit(
                     UPLOAD_MANAGER_EVENT_KEY,
                     UploadManagerEventPayload::QueueListUpdate,
