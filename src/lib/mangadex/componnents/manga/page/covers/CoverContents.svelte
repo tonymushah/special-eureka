@@ -31,7 +31,8 @@
 				res.push({
 					title: cover.title,
 					alt: cover.alt,
-					coverImage: image
+					coverImage: image,
+					id: cover.id
 				});
 		});
 		return res;
