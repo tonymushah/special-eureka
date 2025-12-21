@@ -7,7 +7,7 @@
 	import CoverContents from "./CoverContents__.svelte";
 	import { getCoversImageStoreContext } from "./utils/coverImageStoreContext";
 	import getMangaCoversQuery from "./utils/query";
-	import { get, derived as der, toStore } from "svelte/store";
+	import { get, toStore } from "svelte/store";
 	import { createInfiniteQuery } from "@tanstack/svelte-query";
 	import pageLimit from "@mangadex/stores/page-limit";
 	import ErrorComponent from "@mangadex/componnents/ErrorComponent.svelte";
@@ -41,8 +41,7 @@
 							filename: string;
 						}
 					>((v) => {
-						const locale =
-							v.attributes.locale == null ? undefined : v.attributes.locale;
+						const locale = v.attributes.locale == null ? undefined : v.attributes.locale;
 						const title =
 							v.attributes.volume == null || v.attributes.volume == undefined
 								? v.id
@@ -94,18 +93,20 @@
 	});
 	let coversData = $derived(new Set(query.data?.pages.flatMap((c) => c.list)).values().toArray());
 	const querySub = $effect.root(() => {
-		const set = coversData.map((c) => {
-			return {
-				id: c.id,
-				image: get_cover_art({
-					client,
-					cover_id: c.id,
-					manga_id: id,
-					filename: c.filename
-				})
-			};
+		$effect(() => {
+			const set = coversData.map((c) => {
+				return {
+					id: c.id,
+					image: get_cover_art({
+						client,
+						cover_id: c.id,
+						manga_id: id,
+						filename: c.filename
+					})
+				};
+			});
+			imagesStore.setByBatch(set);
 		});
-		imagesStore.setByBatch(set);
 	});
 
 	let isDataEmpty = $derived(coversData.length == 0);

@@ -3,6 +3,7 @@
 		coverImage: Readable<string | undefined>;
 		title: string;
 		alt: string;
+		id: string;
 	};
 	type MangaCoversItems = MangaCoversItem[];
 </script>
@@ -25,7 +26,7 @@
 </script>
 
 <div class:flex class:grid>
-	{#each items as { coverImage, title, alt } (title)}
+	{#each items as { coverImage, title, alt, id } (id)}
 		<CoverImage {coverImage} {title} {alt} {fixedWidth} />
 	{/each}
 </div>
