@@ -139,6 +139,7 @@
 		background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, var(--accent) 100%);
 		font-weight: 800;
 		font-size: 16px;
+		border-radius: 0.25em;
 	}
 	.cover.isHovered:not(.fixedWidth)::after {
 		opacity: 0;
