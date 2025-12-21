@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { ReadingStatus } from "@mangadex/gql/graphql";
+	import { isLinuxStore } from "@special-eureka/core/commands/isLinux";
 	import type { Writable } from "svelte/store";
 
 	interface Props {
@@ -10,7 +11,7 @@
 	let { readingStatus, disabled }: Props = $props();
 </script>
 
-<select bind:value={$readingStatus} {disabled}>
+<select bind:value={$readingStatus} {disabled} class:isNotLinux={!$isLinuxStore}>
 	<option value={undefined}>None</option>
 	<option value={ReadingStatus.Reading}>Reading</option>
 	<option value={ReadingStatus.OnHold}>On Hold</option>
@@ -31,5 +32,8 @@
 		padding-left: 0.75rem;
 		padding-right: 0.75rem;
 		font-family: inherit;
+	}
+	select.isNotLinux {
+		color: var(--text-color);
 	}
 </style>
