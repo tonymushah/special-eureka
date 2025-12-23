@@ -74,6 +74,8 @@
 		setTitleLayoutData(data);
 	});
 
+	// NOTE: this is completely intentional
+	// svelte-ignore state_referenced_locally
 	const statsStore = data.statsQueryStore!;
 	const stats = der(statsStore, ($stats) => {
 		const _data = $stats.data?.statistics.manga.get;
