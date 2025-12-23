@@ -9,7 +9,7 @@
 	import { getContextClient } from "@urql/svelte";
 	import { debounce } from "lodash";
 	import { onDestroy } from "svelte";
-	import { derived as der, get } from "svelte/store";
+	import { derived as der } from "svelte/store";
 	import { ActionMode } from ".";
 	import type { CurrentUserCustomListItemData } from "./content";
 	import executeSearchQuery from "./content";
@@ -59,12 +59,13 @@
 	let query = createInfiniteQuery(() => $queryOptions);
 
 	let selectedListMap = $state(new Map<string, ActionMode>());
+	let addToListMut = mutationQueryMutation();
 
 	$effect.pre(() => {
 		mutate = async (manga_id: string) => {
 			isMutating = true;
 			try {
-				await mutationQueryMutation.mutateAsync(
+				await addToListMut.mutateAsync(
 					{
 						selectedListMap,
 						title: manga_id,
