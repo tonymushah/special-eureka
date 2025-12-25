@@ -33,28 +33,33 @@
 			preventDefault: true,
 			includeContext: false,
 			addSeparator: false,
-			additionalMenus: () => [
-				ContextMenuItemProvider.menuItem({
-					text: "Open",
-					action() {
-						if (href) {
-							goto(href);
-						}
-					},
-					enabled: href != undefined && $page.url.pathname != href
-				}),
-				ContextMenuItemProvider.menuItem({
-					text: "Open a new window",
-					action() {
-						if (href) {
-							openNewWindow(currentLocationWithNewPath(href));
-						}
-					},
-					enabled: href != undefined
-				}),
-				ContextMenuItemProvider.seperator(),
-				...ctxItems()
-			]
+			additionalMenus: () => {
+				if (href) {
+					return [
+						ContextMenuItemProvider.menuItem({
+							text: "Open",
+							action() {
+								if (href) {
+									goto(href);
+								}
+							},
+							enabled: $page.url.pathname != href
+						}),
+						ContextMenuItemProvider.menuItem({
+							text: "Open a new window",
+							action() {
+								if (href) {
+									openNewWindow(currentLocationWithNewPath(href));
+								}
+							}
+						}),
+						ContextMenuItemProvider.seperator(),
+						...ctxItems()
+					];
+				} else {
+					return ctxItems();
+				}
+			}
 		})
 	}: Props = $props();
 
