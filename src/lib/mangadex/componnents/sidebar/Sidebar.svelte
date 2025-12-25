@@ -1,8 +1,6 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
-	import contextMenu, {
-		ContextMenuItemProvider
-	} from "@special-eureka/core/commands/contextMenu";
+	import { ContextMenuItemProvider } from "@special-eureka/core/commands/contextMenu";
 	import { route } from "$lib/ROUTES";
 	import isDefaultDecoration from "$lib/core/window-decoration/stores/isDefaultDecoration";
 	import { client } from "@mangadex/gql/urql";
@@ -17,8 +15,54 @@
 	import { isSidebarRtl } from "./states/isRtl";
 	import { isSidebarFloating } from "./states/isSidebarFloating";
 	import { showSidebar } from "./states/showSidebar";
-	import registerContextMenuEvent from "@special-eureka/core/utils/contextMenuContext";
+	import registerContextMenuEvent, {
+		setContextMenuContext
+	} from "@special-eureka/core/utils/contextMenuContext";
 	import { addErrorToast } from "../theme/toast/Toaster.svelte";
+	setContextMenuContext([
+		...defaultContextMenuContent(),
+		ContextMenuItemProvider.seperator(),
+		ContextMenuItemProvider.menuItem({
+			text: $isOpen ? "Unfold sidebar" : "Fold sidebar",
+			action() {
+				$isOpen = !$isOpen;
+			}
+		}),
+		ContextMenuItemProvider.menuItem({
+			text: $isSidebarRtl ? "Move sidebar to left" : "Move sidebar to right",
+			action() {
+				$isSidebarRtl = !$isSidebarRtl;
+			}
+		}),
+		ContextMenuItemProvider.seperator(),
+		ContextMenuItemProvider.menuItem({
+			text: $isMounted ? "Unmount Offline Server" : "Mount OfflineServer",
+			action() {
+				if ($isMounted) {
+					unmount(client)
+						.catch((e) => {
+							addErrorToast("Cannot unmount offline data", e);
+						})
+						.then(console.debug);
+				} else {
+					mount(client)
+						.catch((e) => {
+							addErrorToast("Cannot mount offline data", e);
+						})
+						.then(console.debug);
+				}
+			}
+		}),
+		ContextMenuItemProvider.seperator(),
+		goto_sub_menu(),
+		ContextMenuItemProvider.seperator(),
+		ContextMenuItemProvider.menuItem({
+			text: "Settings",
+			action() {
+				goto(route("/mangadex/settings"));
+			}
+		})
+	]);
 </script>
 
 <div
@@ -32,50 +76,7 @@
 		class:collapsed={$isOpen}
 		class:defaultDecoration={$isDefaultDecoration}
 		oncontextmenu={registerContextMenuEvent({
-			additionalMenus: [
-				...defaultContextMenuContent(),
-				ContextMenuItemProvider.seperator(),
-				ContextMenuItemProvider.menuItem({
-					text: $isOpen ? "Unfold sidebar" : "Fold sidebar",
-					action() {
-						$isOpen = !$isOpen;
-					}
-				}),
-				ContextMenuItemProvider.menuItem({
-					text: $isSidebarRtl ? "Move sidebar to left" : "Move sidebar to right",
-					action() {
-						$isSidebarRtl = !$isSidebarRtl;
-					}
-				}),
-				ContextMenuItemProvider.seperator(),
-				ContextMenuItemProvider.menuItem({
-					text: $isMounted ? "Unmount Offline Server" : "Mount OfflineServer",
-					action() {
-						if ($isMounted) {
-							unmount(client)
-								.catch((e) => {
-									addErrorToast("Cannot unmount offline data", e);
-								})
-								.then(console.debug);
-						} else {
-							mount(client)
-								.catch((e) => {
-									addErrorToast("Cannot mount offline data", e);
-								})
-								.then(console.debug);
-						}
-					}
-				}),
-				ContextMenuItemProvider.seperator(),
-				goto_sub_menu(),
-				ContextMenuItemProvider.seperator(),
-				ContextMenuItemProvider.menuItem({
-					text: "Settings",
-					action() {
-						goto(route("/mangadex/settings"));
-					}
-				})
-			],
+			includeContext: true,
 			preventDefault: true
 		})}
 	>

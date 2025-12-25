@@ -1,5 +1,12 @@
 <script lang="ts">
+	import { goto } from "$app/navigation";
 	import { page } from "$app/stores";
+	import { ContextMenuItemProvider } from "@special-eureka/core/commands/contextMenu";
+	import openNewWindow from "@special-eureka/core/commands/openNewWindow";
+	import registerContextMenuEvent, {
+		getContextMenuContext
+	} from "@special-eureka/core/utils/contextMenuContext";
+	import { currentLocationWithNewPath } from "@special-eureka/core/utils/url";
 	interface Events {
 		onclick?: (
 			ev: MouseEvent & {
@@ -16,8 +23,40 @@
 		href?: string | undefined;
 		children?: import("svelte").Snippet;
 	}
-
-	let { href = undefined, children, onclick, oncontextmenu }: Props = $props();
+	const ctxItems = getContextMenuContext();
+	let {
+		href = undefined,
+		children,
+		onclick,
+		oncontextmenu = registerContextMenuEvent({
+			stopPropagation: true,
+			preventDefault: true,
+			includeContext: false,
+			addSeparator: false,
+			additionalMenus: () => [
+				ContextMenuItemProvider.menuItem({
+					text: "Open",
+					action() {
+						if (href) {
+							goto(href);
+						}
+					},
+					enabled: href != undefined && $page.url.pathname != href
+				}),
+				ContextMenuItemProvider.menuItem({
+					text: "Open a new window",
+					action() {
+						if (href) {
+							openNewWindow(currentLocationWithNewPath(href));
+						}
+					},
+					enabled: href != undefined
+				}),
+				ContextMenuItemProvider.seperator(),
+				...ctxItems()
+			]
+		})
+	}: Props = $props();
 
 	let active = $derived($page.url.pathname == href);
 </script>
