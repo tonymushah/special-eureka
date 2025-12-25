@@ -2,7 +2,6 @@
 	import { BookIcon } from "svelte-feather-icons";
 	import SubMenu from "../base/SubMenu.svelte";
 	import SubMenuItem from "../base/SubMenuItem.svelte";
-	import { goto } from "$app/navigation";
 	import { route } from "$lib/ROUTES";
 </script>
 
@@ -11,22 +10,7 @@
 		<BookIcon size="24" />
 	{/snippet}
 	<SubMenuItem label="Recently Popular" />
-	<SubMenuItem
-		label="Latest Uploads"
-		onclick={() => {
-			goto(route("/mangadex/titles/latest-uploads"));
-		}}
-	/>
-	<SubMenuItem
-		label="Recently Added"
-		onclick={() => {
-			goto(route("/mangadex/titles/recently-added"));
-		}}
-	/>
-	<SubMenuItem
-		onclick={() => {
-			goto(route("/mangadex/title/random"));
-		}}
-		label="Random"
-	/>
+	<SubMenuItem label="Latest Uploads" href={route("/mangadex/titles/latest-uploads")} />
+	<SubMenuItem label="Recently Added" href={route("/mangadex/titles/recently-added")} />
+	<SubMenuItem href={route("/mangadex/title/random")} label="Random" />
 </SubMenu>
