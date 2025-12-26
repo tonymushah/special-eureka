@@ -262,26 +262,28 @@ export default function mangaElementContextMenu({
 					ContextMenuItemProvider.menuItem({
 						text: "Download all chapters",
 						action() {
-							downloadTitleWithExtra(id, MangaDownloadExtras.AllChapters);
+							downloadTitleWithExtra(id, MangaDownloadExtras.AllChapters).catch(console.error);
 						}
 					}),
 					ContextMenuItemProvider.menuItem({
 						text: "Download all unread",
 						action() {
-							downloadTitleWithExtra(id, MangaDownloadExtras.Unreads);
+							downloadTitleWithExtra(id, MangaDownloadExtras.Unreads).catch(console.error);
 						},
 						enabled: isLogged
 					}),
 					ContextMenuItemProvider.menuItem({
 						text: "Download all undownloaded",
 						action() {
-							downloadTitleWithExtra(id, MangaDownloadExtras.UnDownloadeds);
+							downloadTitleWithExtra(id, MangaDownloadExtras.UnDownloadeds).catch(console.error);
 						}
 					}),
 					ContextMenuItemProvider.menuItem({
 						text: "Download all undownloaded unread",
 						action() {
-							downloadTitleWithExtra(id, MangaDownloadExtras.UnReadUnDownloadeds);
+							downloadTitleWithExtra(id, MangaDownloadExtras.UnReadUnDownloadeds).catch(
+								console.error
+							);
 						},
 						enabled: isLogged
 					})
