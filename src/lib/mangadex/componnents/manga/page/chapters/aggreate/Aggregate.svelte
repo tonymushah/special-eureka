@@ -25,6 +25,7 @@
 	import { createForumThread } from "@mangadex/stores/create-forum-thread";
 	import { ForumThreadType } from "@mangadex/gql/graphql";
 	import { addErrorToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
+	import ExtraOptions from "./ExtraOptions.svelte";
 
 	let readMarkersMutation = readMarkersMutationLoader();
 	const chaptersStore = getChapterStoreContext();
@@ -225,6 +226,7 @@
 				>
 					Reverse
 				</ButtonAccent>
+				<ExtraOptions id={__res.layoutData.id} />
 			</div>
 		{/if}
 	</div>
