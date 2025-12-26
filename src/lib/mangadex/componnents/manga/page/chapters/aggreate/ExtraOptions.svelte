@@ -5,6 +5,7 @@
 	import MidToneLine from "@mangadex/componnents/theme/lines/MidToneLine.svelte";
 	import { downloadTitleWithExtra } from "@mangadex/gql-docs/title/id/download-with-extras";
 	import { MangaDownloadExtras } from "@mangadex/gql/graphql";
+	import { isLogged } from "@mangadex/utils/auth";
 	import { ListIcon } from "svelte-feather-icons";
 
 	let layout: HTMLElement | undefined = $state();
@@ -13,8 +14,22 @@
 	let open = $state(false);
 	interface Props {
 		id: string;
+		onReverseClick?: () => void;
+		disableReverse?: boolean;
+		disableDownloads?: boolean;
+		disableMarkAsRead?: boolean;
+		hasUnread?: boolean;
+		onreadmarks?: () => void;
 	}
-	let { id }: Props = $props();
+	let {
+		id,
+		onReverseClick,
+		disableReverse,
+		disableDownloads,
+		disableMarkAsRead,
+		hasUnread,
+		onreadmarks
+	}: Props = $props();
 	async function update() {
 		if (layout && popover && arrowElement) {
 			const { x, y, placement, middlewareData } = await computePosition(layout, popover, {
@@ -90,11 +105,36 @@
 </span>
 
 <div class="tooltip" role="tooltip" bind:this={popover}>
+	{#if $isLogged}
+		<button
+			disabled={disableMarkAsRead}
+			onclick={() => {
+				open = false;
+				onreadmarks?.();
+			}}
+		>
+			{#if hasUnread}
+				Mark all chapter as read
+			{:else}
+				Mark all chapter as not read
+			{/if}
+		</button>
+	{/if}
+	<button
+		onclick={() => {
+			open = false;
+			onReverseClick?.();
+		}}
+		disabled={disableReverse}
+	>
+		Reverse order
+	</button>
 	<button
 		onclick={() => {
 			open = false;
 			downloadTitleWithExtra(id, MangaDownloadExtras.AllChapters);
 		}}
+		disabled={disableDownloads}
 	>
 		Download all chapters
 	</button>
@@ -103,6 +143,7 @@
 			open = false;
 			downloadTitleWithExtra(id, MangaDownloadExtras.Unreads);
 		}}
+		disabled={disableDownloads}
 	>
 		Download all unread chapters
 	</button>
@@ -119,6 +160,7 @@
 			open = false;
 			downloadTitleWithExtra(id, MangaDownloadExtras.UnReadUnDownloadeds);
 		}}
+		disabled={disableDownloads}
 	>
 		Download all un-read un-downloaded chapters
 	</button>
