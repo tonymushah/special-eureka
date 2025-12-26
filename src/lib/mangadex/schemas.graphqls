@@ -1569,6 +1569,37 @@ enum MangaDonwloadingState {
 	FETCHING_DATA
 }
 
+"""
+This is for a feature that allows you to download titles with some extras...
+"""
+enum MangaDownloadExtras {
+	"""
+	Download with all chapters available
+	
+	NOTE: The current implement *only* download all chapters that match the current content profile.
+	"""
+	ALL_CHAPTERS
+	"""
+	Download with all chapters that is marked as unread.
+	
+	NOTE: This will not work if the user is not logged in.
+	Also this one also *only* download all *unread* chapters that match the current content profile.
+	"""
+	UNREADS
+	"""
+	Download all undownloaded chapters
+	
+	NOTE: _Again_, this will *only* download undownloaded that match the current content profile.
+	"""
+	UN_DOWNLOADEDS
+	"""
+	Download all unread undownloaded chapters.
+	
+	Only the one matching the current content profile
+	"""
+	UN_READ_UN_DOWNLOADEDS
+}
+
 type MangaDownloadState {
 	isPending: Boolean!
 	isDone: Boolean!
@@ -1718,7 +1749,7 @@ enum MangaListStyle {
 }
 
 type MangaMutations {
-	download(id: UUID!): DownloadState!
+	download(id: UUID!, extras: MangaDownloadExtras): DownloadState!
 	create(params: CreateMangaParam!): MangaObject!
 	edit(params: UpdateMangaParam!): MangaObject!
 	delete(id: UUID!): Boolean!
