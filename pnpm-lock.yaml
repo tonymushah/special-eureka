@@ -32,6 +32,9 @@ importers:
       '@humanspeak/svelte-markdown':
         specifier: ^0.8.13
         version: 0.8.13(svelte@5.46.1)
+      '@lucide/svelte':
+        specifier: ^0.562.0
+        version: 0.562.0(svelte@5.46.1)
       '@panzoom/panzoom':
         specifier: ^4.6.0
         version: 4.6.1
@@ -95,12 +98,6 @@ importers:
       panzoom:
         specifier: ^9.4.3
         version: 9.4.3
-      svelte-feather-icons:
-        specifier: ^4.2.0
-        version: 4.2.0
-      svelte-remixicon:
-        specifier: ^2.8.0
-        version: 2.8.0(svelte@5.46.1)
       swiper:
         specifier: ^12.0.3
         version: 12.0.3
@@ -1499,6 +1496,11 @@ packages:
   '@kitql/internals@0.10.5':
     resolution: {integrity: sha512-2v75bu2vJB0xf7+qSAu0xcUyCYqzc7KeRE1RcKSpOGQTV9UpCqCs/xCsFWLUGnZRWb1VU6XYf+l6GJsDUW9pRQ==}
     engines: {node: ^16.14 || >=18}
+
+  '@lucide/svelte@0.562.0':
+    resolution: {integrity: sha512-wDMULwtTFN2Sc/TFBm6gfuVCNb4Y5P9LDrwxNnUbV52+IEU7NXZmvxwXoz+vrrpad6Xupq+Hw5eUlqIHEGhouw==}
+    peerDependencies:
+      svelte: ^5
 
   '@mdx-js/react@3.1.1':
     resolution: {integrity: sha512-f++rKLQgUVYDAtECQ6fn/is15GkEH9+nZPM3MS0RcxVqoTfawHvDlSCH7JbMhAM6uJ32v3eXLvLmLvjGu7PTQw==}
@@ -4266,23 +4268,11 @@ packages:
       svelte:
         optional: true
 
-  svelte-feather-icons@4.2.0:
-    resolution: {integrity: sha512-KuMTDrL6sA8aCxBv3RMgmmnnyIaAXaYcmWkmNa2r2Qj70vi+An2T6ZBAdiZr6wjx+a3eZJy+FRseeRkzQFGHPw==}
-
-  svelte-remixicon@2.8.0:
-    resolution: {integrity: sha512-QfnObwZukDxTMbReTDyAuMNAKTGz/J5j2Hqh0d6dtnDG3IddU/SaCe67mZ4nBwtye/lqqE4hlF2cRwIn8MH6Iw==}
-    peerDependencies:
-      svelte: ^3.54.0 || ^4.0.0 || ^5.0.0
-
   svelte2tsx@0.7.46:
     resolution: {integrity: sha512-S++Vw3w47a8rBuhbz4JK0fcGea8tOoX1boT53Aib8+oUO2EKeOG+geXprJVTDfBlvR+IJdf3jIpR2RGwT6paQA==}
     peerDependencies:
       svelte: ^3.55 || ^4.0.0-next.0 || ^4.0 || ^5.0.0-next.0
       typescript: ^4.9.4 || ^5.0.0
-
-  svelte@3.59.2:
-    resolution: {integrity: sha512-vzSyuGr3eEoAtT/A6bmajosJZIUWySzY2CzB3w2pgPvnkUjGqlDnsNnA0PMO+mMAhuyMul6C2uuZzY6ELSkzyA==}
-    engines: {node: '>= 8'}
 
   svelte@5.46.1:
     resolution: {integrity: sha512-ynjfCHD3nP2el70kN5Pmg37sSi0EjOm9FgHYQdC4giWG/hzO3AatzXXJJgP305uIhGQxSufJLuYWtkY8uK/8RA==}
@@ -6096,6 +6086,10 @@ snapshots:
       '@babel/types': 7.27.0
       '@kitql/helpers': 0.8.13
       recast: 0.23.11
+      svelte: 5.46.1
+
+  '@lucide/svelte@0.562.0(svelte@5.46.1)':
+    dependencies:
       svelte: 5.46.1
 
   '@mdx-js/react@3.1.1(@types/react@19.2.7)(react@19.2.3)':
@@ -8871,22 +8865,12 @@ snapshots:
     optionalDependencies:
       svelte: 5.46.1
 
-  svelte-feather-icons@4.2.0:
-    dependencies:
-      svelte: 3.59.2
-
-  svelte-remixicon@2.8.0(svelte@5.46.1):
-    dependencies:
-      svelte: 5.46.1
-
   svelte2tsx@0.7.46(svelte@5.46.1)(typescript@5.9.3):
     dependencies:
       dedent-js: 1.0.1
       scule: 1.3.0
       svelte: 5.46.1
       typescript: 5.9.3
-
-  svelte@3.59.2: {}
 
   svelte@5.46.1:
     dependencies:
