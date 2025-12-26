@@ -6844,6 +6844,19 @@ export type GetMangaHihiQuery = {
 	};
 };
 
+export type DownloadTitleWithExtrasMutationVariables = Exact<{
+	mangaId: Scalars["UUID"]["input"];
+	extras?: InputMaybe<MangaDownloadExtras>;
+}>;
+
+export type DownloadTitleWithExtrasMutation = {
+	__typename?: "Mutation";
+	manga: {
+		__typename?: "MangaMutations";
+		download: { __typename?: "DownloadState"; isDownloaded: boolean; hasFailed: boolean };
+	};
+};
+
 export type FollowTitleMutationMutationVariables = Exact<{
 	id: Scalars["UUID"]["input"];
 }>;
@@ -23048,6 +23061,86 @@ export const GetMangaHihiDocument = {
 		}
 	]
 } as unknown as DocumentNode<GetMangaHihiQuery, GetMangaHihiQueryVariables>;
+export const DownloadTitleWithExtrasDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "downloadTitleWithExtras" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "mangaId" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "extras" } },
+					type: {
+						kind: "NamedType",
+						name: { kind: "Name", value: "MangaDownloadExtras" }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "manga" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "download" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "extras" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "extras" }
+											}
+										},
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "id" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "mangaId" }
+											}
+										}
+									],
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "isDownloaded" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "hasFailed" }
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	DownloadTitleWithExtrasMutation,
+	DownloadTitleWithExtrasMutationVariables
+>;
 export const FollowTitleMutationDocument = {
 	kind: "Document",
 	definitions: [
