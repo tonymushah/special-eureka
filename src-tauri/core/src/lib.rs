@@ -75,9 +75,9 @@ pub fn run() {
                     }
                     #[cfg(feature = "hotpath")]
                     {
-                    		if let Ok(mut lock) = _hot_guard.lock() {
-                    			let _ = lock.take();
-                    		}
+                        if let Ok(mut lock) = _hot_guard.lock() {
+                            let _ = lock.take();
+                        }
                     }
                 }
                 _ => {}

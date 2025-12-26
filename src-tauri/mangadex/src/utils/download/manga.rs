@@ -238,8 +238,11 @@ where
             MangaDownloadExtras::Unreads => get_title_unread_chapters(app, title_id).await?,
         };
         for id in chap_ids {
-            app.get_specific_rate_limit()?.at_home(&id).await;
-            let offline_app_state = (**app.get_offline_app_state()?).clone().read_owned().await;
+            let rate_limit = app.get_specific_rate_limit()?;
+            let (offline_app_state, _) = tokio::join!(
+                (**app.get_offline_app_state()?).clone().read_owned(),
+                rate_limit.at_home(&id)
+            );
             let Some(manager) = (*offline_app_state).as_ref().map(|d| d.app_state.clone()) else {
                 return Err(crate::Error::OfflineAppStateNotLoaded);
             };
