@@ -1,3 +1,4 @@
+import { internalToStore } from "$lib/index.svelte";
 import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 import { graphql } from "@mangadex/gql";
 import {
@@ -9,15 +10,8 @@ import { client as gqlClient } from "@mangadex/gql/urql";
 import { isMounted } from "@mangadex/stores/offlineIsMounted";
 import { createMutation, createQuery, type QueryClient } from "@tanstack/svelte-query";
 import type { OperationResult } from "@urql/svelte";
-import { debounce } from "lodash";
-import {
-	derived,
-	readable,
-	toStore,
-	type Readable
-} from "svelte/store";
+import { derived, readable, type Readable } from "svelte/store";
 import { mangadexQueryClient } from "..";
-import { internalToStore } from "$lib/index.svelte";
 
 const downloadMutation = graphql(`
 	mutation downloadCover($id: UUID!) {
@@ -84,106 +78,113 @@ export const invalidateCoverOfflinePresence = async (id: string) => {
 const downloadStateQuery = (id: string, _client?: QueryClient) => {
 	const client = _client ?? mangadexQueryClient;
 	const queryKey = offlinePresenceQueryKey(id);
-	return () => createQuery(() => (
-		{
-			queryKey,
-			async queryFn() {
-				return await gqlClient
-					.query(coverDownloadStateQuery, {
+	return () =>
+		createQuery(
+			() => ({
+				queryKey,
+				async queryFn() {
+					return await gqlClient
+						.query(coverDownloadStateQuery, {
+							id
+						})
+						.toPromise();
+				}
+			}),
+			() => client
+		);
+};
+
+export const downloadMutationQuery = () =>
+	createMutation(
+		() => ({
+			mutationKey: ["cover", "download"],
+			async mutationFn(id: string) {
+				const res = await gqlClient
+					.mutation(downloadMutation, {
 						id
 					})
 					.toPromise();
+				return res;
+			},
+			onSettled(_data, _error, variables, _context) {
+				invalidateCoverOfflinePresence(variables);
+			},
+			onError(error, variables, _context) {
+				addErrorToast(`Cannot download cover art ${variables}`, error);
+			},
+			onSuccess(_data, variables, _context) {
+				addToast({
+					data: {
+						title: "Downloaded cover art",
+						description: variables
+					}
+				});
 			}
 		}),
-		() => client
+		() => mangadexQueryClient
 	);
-};
 
-export const downloadMutationQuery = () => createMutation(
-	() => ({
-		mutationKey: ["cover", "download"],
-		async mutationFn(id: string) {
-			const res = await gqlClient
-				.mutation(downloadMutation, {
-					id
-				})
-				.toPromise();
-			return res;
-		},
-		onSettled(data, error, variables, context) {
-			invalidateCoverOfflinePresence(variables);
-		},
-		onError(error, variables, context) {
-			addErrorToast(`Cannot download cover art ${variables}`, error);
-		},
-		onSuccess(data, variables, context) {
-			addToast({
-				data: {
-					title: "Downloaded cover art",
-					description: variables
-				}
-			});
-		}
-	}),
-	() => mangadexQueryClient
-);
+export const removeMutation = () =>
+	createMutation(
+		() => ({
+			mutationKey: ["cover-removing"],
+			async mutationFn(id: string) {
+				const res = await gqlClient
+					.mutation(coverRemoveMutation, {
+						id
+					})
+					.toPromise();
+				return res;
+			},
+			onSettled(_data, _error, variables, _context) {
+				invalidateCoverOfflinePresence(variables);
+			},
+			onSuccess(_data, variables, _context) {
+				addToast({
+					data: {
+						title: `Removed cover`,
+						description: variables
+					}
+				});
+			},
+			onError(error, variables, _context) {
+				addErrorToast(`Cannot remove cover ${variables}`, error);
+			},
+			networkMode: "always"
+		}),
+		() => mangadexQueryClient
+	);
 
-export const removeMutation = () => createMutation(
-	() => ({
-		mutationKey: ["cover-removing"],
-		async mutationFn(id: string) {
-			const res = await gqlClient
-				.mutation(coverRemoveMutation, {
-					id
-				})
-				.toPromise();
-			return res;
-		},
-		onSettled(data, error, variables, context) {
-			invalidateCoverOfflinePresence(variables);
-		},
-		onSuccess(data, variables, context) {
-			addToast({
-				data: {
-					title: `Removed cover`,
-					description: variables
-				}
-			});
-		},
-		onError(error, variables, context) {
-			addErrorToast(`Cannot remove cover ${variables}`, error);
-		},
-		networkMode: "always"
-	}),
-	() => mangadexQueryClient
-);
-
-export const cancelDonwloadMutation = () => createMutation(() => ({
-	mutationKey: ["cover", "download", "cancel"],
-	async mutationFn(id: string) {
-		const res = await gqlClient
-			.mutation(cancelDonwloadMuation, {
-				id
-			})
-			.toPromise();
-		return res;
-	},
-	onSettled(data, error, variables, context) {
-		invalidateCoverOfflinePresence(variables)
-	},
-	onSuccess(data, variables, context) {
-		addToast({
-			data: {
-				title: `Removed cover`,
-				description: variables
-			}
-		});
-	},
-	onError(error, variables, context) {
-		addErrorToast(`Cannot remove cover ${variables}`, error);
-	},
-	networkMode: "always"
-}), () => mangadexQueryClient);
+export const cancelDonwloadMutation = () =>
+	createMutation(
+		() => ({
+			mutationKey: ["cover", "download", "cancel"],
+			async mutationFn(id: string) {
+				const res = await gqlClient
+					.mutation(cancelDonwloadMuation, {
+						id
+					})
+					.toPromise();
+				return res;
+			},
+			onSettled(_data, _error, variables, _context) {
+				invalidateCoverOfflinePresence(variables);
+			},
+			onSuccess(_data, variables, _context) {
+				addToast({
+					data: {
+						title: `Removed cover`,
+						description: variables
+					}
+				});
+			},
+			onError(error, variables, _context) {
+				addErrorToast(`Cannot remove cover ${variables}`, error);
+			},
+			networkMode: "always"
+		}),
+		() => mangadexQueryClient
+	);
 
 export enum CoverDownloadState {
 	Pending,
@@ -233,9 +234,15 @@ type CoverSubOpType = OperationResult<
 	CoverDownloadSubSubscriptionVariables
 >;
 
-export default function coverDownloadState({ id, deferred }: { id: string, deferred?: boolean }): Readable<CoverDownloadState> {
+export default function coverDownloadState({
+	id,
+	deferred
+}: {
+	id: string;
+	deferred?: boolean;
+}): Readable<CoverDownloadState> {
 	const dState = downloadStateQuery(id);
-	return derived([internalToStore(dState), subOPCover(id, deferred)], ([$query, $state], set) => {
+	return derived([internalToStore(dState), subOPCover(id, deferred)], ([$query, $state], _set) => {
 		const res = (() => {
 			if ($state?.data) {
 				const data = $state.data.watchCoverDownloadState;
@@ -285,7 +292,6 @@ export function isCoverDownloading(param: { id: string; deferred?: boolean }) {
 				return true;
 			default:
 				return false;
-				break;
 		}
 	});
 }
@@ -325,7 +331,7 @@ export function isCoverDownloaded(param: { id: string; deferred?: boolean }) {
 	});
 }
 
-export class CoverDownload { }
+export class CoverDownload {}
 /*
 export class CoverDownload {
 	private coverId: string;
