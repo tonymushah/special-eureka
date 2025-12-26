@@ -68,12 +68,16 @@ where
             let _ = raw_cover_download(&manager, cover).await?;
         } else {
             match manager.get_cover_image(id).await {
-                Err(eureka_mmanager::Error::Io(io)) => {
-                    if io.kind() == std::io::ErrorKind::NotFound {
-                        let _ = raw_cover_download(&manager, cover).await?;
-                    }
+                Err(eureka_mmanager::Error::Io(io))
+                | Err(eureka_mmanager::Error::ApiCore(eureka_mmanager_core::Error::Io(io)))
+                    if io.kind() == std::io::ErrorKind::NotFound =>
+                {
+                    let _ = raw_cover_download(&manager, cover).await?;
                 }
                 _d => {
+                    if let Err(err) = &_d {
+                        dbg!(err);
+                    }
                     let _ = _d?;
                 }
             }
