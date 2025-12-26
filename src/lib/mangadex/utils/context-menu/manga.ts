@@ -1,4 +1,5 @@
 import { goto } from "$app/navigation";
+import { extractFromAccessor } from "$lib/index.svelte";
 import { route } from "$lib/ROUTES";
 import { readManga } from "@mangadex/componnents/manga/read/ReadDialog.svelte";
 import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
@@ -9,8 +10,9 @@ import {
 	isMangaDownloading,
 	removeMutation
 } from "@mangadex/download/manga";
+import { downloadTitleWithExtra } from "@mangadex/gql-docs/title/id/download-with-extras";
 import isFollowingTitle, { isChangingTitleFollowing } from "@mangadex/gql-docs/title/id/follow";
-import { ReadingStatus } from "@mangadex/gql/graphql";
+import { MangaDownloadExtras, ReadingStatus } from "@mangadex/gql/graphql";
 import { set_manga_rating } from "@mangadex/stores/manga/manga_rating";
 import { set_manga_reading_status } from "@mangadex/stores/manga/manga_reading_status";
 import { isMounted } from "@mangadex/stores/offlineIsMounted";
@@ -26,7 +28,6 @@ import { range } from "lodash";
 import { derived, get } from "svelte/store";
 import { isLogged } from "../auth";
 import get_value_and_random_if_undefined from "../lang/get_value_and_random_if_undefined";
-import { extractFromAccessor } from "$lib/index.svelte";
 
 type MangaElementContextMenuOption = {
 	id: string;
@@ -121,11 +122,14 @@ export default function mangaElementContextMenu({
 	};
 	items.push(
 		ContextMenuItemProvider.menuItem({
-			text: derived(isFollowed, (isFollowed) => isFollowed ? "Unfollow title" : "Follow title"),
+			text: derived(isFollowed, (isFollowed) => (isFollowed ? "Unfollow title" : "Follow title")),
 			action() {
 				isFollowed.update((v) => !v);
 			},
-			enabled: derived([isLogged, isChangingTitleFollowing], ([logged, changing]) => logged && !changing)
+			enabled: derived(
+				[isLogged, isChangingTitleFollowing],
+				([logged, changing]) => logged && !changing
+			)
 		}),
 		ContextMenuItemProvider.subMenu({
 			text: "Reading status",
@@ -230,25 +234,60 @@ export default function mangaElementContextMenu({
 		);
 	} else {
 		items.push(
-			ContextMenuItemProvider.menuItem({
-				text: derived(isDownloaded, (isDownloaded) => isDownloaded ? "Re-download" : "Download"),
-				action() {
-					using mut = extractFromAccessor(downloadMutationQuery);
-					mut.value.mutateAsync(id, {
-						onError(error, variables, context) {
-							addErrorToast("Cannot download title", error);
-						},
-						onSuccess(data, variables, context) {
-							addToast({
-								data: {
-									title: "Downloaded titile",
-									description: id
+			ContextMenuItemProvider.subMenu({
+				text: "Download",
+				enabled: isMounted,
+				items: [
+					ContextMenuItemProvider.menuItem({
+						text: derived(isDownloaded, (isDownloaded) =>
+							isDownloaded ? "Re-download metadata" : "Download metadata"
+						),
+						action() {
+							using mut = extractFromAccessor(downloadMutationQuery);
+							mut.value.mutateAsync(id, {
+								onError(error) {
+									addErrorToast("Cannot download title", error);
+								},
+								onSuccess() {
+									addToast({
+										data: {
+											title: "Downloaded titile",
+											description: id
+										}
+									});
 								}
 							});
 						}
-					});
-				},
-				enabled: isMounted
+					}),
+					ContextMenuItemProvider.menuItem({
+						text: "Download all chapters",
+						action() {
+							downloadTitleWithExtra(id, MangaDownloadExtras.AllChapters).catch(console.error);
+						}
+					}),
+					ContextMenuItemProvider.menuItem({
+						text: "Download all unread",
+						action() {
+							downloadTitleWithExtra(id, MangaDownloadExtras.Unreads).catch(console.error);
+						},
+						enabled: isLogged
+					}),
+					ContextMenuItemProvider.menuItem({
+						text: "Download all undownloaded",
+						action() {
+							downloadTitleWithExtra(id, MangaDownloadExtras.UnDownloadeds).catch(console.error);
+						}
+					}),
+					ContextMenuItemProvider.menuItem({
+						text: "Download all undownloaded unread",
+						action() {
+							downloadTitleWithExtra(id, MangaDownloadExtras.UnReadUnDownloadeds).catch(
+								console.error
+							);
+						},
+						enabled: isLogged
+					})
+				]
 			})
 		);
 		if (get(isDownloaded)) {
@@ -268,7 +307,7 @@ export default function mangaElementContextMenu({
 		items.push(
 			ContextMenuItemProvider.menuItem({
 				text: "Save title cover image",
-				action() { },
+				action() {},
 				enabled: false
 			})
 		);

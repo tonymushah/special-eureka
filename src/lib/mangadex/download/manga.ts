@@ -1,3 +1,4 @@
+import { internalToStore } from "$lib/index.svelte";
 import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 import { graphql } from "@mangadex/gql";
 import type {
@@ -8,14 +9,8 @@ import { client as gqlClient } from "@mangadex/gql/urql";
 import { isMounted } from "@mangadex/stores/offlineIsMounted";
 import { createMutation, createQuery, type QueryClient } from "@tanstack/svelte-query";
 import type { OperationResult } from "@urql/svelte";
-import {
-	derived,
-	readable,
-	toStore,
-	type Readable
-} from "svelte/store";
+import { derived, readable, type Readable } from "svelte/store";
 import { mangadexQueryClient } from "..";
-import { internalToStore } from "$lib/index.svelte";
 
 const downloadMutation = graphql(`
 	mutation downloadManga($id: UUID!) {
@@ -79,120 +74,124 @@ export const invalidateMangaOfflinePresence = async (id: string) => {
 	});
 };
 
-export const downloadMutationQuery = () => createMutation(() => (
-	{
-		mutationKey: ["manga", "download"],
-		async mutationFn(id: string) {
-			const res = await gqlClient
-				.mutation(downloadMutation, {
-					id
-				})
-				.toPromise();
-			if (res.error) {
-				throw res.error;
-			}
-			return res;
-		},
-		onSettled(data, error, variables, context) {
-			invalidateMangaOfflinePresence(variables);
-		},
-		onError(error, variables, context) {
-			addErrorToast("Error on downloading title", error);
-		},
-		onSuccess(data, variables, context) {
-			addToast({
-				data: {
-					title: "Downloaded title",
-					description: variables
+export const downloadMutationQuery = () =>
+	createMutation(
+		() => ({
+			mutationKey: ["manga", "download"],
+			async mutationFn(id: string) {
+				const res = await gqlClient
+					.mutation(downloadMutation, {
+						id
+					})
+					.toPromise();
+				if (res.error) {
+					throw res.error;
 				}
-			});
-		}
-	}),
-	() => mangadexQueryClient
-);
+				return res;
+			},
+			onSettled(data, error, variables, context) {
+				invalidateMangaOfflinePresence(variables);
+			},
+			onError(error, variables, context) {
+				addErrorToast("Error on downloading title", error);
+			},
+			onSuccess(data, variables, context) {
+				addToast({
+					data: {
+						title: "Downloaded title",
+						description: variables
+					}
+				});
+			}
+		}),
+		() => mangadexQueryClient
+	);
 
-export const removeMutation = () => createMutation(() => (
-	{
-		mutationKey: ["manga-removing"],
-		async mutationFn(id: string) {
-			const res = await gqlClient
-				.mutation(mangaRemoveMutation, {
-					id
-				})
-				.toPromise();
-			if (res.error) {
-				throw res.error;
-			}
-			return res;
-		},
-		onSettled(data, error, variables, context) {
-			invalidateMangaOfflinePresence(variables);
-		},
-		onError(error, variables, context) {
-			addErrorToast("Cannot remove title", error);
-		},
-		onSuccess(data, variables, context) {
-			addToast({
-				data: {
-					title: "Removed title",
-					description: variables
+export const removeMutation = () =>
+	createMutation(
+		() => ({
+			mutationKey: ["manga-removing"],
+			async mutationFn(id: string) {
+				const res = await gqlClient
+					.mutation(mangaRemoveMutation, {
+						id
+					})
+					.toPromise();
+				if (res.error) {
+					throw res.error;
 				}
-			});
-		},
-		networkMode: "always"
-	}),
-	() => mangadexQueryClient
-);
+				return res;
+			},
+			onSettled(data, error, variables, context) {
+				invalidateMangaOfflinePresence(variables);
+			},
+			onError(error, variables, context) {
+				addErrorToast("Cannot remove title", error);
+			},
+			onSuccess(data, variables, context) {
+				addToast({
+					data: {
+						title: "Removed title",
+						description: variables
+					}
+				});
+			},
+			networkMode: "always"
+		}),
+		() => mangadexQueryClient
+	);
 
-export const cancelMutation = () => createMutation(() => (
-	{
-		mutationKey: ["manga", "download", "cancel"],
-		async mutationFn(id: string) {
-			const res = await gqlClient
-				.mutation(cancelDonwloadMuation, {
-					id
-				})
-				.toPromise();
-			if (res.error) {
-				throw res.error;
-			}
-			return res;
-		},
-		onSettled(data, error, variables, context) {
-			invalidateMangaOfflinePresence(variables);
-		},
-		onError(error, variables, context) {
-			addErrorToast("Cannot cancel download", error);
-		},
-		onSuccess(data, variables, context) {
-			addToast({
-				data: {
-					title: "Canceled download title",
-					description: variables
+export const cancelMutation = () =>
+	createMutation(
+		() => ({
+			mutationKey: ["manga", "download", "cancel"],
+			async mutationFn(id: string) {
+				const res = await gqlClient
+					.mutation(cancelDonwloadMuation, {
+						id
+					})
+					.toPromise();
+				if (res.error) {
+					throw res.error;
 				}
-			});
-		},
-		networkMode: "always"
-	}),
-	() => mangadexQueryClient
-);
+				return res;
+			},
+			onSettled(data, error, variables, context) {
+				invalidateMangaOfflinePresence(variables);
+			},
+			onError(error, variables, context) {
+				addErrorToast("Cannot cancel download", error);
+			},
+			onSuccess(data, variables, context) {
+				addToast({
+					data: {
+						title: "Canceled download title",
+						description: variables
+					}
+				});
+			},
+			networkMode: "always"
+		}),
+		() => mangadexQueryClient
+	);
 
 const downloadStateQuery = (id: string, _client?: QueryClient) => {
 	const client = _client ?? mangadexQueryClient;
 	const queryKey = offlinePresenceQueryKey(id);
-	return () => createQuery(() => (
-		{
-			queryKey,
-			async queryFn() {
-				return await gqlClient
-					.query(mangaDownloadStateQuery, {
-						id
-					})
-					.toPromise();
-			}
-		}),
-		() => client
-	);
+	return () =>
+		createQuery(
+			() => ({
+				queryKey,
+				async queryFn() {
+					return await gqlClient
+						.query(mangaDownloadStateQuery, {
+							id
+						})
+						.toPromise();
+				}
+			}),
+			() => client
+		);
 };
 
 export enum MangaDownloadState {
@@ -249,38 +248,40 @@ export default function mangaDownloadState({
 	deferred?: boolean;
 }): Readable<MangaDownloadState> {
 	const dState = downloadStateQuery(id);
-	return derived([subOpManga(id, deferred), internalToStore(dState)], ([$sub, $initState], set) => {
-		const res = (() => {
-			if ($sub?.data) {
-				const data = $sub.data.watchMangaDownloadState;
-				if (data.downloading) {
-					return MangaDownloadState.Downloading;
-				} else if (data.error) {
+	return derived(
+		[subOpManga(id, deferred), internalToStore(dState)],
+		([$sub, $initState], set) => {
+			const res = (() => {
+				if ($sub?.data) {
+					const data = $sub.data.watchMangaDownloadState;
+					if (data.downloading) {
+						return MangaDownloadState.Downloading;
+					} else if (data.error) {
+						return MangaDownloadState.Error;
+					} else if (data.isCanceled) {
+						return MangaDownloadState.Canceled;
+					} else if (data.isDone) {
+						return MangaDownloadState.Done;
+					} else if (data.isOfflineAppStateNotLoaded) {
+						return MangaDownloadState.OfflineAppStateNotLoaded;
+					}
+				} else if ($sub?.error) {
 					return MangaDownloadState.Error;
-				} else if (data.isCanceled) {
-					return MangaDownloadState.Canceled;
-				} else if (data.isDone) {
-					return MangaDownloadState.Done;
-				} else if (data.isOfflineAppStateNotLoaded) {
-					return MangaDownloadState.OfflineAppStateNotLoaded;
 				}
-			} else if ($sub?.error) {
-				return MangaDownloadState.Error;
-			}
-			if (
-				$initState?.data?.error != undefined ||
-				$initState?.error != null ||
-				$initState?.data?.data?.downloadState.manga.hasFailed == true
-			) {
-				return MangaDownloadState.Error;
-			} else if ($initState?.data?.data?.downloadState.manga.isDownloaded == true) {
-				return MangaDownloadState.Done;
-			} else {
-				return MangaDownloadState.Pending;
-			}
-		})();
-		set(res);
-	},
+				if (
+					$initState?.data?.error != undefined ||
+					$initState?.error != null ||
+					$initState?.data?.data?.downloadState.manga.hasFailed == true
+				) {
+					return MangaDownloadState.Error;
+				} else if ($initState?.data?.data?.downloadState.manga.isDownloaded == true) {
+					return MangaDownloadState.Done;
+				} else {
+					return MangaDownloadState.Pending;
+				}
+			})();
+			set(res);
+		},
 		MangaDownloadState.Pending as MangaDownloadState
 	);
 }

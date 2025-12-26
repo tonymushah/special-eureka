@@ -2064,6 +2064,35 @@ export enum MangaDonwloadingState {
 	Preloading = "PRELOADING"
 }
 
+/** This is for a feature that allows you to download titles with some extras... */
+export enum MangaDownloadExtras {
+	/**
+	 * Download with all chapters available
+	 *
+	 * NOTE: The current implement *only* download all chapters that match the current content profile.
+	 */
+	AllChapters = "ALL_CHAPTERS",
+	/**
+	 * Download with all chapters that is marked as unread.
+	 *
+	 * NOTE: This will not work if the user is not logged in.
+	 * Also this one also *only* download all *unread* chapters that match the current content profile.
+	 */
+	Unreads = "UNREADS",
+	/**
+	 * Download all undownloaded chapters
+	 *
+	 * NOTE: _Again_, this will *only* download undownloaded that match the current content profile.
+	 */
+	UnDownloadeds = "UN_DOWNLOADEDS",
+	/**
+	 * Download all unread undownloaded chapters.
+	 *
+	 * Only the one matching the current content profile
+	 */
+	UnReadUnDownloadeds = "UN_READ_UN_DOWNLOADEDS"
+}
+
 export type MangaDownloadState = {
 	__typename?: "MangaDownloadState";
 	downloading?: Maybe<MangaDonwloadingState>;
@@ -2289,6 +2318,7 @@ export type MangaMutationsDeleteRelationArgs = {
 };
 
 export type MangaMutationsDownloadArgs = {
+	extras?: InputMaybe<MangaDownloadExtras>;
 	id: Scalars["UUID"]["input"];
 };
 
@@ -6811,6 +6841,19 @@ export type GetMangaHihiQuery = {
 				manga: Array<{ __typename?: "MangaRelated"; id: any; related: MangaRelation }>;
 			};
 		};
+	};
+};
+
+export type DownloadTitleWithExtrasMutationVariables = Exact<{
+	mangaId: Scalars["UUID"]["input"];
+	extras?: InputMaybe<MangaDownloadExtras>;
+}>;
+
+export type DownloadTitleWithExtrasMutation = {
+	__typename?: "Mutation";
+	manga: {
+		__typename?: "MangaMutations";
+		download: { __typename?: "DownloadState"; isDownloaded: boolean; hasFailed: boolean };
 	};
 };
 
@@ -23018,6 +23061,86 @@ export const GetMangaHihiDocument = {
 		}
 	]
 } as unknown as DocumentNode<GetMangaHihiQuery, GetMangaHihiQueryVariables>;
+export const DownloadTitleWithExtrasDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "downloadTitleWithExtras" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "mangaId" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "extras" } },
+					type: {
+						kind: "NamedType",
+						name: { kind: "Name", value: "MangaDownloadExtras" }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "manga" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "download" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "extras" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "extras" }
+											}
+										},
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "id" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "mangaId" }
+											}
+										}
+									],
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "isDownloaded" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "hasFailed" }
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	DownloadTitleWithExtrasMutation,
+	DownloadTitleWithExtrasMutationVariables
+>;
 export const FollowTitleMutationDocument = {
 	kind: "Document",
 	definitions: [

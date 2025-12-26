@@ -28,8 +28,18 @@ pub async fn raw_chapter_download(
     quality: DownloadMode,
     force_port_443: bool,
 ) -> crate::Result<ChapterObject> {
+    let mut task = raw_chapter_download_no_wait(manager, id, quality, force_port_443).await?;
+    Ok(task.wait().await?.await?)
+}
+
+pub async fn raw_chapter_download_no_wait(
+    manager: &Addr<DownloadManager>,
+    id: Uuid,
+    quality: DownloadMode,
+    force_port_443: bool,
+) -> Result<Addr<eureka_mmanager::prelude::ChapterDownloadTask>, crate::Error> {
     let chapter_manager = GetManager::<ChapterDownloadManager>::get(manager).await?;
-    let mut task = chapter_manager
+    let task = chapter_manager
         .new_task(
             ChapterDownloadMessage::new(id)
                 .mode(quality)
@@ -37,7 +47,7 @@ pub async fn raw_chapter_download(
                 .state(DownloadMessageState::Downloading),
         )
         .await?;
-    Ok(task.wait().await?.await?)
+    Ok(task)
 }
 
 #[cfg_attr(feature = "hotpath", hotpath::measure)]

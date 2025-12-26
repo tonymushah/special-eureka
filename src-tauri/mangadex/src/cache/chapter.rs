@@ -308,11 +308,11 @@ impl<R: Runtime> SpawnHandle<R> {
             page_data.clone()
         };
         let mut file_to_copy = match page_data.url.domain() {
-            // this "mangadex.chapter-cache" and "mangadex.chapter" is here 
+            // this "mangadex.chapter-cache" and "mangadex.chapter" is here
             // because custom schemes are not handled the same on windows
             //
-            // NOTE: we should maybe change this with some good old #[cfg(windows)] someday 
-            // but i don't know how to do that with a match statement ;( 
+            // NOTE: we should maybe change this with some good old #[cfg(windows)] someday
+            // but i don't know how to do that with a match statement ;(
             Some("chapter-cache") | Some("mangadex.chapter-cache") => {
                 let to_use_path = Path::new(page_data.url.path());
                 let filename = to_use_path

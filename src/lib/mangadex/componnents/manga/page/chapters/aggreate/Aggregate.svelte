@@ -25,6 +25,8 @@
 	import { createForumThread } from "@mangadex/stores/create-forum-thread";
 	import { ForumThreadType } from "@mangadex/gql/graphql";
 	import { addErrorToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
+	import ExtraOptions from "./ExtraOptions.svelte";
+	import { isMounted } from "@mangadex/stores/offlineIsMounted";
 
 	let readMarkersMutation = readMarkersMutationLoader();
 	const chaptersStore = getChapterStoreContext();
@@ -191,40 +193,31 @@
 		</div>
 		{#if !isEmpty}
 			<div class="right">
-				{#if $isLogged}
-					<ButtonAccent
-						disabled={query.isLoading || readMarkersMutation.isPending}
-						onclick={() => {
-							readMarkersMutation.mutate(
-								{
-									reads: hasUnread ? unread.values().toArray() : [],
-									unreads: hasUnread
-										? []
-										: (query.data?.manga.aggregate.chunked.flatMap((d) => d.ids as string[]) ?? [])
-								},
-								{
-									onSuccess() {
-										refetchTitleReadMarker();
-									}
-								}
-							);
-						}}
-					>
-						{#if hasUnread}
-							Mark all chapter as read
-						{:else}
-							Mark all chapter as not read
-						{/if}
-					</ButtonAccent>
-				{/if}
-				<ButtonAccent
-					onclick={debounce(async () => {
+				<ExtraOptions
+					id={__res.layoutData.id}
+					onReverseClick={debounce(async () => {
 						isReversed.update((i) => !i);
 					})}
-					disabled={query.isLoading}
-				>
-					Reverse
-				</ButtonAccent>
+					{hasUnread}
+					disableReverse={query.isLoading}
+					disableDownloads={!$isMounted}
+					disableMarkAsRead={query.isLoading || readMarkersMutation.isPending}
+					onreadmarks={() => {
+						readMarkersMutation.mutate(
+							{
+								reads: hasUnread ? unread.values().toArray() : [],
+								unreads: hasUnread
+									? []
+									: (query.data?.manga.aggregate.chunked.flatMap((d) => d.ids as string[]) ?? [])
+							},
+							{
+								onSuccess() {
+									refetchTitleReadMarker();
+								}
+							}
+						);
+					}}
+				/>
 			</div>
 		{/if}
 	</div>

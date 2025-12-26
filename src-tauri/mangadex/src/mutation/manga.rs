@@ -8,7 +8,7 @@ use crate::{
     query::download_state::DownloadStateQueries,
     store::types::structs::content::feed_from_gql_ctx,
     utils::{
-        download::manga::download_manga,
+        download::manga::{MangaDownloadExtras, download_title_with_extras},
         traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
     },
 };
@@ -50,10 +50,15 @@ pub struct MangaMutations;
 #[Object]
 #[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl MangaMutations {
-    pub async fn download(&self, ctx: &Context<'_>, id: Uuid) -> Result<DownloadState> {
+    pub async fn download(
+        &self,
+        ctx: &Context<'_>,
+        id: Uuid,
+        extras: Option<MangaDownloadExtras>,
+    ) -> Result<DownloadState> {
         let tauri_handle = ctx.get_app_handle::<tauri::Wry>()?.clone();
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
-        let res = download_manga(&tauri_handle, id).await?;
+        let res = download_title_with_extras(&tauri_handle, id, extras).await?;
         let state = DownloadStateQueries
             .manga(ctx, id)
             .await
