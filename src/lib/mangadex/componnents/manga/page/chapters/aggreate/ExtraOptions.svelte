@@ -195,6 +195,7 @@
 		transition: background-color 50ms ease-in-out;
 		z-index: 11;
 		padding: 5px;
+		font-family: var(--fonts);
 		border: none;
 		color: var(--text-color);
 		text-align: left;
