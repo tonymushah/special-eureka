@@ -77,7 +77,6 @@
 		.details {
 			display: flex;
 			align-items: center;
-			justify-content: center;
 			gap: 10px;
 			flex-direction: row;
 			overflow: hidden;
@@ -87,5 +86,11 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
+	}
+	h4 {
+		margin: 0px;
+	}
+	ul {
+		margin: 0px;
 	}
 </style>
