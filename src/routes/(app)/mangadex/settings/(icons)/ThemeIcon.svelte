@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { RiColorFilterFill } from "svelte-remixicon";
+	import { Palette } from "@lucide/svelte";
 </script>
 
-<RiColorFilterFill size="50%" />
+<Palette size="50%" />
