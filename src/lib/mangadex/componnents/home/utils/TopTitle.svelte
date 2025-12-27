@@ -2,7 +2,7 @@
 	// import { isSidebarRtl } from "@mangadex/componnents/sidebar/states/isRtl";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import Title from "@mangadex/componnents/theme/texts/title/Title.svelte";
-	import { ExternalLink, RefreshCwIcon } from "@lucide/svelte";
+	import { Link2, RefreshCwIcon } from "@lucide/svelte";
 	import { goto } from "$app/navigation";
 
 	interface Events {
@@ -35,7 +35,7 @@
 				disabled={href == undefined}
 			>
 				<div class="icon ext-icon">
-					<ExternalLink size="24px" />
+					<Link2 size="24px" />
 				</div>
 			</ButtonAccent>
 		{/if}
