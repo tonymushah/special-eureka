@@ -52,6 +52,6 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		padding: 4px;
+		padding: 2px;
 	}
 </style>
