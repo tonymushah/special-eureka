@@ -48,8 +48,8 @@
 	import { createQuery, type CreateQueryOptions } from "@tanstack/svelte-query";
 	import { writeText } from "@tauri-apps/plugin-clipboard-manager";
 	import { openUrl as open } from "@tauri-apps/plugin-opener";
-	import { debounce } from "lodash";
-	import { type Snippet } from "svelte";
+	import { debounce, delay, noop } from "lodash";
+	import { onMount, untrack, type Snippet } from "svelte";
 	import { derived as der, derived, toStore } from "svelte/store";
 	import { v4 } from "uuid";
 	import type { LayoutData } from "./layout.context";
@@ -61,6 +61,9 @@
 	import { dev } from "$app/environment";
 	import ReportDialog from "@mangadex/componnents/report/dialog/ReportDialog.svelte";
 	import UploadDialog from "@mangadex/componnents/upload/UploadDialog.svelte";
+	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
+	import { ArrowUpFromLine } from "@lucide/svelte";
+	import { fade } from "svelte/transition";
 
 	type TopMangaStatisticsStoreData = TopMangaStatistics & {
 		threadUrl?: string;
@@ -276,9 +279,46 @@
 	}
 	let openReportDialog = $state(false);
 	let openUploadDialog = $state(false);
+	// BUG: If you expand the collapsible and resize your window, the show more label will still be there.
+	let collapsibleEl = $state<HTMLElement>();
+	let canCollapse = $state(false);
+	let collapsed = $state(false);
+	let collapsibleHeight = $derived.by(() => {
+		if (canCollapse) {
+			if (collapsed) {
+				return "80px";
+			} else if (collapsibleEl) {
+				return `${collapsibleEl.scrollHeight}px`;
+			}
+		}
+	});
+	$effect(() => {
+		noop(collapsibleEl);
+		const d = delay(() => shouldCollapseFn(), 2);
+		return () => {
+			clearTimeout(d);
+		};
+	});
+
+	function shouldCollapseFn() {
+		if (collapsibleEl) {
+			if (collapsibleEl.scrollHeight > 80) {
+				canCollapse = true;
+				collapsed = true;
+			} else {
+				canCollapse = false;
+				collapsed = false;
+			}
+		}
+	}
 </script>
 
-<svelte:window onfocus={refetchReadingFollowingStatus} />
+<svelte:window
+	onfocus={debounce(refetchReadingFollowingStatus, 4000)}
+	onresize={debounce(() => {
+		shouldCollapseFn();
+	})}
+/>
 
 <AppTitle title={`${layoutData.title ?? ""} | MangaDex`} />
 
@@ -364,39 +404,68 @@
 />
 
 <div class="out-top">
-	{#if description != undefined && isOnInfoPage}
-		<!-- svelte-ignore a11y_no_static_element_interactions -->
-		<div
-			class="description"
-			oncontextmenu={registerContextMenuEvent({
-				preventDefault: true,
-				additionalMenus: [
-					ContextMenuItemProvider.menuItem({
-						text: "Copy Descrription",
-						action() {
-							writeText(description);
-						}
-					})
-				]
-			})}
-		>
-			<Markdown source={description} />
-		</div>
-	{/if}
-	<div class="top">
-		{#if isOnInfoPage}
+	<div
+		class="collapsible"
+		bind:this={collapsibleEl}
+		class:collapsed
+		style:height={collapsibleHeight}
+	>
+		{#if description != undefined && isOnInfoPage}
 			<!-- svelte-ignore a11y_no_static_element_interactions -->
 			<div
-				class="info"
+				class="description"
 				oncontextmenu={registerContextMenuEvent({
-					preventDefault: true
+					preventDefault: true,
+					additionalMenus: [
+						ContextMenuItemProvider.menuItem({
+							text: "Copy Descrription",
+							action() {
+								writeText(description);
+							}
+						})
+					]
 				})}
 			>
-				<MangaPageInfo />
+				<Markdown source={description} />
 			</div>
 		{/if}
+		<div class="top">
+			{#if isOnInfoPage}
+				<!-- svelte-ignore a11y_no_static_element_interactions -->
+				<div
+					class="info"
+					oncontextmenu={registerContextMenuEvent({
+						preventDefault: true
+					})}
+				>
+					<MangaPageInfo />
+				</div>
+			{/if}
+		</div>
 	</div>
-
+	{#if canCollapse}
+		<div
+			class="collapse-trigger-layout"
+			transition:fade={{
+				duration: 100
+			}}
+			class:collapsed
+		>
+			<button
+				onclick={() => {
+					collapsed = !collapsed;
+				}}
+				class="to-collapse-button"
+				class:collapsed
+			>
+				{#if collapsed}
+					Show more
+				{:else}
+					<ArrowUpFromLine size="14" /> Show less <ArrowUpFromLine size="14" />
+				{/if}
+			</button>
+		</div>
+	{/if}
 	<MangaNavBar
 		id={layoutData.id}
 		{hasRelation}
@@ -425,6 +494,45 @@
 	}
 	.info {
 		display: none;
+	}
+	.collapsible {
+		overflow: hidden;
+		transition: height 100ms ease-in-out;
+	}
+	.collapsible.collapsed {
+		mask-image: linear-gradient(
+			var(--main-background) 0%,
+			var(--main-background) 60%,
+			transparent 100%
+		);
+	}
+	.collapse-trigger-layout {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 100%;
+	}
+	.collapse-trigger-layout.collapsed {
+		border-top: 3px solid var(--mid-tone);
+	}
+	.to-collapse-button {
+		background-color: var(--accent);
+		color: var(--text-color);
+		font-family: var(--fonts);
+		border-radius: 6px;
+		border: 3px solid var(--contrast-l1);
+		font-size: 14px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 2px;
+	}
+	.to-collapse-button.collapsed {
+		background-color: var(--primary-l2);
+		border-color: var(--mid-tone);
+		border-top-left-radius: 0px;
+		border-top-right-radius: 0px;
+		border-top: none;
 	}
 	@media screen and (max-width: 1200px) {
 		.top {
