@@ -6,6 +6,6 @@
 
 <Menu label="Your Reports" href={route("/mangadex/report")}>
 	{#snippet icon()}
-		<Megaphone size="24" />
+		<Megaphone size="26" />
 	{/snippet}
 </Menu>

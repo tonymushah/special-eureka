@@ -6,6 +6,6 @@
 
 <Menu label="Upload sessions" href={route("/mangadex/upload")}>
 	{#snippet icon()}
-		<CloudUpload size="24" />
+		<CloudUpload size="26" />
 	{/snippet}
 </Menu>

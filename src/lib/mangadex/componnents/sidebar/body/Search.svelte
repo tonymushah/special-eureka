@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { SearchIcon } from "@lucide/svelte";
+	import { Search } from "@lucide/svelte";
 	import SubMenu from "../base/SubMenu.svelte";
 	import SubMenuItem from "../base/SubMenuItem.svelte";
 	import { route } from "$lib/ROUTES";
@@ -9,7 +9,7 @@
 
 <SubMenu label="Search">
 	{#snippet icon()}
-		<SearchIcon size="24" />
+		<Search size="24" />
 	{/snippet}
 	<SubMenuItem label="Titles" href={route("/mangadex/titles")} />
 	<SubMenuItem label="Authors" href={route("/mangadex/author")} />
