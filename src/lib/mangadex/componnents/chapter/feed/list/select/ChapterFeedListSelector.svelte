@@ -9,7 +9,7 @@
 	}
 
 	let { style }: Props = $props();
-	const size = "20";
+	const size = "24";
 </script>
 
 <div class="tab-select">
@@ -46,6 +46,6 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		padding: 6px;
+		padding: 2px;
 	}
 </style>
