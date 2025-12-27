@@ -8,6 +8,7 @@
 	import { latest_updates_query } from "./latest-updates";
 	import defaultContentProfile from "@mangadex/content-profile/graphql/defaultProfile";
 	import { createQuery } from "@tanstack/svelte-query";
+	import { route } from "$lib/ROUTES";
 	const client = getContextClient();
 
 	let latest_updates = createQuery(() => ({
@@ -41,6 +42,7 @@
 			await latest_updates.refetch();
 		}
 	}}
+	href={route("/mangadex/titles/latest-uploads")}
 />
 
 {#if latest_updates.isSuccess}

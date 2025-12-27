@@ -8,6 +8,7 @@
 	import Content from "./recently-added/Content.svelte";
 	import defaultContentProfile from "@mangadex/content-profile/graphql/defaultProfile";
 	import { createQuery } from "@tanstack/svelte-query";
+	import { route } from "$lib/ROUTES";
 
 	const client = getContextClient();
 	let recently_added_query = createQuery(() => ({
@@ -39,6 +40,7 @@
 	}}
 	label={"Recently Added"}
 	fetching={recently_added_query.isFetching}
+	href={route("/mangadex/titles/recently-added")}
 />
 
 {#if recently_added_query.isSuccess}
