@@ -18,7 +18,7 @@
 	import { createProgress, melt } from "@melt-ui/svelte";
 	import { save } from "@tauri-apps/plugin-dialog";
 	import { revealItemInDir } from "@tauri-apps/plugin-opener";
-	import { RotateCwIcon, SaveIcon } from "svelte-feather-icons";
+	import { RotateCwIcon, SaveIcon } from "@lucide/svelte";
 	import { writable } from "svelte/store";
 	import { slide } from "svelte/transition";
 	import { v4 } from "uuid";

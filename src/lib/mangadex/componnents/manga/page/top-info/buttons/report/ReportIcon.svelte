@@ -1,5 +1,5 @@
 <script>
-	import { FlagIcon } from "svelte-feather-icons";
+	import { FlagIcon } from "@lucide/svelte";
 </script>
 
 <div class="report-icon">

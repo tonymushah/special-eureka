@@ -6,7 +6,7 @@
 	import { downloadTitleWithExtra } from "@mangadex/gql-docs/title/id/download-with-extras";
 	import { MangaDownloadExtras } from "@mangadex/gql/graphql";
 	import { isLogged } from "@mangadex/utils/auth";
-	import { ListIcon } from "svelte-feather-icons";
+	import { ListIcon } from "@lucide/svelte";
 
 	let layout: HTMLElement | undefined = $state();
 	let popover: HTMLDivElement | undefined = $state(undefined);

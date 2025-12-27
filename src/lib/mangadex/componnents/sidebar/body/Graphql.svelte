@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { route } from "$lib/ROUTES";
-	import {} from "svelte-feather-icons";
+	import {} from "@lucide/svelte";
 	import Menu from "../base/Menu.svelte";
 	import logo from "./graphql/GraphQL_Logo.svg";
 </script>

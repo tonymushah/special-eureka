@@ -29,7 +29,7 @@
 
 <script lang="ts">
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
-	import { XIcon as CloseIcon } from "svelte-feather-icons";
+	import { XIcon as CloseIcon } from "@lucide/svelte";
 	import { derived as der, writable } from "svelte/store";
 	import { fade } from "svelte/transition";
 	import ChapterFeedSelectoDialogBody from "./ChapterFeedSelectoDialogBody.svelte";

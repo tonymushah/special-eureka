@@ -7,7 +7,7 @@
 	import { isLogged } from "@mangadex/utils/auth";
 	import { save } from "@tauri-apps/plugin-dialog";
 	import { revealItemInDir } from "@tauri-apps/plugin-opener";
-	import { RotateCwIcon, SaveIcon } from "svelte-feather-icons";
+	import { RotateCwIcon, SaveIcon } from "@lucide/svelte";
 
 	interface Props {
 		titles: string[];

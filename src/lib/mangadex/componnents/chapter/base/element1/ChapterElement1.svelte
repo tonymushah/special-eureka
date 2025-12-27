@@ -90,9 +90,7 @@
 		setContextMenuContext
 	} from "@special-eureka/core/utils/contextMenuContext";
 	import { debounce } from "lodash";
-	import { EyeIcon, EyeOffIcon, MessageSquareIcon, UsersIcon } from "svelte-feather-icons";
-	import { RiSearchEyeLine } from "svelte-remixicon";
-	import { derived } from "svelte/store";
+	import { BookSearch, EyeIcon, EyeOffIcon, MessageSquareIcon, UsersIcon } from "@lucide/svelte";
 	import DownloadStateComp from "./DownloadStateComp.svelte";
 	import Layout from "./Layout.svelte";
 	import { cancelChapterDownload, downloadChapter } from "./utils";
@@ -258,7 +256,7 @@
 				{#if !$hasBeenRead && $isLogged}
 					<EyeIcon />
 				{:else if readMarkers.isPending || !$isLogged}
-					<RiSearchEyeLine size="25" />
+					<BookSearch />
 				{:else}
 					<EyeOffIcon />
 				{/if}

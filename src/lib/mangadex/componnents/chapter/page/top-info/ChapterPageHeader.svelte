@@ -4,7 +4,7 @@
 
 <script lang="ts">
 	import { onDestroy, onMount } from "svelte";
-	import { MenuIcon } from "svelte-feather-icons";
+	import { MenuIcon } from "@lucide/svelte";
 	import { writable } from "svelte/store";
 	import { getCurrentChapterData } from "../contexts/currentChapter";
 	import ChapterPageHeaderCurrentPage from "./currentPage/ChapterPageHeaderCurrentPage.svelte";

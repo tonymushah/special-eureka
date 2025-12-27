@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { RiArchiveLine } from "svelte-remixicon";
+	import { Archive } from "@lucide/svelte";
 </script>
 
-<RiArchiveLine size="50%" />
+<Archive size="50%" />

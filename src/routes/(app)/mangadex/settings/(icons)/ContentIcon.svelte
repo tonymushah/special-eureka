@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { RiNewsLine } from "svelte-remixicon";
+	import { Newspaper } from "@lucide/svelte";
 </script>
 
-<RiNewsLine size="50%" />
+<Newspaper size="50%" />

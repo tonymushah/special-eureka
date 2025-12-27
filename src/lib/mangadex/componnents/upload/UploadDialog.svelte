@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { createDialog, melt } from "@melt-ui/svelte";
-	import { XIcon as CloseIcon } from "svelte-feather-icons";
+	import { XIcon as CloseIcon } from "@lucide/svelte";
 	import { toStore } from "svelte/store";
 	import ButtonAccent from "../theme/buttons/ButtonAccent.svelte";
 	import { fade } from "svelte/transition";

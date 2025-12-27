@@ -7,7 +7,7 @@
 	import { isLogged } from "@mangadex/utils/auth";
 	import { writeText } from "@tauri-apps/plugin-clipboard-manager";
 	import { openUrl as shellOpen } from "@tauri-apps/plugin-opener";
-	import { BookmarkIcon, ExternalLinkIcon, FlagIcon } from "svelte-feather-icons";
+	import { BookmarkIcon, ExternalLinkIcon, FlagIcon } from "@lucide/svelte";
 	import type { LayoutData } from "./$types";
 	import NavTab from "./NavTab.svelte";
 	import ScanalationGroupLinkButtons from "./ScanalationGroupLinkButtons.svelte";

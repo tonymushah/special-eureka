@@ -1,5 +1,5 @@
 <script>
-	import { PlusSquareIcon } from "svelte-feather-icons";
+	import { PlusSquareIcon } from "@lucide/svelte";
 	import IconLayout from "./IconLayout.svelte";
 </script>
 

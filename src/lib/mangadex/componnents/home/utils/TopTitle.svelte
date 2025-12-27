@@ -2,33 +2,48 @@
 	// import { isSidebarRtl } from "@mangadex/componnents/sidebar/states/isRtl";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import Title from "@mangadex/componnents/theme/texts/title/Title.svelte";
-	import { RefreshCwIcon } from "svelte-feather-icons";
+	import { Link2, RefreshCwIcon } from "@lucide/svelte";
+	import { goto } from "$app/navigation";
 
 	interface Events {
 		onrefresh?: (
 			ev: MouseEvent & {
 				currentTarget: EventTarget & HTMLButtonElement;
 			}
-		) => any;
+		) => void;
 	}
 
 	interface Props extends Events {
 		label: string;
 		fetching: boolean;
+		href?: string;
 	}
 
-	let { label, fetching = $bindable(), onrefresh }: Props = $props();
+	let { label, fetching = $bindable(), onrefresh, href }: Props = $props();
 
 	// $: console.log(`fetching ${fetching}`);
 </script>
 
 <div class="title with-margin">
 	<Title>{label}</Title>
-	<span class="button" class:fetching>
+	<span class="buttons">
+		{#if href}
+			<ButtonAccent
+				onclick={() => {
+					if (href) goto(href);
+				}}
+				disabled={href == undefined}
+			>
+				<div class="icon ext-icon">
+					<Link2 size="24px" />
+				</div>
+			</ButtonAccent>
+		{/if}
 		<ButtonAccent
 			onclick={(e) => {
 				onrefresh?.(e);
 			}}
+			disabled={fetching}
 		>
 			<div class="icon" class:fetching>
 				<RefreshCwIcon size={"24px"} />
@@ -46,7 +61,7 @@
 	div.title {
 		display: flex;
 		align-items: center;
-		justify-content: start;
+		justify-content: space-between;
 		flex-direction: row;
 		gap: 10px;
 		z-index: 3;
@@ -61,7 +76,10 @@
 	.fetching {
 		cursor: not-allowed;
 	}
-	span.button {
+	span.buttons {
+		display: flex;
+		align-items: center;
+		gap: 6px;
 		div.icon {
 			width: 24px;
 			height: 24px;

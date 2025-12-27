@@ -1,5 +1,5 @@
 <script>
-	import { PlusIcon } from "svelte-feather-icons";
+	import { PlusIcon } from "@lucide/svelte";
 </script>
 
 <div>

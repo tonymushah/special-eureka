@@ -4,7 +4,7 @@
 		isChapterDownloaded,
 		isChapterDownloading
 	} from "@mangadex/download/chapter";
-	import { CheckIcon, DownloadCloudIcon, DownloadIcon, XIcon } from "svelte-feather-icons";
+	import { CheckIcon, DownloadCloudIcon, DownloadIcon, XIcon } from "@lucide/svelte";
 	interface Props {
 		id: string;
 	}

@@ -1,5 +1,5 @@
 <script>
-	import { BellOffIcon } from "svelte-feather-icons";
+	import { BellOffIcon } from "@lucide/svelte";
 </script>
 
 <div class="is-following-off">

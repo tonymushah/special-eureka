@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { MenuIcon } from "svelte-feather-icons";
+	import { MenuIcon } from "@lucide/svelte";
 	import { isDrawerOpenWritable } from "../contexts/isDrawerOpen";
 	import { fade } from "svelte/transition";
 

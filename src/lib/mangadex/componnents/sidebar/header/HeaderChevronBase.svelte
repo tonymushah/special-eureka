@@ -2,7 +2,7 @@
 	import sideDirGQLDoc from "@mangadex/gql-docs/sidebarSub";
 	import { Direction } from "@mangadex/gql/graphql";
 	import { getContextClient, subscriptionStore } from "@urql/svelte";
-	import { ChevronLeftIcon, ChevronRightIcon } from "svelte-feather-icons";
+	import { ChevronLeftIcon, ChevronRightIcon } from "@lucide/svelte";
 	import { derived } from "svelte/store";
 
 	interface Events {

@@ -4,7 +4,7 @@
 	import FormInput from "@mangadex/componnents/theme/form/input/FormInput.svelte";
 	import type { UnlistenFn } from "@tauri-apps/api/event";
 	import { onDestroy } from "svelte";
-	import { ArchiveIcon, FilterIcon, SearchIcon } from "svelte-feather-icons";
+	import { ArchiveIcon, FilterIcon, SearchIcon } from "@lucide/svelte";
 	import { derived, writable, type Writable } from "svelte/store";
 	import { init as initFilterContext, type MangaSearchFilterParams } from "./filter/contexts";
 	import MangaSearchFilterDialog from "./filter/MangaSearchFilterDialog.svelte";

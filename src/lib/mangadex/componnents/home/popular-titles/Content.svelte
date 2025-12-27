@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { ContentRating } from "@mangadex/gql/graphql";
-	import { ArrowLeftIcon, ArrowRightIcon } from "svelte-feather-icons";
+	import { ArrowLeftIcon, ArrowRightIcon } from "@lucide/svelte";
 	import type { Readable } from "svelte/store";
 	import type { SwiperContainer } from "swiper/element";
 	import MangaPopularElement from "../../manga/popular/MangaPopulatElementWithReadableCoverImage.svelte";

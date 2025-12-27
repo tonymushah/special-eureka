@@ -1,5 +1,5 @@
 <script>
-	import { BellIcon } from "svelte-feather-icons";
+	import { BellIcon } from "@lucide/svelte";
 </script>
 
 <div class="is-following">

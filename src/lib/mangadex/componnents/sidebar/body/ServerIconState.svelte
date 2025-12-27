@@ -3,7 +3,7 @@
 	import { isMounted } from "@mangadex/stores/offlineIsMounted";
 	import { mount as _mount, unmount as _unmount } from "@mangadex/utils/offline_app_state";
 	import { getContextClient } from "@urql/svelte";
-	import { ServerIcon } from "svelte-feather-icons";
+	import { ServerIcon } from "@lucide/svelte";
 	import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 	import { createMutation } from "@tanstack/svelte-query";
 

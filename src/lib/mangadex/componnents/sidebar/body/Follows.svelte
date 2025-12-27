@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { BookmarkIcon } from "svelte-feather-icons";
+	import { BookmarkIcon } from "@lucide/svelte";
 	import SubMenu from "../base/SubMenu.svelte";
 	import SubMenuItem from "../base/SubMenuItem.svelte";
 	import { route } from "$lib/ROUTES";

@@ -2,7 +2,7 @@
 	import Title from "@mangadex/componnents/theme/texts/title/Title.svelte";
 	import { ContentRating } from "@mangadex/gql/graphql";
 	import { getMangaSearchContentRatingContextStoreWritable } from "../contexts/contentRating";
-	import { CheckIcon as PlusIcon } from "svelte-feather-icons";
+	import { CheckIcon as PlusIcon } from "@lucide/svelte";
 
 	const selected = getMangaSearchContentRatingContextStoreWritable();
 	function toggleContentRating(rating: ContentRating) {

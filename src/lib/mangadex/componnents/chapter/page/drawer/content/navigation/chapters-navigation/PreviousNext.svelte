@@ -5,7 +5,7 @@
 		fireChapterNextEvent,
 		fireChapterPreviousEvent
 	} from "../../../../contexts/previousNextEventTarget";
-	import { ArrowLeftIcon, ArrowRightIcon } from "svelte-feather-icons";
+	import { ArrowLeftIcon, ArrowRightIcon } from "@lucide/svelte";
 	import { Direction as ReadingDirection } from "@mangadex/gql/graphql";
 	import { getCurrentChapterDirection } from "@mangadex/componnents/chapter/page/contexts/readingDirection";
 	interface Props {

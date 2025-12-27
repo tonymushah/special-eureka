@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Link from "@mangadex/componnents/theme/links/Link.svelte";
 	import UserRolesComp from "@mangadex/componnents/user/UserRolesComp.svelte";
-	import { UserIcon } from "svelte-feather-icons";
+	import { UserIcon } from "@lucide/svelte";
 	import { derived } from "svelte/store";
 	import { getCurrentChapterData } from "../../../contexts/currentChapter";
 	import { route } from "$lib/ROUTES";

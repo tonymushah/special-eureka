@@ -2,7 +2,7 @@
 	import { isLogged, userMe } from "@mangadex/utils/auth";
 	import { getContextClient } from "@urql/svelte";
 	import { onMount } from "svelte";
-	import { UserCheckIcon, UserIcon, UserXIcon } from "svelte-feather-icons";
+	import { UserCheckIcon, UserIcon, UserXIcon } from "@lucide/svelte";
 	import Menu from "./base/Menu.svelte";
 	import { userMeOnSidebarFooterQuery } from "./footer";
 	import { goto } from "$app/navigation";

@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { route } from "$lib/ROUTES";
-	import { SettingsIcon } from "svelte-feather-icons";
+	import { Toolbox } from "@lucide/svelte";
 	import Menu from "../base/Menu.svelte";
 </script>
 
 <Menu label="Settings" href={route("/mangadex/settings")}>
 	{#snippet icon()}
-		<SettingsIcon size="24" />
+		<Toolbox size="26" />
 	{/snippet}
 </Menu>

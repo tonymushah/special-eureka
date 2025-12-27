@@ -2,7 +2,7 @@
 	import Title from "@mangadex/componnents/theme/texts/title/Title.svelte";
 	import type { TagGroup } from "@mangadex/gql/graphql";
 	import make_first_upper_case from "@mangadex/utils/make_first_upper_case";
-	import { CheckIcon as PlusIcon } from "svelte-feather-icons";
+	import { Ban, CheckIcon as PlusIcon } from "@lucide/svelte";
 	import { bounceInOut } from "svelte/easing";
 	import { derived, readonly } from "svelte/store";
 	import { fade } from "svelte/transition";
@@ -12,7 +12,6 @@
 		TagOptionState,
 		toggleTagOption
 	} from "../../contexts/tags";
-	import { RiForbid2Line } from "svelte-remixicon";
 
 	interface Props {
 		title: string;
@@ -55,7 +54,7 @@
 							}}
 						>
 							{#if tag.state == TagOptionState.EXCLUDE}
-								<RiForbid2Line size="24" />
+								<Ban size="24" />
 							{:else if tag.state == TagOptionState.INCLUDE}
 								<PlusIcon />
 							{/if}

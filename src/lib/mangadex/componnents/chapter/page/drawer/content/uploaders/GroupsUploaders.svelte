@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { UsersIcon } from "svelte-feather-icons";
+	import { UsersIcon } from "@lucide/svelte";
 	import { getCurrentChapterData } from "../../../contexts/currentChapter";
 	import { derived } from "svelte/store";
 	import Link from "@mangadex/componnents/theme/links/Link.svelte";

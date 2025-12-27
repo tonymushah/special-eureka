@@ -5,7 +5,7 @@
 	import { writeText } from "@tauri-apps/plugin-clipboard-manager";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import { openUrl as shellOpen } from "@tauri-apps/plugin-opener";
-	import { ExternalLinkIcon, FlagIcon } from "svelte-feather-icons";
+	import { ExternalLinkIcon, FlagIcon } from "@lucide/svelte";
 	import AuthorLinkButtons from "./AuthorLinkButtons.svelte";
 	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
 	import { isLogged } from "@mangadex/utils/auth";

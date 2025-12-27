@@ -2,7 +2,7 @@
 	import { getCurrentChapterImageFit } from "@mangadex/componnents/chapter/page/contexts/imageFit";
 	import { ImageFit } from "@mangadex/gql/graphql";
 
-	import { AlignCenterIcon, AlignJustifyIcon, MehIcon } from "svelte-feather-icons";
+	import { AlignCenterIcon, AlignJustifyIcon, MehIcon } from "@lucide/svelte";
 	const imageFitStore = getCurrentChapterImageFit();
 	const size = "16";
 </script>

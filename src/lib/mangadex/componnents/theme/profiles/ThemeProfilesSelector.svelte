@@ -2,7 +2,7 @@
 	import defaultThemeProfileKey from "@mangadex/theme/graphql/defaultThemeProfileKey";
 	import themes, { singleUpdateMutation } from "@mangadex/theme/graphql/themes";
 	import { getContextClient } from "@urql/svelte";
-	import { XCircleIcon } from "svelte-feather-icons";
+	import { XCircleIcon } from "@lucide/svelte";
 	import { derived } from "svelte/store";
 	import SomeDiv from "../SomeDiv.svelte";
 	import ButtonAccent from "../buttons/ButtonAccent.svelte";

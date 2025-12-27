@@ -1,18 +1,12 @@
 <script lang="ts">
-	import {
-		CopyIcon,
-		ExternalLinkIcon,
-		GlobeIcon,
-		MailIcon,
-		TwitterIcon
-	} from "svelte-feather-icons";
+	import { CopyIcon, ExternalLinkIcon, GlobeIcon, MailIcon, TwitterIcon } from "@lucide/svelte";
 	import { writeText } from "@tauri-apps/plugin-clipboard-manager";
 	import { openUrl as shellOpen } from "@tauri-apps/plugin-opener";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import { getContextClient } from "@urql/svelte";
 	import { getFaviconSrc } from "@mangadex/utils/favicons/getFaviconSrc";
 	import { readable } from "svelte/store";
-	import { RiDiscordFill } from "svelte-remixicon";
+	import Discord from "@mangadex/componnents/icon/Discord.svelte";
 
 	interface Props {
 		website?: string | undefined;
@@ -134,7 +128,7 @@
 	>
 		<div class="button-inner">
 			<div class="icon">
-				<RiDiscordFill size="20" />
+				<Discord size="20" />
 			</div>
 			<h4>Discord</h4>
 		</div>

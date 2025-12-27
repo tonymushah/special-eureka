@@ -3,8 +3,8 @@
 	import type { PageData } from "./$types";
 	import { goto } from "$app/navigation";
 	import { route } from "$lib/ROUTES";
-	import { RiVipCrown2Fill } from "svelte-remixicon";
 	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
+	import { ChessQueen } from "@lucide/svelte";
 
 	interface Props {
 		data: PageData;
@@ -30,7 +30,7 @@
 			>
 				{#if member.isLeader}
 					<div>
-						<RiVipCrown2Fill color="var(--primary)" size="1em" />
+						<ChessQueen color="var(--primary)" size="16" />
 					</div>
 				{/if}
 			</UsersSimpleBase>

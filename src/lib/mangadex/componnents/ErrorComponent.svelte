@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { XCircleIcon } from "svelte-feather-icons";
+	import { XCircleIcon } from "@lucide/svelte";
 	import ButtonAccent from "./theme/buttons/ButtonAccent.svelte";
 	import PrimaryButtonOnlyLabel from "./theme/buttons/PrimaryButtonOnlyLabel.svelte";
 	import { CombinedError } from "@urql/svelte";
@@ -77,7 +77,6 @@
 		.details {
 			display: flex;
 			align-items: center;
-			justify-content: center;
 			gap: 10px;
 			flex-direction: row;
 			overflow: hidden;
@@ -87,5 +86,11 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
+	}
+	h4 {
+		margin: 0px;
+	}
+	ul {
+		margin: 0px;
 	}
 </style>

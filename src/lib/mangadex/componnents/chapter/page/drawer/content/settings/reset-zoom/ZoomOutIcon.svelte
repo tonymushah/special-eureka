@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { ZoomOutIcon } from "svelte-feather-icons";
+	import { ZoomOutIcon } from "@lucide/svelte";
 </script>
 
 <div>

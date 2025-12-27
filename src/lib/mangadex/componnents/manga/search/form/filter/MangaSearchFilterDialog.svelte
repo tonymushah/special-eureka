@@ -2,8 +2,9 @@
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import PrimaryButton from "@mangadex/componnents/theme/buttons/PrimaryButton.svelte";
 	import Title from "@mangadex/componnents/theme/texts/title/Title.svelte";
-	import { RiCloseLine } from "svelte-remixicon";
+
 	import MangaSearchFilterDialogContent from "./MangaSearchFilterDialogContent.svelte";
+	import { X } from "@lucide/svelte";
 
 	interface Events {
 		onvalidate?: (
@@ -38,7 +39,7 @@
 					dialog_bind?.close();
 				}}
 			>
-				<RiCloseLine size={"24"} />
+				<X size={"24"} />
 			</ButtonAccent>
 		</div>
 	</div>

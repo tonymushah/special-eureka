@@ -4,7 +4,7 @@
 	import { getVersion } from "@tauri-apps/api/app";
 	import { openUrl } from "@tauri-apps/plugin-opener";
 	import { onMount, type Snippet } from "svelte";
-	import { GithubIcon } from "svelte-feather-icons";
+	import { GithubIcon } from "@lucide/svelte";
 	import haikeiREd from "@special-eureka/dashboard/haikei/animated-1.svg";
 	import { QueryClient, QueryClientProvider } from "@tanstack/svelte-query";
 	import { SvelteQueryDevtools } from "@tanstack/svelte-query-devtools";
@@ -14,9 +14,8 @@
 	}
 	let { children }: Props = $props();
 	onMount(async () => {
-		const { defaultBehavior } = await import(
-			"@special-eureka/core/window-decoration/stores/decorations.svelte"
-		);
+		const { defaultBehavior } =
+			await import("@special-eureka/core/window-decoration/stores/decorations.svelte");
 		defaultBehavior();
 	});
 	$effect(() => {

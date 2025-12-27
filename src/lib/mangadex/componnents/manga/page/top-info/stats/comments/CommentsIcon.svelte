@@ -1,5 +1,5 @@
 <script>
-	import { MessageSquareIcon } from "svelte-feather-icons";
+	import { MessageSquareIcon } from "@lucide/svelte";
 </script>
 
 <div class="comment-icon">

@@ -3,7 +3,7 @@
 	import PrimaryButton from "@mangadex/componnents/theme/buttons/PrimaryButton.svelte";
 	import FormInput from "@mangadex/componnents/theme/form/input/FormInput.svelte";
 	import MidToneLine from "@mangadex/componnents/theme/lines/MidToneLine.svelte";
-	import { SearchIcon } from "svelte-feather-icons";
+	import { SearchIcon } from "@lucide/svelte";
 	import { writable } from "svelte/store";
 	import SearchContent from "./SearchContent.svelte";
 

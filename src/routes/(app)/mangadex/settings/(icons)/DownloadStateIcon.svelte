@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { RiDownloadCloud2Line } from "svelte-remixicon";
+	import { CloudDownload } from "@lucide/svelte";
 </script>
 
-<RiDownloadCloud2Line size="50%" />
+<CloudDownload size="50%" />

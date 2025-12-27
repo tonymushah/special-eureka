@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { slide } from "svelte/transition";
 	import PrimaryButton from "./theme/buttons/PrimaryButton.svelte";
-	import { ArrowLeftIcon, RefreshCcwIcon } from "svelte-feather-icons";
+	import { ArrowLeftIcon, RefreshCcwIcon } from "@lucide/svelte";
 	import ButtonAccent from "./theme/buttons/ButtonAccent.svelte";
 	let isTitleHovered = $state(false);
 	interface Props {

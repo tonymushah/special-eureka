@@ -1,12 +1,11 @@
 <script lang="ts">
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import { MangaListStyle } from "@mangadex/gql/graphql";
-	import { GridIcon } from "svelte-feather-icons";
-	import { RiLayoutColumnLine, RiLayoutRowLine } from "svelte-remixicon";
+	import { LayoutList, Grid3x2, LayoutGrid } from "@lucide/svelte";
 	import { getMangaListStyleContextWritable } from "../contexts/style";
 
 	const style = getMangaListStyleContextWritable();
-	const size = "20";
+	const size = "24";
 </script>
 
 <div class="tab-select">
@@ -17,7 +16,7 @@
 		variant={$style == MangaListStyle.Grid ? "4" : "1"}
 	>
 		<div class="icon">
-			<GridIcon {size} />
+			<LayoutGrid {size} />
 		</div>
 	</ButtonAccent>
 	<ButtonAccent
@@ -27,7 +26,7 @@
 		variant={$style == MangaListStyle.Rows ? "5" : "1"}
 	>
 		<div class="icon">
-			<RiLayoutRowLine {size} />
+			<LayoutList {size} />
 		</div>
 	</ButtonAccent>
 	<ButtonAccent
@@ -37,7 +36,7 @@
 		variant={$style == MangaListStyle.Cover ? "5" : "1"}
 	>
 		<div class="icon">
-			<RiLayoutColumnLine {size} />
+			<Grid3x2 {size} />
 		</div>
 	</ButtonAccent>
 </div>
@@ -53,6 +52,6 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		padding: 6px;
+		padding: 2px;
 	}
 </style>

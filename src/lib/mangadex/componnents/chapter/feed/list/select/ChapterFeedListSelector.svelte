@@ -1,8 +1,7 @@
 <script lang="ts">
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import { ChapterFeedStyle } from "@mangadex/gql/graphql";
-	import { GridIcon, ListIcon } from "svelte-feather-icons";
-	import { RiLayoutRowLine } from "svelte-remixicon";
+	import { ListIcon, Rows3 } from "@lucide/svelte";
 	import type { Writable } from "svelte/store";
 
 	interface Props {
@@ -10,7 +9,7 @@
 	}
 
 	let { style }: Props = $props();
-	const size = "20";
+	const size = "24";
 </script>
 
 <div class="tab-select">
@@ -31,7 +30,7 @@
 		variant={$style == ChapterFeedStyle.CoverFull ? "5" : "1"}
 	>
 		<div class="icon">
-			<RiLayoutRowLine {size} />
+			<Rows3 {size} />
 		</div>
 	</ButtonAccent>
 </div>
@@ -47,6 +46,6 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		padding: 6px;
+		padding: 2px;
 	}
 </style>

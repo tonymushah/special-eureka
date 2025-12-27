@@ -1,5 +1,5 @@
 <script>
-	import { TrashIcon } from "svelte-feather-icons";
+	import { TrashIcon } from "@lucide/svelte";
 </script>
 
 <div class="trash-can">

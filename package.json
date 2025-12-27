@@ -87,6 +87,7 @@
 		"@graphiql/toolkit": "~0.11.3",
 		"@graphql-typed-document-node/core": "^3.2.0",
 		"@humanspeak/svelte-markdown": "^0.8.13",
+		"@lucide/svelte": "^0.562.0",
 		"@panzoom/panzoom": "^4.6.0",
 		"@storybook/addon-a11y": "^10.0.0",
 		"@tanstack/svelte-query": "^6.0.3",
@@ -108,8 +109,6 @@
 		"mizuki-graphiql-fetcher": "^1.1.0",
 		"mizuki-urql-adapter": "^1.1.0",
 		"panzoom": "^9.4.3",
-		"svelte-feather-icons": "^4.2.0",
-		"svelte-remixicon": "^2.8.0",
 		"swiper": "^12.0.3",
 		"timeago.js": "^4.0.2",
 		"uuid": "^13.0.0"

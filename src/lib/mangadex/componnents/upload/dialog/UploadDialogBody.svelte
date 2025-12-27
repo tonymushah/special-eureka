@@ -8,7 +8,7 @@
 	import { createCombobox, createTagsInput, melt } from "@melt-ui/svelte";
 	import { createInfiniteQuery } from "@tanstack/svelte-query";
 	import { onDestroy } from "svelte";
-	import { XIcon } from "svelte-feather-icons";
+	import { XIcon } from "@lucide/svelte";
 	import { slide } from "svelte/transition";
 	import Tooltip from "@mangadex/componnents/Tooltip.svelte";
 	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";

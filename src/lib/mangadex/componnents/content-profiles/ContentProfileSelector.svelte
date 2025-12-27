@@ -6,7 +6,7 @@
 	import defaultThemeProfileKey from "@mangadex/content-profile/graphql/defaultProfileName";
 	import PrimaryButton from "@mangadex/componnents/theme/buttons/PrimaryButton.svelte";
 	import DangerButton from "@mangadex/componnents/theme/buttons/DangerButton.svelte";
-	import { XCircleIcon } from "svelte-feather-icons";
+	import { XCircleIcon } from "@lucide/svelte";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import FormInput from "@mangadex/componnents/theme/form/input/FormInput.svelte";
 

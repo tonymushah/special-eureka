@@ -10,12 +10,12 @@
 	import type { UnlistenFn } from "@tauri-apps/api/event";
 	import { getCurrentWindow, PhysicalPosition } from "@tauri-apps/api/window";
 	import { onDestroy, onMount } from "svelte";
-	import { ImageIcon } from "svelte-feather-icons";
-	import { RiFileDamageLine } from "svelte-remixicon";
+	import { ImageIcon } from "@lucide/svelte";
 	import { flip } from "svelte/animate";
 	import { fade } from "svelte/transition";
-	import { imageIcon } from "./images.module.scss";
+	import imageIconCss from "./images.module.scss";
 
+	const imageIcon = imageIconCss.imageIcon;
 	interface Props {
 		images: string[];
 		sessionId: string;

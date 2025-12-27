@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { HelpCircleIcon } from "svelte-feather-icons";
+	import { HelpCircleIcon } from "@lucide/svelte";
 	const size = "16";
 </script>
 

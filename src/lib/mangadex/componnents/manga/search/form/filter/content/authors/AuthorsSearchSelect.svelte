@@ -4,7 +4,7 @@
 	import { createCombobox, createTagsInput, melt, type Tag } from "@melt-ui/svelte";
 	import { debounce, type DebouncedFunc } from "lodash";
 	import { onDestroy } from "svelte";
-	import { XIcon } from "svelte-feather-icons";
+	import { XIcon } from "@lucide/svelte";
 	import { get, writable, type Writable } from "svelte/store";
 	import {
 		getMangaSearchAuthorSearchFetcher,
