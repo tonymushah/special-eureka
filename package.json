@@ -81,7 +81,7 @@
 	"dependencies": {
 		"@floating-ui/dom": "^1.7.4",
 		"@fontsource-variable/josefin-sans": "^5.2.8",
-		"@fontsource-variable/noto-sans-jp": "^5.2.9",
+		"@fontsource-variable/lexend": "^5.2.11",
 		"@fontsource/pacifico": "^5.2.7",
 		"@fontsource/poppins": "^5.2.7",
 		"@graphiql/toolkit": "~0.11.3",

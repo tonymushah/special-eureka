@@ -14,9 +14,9 @@ importers:
       '@fontsource-variable/josefin-sans':
         specifier: ^5.2.8
         version: 5.2.8
-      '@fontsource-variable/noto-sans-jp':
-        specifier: ^5.2.9
-        version: 5.2.9
+      '@fontsource-variable/lexend':
+        specifier: ^5.2.11
+        version: 5.2.11
       '@fontsource/pacifico':
         specifier: ^5.2.7
         version: 5.2.7
@@ -787,8 +787,8 @@ packages:
   '@fontsource-variable/josefin-sans@5.2.8':
     resolution: {integrity: sha512-xt8EGt2/66JJV/mmWU2NxafIwXmDNdd1yi/bVZyRRMCtygHXPCldJrrjjDgOCJPyXbE7NWkc3g+5iE8uJJGbFA==}
 
-  '@fontsource-variable/noto-sans-jp@5.2.9':
-    resolution: {integrity: sha512-osPL5f7dvGDjuMuFwDTGPLG37030D8X5zk+3BWea6txAVDFeE/ZIrKW0DY0uSDfRn9+NiKbiFn/2QvZveKXTog==}
+  '@fontsource-variable/lexend@5.2.11':
+    resolution: {integrity: sha512-0hgEQ4O7Nh8fxL/WWmspJf0BErbocRkZwtLRGey/V4mUUqxfF7QUwqhcdzwpjom3NYCniY4uzQ5wYD7r9/92tQ==}
 
   '@fontsource/pacifico@5.2.7':
     resolution: {integrity: sha512-L+YiZn3Lb8rVN15zcLlti62doVxQeFpS+dJmulKkFrUo3dZIAxZLHwXoKaaHm+VVcOTrT/mmKCZqGOIWVmFV2w==}
@@ -5129,7 +5129,7 @@ snapshots:
 
   '@fontsource-variable/josefin-sans@5.2.8': {}
 
-  '@fontsource-variable/noto-sans-jp@5.2.9': {}
+  '@fontsource-variable/lexend@5.2.11': {}
 
   '@fontsource/pacifico@5.2.7': {}
 

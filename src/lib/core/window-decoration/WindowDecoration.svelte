@@ -1,8 +1,7 @@
 <script lang="ts" module>
 	import { derived, writable } from "svelte/store";
 	import defaultLogo from "./app-icon.png";
-	// Supports weights 100-900
-	import "@fontsource-variable/noto-sans-jp";
+	import "@fontsource-variable/lexend";
 	import "@fontsource/pacifico";
 	import { getCurrentWebviewWindow } from "@tauri-apps/api/webviewWindow";
 	const appWindow = getCurrentWebviewWindow();
@@ -25,7 +24,7 @@
 
 	export const logo = writable(defaultLogo);
 	export const title = writable("Special Eureka");
-	export const fonts = writable("'Noto Sans JP Variable', sans-serif");
+	export const fonts = writable("'Lexend Variable', sans-serif");
 	export const style = writable<WindowDecorationStyle>({
 		textColor: "#000",
 		background: "#eee",
@@ -46,7 +45,7 @@
 		if (rand % 5 == 0) {
 			setPacificoTitleBarFonts();
 		} else {
-			fonts.set("'Noto Sans JP Variable', sans-serif");
+			fonts.set("'Lexend Variable', sans-serif");
 		}
 	}
 	export function setDefaultStyles() {
