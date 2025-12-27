@@ -1,17 +1,32 @@
 <script lang="ts">
-	import { RiSideBarFill, RiSidebarFoldLine } from "svelte-remixicon";
 	import { sideBarActionType as action } from "./action";
-	import { SlashIcon } from "@lucide/svelte";
+	import {
+		PanelLeft,
+		PanelLeftDashed,
+		PanelRight,
+		PanelRightDashed,
+		SlashIcon
+	} from "@lucide/svelte";
+	import { isSidebarRtl } from "@mangadex/componnents/sidebar/states/isRtl";
 	import { SidebarMode } from "@mangadex/gql/graphql";
 
 	const size = "18";
+	let sidebarRtl = $derived($isSidebarRtl);
 </script>
 
 <div>
 	{#if $action == SidebarMode.Default}
-		<RiSideBarFill size={`${size}px`} />
+		{#if sidebarRtl}
+			<PanelRight {size} />
+		{:else}
+			<PanelLeft {size} />
+		{/if}
 	{:else if $action == SidebarMode.Floating}
-		<RiSidebarFoldLine size={`${size}px`} />
+		{#if sidebarRtl}
+			<PanelRightDashed {size} />
+		{:else}
+			<PanelLeftDashed {size} />
+		{/if}
 	{:else}
 		<SlashIcon {size} />
 	{/if}
