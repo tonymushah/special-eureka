@@ -1,6 +1,5 @@
 <script lang="ts">
-	import { XIcon } from "@lucide/svelte";
-	import { RiPushpinLine, RiUnpinLine } from "svelte-remixicon";
+	import { XIcon, Pin, PinOff } from "@lucide/svelte";
 	import { derived } from "svelte/store";
 	import { isDrawerFixedWritable } from "../../contexts/isDrawerFixed";
 	import { isDrawerOpenWritable } from "../../contexts/isDrawerOpen";
@@ -43,9 +42,9 @@
 		}}
 	>
 		{#if $fixed_}
-			<RiPushpinLine size="24" />
+			<Pin />
 		{:else}
-			<RiUnpinLine size="24" />
+			<PinOff />
 		{/if}
 	</div>
 </section>
