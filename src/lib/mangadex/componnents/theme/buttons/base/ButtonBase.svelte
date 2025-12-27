@@ -55,6 +55,7 @@
 		justify-content: var(--button-justify-content);
 	}
 	button:disabled {
+		cursor: not-allowed;
 		background: linear-gradient(
 			225deg,
 			color-mix(in srgb, var(--main-background) 95%, var(--danger, transparent) 5%) 0%,
