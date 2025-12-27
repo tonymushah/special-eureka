@@ -1,8 +1,7 @@
 <script lang="ts">
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import { MangaListStyle } from "@mangadex/gql/graphql";
-	import { GridIcon } from "@lucide/svelte";
-	import { RiLayoutColumnLine, RiLayoutRowLine } from "svelte-remixicon";
+	import { GridIcon, LayoutList, Grid3x2 } from "@lucide/svelte";
 	import { getMangaListStyleContextWritable } from "../contexts/style";
 
 	const style = getMangaListStyleContextWritable();
@@ -27,7 +26,7 @@
 		variant={$style == MangaListStyle.Rows ? "5" : "1"}
 	>
 		<div class="icon">
-			<RiLayoutRowLine {size} />
+			<LayoutList {size} />
 		</div>
 	</ButtonAccent>
 	<ButtonAccent
@@ -37,7 +36,7 @@
 		variant={$style == MangaListStyle.Cover ? "5" : "1"}
 	>
 		<div class="icon">
-			<RiLayoutColumnLine {size} />
+			<Grid3x2 {size} />
 		</div>
 	</ButtonAccent>
 </div>
