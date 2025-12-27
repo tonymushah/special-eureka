@@ -175,7 +175,6 @@
 		color: var(--text-color);
 		font-weight: bold;
 		border-radius: 4px;
-		font-size: 90%;
 		width: max-content;
 		position: absolute;
 		top: 0;
@@ -196,6 +195,7 @@
 		z-index: 11;
 		padding: 5px;
 		font-family: var(--fonts);
+		font-size: var(--font-size);
 		border: none;
 		color: var(--text-color);
 		text-align: left;
