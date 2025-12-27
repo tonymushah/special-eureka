@@ -2,7 +2,7 @@
 	import Markdown from "@mangadex/componnents/markdown/Markdown.svelte";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import PrimaryButton from "@mangadex/componnents/theme/buttons/PrimaryButton.svelte";
-	import { BookOpenIcon } from "svelte-feather-icons";
+	import { BookOpenIcon } from "@lucide/svelte";
 
 	interface Events {
 		onreadClick?: (

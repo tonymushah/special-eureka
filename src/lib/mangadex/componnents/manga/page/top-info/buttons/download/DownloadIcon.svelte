@@ -1,5 +1,5 @@
 <script>
-	import { DownloadIcon } from "svelte-feather-icons";
+	import { DownloadIcon } from "@lucide/svelte";
 </script>
 
 <div class="download-icon">

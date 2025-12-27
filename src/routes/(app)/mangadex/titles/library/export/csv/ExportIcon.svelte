@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { SaveIcon } from "svelte-feather-icons";
+	import { SaveIcon } from "@lucide/svelte";
 </script>
 
 <div class="icon">

@@ -8,12 +8,7 @@
 	import { createPopover, melt } from "@melt-ui/svelte";
 	import MangaDexVarThemeProvider from "@mangadex/componnents/theme/MangaDexVarThemeProvider.svelte";
 	import { slide } from "svelte/transition";
-	import {
-		BookOpenIcon,
-		FileIcon,
-		MoreHorizontalIcon,
-		MoreVerticalIcon
-	} from "svelte-feather-icons";
+	import { BookOpenIcon, FileIcon, MoreHorizontalIcon, MoreVerticalIcon } from "@lucide/svelte";
 	import { getCurrentChapterData } from "../../../contexts/currentChapter";
 
 	const mode = getCurrentChapterReadingModeWritable();

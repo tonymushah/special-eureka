@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Snippet } from "svelte";
-	import { ChevronDownIcon } from "svelte-feather-icons";
+	import { ChevronDownIcon } from "@lucide/svelte";
 	import { slide } from "svelte/transition";
 
 	interface Props {

@@ -1,12 +1,7 @@
 <script lang="ts">
 	import { getChapterCurrentPageContext } from "@mangadex/componnents/chapter/page/contexts/currentPage";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
-	import {
-		ArrowLeftIcon,
-		ArrowUpIcon,
-		ArrowRightIcon,
-		ArrowDownIcon
-	} from "svelte-feather-icons";
+	import { ArrowLeftIcon, ArrowUpIcon, ArrowRightIcon, ArrowDownIcon } from "@lucide/svelte";
 	import { Direction as ReadingDirection, ReadingMode } from "@mangadex/gql/graphql";
 	import { getCurrentChapterDirection } from "@mangadex/componnents/chapter/page/contexts/readingDirection";
 	import { resetZoom } from "@mangadex/componnents/chapter/page/contexts/resetZoomEventTarget";

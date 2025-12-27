@@ -1,5 +1,5 @@
 <script>
-	import { UploadIcon } from "svelte-feather-icons";
+	import { UploadIcon } from "@lucide/svelte";
 </script>
 
 <div class="upload-icon">

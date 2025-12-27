@@ -3,13 +3,7 @@
 	import { getFaviconSrc } from "@mangadex/utils/favicons/getFaviconSrc";
 	import { getContextClient } from "@urql/svelte";
 	import { readable } from "svelte/store";
-	import {
-		BoxIcon,
-		ExternalLinkIcon,
-		GlobeIcon,
-		TwitterIcon,
-		YoutubeIcon
-	} from "svelte-feather-icons";
+	import { BoxIcon, ExternalLinkIcon, GlobeIcon, TwitterIcon, YoutubeIcon } from "@lucide/svelte";
 	import { openUrl as shellOpen } from "@tauri-apps/plugin-opener";
 	import { RiTumblrLine, RiWeiboLine } from "svelte-remixicon";
 	import type { AuthorLinks } from "./layout.context";

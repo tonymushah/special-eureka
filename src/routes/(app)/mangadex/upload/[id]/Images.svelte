@@ -10,7 +10,7 @@
 	import type { UnlistenFn } from "@tauri-apps/api/event";
 	import { getCurrentWindow, PhysicalPosition } from "@tauri-apps/api/window";
 	import { onDestroy, onMount } from "svelte";
-	import { ImageIcon } from "svelte-feather-icons";
+	import { ImageIcon } from "@lucide/svelte";
 	import { RiFileDamageLine } from "svelte-remixicon";
 	import { flip } from "svelte/animate";
 	import { fade } from "svelte/transition";

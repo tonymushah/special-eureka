@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { route } from "$lib/ROUTES";
 	import Link from "@mangadex/componnents/theme/links/Link.svelte";
-	import { BookIcon, FileIcon } from "svelte-feather-icons";
+	import { BookIcon, FileIcon } from "@lucide/svelte";
 	import { getCurrentChapterData } from "../contexts/currentChapter";
 
 	const current = getCurrentChapterData();

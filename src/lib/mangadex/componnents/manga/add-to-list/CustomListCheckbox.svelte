@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { createCheckbox, melt } from "@melt-ui/svelte";
-	import { CheckIcon, MinusIcon } from "svelte-feather-icons";
+	import { CheckIcon, MinusIcon } from "@lucide/svelte";
 	import { v4 } from "uuid";
 
 	interface Props {

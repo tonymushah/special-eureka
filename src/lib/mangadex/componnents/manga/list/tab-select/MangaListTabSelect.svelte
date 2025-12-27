@@ -1,7 +1,7 @@
 <script lang="ts">
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import { MangaListStyle } from "@mangadex/gql/graphql";
-	import { GridIcon } from "svelte-feather-icons";
+	import { GridIcon } from "@lucide/svelte";
 	import { RiLayoutColumnLine, RiLayoutRowLine } from "svelte-remixicon";
 	import { getMangaListStyleContextWritable } from "../contexts/style";
 

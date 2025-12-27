@@ -9,7 +9,7 @@
 	import { Direction as ReadingDirection } from "@mangadex/gql/graphql";
 	import { ceil, isArray, noop, random } from "lodash";
 	import { onMount, type Snippet } from "svelte";
-	import { ArrowLeftIcon, ArrowRightIcon } from "svelte-feather-icons";
+	import { ArrowLeftIcon, ArrowRightIcon } from "@lucide/svelte";
 	import { derived as der } from "svelte/store";
 	import getCurrentChapterImages from "@mangadex/componnents/chapter/page/utils/getCurrentChapterImages";
 

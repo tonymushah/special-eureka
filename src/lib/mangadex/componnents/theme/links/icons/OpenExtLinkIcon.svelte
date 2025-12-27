@@ -1,5 +1,5 @@
 <script>
-	import { ExternalLinkIcon } from "svelte-feather-icons";
+	import { ExternalLinkIcon } from "@lucide/svelte";
 	import IconLayout from "./IconLayout.svelte";
 </script>
 

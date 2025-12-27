@@ -3,7 +3,7 @@
 	import { ReportCategory, type InputMaybe } from "@mangadex/gql/graphql";
 	import { createDialog, melt } from "@melt-ui/svelte";
 	import { toStore } from "svelte/store";
-	import { XIcon as CloseIcon } from "svelte-feather-icons";
+	import { XIcon as CloseIcon } from "@lucide/svelte";
 	import { fade } from "svelte/transition";
 	import { createReportReasonListQuery, createSendReportMutation } from "@mangadex/gql-docs/report";
 	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";

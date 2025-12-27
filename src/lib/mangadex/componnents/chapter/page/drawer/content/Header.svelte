@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { XIcon } from "svelte-feather-icons";
+	import { XIcon } from "@lucide/svelte";
 	import { RiPushpinLine, RiUnpinLine } from "svelte-remixicon";
 	import { derived } from "svelte/store";
 	import { isDrawerFixedWritable } from "../../contexts/isDrawerFixed";

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { ChevronRightIcon } from "svelte-feather-icons";
+	import { ChevronRightIcon } from "@lucide/svelte";
 	import ButtonAccent from "../theme/buttons/ButtonAccent.svelte";
 	import Title from "../theme/texts/title/Title.svelte";
 	import type { Snippet } from "svelte";

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { RefreshCcwIcon } from "svelte-feather-icons";
+	import { RefreshCcwIcon } from "@lucide/svelte";
 	const size = "16";
 </script>
 

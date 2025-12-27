@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { RiProgress1Line, RiProgress1Fill } from "svelte-remixicon";
 	import { progressModeStore as action } from "@mangadex/stores/chapterLayout";
-	import { SlashIcon } from "svelte-feather-icons";
+	import { SlashIcon } from "@lucide/svelte";
 	import { ProgressMode } from "@mangadex/gql/graphql";
 
 	const size = "18";

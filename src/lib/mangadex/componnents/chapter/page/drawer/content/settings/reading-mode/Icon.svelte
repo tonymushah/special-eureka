@@ -7,7 +7,7 @@
 		MehIcon,
 		MoreHorizontalIcon,
 		MoreVerticalIcon
-	} from "svelte-feather-icons";
+	} from "@lucide/svelte";
 
 	const size = "18";
 	const mode = getCurrentChapterReadingModeWritable();

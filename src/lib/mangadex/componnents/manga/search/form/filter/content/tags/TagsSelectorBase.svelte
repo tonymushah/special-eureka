@@ -2,7 +2,7 @@
 	import Title from "@mangadex/componnents/theme/texts/title/Title.svelte";
 	import type { TagGroup } from "@mangadex/gql/graphql";
 	import make_first_upper_case from "@mangadex/utils/make_first_upper_case";
-	import { CheckIcon as PlusIcon } from "svelte-feather-icons";
+	import { CheckIcon as PlusIcon } from "@lucide/svelte";
 	import { bounceInOut } from "svelte/easing";
 	import { derived, readonly } from "svelte/store";
 	import { fade } from "svelte/transition";

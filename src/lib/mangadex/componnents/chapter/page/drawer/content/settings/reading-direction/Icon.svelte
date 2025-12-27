@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { ArrowLeftCircleIcon, ArrowRightCircleIcon } from "svelte-feather-icons";
+	import { ArrowLeftCircleIcon, ArrowRightCircleIcon } from "@lucide/svelte";
 	import { Direction as ReadingDirection } from "@mangadex/gql/graphql";
 	import { getCurrentChapterDirection } from "@mangadex/componnents/chapter/page/contexts/readingDirection";
 

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { route } from "$lib/ROUTES";
-	import { SettingsIcon } from "svelte-feather-icons";
+	import { SettingsIcon } from "@lucide/svelte";
 	import Menu from "../base/Menu.svelte";
 </script>
 

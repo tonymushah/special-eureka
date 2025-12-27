@@ -3,7 +3,7 @@
 		isChangingListFollowing
 	} from "@mangadex/gql-docs/list/id/follow";
 	import PrimaryButton from "@mangadex/componnents/theme/buttons/PrimaryButton.svelte";
-	import { BookmarkIcon } from "svelte-feather-icons";
+	import { BookmarkIcon } from "@lucide/svelte";
 	import { isLogged } from "@mangadex/utils/auth";
 
 	interface Props {

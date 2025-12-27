@@ -1,6 +1,6 @@
 <script lang="ts">
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
-	import { GridIcon, TableIcon } from "svelte-feather-icons";
+	import { GridIcon, TableIcon } from "@lucide/svelte";
 	import { ReportStatusMode, type ReportData } from "../types";
 	import Table from "./Table.svelte";
 	import MidToneLine from "@mangadex/componnents/theme/lines/MidToneLine.svelte";

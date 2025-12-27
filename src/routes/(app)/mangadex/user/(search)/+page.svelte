@@ -6,7 +6,7 @@
 	import FormInput from "@mangadex/componnents/theme/form/input/FormInput.svelte";
 	import MidToneLine from "@mangadex/componnents/theme/lines/MidToneLine.svelte";
 	import Title from "@mangadex/componnents/theme/texts/title/Title.svelte";
-	import { SearchIcon } from "svelte-feather-icons";
+	import { SearchIcon } from "@lucide/svelte";
 	import { readonly, writable } from "svelte/store";
 	import SearchContent from "./SearchContent.svelte";
 	let realTime = $state(false);

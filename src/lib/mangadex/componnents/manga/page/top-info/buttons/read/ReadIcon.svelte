@@ -1,5 +1,5 @@
 <script>
-	import { BookOpenIcon } from "svelte-feather-icons";
+	import { BookOpenIcon } from "@lucide/svelte";
 </script>
 
 <div class="read-icon">

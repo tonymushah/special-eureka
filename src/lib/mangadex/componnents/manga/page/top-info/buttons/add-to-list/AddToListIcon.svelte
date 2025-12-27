@@ -1,5 +1,5 @@
 <script>
-	import { ListIcon } from "svelte-feather-icons";
+	import { ListIcon } from "@lucide/svelte";
 </script>
 
 <div class="add-to-list">

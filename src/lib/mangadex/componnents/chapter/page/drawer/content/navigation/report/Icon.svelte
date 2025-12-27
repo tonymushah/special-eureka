@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { FlagIcon } from "svelte-feather-icons";
+	import { FlagIcon } from "@lucide/svelte";
 	const size = "16";
 </script>
 

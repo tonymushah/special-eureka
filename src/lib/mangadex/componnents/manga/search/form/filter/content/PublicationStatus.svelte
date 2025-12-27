@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Title from "@mangadex/componnents/theme/texts/title/Title.svelte";
 	import { MangaStatus } from "@mangadex/gql/graphql";
-	import { CheckIcon as PlusIcon, MinusIcon } from "svelte-feather-icons";
+	import { CheckIcon as PlusIcon, MinusIcon } from "@lucide/svelte";
 	import { getMangaSearchPublicationStatusContextStoreWritable } from "../contexts/publicationStatus";
 
 	const selected = getMangaSearchPublicationStatusContextStoreWritable();

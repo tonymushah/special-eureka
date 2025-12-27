@@ -16,7 +16,7 @@
 	import type { LayoutData } from "./$types";
 	import deleteCustomListMutation from "@mangadex/gql-docs/list/id/delete";
 	import FollowButton from "./FollowButton.svelte";
-	import { GitBranchIcon } from "svelte-feather-icons";
+	import { GitBranchIcon } from "@lucide/svelte";
 	import CustomListForkDialog from "@mangadex/componnents/custom-list/fork/CustomListForkDialog.svelte";
 
 	interface Props {

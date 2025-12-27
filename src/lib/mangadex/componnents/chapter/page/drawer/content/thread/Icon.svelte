@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { MessageSquareIcon } from "svelte-feather-icons";
+	import { MessageSquareIcon } from "@lucide/svelte";
 	const size = "16";
 </script>
 

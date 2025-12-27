@@ -20,7 +20,7 @@
 		UserIcon,
 		UsersIcon,
 		XIcon
-	} from "svelte-feather-icons";
+	} from "@lucide/svelte";
 	import { cancelChapterDownload, downloadChapter } from "./utils";
 
 	type Group = {

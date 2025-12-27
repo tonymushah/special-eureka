@@ -1,5 +1,5 @@
 <script>
-	import { ChevronLeftIcon } from "svelte-feather-icons";
+	import { ChevronLeftIcon } from "@lucide/svelte";
 </script>
 
 <div>

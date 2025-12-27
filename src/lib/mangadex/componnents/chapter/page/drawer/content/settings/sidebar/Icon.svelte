@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { RiSideBarFill, RiSidebarFoldLine } from "svelte-remixicon";
 	import { sideBarActionType as action } from "./action";
-	import { SlashIcon } from "svelte-feather-icons";
+	import { SlashIcon } from "@lucide/svelte";
 	import { SidebarMode } from "@mangadex/gql/graphql";
 
 	const size = "18";

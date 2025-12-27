@@ -90,7 +90,7 @@
 	import MangaDexVarThemeProvider from "../MangaDexVarThemeProvider.svelte";
 	import { isSidebarRtl } from "@mangadex/componnents/sidebar/states/isRtl";
 	import { decoHStore } from "$routes/MainLayout.svelte";
-	import { XIcon } from "svelte-feather-icons";
+	import { XIcon } from "@lucide/svelte";
 	import { flip } from "svelte/animate";
 	import { fly } from "svelte/transition";
 	import ToastProgress from "./ToastProgress.svelte";

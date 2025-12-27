@@ -2,11 +2,11 @@
 	import { createDialog, melt } from "@melt-ui/svelte";
 	import ButtonAccent from "../theme/buttons/ButtonAccent.svelte";
 	import { makeScroll, preventScroll, scrollElementId } from "../layout/scrollElement";
-	import { FilterIcon } from "svelte-feather-icons";
+	import { FilterIcon } from "@lucide/svelte";
 	import type { UserLibrarySectionParam } from "@mangadex/gql/graphql";
 	import type { Writable } from "svelte/store";
 	import { fade } from "svelte/transition";
-	import { XIcon as CloseIcon } from "svelte-feather-icons";
+	import { XIcon as CloseIcon } from "@lucide/svelte";
 	import FilterContent from "./filter/FilterContent.svelte";
 	const {
 		elements: { trigger, portalled, overlay, content, title, description, close },

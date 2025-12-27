@@ -1,5 +1,5 @@
 <script>
-	import { RefreshCwIcon } from "svelte-feather-icons";
+	import { RefreshCwIcon } from "@lucide/svelte";
 </script>
 
 <div class="loading-icon">

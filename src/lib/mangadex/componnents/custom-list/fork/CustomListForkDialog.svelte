@@ -4,7 +4,7 @@
 	import { createDialog, melt } from "@melt-ui/svelte";
 	import { toStore } from "svelte/store";
 	import { fade } from "svelte/transition";
-	import { XIcon as CloseIcon } from "svelte-feather-icons";
+	import { XIcon as CloseIcon } from "@lucide/svelte";
 	import { CustomListVisibility } from "@mangadex/gql/graphql";
 	import { forkCustomListMutation as forkCustomListMutationLoader } from "@mangadex/gql-docs/list/id/fork";
 	import { isLogged } from "@mangadex/utils/auth";

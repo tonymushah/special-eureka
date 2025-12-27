@@ -1,5 +1,5 @@
 <script>
-	import { BookmarkIcon } from "svelte-feather-icons";
+	import { BookmarkIcon } from "@lucide/svelte";
 </script>
 
 <div class="bookmark-icon">

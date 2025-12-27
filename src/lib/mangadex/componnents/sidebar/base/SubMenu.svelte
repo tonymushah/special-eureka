@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { sidebarState as isOpen } from "@mangadex/stores";
-	import { ChevronUpIcon } from "svelte-feather-icons";
+	import { ChevronUpIcon } from "@lucide/svelte";
 	import { fade, slide } from "svelte/transition";
 	import HeaderChevronBase from "../header/HeaderChevronBase.svelte";
 	import MenuBase from "./MenuBase.svelte";

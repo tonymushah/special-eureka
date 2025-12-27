@@ -9,7 +9,7 @@
 	import PrimaryButton from "@mangadex/componnents/theme/buttons/PrimaryButton.svelte";
 	import type { ContentProfileConflicts } from "@mangadex/utils/conflicts";
 	import { lowerCase, startCase } from "lodash";
-	import { ArrowLeftIcon } from "svelte-feather-icons";
+	import { ArrowLeftIcon } from "@lucide/svelte";
 	interface Props {
 		ingnoreConflict: boolean;
 		conflicts: ContentProfileConflicts;

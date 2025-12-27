@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { XCircleIcon } from "svelte-feather-icons";
+	import { XCircleIcon } from "@lucide/svelte";
 	import ButtonAccent from "./theme/buttons/ButtonAccent.svelte";
 	import PrimaryButtonOnlyLabel from "./theme/buttons/PrimaryButtonOnlyLabel.svelte";
 	import { CombinedError } from "@urql/svelte";

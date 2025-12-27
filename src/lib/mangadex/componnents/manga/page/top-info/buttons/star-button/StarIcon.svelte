@@ -1,5 +1,5 @@
 <script>
-	import { StarIcon } from "svelte-feather-icons";
+	import { StarIcon } from "@lucide/svelte";
 </script>
 
 <div class="star-icon">

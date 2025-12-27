@@ -2,7 +2,7 @@
 	// import { isSidebarRtl } from "@mangadex/componnents/sidebar/states/isRtl";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import Title from "@mangadex/componnents/theme/texts/title/Title.svelte";
-	import { RefreshCwIcon } from "svelte-feather-icons";
+	import { RefreshCwIcon } from "@lucide/svelte";
 
 	interface Events {
 		onrefresh?: (

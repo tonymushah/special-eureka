@@ -1,11 +1,5 @@
 <script lang="ts">
-	import {
-		CopyIcon,
-		ExternalLinkIcon,
-		GlobeIcon,
-		MailIcon,
-		TwitterIcon
-	} from "svelte-feather-icons";
+	import { CopyIcon, ExternalLinkIcon, GlobeIcon, MailIcon, TwitterIcon } from "@lucide/svelte";
 	import { writeText } from "@tauri-apps/plugin-clipboard-manager";
 	import { openUrl as shellOpen } from "@tauri-apps/plugin-opener";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";

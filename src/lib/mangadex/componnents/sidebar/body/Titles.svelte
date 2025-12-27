@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { BookIcon } from "svelte-feather-icons";
+	import { BookIcon } from "@lucide/svelte";
 	import SubMenu from "../base/SubMenu.svelte";
 	import SubMenuItem from "../base/SubMenuItem.svelte";
 	import { route } from "$lib/ROUTES";

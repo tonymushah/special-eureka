@@ -90,7 +90,7 @@
 		setContextMenuContext
 	} from "@special-eureka/core/utils/contextMenuContext";
 	import { debounce } from "lodash";
-	import { EyeIcon, EyeOffIcon, MessageSquareIcon, UsersIcon } from "svelte-feather-icons";
+	import { EyeIcon, EyeOffIcon, MessageSquareIcon, UsersIcon } from "@lucide/svelte";
 	import { RiSearchEyeLine } from "svelte-remixicon";
 	import { derived } from "svelte/store";
 	import DownloadStateComp from "./DownloadStateComp.svelte";
