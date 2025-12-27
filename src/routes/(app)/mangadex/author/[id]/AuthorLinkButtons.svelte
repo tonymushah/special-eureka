@@ -5,8 +5,9 @@
 	import { readable } from "svelte/store";
 	import { BoxIcon, ExternalLinkIcon, GlobeIcon, TwitterIcon, YoutubeIcon } from "@lucide/svelte";
 	import { openUrl as shellOpen } from "@tauri-apps/plugin-opener";
-	import { RiTumblrLine, RiWeiboLine } from "svelte-remixicon";
 	import type { AuthorLinks } from "./layout.context";
+	import Weibo from "@mangadex/componnents/icon/Weibo.svelte";
+	import Tumblr from "@mangadex/componnents/icon/Tumblr.svelte";
 
 	const client = getContextClient();
 	interface Props {
@@ -301,7 +302,7 @@
 				{#if $tumblr}
 					<img src={$tumblr} alt={links.tumblr} />
 				{:else}
-					<RiTumblrLine size="20px" />
+					<Tumblr size="20" />
 				{/if}
 			</div>
 			<h4>Tumblr</h4>
@@ -343,7 +344,7 @@
 				{#if $weibo}
 					<img src={$weibo} alt={links.weibo} />
 				{:else}
-					<RiWeiboLine size="20px" />
+					<Weibo size="20" />
 				{/if}
 			</div>
 			<h4>Weibo</h4>
