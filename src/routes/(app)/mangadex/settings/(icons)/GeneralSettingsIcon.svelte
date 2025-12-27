@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { RiToolsFill } from "svelte-remixicon";
+	import { ToolCase } from "@lucide/svelte";
 </script>
 
-<RiToolsFill size="50%" />
+<ToolCase size="50%" />
