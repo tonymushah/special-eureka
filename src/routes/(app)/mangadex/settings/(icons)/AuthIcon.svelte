@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { RiIdCardLine } from "svelte-remixicon";
+	import { IdCard } from "@lucide/svelte";
 </script>
 
-<RiIdCardLine size="50%" />
+<IdCard size="50%" />
