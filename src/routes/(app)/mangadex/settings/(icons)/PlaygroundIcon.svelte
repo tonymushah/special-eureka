@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { RiCodeBoxLine } from "svelte-remixicon";
+	import { Codesandbox } from "@lucide/svelte";
 </script>
 
-<RiCodeBoxLine size="50%" />
+<Codesandbox size="50%" />
