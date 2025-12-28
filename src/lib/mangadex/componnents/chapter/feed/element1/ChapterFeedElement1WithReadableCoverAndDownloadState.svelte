@@ -58,6 +58,7 @@
 		uploader: Uploader;
 		upload_date: Date;
 		haveBeenRead?: boolean;
+		end?: boolean;
 	}
 
 	let {
@@ -75,7 +76,8 @@
 		ondownload,
 		ondownloadKeyPress,
 		onmangaClick,
-		onmangaKeyClick
+		onmangaKeyClick,
+		end
 	}: Props = $props();
 
 	let image_ = $derived($coverImage);
@@ -84,13 +86,7 @@
 
 <Layout bind:haveBeenRead {mangaId}>
 	{#if image_}
-		<CoverImage
-			coverImage={image_}
-			{coverImageAlt}
-			{mangaId}
-			{onmangaClick}
-			{onmangaKeyClick}
-		/>
+		<CoverImage coverImage={image_} {coverImageAlt} {mangaId} {onmangaClick} {onmangaKeyClick} />
 	{:else}
 		<LoaderImage {mangaId} {onmangaClick} {onmangaKeyClick} />
 	{/if}
@@ -107,5 +103,6 @@
 		{ondownloadKeyPress}
 		{onmangaClick}
 		{onmangaKeyClick}
+		{end}
 	/>
 </Layout>
