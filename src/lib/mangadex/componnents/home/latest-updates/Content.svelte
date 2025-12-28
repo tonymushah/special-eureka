@@ -18,10 +18,6 @@
 		chapters.home.recentlyUploaded.data.map((c) => ({
 			mangaId: c.relationships.manga.id,
 			chapterId: c.id,
-			download_state: getChapterDownloadState({
-				id: c.id,
-				client
-			}),
 			coverImage: get_cover_art({
 				client,
 				cover_id: c.relationships.manga.relationships.coverArt.id,
@@ -58,7 +54,20 @@
 				c.attributes.title != null && c.attributes.title != undefined
 					? ` ${c.attributes.title}`
 					: ""
-			}`
+			}`,
+			end: (() => {
+				let isLastChapter = false;
+				const lastChapter = c.relationships.manga.attributes.lastChapter;
+				if (lastChapter) {
+					isLastChapter = c.attributes.chapter == lastChapter;
+				}
+				let isLastVolume = false;
+				const lastVolume = c.relationships.manga.attributes.lastVolume;
+				if (lastVolume) {
+					isLastVolume = c.attributes.volume == lastVolume;
+				}
+				return isLastVolume && isLastChapter;
+			})()
 		}))
 	);
 	let halfwayThrough = $derived(Math.floor(data.length / 2));
@@ -70,7 +79,7 @@
 {#if data.length > 0}
 	<div class="content">
 		<div class="chapter-col data1">
-			{#each data1 as { chapterId, mangaId, coverImage, upload_date, lang, uploader, groups, mangaTitle, chapterTitle, coverImageAlt, download_state } (chapterId)}
+			{#each data1 as { chapterId, mangaId, coverImage, upload_date, lang, uploader, groups, mangaTitle, chapterTitle, coverImageAlt, end } (chapterId)}
 				<div class="chapter">
 					<ChapterFeedElement1
 						{mangaId}
@@ -86,12 +95,13 @@
 						onmangaClick={() => {
 							openTitle(mangaId);
 						}}
+						{end}
 					/>
 				</div>
 			{/each}
 		</div>
 		<div class="chapter-col data2">
-			{#each data2 as { chapterId, mangaId, coverImage, upload_date, lang, uploader, groups, mangaTitle, chapterTitle, coverImageAlt, download_state } (chapterId)}
+			{#each data2 as { chapterId, mangaId, coverImage, upload_date, lang, uploader, groups, mangaTitle, chapterTitle, coverImageAlt, end } (chapterId)}
 				<div class="chapter">
 					<ChapterFeedElement1
 						{mangaId}
@@ -107,6 +117,7 @@
 						onmangaClick={() => {
 							openTitle(mangaId);
 						}}
+						{end}
 					/>
 				</div>
 			{/each}
