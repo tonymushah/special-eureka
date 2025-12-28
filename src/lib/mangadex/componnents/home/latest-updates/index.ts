@@ -39,6 +39,8 @@ export const latest_updates_query = graphql(/* GraphQL */ `
 							id
 							attributes {
 								title
+								lastChapter
+								lastVolume
 							}
 							relationships {
 								coverArt {

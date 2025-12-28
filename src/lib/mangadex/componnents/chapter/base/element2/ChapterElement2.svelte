@@ -22,6 +22,7 @@
 		XIcon
 	} from "@lucide/svelte";
 	import { cancelChapterDownload, downloadChapter } from "./utils";
+	import IndicationBadge from "@mangadex/componnents/theme/tag/IndicationBadge.svelte";
 
 	type Group = {
 		id: string;
@@ -57,6 +58,7 @@
 		groups?: Group[];
 		uploader: Uploader;
 		upload_date: Date;
+		end?: boolean;
 	}
 
 	let {
@@ -67,7 +69,8 @@
 		uploader,
 		upload_date,
 		ondownload,
-		ondownloadKeyPress
+		ondownloadKeyPress,
+		end
 	}: Props = $props();
 
 	let layout: HTMLDivElement | undefined = $state();
@@ -205,8 +208,11 @@
 				href={`/mangadex/chapter/${id}`}
 				oncontextmenu={registerContextMenuEvent({
 					preventDefault: true
-				})}><h4>{chapterTitle}</h4></a
+				})}><h4>{chapterTitle ?? "Oneshot?"}</h4></a
 			>
+			{#if end}
+				<IndicationBadge --tag-padding="0px 4px">END</IndicationBadge>
+			{/if}
 		</div>
 		<p>
 			<TimeAgo date={upload_date} />

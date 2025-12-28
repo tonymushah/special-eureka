@@ -65,6 +65,7 @@
 		uploader: Uploader;
 		upload_date: Date;
 		comments?: number | undefined;
+		end?: boolean;
 	}
 </script>
 
@@ -94,6 +95,7 @@
 	import DownloadStateComp from "./DownloadStateComp.svelte";
 	import Layout from "./Layout.svelte";
 	import { cancelChapterDownload, downloadChapter } from "./utils";
+	import IndicationBadge from "@mangadex/componnents/theme/tag/IndicationBadge.svelte";
 
 	let {
 		id,
@@ -111,7 +113,8 @@
 		onreadKeyPress,
 		onremove,
 		onremoveKeyPress,
-		onclick
+		onclick,
+		end
 	}: Props = $props();
 
 	let readMarkers = readMarkersLoader();
@@ -280,6 +283,9 @@
 						{/if}
 					</h4>
 				</Link>
+				{#if end}
+					<IndicationBadge --tag-padding="0px 4px">END</IndicationBadge>
+				{/if}
 			</div>
 
 			<div class="groups">
@@ -379,7 +385,11 @@
 		font-style: italic;
 	}
 	.title-outer {
-		display: contents;
+		display: flex;
+		align-items: center;
+		gap: 2px;
+		flex-wrap: nowrap;
+		flex-direction: row;
 	}
 	.groups {
 		display: flex;

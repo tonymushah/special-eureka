@@ -4068,7 +4068,12 @@ export type RecentlyAddedHomeQuery = {
 					manga: {
 						__typename?: "MangaObject";
 						id: any;
-						attributes: { __typename?: "GraphQLMangaAttributes"; title: any };
+						attributes: {
+							__typename?: "GraphQLMangaAttributes";
+							title: any;
+							lastChapter?: string | null;
+							lastVolume?: string | null;
+						};
 						relationships: {
 							__typename?: "MangaRelationships";
 							coverArt: {
@@ -8814,6 +8819,20 @@ export const RecentlyAddedHomeDocument = {
 																									name: {
 																										kind: "Name",
 																										value: "title"
+																									}
+																								},
+																								{
+																									kind: "Field",
+																									name: {
+																										kind: "Name",
+																										value: "lastChapter"
+																									}
+																								},
+																								{
+																									kind: "Field",
+																									name: {
+																										kind: "Name",
+																										value: "lastVolume"
 																									}
 																								}
 																							]

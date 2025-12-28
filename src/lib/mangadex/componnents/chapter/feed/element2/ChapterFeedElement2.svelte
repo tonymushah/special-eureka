@@ -3,7 +3,6 @@
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import Skeleton from "@mangadex/componnents/theme/loader/Skeleton.svelte";
 	import type { Language } from "@mangadex/gql/graphql";
-	import { onMount } from "svelte";
 	import type { Readable } from "svelte/store";
 	import type { Chapter } from "..";
 	import ChapterElement1 from "../../base/element1/ChapterElement1.svelte";
@@ -11,7 +10,6 @@
 	import registerContextMenuEvent, {
 		setContextMenuContext
 	} from "@special-eureka/core/utils/contextMenuContext";
-	import { fade } from "svelte/transition";
 
 	type MouseEnvDiv = MouseEvent & {
 		currentTarget: HTMLDivElement & EventTarget;
@@ -108,7 +106,7 @@
 </script>
 
 {#snippet _chapters(chaps: Chapter[])}
-	{#each chaps as { chapterId, title, lang, groups, uploader, upload_date, comments }}
+	{#each chaps as { chapterId, title, lang, groups, uploader, upload_date, comments, end }}
 		<ChapterElement1
 			{ondownload}
 			{ondownloadKeyPress}
@@ -125,6 +123,7 @@
 			{upload_date}
 			{uploader}
 			{comments}
+			{end}
 		/>
 	{/each}
 {/snippet}
