@@ -211,7 +211,7 @@
 				})}><h4>{chapterTitle ?? "Oneshot?"}</h4></a
 			>
 			{#if end}
-				<IndicationBadge>END</IndicationBadge>
+				<IndicationBadge --tag-padding="0px 4px">END</IndicationBadge>
 			{/if}
 		</div>
 		<p>

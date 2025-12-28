@@ -284,7 +284,7 @@
 					</h4>
 				</Link>
 				{#if end}
-					<IndicationBadge>END</IndicationBadge>
+					<IndicationBadge --tag-padding="0px 4px">END</IndicationBadge>
 				{/if}
 			</div>
 
