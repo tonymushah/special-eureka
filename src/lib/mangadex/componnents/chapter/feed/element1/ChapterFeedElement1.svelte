@@ -55,6 +55,7 @@
 		uploader: Uploader;
 		upload_date: Date;
 		haveBeenRead?: boolean;
+		end?: boolean;
 	}
 
 	let {
@@ -72,7 +73,8 @@
 		ondownload,
 		ondownloadKeyPress,
 		onmangaClick,
-		onmangaKeyClick
+		onmangaKeyClick,
+		end
 	}: Props = $props();
 	setContextMenuContext(() => mangaElementContextMenu({ id: mangaId, coverArtId: mangaId }));
 </script>
@@ -92,5 +94,6 @@
 		{ondownloadKeyPress}
 		{onmangaClick}
 		{onmangaKeyClick}
+		{end}
 	/>
 </Layout>

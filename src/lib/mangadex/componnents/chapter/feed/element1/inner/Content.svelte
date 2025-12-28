@@ -52,6 +52,7 @@
 		groups?: Group[];
 		uploader: Uploader;
 		upload_date: Date;
+		end?: boolean;
 	}
 
 	let {
@@ -66,7 +67,8 @@
 		ondownload,
 		ondownloadKeyPress,
 		onmangaClick,
-		onmangaKeyClick
+		onmangaKeyClick,
+		end
 	}: Props = $props();
 	setContextMenuContext(() =>
 		mangaElementContextMenu({
@@ -109,6 +111,7 @@
 			{chapterTitle}
 			{groups}
 			{uploader}
+			{end}
 		/>
 	</div>
 </div>
