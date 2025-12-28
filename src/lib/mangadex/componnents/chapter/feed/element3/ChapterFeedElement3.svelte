@@ -127,7 +127,7 @@
 		<hr />
 		<div class="bottom-body">
 			<div class="chapters">
-				{#each chapters as { chapterId, title, lang, groups, uploader, upload_date, comments }}
+				{#each chapters as { chapterId, title, lang, groups, uploader, upload_date, comments, end }}
 					<ChapterElement1
 						{ondownload}
 						{onread}
@@ -144,6 +144,7 @@
 						{upload_date}
 						{uploader}
 						{comments}
+						{end}
 					/>
 				{/each}
 			</div>

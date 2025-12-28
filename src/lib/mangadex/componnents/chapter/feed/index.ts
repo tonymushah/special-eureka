@@ -21,4 +21,5 @@ export type Chapter = {
 	download_state: Readable<ChapterDownloadState>;
 	comments: number;
 	threadUrl?: string;
+	end?: boolean;
 };

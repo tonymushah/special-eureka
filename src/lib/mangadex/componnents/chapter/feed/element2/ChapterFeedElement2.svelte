@@ -106,7 +106,7 @@
 </script>
 
 {#snippet _chapters(chaps: Chapter[])}
-	{#each chaps as { chapterId, title, lang, groups, uploader, upload_date, comments }}
+	{#each chaps as { chapterId, title, lang, groups, uploader, upload_date, comments, end }}
 		<ChapterElement1
 			{ondownload}
 			{ondownloadKeyPress}
@@ -123,6 +123,7 @@
 			{upload_date}
 			{uploader}
 			{comments}
+			{end}
 		/>
 	{/each}
 {/snippet}

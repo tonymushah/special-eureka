@@ -114,10 +114,8 @@ export default async function executeSearchQuery(
 				return {
 					mangaId: e.manga.id,
 					title:
-						get_value_from_title_and_random_if_undefined(
-							e.manga.attributes.title,
-							"en"
-						) ?? e.manga.id,
+						get_value_from_title_and_random_if_undefined(e.manga.attributes.title, "en") ??
+						e.manga.id,
 					coverImage: cover_art,
 					coverImageAlt: e.manga.relationships.coverArt.id,
 					mangaLang: e.manga.attributes.originalLanguage,
@@ -151,9 +149,7 @@ export default async function executeSearchQuery(
 							chapterId: chap.id,
 							title,
 							lang: chap.attributes.translatedLanguage,
-							upload_date: new Date(
-								chap.attributes.readableAt ?? chap.attributes.createdAt
-							),
+							upload_date: new Date(chap.attributes.readableAt ?? chap.attributes.createdAt),
 							uploader: {
 								id: user.id,
 								name: user.attributes.username,
@@ -167,7 +163,20 @@ export default async function executeSearchQuery(
 							download_state: getChapterDownloadState({
 								id: chap.id,
 								client
-							})
+							}),
+							end: (() => {
+								let isLastChapter = false;
+								const lastChapter = e.manga.attributes.lastChapter;
+								if (lastChapter) {
+									isLastChapter = chap.attributes.chapter == lastChapter;
+								}
+								let isLastVolume = false;
+								const lastVolume = e.manga.attributes.lastVolume;
+								if (lastVolume) {
+									isLastVolume = chap.attributes.volume == lastVolume;
+								}
+								return isLastChapter && isLastVolume;
+							})()
 						};
 					})
 				};
