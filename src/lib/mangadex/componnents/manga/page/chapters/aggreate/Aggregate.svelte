@@ -102,7 +102,12 @@
 					const task = delay(() => {
 						if (ids.length > 0)
 							if (!chaptersStore.isPresents(ids)) {
-								fetchChapters(ids, !hasConflicts(__res.conflicts))
+								fetchChapters({
+									ids,
+									feedContent: !hasConflicts(__res.conflicts),
+									lastChapter: data.attributes.lastChapter ?? undefined,
+									lastVolume: data.attributes.lastVolume ?? undefined
+								})
 									.then(async (cs) => {
 										if (cs) chaptersStore.addByBatch(cs);
 										const comments = await fetchComments(ids);

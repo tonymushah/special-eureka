@@ -1,13 +1,23 @@
-import { client } from "@mangadex/gql/urql";
-import { chapterCommentsQuery, getMangaAggregateChapterQuery } from "./query";
-import type { ComponentProps } from "svelte";
-import chapterTitle from "@mangadex/utils/chapter/title";
-import getChapterDownloadState from "@mangadex/componnents/home/latest-updates/getChapterDownloadState";
-import ChapterElement1 from "@mangadex/componnents/chapter/base/element1/ChapterElement1.svelte";
-import { mangadexQueryClient } from "@mangadex/index";
 import { dev } from "$app/environment";
+import ChapterElement1 from "@mangadex/componnents/chapter/base/element1/ChapterElement1.svelte";
+import getChapterDownloadState from "@mangadex/componnents/home/latest-updates/getChapterDownloadState";
+import { client } from "@mangadex/gql/urql";
+import { mangadexQueryClient } from "@mangadex/index";
+import chapterTitle from "@mangadex/utils/chapter/title";
+import type { ComponentProps } from "svelte";
+import { chapterCommentsQuery, getMangaAggregateChapterQuery } from "./query";
 
-export async function fetchChapters(ids: string[], feedContent?: boolean) {
+export async function fetchChapters({
+	ids,
+	feedContent,
+	lastChapter,
+	lastVolume
+}: {
+	ids: string[];
+	feedContent?: boolean;
+	lastChapter?: string;
+	lastVolume?: string;
+}) {
 	const result = await client
 		.query(getMangaAggregateChapterQuery, {
 			ids,
@@ -18,9 +28,20 @@ export async function fetchChapters(ids: string[], feedContent?: boolean) {
 		throw result.error;
 	}
 	if (dev)
-		mangadexQueryClient.setQueryData(["getMangaAggregateChapterQuery", ...ids, `feedContent:${feedContent}`], () => result);
+		mangadexQueryClient.setQueryData(
+			["getMangaAggregateChapterQuery", ...ids, `feedContent:${feedContent}`],
+			() => result
+		);
 	const chapters = result.data?.chapter.list.data.map<ComponentProps<typeof ChapterElement1>>(
 		(c) => {
+			let isLastChapter = false;
+			if (lastChapter) {
+				isLastChapter = c.attributes.chapter == lastChapter;
+			}
+			let isLastVolume = false;
+			if (lastVolume) {
+				isLastVolume = c.attributes.volume == lastVolume;
+			}
 			const title = chapterTitle({
 				chapter: c.attributes.chapter,
 				title: c.attributes.title
@@ -45,7 +66,8 @@ export async function fetchChapters(ids: string[], feedContent?: boolean) {
 					id: c.id,
 					client
 				}),
-				groups
+				groups,
+				end: isLastChapter && isLastVolume
 			};
 		}
 	);
