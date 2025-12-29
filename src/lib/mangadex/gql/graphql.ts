@@ -6376,6 +6376,22 @@ export type UserFollowedCustomListsQuery = {
 	};
 };
 
+export type MangaInfoPositionGqlDocSubscriptionVariables = Exact<{ [key: string]: never }>;
+
+export type MangaInfoPositionGqlDocSubscription = {
+	__typename?: "Subscriptions";
+	watchMangaInfosPosition: MangaInfosPositions;
+};
+
+export type SetMangaInfoPositionMutationVariables = Exact<{
+	position: MangaInfosPositions;
+}>;
+
+export type SetMangaInfoPositionMutation = {
+	__typename?: "Mutation";
+	userOption: { __typename?: "UserOptionMutations"; setMangaInfosPosition: MangaInfosPositions };
+};
+
 export type ListenToChapterReadMarkerSubscriptionVariables = Exact<{
 	id: Scalars["UUID"]["input"];
 }>;
@@ -20462,6 +20478,76 @@ export const UserFollowedCustomListsDocument = {
 		}
 	]
 } as unknown as DocumentNode<UserFollowedCustomListsQuery, UserFollowedCustomListsQueryVariables>;
+export const MangaInfoPositionGqlDocDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "subscription",
+			name: { kind: "Name", value: "mangaInfoPositionGQLDoc" },
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{ kind: "Field", name: { kind: "Name", value: "watchMangaInfosPosition" } }
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	MangaInfoPositionGqlDocSubscription,
+	MangaInfoPositionGqlDocSubscriptionVariables
+>;
+export const SetMangaInfoPositionDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "setMangaInfoPosition" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "position" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "NamedType",
+							name: { kind: "Name", value: "MangaInfosPositions" }
+						}
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "userOption" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "setMangaInfosPosition" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "position" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "position" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<SetMangaInfoPositionMutation, SetMangaInfoPositionMutationVariables>;
 export const ListenToChapterReadMarkerDocument = {
 	kind: "Document",
 	definitions: [
