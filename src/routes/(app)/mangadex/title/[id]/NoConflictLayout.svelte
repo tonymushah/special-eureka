@@ -56,7 +56,7 @@
 	import { setTitleLayoutData } from "./layout.context";
 	import { isLogged } from "@mangadex/utils/auth";
 	import { createForumThread } from "@mangadex/stores/create-forum-thread";
-	import { ForumThreadType, ReportCategory } from "@mangadex/gql/graphql";
+	import { ForumThreadType, MangaInfosPositions, ReportCategory } from "@mangadex/gql/graphql";
 	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
 	import { dev } from "$app/environment";
 	import ReportDialog from "@mangadex/componnents/report/dialog/ReportDialog.svelte";
@@ -64,6 +64,7 @@
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import { ArrowUpFromLine } from "@lucide/svelte";
 	import { fade } from "svelte/transition";
+	import { mangaInfoPosition } from "@mangadex/stores/manga-info-position";
 
 	type TopMangaStatisticsStoreData = TopMangaStatistics & {
 		threadUrl?: string;
@@ -292,8 +293,9 @@
 			}
 		}
 	});
+	let mangaInfoPos = $derived($mangaInfoPosition);
 	$effect(() => {
-		noop(collapsibleEl);
+		noop(collapsibleEl, mangaInfoPos);
 		const d = delay(() => shouldCollapseFn(), 2);
 		return () => {
 			clearTimeout(d);
@@ -311,6 +313,7 @@
 			}
 		}
 	}
+	let shouldInfoBeneathDesc = $derived(mangaInfoPos == MangaInfosPositions.BeneathDescription);
 </script>
 
 <svelte:window
@@ -429,11 +432,12 @@
 				<Markdown source={description} />
 			</div>
 		{/if}
-		<div class="top">
+		<div class="top" class:shouldInfoBeneathDesc>
 			{#if isOnInfoPage}
 				<!-- svelte-ignore a11y_no_static_element_interactions -->
 				<div
 					class="info"
+					class:shouldInfoBeneathDesc
 					oncontextmenu={registerContextMenuEvent({
 						preventDefault: true
 					})}
@@ -486,6 +490,8 @@
 </div>
 
 <style lang="scss">
+	@use "@special-eureka/core/sass/_breakpoints.scss" as bp;
+	@use "sass:map";
 	div.out-top {
 		margin: 0em 1em;
 	}
@@ -534,12 +540,18 @@
 		border-top-right-radius: 0px;
 		border-top: none;
 	}
-	@media screen and (max-width: 1200px) {
+	@include bp.media-only-screen-breakpoint-down(map.get(bp.$grid-breakpoints, "xl")) {
 		.top {
 			display: block;
 		}
 		.info {
 			display: block;
 		}
+	}
+	.info.shouldInfoBeneathDesc {
+		display: block;
+	}
+	.top.shouldInfoBeneathDesc {
+		display: block;
 	}
 </style>
