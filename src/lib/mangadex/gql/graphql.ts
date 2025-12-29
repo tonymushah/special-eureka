@@ -2213,6 +2213,12 @@ export type MangaFeedSortOrder =
 			volume: OrderDirection;
 	  };
 
+export enum MangaInfosPositions {
+	BeneathDescription = "BENEATH_DESCRIPTION",
+	Left = "LEFT",
+	Right = "RIGHT"
+}
+
 export type MangaLinks = {
 	__typename?: "MangaLinks";
 	amazon?: Maybe<Scalars["Url"]["output"]>;
@@ -3286,6 +3292,7 @@ export type Subscriptions = {
 	watchLongstripImageWidth: Scalars["Float"]["output"];
 	watchManga: GraphQlMangaAttributes;
 	watchMangaDownloadState: MangaDownloadState;
+	watchMangaInfosPosition: MangaInfosPositions;
 	watchMangaListStyle: MangaListStyle;
 	watchMangaReadingState?: Maybe<ReadingStatus>;
 	watchMangaStatistics: MangaStatisticsAttributes;
@@ -3723,6 +3730,7 @@ export type UserOptionMutations = {
 	setForcePort443: Scalars["Boolean"]["output"];
 	setImageFit: ImageFit;
 	setLongstripImageWidth: Scalars["Float"]["output"];
+	setMangaInfosPosition: MangaInfosPositions;
 	setMangaListStyle: MangaListStyle;
 	setOfflineConfig: OfflineConfigObject;
 	setPageDirection: Direction;
@@ -3794,6 +3802,10 @@ export type UserOptionMutationsSetImageFitArgs = {
 
 export type UserOptionMutationsSetLongstripImageWidthArgs = {
 	width: Scalars["Float"]["input"];
+};
+
+export type UserOptionMutationsSetMangaInfosPositionArgs = {
+	position: MangaInfosPositions;
 };
 
 export type UserOptionMutationsSetMangaListStyleArgs = {
