@@ -28,6 +28,7 @@ pub mod is_following;
 pub mod is_logged;
 pub mod longstrip_image_width;
 pub mod manga;
+pub mod manga_infos_positions;
 pub mod manga_list_style;
 pub mod manga_reading_state;
 pub mod page_direction;
@@ -65,6 +66,7 @@ use self::{
     is_logged::IsLoggedWatch,
     longstrip_image_width::LongstripImageWidthWatch,
     manga::MangaWatch,
+    manga_infos_positions::MangaInfosPositionsWatch,
     manga_list_style::MangaListStyleWatch,
     manga_reading_state::MangaReadingStateWatch,
     page_direction::PageDirectionWatch,
@@ -260,4 +262,5 @@ watches_implementation! {
     content_profile_blur => ContentProfileBlurWatch,
     content_profile_warning => ContentProfileWarningModeWatch,
     toast_notify => ToastNotifyWatch,
+    manga_infos_position => MangaInfosPositionsWatch,
 }
