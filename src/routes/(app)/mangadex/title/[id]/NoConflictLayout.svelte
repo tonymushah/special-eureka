@@ -49,7 +49,7 @@
 	import { writeText } from "@tauri-apps/plugin-clipboard-manager";
 	import { openUrl as open } from "@tauri-apps/plugin-opener";
 	import { debounce, delay, noop } from "lodash";
-	import { onMount, untrack, type Snippet } from "svelte";
+	import { type Snippet } from "svelte";
 	import { derived as der, derived, toStore } from "svelte/store";
 	import { v4 } from "uuid";
 	import type { LayoutData } from "./layout.context";
@@ -61,7 +61,6 @@
 	import { dev } from "$app/environment";
 	import ReportDialog from "@mangadex/componnents/report/dialog/ReportDialog.svelte";
 	import UploadDialog from "@mangadex/componnents/upload/UploadDialog.svelte";
-	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import { ArrowUpFromLine } from "@lucide/svelte";
 	import { fade } from "svelte/transition";
 	import { mangaInfoPosition } from "@mangadex/stores/manga-info-position";
@@ -295,7 +294,7 @@
 	});
 	let mangaInfoPos = $derived($mangaInfoPosition);
 	$effect(() => {
-		noop(collapsibleEl, mangaInfoPos);
+		noop(collapsibleEl, mangaInfoPos, isOnInfoPage);
 		const d = delay(() => shouldCollapseFn(), 2);
 		return () => {
 			clearTimeout(d);
