@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { progressModeStore as action } from "@mangadex/stores/chapterLayout";
-	import { PanelBottom, PanelBottomDashed, SlashIcon } from "@lucide/svelte";
+	import { PanelBottom, PanelBottomDashed, CircleSlash2 as SlashIcon } from "@lucide/svelte";
 	import { ProgressMode } from "@mangadex/gql/graphql";
 
 	const size = "18";
