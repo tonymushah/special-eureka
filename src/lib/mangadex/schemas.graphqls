@@ -1598,6 +1598,18 @@ enum MangaDownloadExtras {
 	Only the one matching the current content profile
 	"""
 	UN_READ_UN_DOWNLOADEDS
+	"""
+	Re-download all failed chapters
+	
+	Only the one matching the current content profile
+	"""
+	FAILED
+	"""
+	Re-download all un-read failed chapters
+	
+	Only the one matching the current content profile
+	"""
+	UN_READ_FAILED
 }
 
 type MangaDownloadState {
