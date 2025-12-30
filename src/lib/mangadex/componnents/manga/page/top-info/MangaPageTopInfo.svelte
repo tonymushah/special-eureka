@@ -202,6 +202,8 @@
 </TopInfoLayout>
 
 <style lang="scss">
+	@use "@special-eureka/core/sass/_breakpoints.scss" as bp;
+	@use "sass:map";
 	section.top {
 		display: grid;
 		margin-top: 18px;
@@ -230,7 +232,31 @@
 			gap: 10px;
 		}
 	}
-	@media (width >= 900px) {
+	h1.title {
+		-webkit-line-clamp: 1;
+		line-clamp: 1;
+	}
+	@include bp.media-only-screen-breakpoint-down(map.get(bp.$grid-breakpoints, "md")) {
+		h1.title {
+			font-size: 25px;
+		}
+	}
+	@include bp.media-only-screen-breakpoint-down(map.get(bp.$grid-breakpoints, "sm")) {
+		h1.title {
+			font-size: 20px;
+		}
+	}
+	@include bp.media-only-screen-breakpoint-down(map.get(bp.$grid-breakpoints, "lg")) {
+		h1.title {
+			font-size: 30px;
+			-webkit-box-orient: vertical;
+			overflow: hidden;
+		}
+		h2.alt-title {
+			display: none;
+		}
+	}
+	@include bp.media-only-screen-breakpoint-up(map.get(bp.$grid-breakpoints, "lg")) {
 		h1 {
 			font-size: 40px;
 			-webkit-line-clamp: 1;
@@ -243,16 +269,6 @@
 			-webkit-box-orient: vertical;
 			overflow: hidden;
 			margin: 0px;
-		}
-	}
-	@media (width < 900px) {
-		h1.title {
-			font-size: 30px;
-			-webkit-box-orient: vertical;
-			overflow: hidden;
-		}
-		h2.alt-title {
-			display: none;
 		}
 	}
 </style>
