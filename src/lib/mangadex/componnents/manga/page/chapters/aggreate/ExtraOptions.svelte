@@ -7,6 +7,7 @@
 	import { MangaDownloadExtras } from "@mangadex/gql/graphql";
 	import { isLogged } from "@mangadex/utils/auth";
 	import { ListIcon } from "@lucide/svelte";
+	import { dev } from "$app/environment";
 
 	let layout: HTMLElement | undefined = $state();
 	let popover: HTMLDivElement | undefined = $state(undefined);
@@ -105,7 +106,7 @@
 </span>
 
 <div class="tooltip" role="tooltip" bind:this={popover}>
-	{#if $isLogged}
+	{#if $isLogged || dev}
 		<button
 			disabled={disableMarkAsRead}
 			onclick={() => {
