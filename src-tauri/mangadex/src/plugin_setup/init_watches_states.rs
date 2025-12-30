@@ -10,6 +10,7 @@ use crate::{
             content_profile_warning::ContentProfileWarningModeStore,
             direction::{reading::ReadingDirectionStore, sidebar::SidebarDirectionStore},
             image_fit::ImageFitStore,
+            manga_infos_positions::MangaInfosPositionsStore,
             manga_list_style::MangaListStyleStore,
             pagination_style::PaginationStyleStore,
             reading_mode::ReadingModeStore,
@@ -62,6 +63,7 @@ setup_watch! {
     content_profile_blur <= ContentProfileBlurStore,
     content_profile_warning <= ContentProfileWarningModeStore,
     toast_notify <= ToastNotifyStore,
+    manga_infos_position <= MangaInfosPositionsStore,
 }
 
 #[cfg_attr(feature = "hotpath", hotpath::measure)]

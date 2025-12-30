@@ -32,6 +32,8 @@
 </article>
 
 <style lang="scss">
+	@use "@special-eureka/core/sass/_breakpoints.scss" as bp;
+	@use "sass:map";
 	.layout-image {
 		background-repeat: no-repeat;
 		background-size: cover;
@@ -53,27 +55,31 @@
 		gap: 10px;
 		backdrop-filter: blur(5px);
 		-webkit-backdrop-filter: blur(5px);
+		grid-template-areas: "cover content";
 		.cover {
-			grid-column: 0 / 4;
-			grid-row: 1;
+			grid-area: cover;
 			display: flex;
 			align-self: center;
 			justify-content: center;
 			margin: 2em;
 		}
 		.content {
-			grid-column: 2 / -1;
-			grid-row: 1;
+			grid-area: content;
 		}
 	}
-	@media (width >= 900px) {
-		.layout {
-			grid-template-columns: repeat(4, 1fr);
-		}
-	}
-	@media (width < 900px) {
+	@include bp.media-only-screen-breakpoint-down(map.get(bp.$grid-breakpoints, "lg")) {
 		.layout {
 			grid-template-columns: 35% auto;
+		}
+	}
+	@include bp.media-only-screen-breakpoint-up(map.get(bp.$grid-breakpoints, "lg")) {
+		.layout {
+			grid-template-columns: 275px auto;
+		}
+	}
+	@include bp.media-only-screen-breakpoint-up(map.get(bp.$grid-breakpoints, "xxl")) {
+		.layout {
+			grid-template-columns: 300px auto;
 		}
 	}
 </style>

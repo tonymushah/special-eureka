@@ -28,6 +28,7 @@ use self::{
         enums::{
             content_profile_warning::ContentProfileWarningModeStore,
             direction::{reading::ReadingDirectionStore, sidebar::SidebarDirectionStore},
+            manga_infos_positions::MangaInfosPositionsStore,
             manga_list_style::MangaListStyleStore,
             reading_mode::ReadingModeStore,
         },
@@ -79,6 +80,7 @@ get_store_builder! {
     ContentProfileBlurStore,
     ContentProfileWarningModeStore,
     ToastNotifyStore,
+    MangaInfosPositionsStore,
 }
 
 // [x] refactor into a macro!

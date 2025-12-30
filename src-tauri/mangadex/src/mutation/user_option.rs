@@ -1,6 +1,9 @@
 use std::num::NonZero;
 
 use crate::error::wrapped::Result;
+use crate::store::types::enums::manga_infos_positions::{
+    MangaInfosPositions, MangaInfosPositionsStore,
+};
 use crate::{
     cache::{cover::CoverImageCache, favicon::clear_favicons_dir},
     objects::offline_config::{OfflineConfigInput, OfflineConfigObject},
@@ -441,6 +444,19 @@ impl UserOptionMutations {
         *store = notify;
         app.insert_and_save(&store).await?;
         watches.toast_notify.send_data(*store)?;
+        Ok(*store)
+    }
+    pub async fn set_manga_infos_position(
+        &self,
+        ctx: &Context<'_>,
+        position: MangaInfosPositions,
+    ) -> crate::Result<MangaInfosPositions, crate::error::ErrorWrapper> {
+        let app = ctx.get_app_handle::<tauri::Wry>()?;
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
+        let mut store = app.extract::<MangaInfosPositionsStore>().await?;
+        *store = position;
+        app.insert_and_save(&store).await?;
+        watches.manga_infos_position.send_data(*store)?;
         Ok(*store)
     }
 }

@@ -14,7 +14,7 @@
 </div>
 
 <section>
-	<p><i>The change will be reflected to all window</i></p>
+	<p><i>The change will be reflected to all windows.</i></p>
 </section>
 
 <style lang="scss">

@@ -48,7 +48,7 @@
 	import { createQuery, type CreateQueryOptions } from "@tanstack/svelte-query";
 	import { writeText } from "@tauri-apps/plugin-clipboard-manager";
 	import { openUrl as open } from "@tauri-apps/plugin-opener";
-	import { debounce } from "lodash";
+	import { debounce, delay, noop } from "lodash";
 	import { type Snippet } from "svelte";
 	import { derived as der, derived, toStore } from "svelte/store";
 	import { v4 } from "uuid";
@@ -56,11 +56,14 @@
 	import { setTitleLayoutData } from "./layout.context";
 	import { isLogged } from "@mangadex/utils/auth";
 	import { createForumThread } from "@mangadex/stores/create-forum-thread";
-	import { ForumThreadType, ReportCategory } from "@mangadex/gql/graphql";
+	import { ForumThreadType, MangaInfosPositions, ReportCategory } from "@mangadex/gql/graphql";
 	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
 	import { dev } from "$app/environment";
 	import ReportDialog from "@mangadex/componnents/report/dialog/ReportDialog.svelte";
 	import UploadDialog from "@mangadex/componnents/upload/UploadDialog.svelte";
+	import { ArrowUpFromLine } from "@lucide/svelte";
+	import { fade } from "svelte/transition";
+	import { mangaInfoPosition } from "@mangadex/stores/manga-info-position";
 
 	type TopMangaStatisticsStoreData = TopMangaStatistics & {
 		threadUrl?: string;
@@ -276,9 +279,48 @@
 	}
 	let openReportDialog = $state(false);
 	let openUploadDialog = $state(false);
+	// BUG: If you expand the collapsible and resize your window, the show more label will still be there.
+	let collapsibleEl = $state<HTMLElement>();
+	let canCollapse = $state(false);
+	let collapsed = $state(false);
+	let collapsibleHeight = $derived.by(() => {
+		if (canCollapse) {
+			if (collapsed) {
+				return "80px";
+			} else if (collapsibleEl) {
+				return `${collapsibleEl.scrollHeight}px`;
+			}
+		}
+	});
+	let mangaInfoPos = $derived($mangaInfoPosition);
+	$effect(() => {
+		noop(collapsibleEl, mangaInfoPos, isOnInfoPage);
+		const d = delay(() => shouldCollapseFn(), 2);
+		return () => {
+			clearTimeout(d);
+		};
+	});
+
+	function shouldCollapseFn() {
+		if (collapsibleEl) {
+			if (collapsibleEl.scrollHeight > 80) {
+				canCollapse = true;
+				collapsed = true;
+			} else {
+				canCollapse = false;
+				collapsed = false;
+			}
+		}
+	}
+	let shouldInfoBeneathDesc = $derived(mangaInfoPos == MangaInfosPositions.BeneathDescription);
 </script>
 
-<svelte:window onfocus={refetchReadingFollowingStatus} />
+<svelte:window
+	onfocus={debounce(refetchReadingFollowingStatus, 4000)}
+	onresize={debounce(() => {
+		shouldCollapseFn();
+	})}
+/>
 
 <AppTitle title={`${layoutData.title ?? ""} | MangaDex`} />
 
@@ -364,39 +406,69 @@
 />
 
 <div class="out-top">
-	{#if description != undefined && isOnInfoPage}
-		<!-- svelte-ignore a11y_no_static_element_interactions -->
-		<div
-			class="description"
-			oncontextmenu={registerContextMenuEvent({
-				preventDefault: true,
-				additionalMenus: [
-					ContextMenuItemProvider.menuItem({
-						text: "Copy Descrription",
-						action() {
-							writeText(description);
-						}
-					})
-				]
-			})}
-		>
-			<Markdown source={description} />
-		</div>
-	{/if}
-	<div class="top">
-		{#if isOnInfoPage}
+	<div
+		class="collapsible"
+		bind:this={collapsibleEl}
+		class:collapsed
+		style:height={collapsibleHeight}
+	>
+		{#if description != undefined && isOnInfoPage}
 			<!-- svelte-ignore a11y_no_static_element_interactions -->
 			<div
-				class="info"
+				class="description"
 				oncontextmenu={registerContextMenuEvent({
-					preventDefault: true
+					preventDefault: true,
+					additionalMenus: [
+						ContextMenuItemProvider.menuItem({
+							text: "Copy Descrription",
+							action() {
+								writeText(description);
+							}
+						})
+					]
 				})}
 			>
-				<MangaPageInfo />
+				<Markdown source={description} />
 			</div>
 		{/if}
+		<div class="top" class:shouldInfoBeneathDesc>
+			{#if isOnInfoPage}
+				<!-- svelte-ignore a11y_no_static_element_interactions -->
+				<div
+					class="info"
+					class:shouldInfoBeneathDesc
+					oncontextmenu={registerContextMenuEvent({
+						preventDefault: true
+					})}
+				>
+					<MangaPageInfo />
+				</div>
+			{/if}
+		</div>
 	</div>
-
+	{#if canCollapse}
+		<div
+			class="collapse-trigger-layout"
+			transition:fade={{
+				duration: 100
+			}}
+			class:collapsed
+		>
+			<button
+				onclick={() => {
+					collapsed = !collapsed;
+				}}
+				class="to-collapse-button"
+				class:collapsed
+			>
+				{#if collapsed}
+					Show more
+				{:else}
+					<ArrowUpFromLine size="14" /> Show less <ArrowUpFromLine size="14" />
+				{/if}
+			</button>
+		</div>
+	{/if}
 	<MangaNavBar
 		id={layoutData.id}
 		{hasRelation}
@@ -417,6 +489,8 @@
 </div>
 
 <style lang="scss">
+	@use "@special-eureka/core/sass/_breakpoints.scss" as bp;
+	@use "sass:map";
 	div.out-top {
 		margin: 0em 1em;
 	}
@@ -426,12 +500,57 @@
 	.info {
 		display: none;
 	}
-	@media screen and (max-width: 1200px) {
+	.collapsible {
+		overflow: hidden;
+		transition: height 100ms ease-in-out;
+	}
+	.collapsible.collapsed {
+		mask-image: linear-gradient(
+			var(--main-background) 0%,
+			var(--main-background) 60%,
+			transparent 100%
+		);
+	}
+	.collapse-trigger-layout {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 100%;
+	}
+	.collapse-trigger-layout.collapsed {
+		border-top: 3px solid var(--mid-tone);
+	}
+	.to-collapse-button {
+		background-color: var(--accent);
+		color: var(--text-color);
+		font-family: var(--fonts);
+		border-radius: 6px;
+		border: 3px solid var(--contrast-l1);
+		font-size: 14px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 2px;
+	}
+	.to-collapse-button.collapsed {
+		background-color: var(--primary-l2);
+		border-color: var(--mid-tone);
+		border-top-left-radius: 0px;
+		border-top-right-radius: 0px;
+		border-top: none;
+	}
+	@include bp.media-only-screen-breakpoint-down(map.get(bp.$grid-breakpoints, "xl")) {
 		.top {
 			display: block;
 		}
 		.info {
 			display: block;
 		}
+	}
+	.info.shouldInfoBeneathDesc {
+		display: block;
+	}
+	.top.shouldInfoBeneathDesc {
+		display: block;
 	}
 </style>

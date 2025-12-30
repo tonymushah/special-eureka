@@ -2,12 +2,15 @@ use async_graphql::{Context, Subscription};
 use futures_util::Stream;
 
 use crate::{
-    store::types::enums::content_profile_warning::ContentProfileWarningMode,
+    store::types::enums::{
+        content_profile_warning::ContentProfileWarningMode,
+        manga_infos_positions::MangaInfosPositions,
+    },
     subscription::utils::WatchSubscriptionStream,
     utils::watch::{
         content_blur::ContentProfileBlurWatch,
         content_profile_warning::ContentProfileWarningModeWatch, force_443::ForcePort443Watch,
-        toast_notify::ToastNotifyWatch,
+        manga_infos_positions::MangaInfosPositionsWatch, toast_notify::ToastNotifyWatch,
     },
 };
 
@@ -56,6 +59,16 @@ impl UserOptionNextSubscriptions {
     ) -> crate::Result<impl Stream<Item = bool> + 'ctx, crate::error::ErrorWrapper> {
         WatchSubscriptionStream::from_async_graphql_context_watch_as_ref::<
             ToastNotifyWatch,
+            tauri::Wry,
+        >(ctx)
+        .map_err(crate::error::ErrorWrapper::from)
+    }
+    pub async fn watch_manga_infos_position<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+    ) -> crate::Result<impl Stream<Item = MangaInfosPositions>, crate::error::ErrorWrapper> {
+        WatchSubscriptionStream::from_async_graphql_context_watch_as_ref::<
+            MangaInfosPositionsWatch,
             tauri::Wry,
         >(ctx)
         .map_err(crate::error::ErrorWrapper::from)

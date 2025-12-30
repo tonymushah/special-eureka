@@ -1682,6 +1682,12 @@ input MangaFeedSortOrder @oneOf {
 	volume: OrderDirection
 }
 
+enum MangaInfosPositions {
+	LEFT
+	RIGHT
+	BENEATH_DESCRIPTION
+}
+
 type MangaLinks {
 	hasNoLinks: Boolean!
 	amazon: Url
@@ -2538,6 +2544,7 @@ type Subscriptions {
 	watchContentProfileBlur: Boolean!
 	watchContentProfileWarningMode: ContentProfileWarningMode!
 	watchNotifyToast: Boolean!
+	watchMangaInfosPosition: MangaInfosPositions!
 	watchReadMarker(chapterId: UUID!): Boolean!
 	watchReadMarkers: ChapterReadMarkerSubItem!
 	watchInternalUploadQueueListIds: [UUID!]!
@@ -2824,6 +2831,7 @@ type UserOptionMutations {
 	setContentProfileBlur(blur: Boolean!): Boolean!
 	setContentProfileWarningMode(mode: ContentProfileWarningMode!): ContentProfileWarningMode!
 	setToastNotify(notify: Boolean!): Boolean!
+	setMangaInfosPosition(position: MangaInfosPositions!): MangaInfosPositions!
 }
 
 type UserOptionQueries {
