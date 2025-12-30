@@ -218,6 +218,9 @@
 							{
 								onSuccess() {
 									refetchTitleReadMarker();
+								},
+								onError(err) {
+									addErrorToast("Cannot mark unread as read", err);
 								}
 							}
 						);

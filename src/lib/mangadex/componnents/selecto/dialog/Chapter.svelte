@@ -6,9 +6,12 @@
 	import { multiChapterDownload as multiChapterDownloadLoader } from "./chapter/download";
 	import { removeMultipleChapterMutation as removeMultipleChapterMutationLoader } from "./chapter/local-remove";
 	import exportIdsToTxtLoader from "@mangadex/gql-docs/export/ids";
-	import { addErrorToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
+	import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 	import { revealItemInDir } from "@tauri-apps/plugin-opener";
 	import { isMounted } from "@mangadex/stores/offlineIsMounted";
+	import { dev } from "$app/environment";
+	import { isLogged } from "@mangadex/utils/auth";
+	import { readMarkers } from "@mangadex/stores/read-markers/mutations";
 
 	interface Props {
 		chapters: string[];
@@ -19,6 +22,7 @@
 	let { chapters = $bindable([]) }: Props = $props();
 	let currentAction: "selection" = $state("selection");
 	let canDelete = false;
+	let readMarker = readMarkers();
 </script>
 
 <SectionBase>
@@ -75,6 +79,58 @@
 				);
 			}}
 		/>
+		{#if $isLogged || dev}
+			<ButtonAccentOnlyLabel
+				variant="3"
+				disabled={readMarker.isPending}
+				label="Mark as read"
+				onclick={() => {
+					readMarker.mutateAsync(
+						{
+							reads: chapters,
+							unreads: []
+						},
+						{
+							onError(error) {
+								addErrorToast("Cannot mark chapters as read", error);
+							},
+							onSuccess(data, variables) {
+								addToast({
+									data: {
+										title: `Marked ${variables.reads.length} chapter${variables.reads.length == 1 ? "" : "s"} as read`
+									}
+								});
+							}
+						}
+					);
+				}}
+			/>
+			<ButtonAccentOnlyLabel
+				variant="3"
+				disabled={readMarker.isPending}
+				label="Mark as unread"
+				onclick={() => {
+					readMarker.mutateAsync(
+						{
+							reads: [],
+							unreads: chapters
+						},
+						{
+							onError(error) {
+								addErrorToast("Cannot mark chapters as unread", error);
+							},
+							onSuccess(data, variables) {
+								addToast({
+									data: {
+										title: `Marked ${variables.reads.length} chapter${variables.reads.length == 1 ? "" : "s"} as read`
+									}
+								});
+							}
+						}
+					);
+				}}
+			/>
+		{/if}
 		{#if canDelete}
 			<DangerButtonOnlyLabel variant="1" label="Delete them permanently" />
 		{/if}

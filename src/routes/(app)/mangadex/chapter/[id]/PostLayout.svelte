@@ -96,6 +96,7 @@
 	import { createForumThread } from "@mangadex/stores/create-forum-thread";
 	import { onMount, untrack } from "svelte";
 	import { delay } from "lodash";
+	import { isLogged } from "@mangadex/utils/auth";
 
 	interface Props {
 		data: LayoutData;
@@ -110,28 +111,29 @@
 		const chapterId = data.data.id;
 		if (typeof chapterId == "string") {
 			const time = delay(() => {
-				readMarkers.mutate(
-					{
-						reads: [chapterId],
-						unreads: [],
-						// NOTE history is currently disabled
-						updateHistory: false
-					},
-					{
-						onSuccess() {
-							if (dev) {
-								addToast({
-									data: {
-										title: "Marked chapter as read"
-									}
-								});
-							}
+				if (untrack(() => $isLogged || dev))
+					readMarkers.mutate(
+						{
+							reads: [chapterId],
+							unreads: [],
+							// NOTE history is currently disabled
+							updateHistory: false
 						},
-						onError(error) {
-							addErrorToast("Cannot mark chapter as read", error);
+						{
+							onSuccess() {
+								if (dev) {
+									addToast({
+										data: {
+											title: "Marked chapter as read"
+										}
+									});
+								}
+							},
+							onError(error) {
+								addErrorToast("Cannot mark chapter as read", error);
+							}
 						}
-					}
-				);
+					);
 			}, 100);
 			return () => {
 				clearTimeout(time);
