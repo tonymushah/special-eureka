@@ -2073,6 +2073,12 @@ export enum MangaDownloadExtras {
 	 */
 	AllChapters = "ALL_CHAPTERS",
 	/**
+	 * Re-download all failed chapters
+	 *
+	 * Only the one matching the current content profile
+	 */
+	Failed = "FAILED",
+	/**
 	 * Download with all chapters that is marked as unread.
 	 *
 	 * NOTE: This will not work if the user is not logged in.
@@ -2085,6 +2091,12 @@ export enum MangaDownloadExtras {
 	 * NOTE: _Again_, this will *only* download undownloaded that match the current content profile.
 	 */
 	UnDownloadeds = "UN_DOWNLOADEDS",
+	/**
+	 * Re-download all un-read failed chapters
+	 *
+	 * Only the one matching the current content profile
+	 */
+	UnReadFailed = "UN_READ_FAILED",
 	/**
 	 * Download all unread undownloaded chapters.
 	 *

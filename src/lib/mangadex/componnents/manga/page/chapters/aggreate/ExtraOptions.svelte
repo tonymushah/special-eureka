@@ -2,7 +2,6 @@
 	import { autoPlacement, autoUpdate } from "@floating-ui/dom";
 	import { arrow, computePosition, offset, shift } from "@floating-ui/dom";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
-	import MidToneLine from "@mangadex/componnents/theme/lines/MidToneLine.svelte";
 	import { downloadTitleWithExtra } from "@mangadex/gql-docs/title/id/download-with-extras";
 	import { MangaDownloadExtras } from "@mangadex/gql/graphql";
 	import { isLogged } from "@mangadex/utils/auth";
@@ -153,6 +152,7 @@
 			open = false;
 			downloadTitleWithExtra(id, MangaDownloadExtras.UnDownloadeds);
 		}}
+		disabled={disableDownloads}
 	>
 		Download all un-downloaded chapters
 	</button>
@@ -164,6 +164,24 @@
 		disabled={disableDownloads}
 	>
 		Download all un-read un-downloaded chapters
+	</button>
+	<button
+		onclick={() => {
+			open = false;
+			downloadTitleWithExtra(id, MangaDownloadExtras.Failed);
+		}}
+		disabled={disableDownloads}
+	>
+		(Re)Download all title failed chapters
+	</button>
+	<button
+		onclick={() => {
+			open = false;
+			downloadTitleWithExtra(id, MangaDownloadExtras.UnReadFailed);
+		}}
+		disabled={disableDownloads}
+	>
+		(Re)Download all title unread failed chapters
 	</button>
 	<div class="arrow" bind:this={arrowElement}></div>
 </div>
