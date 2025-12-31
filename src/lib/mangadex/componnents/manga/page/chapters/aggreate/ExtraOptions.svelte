@@ -153,6 +153,7 @@
 			open = false;
 			downloadTitleWithExtra(id, MangaDownloadExtras.UnDownloadeds);
 		}}
+		disabled={disableDownloads}
 	>
 		Download all un-downloaded chapters
 	</button>
@@ -164,6 +165,24 @@
 		disabled={disableDownloads}
 	>
 		Download all un-read un-downloaded chapters
+	</button>
+	<button
+		onclick={() => {
+			open = false;
+			downloadTitleWithExtra(id, MangaDownloadExtras.Failed);
+		}}
+		disabled={disableDownloads}
+	>
+		(Re)Download all title failed chapters
+	</button>
+	<button
+		onclick={() => {
+			open = false;
+			downloadTitleWithExtra(id, MangaDownloadExtras.UnReadFailed);
+		}}
+		disabled={disableDownloads}
+	>
+		(Re)Download all title unread failed chapters
 	</button>
 	<div class="arrow" bind:this={arrowElement}></div>
 </div>
