@@ -2,7 +2,6 @@
 	import { autoPlacement, autoUpdate } from "@floating-ui/dom";
 	import { arrow, computePosition, offset, shift } from "@floating-ui/dom";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
-	import MidToneLine from "@mangadex/componnents/theme/lines/MidToneLine.svelte";
 	import { downloadTitleWithExtra } from "@mangadex/gql-docs/title/id/download-with-extras";
 	import { MangaDownloadExtras } from "@mangadex/gql/graphql";
 	import { isLogged } from "@mangadex/utils/auth";
