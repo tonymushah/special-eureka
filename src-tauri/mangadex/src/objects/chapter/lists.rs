@@ -11,7 +11,7 @@ use crate::objects::{
 
 use super::Chapter;
 
-#[derive(Clone, SimpleObject)]
+#[derive(Clone, SimpleObject, Default)]
 pub struct ChapterResults {
     data: Vec<Chapter>,
     #[graphql(flatten)]

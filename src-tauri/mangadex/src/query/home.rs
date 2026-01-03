@@ -1,6 +1,9 @@
 use crate::{
     objects::GetId,
-    utils::{read_marker::has_title_read, traits_utils::MangadexAsyncGraphQLContextExt},
+    utils::{
+        read_marker::{has_chapters_read, has_title_read},
+        traits_utils::MangadexAsyncGraphQLContextExt,
+    },
 };
 
 use async_graphql::{Context, Object};
@@ -69,9 +72,42 @@ impl HomeQueries {
         params.order = Some(ChapterSortOrder::ReadableAt(OrderDirection::Descending));
         params.chapter_ids.clear();
         params.chapters.clear();
-        ChapterListQueries::new(params, ctx.get_app_handle::<tauri::Wry>()?)
-            .default(ctx, None)
-            .await
+        let mut res = None::<ChapterResults>;
+        loop {
+            {
+                let mut inner_res =
+                    ChapterListQueries::new(params.clone(), ctx.get_app_handle::<tauri::Wry>()?)
+                        .default(ctx, None)
+                        .await?;
+                let read_markers = has_chapters_read(
+                    ctx.get_app_handle::<tauri::Wry>()?,
+                    inner_res.iter().map(|c| c.get_id()).collect(),
+                )
+                .await
+                .ok()
+                .unwrap_or_default();
+                inner_res.retain(|c| !read_markers.contains(&c.get_id()));
+                match res.as_mut() {
+                    None => {
+                        res = Some(inner_res);
+                    }
+                    Some(res) => {
+                        res.append(&mut inner_res);
+                    }
+                }
+            }
+            if let Some(res) = &mut res {
+                if res.len() < res.info.limit.try_into()? {
+                    params.offset = Some(params.offset.unwrap_or_default() + res.info.limit);
+                } else {
+                    let limit: usize = res.info.limit.try_into()?;
+                    res.truncate(limit);
+                    res.shrink_to_fit();
+                    break;
+                }
+            }
+        }
+        Ok(res.unwrap_or_default())
     }
     pub async fn recently_added(
         &self,
@@ -96,8 +132,7 @@ impl HomeQueries {
             .unwrap_or_default();
             res.retain(|d| !read_marker.get(&d.get_id()).copied().unwrap_or_default());
             if res.is_empty() {
-                params.offset =
-                    Some(params.offset.unwrap_or_default() + params.limit.unwrap_or_default());
+                params.offset = Some(params.offset.unwrap_or_default() + res.info.limit);
                 continue;
             }
             return Ok(res);

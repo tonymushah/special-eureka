@@ -68,19 +68,16 @@ where
     };
     let chapter_read = {
         let mut chapter_read = HashSet::<Uuid>::new();
-        for titles in &titles_id
+        let chunks = (&titles_id
             .into_iter()
-            .chunks(crate::constants::MANGADEX_PAGE_LIMIT.try_into()?)
-        {
+            .chunks(crate::constants::MANGADEX_PAGE_LIMIT.try_into()?))
+            .into_iter()
+            .map(|c| c.collect_vec())
+            .collect_vec();
+        for titles in chunks {
             let client = app.get_mangadex_client_with_auth_refresh().await?;
 
-            let res = client
-                .manga()
-                .read()
-                .get()
-                .manga_ids(titles.collect::<Vec<_>>())
-                .send()
-                .await?;
+            let res = client.manga().read().get().manga_ids(titles).send().await?;
             match res {
                 MangaReadMarkers::Ungrouped(ug) => {
                     let watches = app.get_watches()?;
