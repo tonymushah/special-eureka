@@ -98,6 +98,7 @@ impl HomeQueries {
             }
             if let Some(res) = &mut res {
                 if res.len() < res.info.limit.try_into()? {
+                    // TODO put a condition just in case if the offset goes out of the total number of element
                     params.offset = Some(params.offset.unwrap_or_default() + res.info.limit);
                 } else {
                     let limit: usize = res.info.limit.try_into()?;
@@ -132,6 +133,7 @@ impl HomeQueries {
             .unwrap_or_default();
             res.retain(|d| !read_marker.contains(&d.get_id()));
             if res.is_empty() {
+                // TODO Put a condition just in case if the offset goes out of the total number of element.
                 params.offset = Some(params.offset.unwrap_or_default() + res.info.limit);
                 continue;
             }
