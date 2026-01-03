@@ -1,4 +1,4 @@
-use std::ops::Deref;
+use std::ops::{Deref, DerefMut};
 use std::vec::IntoIter;
 
 use async_graphql::SimpleObject;
@@ -15,7 +15,7 @@ use super::Chapter;
 pub struct ChapterResults {
     data: Vec<Chapter>,
     #[graphql(flatten)]
-    info: ResultsInfo,
+    pub(crate) info: ResultsInfo,
 }
 
 impl IntoIterator for ChapterResults {
@@ -33,6 +33,12 @@ impl Deref for ChapterResults {
 
     fn deref(&self) -> &Self::Target {
         &self.data
+    }
+}
+
+impl DerefMut for ChapterResults {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.data
     }
 }
 
