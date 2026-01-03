@@ -1,4 +1,7 @@
-use crate::utils::traits_utils::MangadexAsyncGraphQLContextExt;
+use crate::{
+    objects::GetId,
+    utils::{read_marker::has_title_read, traits_utils::MangadexAsyncGraphQLContextExt},
+};
 
 use async_graphql::{Context, Object};
 use mangadex_api_input_types::{chapter::list::ChapterListParams, manga::list::MangaListParams};
@@ -80,13 +83,25 @@ impl HomeQueries {
         params.order = Some(MangaSortOrder::CreatedAt(OrderDirection::Descending));
         params.has_available_chapters = Some(true);
         params.manga_ids.clear();
-        Ok({
-            let res: MangaResults =
-                MangaListQueries::new(params, ctx.get_app_handle::<tauri::Wry>()?)
+        loop {
+            let mut res: MangaResults =
+                MangaListQueries::new(params.clone(), ctx.get_app_handle::<tauri::Wry>()?)
                     .list(ctx)
                     .await?;
-            res
-        })
+            let read_marker = has_title_read(
+                ctx.get_app_handle::<tauri::Wry>()?,
+                res.iter().map(|d| d.get_id()).collect(),
+            )
+            .await
+            .unwrap_or_default();
+            res.retain(|d| !read_marker.get(&d.get_id()).copied().unwrap_or_default());
+            if res.is_empty() {
+                params.offset =
+                    Some(params.offset.unwrap_or_default() + params.limit.unwrap_or_default());
+                continue;
+            }
+            return Ok(res);
+        }
     }
     pub async fn popular_titles(
         &self,
