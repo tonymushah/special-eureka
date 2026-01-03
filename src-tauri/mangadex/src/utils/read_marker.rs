@@ -1,4 +1,4 @@
-use std::collections::{HashMap, HashSet};
+use std::collections::HashSet;
 
 use itertools::Itertools;
 use mangadex_api_input_types::chapter::list::ChapterListParams;
@@ -13,7 +13,7 @@ use crate::{
     },
 };
 
-pub async fn has_title_read<M, R>(app: &M, titles: Vec<Uuid>) -> crate::Result<HashMap<Uuid, bool>>
+pub async fn has_title_read<M, R>(app: &M, titles: Vec<Uuid>) -> crate::Result<HashSet<Uuid>>
 where
     M: Manager<R> + Sync,
     R: Runtime,
@@ -37,7 +37,8 @@ where
                     watches.read_marker.send_data((*id, true));
                 }
             })
-            .map(|(k, v)| (k, !v.is_empty()))
+            .filter(|(_, v)| v.is_empty())
+            .map(|(k, _)| k)
             .collect()),
         _ => Err(crate::Error::GotReadMarkersUnGrouped),
     }

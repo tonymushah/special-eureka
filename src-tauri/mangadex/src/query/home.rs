@@ -130,7 +130,7 @@ impl HomeQueries {
             )
             .await
             .unwrap_or_default();
-            res.retain(|d| !read_marker.get(&d.get_id()).copied().unwrap_or_default());
+            res.retain(|d| !read_marker.contains(&d.get_id()));
             if res.is_empty() {
                 params.offset = Some(params.offset.unwrap_or_default() + res.info.limit);
                 continue;
