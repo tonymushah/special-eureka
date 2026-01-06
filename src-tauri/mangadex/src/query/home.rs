@@ -98,8 +98,12 @@ impl HomeQueries {
             }
             if let Some(res) = &mut res {
                 if res.len() < res.info.limit.try_into()? {
-                    // TODO put a condition just in case if the offset goes out of the total number of element
-                    params.offset = Some(params.offset.unwrap_or_default() + res.info.limit);
+                    let next_offset = res.info.offset + res.info.limit;
+                    if next_offset > res.info.total {
+                        break;
+                    } else {
+                        params.offset = Some(next_offset);
+                    }
                 } else {
                     let limit: usize = res.info.limit.try_into()?;
                     res.truncate(limit);
