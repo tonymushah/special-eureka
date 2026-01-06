@@ -137,9 +137,11 @@ impl HomeQueries {
             .unwrap_or_default();
             res.retain(|d| !read_marker.contains(&d.get_id()));
             if res.is_empty() {
-                // TODO Put a condition just in case if the offset goes out of the total number of element.
-                params.offset = Some(params.offset.unwrap_or_default() + res.info.limit);
-                continue;
+                let next_offset = res.info.limit + res.info.limit;
+                if next_offset <= res.info.total {
+                    params.offset = Some(next_offset);
+                    continue;
+                }
             }
             return Ok(res);
         }
