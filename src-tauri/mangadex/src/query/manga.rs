@@ -64,6 +64,7 @@ impl MangaQueries {
         ctx: &Context<'_>,
         params: Option<MangaListParams>,
         exclude_content_profile: Option<bool>,
+        only_unread: Option<bool>,
     ) -> Result<MangaResults> {
         let mut params = params.unwrap_or_default();
         params.includes = <MangaResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
@@ -75,6 +76,7 @@ impl MangaQueries {
             exclude_content_profile.unwrap_or_default(),
             ctx.get_app_handle::<tauri::Wry>()?,
         )
+        .only_unreads(only_unread.unwrap_or_default())
         .list(ctx)
         .await?)
     }
