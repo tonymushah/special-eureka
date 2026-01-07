@@ -10,7 +10,8 @@ use crate::{
     utils::watch::{
         content_blur::ContentProfileBlurWatch,
         content_profile_warning::ContentProfileWarningModeWatch, force_443::ForcePort443Watch,
-        manga_infos_positions::MangaInfosPositionsWatch, toast_notify::ToastNotifyWatch,
+        hide_read_titles::HideReadTitlesWatch, manga_infos_positions::MangaInfosPositionsWatch,
+        toast_notify::ToastNotifyWatch,
     },
 };
 
@@ -69,6 +70,16 @@ impl UserOptionNextSubscriptions {
     ) -> crate::Result<impl Stream<Item = MangaInfosPositions>, crate::error::ErrorWrapper> {
         WatchSubscriptionStream::from_async_graphql_context_watch_as_ref::<
             MangaInfosPositionsWatch,
+            tauri::Wry,
+        >(ctx)
+        .map_err(crate::error::ErrorWrapper::from)
+    }
+    pub async fn watch_hide_read_titles<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+    ) -> crate::Result<impl Stream<Item = bool> + 'ctx, crate::error::ErrorWrapper> {
+        WatchSubscriptionStream::from_async_graphql_context_watch_as_ref::<
+            HideReadTitlesWatch,
             tauri::Wry,
         >(ctx)
         .map_err(crate::error::ErrorWrapper::from)

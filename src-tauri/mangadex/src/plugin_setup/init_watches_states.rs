@@ -21,6 +21,7 @@ use crate::{
             content::profiles::{ContentProfileDefaultKey, ContentProfiles},
             content_blur::ContentProfileBlurStore,
             force_443::ForcePort443Store,
+            hide_read_titles::HideReadTitlesStore,
             longstrip_image_width::LongstripImageWidthStore,
             page_limit::PageLimitStore,
             theme::profiles::{ThemeProfileDefaultKey, ThemeProfiles},
@@ -64,6 +65,7 @@ setup_watch! {
     content_profile_warning <= ContentProfileWarningModeStore,
     toast_notify <= ToastNotifyStore,
     manga_infos_position <= MangaInfosPositionsStore,
+    hide_read_titles <= HideReadTitlesStore,
 }
 
 #[cfg_attr(feature = "hotpath", hotpath::measure)]

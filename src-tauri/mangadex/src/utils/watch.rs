@@ -22,6 +22,7 @@ pub mod cover;
 pub mod custom_list;
 pub mod download_state;
 pub mod force_443;
+pub mod hide_read_titles;
 pub mod image_fit;
 pub mod is_appstate_mounted;
 pub mod is_following;
@@ -61,6 +62,7 @@ use self::{
     custom_list::CustomListWatch,
     download_state::DownloadStateWatch,
     force_443::ForcePort443Watch,
+    hide_read_titles::HideReadTitlesWatch,
     is_appstate_mounted::IsAppStateMountedWatch,
     is_following::IsFollowingWatch,
     is_logged::IsLoggedWatch,
@@ -263,4 +265,5 @@ watches_implementation! {
     content_profile_warning => ContentProfileWarningModeWatch,
     toast_notify => ToastNotifyWatch,
     manga_infos_position => MangaInfosPositionsWatch,
+    hide_read_titles => HideReadTitlesWatch,
 }

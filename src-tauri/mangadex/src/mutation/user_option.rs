@@ -4,6 +4,7 @@ use crate::error::wrapped::Result;
 use crate::store::types::enums::manga_infos_positions::{
     MangaInfosPositions, MangaInfosPositionsStore,
 };
+use crate::store::types::structs::hide_read_titles::HideReadTitlesStore;
 use crate::{
     cache::{cover::CoverImageCache, favicon::clear_favicons_dir},
     objects::offline_config::{OfflineConfigInput, OfflineConfigObject},
@@ -457,6 +458,19 @@ impl UserOptionMutations {
         *store = position;
         app.insert_and_save(&store).await?;
         watches.manga_infos_position.send_data(*store)?;
+        Ok(*store)
+    }
+    pub async fn set_hide_read_titles(
+        &self,
+        ctx: &Context<'_>,
+        hide: bool,
+    ) -> crate::Result<bool, crate::error::ErrorWrapper> {
+        let app = ctx.get_app_handle::<tauri::Wry>()?;
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
+        let mut store = app.extract::<HideReadTitlesStore>().await?;
+        *store = hide;
+        app.insert_and_save(&store).await?;
+        watches.hide_read_titles.send_data(*store)?;
         Ok(*store)
     }
 }
