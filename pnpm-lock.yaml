@@ -36,7 +36,7 @@ importers:
         version: 3.2.0(graphql@16.12.0)
       '@humanspeak/svelte-markdown':
         specifier: ^0.8.13
-        version: 0.8.13(svelte@5.46.1)
+        version: 0.8.14(svelte@5.46.1)
       '@lucide/svelte':
         specifier: ^0.562.0
         version: 0.562.0(svelte@5.46.1)
@@ -1041,8 +1041,12 @@ packages:
     resolution: {integrity: sha512-/zUx+yOsIrG4Y43Eh2peDeKCxlRt/gET6aHfaKpuq267qXdYDFViVHfMaLyygZOnl0kGWxFIgsBy8QFuTLUXEQ==}
     engines: {node: '>=18.18.0'}
 
-  '@humanspeak/svelte-markdown@0.8.13':
-    resolution: {integrity: sha512-A0Ds5HaAID6HPcJ9MZUKjNuDpIOn10AUhwoJl46mHFvl4uM0//+UU0wJc2CFj3kPtsruJLR+7ZOImWb6awmAbQ==}
+  '@humanspeak/memory-cache@1.0.2':
+    resolution: {integrity: sha512-UgyiEqv10ioIXcz10Le7ZRdnr5AAxnSJC8rtxulAozDfoiiIPsxa3e8v58OWqxUlev+5BbwfCtulQsrtJIRjgg==}
+    engines: {node: '>=18.0.0'}
+
+  '@humanspeak/svelte-markdown@0.8.14':
+    resolution: {integrity: sha512-soaeyTClgBz56W1o2Xj15I6EijewdLUEqFBe2LBrnOqyWrdIwPGfDgP4Qm++3Yy26JjlP2B9rz+RstjYUrfX8A==}
     peerDependencies:
       svelte: ^5.0.0
 
@@ -3504,8 +3508,8 @@ packages:
     resolution: {integrity: sha512-a54IwgWPaeBCAAsv13YgmALOF1elABB08FxO9i+r4VFk5Vl4pKokRPeX8u5TCgSsPi6ec1otfLjdOpVcgbpshg==}
     hasBin: true
 
-  marked@16.4.1:
-    resolution: {integrity: sha512-ntROs7RaN3EvWfy3EZi14H4YxmT6A5YvywfhO+0pm+cH/dnSQRmdAmoFIc3B9aiwTehyk7pESH4ofyBY+V5hZg==}
+  marked@17.0.1:
+    resolution: {integrity: sha512-boeBdiS0ghpWcSwoNm/jJBwdpFaMnZWRzjA6SkUMYb40SVaN1x7mmfGKp0jvexGcx+7y2La5zRZsYFZI6Qpypg==}
     engines: {node: '>= 20'}
     hasBin: true
 
@@ -5610,11 +5614,14 @@ snapshots:
       '@humanfs/core': 0.19.1
       '@humanwhocodes/retry': 0.4.3
 
-  '@humanspeak/svelte-markdown@0.8.13(svelte@5.46.1)':
+  '@humanspeak/memory-cache@1.0.2': {}
+
+  '@humanspeak/svelte-markdown@0.8.14(svelte@5.46.1)':
     dependencies:
+      '@humanspeak/memory-cache': 1.0.2
       github-slugger: 2.0.0
       htmlparser2: 10.0.0
-      marked: 16.4.1
+      marked: 17.0.1
       svelte: 5.46.1
 
   '@humanwhocodes/module-importer@1.0.1': {}
@@ -8002,7 +8009,7 @@ snapshots:
       punycode.js: 2.3.1
       uc.micro: 2.1.0
 
-  marked@16.4.1: {}
+  marked@17.0.1: {}
 
   mdn-data@2.0.28: {}
 
