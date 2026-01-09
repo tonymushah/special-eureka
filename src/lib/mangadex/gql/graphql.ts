@@ -313,6 +313,11 @@ export type AuthorQueriesListArgs = {
 export type AuthorRelationships = {
 	__typename?: "AuthorRelationships";
 	works: Array<MangaObject>;
+	worksNumber: Scalars["Int"]["output"];
+};
+
+export type AuthorRelationshipsWorksArgs = {
+	onlyUnread?: InputMaybe<Scalars["Boolean"]["input"]>;
 };
 
 export type AuthorResults = {
@@ -1260,6 +1265,7 @@ export type CustomListRelationships = {
 export type CustomListRelationshipsTitlesArgs = {
 	limit?: InputMaybe<Scalars["Int"]["input"]>;
 	offset?: InputMaybe<Scalars["Int"]["input"]>;
+	onlyUnread?: InputMaybe<Scalars["Boolean"]["input"]>;
 };
 
 export type CustomListRemoveMangaParam = {
@@ -2443,6 +2449,7 @@ export type MangaQueriesIsInLibraryArgs = {
 
 export type MangaQueriesListArgs = {
 	excludeContentProfile?: InputMaybe<Scalars["Boolean"]["input"]>;
+	onlyUnread?: InputMaybe<Scalars["Boolean"]["input"]>;
 	params?: InputMaybe<MangaListParams>;
 };
 
@@ -3290,6 +3297,7 @@ export type Subscriptions = {
 	watchCustomList: CustomListAttributes;
 	watchDownloadState: DownloadState;
 	watchForcePort443: Scalars["Boolean"]["output"];
+	watchHideReadTitles: Scalars["Boolean"]["output"];
 	watchImageFit: ImageFit;
 	watchInternalUploadQueueListIds: Array<Scalars["UUID"]["output"]>;
 	watchInternalUploadQueueState?: Maybe<InternUploadQueueState>;
@@ -3740,6 +3748,7 @@ export type UserOptionMutations = {
 	setDefaultContentProfileKey?: Maybe<Scalars["String"]["output"]>;
 	setDefaultThemeProfile?: Maybe<Scalars["String"]["output"]>;
 	setForcePort443: Scalars["Boolean"]["output"];
+	setHideReadTitles: Scalars["Boolean"]["output"];
 	setImageFit: ImageFit;
 	setLongstripImageWidth: Scalars["Float"]["output"];
 	setMangaInfosPosition: MangaInfosPositions;
@@ -3806,6 +3815,10 @@ export type UserOptionMutationsSetDefaultThemeProfileArgs = {
 
 export type UserOptionMutationsSetForcePort443Args = {
 	force: Scalars["Boolean"]["input"];
+};
+
+export type UserOptionMutationsSetHideReadTitlesArgs = {
+	hide: Scalars["Boolean"]["input"];
 };
 
 export type UserOptionMutationsSetImageFitArgs = {
