@@ -5757,6 +5757,22 @@ export type UserFollowedGroupsQuery = {
 	};
 };
 
+export type WatchOnlyUnreadSubSubscriptionVariables = Exact<{ [key: string]: never }>;
+
+export type WatchOnlyUnreadSubSubscription = {
+	__typename?: "Subscriptions";
+	watchHideReadTitles: boolean;
+};
+
+export type SetHideReadTitleMutationVariables = Exact<{
+	hide: Scalars["Boolean"]["input"];
+}>;
+
+export type SetHideReadTitleMutation = {
+	__typename?: "Mutation";
+	userOption: { __typename?: "UserOptionMutations"; setHideReadTitles: boolean };
+};
+
 export type CurrentUserLibraryCompletedQueryVariables = Exact<{
 	param?: InputMaybe<UserLibrarySectionParam>;
 }>;
@@ -17234,6 +17250,73 @@ export const UserFollowedGroupsDocument = {
 		}
 	]
 } as unknown as DocumentNode<UserFollowedGroupsQuery, UserFollowedGroupsQueryVariables>;
+export const WatchOnlyUnreadSubDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "subscription",
+			name: { kind: "Name", value: "watchOnlyUnreadSub" },
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{ kind: "Field", name: { kind: "Name", value: "watchHideReadTitles" } }
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	WatchOnlyUnreadSubSubscription,
+	WatchOnlyUnreadSubSubscriptionVariables
+>;
+export const SetHideReadTitleDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "setHideReadTitle" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "hide" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "Boolean" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "userOption" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "setHideReadTitles" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "hide" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "hide" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<SetHideReadTitleMutation, SetHideReadTitleMutationVariables>;
 export const CurrentUserLibraryCompletedDocument = {
 	kind: "Document",
 	definitions: [
