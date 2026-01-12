@@ -22,25 +22,59 @@
 		selectedChapters: string[];
 		onEnd?: (ev?: MouseEvent | TouchEvent) => void;
 		useDialog?: boolean;
+		selectedCustomLists?: string[];
+		selectedScansGroups?: string[];
+		selectedUsers?: string[];
+		selectedCovers?: string[];
 	}
 	let {
 		container = $bindable(),
 		selectedMangas = $bindable(),
 		selectedChapters = $bindable(),
+		selectedCustomLists = $bindable([]),
+		selectedCovers = $bindable([]),
+		selectedScansGroups = $bindable([]),
+		selectedUsers = $bindable([]),
 		useDialog = true,
 		onEnd
 	}: Props = $props();
 	let selected_mangas = $derived(uniq(selectedMangas));
 	let selected_chapters = $derived(uniq(selectedChapters));
+	let selected_custom_lists = $derived(uniq(selectedCustomLists));
+	let selected_covers = $derived(uniq(selectedCovers));
+	let selected_scans_groups = $derived(uniq(selectedScansGroups));
+	let selected_users = $derived(uniq(selectedUsers));
+
 	const selectionAreaClass = cssMod.selectoArea;
 	function pushSelected(element: Element) {
 		const maybeChapterId = element?.getAttribute("data-chapter-id");
 		if (maybeChapterId != null) {
 			if (validate(maybeChapterId)) selectedChapters.push(maybeChapterId);
 		}
+
 		const maybeMangaId = element?.getAttribute("data-manga-id");
 		if (maybeMangaId != null) {
 			if (validate(maybeMangaId)) selectedMangas.push(maybeMangaId);
+		}
+
+		const maybeCustomListId = element?.getAttribute("data-custom-list-id");
+		if (maybeCustomListId != null) {
+			if (validate(maybeCustomListId)) selectedCustomLists.push(maybeCustomListId);
+		}
+
+		const maybeCoverId = element?.getAttribute("data-cover-id");
+		if (maybeCoverId != null) {
+			if (validate(maybeCoverId)) selectedCovers.push(maybeCoverId);
+		}
+
+		const maybeScansGroupId = element?.getAttribute("data-scanlation-group-id");
+		if (maybeScansGroupId != null) {
+			if (validate(maybeScansGroupId)) selectedScansGroups.push(maybeScansGroupId);
+		}
+
+		const maybeUserId = element?.getAttribute("data-user-id");
+		if (maybeUserId != null) {
+			if (validate(maybeUserId)) selectedUsers.push(maybeUserId);
 		}
 	}
 	function cleatSelecteds() {
@@ -139,7 +173,11 @@
 			if (useDialog) {
 				openSelectoDialog({
 					titles: [...selected_mangas],
-					chapters: [...selected_chapters]
+					chapters: [...selected_chapters],
+					covers: [...selected_covers],
+					scanGroups: [...selected_scans_groups],
+					users: [...selected_users],
+					customLists: [...selected_custom_lists]
 				});
 			}
 

@@ -8,6 +8,10 @@
 	interface Props {
 		titles: string[];
 		chapters: string[];
+		covers: string[];
+		scanlationGroups: string[];
+		users: string[];
+		customLists: string[];
 	}
 	const titleId = "titles";
 	const chapterId = "chapters";
