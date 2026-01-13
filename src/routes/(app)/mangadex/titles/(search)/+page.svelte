@@ -19,6 +19,7 @@
 	import { derived, get, writable } from "svelte/store";
 	import type { PageData } from "./$types";
 	import SearchContent from "./SearchContent.svelte";
+	import { hideReadTitle } from "@mangadex/stores/hide-read-title";
 
 	interface Props {
 		data: PageData;
@@ -138,6 +139,7 @@
 	</section>
 
 	<section class="form-search">
+		<!-- TODO add option in title -->
 		<MangaSearchForm
 			bind:dialog_bind
 			bind:realTime
@@ -157,7 +159,12 @@
 
 	<section class="content">
 		{#if !$isEmpty}
-			<SearchContent params={listParams} {offlineStore} excludeContentProfile />
+			<SearchContent
+				params={listParams}
+				{offlineStore}
+				excludeContentProfile
+				hideReadTitle={$hideReadTitle}
+			/>
 		{/if}
 	</section>
 </main>
