@@ -1,9 +1,10 @@
 <script lang="ts">
 	import SearchContent from "@mangadex/routes/titles/(search)/SearchContent.svelte";
 	import type { PageData } from "./$types";
-	import { derived, readable, toStore, writable } from "svelte/store";
+	import { derived, readable, toStore } from "svelte/store";
 	import type { MangaListParams } from "@mangadex/gql/graphql";
 	import pageLimit from "@mangadex/stores/page-limit";
+	import { hideReadTitle } from "@mangadex/stores/hide-read-title";
 	interface Props {
 		data: PageData;
 	}
@@ -21,7 +22,7 @@
 </script>
 
 <section class="content">
-	<SearchContent params={listParams} {offlineStore} />
+	<SearchContent params={listParams} {offlineStore} hideReadTitle={$hideReadTitle} />
 </section>
 
 <style lang="scss">
