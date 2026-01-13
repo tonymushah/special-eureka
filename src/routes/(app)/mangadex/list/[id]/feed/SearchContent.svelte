@@ -5,11 +5,7 @@
 	import Fetching from "@mangadex/componnents/search/content/Fetching.svelte";
 	import HasNext from "@mangadex/componnents/search/content/HasNext.svelte";
 	import NothingToShow from "@mangadex/componnents/search/content/NothingToShow.svelte";
-	import {
-		ForumThreadType,
-		OrderDirection,
-		type MangaFeedSortOrder
-	} from "@mangadex/gql/graphql";
+	import { ForumThreadType, OrderDirection, type MangaFeedSortOrder } from "@mangadex/gql/graphql";
 	import chapterFeedStyle from "@mangadex/stores/chapterFeedStyle";
 	import type AbstractSearchResult from "@mangadex/utils/searchResult/AbstractSearchResult";
 	import { createInfiniteQuery, type CreateInfiniteQueryOptions } from "@tanstack/svelte-query";
@@ -17,7 +13,7 @@
 	import { debounce } from "lodash";
 	import { onDestroy } from "svelte";
 	import type { Readable } from "svelte/store";
-	import { derived, get, writable } from "svelte/store";
+	import { derived, writable } from "svelte/store";
 	import executeSearchQuery, {
 		type ChapterFeedListItemExt,
 		type CustomListFeedChapterParams
@@ -40,6 +36,7 @@
 		readableAt: OrderDirection.Descending
 	});
 	const client = getContextClient();
+	// svelte-ignore state_referenced_locally
 	const queryParams = derived([customListId, pageLimit, isPrivate, order], (d) => d);
 	let query = createInfiniteQuery(() => {
 		const [_customListId, _limit, _isPrivate, _order] = $queryParams;
@@ -53,6 +50,8 @@
 				`${_order}`
 			],
 			async queryFn({ pageParam }) {
+				// TODO implement hideReadTitle
+				// i dunno if it is right to do that here?
 				return await executeSearchQuery(client, pageParam, _isPrivate);
 			},
 			getNextPageParam(lastPage, _allPages, lastPageParam) {
