@@ -2,6 +2,7 @@
 	import ContentWarning from "./ContentWarning.svelte";
 	import CoverBlur from "./CoverBlur.svelte";
 	import ForcePort443 from "./ForcePort443.svelte";
+	import HideReadTitle from "./HideReadTitle.svelte";
 	import IsDataSaver from "./IsDataSaver.svelte";
 	import MangaInfoPosition from "./MangaInfoPosition.svelte";
 	import PageLimit from "./PageLimit.svelte";
@@ -40,6 +41,9 @@
 	<hr />
 	<section>
 		<MangaInfoPosition />
+	</section>
+	<section>
+		<HideReadTitle />
 	</section>
 </div>
 
