@@ -1,5 +1,6 @@
 import { graphql } from "@mangadex/gql";
 
+// TODO implement only unread param
 const query = graphql(`
 	query scanlationUploadsFeed(
 		$group: UUID!
