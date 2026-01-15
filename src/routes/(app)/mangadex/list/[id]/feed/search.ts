@@ -26,6 +26,7 @@ type CustomListFeedChapterConstructorParams = {
 	limit: number;
 	total: number;
 	isPrivate: boolean;
+	onlyUnreadTitles?: boolean;
 };
 
 export type ChapterFeedListItemExt = ChapterFeedListItem & {
@@ -40,6 +41,7 @@ export class CustomListFeedResult extends AbstractSearchResult<ChapterFeedListIt
 	limit: number;
 	total: number;
 	isPrivate: boolean;
+	onlyUnreadTitles?: boolean;
 	constructor(param: CustomListFeedChapterConstructorParams) {
 		super(param.data);
 		this.client = param.client;
@@ -49,6 +51,7 @@ export class CustomListFeedResult extends AbstractSearchResult<ChapterFeedListIt
 		this.total = param.total;
 		this.mangaListParams = param.mangaListParams;
 		this.isPrivate = param.isPrivate;
+		this.onlyUnreadTitles = param.onlyUnreadTitles;
 	}
 	hasNext(): boolean {
 		return this.offset < this.total && this.offset >= 0;
@@ -62,7 +65,10 @@ export class CustomListFeedResult extends AbstractSearchResult<ChapterFeedListIt
 				limit: this.limit
 			},
 			this.isPrivate,
-			this.mangaListParams
+			this.mangaListParams,
+			{
+				onlyUnreadTitles: this.onlyUnreadTitles
+			}
 		);
 	}
 	public get paginationData(): PaginationData {
@@ -78,13 +84,15 @@ export default async function executeSearchQuery(
 	client: Client,
 	params: CustomListFeedChapterParams,
 	isPrivate: boolean,
-	mangaListParams?: MangaListParams
+	mangaListParams?: MangaListParams,
+	{ onlyUnreadTitles }: { onlyUnreadTitles?: boolean } = {}
 ): Promise<AbstractSearchResult<ChapterFeedListItem>> {
 	const results = await client
 		.query(query, {
 			feedParam: params,
 			mangaListParams,
-			private: isPrivate
+			private: isPrivate,
+			onlyUnreadTitles
 		})
 		.toPromise();
 	if (results.error) {
@@ -183,7 +191,8 @@ export default async function executeSearchQuery(
 						};
 					})
 				};
-			})
+			}),
+			onlyUnreadTitles
 		});
 	}
 	throw new Error("No results??");

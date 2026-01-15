@@ -5,12 +5,14 @@ const query = graphql(`
 		$feedParam: CustomListMangaFeedParams!
 		$mangaParam: MangaListParams
 		$private: Boolean
+		$onlyUnreadTitles: Boolean
 	) {
 		feed {
 			customListFeedGrouped(
 				feedParams: $feedParam
 				mangaListParams: $mangaParam
 				private: $private
+				onlyUnreadTitles: $onlyUnreadTitles
 			) {
 				limit
 				offset

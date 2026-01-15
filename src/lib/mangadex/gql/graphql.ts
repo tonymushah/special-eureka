@@ -6236,6 +6236,7 @@ export type CustomListChapterFeedQueryVariables = Exact<{
 	feedParam: CustomListMangaFeedParams;
 	mangaParam?: InputMaybe<MangaListParams>;
 	private?: InputMaybe<Scalars["Boolean"]["input"]>;
+	onlyUnreadTitles?: InputMaybe<Scalars["Boolean"]["input"]>;
 }>;
 
 export type CustomListChapterFeedQuery = {
@@ -19608,6 +19609,14 @@ export const CustomListChapterFeedDocument = {
 					kind: "VariableDefinition",
 					variable: { kind: "Variable", name: { kind: "Name", value: "private" } },
 					type: { kind: "NamedType", name: { kind: "Name", value: "Boolean" } }
+				},
+				{
+					kind: "VariableDefinition",
+					variable: {
+						kind: "Variable",
+						name: { kind: "Name", value: "onlyUnreadTitles" }
+					},
+					type: { kind: "NamedType", name: { kind: "Name", value: "Boolean" } }
 				}
 			],
 			selectionSet: {
@@ -19645,6 +19654,14 @@ export const CustomListChapterFeedDocument = {
 											value: {
 												kind: "Variable",
 												name: { kind: "Name", value: "private" }
+											}
+										},
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "onlyUnreadTitles" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "onlyUnreadTitles" }
 											}
 										}
 									],

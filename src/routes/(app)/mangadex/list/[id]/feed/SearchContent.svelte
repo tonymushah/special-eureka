@@ -25,6 +25,7 @@
 	import { openUrl } from "@tauri-apps/plugin-opener";
 	import { createForumThread } from "@mangadex/stores/create-forum-thread";
 	import { addErrorToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
+	import { hideReadTitle } from "@mangadex/stores/hide-read-title";
 
 	interface Props {
 		customListId: Readable<string>;
@@ -37,9 +38,9 @@
 	});
 	const client = getContextClient();
 	// svelte-ignore state_referenced_locally
-	const queryParams = derived([customListId, pageLimit, isPrivate, order], (d) => d);
+	const queryParams = derived([customListId, pageLimit, isPrivate, order, hideReadTitle], (d) => d);
 	let query = createInfiniteQuery(() => {
-		const [_customListId, _limit, _isPrivate, _order] = $queryParams;
+		const [_customListId, _limit, _isPrivate, _order, _hideReadTitles] = $queryParams;
 		return {
 			queryKey: [
 				"customList",
@@ -47,12 +48,15 @@
 				"feed",
 				`limit:${_limit}`,
 				`private:${_isPrivate}`,
-				`${_order}`
+				`${_order}`,
+				`${_hideReadTitles}`
 			],
 			async queryFn({ pageParam }) {
 				// TODO implement hideReadTitle
 				// i dunno if it is right to do that here?
-				return await executeSearchQuery(client, pageParam, _isPrivate);
+				return await executeSearchQuery(client, pageParam, _isPrivate, undefined, {
+					onlyUnreadTitles: _hideReadTitles
+				});
 			},
 			getNextPageParam(lastPage, _allPages, lastPageParam) {
 				let limit = lastPage.paginationData.limit;
