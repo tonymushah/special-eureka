@@ -585,6 +585,7 @@ export type ChapterQueriesListWithGroupByMangaArgs = {
 	chapterListParams?: InputMaybe<ChapterListParams>;
 	feedContent?: InputMaybe<Scalars["Boolean"]["input"]>;
 	mangaListParams?: InputMaybe<MangaListParams>;
+	onlyUnreadTitles?: InputMaybe<Scalars["Boolean"]["input"]>;
 };
 
 export type ChapterQueriesPagesArgs = {
@@ -1472,6 +1473,7 @@ export type FeedQueriesCustomListFeedArgs = {
 export type FeedQueriesCustomListFeedGroupedArgs = {
 	feedParams: CustomListMangaFeedParams;
 	mangaListParams?: InputMaybe<MangaListParams>;
+	onlyUnreadTitles?: InputMaybe<Scalars["Boolean"]["input"]>;
 	private?: InputMaybe<Scalars["Boolean"]["input"]>;
 };
 

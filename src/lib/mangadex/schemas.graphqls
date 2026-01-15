@@ -432,7 +432,7 @@ type ChapterQueries {
 	list(params: ChapterListParams, offlineParams: GetAllChapterParams, feedContent: Boolean): ChapterResults!
 	get(id: UUID!): Chapter!
 	pages(id: UUID!): ChapterPages!
-	listWithGroupByManga(chapterListParams: ChapterListParams, mangaListParams: MangaListParams, feedContent: Boolean): MangaChapterGroup!
+	listWithGroupByManga(chapterListParams: ChapterListParams, mangaListParams: MangaListParams, feedContent: Boolean, onlyUnreadTitles: Boolean): MangaChapterGroup!
 	isDownloaded(id: UUID!): DownloadState!
 }
 
@@ -1135,7 +1135,7 @@ type FeedQueries {
 	userLoggedMangaFeed(params: FollowedMangaFeedParams): ChapterResults!
 	userLoggedMangaFeedGrouped(feedParams: FollowedMangaFeedParams, mangaListParams: MangaListParams): MangaChapterGroup!
 	customListFeed(params: CustomListMangaFeedParams!, private: Boolean): ChapterResults!
-	customListFeedGrouped(feedParams: CustomListMangaFeedParams!, mangaListParams: MangaListParams, private: Boolean): MangaChapterGroup!
+	customListFeedGrouped(feedParams: CustomListMangaFeedParams!, mangaListParams: MangaListParams, private: Boolean, onlyUnreadTitles: Boolean): MangaChapterGroup!
 }
 
 input FollowedMangaFeedParams {
