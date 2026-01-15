@@ -202,7 +202,7 @@ function setFollowingStatus(
 				}
 				options?.onSucess?.(variables);
 			},
-			onSettled(data, error, variables, context) {
+			onSettled(data, error, variables ) {
 				using _ = mut;
 				query.refetch();
 				options?.onSettled?.(error, variables);
