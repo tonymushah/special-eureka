@@ -3,6 +3,7 @@ pub mod list;
 pub mod pages;
 
 use crate::{
+    objects::manga_chapter_group::{GroupsResultsExtras, groups_results_with_extras},
     store::types::structs::content::feed_from_gql_ctx,
     utils::traits_utils::MangadexAsyncGraphQLContextExt,
 };
@@ -15,7 +16,7 @@ use crate::{
     objects::{
         ExtractReferenceExpansion, ExtractReferenceExpansionFromContext,
         chapter::{Chapter, lists::ChapterResults, pages::ChapterPages},
-        manga_chapter_group::{MangaChapterGroup, group_results},
+        manga_chapter_group::MangaChapterGroup,
     },
     utils::download_state::DownloadState,
 };
@@ -81,6 +82,7 @@ impl ChapterQueries {
         chapter_list_params: Option<ChapterListParams>,
         manga_list_params: Option<MangaListParams>,
         feed_content: Option<bool>,
+        only_unread_titles: Option<bool>,
     ) -> crate::error::wrapped::Result<MangaChapterGroup> {
         let feed_content = feed_content.unwrap_or_default();
         let mut chapter_list_params: ChapterListParams = chapter_list_params.unwrap_or_default();
@@ -93,12 +95,15 @@ impl ChapterQueries {
             MangaChapterGroup::get_chapter_references_expansions_from_context(ctx);
         manga_list_params.includes =
             MangaChapterGroup::get_manga_references_expansions_from_context(ctx);
-        Ok(group_results(
+        Ok(groups_results_with_extras(
             ChapterListQueries::new(chapter_list_params, ctx.get_app_handle::<tauri::Wry>()?)
                 ._default(ctx, None)
                 .await?,
             ctx,
             manga_list_params,
+            GroupsResultsExtras {
+                only_unread_titles: only_unread_titles.unwrap_or_default(),
+            },
         )
         .await?)
     }

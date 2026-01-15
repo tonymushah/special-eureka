@@ -68,11 +68,17 @@ impl MangaChapterGroup {
     }
 }
 
+#[derive(Debug, Default, Clone)]
+pub struct GroupsResultsExtras {
+    pub only_unread_titles: bool,
+}
+
 #[cfg_attr(feature = "hotpath", hotpath::measure)]
-pub async fn group_results(
+pub async fn groups_results_with_extras(
     chapter_results: Results<ChapterObject>,
     ctx: &Context<'_>,
     mut manga_list_params: MangaListParams,
+    extras: GroupsResultsExtras,
 ) -> Result<MangaChapterGroup> {
     let info: ResultsInfo = (&chapter_results).into();
     let mut manga_ids_chapter_group: Vec<(Uuid, Vec<ChapterObject>)> = Vec::new();
@@ -107,6 +113,7 @@ pub async fn group_results(
         true,
         ctx.get_app_handle::<tauri::Wry>()?,
     )
+    .only_unreads(extras.only_unread_titles)
     .list(ctx)
     .await?;
     Ok(MangaChapterGroup {
@@ -124,4 +131,12 @@ pub async fn group_results(
             .collect(),
         info,
     })
+}
+
+pub async fn group_results(
+    chapter_results: Results<ChapterObject>,
+    ctx: &Context<'_>,
+    manga_list_params: MangaListParams,
+) -> Result<MangaChapterGroup> {
+    groups_results_with_extras(chapter_results, ctx, manga_list_params, Default::default()).await
 }
