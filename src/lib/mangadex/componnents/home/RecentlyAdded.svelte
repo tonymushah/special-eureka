@@ -15,10 +15,10 @@
 		queryKey: ["home", "recently", "added", "titles"],
 		async queryFn() {
 			const res = await client.query(query, {}).toPromise();
-			if (res.data) {
-				return res.data;
-			} else if (res.error) {
+			if (res.error) {
 				throw res.error;
+			} else if (res.data) {
+				return res.data;
 			} else {
 				throw new Error("no data");
 			}
