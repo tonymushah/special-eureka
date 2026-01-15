@@ -59,6 +59,7 @@ csv.workspace = true
 hotpath = { workspace = true, optional = true }
 shrink_fit_wrapper.workspace = true
 rand.workspace = true
+itertools.workspace = true
 
 [dependencies.eureka-mmanager]
 version = "0.4"

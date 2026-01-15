@@ -4,6 +4,7 @@
 	import { derived as sderived, readable, writable } from "svelte/store";
 	import type { MangaListParams } from "@mangadex/gql/graphql";
 	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
+	import { hideReadTitle } from "@mangadex/stores/hide-read-title";
 
 	interface Props {
 		data: PageData;
@@ -22,4 +23,4 @@
 
 <AppTitle title="{data.attributes.name} - MangaDex" />
 
-<SearchContent offlineStore={readable(false)} {params} />
+<SearchContent offlineStore={readable(false)} {params} hideReadTitle={$hideReadTitle} />

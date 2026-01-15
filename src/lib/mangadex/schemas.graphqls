@@ -213,7 +213,8 @@ type AuthorQueries {
 }
 
 type AuthorRelationships {
-	works: [MangaObject!]!
+	worksNumber: Int!
+	works(onlyUnread: Boolean): [MangaObject!]!
 }
 
 type AuthorResults {
@@ -431,7 +432,7 @@ type ChapterQueries {
 	list(params: ChapterListParams, offlineParams: GetAllChapterParams, feedContent: Boolean): ChapterResults!
 	get(id: UUID!): Chapter!
 	pages(id: UUID!): ChapterPages!
-	listWithGroupByManga(chapterListParams: ChapterListParams, mangaListParams: MangaListParams, feedContent: Boolean): MangaChapterGroup!
+	listWithGroupByManga(chapterListParams: ChapterListParams, mangaListParams: MangaListParams, feedContent: Boolean, onlyUnreadTitles: Boolean): MangaChapterGroup!
 	isDownloaded(id: UUID!): DownloadState!
 }
 
@@ -942,7 +943,7 @@ type CustomListQueries {
 
 type CustomListRelationships {
 	titlesIds: [UUID!]!
-	titles(offset: Int, limit: Int): [MangaObject!]!
+	titles(offset: Int, limit: Int, onlyUnread: Boolean): [MangaObject!]!
 	user: User!
 }
 
@@ -1134,7 +1135,7 @@ type FeedQueries {
 	userLoggedMangaFeed(params: FollowedMangaFeedParams): ChapterResults!
 	userLoggedMangaFeedGrouped(feedParams: FollowedMangaFeedParams, mangaListParams: MangaListParams): MangaChapterGroup!
 	customListFeed(params: CustomListMangaFeedParams!, private: Boolean): ChapterResults!
-	customListFeedGrouped(feedParams: CustomListMangaFeedParams!, mangaListParams: MangaListParams, private: Boolean): MangaChapterGroup!
+	customListFeedGrouped(feedParams: CustomListMangaFeedParams!, mangaListParams: MangaListParams, private: Boolean, onlyUnreadTitles: Boolean): MangaChapterGroup!
 }
 
 input FollowedMangaFeedParams {
@@ -1796,7 +1797,7 @@ type MangaObject {
 type MangaQueries {
 	isDownloaded(id: UUID!): DownloadState!
 	get(id: UUID!): MangaObject!
-	list(params: MangaListParams, excludeContentProfile: Boolean): MangaResults!
+	list(params: MangaListParams, excludeContentProfile: Boolean, onlyUnread: Boolean): MangaResults!
 	listOffline(params: MangaListParams, excludeContentProfile: Boolean): MangaResults!
 	random(params: MangaRandomParams): MangaObject!
 	feed(params: MangaFeedParams!): ChapterResults!
@@ -2557,6 +2558,7 @@ type Subscriptions {
 	watchContentProfileWarningMode: ContentProfileWarningMode!
 	watchNotifyToast: Boolean!
 	watchMangaInfosPosition: MangaInfosPositions!
+	watchHideReadTitles: Boolean!
 	watchReadMarker(chapterId: UUID!): Boolean!
 	watchReadMarkers: ChapterReadMarkerSubItem!
 	watchInternalUploadQueueListIds: [UUID!]!
@@ -2844,6 +2846,7 @@ type UserOptionMutations {
 	setContentProfileWarningMode(mode: ContentProfileWarningMode!): ContentProfileWarningMode!
 	setToastNotify(notify: Boolean!): Boolean!
 	setMangaInfosPosition(position: MangaInfosPositions!): MangaInfosPositions!
+	setHideReadTitles(hide: Boolean!): Boolean!
 }
 
 type UserOptionQueries {

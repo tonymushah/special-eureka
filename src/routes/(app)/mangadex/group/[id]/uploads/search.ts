@@ -32,6 +32,7 @@ type ScanlationGroupUploadsFeedChapterConstructorParams = {
 	offset: number;
 	limit: number;
 	total: number;
+	hideReadTitle?: boolean;
 };
 
 export class ScanlationGroupUploadsFeedResult extends AbstractSearchResult<ChapterFeedListItem> {
@@ -41,6 +42,7 @@ export class ScanlationGroupUploadsFeedResult extends AbstractSearchResult<Chapt
 	offset: number;
 	limit: number;
 	total: number;
+	hideReadTitle?: boolean;
 	constructor(param: ScanlationGroupUploadsFeedChapterConstructorParams) {
 		super(param.data);
 		this.client = param.client;
@@ -49,6 +51,7 @@ export class ScanlationGroupUploadsFeedResult extends AbstractSearchResult<Chapt
 		this.offset = param.offset;
 		this.total = param.total;
 		this.mangaListParams = param.mangaListParams;
+		this.hideReadTitle = param.hideReadTitle;
 	}
 	hasNext(): boolean {
 		return this.offset < this.total && this.offset >= 0;
@@ -61,7 +64,7 @@ export class ScanlationGroupUploadsFeedResult extends AbstractSearchResult<Chapt
 				offset: this.offset + this.limit,
 				limit: this.limit
 			},
-			this.mangaListParams
+			{ mangaListParams: this.mangaListParams, hideReadTitle: this.hideReadTitle }
 		);
 	}
 	public get paginationData(): PaginationData {
@@ -76,7 +79,10 @@ export class ScanlationGroupUploadsFeedResult extends AbstractSearchResult<Chapt
 export default async function executeSearchQuery(
 	client: Client,
 	params: ScanlationGroupUploadsFeedChapterParams,
-	mangaListParams?: MangaListParams
+	{
+		mangaListParams,
+		hideReadTitle
+	}: { mangaListParams?: MangaListParams; hideReadTitle?: boolean } = {}
 ): Promise<AbstractSearchResult<ChapterFeedListItem>> {
 	const results = await client
 		.query(query, {
@@ -85,7 +91,8 @@ export default async function executeSearchQuery(
 			offset: params.offset,
 			limit: params.limit,
 			order: params.order,
-			mangaListParams
+			mangaListParams,
+			onlyUnreadTitles: hideReadTitle
 		})
 		.toPromise();
 	if (results.error) {
@@ -105,6 +112,7 @@ export default async function executeSearchQuery(
 			total: data.total,
 			limit: data.limit,
 			mangaListParams,
+			hideReadTitle,
 			data: data.data.map<ChapterFeedListItem>((e) => {
 				const cover_art = get_cover_art({
 					client,

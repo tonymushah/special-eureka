@@ -76,7 +76,8 @@ export default async function executeSearchQuery(
 	client: Client,
 	params: MangaListParams,
 	offline: boolean = false,
-	excludeContentProfile?: boolean
+	excludeContentProfile?: boolean,
+	hideReadTitle?: boolean
 ): Promise<AbstractSearchResult<MangaListContentItemProps>> {
 	let res: SomeRes | undefined = undefined;
 	if (offline) {
@@ -104,24 +105,13 @@ export default async function executeSearchQuery(
 						status: v.attributes.status,
 						contentRating: contentRating != null ? contentRating : undefined,
 						description:
-							get_value_from_title_and_random_if_undefined(
-								v.attributes.description,
-								"en"
-							) ?? "",
-						title:
-							get_value_from_title_and_random_if_undefined(
-								v.attributes.title,
-								"en"
-							) ?? "",
+							get_value_from_title_and_random_if_undefined(v.attributes.description, "en") ?? "",
+						title: get_value_from_title_and_random_if_undefined(v.attributes.title, "en") ?? "",
 						coverImageAlt: v.relationships.coverArt.id,
 						withFull: true,
 						tags: v.attributes.tags.map((tag) => ({
 							id: tag.id,
-							name:
-								get_value_from_title_and_random_if_undefined(
-									tag.attributes.name,
-									"en"
-								) ?? ""
+							name: get_value_from_title_and_random_if_undefined(tag.attributes.name, "en") ?? ""
 						})),
 						language: v.attributes.originalLanguage,
 						publicationDemographic: v.attributes.publicationDemographic ?? undefined
@@ -139,7 +129,8 @@ export default async function executeSearchQuery(
 		const result = await client
 			.query(defaultQuery, {
 				params,
-				excludeContentProfile
+				excludeContentProfile,
+				hideReadTitle
 			})
 			.toPromise();
 		if (result.data) {
@@ -160,24 +151,13 @@ export default async function executeSearchQuery(
 						status: v.attributes.status,
 						contentRating: contentRating != null ? contentRating : undefined,
 						description:
-							get_value_from_title_and_random_if_undefined(
-								v.attributes.description,
-								"en"
-							) ?? "",
-						title:
-							get_value_from_title_and_random_if_undefined(
-								v.attributes.title,
-								"en"
-							) ?? "",
+							get_value_from_title_and_random_if_undefined(v.attributes.description, "en") ?? "",
+						title: get_value_from_title_and_random_if_undefined(v.attributes.title, "en") ?? "",
 						coverImageAlt: v.relationships.coverArt.id,
 						withFull: true,
 						tags: v.attributes.tags.map((tag) => ({
 							id: tag.id,
-							name:
-								get_value_from_title_and_random_if_undefined(
-									tag.attributes.name,
-									"en"
-								) ?? ""
+							name: get_value_from_title_and_random_if_undefined(tag.attributes.name, "en") ?? ""
 						})),
 						language: v.attributes.originalLanguage,
 						publicationDemographic: v.attributes.publicationDemographic ?? undefined

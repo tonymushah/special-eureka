@@ -6920,6 +6920,7 @@ dependencies = [
  "hotpath",
  "image",
  "impl-trait-for-tuples",
+ "itertools 0.14.0",
  "log",
  "mangadex-api",
  "mangadex-api-input-types",
