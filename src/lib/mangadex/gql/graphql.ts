@@ -5563,6 +5563,7 @@ export type ScanlationUploadsFeedQueryVariables = Exact<{
 	limit?: InputMaybe<Scalars["Int"]["input"]>;
 	order?: ChapterSortOrder;
 	mangaListParams?: InputMaybe<MangaListParams>;
+	onlyUnreadTitles?: InputMaybe<Scalars["Boolean"]["input"]>;
 }>;
 
 export type ScanlationUploadsFeedQuery = {
@@ -16171,6 +16172,14 @@ export const ScanlationUploadsFeedDocument = {
 					},
 					type: { kind: "NamedType", name: { kind: "Name", value: "MangaListParams" } },
 					defaultValue: { kind: "ObjectValue", fields: [] }
+				},
+				{
+					kind: "VariableDefinition",
+					variable: {
+						kind: "Variable",
+						name: { kind: "Name", value: "onlyUnreadTitles" }
+					},
+					type: { kind: "NamedType", name: { kind: "Name", value: "Boolean" } }
 				}
 			],
 			selectionSet: {
@@ -16255,6 +16264,14 @@ export const ScanlationUploadsFeedDocument = {
 											value: {
 												kind: "Variable",
 												name: { kind: "Name", value: "mangaListParams" }
+											}
+										},
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "onlyUnreadTitles" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "onlyUnreadTitles" }
 											}
 										}
 									],

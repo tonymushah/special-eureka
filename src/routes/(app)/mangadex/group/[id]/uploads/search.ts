@@ -91,7 +91,8 @@ export default async function executeSearchQuery(
 			offset: params.offset,
 			limit: params.limit,
 			order: params.order,
-			mangaListParams
+			mangaListParams,
+			onlyUnreadTitles: hideReadTitle
 		})
 		.toPromise();
 	if (results.error) {

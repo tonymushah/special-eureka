@@ -9,6 +9,7 @@ const query = graphql(`
 		$limit: Int
 		$order: ChapterSortOrder! = { publishAt: DESCENDING }
 		$mangaListParams: MangaListParams = {}
+		$onlyUnreadTitles: Boolean
 	) {
 		chapter {
 			listWithGroupByManga(
@@ -20,6 +21,7 @@ const query = graphql(`
 					order: $order
 				}
 				mangaListParams: $mangaListParams
+				onlyUnreadTitles: $onlyUnreadTitles
 			) {
 				limit
 				offset
