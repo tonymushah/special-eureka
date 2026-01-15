@@ -42,10 +42,10 @@ export async function get_manga_rating(manga_id: string): Promise<number | null>
 			id: manga_id
 		})
 		.toPromise();
-	if (res?.data) {
-		return res?.data?.rating?.lists[0]?.rating ?? null;
-	} else if (res?.error) {
-		throw res?.error;
+	if (res.error) {
+		throw res.error;
+	} else if (res.data) {
+		return res.data.rating.lists[0]?.rating ?? null;
 	} else {
 		throw new Error("no data?");
 	}
