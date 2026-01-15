@@ -68,6 +68,9 @@ export default async function executeSearchQuery(
 			params
 		})
 		.toPromise();
+	if (result.error) {
+		throw result.error;
+	}
 	if (result.data) {
 		const data = result.data.scanlationGroup.list;
 		return new ScanlationGroupSearchResult({
@@ -78,9 +81,7 @@ export default async function executeSearchQuery(
 			limit: data.limit,
 			data: data.data.map<ScanlationGroupListItemData>((e) => {
 				const eleader = e.relationships.leader;
-				const leader = eleader
-					? { id: eleader.id, name: eleader.attributes.username }
-					: undefined;
+				const leader = eleader ? { id: eleader.id, name: eleader.attributes.username } : undefined;
 				return {
 					id: e.id,
 					name: e.attributes.name,
@@ -91,9 +92,6 @@ export default async function executeSearchQuery(
 				};
 			})
 		});
-	}
-	if (result.error) {
-		throw result.error;
 	}
 	throw new Error("No results??");
 }

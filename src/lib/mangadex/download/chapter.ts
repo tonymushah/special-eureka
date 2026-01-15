@@ -284,7 +284,7 @@ export default function chapterDownloadState({
 				} else if ($rawState?.error) {
 					return ChapterDownloadState.Error;
 				}
-				const isPresentData = $isChapterPresentRaw.data?.data?.downloadState.chapter;
+				const isPresentData = $isChapterPresentRaw?.data?.data?.downloadState?.chapter;
 				if (isPresentData?.hasFailed == true) {
 					return ChapterDownloadState.Error;
 				} else if (isPresentData?.isDownloaded == true) {

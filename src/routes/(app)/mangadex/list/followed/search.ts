@@ -1,5 +1,10 @@
 import { userFollowedCustomListsGQL } from "@mangadex/gql-docs/list/user-followed";
-import type { CurrentLoggedLists, CustomListVisibility, UserFollowedCustomListsQueryVariables, UserRole } from "@mangadex/gql/graphql";
+import type {
+	CurrentLoggedLists,
+	CustomListVisibility,
+	UserFollowedCustomListsQueryVariables,
+	UserRole
+} from "@mangadex/gql/graphql";
 import AbstractSearchResult, {
 	type PaginationData
 } from "@mangadex/utils/searchResult/AbstractSearchResult";
@@ -11,10 +16,10 @@ export type FollowedUserCustomListItemData = {
 	titles: number;
 	visibility: CustomListVisibility;
 	creator: {
-		id: string,
-		name: string,
-		roles: UserRole[]
-	}
+		id: string;
+		name: string;
+		roles: UserRole[];
+	};
 };
 
 type FollowedUserCustomListConstructorParams = {
@@ -68,6 +73,9 @@ export default async function executeSearchQuery(
 			...params
 		})
 		.toPromise();
+	if (result.error) {
+		throw result.error;
+	}
 	if (result.data) {
 		const data = result.data.follows.customLists;
 		return new CurrentUserCustomListSearchResult({
@@ -91,8 +99,6 @@ export default async function executeSearchQuery(
 			})
 		});
 	}
-	if (result.error) {
-		throw result.error;
-	}
+
 	throw new Error("No results??");
 }

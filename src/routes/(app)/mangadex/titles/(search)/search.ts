@@ -87,6 +87,9 @@ export default async function executeSearchQuery(
 				excludeContentProfile
 			})
 			.toPromise();
+		if (result.error) {
+			throw result.error;
+		}
 		if (result.data) {
 			const data = result.data.manga.listOffline;
 			res = {
@@ -122,9 +125,6 @@ export default async function executeSearchQuery(
 				total: data.total
 			};
 		}
-		if (result.error) {
-			throw result.error;
-		}
 	} else {
 		const result = await client
 			.query(defaultQuery, {
@@ -133,6 +133,9 @@ export default async function executeSearchQuery(
 				hideReadTitle
 			})
 			.toPromise();
+		if (result.error) {
+			throw result.error;
+		}
 		if (result.data) {
 			const data = result.data.manga.list;
 			res = {
@@ -167,9 +170,6 @@ export default async function executeSearchQuery(
 				limit: data.limit,
 				total: data.total
 			};
-		}
-		if (result.error) {
-			throw result.error;
 		}
 	}
 	if (res) {

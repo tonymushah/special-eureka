@@ -1,6 +1,6 @@
-import type { Client } from "@urql/svelte";
 import query from "@mangadex/gql-docs/chapter/layout";
 import getTitleConflicts from "@mangadex/utils/conflicts";
+import type { Client } from "@urql/svelte";
 
 export async function load({
 	id,
@@ -18,7 +18,9 @@ export async function load({
 			id
 		})
 		.toPromise();
-	if (result.data != undefined) {
+	if (result.error != undefined) {
+		throw result.error;
+	} else if (result.data != undefined) {
 		const pagesL = result.data.chapter.get.attributes.pages;
 		const data = result.data.chapter.get;
 		const currentPage = isEnd ? pagesL - 1 : Math.abs(Number(startPage));
@@ -31,8 +33,6 @@ export async function load({
 			currentPage: isNaN(currentPage) ? 0 : currentPage,
 			conflicts
 		};
-	} else if (result.error != undefined) {
-		throw result.error;
 	} else {
 		throw new Error("Title not found");
 	}

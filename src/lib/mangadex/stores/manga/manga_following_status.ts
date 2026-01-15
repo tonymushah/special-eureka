@@ -38,10 +38,10 @@ export async function get_manga_following_status(manga_id: string): Promise<bool
 			id: manga_id
 		})
 		.toPromise();
-	if (res.data) {
-		return res.data.follows.isFollowingManga;
-	} else if (res.error) {
+	if (res.error) {
 		throw res.error;
+	} else if (res.data) {
+		return res.data.follows.isFollowingManga;
 	} else {
 		throw new Error("no data??");
 	}

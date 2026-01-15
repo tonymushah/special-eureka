@@ -44,7 +44,6 @@ export default function get_cover_art({
 					filename
 				})
 				.toPromise();
-			console.debug(["cover", "image", cover_id, manga_id, filename, mode]);
 			if (res.error) {
 				throw res.error;
 			}

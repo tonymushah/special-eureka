@@ -6,7 +6,7 @@
 	import { getContextClient } from "@urql/svelte";
 	import { debounce } from "lodash";
 	import { onDestroy } from "svelte";
-	import { derived, get, type Readable } from "svelte/store";
+	import { derived, type Readable } from "svelte/store";
 	import executeSearchQuery, { type UserListItemData } from "./search";
 
 	import { goto } from "$app/navigation";
@@ -27,6 +27,7 @@
 	}
 
 	let { userName }: Props = $props();
+	// svelte-ignore state_referenced_locally
 	const params = derived([userName, pageLimit], ([$userName, $limit]) => {
 		return {
 			username: $userName,
@@ -90,10 +91,7 @@
 		}
 		return Array.from(
 			new Map(
-				(result.data?.pages.map((d) => d.data).flatMap((i) => i) ?? []).map((d) => [
-					d.id,
-					d
-				])
+				(result.data?.pages.map((d) => d.data).flatMap((i) => i) ?? []).map((d) => [d.id, d])
 			).values()
 		);
 	});

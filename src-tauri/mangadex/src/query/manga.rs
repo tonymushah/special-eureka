@@ -77,7 +77,7 @@ impl MangaQueries {
             ctx.get_app_handle::<tauri::Wry>()?,
         )
         .only_unreads(only_unread.unwrap_or_default())
-        .list(ctx)
+        .list_with_inner_filter(ctx)
         .await?)
     }
     pub async fn list_offline(
