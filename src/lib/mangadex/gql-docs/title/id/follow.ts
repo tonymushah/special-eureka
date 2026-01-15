@@ -4,7 +4,7 @@ import { graphql } from "@mangadex/gql/gql";
 import { client } from "@mangadex/gql/urql";
 import { mangadexQueryClient } from "@mangadex/index";
 import { createMutation, createQuery, type CreateQueryResult } from "@tanstack/svelte-query";
-import { derived, type Writable, get, toStore, readonly, writable } from "svelte/store";
+import { derived, get, readonly, writable, type Writable } from "svelte/store";
 
 export const followTitleGQLMutation = graphql(`
 	mutation followTitleMutation($id: UUID!) {
@@ -34,53 +34,72 @@ const globalIsMutatingInner = writable(false);
 
 export const isChangingTitleFollowing = readonly(globalIsMutatingInner);
 
-export const followTitleMutation = () => createMutation(() => ({
-	mutationKey: ["custom-list", "follow"],
-	async mutationFn(id: string) {
-		const res = await client.mutation(followTitleGQLMutation, {
-			id
-		}).toPromise();
-		if (res.error) {
-			throw res.error;
-		}
-	},
-	onMutate(variables, context) {
-		globalIsMutatingInner.set(true);
-	},
-	onSettled(data, error, variables, onMutateResult, context) {
-		globalIsMutatingInner.set(false);
-	},
-}), () => mangadexQueryClient);
+export const followTitleMutation = () =>
+	createMutation(
+		() => ({
+			mutationKey: ["custom-list", "follow"],
+			async mutationFn(id: string) {
+				const res = await client
+					.mutation(followTitleGQLMutation, {
+						id
+					})
+					.toPromise();
+				if (res.error) {
+					throw res.error;
+				}
+			},
+			onMutate(variables, context) {
+				globalIsMutatingInner.set(true);
+			},
+			onSettled(data, error, variables, onMutateResult, context) {
+				globalIsMutatingInner.set(false);
+			}
+		}),
+		() => mangadexQueryClient
+	);
 
-export const unfollowTitleMutation = () => createMutation(() => ({
-	mutationKey: ["title", "unfollow"],
-	async mutationFn(id: string) {
-		const res = await client.mutation(unfollowTitleGQLMutation, {
-			id
-		}).toPromise();
-		if (res.error) {
-			throw res.error;
-		}
-	},
-	onMutate(variables, context) {
-		globalIsMutatingInner.set(true);
-	},
-	onSettled(data, error, variables, onMutateResult, context) {
-		globalIsMutatingInner.set(false);
-	},
-}), () => mangadexQueryClient);
+export const unfollowTitleMutation = () =>
+	createMutation(
+		() => ({
+			mutationKey: ["title", "unfollow"],
+			async mutationFn(id: string) {
+				const res = await client
+					.mutation(unfollowTitleGQLMutation, {
+						id
+					})
+					.toPromise();
+				if (res.error) {
+					throw res.error;
+				}
+			},
+			onMutate(variables, context) {
+				globalIsMutatingInner.set(true);
+			},
+			onSettled(data, error, variables, onMutateResult, context) {
+				globalIsMutatingInner.set(false);
+			}
+		}),
+		() => mangadexQueryClient
+	);
 
-export default function isFollowingTitle(id: string, options?: {
-	onSettled?: (error: Error | null, variables: string) => void;
-	onError?: (error: Error, variables: string) => void;
-	onSucess?: (variables: string) => void;
-	toast?: boolean
-}): Writable<boolean> {
+export default function isFollowingTitle(
+	id: string,
+	options?: {
+		onSettled?: (error: Error | null, variables: string) => void;
+		onError?: (error: Error, variables: string) => void;
+		onSucess?: (variables: string) => void;
+		toast?: boolean;
+	}
+): Writable<boolean> {
 	const toast = options?.toast ?? true;
 	const query = isFollowingTitle_(id);
-	const queryDerived = derived(internalToStore(query), ($query) => {
-		return $query.data ?? false
-	}, false);
+	const queryDerived = derived(
+		internalToStore(query),
+		($query) => {
+			return $query.data ?? false;
+		},
+		false
+	);
 	return {
 		subscribe(run, invalidate) {
 			return queryDerived.subscribe(run, invalidate);
@@ -98,21 +117,27 @@ export default function isFollowingTitle(id: string, options?: {
 }
 
 export function isFollowingTitle_(id: string) {
-	return () => createQuery(() => ({
-		queryKey: ["title", id, "is-following"],
-		async queryFn() {
-			const res = await client.query(isFollowingTitleQuery, {
-				id
-			}).toPromise();
-			if (res.error) {
-				throw res.error;
-			} else if (res.data) {
-				return res.data.follows.isFollowingManga;
-			} else {
-				throw new Error("no data??");
-			}
-		}
-	}), () => mangadexQueryClient);
+	return () =>
+		createQuery(
+			() => ({
+				queryKey: ["title", id, "is-following"],
+				async queryFn() {
+					const res = await client
+						.query(isFollowingTitleQuery, {
+							id
+						})
+						.toPromise();
+					if (res?.error) {
+						throw res.error;
+					} else if (res?.data) {
+						return res?.data.follows.isFollowingManga;
+					} else {
+						throw new Error("no data??");
+					}
+				}
+			}),
+			() => mangadexQueryClient
+		);
 }
 
 function setFollowingStatus(
@@ -122,11 +147,11 @@ function setFollowingStatus(
 	query: CreateQueryResult,
 	options:
 		| {
-			onSettled?: (error: Error | null, variables: string) => void;
-			onError?: (error: Error, variables: string) => void;
-			onSucess?: (variables: string) => void;
-			toast?: boolean;
-		}
+				onSettled?: (error: Error | null, variables: string) => void;
+				onError?: (error: Error, variables: string) => void;
+				onSucess?: (variables: string) => void;
+				toast?: boolean;
+		  }
 		| undefined
 ) {
 	if (value) {
@@ -156,7 +181,6 @@ function setFollowingStatus(
 				options?.onSettled?.(error, variables);
 			}
 		});
-
 	} else {
 		const mut = extractFromAccessor(unfollowTitleMutation);
 		mut.value.mutate(id, {
