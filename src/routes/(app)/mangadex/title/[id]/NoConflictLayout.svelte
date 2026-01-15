@@ -504,13 +504,16 @@
 		overflow: hidden;
 		transition: height 100ms ease-in-out;
 	}
+	/*
+	// Disabled until a fix is found...
 	.collapsible.collapsed {
 		mask-image: linear-gradient(
 			var(--main-background) 0%,
 			var(--main-background) 60%,
 			transparent 100%
 		);
-	}
+		}
+	*/
 	.collapse-trigger-layout {
 		display: flex;
 		align-items: center;
