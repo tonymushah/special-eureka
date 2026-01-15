@@ -127,10 +127,10 @@ export function isFollowingTitle_(id: string) {
 							id
 						})
 						.toPromise();
-					if (res?.error) {
+					if (res.error) {
 						throw res.error;
-					} else if (res?.data) {
-						return res?.data.follows.isFollowingManga;
+					} else if (res.data) {
+						return res.data.follows.isFollowingManga;
 					} else {
 						throw new Error("no data??");
 					}
