@@ -1,18 +1,17 @@
 import { CoverImageQuality } from "@mangadex/gql/graphql";
+import { isDataSaver } from "@mangadex/stores/chapterQuality";
 import getTitleConflicts from "@mangadex/utils/conflicts";
 import get_cover_art from "@mangadex/utils/cover-art/get_cover_art";
 import get_value_and_random_if_undefined from "@mangadex/utils/lang/get_value_and_random_if_undefined";
 import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
 import manga_altTitle_to_lang_map from "@mangadex/utils/lang/record-to-map/manga-altTitle-to-lang-map";
 import type { Tag } from "@mangadex/utils/types/Tag";
-import { error } from "@sveltejs/kit";
 import type { Client } from "@urql/svelte";
 import { queryStore } from "@urql/svelte";
 import { getContext, setContext } from "svelte";
+import { get } from "svelte/store";
 import query from "./(layout)/query";
 import statsQuery from "./(layout)/statsQuery";
-import { isDataSaver } from "@mangadex/stores/chapterQuality";
-import { get } from "svelte/store";
 
 const contextKey = "title-layout-data";
 

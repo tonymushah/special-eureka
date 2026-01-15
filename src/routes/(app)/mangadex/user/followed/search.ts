@@ -64,9 +64,13 @@ export default async function executeSearchQuery(
 ): Promise<AbstractSearchResult<UserListItemData>> {
 	const result = await client
 		.query(userFollowedUsersGQL, {
-			...params,
+			...params
 		})
 		.toPromise();
+
+	if (result.error) {
+		throw result.error;
+	}
 	if (result.data) {
 		const data = result.data.follows.users;
 		return new UserFollowingSearchResult({
@@ -83,9 +87,6 @@ export default async function executeSearchQuery(
 				};
 			})
 		});
-	}
-	if (result.error) {
-		throw result.error;
 	}
 	throw new Error("No results??");
 }
