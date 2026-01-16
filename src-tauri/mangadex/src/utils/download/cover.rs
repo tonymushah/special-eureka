@@ -44,8 +44,7 @@ where
     if let Some(manga) = cover
         .find_first_relationships(RelationshipType::Manga)
         .map(|d| d.id)
-    {
-        if !dirs
+        && !dirs
             .send(IsInMessage(HistoryEntry::new(
                 manga,
                 RelationshipType::Manga,
@@ -54,6 +53,5 @@ where
         {
             raw_manga_download(&manager, manga).await?;
         }
-    }
     Ok(cover)
 }
