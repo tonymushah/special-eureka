@@ -5,7 +5,6 @@
 	import { mangadexQueryClient } from "@mangadex/index";
 	import { getTitleLayoutData } from "@mangadex/routes/title/[id]/layout.context";
 	import { getContextReadChapterMarkers } from "@mangadex/stores/read-markers/context";
-	import { isLogged } from "@mangadex/utils/auth";
 	import { createQuery } from "@tanstack/svelte-query";
 	import type { UnlistenFn } from "@tauri-apps/api/event";
 	import { openUrl as open } from "@tauri-apps/plugin-opener";
