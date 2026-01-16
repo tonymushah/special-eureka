@@ -27,6 +27,7 @@
 	import { addErrorToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 	import ExtraOptions from "./ExtraOptions.svelte";
 	import { isMounted } from "@mangadex/stores/offlineIsMounted";
+	import { getCurrentWebview } from "@tauri-apps/api/webview";
 
 	let readMarkersMutation = readMarkersMutationLoader();
 	const chaptersStore = getChapterStoreContext();
@@ -153,6 +154,15 @@
 			queryKey: ["title", __res.layoutData.id, "read-markers", "page"]
 		});
 	}
+	const webview = getCurrentWebview();
+	$effect(() => {
+		const sub = webview.listen(`mangadex-title-read-markers-change-${__res.layoutData.id}`, (d) => {
+			refetchTitleReadMarker();
+		});
+		return () => {
+			sub.then((v) => v());
+		};
+	});
 	const readMarkers = getContextReadChapterMarkers();
 	let unread = $derived.by(() => {
 		let chapters = new Set(query.data?.manga.aggregate.chunked.flatMap((t) => t.ids as string[]));
