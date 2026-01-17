@@ -23,6 +23,7 @@ where
         .manga()
         .read()
         .get()
+		// TODO implement MANGADEX_PAGE_LIMIT
         .manga_ids(titles)
         .grouped(true)
         .send()
