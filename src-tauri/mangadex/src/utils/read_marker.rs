@@ -37,7 +37,9 @@ where
                     watches.read_marker.send_data((*id, true));
                 }
             })
-            .filter(|(_, v)| v.is_empty())
+			// Adding this code is kinda stupid to my part
+			// because filter will just give an empty Set at the end
+            // .filter(|(_, v)| v.is_empty())
             .map(|(k, _)| k)
             .collect()),
         _ => Err(crate::Error::GotReadMarkersUnGrouped),
