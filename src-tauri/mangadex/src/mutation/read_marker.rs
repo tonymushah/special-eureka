@@ -16,6 +16,7 @@ use mangadex_api_input_types::{
     chapter::list::ChapterListParams, read_marker::batch_read_marker::MarkChapterBatchParam,
 };
 use mangadex_api_types_rust::RelationshipType;
+use tauri::Emitter;
 use uuid::Uuid;
 
 use crate::utils::{
@@ -44,6 +45,10 @@ impl ReadMarkerMutations {
         params.chapter_ids_unread.iter().for_each(|id| {
             let _ = watches.read_marker.send_data((*id, false));
         });
+        ctx.get_app_handle::<tauri::Wry>()?.emit(
+            format!("mangadex-title-read-markers-change-{}", params.manga_id).as_str(),
+            (),
+        )?;
         Ok(true)
     }
     pub async fn read_markers_batch(

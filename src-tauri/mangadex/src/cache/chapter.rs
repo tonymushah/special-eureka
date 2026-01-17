@@ -411,11 +411,10 @@ impl<R: Runtime> SpawnHandle<R> {
             } else {
                 None
             };
-            if !maybe_in.unwrap_or_default() {
-                if let Err(err) = self.refetch_page(page_num).await {
+            if !maybe_in.unwrap_or_default()
+                && let Err(err) = self.refetch_page(page_num).await {
                     self.send_message(Err(err));
                 }
-            }
         }
         Ok(())
     }
