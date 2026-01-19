@@ -1,11 +1,24 @@
-use std::{fs::create_dir_all, time::SystemTime};
+use std::{
+    fs::{create_dir_all, read_dir, remove_file},
+    time::SystemTime,
+};
 
 use fern::{Dispatch, log_file};
 use tauri::{App, Manager, Runtime};
 
 pub fn setup_logger<R: Runtime>(app: &App<R>) -> anyhow::Result<()> {
     create_dir_all(app.path().app_log_dir()?)?;
+    if read_dir(app.path().app_log_dir()?)
+        .map(|c| c.count())
+        .unwrap_or_default()
+        > 100
+    {
+        for e in read_dir(app.path().app_log_dir()?)?.flatten() {
+            remove_file(e.path())?;
+        }
+    }
     let file_dispatch = Dispatch::new()
+        .level(log::LevelFilter::Info)
         .format(|out, msg, record| {
             out.finish(format_args!(
                 "[{} {} {}] {}",

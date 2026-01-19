@@ -11,14 +11,6 @@ pub fn get_builder() -> Builder<Wry> {
     /*builder = builder
     .menu(menu::get_menu())*/
     // .on_menu_event(menu::on_menu_event);
-    #[cfg(feature = "devtools")]
-    {
-        builder = builder.plugin(tauri_plugin_devtools::init());
-    }
-    #[cfg(feature = "embedded-devtools")]
-    {
-        builder = builder.plugin(tauri_plugin_devtools_app::init());
-    }
     builder
         /*
             .register_uri_scheme_protocol("tony", |_app, req| {
@@ -52,9 +44,10 @@ pub fn get_builder() -> Builder<Wry> {
         // TODO Implement cli function
         .plugin(tauri_plugin_single_instance::init(|_app, _args, _cmd| {
             if _args.len() == 1
-                && let Err(err) = open_new_window_sync_from_app(_app, None) {
-                    log::error!("{err}");
-                }
+                && let Err(err) = open_new_window_sync_from_app(_app, None)
+            {
+                log::error!("{err}");
+            }
             println!("{:#?}", _args);
             println!("{_cmd}");
         }))
