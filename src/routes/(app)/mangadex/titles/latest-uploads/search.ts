@@ -1,12 +1,7 @@
 import type { Chapter } from "@mangadex/componnents/chapter/feed";
 import type { ChapterFeedListItem } from "@mangadex/componnents/chapter/feed/list";
 import getChapterDownloadState from "@mangadex/componnents/home/latest-updates/getChapterDownloadState";
-import {
-	CoverImageQuality,
-	type Language,
-	type MangaFeedSortOrder,
-	type MangaListParams
-} from "@mangadex/gql/graphql";
+import { CoverImageQuality, type MangaListParams } from "@mangadex/gql/graphql";
 import get_cover_art from "@mangadex/utils/cover-art/get_cover_art";
 import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
 import AbstractSearchResult, {
@@ -110,10 +105,8 @@ export default async function executeSearchQuery(
 				return {
 					mangaId: e.manga.id,
 					title:
-						get_value_from_title_and_random_if_undefined(
-							e.manga.attributes.title,
-							"en"
-						) ?? e.manga.id,
+						get_value_from_title_and_random_if_undefined(e.manga.attributes.title, "en") ??
+						e.manga.id,
 					coverImage: cover_art,
 					coverImageAlt: e.manga.relationships.coverArt.id,
 					mangaLang: e.manga.attributes.originalLanguage,
@@ -147,9 +140,7 @@ export default async function executeSearchQuery(
 							chapterId: chap.id,
 							title,
 							lang: chap.attributes.translatedLanguage,
-							upload_date: new Date(
-								chap.attributes.readableAt ?? chap.attributes.createdAt
-							),
+							upload_date: new Date(chap.attributes.readableAt ?? chap.attributes.createdAt),
 							uploader: {
 								id: user.id,
 								name: user.attributes.username,

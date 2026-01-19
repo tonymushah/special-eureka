@@ -4,9 +4,7 @@
 	import get_cover_art from "@mangadex/utils/cover-art/get_cover_art";
 	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
 	import openTitle from "@mangadex/utils/links/title/[id]";
-	import { ChapterDownloadState } from "@mangadex/utils/types/DownloadState";
 	import { getContextClient } from "@urql/svelte";
-	import getChapterDownloadState from "./getChapterDownloadState";
 	import NothingToShow from "../NothingToShow.svelte";
 	const client = getContextClient();
 	interface Props {

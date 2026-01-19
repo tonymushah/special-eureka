@@ -19,10 +19,10 @@
 		queryKey: ["home", "popular", "titles"],
 		async queryFn() {
 			const res = await client.query(popular_title_query, {}).toPromise();
-			if (res.data) {
-				return res.data.home.popularTitles.data;
-			} else if (res.error) {
+			if (res.error) {
 				throw res.error;
+			} else if (res.data) {
+				return res.data.home.popularTitles.data;
 			} else {
 				throw new Error("no data??");
 			}
@@ -54,8 +54,7 @@
 			id: manga.id,
 			title: get_value_from_title_and_random_if_undefined(manga.attributes.title, "en") ?? "",
 			description:
-				get_value_from_title_and_random_if_undefined(manga.attributes.description, "en") ??
-				"",
+				get_value_from_title_and_random_if_undefined(manga.attributes.description, "en") ?? "",
 			coverImage: get_cover_art({
 				client,
 				manga_id: manga.id,

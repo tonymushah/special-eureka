@@ -1,3 +1,5 @@
+// TODO please make a macro for this. I am tired of copy pasting the definition above.
+
 pub const CLIENT_INFO: &str = "client_info";
 
 pub const PATH: &str = "mangadex.store";
@@ -43,3 +45,7 @@ pub const CONTENT_PROFILE_WARNING_MODE: &str = "content_profile_warning_mode";
 pub const CONTENT_PROFILE_BLUR: &str = "content_profile_blur";
 
 pub const TOAST_NOTIFY: &str = "toast_notify";
+
+pub const MANGA_INFOS_POSITIONS: &str = "manga_infos_positions";
+
+pub const HIDE_READ_TITLES: &str = "hide_read_titles";

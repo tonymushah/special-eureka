@@ -40,19 +40,18 @@ fn check_and_notify<R: Runtime>(
             app.notification().request_permission()?;
         }
         if app.notification().permission_state()? == PermissionState::Granted {
-            let res = app
+            let notif = app
                 .notification()
                 .builder()
                 .title("Chapters Downloads Finished")
                 .body(format!(
-                    "Success {}\nFailed{}",
+                    "Success {}\nFailed {}",
                     handle.get_success_len(),
                     handle.get_failed_len()
-                ))
-                .show();
+                ));
             handle.clear();
             handle.shrink_to_fit();
-            res?;
+            notif.show()?;
         }
     }
     Ok(())

@@ -11,6 +11,7 @@ pub mod collection;
 pub mod download;
 pub mod download_state;
 pub mod math;
+pub mod read_marker;
 pub mod refresh_token;
 pub mod source;
 pub mod splittable_param;

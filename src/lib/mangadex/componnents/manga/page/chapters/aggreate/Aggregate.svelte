@@ -5,7 +5,6 @@
 	import { mangadexQueryClient } from "@mangadex/index";
 	import { getTitleLayoutData } from "@mangadex/routes/title/[id]/layout.context";
 	import { getContextReadChapterMarkers } from "@mangadex/stores/read-markers/context";
-	import { isLogged } from "@mangadex/utils/auth";
 	import { createQuery } from "@tanstack/svelte-query";
 	import type { UnlistenFn } from "@tauri-apps/api/event";
 	import { openUrl as open } from "@tauri-apps/plugin-opener";
@@ -27,6 +26,7 @@
 	import { addErrorToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 	import ExtraOptions from "./ExtraOptions.svelte";
 	import { isMounted } from "@mangadex/stores/offlineIsMounted";
+	import { getCurrentWebview } from "@tauri-apps/api/webview";
 
 	let readMarkersMutation = readMarkersMutationLoader();
 	const chaptersStore = getChapterStoreContext();
@@ -153,6 +153,15 @@
 			queryKey: ["title", __res.layoutData.id, "read-markers", "page"]
 		});
 	}
+	const webview = getCurrentWebview();
+	$effect(() => {
+		const sub = webview.listen(`mangadex-title-read-markers-change-${__res.layoutData.id}`, (d) => {
+			refetchTitleReadMarker();
+		});
+		return () => {
+			sub.then((v) => v());
+		};
+	});
 	const readMarkers = getContextReadChapterMarkers();
 	let unread = $derived.by(() => {
 		let chapters = new Set(query.data?.manga.aggregate.chunked.flatMap((t) => t.ids as string[]));
@@ -218,6 +227,9 @@
 							{
 								onSuccess() {
 									refetchTitleReadMarker();
+								},
+								onError(err) {
+									addErrorToast("Cannot mark unread as read", err);
 								}
 							}
 						);

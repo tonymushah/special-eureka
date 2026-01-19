@@ -18,17 +18,17 @@
 		queryKey: ["home", "staff-picks", "titles"],
 		async queryFn() {
 			const res = await client.query(query, {}).toPromise();
-			if (res.data) {
-				return res.data;
-			} else if (res.error) {
+			if (res.error) {
 				throw res.error;
+			} else if (res.data) {
+				return res.data;
 			} else {
 				throw new Error("no data??");
 			}
 		}
 	}));
 	let treatedData = $derived.by(() => {
-		return staff_picks.data?.home.staffPicks.relationships.titles.map<StaffPicksTitle>((t) => {
+		return staff_picks?.data?.home.staffPicks.relationships.titles.map<StaffPicksTitle>((t) => {
 			const manga_id: string = t.id;
 			const cover_id: string = t.relationships.coverArt.id;
 			const filename: string = t.relationships.coverArt.attributes.fileName;

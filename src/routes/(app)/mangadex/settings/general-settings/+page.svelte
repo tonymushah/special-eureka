@@ -2,7 +2,9 @@
 	import ContentWarning from "./ContentWarning.svelte";
 	import CoverBlur from "./CoverBlur.svelte";
 	import ForcePort443 from "./ForcePort443.svelte";
+	import HideReadTitle from "./HideReadTitle.svelte";
 	import IsDataSaver from "./IsDataSaver.svelte";
+	import MangaInfoPosition from "./MangaInfoPosition.svelte";
 	import PageLimit from "./PageLimit.svelte";
 	import ReadingModeSetting from "./ReadingModeSetting.svelte";
 	import ToastNotify from "./ToastNotify.svelte";
@@ -35,6 +37,13 @@
 	<hr />
 	<section>
 		<ToastNotify />
+	</section>
+	<hr />
+	<section>
+		<MangaInfoPosition />
+	</section>
+	<section>
+		<HideReadTitle />
 	</section>
 </div>
 

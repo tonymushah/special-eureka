@@ -11,7 +11,10 @@ use uuid::Uuid;
 use crate::{
     objects::{ExtractReferenceExpansion, manga::MangaObject, user::User},
     query::user_option::UserOptionQueries,
-    utils::get_mangadex_client_from_graphql_context,
+    utils::{
+        get_mangadex_client_from_graphql_context, read_marker::has_title_read,
+        traits_utils::MangadexAsyncGraphQLContextExt,
+    },
 };
 
 #[derive(Debug, Clone)]
@@ -54,6 +57,7 @@ impl CustomListRelationships {
         ctx: &Context<'_>,
         offset: Option<u32>,
         limit: Option<u32>,
+        only_unread: Option<bool>,
     ) -> Result<Vec<MangaObject>, crate::ErrorWrapper> {
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
         let mut req = client.manga().get();
@@ -79,6 +83,10 @@ impl CustomListRelationships {
             });
         includes.dedup();
         let content_profile = UserOptionQueries.get_default_content_profile(ctx).await?;
+        let read_markers =
+            has_title_read(ctx.get_app_handle::<tauri::Wry>()?, self.titles_ids_pure())
+                .await
+                .unwrap_or_default();
         Ok(req
             .includes(includes)
             .send()
@@ -184,6 +192,12 @@ impl CustomListRelationships {
                         true
                     };
 
+                    let not_read = if only_unread.unwrap_or_default() {
+                        !read_markers.contains(&data.id)
+                    } else {
+                        true
+                    };
+
                     content_rating
                         && excluded_original_languages
                         && excluded_tags
@@ -192,6 +206,7 @@ impl CustomListRelationships {
                         && translated_languages
                         && included_tags
                         && original_languages
+                        && not_read
                 } else {
                     true
                 }

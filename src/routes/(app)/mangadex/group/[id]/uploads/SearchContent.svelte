@@ -14,7 +14,7 @@
 	import { debounce } from "lodash";
 	import { onDestroy } from "svelte";
 	import type { Readable } from "svelte/store";
-	import { derived, get, writable } from "svelte/store";
+	import { writable } from "svelte/store";
 	import executeSearchQuery, {
 		type ScanlationGroupUploadsFeedChapterParams as Params
 	} from "./search";
@@ -25,6 +25,7 @@
 	import { openUrl } from "@tauri-apps/plugin-opener";
 	import { addErrorToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 	import { createForumThread } from "@mangadex/stores/create-forum-thread";
+	import { hideReadTitle } from "@mangadex/stores/hide-read-title";
 
 	interface Props {
 		groupId: Readable<string>;
@@ -39,7 +40,10 @@
 		return {
 			queryKey: ["group", $groupId, "uploads", `limit:${$pageLimit}`, `${$sort}`],
 			async queryFn({ pageParam }) {
-				return await executeSearchQuery(client, pageParam);
+				return await executeSearchQuery(client, pageParam, {
+					// i dunno if this is right
+					hideReadTitle: $hideReadTitle
+				});
 			},
 			getNextPageParam(lastPage, _allPages, lastPageParam) {
 				let limit = lastPage.paginationData.limit;

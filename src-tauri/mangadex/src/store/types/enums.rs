@@ -3,6 +3,7 @@ pub mod chapter_quality;
 pub mod content_profile_warning;
 pub mod direction;
 pub mod image_fit;
+pub mod manga_infos_positions;
 pub mod manga_list_style;
 pub mod pagination_style;
 pub mod reading_mode;

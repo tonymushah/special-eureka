@@ -2,6 +2,7 @@ use std::ops::Deref;
 
 use crate::error::wrapped::Result;
 
+use crate::objects::manga_chapter_group::{GroupsResultsExtras, groups_results_with_extras};
 use crate::{
     store::types::structs::content::feed_from_gql_ctx,
     utils::{get_mangadex_client_from_graphql_context, splittable_param::SendSplitted},
@@ -132,6 +133,7 @@ impl FeedQueries {
         feed_params: CustomListMangaFeedParams,
         manga_list_params: Option<MangaListParams>,
         private: Option<bool>,
+        only_unread_titles: Option<bool>,
     ) -> Result<MangaChapterGroup> {
         let mut feed_params: CustomListMangaFeedParams =
             feed_from_gql_ctx::<tauri::Wry, _>(ctx, feed_params);
@@ -150,7 +152,7 @@ impl FeedQueries {
             MangaChapterGroup::get_chapter_references_expansions_from_context(ctx);
         manga_list_params.includes =
             MangaChapterGroup::get_manga_references_expansions_from_context(ctx);
-        Ok(group_results(
+        Ok(groups_results_with_extras(
             {
                 let res = if private.unwrap_or_default() {
                     feed_params.send_splitted_default_with_auth(&client).await?
@@ -168,6 +170,9 @@ impl FeedQueries {
             },
             ctx,
             manga_list_params,
+            GroupsResultsExtras {
+                only_unread_titles: only_unread_titles.unwrap_or_default(),
+            },
         )
         .await?)
     }

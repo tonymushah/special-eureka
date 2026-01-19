@@ -1,4 +1,4 @@
-use std::ops::Deref;
+use std::ops::{Deref, DerefMut};
 
 use async_graphql::SimpleObject;
 use mangadex_api_schema_rust::v5::{MangaObject, Results};
@@ -21,6 +21,12 @@ impl Deref for MangaResults {
     type Target = Vec<Manga>;
     fn deref(&self) -> &Self::Target {
         &self.data
+    }
+}
+
+impl DerefMut for MangaResults {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.data
     }
 }
 

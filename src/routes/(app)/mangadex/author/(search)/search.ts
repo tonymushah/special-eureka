@@ -63,6 +63,9 @@ export default async function executeSearchQuery(
 			params
 		})
 		.toPromise();
+	if (result.error) {
+		throw result.error;
+	}
 	if (result.data) {
 		const data = result.data.author.list;
 		return new AuthorSearchResult({
@@ -77,9 +80,6 @@ export default async function executeSearchQuery(
 				titles: e.relationships.works.length
 			}))
 		});
-	}
-	if (result.error) {
-		throw result.error;
 	}
 	throw new Error("No results??");
 }

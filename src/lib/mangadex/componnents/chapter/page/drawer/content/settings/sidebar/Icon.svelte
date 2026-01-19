@@ -5,7 +5,7 @@
 		PanelLeftDashed,
 		PanelRight,
 		PanelRightDashed,
-		SlashIcon
+		CircleSlash2 as SlashIcon
 	} from "@lucide/svelte";
 	import { isSidebarRtl } from "@mangadex/componnents/sidebar/states/isRtl";
 	import { SidebarMode } from "@mangadex/gql/graphql";

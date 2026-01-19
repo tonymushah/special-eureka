@@ -28,13 +28,14 @@ use self::{
         enums::{
             content_profile_warning::ContentProfileWarningModeStore,
             direction::{reading::ReadingDirectionStore, sidebar::SidebarDirectionStore},
+            manga_infos_positions::MangaInfosPositionsStore,
             manga_list_style::MangaListStyleStore,
             reading_mode::ReadingModeStore,
         },
         structs::{
             chapter_layout::ChapterLayoutStore, client_info::ClientInfoStore,
-            page_limit::PageLimitStore, refresh_token::RefreshTokenStore,
-            toast_notify::ToastNotifyStore,
+            hide_read_titles::HideReadTitlesStore, page_limit::PageLimitStore,
+            refresh_token::RefreshTokenStore, toast_notify::ToastNotifyStore,
         },
     },
 };
@@ -79,6 +80,8 @@ get_store_builder! {
     ContentProfileBlurStore,
     ContentProfileWarningModeStore,
     ToastNotifyStore,
+    MangaInfosPositionsStore,
+    HideReadTitlesStore,
 }
 
 // [x] refactor into a macro!

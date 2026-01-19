@@ -89,8 +89,8 @@ impl AppStateInner {
                             .as_ref()
                             .cloned()
                             .filter(|a| a.attributes.is_online());
-                        if let Some(data) = sub_inner {
-                            if app_state1
+                        if let Some(data) = sub_inner
+                            && app_state1
                                 .get_dir_options()
                                 .and_then(|d| {
                                     d.send(IsInMessage(HistoryEntry::new(
@@ -107,7 +107,6 @@ impl AppStateInner {
                                     .verify_and_push(Into::<ChapterObject>::into(data))
                                     .await;
                             }
-                        }
                     } else {
                         break;
                     }
@@ -123,8 +122,8 @@ impl AppStateInner {
                             .cloned()
                             .filter(|a| a.attributes.is_online());
 
-                        if let Some(data) = sub_inner {
-                            if app_state2
+                        if let Some(data) = sub_inner
+                            && app_state2
                                 .get_dir_options()
                                 .and_then(|d| {
                                     d.send(IsInMessage(HistoryEntry::new(
@@ -140,7 +139,6 @@ impl AppStateInner {
                                     .verify_and_push(Into::<MangaObject>::into(data))
                                     .await;
                             }
-                        }
                     } else {
                         break;
                     }
@@ -155,8 +153,8 @@ impl AppStateInner {
                             .as_ref()
                             .cloned()
                             .filter(|a| a.attributes.is_online());
-                        if let Some(data) = sub_inner {
-                            if app_state3
+                        if let Some(data) = sub_inner
+                            && app_state3
                                 .get_dir_options()
                                 .and_then(|d| {
                                     d.send(IsInMessage(HistoryEntry::new(
@@ -172,7 +170,6 @@ impl AppStateInner {
                                     .verify_and_push(Into::<CoverObject>::into(data))
                                     .await;
                             }
-                        }
                     } else {
                         break;
                     }

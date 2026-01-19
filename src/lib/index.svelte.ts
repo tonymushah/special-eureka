@@ -3,7 +3,7 @@ import { readable, type Readable } from "svelte/store";
 import { useExtractedAccessor, type ExtractedAccessor } from "./core/utils/extractedAccessor";
 
 export function root_effect(effect: () => void | VoidFunction): VoidFunction {
-	return $effect.root(effect)
+	return $effect.root(effect);
 }
 
 export function extractFromAccessor<T>(_access: Accessor<T>): ExtractedAccessor<T> {
@@ -25,12 +25,14 @@ export function extractFromAccessor<T>(_access: Accessor<T>): ExtractedAccessor<
 
 export function internalToStore<T>(accessor: Accessor<T>): Readable<T> {
 	const inner = extractFromAccessor(accessor);
-	return useExtractedAccessor(inner, (value) => readable<T>(value, (set) => {
-		return $effect.root(() => {
-			let val = $derived(accessor());
-			$effect(() => {
-				set(val);
-			})
-		});
-	}));
+	return useExtractedAccessor(inner, (value) =>
+		readable<T>(value, (set) => {
+			return $effect.root(() => {
+				const val = $derived(accessor());
+				$effect(() => {
+					set(val);
+				});
+			});
+		})
+	);
 }

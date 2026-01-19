@@ -24,6 +24,11 @@ export function getContextReadChapterMarker(chapter: string): Readable<boolean> 
 		return markers.get(chapter);
 	});
 	return derived([context, chapterReadState(chapter)], ([$context, $watch]) => {
-		return $context ?? $watch;
+		// Just as temporary solution ??
+		if ($context) {
+			return $context;
+		} else {
+			return $watch;
+		}
 	});
 }

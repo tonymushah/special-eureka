@@ -6,7 +6,7 @@ use eureka_mmanager::{
     download::{manga::MangaDownloadMessage, state::DownloadMessageState},
     history::service::messages::is_in::IsInMessage,
     prelude::{
-        AsyncCanBeWaited, AsyncIntoMangaAggreagate, ChapterDataPullAsyncTrait,
+        AsyncCanBeWaited, AsyncIntoMangaAggreagate, AsyncIsIn, ChapterDataPullAsyncTrait,
         CoverDataPullAsyncTrait, GetManager, GetManagerStateData, HistoryEntry,
         MangaDownloadManager, TaskManagerAddr,
     },
@@ -18,6 +18,7 @@ use tauri::{Manager, Runtime};
 use uuid::Uuid;
 
 use crate::{
+    ins_handle,
     store::{
         TauriManagerMangadexStoreExtractor,
         types::{
@@ -25,7 +26,7 @@ use crate::{
             structs::{content::GetContentProfile, force_443::ForcePort443Store},
         },
     },
-    utils::traits_utils::MangadexTauriManagerExt,
+    utils::{source::SendMultiSourceData, traits_utils::MangadexTauriManagerExt},
 };
 
 use super::cover::raw_cover_download;
@@ -106,6 +107,14 @@ pub enum MangaDownloadExtras {
     ///
     /// Only the one matching the current content profile
     UnReadUnDownloadeds,
+    /// Re-download all failed chapters
+    ///
+    /// Only the one matching the current content profile
+    Failed,
+    /// Re-download all un-read failed chapters
+    ///
+    /// Only the one matching the current content profile
+    UnReadFailed,
 }
 
 pub async fn get_title_chapter_ids<R, M>(app: &M, title_id: Uuid) -> crate::Result<HashSet<Uuid>>
@@ -160,6 +169,41 @@ where
     Ok(&all_chapters - &read)
 }
 
+pub async fn get_title_downloaded_chapters_id<R, M>(
+    app: &M,
+    title_id: Uuid,
+) -> crate::Result<HashSet<Uuid>>
+where
+    R: Runtime,
+    M: Manager<R> + Sync,
+{
+    let maybe_app_state = app.get_offline_app_state()?;
+    let cp = app.app_handle().get_content_profile()?;
+    let read = maybe_app_state.read().await;
+    let state = read
+        .as_ref()
+        .ok_or(crate::Error::OfflineAppStateNotLoaded)?;
+    Ok(state
+        .get_chapters()
+        .await?
+        .aggregate(MangaAggregateParam {
+            manga_id: title_id,
+            translated_language: cp.translated_languages,
+            groups: Default::default(),
+        })
+        .await
+        .volumes
+        .into_iter()
+        .flat_map(|v| {
+            v.chapters.into_iter().flat_map(|c| {
+                let mut chapter_ids = c.others;
+                chapter_ids.push(c.id);
+                chapter_ids
+            })
+        })
+        .collect())
+}
+
 pub async fn get_title_undownloaded_chapters<R, M>(
     app: &M,
     title_id: Uuid,
@@ -168,35 +212,36 @@ where
     R: Runtime,
     M: Manager<R> + Sync,
 {
-    let downloaded: HashSet<_> = {
-        let maybe_app_state = app.get_offline_app_state()?;
-        let cp = app.app_handle().get_content_profile()?;
-        let read = maybe_app_state.read().await;
-        let state = read
-            .as_ref()
-            .ok_or(crate::Error::OfflineAppStateNotLoaded)?;
-        state
-            .get_chapters()
-            .await?
-            .aggregate(MangaAggregateParam {
-                manga_id: title_id,
-                translated_language: cp.translated_languages,
-                groups: Default::default(),
-            })
-            .await
-            .volumes
-            .into_iter()
-            .flat_map(|v| {
-                v.chapters.into_iter().flat_map(|c| {
-                    let mut chapter_ids = c.others;
-                    chapter_ids.push(c.id);
-                    chapter_ids
-                })
-            })
-            .collect()
-    };
+    let downloaded: HashSet<_> = get_title_downloaded_chapters_id(app, title_id).await?;
     let all_chapters = get_title_chapter_ids(app, title_id).await?;
     Ok(&all_chapters - &downloaded)
+}
+
+pub async fn get_title_failed_chapters<R, M>(
+    app: &M,
+    title_id: Uuid,
+) -> crate::Result<HashSet<Uuid>>
+where
+    R: Runtime,
+    M: Manager<R> + Sync,
+{
+    let downloaded = get_title_downloaded_chapters_id(app, title_id).await?;
+    let maybe_app_state = app.get_offline_app_state()?;
+    let read = maybe_app_state.read().await;
+    let state = read
+        .as_ref()
+        .ok_or(crate::Error::OfflineAppStateNotLoaded)?;
+    let history = state.app_state.get_history().await?;
+    let mut failed = HashSet::<Uuid>::new();
+    for id in downloaded {
+        if history
+            .is_in(HistoryEntry::new(id, RelationshipType::Chapter))
+            .await?
+        {
+            failed.insert(id);
+        }
+    }
+    Ok(failed)
 }
 
 pub async fn get_title_undownloaded_unread_chapters<R, M>(
@@ -220,6 +265,19 @@ where
     Ok(&undownloaded & &unread)
 }
 
+pub async fn get_title_failed_unread_chapters<R, M>(
+    app: &M,
+    title_id: Uuid,
+) -> crate::Result<HashSet<Uuid>>
+where
+    R: Runtime,
+    M: Manager<R> + Sync,
+{
+    let failed = get_title_failed_chapters(app, title_id).await?;
+    let unread = get_title_unread_chapters(app, title_id).await?;
+    Ok(&failed & &unread)
+}
+
 pub async fn download_title_with_extras<R, M>(
     app: &M,
     title_id: Uuid,
@@ -240,6 +298,10 @@ where
                 get_title_undownloaded_unread_chapters(app, title_id).await?
             }
             MangaDownloadExtras::Unreads => get_title_unread_chapters(app, title_id).await?,
+            MangaDownloadExtras::Failed => get_title_failed_chapters(app, title_id).await?,
+            MangaDownloadExtras::UnReadFailed => {
+                get_title_failed_unread_chapters(app, title_id).await?
+            }
         };
         for id in chap_ids {
             let rate_limit = app.get_specific_rate_limit()?;
@@ -250,7 +312,8 @@ where
             let Some(manager) = (*offline_app_state).as_ref().map(|d| d.app_state.clone()) else {
                 return Err(crate::Error::OfflineAppStateNotLoaded);
             };
-            super::chapter::raw_chapter_download_no_wait(
+
+            let wait = super::chapter::raw_chapter_download_no_wait(
                 &manager,
                 id,
                 (*app
@@ -260,7 +323,32 @@ where
                 .into(),
                 *app.extract::<ForcePort443Store>().await.unwrap_or_default(),
             )
+            .await?
+            .wait()
             .await?;
+            {
+                ins_handle::add_in_queue(app.app_handle(), id)?;
+                let app = app.app_handle().clone();
+
+                tokio::spawn(async move {
+                    match wait.await {
+                        Ok(res) => {
+                            if let Err(err) = ins_handle::add_in_success(&app, id) {
+                                log::error!("{err}");
+                            }
+                            let data: crate::objects::chapter::Chapter = res.into();
+                            app.get_watches()?.chapter.send_offline(data);
+                        }
+                        Err(err) => {
+                            if let Err(e) = ins_handle::add_in_failed(&app, id) {
+                                log::error!("{e}");
+                            }
+                            log::error!("chapter id {id} => {err}");
+                        }
+                    }
+                    Ok::<_, crate::Error>(())
+                });
+            }
         }
     }
     Ok(mg_obj)

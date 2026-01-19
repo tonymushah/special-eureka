@@ -1,9 +1,17 @@
 import { graphql } from "@mangadex/gql/exports";
 
 export const defaultQuery = graphql(`
-	query defaultMangaSearchQuery($params: MangaListParams!, $excludeContentProfile: Boolean) {
+	query defaultMangaSearchQuery(
+		$params: MangaListParams!
+		$excludeContentProfile: Boolean
+		$hideReadTitle: Boolean
+	) {
 		manga {
-			list(params: $params, excludeContentProfile: $excludeContentProfile) {
+			list(
+				params: $params
+				excludeContentProfile: $excludeContentProfile
+				onlyUnread: $hideReadTitle
+			) {
 				limit
 				offset
 				total

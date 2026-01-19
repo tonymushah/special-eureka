@@ -14,7 +14,7 @@
 	/>
 	<h3>Blur unmatched title cover</h3>
 </div>
-<p>Blur title cover art that doesn't match the current content profile</p>
+<p>Blur title cover art that doesn't match the current content profile.</p>
 
 <style lang="scss">
 	.checkbox {

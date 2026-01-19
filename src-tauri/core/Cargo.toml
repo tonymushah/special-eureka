@@ -1,6 +1,6 @@
 [package]
 name = "special-eureka"
-version = "0.2.2-7"
+version = "0.2.3-3"
 description = "a manga reader desktop app build with tauri"
 authors = ["tonymushah"]
 license = ""
@@ -8,7 +8,7 @@ repository = "https://github.com/tonymushah/special-eureka"
 default-run = "special-eureka"
 edition = "2024"
 exclude = ["./examples", "./data"]
-rust-version = "1.86"
+rust-version = "1.91"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -41,8 +41,6 @@ sys-locale = "0.3.2"
 thiserror.workspace = true
 tauri-plugin-single-instance.workspace = true
 hotpath = { workspace = true, optional = true }
-tauri-plugin-devtools = { version = "2.0.1", optional = true }
-tauri-plugin-devtools-app = { version = "2.0.1", optional = true }
 # csv = { workspace = true, optional = true }
 
 [target."cfg(not(any(target_os = \"android\", target_os = \"ios\")))".dependencies.tauri-plugin-updater]
@@ -65,8 +63,6 @@ hotpath-alloc = ["hotpath/hotpath-alloc", "hotpath"]
 hotpath-off = ["hotpath/hotpath-off"]
 single-runtime = []
 actix-multi-threaded = []
-devtools = ["dep:tauri-plugin-devtools"]
-embedded-devtools = ["devtools", "dep:tauri-plugin-devtools-app"]
 
 [[bin]]
 name = "special-eureka"

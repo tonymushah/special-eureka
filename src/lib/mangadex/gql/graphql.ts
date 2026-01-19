@@ -313,6 +313,11 @@ export type AuthorQueriesListArgs = {
 export type AuthorRelationships = {
 	__typename?: "AuthorRelationships";
 	works: Array<MangaObject>;
+	worksNumber: Scalars["Int"]["output"];
+};
+
+export type AuthorRelationshipsWorksArgs = {
+	onlyUnread?: InputMaybe<Scalars["Boolean"]["input"]>;
 };
 
 export type AuthorResults = {
@@ -580,6 +585,7 @@ export type ChapterQueriesListWithGroupByMangaArgs = {
 	chapterListParams?: InputMaybe<ChapterListParams>;
 	feedContent?: InputMaybe<Scalars["Boolean"]["input"]>;
 	mangaListParams?: InputMaybe<MangaListParams>;
+	onlyUnreadTitles?: InputMaybe<Scalars["Boolean"]["input"]>;
 };
 
 export type ChapterQueriesPagesArgs = {
@@ -1260,6 +1266,7 @@ export type CustomListRelationships = {
 export type CustomListRelationshipsTitlesArgs = {
 	limit?: InputMaybe<Scalars["Int"]["input"]>;
 	offset?: InputMaybe<Scalars["Int"]["input"]>;
+	onlyUnread?: InputMaybe<Scalars["Boolean"]["input"]>;
 };
 
 export type CustomListRemoveMangaParam = {
@@ -1466,6 +1473,7 @@ export type FeedQueriesCustomListFeedArgs = {
 export type FeedQueriesCustomListFeedGroupedArgs = {
 	feedParams: CustomListMangaFeedParams;
 	mangaListParams?: InputMaybe<MangaListParams>;
+	onlyUnreadTitles?: InputMaybe<Scalars["Boolean"]["input"]>;
 	private?: InputMaybe<Scalars["Boolean"]["input"]>;
 };
 
@@ -2073,6 +2081,12 @@ export enum MangaDownloadExtras {
 	 */
 	AllChapters = "ALL_CHAPTERS",
 	/**
+	 * Re-download all failed chapters
+	 *
+	 * Only the one matching the current content profile
+	 */
+	Failed = "FAILED",
+	/**
 	 * Download with all chapters that is marked as unread.
 	 *
 	 * NOTE: This will not work if the user is not logged in.
@@ -2085,6 +2099,12 @@ export enum MangaDownloadExtras {
 	 * NOTE: _Again_, this will *only* download undownloaded that match the current content profile.
 	 */
 	UnDownloadeds = "UN_DOWNLOADEDS",
+	/**
+	 * Re-download all un-read failed chapters
+	 *
+	 * Only the one matching the current content profile
+	 */
+	UnReadFailed = "UN_READ_FAILED",
 	/**
 	 * Download all unread undownloaded chapters.
 	 *
@@ -2212,6 +2232,12 @@ export type MangaFeedSortOrder =
 			updatedAt?: never;
 			volume: OrderDirection;
 	  };
+
+export enum MangaInfosPositions {
+	BeneathDescription = "BENEATH_DESCRIPTION",
+	Left = "LEFT",
+	Right = "RIGHT"
+}
 
 export type MangaLinks = {
 	__typename?: "MangaLinks";
@@ -2425,6 +2451,7 @@ export type MangaQueriesIsInLibraryArgs = {
 
 export type MangaQueriesListArgs = {
 	excludeContentProfile?: InputMaybe<Scalars["Boolean"]["input"]>;
+	onlyUnread?: InputMaybe<Scalars["Boolean"]["input"]>;
 	params?: InputMaybe<MangaListParams>;
 };
 
@@ -3272,6 +3299,7 @@ export type Subscriptions = {
 	watchCustomList: CustomListAttributes;
 	watchDownloadState: DownloadState;
 	watchForcePort443: Scalars["Boolean"]["output"];
+	watchHideReadTitles: Scalars["Boolean"]["output"];
 	watchImageFit: ImageFit;
 	watchInternalUploadQueueListIds: Array<Scalars["UUID"]["output"]>;
 	watchInternalUploadQueueState?: Maybe<InternUploadQueueState>;
@@ -3286,6 +3314,7 @@ export type Subscriptions = {
 	watchLongstripImageWidth: Scalars["Float"]["output"];
 	watchManga: GraphQlMangaAttributes;
 	watchMangaDownloadState: MangaDownloadState;
+	watchMangaInfosPosition: MangaInfosPositions;
 	watchMangaListStyle: MangaListStyle;
 	watchMangaReadingState?: Maybe<ReadingStatus>;
 	watchMangaStatistics: MangaStatisticsAttributes;
@@ -3721,8 +3750,10 @@ export type UserOptionMutations = {
 	setDefaultContentProfileKey?: Maybe<Scalars["String"]["output"]>;
 	setDefaultThemeProfile?: Maybe<Scalars["String"]["output"]>;
 	setForcePort443: Scalars["Boolean"]["output"];
+	setHideReadTitles: Scalars["Boolean"]["output"];
 	setImageFit: ImageFit;
 	setLongstripImageWidth: Scalars["Float"]["output"];
+	setMangaInfosPosition: MangaInfosPositions;
 	setMangaListStyle: MangaListStyle;
 	setOfflineConfig: OfflineConfigObject;
 	setPageDirection: Direction;
@@ -3788,12 +3819,20 @@ export type UserOptionMutationsSetForcePort443Args = {
 	force: Scalars["Boolean"]["input"];
 };
 
+export type UserOptionMutationsSetHideReadTitlesArgs = {
+	hide: Scalars["Boolean"]["input"];
+};
+
 export type UserOptionMutationsSetImageFitArgs = {
 	imageFit: ImageFit;
 };
 
 export type UserOptionMutationsSetLongstripImageWidthArgs = {
 	width: Scalars["Float"]["input"];
+};
+
+export type UserOptionMutationsSetMangaInfosPositionArgs = {
+	position: MangaInfosPositions;
 };
 
 export type UserOptionMutationsSetMangaListStyleArgs = {
@@ -5524,6 +5563,7 @@ export type ScanlationUploadsFeedQueryVariables = Exact<{
 	limit?: InputMaybe<Scalars["Int"]["input"]>;
 	order?: ChapterSortOrder;
 	mangaListParams?: InputMaybe<MangaListParams>;
+	onlyUnreadTitles?: InputMaybe<Scalars["Boolean"]["input"]>;
 }>;
 
 export type ScanlationUploadsFeedQuery = {
@@ -5718,6 +5758,22 @@ export type UserFollowedGroupsQuery = {
 			}>;
 		};
 	};
+};
+
+export type WatchOnlyUnreadSubSubscriptionVariables = Exact<{ [key: string]: never }>;
+
+export type WatchOnlyUnreadSubSubscription = {
+	__typename?: "Subscriptions";
+	watchHideReadTitles: boolean;
+};
+
+export type SetHideReadTitleMutationVariables = Exact<{
+	hide: Scalars["Boolean"]["input"];
+}>;
+
+export type SetHideReadTitleMutation = {
+	__typename?: "Mutation";
+	userOption: { __typename?: "UserOptionMutations"; setHideReadTitles: boolean };
 };
 
 export type CurrentUserLibraryCompletedQueryVariables = Exact<{
@@ -6180,6 +6236,7 @@ export type CustomListChapterFeedQueryVariables = Exact<{
 	feedParam: CustomListMangaFeedParams;
 	mangaParam?: InputMaybe<MangaListParams>;
 	private?: InputMaybe<Scalars["Boolean"]["input"]>;
+	onlyUnreadTitles?: InputMaybe<Scalars["Boolean"]["input"]>;
 }>;
 
 export type CustomListChapterFeedQuery = {
@@ -6367,6 +6424,22 @@ export type UserFollowedCustomListsQuery = {
 			}>;
 		};
 	};
+};
+
+export type MangaInfoPositionGqlDocSubscriptionVariables = Exact<{ [key: string]: never }>;
+
+export type MangaInfoPositionGqlDocSubscription = {
+	__typename?: "Subscriptions";
+	watchMangaInfosPosition: MangaInfosPositions;
+};
+
+export type SetMangaInfoPositionMutationVariables = Exact<{
+	position: MangaInfosPositions;
+}>;
+
+export type SetMangaInfoPositionMutation = {
+	__typename?: "Mutation";
+	userOption: { __typename?: "UserOptionMutations"; setMangaInfosPosition: MangaInfosPositions };
 };
 
 export type ListenToChapterReadMarkerSubscriptionVariables = Exact<{
@@ -7077,6 +7150,7 @@ export type RecentlyAddedPageQueryQuery = {
 export type DefaultMangaSearchQueryQueryVariables = Exact<{
 	params: MangaListParams;
 	excludeContentProfile?: InputMaybe<Scalars["Boolean"]["input"]>;
+	hideReadTitle?: InputMaybe<Scalars["Boolean"]["input"]>;
 }>;
 
 export type DefaultMangaSearchQueryQuery = {
@@ -16099,6 +16173,14 @@ export const ScanlationUploadsFeedDocument = {
 					},
 					type: { kind: "NamedType", name: { kind: "Name", value: "MangaListParams" } },
 					defaultValue: { kind: "ObjectValue", fields: [] }
+				},
+				{
+					kind: "VariableDefinition",
+					variable: {
+						kind: "Variable",
+						name: { kind: "Name", value: "onlyUnreadTitles" }
+					},
+					type: { kind: "NamedType", name: { kind: "Name", value: "Boolean" } }
 				}
 			],
 			selectionSet: {
@@ -16183,6 +16265,14 @@ export const ScanlationUploadsFeedDocument = {
 											value: {
 												kind: "Variable",
 												name: { kind: "Name", value: "mangaListParams" }
+											}
+										},
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "onlyUnreadTitles" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "onlyUnreadTitles" }
 											}
 										}
 									],
@@ -17181,6 +17271,73 @@ export const UserFollowedGroupsDocument = {
 		}
 	]
 } as unknown as DocumentNode<UserFollowedGroupsQuery, UserFollowedGroupsQueryVariables>;
+export const WatchOnlyUnreadSubDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "subscription",
+			name: { kind: "Name", value: "watchOnlyUnreadSub" },
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{ kind: "Field", name: { kind: "Name", value: "watchHideReadTitles" } }
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	WatchOnlyUnreadSubSubscription,
+	WatchOnlyUnreadSubSubscriptionVariables
+>;
+export const SetHideReadTitleDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "setHideReadTitle" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "hide" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "Boolean" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "userOption" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "setHideReadTitles" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "hide" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "hide" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<SetHideReadTitleMutation, SetHideReadTitleMutationVariables>;
 export const CurrentUserLibraryCompletedDocument = {
 	kind: "Document",
 	definitions: [
@@ -19452,6 +19609,14 @@ export const CustomListChapterFeedDocument = {
 					kind: "VariableDefinition",
 					variable: { kind: "Variable", name: { kind: "Name", value: "private" } },
 					type: { kind: "NamedType", name: { kind: "Name", value: "Boolean" } }
+				},
+				{
+					kind: "VariableDefinition",
+					variable: {
+						kind: "Variable",
+						name: { kind: "Name", value: "onlyUnreadTitles" }
+					},
+					type: { kind: "NamedType", name: { kind: "Name", value: "Boolean" } }
 				}
 			],
 			selectionSet: {
@@ -19489,6 +19654,14 @@ export const CustomListChapterFeedDocument = {
 											value: {
 												kind: "Variable",
 												name: { kind: "Name", value: "private" }
+											}
+										},
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "onlyUnreadTitles" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "onlyUnreadTitles" }
 											}
 										}
 									],
@@ -20469,6 +20642,76 @@ export const UserFollowedCustomListsDocument = {
 		}
 	]
 } as unknown as DocumentNode<UserFollowedCustomListsQuery, UserFollowedCustomListsQueryVariables>;
+export const MangaInfoPositionGqlDocDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "subscription",
+			name: { kind: "Name", value: "mangaInfoPositionGQLDoc" },
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{ kind: "Field", name: { kind: "Name", value: "watchMangaInfosPosition" } }
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	MangaInfoPositionGqlDocSubscription,
+	MangaInfoPositionGqlDocSubscriptionVariables
+>;
+export const SetMangaInfoPositionDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "setMangaInfoPosition" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "position" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "NamedType",
+							name: { kind: "Name", value: "MangaInfosPositions" }
+						}
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "userOption" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "setMangaInfosPosition" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "position" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "position" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<SetMangaInfoPositionMutation, SetMangaInfoPositionMutationVariables>;
 export const ListenToChapterReadMarkerDocument = {
 	kind: "Document",
 	definitions: [
@@ -24333,6 +24576,11 @@ export const DefaultMangaSearchQueryDocument = {
 						name: { kind: "Name", value: "excludeContentProfile" }
 					},
 					type: { kind: "NamedType", name: { kind: "Name", value: "Boolean" } }
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "hideReadTitle" } },
+					type: { kind: "NamedType", name: { kind: "Name", value: "Boolean" } }
 				}
 			],
 			selectionSet: {
@@ -24365,6 +24613,14 @@ export const DefaultMangaSearchQueryDocument = {
 													kind: "Name",
 													value: "excludeContentProfile"
 												}
+											}
+										},
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "onlyUnread" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "hideReadTitle" }
 											}
 										}
 									],

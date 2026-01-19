@@ -11,7 +11,7 @@
 	import { getContextClient } from "@urql/svelte";
 	import { debounce /* , last, range */ } from "lodash";
 	import { onDestroy } from "svelte";
-	import { derived, get, writable, type Readable, type Writable } from "svelte/store";
+	import { derived, get, toStore, writable, type Readable, type Writable } from "svelte/store";
 	import executeSearchQuery from "./search";
 
 	const client = getContextClient();
@@ -19,22 +19,31 @@
 		params: Readable<MangaListParams>;
 		offlineStore: Readable<boolean>;
 		excludeContentProfile?: boolean;
+		hideReadTitle?: boolean;
 	}
 
-	let { params: initialParam, offlineStore, excludeContentProfile }: Props = $props();
+	let {
+		params: initialParam,
+		offlineStore,
+		excludeContentProfile,
+		hideReadTitle = $bindable(false)
+	}: Props = $props();
 	const params = writable(get(initialParam), (set) => initialParam.subscribe(set));
-	const p_p_offline = derived([params, offlineStore], (merged) => merged);
+	const p_p_offline = derived(
+		[params, offlineStore, toStore(() => hideReadTitle)],
+		(merged) => merged
+	);
 	interface InfiniteQueryData {
 		data: MangaListContentItemProps[];
 		offset: number;
 		limit: number;
 		total: number;
 	}
-	const infiniteQueryOptions = derived(p_p_offline, ([$params, isOffline]) => {
+	const infiniteQueryOptions = derived(p_p_offline, ([$params, isOffline, hideReadTitle]) => {
 		return {
-			queryKey: ["manga-search", $params, isOffline],
-			initialPageParam: [$params, isOffline],
-			getNextPageParam(lastPage, allPages, [lastPageParam, lastPageOffline], allPageParams) {
+			queryKey: ["manga-search", $params, isOffline, hideReadTitle],
+			initialPageParam: [$params, isOffline, hideReadTitle],
+			getNextPageParam(lastPage, allPages, [lastPageParam, lastPageOffline, lastHideReadTitle]) {
 				const next_offset = lastPage.limit + lastPage.offset;
 				if (next_offset > lastPage.total) {
 					return null;
@@ -45,18 +54,29 @@
 							limit: lastPage.limit,
 							offset: next_offset
 						},
-						lastPageOffline
+						lastPageOffline,
+						lastHideReadTitle
 					];
 				}
 			},
-			async queryFn({ pageParam: [p, offline] }) {
-				const res = await executeSearchQuery(client, p, offline, excludeContentProfile);
+			async queryFn({ pageParam: [p, offline, hideReadTitle] }) {
+				const res = await executeSearchQuery(
+					client,
+					p,
+					offline,
+					excludeContentProfile,
+					hideReadTitle
+				);
 				return {
 					data: res.data,
 					...res.paginationData
 				};
 			},
-			getPreviousPageParam(firstPage, allPages, [firstPageParam, firstPageOffline]) {
+			getPreviousPageParam(
+				firstPage,
+				allPages,
+				[firstPageParam, firstPageOffline, firstHideReadTitle]
+			) {
 				const next_offset = firstPage.limit - firstPage.offset;
 				if (next_offset < 0) {
 					return null;
@@ -67,7 +87,8 @@
 							limit: firstPage.limit,
 							offset: next_offset
 						},
-						firstPageOffline
+						firstPageOffline,
+						firstHideReadTitle
 					];
 				}
 			}
@@ -75,8 +96,8 @@
 			InfiniteQueryData,
 			Error,
 			InfiniteQueryData,
-			[string, MangaListParams, boolean],
-			[MangaListParams, boolean]
+			[string, MangaListParams, boolean, boolean],
+			[MangaListParams, boolean, boolean]
 		>;
 	});
 	let infiniteQuery = createInfiniteQuery(() => $infiniteQueryOptions);
