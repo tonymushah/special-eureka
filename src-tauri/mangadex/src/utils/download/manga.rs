@@ -18,6 +18,7 @@ use tauri::{Manager, Runtime};
 use uuid::Uuid;
 
 use crate::{
+    ins_handle,
     store::{
         TauriManagerMangadexStoreExtractor,
         types::{
@@ -25,7 +26,7 @@ use crate::{
             structs::{content::GetContentProfile, force_443::ForcePort443Store},
         },
     },
-    utils::traits_utils::MangadexTauriManagerExt,
+    utils::{source::SendMultiSourceData, traits_utils::MangadexTauriManagerExt},
 };
 
 use super::cover::raw_cover_download;
@@ -311,7 +312,8 @@ where
             let Some(manager) = (*offline_app_state).as_ref().map(|d| d.app_state.clone()) else {
                 return Err(crate::Error::OfflineAppStateNotLoaded);
             };
-            super::chapter::raw_chapter_download_no_wait(
+
+            let wait = super::chapter::raw_chapter_download_no_wait(
                 &manager,
                 id,
                 (*app
@@ -321,7 +323,32 @@ where
                 .into(),
                 *app.extract::<ForcePort443Store>().await.unwrap_or_default(),
             )
+            .await?
+            .wait()
             .await?;
+            {
+                ins_handle::add_in_queue(app.app_handle(), id)?;
+                let app = app.app_handle().clone();
+
+                tokio::spawn(async move {
+                    match wait.await {
+                        Ok(res) => {
+                            if let Err(err) = ins_handle::add_in_success(&app, id) {
+                                log::error!("{err}");
+                            }
+                            let data: crate::objects::chapter::Chapter = res.into();
+                            app.get_watches()?.chapter.send_offline(data);
+                        }
+                        Err(err) => {
+                            if let Err(e) = ins_handle::add_in_failed(&app, id) {
+                                log::error!("{e}");
+                            }
+                            log::error!("chapter id {id} => {err}");
+                        }
+                    }
+                    Ok::<_, crate::Error>(())
+                });
+            }
         }
     }
     Ok(mg_obj)
