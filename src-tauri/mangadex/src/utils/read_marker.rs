@@ -7,6 +7,7 @@ use tauri::{Manager, Runtime};
 use uuid::Uuid;
 
 use crate::{
+    constants::MANGADEX_READ_MARKER_CHUNK,
     store::types::structs::content::ContentFeeder,
     utils::{
         splittable_param::SendSplitted, traits_utils::MangadexTauriManagerExt, watch::SendData,
@@ -19,29 +20,43 @@ where
     R: Runtime,
 {
     let client = app.get_mangadex_client_with_auth_refresh().await?;
-    let res = client
-        .manga()
-        .read()
-        .get()
-        .manga_ids(titles)
-        .grouped(true)
-        .send()
-        .await?;
-    let watches = app.get_watches()?;
-    match res {
-        MangaReadMarkers::Grouped(g) => Ok(g
-            .data
-            .into_iter()
-            .inspect(|(_, v)| {
-                for id in v {
-                    watches.read_marker.send_data((*id, true));
-                }
-            })
-            .filter(|(_, v)| v.is_empty())
-            .map(|(k, _)| k)
-            .collect()),
-        _ => Err(crate::Error::GotReadMarkersUnGrouped),
+    let mut to_return = HashSet::<Uuid>::with_capacity(titles.len());
+    for titles in titles
+        .into_iter()
+        .chunks(MANGADEX_READ_MARKER_CHUNK)
+        .into_iter()
+        .map(|d| d.collect_vec())
+        .collect_vec()
+    {
+        let res = client
+            .manga()
+            .read()
+            .get()
+            .manga_ids(titles)
+            .grouped(true)
+            .send()
+            .await?;
+        let watches = app.get_watches()?;
+        match res {
+            MangaReadMarkers::Grouped(g) => to_return.extend(
+                g.data
+                    .into_iter()
+                    .inspect(|(_, v)| {
+                        for id in v {
+                            watches.read_marker.send_data((*id, true));
+                        }
+                    })
+                    // Remove titles that doesn't have readmarkers
+                    //
+                    // This is somewhat unrelevant if the MangaDexAPI does it job but who knows
+                    .filter(|(_, v)| !v.is_empty())
+                    .map(|(k, _)| k),
+            ),
+            _ => return Err(crate::Error::GotReadMarkersUnGrouped),
+        };
     }
+    to_return.shrink_to_fit();
+    Ok(to_return)
 }
 
 pub async fn has_chapters_read<M, R>(app: &M, chapters: Vec<Uuid>) -> crate::Result<HashSet<Uuid>>
@@ -69,9 +84,9 @@ where
     };
     let chapter_read = {
         let mut chapter_read = HashSet::<Uuid>::new();
-        let chunks = (&titles_id
+        let chunks = titles_id
             .into_iter()
-            .chunks(crate::constants::MANGADEX_PAGE_LIMIT.try_into()?))
+            .chunks(crate::constants::MANGADEX_READ_MARKER_CHUNK)
             .into_iter()
             .map(|c| c.collect_vec())
             .collect_vec();
