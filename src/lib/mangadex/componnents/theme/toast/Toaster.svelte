@@ -4,6 +4,7 @@
 		placement: "bottom"
 	});
 
+	// TODO fix function calls
 	export const addToast: typeof toaster.create = (param) => {
 		let notify = false;
 		const unsub = toastNotify.subscribe((d) => {
