@@ -1,7 +1,6 @@
 <script lang="ts">
 	import type { HTMLButtonAttributes } from "svelte/elements";
 	import PrimaryButton from "./PrimaryButton.svelte";
-	import type { AnyMeltElement } from "@melt-ui/svelte";
 	import type { Component } from "svelte";
 
 	interface Props extends Omit<HTMLButtonAttributes, "children"> {
@@ -11,7 +10,6 @@
 		oneLine?: boolean;
 		icon?: Component | undefined;
 		noCenter?: boolean;
-		meltElement?: AnyMeltElement;
 	}
 
 	let {
