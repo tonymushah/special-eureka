@@ -15,7 +15,18 @@
 	}
 	const titleId = "titles";
 	const chapterId = "chapters";
-	let { titles = $bindable(), chapters = $bindable() }: Props = $props();
+	const coversId = "covers";
+	const scanlationGroupsId = "scanlation_groups";
+	const usersId = "users";
+	const customListsId = "customLists";
+	let {
+		titles = $bindable(),
+		chapters = $bindable(),
+		covers = $bindable(),
+		scanlationGroups = $bindable(),
+		users = $bindable(),
+		customLists = $bindable()
+	}: Props = $props();
 	let triggers = $derived.by(() => {
 		return [
 			{
@@ -27,6 +38,26 @@
 				id: chapterId,
 				title: `Chapters (${chapters.length})`,
 				disabled: chapters.length == 0
+			},
+			{
+				id: coversId,
+				title: `Covers (${covers.length})`,
+				disabled: chapters.length == 0
+			},
+			{
+				id: scanlationGroupsId,
+				title: `Scanlation Groups (${scanlationGroups.length})`,
+				disabled: scanlationGroups.length == 0
+			},
+			{
+				id: usersId,
+				title: `Users (${users.length})`,
+				disabled: users.length == 0
+			},
+			{
+				id: customListsId,
+				title: `CustomLists (${customLists.length})`,
+				disabled: customLists.length == 0
 			}
 		] as MangaDexTabTrigger[];
 	});
@@ -47,6 +78,22 @@
 				<Titles {titles} />
 			{:else if key == chapterId}
 				<Chapter {chapters} />
+			{:else if key == coversId}
+				<div class="nothing">
+					<h2>wip</h2>
+				</div>
+			{:else if key == scanlationGroupsId}
+				<div class="nothing">
+					<h2>wip</h2>
+				</div>
+			{:else if key == usersId}
+				<div class="nothing">
+					<h2>wip</h2>
+				</div>
+			{:else if key == customListsId}
+				<div class="nothing">
+					<h2>wip</h2>
+				</div>
 			{:else}
 				<div class="nothing">
 					<h2>Nothing selected</h2>
