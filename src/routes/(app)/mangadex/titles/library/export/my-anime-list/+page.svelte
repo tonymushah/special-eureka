@@ -436,26 +436,6 @@
 			}
 		}
 	}
-	.progress {
-		position: relative;
-		height: 1em;
-		width: 80%;
-		overflow: hidden;
-		border-radius: 99999999px;
-		background-color: var(--accent-l5);
-		.progress-inner {
-			height: 100%;
-			width: 100%;
-			background-color: var(--primary-l2);
-			transition: transform ease-in-out 100ms;
-		}
-	}
-	.progress:hover {
-		background-color: var(--accent-l5-hover);
-	}
-	.progress:active {
-		background-color: var(--accent-l5-active);
-	}
 	.loading {
 		display: flex;
 		align-items: center;
