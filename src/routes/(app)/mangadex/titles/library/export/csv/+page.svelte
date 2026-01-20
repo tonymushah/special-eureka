@@ -46,21 +46,20 @@
 				await exportLibraryToCSV.mutateAsync(
 					{ ...options, exportPath },
 					{
-						onSettled(data, error, variables, context) {
+						onSettled(data, error, variables) {
 							console.debug(variables);
 						},
-						onSuccess(data, variables, context) {
+						onSuccess(data) {
 							addToast({
-								data: {
-									title: "Library exported",
-									description: data
-								}
+								title: "Library exported",
+								description: data,
+								type: "success"
 							});
 							if (revealAfterFinish) {
 								revealItemInDir(data);
 							}
 						},
-						onError(error, variables, context) {
+						onError(error) {
 							addErrorToast("Cannot export library as a My Anime List XML Import file", error);
 						}
 					}
@@ -160,7 +159,7 @@
 		<PrimaryButton
 			isBase
 			disabled={exportLibraryToCSV.isPending || !$isLogged}
-			onclick={(e) => {
+			onclick={() => {
 				submitExport();
 			}}
 		>
@@ -172,7 +171,7 @@
 		<ButtonAccent
 			isBase
 			variant="3"
-			onclick={(e) => {
+			onclick={() => {
 				options = defaultOptions();
 			}}
 			disabled={exportLibraryToCSV.isPending}
