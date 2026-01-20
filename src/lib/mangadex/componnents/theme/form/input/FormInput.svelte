@@ -3,6 +3,7 @@
 
 	interface Props {
 		inputProps?: Omit<HTMLInputAttributes, "value">;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		value?: any;
 		widthFull?: boolean;
 	}
