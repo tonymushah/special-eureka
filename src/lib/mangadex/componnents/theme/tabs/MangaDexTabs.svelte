@@ -21,6 +21,8 @@
 		fillAvailableHeight?: boolean;
 		flex?: boolean;
 		content?: boolean;
+		unmountOnExit?: boolean;
+		lazyMount?: boolean;
 	}
 	let {
 		triggers = $bindable([]),
@@ -30,11 +32,15 @@
 		fillAvailableHeight,
 		flex,
 		content,
-		defaultValue
+		defaultValue,
+		unmountOnExit,
+		lazyMount
 	}: Props = $props();
 </script>
 
 <Tabs.Root
+	{unmountOnExit}
+	{lazyMount}
 	{defaultValue}
 	class={[
 		cssMod.root,
