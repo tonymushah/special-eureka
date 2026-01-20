@@ -3,6 +3,7 @@
 	import Chapters from "./(states)/Chapters.svelte";
 	import Mangas from "./(states)/Mangas.svelte";
 	import Covers from "./(states)/Covers.svelte";
+	import { TabContent } from "@ark-ui/svelte/tabs";
 </script>
 
 <MangaDexTabs
@@ -21,22 +22,22 @@
 		}
 	]}
 	defaultValue="chapters"
+	lazyMount
+	unmountOnExit
 >
-	{#snippet children(content)}
-		{#if content == "chapters"}
-			<div>
-				<Chapters />
-			</div>
-		{/if}
-		{#if content == "mangas"}
-			<div>
-				<Mangas />
-			</div>
-		{/if}
-		{#if content == "covers"}
-			<div>
-				<Covers />
-			</div>
-		{/if}
-	{/snippet}
+	<TabContent value="chapters">
+		<div>
+			<Chapters />
+		</div>
+	</TabContent>
+	<TabContent value="mangas">
+		<div>
+			<Mangas />
+		</div>
+	</TabContent>
+	<TabContent value="covers">
+		<div>
+			<Covers />
+		</div>
+	</TabContent>
 </MangaDexTabs>
