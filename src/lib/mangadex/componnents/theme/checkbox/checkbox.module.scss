@@ -1,0 +1,15 @@
+.indicator {
+	&[data-state="checked"] {
+		color: var(--primary);
+	}
+}
+
+.label {
+	color: var(--text-color);
+}
+
+.root[data-state="indeterminate"] {
+	.label {
+		color: var(--mid-tone);
+	}
+}
