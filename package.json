@@ -1,6 +1,6 @@
 {
 	"name": "special-eureka",
-	"version": "0.2.2",
+	"version": "0.2.3",
 	"scripts": {
 		"vite:dev": "vite dev",
 		"codegen": "graphql-codegen",
