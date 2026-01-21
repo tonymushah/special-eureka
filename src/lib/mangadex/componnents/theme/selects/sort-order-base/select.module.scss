@@ -1,0 +1,102 @@
+.label {
+	padding: 0em 0.5em;
+	color: var(--mid-tone);
+	display: flex;
+	gap: 2px;
+	align-items: center;
+	font-size: 12px;
+	font-family: inherit;
+	font-weight: 800;
+}
+.menu-outer {
+	display: flex;
+	flex-direction: column;
+	height: 200px;
+}
+.control {
+	display: flex;
+	align-items: bottom;
+	gap: 3px;
+	[data-part="clear-trigger"] {
+		color: var(--text-color);
+		border: 3px solid var(--mid-tone);
+		background-color: var(--accent-l3);
+		border-radius: 3px;
+		box-shadow: 0px 3px 0px var(--mid-tone);
+		transform: translateY(-3px);
+		&:hover {
+			background-color: var(--accent-l3-hover);
+		}
+		&:active {
+			background-color: var(--accent-l3-active);
+			transform: translateY(0px);
+			box-shadow: 0px 0px 0px var(--mid-tone);
+		}
+	}
+}
+.menu {
+	margin: 0px;
+	border-radius: 0.25em;
+	background-color: var(--accent);
+	z-index: 10;
+	overflow-y: scroll;
+	color: var(--text-color);
+	padding-left: 0em;
+	width: 250px;
+	border: 3px solid var(--mid-tone);
+
+	/*[data-part="item-group"] {
+		
+	}*/
+
+	[data-part="item-group-label"] {
+		font-weight: 400;
+		text-decoration: underline;
+		padding-left: 10px;
+	}
+
+	[data-part="item"] {
+		transition: background-color 50ms ease-in-out;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding-left: 15px;
+
+		&[data-state="unchecked"]:hover {
+			background-color: var(--accent-hover);
+		}
+		&[data-state="unchecked"]:active {
+			background-color: var(--accent-active);
+		}
+		&[data-state="checked"] {
+			background-color: var(--primary);
+		}
+	}
+}
+
+.trigger {
+	min-width: 250px;
+	margin: 0px;
+	display: flex;
+	background-color: var(--accent);
+	color: var(--text-color);
+	font-family: var(--fonts);
+	align-items: center;
+	justify-content: space-between;
+	border: 3px solid var(--mid-tone);
+	border-radius: 6px;
+	transition: background-color ease-in-out 50ms;
+	[data-part="indicator"] {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+}
+
+.trigger:hover {
+	background-color: var(--accent-hover);
+}
+
+.trigger:hover {
+	background-color: var(--accent-active);
+}
