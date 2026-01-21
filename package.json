@@ -35,6 +35,7 @@
 		"@playwright/test": "^1.57.0",
 		"@storybook/addon-docs": "^10.1.11",
 		"@storybook/addon-links": "^10.1.11",
+		"@storybook/addon-svelte-csf": "^5.0.10",
 		"@storybook/sveltekit": "^10.1.11",
 		"@sveltejs/adapter-static": "^3.0.10",
 		"@sveltejs/kit": "^2.49.4",
