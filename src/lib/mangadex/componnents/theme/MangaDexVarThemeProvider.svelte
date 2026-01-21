@@ -5,14 +5,16 @@
 	import ButtonFlexContentProvider from "./buttons/ButtonFlexContentProvider.svelte";
 	import { custom } from "@mangadex/theme";
 	import { derived } from "svelte/store";
-	const theme_store_ = getMangaDexThemeContext();
-	const theme_store = derived([theme_store_], ([$t]) => $t ?? custom);
+
 	interface Props {
 		fonts?: string;
 		children?: import("svelte").Snippet;
 	}
 
 	let { fonts = "Poppins", children }: Props = $props();
+
+	const theme_store_ = getMangaDexThemeContext();
+	const theme_store = derived([theme_store_], ([$t]) => $t ?? custom);
 </script>
 
 <SomeDiv

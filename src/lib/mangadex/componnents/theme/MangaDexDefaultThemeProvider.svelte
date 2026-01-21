@@ -5,7 +5,6 @@
 	import { writable } from "svelte/store";
 	import MangaDexVarThemeProvider from "./MangaDexVarThemeProvider.svelte";
 	import MangadexBackground from "./MangadexBackground.svelte";
-	import Toaster from "./toast/Toaster.svelte";
 
 	interface Props {
 		fonts?: string;
@@ -22,7 +21,6 @@
 </script>
 
 <MangaDexVarThemeProvider>
-	<Toaster />
 	<MangadexBackground>
 		{@render children?.()}
 	</MangadexBackground>
