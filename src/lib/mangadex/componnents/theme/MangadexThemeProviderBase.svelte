@@ -3,13 +3,13 @@
 	import { setMangaDexThemeContextWritable } from "@mangadex/utils/contexts";
 	import { writable } from "svelte/store";
 	import { setMangaDexFontsContext } from "@mangadex/utils/contexts/fonts";
-	import Toaster from "./toast/Toaster.svelte";
 	import MangaDexVarThemeProvider from "./MangaDexVarThemeProvider.svelte";
 
 	interface Props {
 		theme: MangadexTheme;
 		fonts?: string;
 		children?: import("svelte").Snippet;
+		noToaster?: boolean;
 	}
 
 	let { theme, fonts = "Poppins", children }: Props = $props();
@@ -26,6 +26,5 @@
 </script>
 
 <MangaDexVarThemeProvider>
-	<Toaster />
 	{@render children?.()}
 </MangaDexVarThemeProvider>

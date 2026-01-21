@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { client } from "@mangadex/gql/urql";
+	//import { client } from "@mangadex/gql/urql";
 	import { custom as theme } from "@mangadex/theme";
-	import { setContextClient } from "@urql/svelte";
+	//import { setContextClient } from "@urql/svelte";
 	import MangadexThemeProviderBase from "./MangadexThemeProviderBase.svelte";
 	interface Props {
 		children?: import("svelte").Snippet;
@@ -24,7 +24,7 @@
 		return clearMocks;
 	});
     */
-	setContextClient(client);
+	//setContextClient(client);
 </script>
 
 <MangadexThemeProviderBase {theme}>
