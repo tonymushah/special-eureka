@@ -27,6 +27,7 @@
 	import { derived as der, writable } from "svelte/store";
 	import ChapterFeedSelectoDialogBody from "./ChapterFeedSelectoDialogBody.svelte";
 	import cssMod from "./dialog.module.scss";
+	import MangaDexVarThemeProvider from "../theme/MangaDexVarThemeProvider.svelte";
 </script>
 
 <Dialog.Root
@@ -40,34 +41,36 @@
 	<Portal container={document.getElementById("mangadex-scroll-container") ?? undefined}>
 		<Dialog.Backdrop class={cssMod.overlay} />
 		<Dialog.Positioner>
-			<Dialog.Content class={cssMod.dialog}>
-				<div class="content">
-					<div class="top">
-						<div class="title-desc">
-							<Dialog.Title class={cssMod.title}>Selecto</Dialog.Title>
-							{#if !$nothingSelected}
-								<Dialog.Description class={cssMod.description}>
-									You have selected {$mangasLen} title{#if $mangasLen > 1}s{/if}{#if $chaptersLen > 0}
-										and {$chaptersLen}
-										chapter{#if $chaptersLen > 1}s{/if}
-									{/if}.
-								</Dialog.Description>
-							{/if}
+			<MangaDexVarThemeProvider>
+				<Dialog.Content class={cssMod.dialog}>
+					<div class="content">
+						<div class="top">
+							<div class="title-desc">
+								<Dialog.Title class={cssMod.title}>Selecto</Dialog.Title>
+								{#if !$nothingSelected}
+									<Dialog.Description class={cssMod.description}>
+										You have selected {$mangasLen} title{#if $mangasLen > 1}s{/if}{#if $chaptersLen > 0}
+											and {$chaptersLen}
+											chapter{#if $chaptersLen > 1}s{/if}
+										{/if}.
+									</Dialog.Description>
+								{/if}
+							</div>
+							<div class="close">
+								<Dialog.CloseTrigger class={cssMod.closeButton}>
+									<CloseIcon />
+								</Dialog.CloseTrigger>
+							</div>
 						</div>
-						<div class="close">
-							<Dialog.CloseTrigger class={cssMod.closeButton}>
-								<CloseIcon />
-							</Dialog.CloseTrigger>
-						</div>
+						{#if $selected?.titles && $selected?.chapters}
+							<ChapterFeedSelectoDialogBody
+								titles={$selected?.titles}
+								chapters={$selected?.chapters}
+							/>
+						{/if}
 					</div>
-					{#if $selected?.titles && $selected?.chapters}
-						<ChapterFeedSelectoDialogBody
-							titles={$selected?.titles}
-							chapters={$selected?.chapters}
-						/>
-					{/if}
-				</div>
-			</Dialog.Content>
+				</Dialog.Content>
+			</MangaDexVarThemeProvider>
 		</Dialog.Positioner>
 	</Portal>
 </Dialog.Root>

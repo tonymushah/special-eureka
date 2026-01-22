@@ -6,9 +6,6 @@
 	font-size: var(--button-font-size, medium);
 	border: 3px solid var(--mid-tone);
 	border-radius: 3px;
-	transition:
-		box-shadow,
-		transform 250ms ease-in-out;
 }
 .trigger[data-focus] {
 	background-color: color-mix(in srgb, var(--accent-l2) 50%, transparent 50%);
