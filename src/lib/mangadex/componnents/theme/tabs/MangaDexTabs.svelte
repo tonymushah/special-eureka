@@ -23,6 +23,7 @@
 		content?: boolean;
 		unmountOnExit?: boolean;
 		lazyMount?: boolean;
+		manual?: boolean;
 	}
 	let {
 		triggers = $bindable([]),
@@ -34,7 +35,8 @@
 		content,
 		defaultValue,
 		unmountOnExit,
-		lazyMount
+		lazyMount,
+		manual
 	}: Props = $props();
 </script>
 
@@ -49,6 +51,7 @@
 		flex && cssMod.flex,
 		content && cssMod.content
 	]}
+	activationMode={manual ? "manual" : "automatic"}
 >
 	<!-- class:root={true}
 		class:fullHeight

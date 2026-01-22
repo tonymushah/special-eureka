@@ -38,7 +38,7 @@
 	});
 </script>
 
-<MangaDexTabs {triggers} defaultValue={titleId} content lazyMount unmountOnExit>
+<MangaDexTabs {triggers} defaultValue={titleId} content lazyMount unmountOnExit manual>
 	<TabContent value={titleId} class={cssMod.content}>
 		<Titles {titles} />
 	</TabContent>
