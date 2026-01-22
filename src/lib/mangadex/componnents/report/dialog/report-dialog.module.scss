@@ -1,0 +1,29 @@
+.dialog {
+	background-color: var(--main-background);
+	color: var(--text-color);
+	width: 75vw;
+	border: 3px solid var(--primary);
+	border-radius: 0.5rem;
+	position: fixed;
+	z-index: 5;
+	transform: translateY(-50%);
+	transform: translateX(-50%);
+	top: 10vh;
+	left: 50%;
+	padding: 0.5rem; /* 24px */
+	height: 75vh;
+}
+.overlay {
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);
+	z-index: 5;
+	inset: 0px;
+	position: fixed;
+}
+
+.icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 6px;
+}
