@@ -6,12 +6,18 @@
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		value?: any;
 		widthFull?: boolean;
+		self?: HTMLInputElement;
 	}
 
-	let { inputProps, value = $bindable(undefined), widthFull = false }: Props = $props();
+	let {
+		inputProps,
+		value = $bindable(undefined),
+		widthFull = false,
+		self = $bindable()
+	}: Props = $props();
 </script>
 
-<input {...inputProps} bind:value class:widthFull />
+<input {...inputProps} bind:value class:widthFull bind:this={self} />
 
 <style lang="scss">
 	input {
