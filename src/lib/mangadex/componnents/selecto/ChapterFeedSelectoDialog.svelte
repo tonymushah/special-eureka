@@ -26,7 +26,7 @@
 	import { XIcon as CloseIcon } from "@lucide/svelte";
 	import { derived as der, writable } from "svelte/store";
 	import ChapterFeedSelectoDialogBody from "./ChapterFeedSelectoDialogBody.svelte";
-	import cssMod from "./dialog.module.scss";
+	import cssMod from "@mangadex/componnents/theme/dialog/dialog.module.scss";
 	import MangaDexVarThemeProvider from "../theme/MangaDexVarThemeProvider.svelte";
 </script>
 
