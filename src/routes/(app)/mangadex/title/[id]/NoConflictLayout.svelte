@@ -45,7 +45,7 @@
 	import registerContextMenuEvent, {
 		setContextMenuContext
 	} from "@special-eureka/core/utils/contextMenuContext";
-	import { createQuery, type CreateQueryOptions } from "@tanstack/svelte-query";
+	import { createMutation, createQuery, type CreateQueryOptions } from "@tanstack/svelte-query";
 	import { writeText } from "@tauri-apps/plugin-clipboard-manager";
 	import { openUrl as open } from "@tauri-apps/plugin-opener";
 	import { debounce, delay, noop } from "lodash";
@@ -117,19 +117,49 @@
 	let description = $derived(layoutData.description);
 	let hasRelation = $derived(data.queryResult!.relationships.manga.length > 0);
 
+	// svelte-ignore state_referenced_locally
 	const _state = mangaDownloadState({ id: data.layoutData.id, deferred: true });
 	const reading_status = der(
-		manga_reading_status(data.layoutData.id),
+		// svelte-ignore state_referenced_locally
+		manga_reading_status(data.layoutData.id, {
+			getOnMount: false
+		}),
 		(status) => status ?? undefined
 	);
-	const isFollowing = manga_following_status(data.layoutData.id);
+	// svelte-ignore state_referenced_locally
+	const isFollowing = manga_following_status(data.layoutData.id, {
+		getOnMount: false
+	});
 
+	let followingStatusQuery = createQuery(() => ({
+		queryKey: ["title", data.layoutData.id, "following", "status"],
+		queryFn() {
+			return get_manga_following_status(data.layoutData.id);
+		},
+		networkMode: "online"
+	}));
+	let readingStatusQuery = createQuery(() => ({
+		queryKey: ["title", data.layoutData.id, "reading", "status"],
+		queryFn() {
+			return get_manga_reading_status(data.layoutData.id);
+		},
+		networkMode: "online"
+	}));
+	let title_rating = createQuery(() => ({
+		queryKey: ["title", data.layoutData.id, "user-defined", "rating"],
+		queryFn() {
+			return get_manga_rating(data.layoutData.id);
+		},
+		networkMode: "online"
+	}));
 	function refetchReadingFollowingStatus() {
 		Promise.all([
-			get_manga_following_status(data.layoutData.id),
-			get_manga_reading_status(data.layoutData.id),
-			get_manga_rating(data.layoutData.id)
-		]).catch(console.error);
+			followingStatusQuery.refetch(),
+			readingStatusQuery.refetch(),
+			title_rating.refetch()
+		]).catch((e) => {
+			if (dev) console.error(e);
+		});
 	}
 	function onSetReadingStatusError(e: unknown) {
 		const title = "Error on updating the reading or follow status";
@@ -139,53 +169,51 @@
 		const title = "Error on updating your manga rating";
 		addErrorToast(title, e);
 	}
-	let disableAddToLibrary = $state(false);
-	const onreadingStatus = debounce((e: ReadingStatusEventDetail) => {
-		if (!disableAddToLibrary) {
-			disableAddToLibrary = true;
-			/// TODO Please migrate this to tanstack query
-			Promise.all([
+	let readingStatusMutation = createMutation(() => ({
+		mutationKey: ["title", layoutData.id as string, "setReadingStatus"],
+		async mutationFn(e: ReadingStatusEventDetail) {
+			return await Promise.all([
 				set_manga_reading_status(layoutData.id, e.readingStatus ?? null),
 				set_manga_following_status(layoutData.id, e.isFollowing)
-			])
-				.then(() => {
-					addToast({
-						data: {
-							title: "Manga reading and follow status sucessufully updated",
-							variant: "green"
-						}
-					});
-				})
-				.catch((e) => {
-					onSetReadingStatusError(e);
-				})
-				.finally(() => {
-					e.closeDialog?.();
-					disableAddToLibrary = false;
-				});
+			]);
+		},
+		onSettled(data, error, variables) {
+			variables.closeDialog?.();
+		},
+		onError(err) {
+			onSetReadingStatusError(err);
+		},
+		onSuccess() {
+			addToast({
+				title: "Manga reading and follow status sucessufully updated",
+				type: "success"
+			});
 		}
+	}));
+	let disableAddToLibrary = $derived(readingStatusMutation.isPending);
+	const onreadingStatus = debounce((e: ReadingStatusEventDetail) => {
+		readingStatusMutation.mutate(e);
 	});
-	let disableRating = $state(false);
+	let titleRatingMutation = createMutation(() => ({
+		mutationKey: ["title", layoutData.id as string, "setTitleRating"],
+		async mutationFn(e: number | null) {
+			return await set_manga_rating(data.layoutData.id, e);
+		},
+		onError(e) {
+			onSetRatingError(e);
+		},
+		onSuccess() {
+			addToast({
+				title: "Manga rating updated sucessully",
+				type: "success"
+			});
+		}
+	}));
+	let disableRating = $derived(titleRatingMutation.isPending);
 	const onrating = debounce((e: number | null) => {
-		if (!disableRating) {
-			disableRating = true;
-			set_manga_rating(data.layoutData.id, e)
-				.then(() => {
-					addToast({
-						data: {
-							title: "Manga rating updated sucessully",
-							variant: "green"
-						}
-					});
-				})
-				.catch((e) => {
-					onSetRatingError(e);
-				})
-				.finally(() => {
-					disableRating = false;
-				});
-		}
+		titleRatingMutation.mutate(e);
 	});
+	// svelte-ignore state_referenced_locally
 	const hasChaptToRead = hasChapterToRead(data.layoutData.id);
 	setContextMenuContext(() =>
 		mangaElementContextMenu({
