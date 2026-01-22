@@ -5,6 +5,7 @@
 	import { makeScroll, preventScroll } from "../layout/scrollElement";
 	import Chapter from "./dialog/Chapter.svelte";
 	import { TabContent } from "@ark-ui/svelte/tabs";
+	import cssMod from "./dialog-body.module.scss";
 
 	interface Props {
 		titles: string[];
@@ -38,10 +39,10 @@
 </script>
 
 <MangaDexTabs {triggers} defaultValue={titleId} content lazyMount unmountOnExit>
-	<TabContent value={titleId}>
+	<TabContent value={titleId} class={cssMod.content}>
 		<Titles {titles} />
 	</TabContent>
-	<TabContent value={chapterId}>
+	<TabContent value={chapterId} class={cssMod.content}>
 		<Chapter {chapters} />
 	</TabContent>
 </MangaDexTabs>
