@@ -51,7 +51,7 @@
 
 <style lang="scss">
 	.menu-outer {
-		display: flex;
+		display: none;
 		flex-direction: column;
 		height: 200px;
 		z-index: 100;

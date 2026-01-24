@@ -28,7 +28,8 @@
 		open: () => shouldOpen,
 		closeOnClick: true,
 		sameWidth: true,
-		setOpen: (o) => (shouldOpen = o)
+		setOpen: (o) => (shouldOpen = o),
+		showMenuDisplay: "flex"
 	});
 	const client = getContextClient();
 	let authorSearchQuery = createInfiniteQuery(() => ({
