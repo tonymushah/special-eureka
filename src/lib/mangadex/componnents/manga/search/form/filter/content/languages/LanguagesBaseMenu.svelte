@@ -1,34 +1,37 @@
 <script lang="ts">
 	import FlagIcon from "@mangadex/componnents/FlagIcon.svelte";
 	import MangaDexVarThemeProvider from "@mangadex/componnents/theme/MangaDexVarThemeProvider.svelte";
+	import type { Language } from "@mangadex/gql/graphql";
 	import { language_list } from "@mangadex/utils/lang/list";
-
-	import { melt, type AnyMeltElement } from "@melt-ui/svelte";
 	import { startCase } from "lodash";
-	import type { Readable } from "svelte/store";
 	import { slide } from "svelte/transition";
 	interface Props {
-		menu: AnyMeltElement;
-		option: AnyMeltElement;
-		isSelected: Readable<(value: unknown) => boolean>;
-		open: Readable<boolean>;
+		menu?: HTMLElement;
+		open: boolean;
+		selectedLanguages?: Language[];
 	}
-	let { open, isSelected, menu, option }: Props = $props();
+	let { open, selectedLanguages = $bindable([]), menu = $bindable() }: Props = $props();
 </script>
 
-{#if $open == true}
-	<div class="menu-outer" use:melt={$menu}>
+{#if open == true}
+	<div class="menu-outer" bind:this={menu}>
 		<MangaDexVarThemeProvider>
 			<menu transition:slide={{ duration: 150, axis: "y" }}>
 				{#each language_list.map((e) => {
 					return { value: e, label: startCase(e) };
 				}) as { value, label } (value)}
-					<li use:melt={$option({ value, label })} class:isSelected={$isSelected(value)}>
+					<button
+						class="mi"
+						onclick={() => {
+							selectedLanguages = new Set([...selectedLanguages, value]).values().toArray();
+						}}
+						class:isSelected={selectedLanguages.includes(value)}
+					>
 						<div class="icon">
 							<FlagIcon lang={value} />
 						</div>
 						<h4>{label}</h4>
-					</li>
+					</button>
 				{/each}
 			</menu>
 		</MangaDexVarThemeProvider>
@@ -37,7 +40,7 @@
 
 <style lang="scss">
 	.menu-outer {
-		display: flex;
+		display: none;
 		flex-direction: column;
 		max-height: 200px;
 	}
@@ -52,11 +55,15 @@
 		color: var(--text-color);
 		padding-left: 0em;
 		max-height: 300px;
-		li {
+		.mi {
 			padding-left: 1em;
-			transition: background-color 200ms ease-in-out;
+			transition: background-color 50ms ease-in-out;
 			display: flex;
 			gap: 10px;
+			background-color: transparent;
+			color: var(--text-color);
+			border: 0px;
+			box-shadow: none;
 			h4 {
 				margin: 0px;
 				overflow: hidden;
@@ -64,13 +71,13 @@
 				text-overflow: ellipsis;
 			}
 		}
-		li:not(.isSelected):hover {
+		.mi:not(.isSelected):hover {
 			background-color: var(--accent-hover);
 		}
-		li:not(.isSelected):active {
+		.mi:not(.isSelected):active {
 			background-color: var(--accent-active);
 		}
-		li.isSelected {
+		.mi.isSelected {
 			background-color: var(--primary);
 		}
 	}

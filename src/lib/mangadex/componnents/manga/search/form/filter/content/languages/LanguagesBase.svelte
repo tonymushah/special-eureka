@@ -2,80 +2,30 @@
 	import FlagIcon from "@mangadex/componnents/FlagIcon.svelte";
 	import Title from "@mangadex/componnents/theme/texts/title/Title.svelte";
 	import type { Language } from "@mangadex/gql/graphql";
-	import { createSelect, melt, type SelectOption } from "@melt-ui/svelte";
-	import { derived as der, get, type Writable } from "svelte/store";
+	import { type Writable } from "svelte/store";
 	import LanguagesBaseMenu from "./LanguagesBaseMenu.svelte";
-	import type { PortalConfig } from "@melt-ui/svelte/internal/actions";
 	import { startCase } from "lodash";
+	import { floatingUImenu } from "@mangadex/utils/floating-ui/menu.svelte";
 
 	interface Props {
 		title: string;
 		selecteds: Writable<Language[]>;
-		placement?:
-			| "top"
-			| "top-start"
-			| "top-end"
-			| "right"
-			| "right-start"
-			| "right-end"
-			| "bottom"
-			| "bottom-start"
-			| "bottom-end"
-			| "left"
-			| "left-start"
-			| "left-end";
-		portal?: PortalConfig | null;
 		showLangName?: boolean;
 		rowLayout?: boolean;
 		titleAsParagraph?: boolean;
 	}
-	let {
-		title,
-		selecteds,
-		placement = "top",
-		portal,
-		showLangName,
-		rowLayout,
-		titleAsParagraph
-	}: Props = $props();
-	const selecteds_options = der(selecteds, ($s) => {
-		return $s.map<SelectOption<Language>>((ss) => ({
-			value: ss
-		}));
-	});
-	const {
-		elements: { trigger, menu, option },
-		states: { selected, open },
-		helpers: { isSelected }
-	} = createSelect<Language, true>({
-		forceVisible: true,
-		positioning: {
-			placement,
-			fitViewport: true,
-			sameWidth: true
-			// strategy: "fixed"
-		},
-		portal,
-		multiple: true,
-		selected: {
-			subscribe(run, invalidate) {
-				return selecteds_options.subscribe(run, invalidate);
-			},
-			set(value) {
-				selecteds.set(value.map((v) => v.value));
-			},
-			update(updater) {
-				const options = get(selecteds_options);
-				selecteds.set(updater(options).map((v) => v.value));
-			}
-		}
-	});
-	$effect(() => {
-		if ($open) {
-			console.log("open");
-		} else {
-			console.log("not open");
-		}
+	let { title, selecteds, showLangName, rowLayout, titleAsParagraph }: Props = $props();
+	let open = $state(false);
+	let menu = $state<HTMLElement | undefined>();
+	let trigger = $state<HTMLElement | undefined>();
+	floatingUImenu({
+		menuElement: () => menu,
+		triggerElement: () => trigger,
+		open: () => open,
+		setOpen: (o) => (open = o),
+		sameWidth: true,
+		showMenuDisplay: "flex",
+		closeOnClick: true
 	});
 </script>
 
@@ -87,25 +37,27 @@
 	{/if}
 	<div class="content">
 		<button
-			use:melt={$trigger}
+			onclick={() => {
+				open = !open;
+			}}
 			oncontextmenu={(e) => {
 				e.preventDefault();
 				selecteds.set([]);
 			}}
 			aria-label={title}
 		>
-			{#if $selected}
-				{#each $selected as s}
+			{#if $selecteds.length > 0}
+				{#each $selecteds as s}
 					{#if showLangName}
 						<div class="lang">
 							<div class="icon">
-								<FlagIcon lang={s.value} />
+								<FlagIcon lang={s} />
 							</div>
-							<span>{startCase(s.value)}</span>
+							<span>{startCase(s)}</span>
 						</div>
 					{:else}
 						<div class="icon">
-							<FlagIcon lang={s.value} />
+							<FlagIcon lang={s} />
 						</div>
 					{/if}
 				{:else}
@@ -118,8 +70,7 @@
 	</div>
 </section>
 
-<!-- @ts-ignore -->
-<LanguagesBaseMenu {open} {menu} {option} {isSelected} />
+<LanguagesBaseMenu {open} bind:selectedLanguages={$selecteds} bind:menu />
 
 <style lang="scss">
 	button {
