@@ -58,7 +58,7 @@
 					...res.paginationData
 				};
 			},
-			getPreviousPageParam(firstPage, allPages, firstPageParam, allPageParams) {
+			getPreviousPageParam(firstPage, allPages, firstPageParam) {
 				const next_offset = firstPage.limit - firstPage.offset;
 				if (next_offset < 0) {
 					return null;
