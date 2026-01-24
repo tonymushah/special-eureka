@@ -22,6 +22,7 @@
 	}
 
 	let { authorName }: Props = $props();
+	// svelte-ignore state_referenced_locally
 	const params = derived([authorName, pageLimit], ([$authorName, $limit]) => {
 		return {
 			name: $authorName,
@@ -38,7 +39,7 @@
 		return {
 			queryKey: ["author-search", $params],
 			initialPageParam: $params,
-			getNextPageParam(lastPage, allPages, lastPageParam, allPageParams) {
+			getNextPageParam(lastPage, allPages, lastPageParam) {
 				const next_offset = lastPage.limit + lastPage.offset;
 				if (next_offset > lastPage.total) {
 					return null;
@@ -84,10 +85,7 @@
 		}
 		return Array.from(
 			new Map(
-				(result.data?.pages.map((d) => d.data).flatMap((i) => i) ?? []).map((d) => [
-					d.id,
-					d
-				])
+				(result.data?.pages.map((d) => d.data).flatMap((i) => i) ?? []).map((d) => [d.id, d])
 			).values()
 		);
 	});
