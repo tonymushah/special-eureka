@@ -1,5 +1,4 @@
 <script lang="ts">
-	// TODO refactor to `tanstack/query`
 	import FormInput from "@mangadex/componnents/theme/form/input/FormInput.svelte";
 	import type { Tag } from "@mangadex/utils/legacy/melt-ui-tag.ts";
 	import { debounce } from "lodash";
