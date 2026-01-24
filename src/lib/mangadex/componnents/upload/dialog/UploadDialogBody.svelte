@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { tagWritableToComboboxOptionWritable } from "@mangadex/componnents/manga/search/form/filter/content/authors/utils";
 	import FormInput from "@mangadex/componnents/theme/form/input/FormInput.svelte";
 	import MangaDexVarThemeProvider from "@mangadex/componnents/theme/MangaDexVarThemeProvider.svelte";
 	import { groupSearchAndGetNameOnly } from "@mangadex/gql-docs/group/search/name-only";
@@ -128,7 +127,11 @@
 		open: () => shouldOpen,
 		triggerElement: () => trigger,
 		menuElement: () => menu,
-		showMenuDisplay: "flex"
+		showMenuDisplay: "flex",
+		closeOnClick: true,
+		setOpen(o) {
+			shouldOpen = o;
+		}
 	});
 </script>
 

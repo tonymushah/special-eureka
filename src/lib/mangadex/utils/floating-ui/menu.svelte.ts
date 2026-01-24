@@ -26,13 +26,17 @@ export function floatingUImenu({
 	triggerElement,
 	menuElement,
 	showMenuDisplay,
-	hideMenuDisplay
+	hideMenuDisplay,
+	closeOnClick,
+	setOpen
 }: {
 	open: () => boolean;
 	triggerElement?: () => HTMLElement | undefined;
 	menuElement?: () => HTMLElement | undefined;
 	showMenuDisplay?: string;
 	hideMenuDisplay?: string;
+	closeOnClick?: boolean;
+	setOpen?: (o: boolean) => void;
 }) {
 	const trigger = $derived(triggerElement?.());
 	const menu = $derived(menuElement?.());
@@ -54,6 +58,18 @@ export function floatingUImenu({
 		}
 	};
 	const open = $derived(_open());
+	$effect(() => {
+		if (menu && closeOnClick) {
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+			const menuEvClick = (_e: MouseEvent) => {
+				setOpen?.(false);
+			};
+			menu.addEventListener("click", menuEvClick);
+			return () => {
+				menu.removeEventListener("click", menuEvClick);
+			};
+		}
+	});
 	$effect(() => {
 		if (open == true) {
 			showMenu();
