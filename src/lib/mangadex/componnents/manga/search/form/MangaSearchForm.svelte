@@ -112,6 +112,7 @@
 <form
 	onsubmit={(e) => {
 		e.preventDefault();
+		e.stopPropagation();
 		onsubmit?.($params);
 	}}
 >
