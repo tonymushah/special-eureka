@@ -28,7 +28,8 @@ export function floatingUImenu({
 	showMenuDisplay,
 	hideMenuDisplay,
 	closeOnClick,
-	setOpen
+	setOpen,
+	sameWidth
 }: {
 	open: () => boolean;
 	triggerElement?: () => HTMLElement | undefined;
@@ -37,6 +38,7 @@ export function floatingUImenu({
 	hideMenuDisplay?: string;
 	closeOnClick?: boolean;
 	setOpen?: (o: boolean) => void;
+	sameWidth?: boolean;
 }) {
 	const trigger = $derived(triggerElement?.());
 	const menu = $derived(menuElement?.());
@@ -47,14 +49,16 @@ export function floatingUImenu({
 		});
 	};
 	const showMenu = () => {
-		if (menu) {
+		if (menu && trigger) {
 			menu.style.display = showMenuDisplay ?? "block";
+			if (sameWidth) menu.style.width = `${trigger.clientWidth}px`;
 			innerUpdate();
 		}
 	};
 	const hideMenu = () => {
 		if (menu) {
 			menu.style.display = hideMenuDisplay ?? "";
+			menu.style.width = "";
 		}
 	};
 	const open = $derived(_open());

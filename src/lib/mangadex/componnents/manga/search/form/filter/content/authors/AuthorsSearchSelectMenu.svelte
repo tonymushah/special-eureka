@@ -1,44 +1,47 @@
 <script lang="ts">
 	import MangaDexVarThemeProvider from "@mangadex/componnents/theme/MangaDexVarThemeProvider.svelte";
-	import { melt, type AnyMeltElement, type Tag } from "@melt-ui/svelte";
-	import type { Readable } from "svelte/store";
+	import type { Tag } from "@mangadex/utils/legacy/melt-ui-tag";
+	import type { Writable } from "svelte/store";
 	import { slide } from "svelte/transition";
 
 	interface Props {
-		open: Readable<boolean>;
+		open: boolean;
 		toObserve?: HTMLElement;
-		currentAuthorSearch: Readable<Tag[]>;
-		isSelected: Readable<(value: unknown) => boolean>;
-		option: AnyMeltElement;
-		menu: AnyMeltElement;
-		isFetching: Readable<boolean>;
+		currentAuthorSearch: Tag[];
+		isFetching: boolean;
 		hasNext: boolean;
+		tags: Writable<Tag[]>;
+		menu?: HTMLElement;
 	}
 	let {
 		open,
 		toObserve = $bindable(),
 		currentAuthorSearch,
 		isFetching,
-		isSelected,
-		option,
-		menu,
-		hasNext
+		hasNext,
+		tags,
+		menu = $bindable()
 	}: Props = $props();
 </script>
 
-{#if $open}
-	<div class="menu-outer" use:melt={$menu}>
+{#if open}
+	<div class="menu-outer" bind:this={menu}>
 		<MangaDexVarThemeProvider>
 			<menu transition:slide={{ duration: 150, axis: "y" }}>
-				{#each $currentAuthorSearch as author (author.id)}
-					<li
-						use:melt={$option({ value: author.id, label: author.value })}
-						class:isSelected={$isSelected(author.id)}
+				{#each currentAuthorSearch as author (author.id)}
+					<button
+						class="li"
+						class:isSelected={$tags.includes(author)}
+						onclick={() => {
+							tags.update((tags) => {
+								return new Set([...tags, author]).values().toArray();
+							});
+						}}
 					>
 						<h4>{author.value}</h4>
-					</li>
+					</button>
 				{/each}
-				{#if !$isFetching && hasNext}
+				{#if !isFetching && hasNext}
 					<div bind:this={toObserve}></div>
 				{/if}
 			</menu>
@@ -62,23 +65,24 @@
 		overflow-y: scroll;
 		color: var(--text-color);
 		padding-left: 0em;
-		li {
+		.li {
 			padding-left: 1em;
-			transition: background-color 200ms ease-in-out;
+			transition: background-color 50ms ease-in-out;
+			background-color: transparent;
+			color: var(--text-color);
+			border: 0px;
+			align-items: center;
 			h4 {
 				margin: 0px;
 			}
 		}
-		li[data-highlighted] {
+		.li:not(.isSelected):hover {
 			background-color: var(--accent-hover);
 		}
-		li:not(.isSelected):hover {
-			background-color: var(--accent-hover);
-		}
-		li:not(.isSelected):active {
+		.li:not(.isSelected):active {
 			background-color: var(--accent-active);
 		}
-		li.isSelected {
+		.li.isSelected {
 			background-color: var(--primary);
 		}
 	}
