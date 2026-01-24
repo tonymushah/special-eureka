@@ -298,7 +298,7 @@
 		padding-left: 0em;
 		.mi {
 			padding-left: 1em;
-			transition: background-color 200ms ease-in-out;
+			transition: background-color 50ms ease-in-out;
 			background-color: transparent;
 			color: var(--text-color);
 			border: 0px;
