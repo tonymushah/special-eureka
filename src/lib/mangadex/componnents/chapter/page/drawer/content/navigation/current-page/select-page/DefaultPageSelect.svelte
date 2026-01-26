@@ -4,13 +4,11 @@
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import MangaDexVarThemeProvider from "@mangadex/componnents/theme/MangaDexVarThemeProvider.svelte";
 	import { floatingUImenu } from "@mangadex/utils/floating-ui/menu.svelte";
+	import type { SelectOption } from "@mangadex/utils/legacy/melt-ui-select-option";
 	import { range } from "lodash";
 	import { derived, get, type Writable } from "svelte/store";
 	import { slide } from "svelte/transition";
-	type SelectOption<T> = {
-		value: T;
-		label: string;
-	};
+
 	const currentPageContext = getChapterCurrentPageContext();
 	const currentPageSelectedReadable = derived(currentPageContext, ($page) => {
 		return {
