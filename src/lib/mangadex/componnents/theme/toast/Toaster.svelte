@@ -63,7 +63,7 @@
 </script>
 
 <script lang="ts">
-	import { createToaster, Toaster as ArkToaster, Toast } from "@ark-ui/svelte";
+	import { createToaster, Toaster as ArkToaster, Toast, Portal } from "@ark-ui/svelte";
 	import MangaDexVarThemeProvider from "../MangaDexVarThemeProvider.svelte";
 	import { toastNotify } from "@mangadex/stores/toastNotify";
 	import {
@@ -78,19 +78,23 @@
 	import toastStyles from "./toaster.module.scss";
 </script>
 
-<ArkToaster {toaster}>
-	{#snippet children(toast)}
-		<MangaDexVarThemeProvider>
-			<Toast.Root class={toastStyles.toast}>
-				<Toast.Title class={toastStyles.title}>{toast().title}</Toast.Title>
-				<Toast.Description class={toastStyles.description}>{toast().description}</Toast.Description>
-				<Toast.CloseTrigger class={toastStyles.close}>
-					<X />
-				</Toast.CloseTrigger>
-			</Toast.Root>
-		</MangaDexVarThemeProvider>
-	{/snippet}
-</ArkToaster>
+<Portal>
+	<ArkToaster {toaster}>
+		{#snippet children(toast)}
+			<MangaDexVarThemeProvider>
+				<Toast.Root class={toastStyles.toast}>
+					<Toast.Title class={toastStyles.title}>{toast().title}</Toast.Title>
+					<Toast.Description class={toastStyles.description}
+						>{toast().description}</Toast.Description
+					>
+					<Toast.CloseTrigger class={toastStyles.close}>
+						<X class={toastStyles.x} />
+					</Toast.CloseTrigger>
+				</Toast.Root>
+			</MangaDexVarThemeProvider>
+		{/snippet}
+	</ArkToaster>
+</Portal>
 
 <!-- 
 <div use:portal class="portal" class:rtl={$isSidebarRtl} style="--decoH: {$decoHStore}px">

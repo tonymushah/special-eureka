@@ -3,8 +3,7 @@
 	border-radius: 0.5rem; /* 8px */
 	background-color: var(--accent-l1);
 	border: 2px solid var(--mid-tone);
-	position: relative;
-	display: flex;
+	display: grid;
 	width: 24rem;
 	max-width: calc(100vw - 2rem);
 	align-items: center;
@@ -12,18 +11,39 @@
 	gap: 1rem; /* 16px */
 	padding: 1.25rem; /* 20px */
 	overflow: hidden;
+	translate: var(--x) var(--y);
+	scale: var(--scale);
+	z-index: var(--z-index);
+	/* height: var(--height); */
+	opacity: var(--opacity);
+	will-change: translate, opacity, scale;
+	transition:
+		translate 400ms,
+		scale 400ms,
+		opacity 400ms,
+		height 400ms,
+		box-shadow 200ms;
+	transition-timing-function: cubic-bezier(0.21, 1.02, 0.73, 1);
+
+	&[data-state="closed"] {
+		transition:
+			translate 400ms,
+			scale 400ms,
+			opacity 200ms;
+		transition-timing-function: cubic-bezier(0.06, 0.71, 0.55, 1);
+	}
 
 	&[data-type="error"] {
-		background: var(--accent-l3);
-		color: var(--danger-l2);
+		background: color-mix(in srgb, var(--accent-l3) 50%, var(--danger-l2) 50%);
+		color: var(--text-color);
 	}
 
 	&[data-type="info"] {
-		color: var(--mid-tone);
+		color: var(--text-color);
 	}
 
 	&[data-type="warning"] {
-		background: var(--status-yellow);
+		background: color-mix(in srgb, var(--accent-l3) 50%, var(--status-yellow) 50%);
 	}
 
 	&[data-type="success"] {
@@ -34,25 +54,31 @@
 
 .title {
 	margin: 0px;
-	display: flex;
 	align-items: center;
 	gap: 0.5rem; /* 8px */
 	font-weight: 600;
 	font-size: 16px;
+	line-clamp: 2;
+	-webkit-line-clamp: 2;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
 }
 .close {
 	position: absolute;
 	right: 1rem; /* 16px */
 	top: 1rem; /* 16px */
-	display: grid;
-	width: 24px;
-	height: 24px;
+	display: flex;
+	width: 16px;
+	height: 16px;
 	justify-content: center;
 	align-items: center;
-	border-radius: 9999px;
-	background-color: inherit;
+	border-radius: 6px;
+	background-color: transparent;
 	border: none;
 	color: var(--text-color);
+	transition: background 50ms ease-in-out;
+	padding: 0px;
 }
 .close:hover {
 	background-color: var(--accent-l1-hover);
@@ -62,4 +88,8 @@
 }
 .description {
 	font-size: 12px;
+	color: var(--text-color);
+}
+
+.x {
 }

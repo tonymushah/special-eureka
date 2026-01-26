@@ -1,90 +1,30 @@
 <script lang="ts">
-	import { derived, get, type Readable } from "svelte/store";
 	import { isLongStrip } from "../../../contexts/currentChapterReadingMode";
 	import { getLongStripImagesWidthContextWritable } from "../../../readinMode/longStrip/utils/context/longstrip_images_width";
-	import { createSlider, createTooltip, melt } from "@melt-ui/svelte";
 	import SettingsTransitComp from "./utils/SettingsTransitComp.svelte";
-	import { fade } from "svelte/transition";
-	import MangaDexVarThemeProvider from "@mangadex/componnents/theme/MangaDexVarThemeProvider.svelte";
+	import { Slider } from "@ark-ui/svelte/slider";
 
 	const isLong = isLongStrip();
 	const imageWidth = getLongStripImagesWidthContextWritable();
-	const derivedImageWidth: Readable<number[]> & {
-		set: (value: number[]) => void;
-	} = {
-		subscribe(run, invalidate) {
-			return derived(imageWidth, ($i) => {
-				return [$i];
-			}).subscribe(run, invalidate);
-		},
-		set(value) {
-			imageWidth.set(value[0]);
-		}
-	};
-	const {
-		elements: { root, range, thumbs }
-	} = createSlider({
-		min: 0,
-		max: 100,
-		step: 1,
-		value: {
-			subscribe(run, invalidate) {
-				return derivedImageWidth.subscribe(run, invalidate);
-			},
-			update(updater) {
-				derivedImageWidth.set(updater(get(derivedImageWidth)));
-			},
-			set(value) {
-				derivedImageWidth.set(value);
-			}
-		}
-	});
-	const {
-		elements: { trigger, content, arrow },
-		states: { open }
-	} = createTooltip({
-		positioning: {
-			placement: "bottom"
-		},
-		openDelay: 0,
-		closeDelay: 0,
-		closeOnPointerDown: false,
-		forceVisible: true
-	});
-	const tooltipContent = derived(imageWidth, ($iw) => {
-		if ($iw == 0) {
-			return 100;
-		} else {
-			return $iw;
-		}
-	});
 </script>
 
 {#if $isLong}
 	<SettingsTransitComp>
-		<div class="root">
-			<h4>Image Width</h4>
-			<div class="slider-container">
-				<span use:melt={$root} class="slider-root">
-					<span class="slider-range-outer">
-						<span use:melt={$range} class="slider-range"></span>
-					</span>
-					<span use:melt={$thumbs[0]} use:melt={$trigger} class="slider-thumbs"> </span>
-				</span>
+		<Slider.Root bind:value={() => [$imageWidth], (i) => ($imageWidth = i.at(0) ?? 0)}>
+			<div>
+				<Slider.Label>Image Width</Slider.Label>
+				<Slider.ValueText />
 			</div>
-		</div>
+			<Slider.Control>
+				<Slider.Track>
+					<Slider.Range />
+				</Slider.Track>
+				<Slider.Thumb index={0}>
+					<Slider.HiddenInput />
+				</Slider.Thumb>
+			</Slider.Control>
+		</Slider.Root>
 	</SettingsTransitComp>
-{/if}
-
-{#if $open}
-	<div class="tooltip" use:melt={$content} transition:fade={{ duration: 100 }}>
-		<MangaDexVarThemeProvider>
-			<div class="tooltip-content">
-				<div use:melt={$arrow}></div>
-				<h4>{$tooltipContent}%</h4>
-			</div>
-		</MangaDexVarThemeProvider>
-	</div>
 {/if}
 
 <style lang="scss">
