@@ -5,11 +5,11 @@
 	import ButtonAccentOnlyLabel from "@mangadex/componnents/theme/buttons/ButtonAccentOnlyLabel.svelte";
 	import Icon from "./reading-mode/Icon.svelte";
 	import SettingsTransitComp from "./utils/SettingsTransitComp.svelte";
-	import { createPopover, melt } from "@melt-ui/svelte";
 	import MangaDexVarThemeProvider from "@mangadex/componnents/theme/MangaDexVarThemeProvider.svelte";
 	import { slide } from "svelte/transition";
 	import { BookOpenIcon, FileIcon, MoreHorizontalIcon, MoreVerticalIcon } from "@lucide/svelte";
 	import { getCurrentChapterData } from "../../../contexts/currentChapter";
+	import { floatingUImenu } from "@mangadex/utils/floating-ui/menu.svelte";
 
 	const mode = getCurrentChapterReadingModeWritable();
 	const currentData = getCurrentChapterData();
@@ -29,15 +29,17 @@
 		}
 	});
 	const size = "18";
-	const {
-		elements: { content: menu, trigger, close },
-		states: { open }
-	} = createPopover({
-		forceVisible: true,
-		positioning: {
-			placement: "bottom",
-			sameWidth: true
-		}
+	let open = $state(false);
+	let trigger = $state<HTMLElement | undefined>();
+	let menu = $state<HTMLElement | undefined>();
+	floatingUImenu({
+		open: () => open,
+		triggerElement: () => trigger,
+		menuElement: () => menu,
+		showMenuDisplay: "flex",
+		setOpen: (o) => (open = o),
+		sameWidth: true,
+		closeOnClick: true
 	});
 </script>
 
@@ -67,7 +69,7 @@
 				}
 			}
 		}}
-		use:melt={$trigger}
+		bind:this={trigger}
 	>
 		<ButtonAccentOnlyLabel
 			variant="3"
@@ -75,19 +77,21 @@
 			disabled={$currentData.isLongstrip}
 			label={$label}
 			oneLine
+			onclick={() => {
+				open = !open;
+			}}
 		/>
 	</div>
 </SettingsTransitComp>
 
-{#if $open && !$currentData.isLongstrip}
-	<div class="menu-outer" use:melt={$menu}>
+{#if open && !$currentData.isLongstrip}
+	<div class="menu-outer" bind:this={menu}>
 		<MangaDexVarThemeProvider>
 			<menu transition:slide={{ duration: 150, axis: "y" }}>
 				<!-- svelte-ignore a11y_no_noninteractive_element_to_interactive_role -->
 				<li
 					role="button"
 					tabindex="0"
-					use:melt={$close}
 					onclick={() => {
 						mode.set(ReadingMode.SinglePage);
 					}}
@@ -100,8 +104,8 @@
 					<h4>Single Page</h4>
 				</li>
 				<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+				<!-- svelte-ignore a11y_click_events_have_key_events -->
 				<li
-					use:melt={$close}
 					onclick={() => {
 						mode.set(ReadingMode.DoublePage);
 					}}
@@ -113,8 +117,8 @@
 					<h4>Double Page</h4>
 				</li>
 				<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+				<!-- svelte-ignore a11y_click_events_have_key_events -->
 				<li
-					use:melt={$close}
 					onclick={() => {
 						mode.set(ReadingMode.LongStrip);
 					}}
@@ -126,8 +130,8 @@
 					<h4>Longstrip</h4>
 				</li>
 				<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+				<!-- svelte-ignore a11y_click_events_have_key_events -->
 				<li
-					use:melt={$close}
 					onclick={() => {
 						mode.set(ReadingMode.WideStrip);
 					}}
@@ -145,16 +149,16 @@
 
 <style lang="scss">
 	.menu-outer {
-		display: flex;
+		display: none;
 		flex-direction: column;
 		position: absolute;
 	}
-	.layout {
+	/* .layout {
 		flex: 3;
 		display: flex;
 		flex-direction: column;
 		gap: 4px;
-	}
+	} */
 	menu {
 		margin: 0px;
 		border-radius: 0.25em;
@@ -184,9 +188,9 @@
 			background-color: var(--primary);
 		}
 	}
-	.input {
+	/* .input {
 		display: grid;
-	}
+	} */
 	div.outer {
 		display: grid;
 	}
