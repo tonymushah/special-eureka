@@ -56,7 +56,12 @@
 
 <div class="layout">
 	<div class="input" bind:this={trigger}>
-		<ButtonAccent disabled={$hasRelated}>
+		<ButtonAccent
+			disabled={!$hasRelated}
+			onclick={() => {
+				open = !open;
+			}}
+		>
 			{#if $current.chapterNumber != undefined}
 				Chapter {$current.chapterNumber}
 			{:else if $current.isOneshot}
