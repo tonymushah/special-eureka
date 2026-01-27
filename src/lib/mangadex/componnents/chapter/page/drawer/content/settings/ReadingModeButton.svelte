@@ -39,38 +39,13 @@
 		showMenuDisplay: "flex",
 		setOpen: (o) => (open = o),
 		sameWidth: true,
-		closeOnClick: true
+		closeOnClick: true,
+		closeOnOutClick: true
 	});
 </script>
 
 <SettingsTransitComp>
-	<div
-		role="menu"
-		tabindex="0"
-		class="outer"
-		oncontextmenu={(e) => {
-			e.preventDefault();
-			if (!$currentData.isLongstrip) {
-				switch ($mode) {
-					case ReadingMode.SinglePage:
-						mode.set(ReadingMode.DoublePage);
-						break;
-					case ReadingMode.DoublePage:
-						mode.set(ReadingMode.LongStrip);
-						break;
-					case ReadingMode.LongStrip:
-						mode.set(ReadingMode.WideStrip);
-						break;
-					case ReadingMode.WideStrip:
-						mode.set(ReadingMode.SinglePage);
-						break;
-					default:
-						break;
-				}
-			}
-		}}
-		bind:this={trigger}
-	>
+	<div class="outer" bind:this={trigger}>
 		<ButtonAccentOnlyLabel
 			variant="3"
 			icon={Icon}
@@ -80,78 +55,98 @@
 			onclick={() => {
 				open = !open;
 			}}
+			oncontextmenu={(e) => {
+				e.preventDefault();
+				if (!$currentData.isLongstrip) {
+					switch ($mode) {
+						case ReadingMode.SinglePage:
+							mode.set(ReadingMode.DoublePage);
+							break;
+						case ReadingMode.DoublePage:
+							mode.set(ReadingMode.LongStrip);
+							break;
+						case ReadingMode.LongStrip:
+							mode.set(ReadingMode.WideStrip);
+							break;
+						case ReadingMode.WideStrip:
+							mode.set(ReadingMode.SinglePage);
+							break;
+						default:
+							break;
+					}
+				}
+			}}
 		/>
 	</div>
+	{#if open && !$currentData.isLongstrip}
+		<div class="menu-outer" bind:this={menu}>
+			<MangaDexVarThemeProvider>
+				<menu transition:slide={{ duration: 150, axis: "y" }}>
+					<!-- svelte-ignore a11y_no_noninteractive_element_to_interactive_role -->
+					<li
+						role="button"
+						tabindex="0"
+						onclick={() => {
+							mode.set(ReadingMode.SinglePage);
+						}}
+						onkeypress={() => {}}
+						class:isSelected={$mode == ReadingMode.SinglePage}
+					>
+						<div class="icon">
+							<BookOpenIcon {size} />
+						</div>
+						<h4>Single Page</h4>
+					</li>
+					<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+					<!-- svelte-ignore a11y_click_events_have_key_events -->
+					<li
+						onclick={() => {
+							mode.set(ReadingMode.DoublePage);
+						}}
+						class:isSelected={$mode == ReadingMode.DoublePage}
+					>
+						<div class="icon">
+							<FileIcon {size} />
+						</div>
+						<h4>Double Page</h4>
+					</li>
+					<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+					<!-- svelte-ignore a11y_click_events_have_key_events -->
+					<li
+						onclick={() => {
+							mode.set(ReadingMode.LongStrip);
+						}}
+						class:isSelected={$mode == ReadingMode.LongStrip}
+					>
+						<div class="icon">
+							<MoreVerticalIcon {size} />
+						</div>
+						<h4>Longstrip</h4>
+					</li>
+					<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+					<!-- svelte-ignore a11y_click_events_have_key_events -->
+					<li
+						onclick={() => {
+							mode.set(ReadingMode.WideStrip);
+						}}
+						class:isSelected={$mode == ReadingMode.WideStrip}
+					>
+						<div class="icon">
+							<MoreHorizontalIcon {size} />
+						</div>
+						<h4>Widestrip</h4>
+					</li>
+				</menu>
+			</MangaDexVarThemeProvider>
+		</div>
+	{/if}
 </SettingsTransitComp>
-
-{#if open && !$currentData.isLongstrip}
-	<div class="menu-outer" bind:this={menu}>
-		<MangaDexVarThemeProvider>
-			<menu transition:slide={{ duration: 150, axis: "y" }}>
-				<!-- svelte-ignore a11y_no_noninteractive_element_to_interactive_role -->
-				<li
-					role="button"
-					tabindex="0"
-					onclick={() => {
-						mode.set(ReadingMode.SinglePage);
-					}}
-					onkeypress={() => {}}
-					class:isSelected={$mode == ReadingMode.SinglePage}
-				>
-					<div class="icon">
-						<BookOpenIcon {size} />
-					</div>
-					<h4>Single Page</h4>
-				</li>
-				<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-				<!-- svelte-ignore a11y_click_events_have_key_events -->
-				<li
-					onclick={() => {
-						mode.set(ReadingMode.DoublePage);
-					}}
-					class:isSelected={$mode == ReadingMode.DoublePage}
-				>
-					<div class="icon">
-						<FileIcon {size} />
-					</div>
-					<h4>Double Page</h4>
-				</li>
-				<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-				<!-- svelte-ignore a11y_click_events_have_key_events -->
-				<li
-					onclick={() => {
-						mode.set(ReadingMode.LongStrip);
-					}}
-					class:isSelected={$mode == ReadingMode.LongStrip}
-				>
-					<div class="icon">
-						<MoreVerticalIcon {size} />
-					</div>
-					<h4>Longstrip</h4>
-				</li>
-				<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-				<!-- svelte-ignore a11y_click_events_have_key_events -->
-				<li
-					onclick={() => {
-						mode.set(ReadingMode.WideStrip);
-					}}
-					class:isSelected={$mode == ReadingMode.WideStrip}
-				>
-					<div class="icon">
-						<MoreHorizontalIcon {size} />
-					</div>
-					<h4>Widestrip</h4>
-				</li>
-			</menu>
-		</MangaDexVarThemeProvider>
-	</div>
-{/if}
 
 <style lang="scss">
 	.menu-outer {
-		display: none;
 		flex-direction: column;
 		position: absolute;
+		z-index: 10;
 	}
 	/* .layout {
 		flex: 3;
@@ -165,9 +160,10 @@
 		list-style: none;
 		background-color: var(--accent);
 		z-index: 10;
-		overflow-y: scroll;
+		/* overflow-y: scroll; */
 		color: var(--text-color);
 		padding-left: 0em;
+		overflow: hidden;
 		li {
 			padding-left: 1em;
 			transition: background-color 200ms ease-in-out;
