@@ -531,7 +531,9 @@
 				}
 			}
 		}}
-		disableComments={createForumThreadMutation.isPending || statsQuery.isLoading}
+		disableComments={createForumThreadMutation.isPending ||
+			statsQuery.isLoading ||
+			stats == undefined}
 	/>
 	{@render children?.()}
 </div>
