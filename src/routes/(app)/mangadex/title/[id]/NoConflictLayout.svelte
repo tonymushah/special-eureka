@@ -64,6 +64,7 @@
 	import { ArrowUpFromLine } from "@lucide/svelte";
 	import { fade } from "svelte/transition";
 	import { mangaInfoPosition } from "@mangadex/stores/manga-info-position";
+	import statsGQLQuery from "./(layout)/statsQuery";
 
 	type TopMangaStatisticsStoreData = TopMangaStatistics & {
 		threadUrl?: string;
@@ -79,9 +80,26 @@
 
 	// NOTE: this is completely intentional
 	// svelte-ignore state_referenced_locally
-	const statsStore = data.statsQueryStore!;
-	const stats = der(statsStore, ($stats) => {
-		const _data = $stats.data?.statistics.manga.get;
+	let statsQuery = createQuery(() => ({
+		queryKey: ["title", data.layoutData.id, "stats"],
+		async queryFn() {
+			const res = await client
+				.query(statsGQLQuery, {
+					id: data.layoutData.id
+				})
+				.toPromise();
+			if (res.error) {
+				throw res.error;
+			} else if (res.data) {
+				return res.data.statistics.manga.get;
+			} else {
+				throw new Error("no data");
+			}
+		},
+		networkMode: "online"
+	}));
+	let stats: TopMangaStatisticsStoreData | undefined = $derived.by(() => {
+		const _data = statsQuery.data;
 		if (_data) {
 			return {
 				average: _data.rating.bayesian ?? 0,
@@ -136,21 +154,21 @@
 		queryFn() {
 			return get_manga_following_status(data.layoutData.id);
 		},
-		networkMode: "online"
+		enabled: $isLogged
 	}));
 	let readingStatusQuery = createQuery(() => ({
 		queryKey: ["title", data.layoutData.id, "reading", "status"],
 		queryFn() {
 			return get_manga_reading_status(data.layoutData.id);
 		},
-		networkMode: "online"
+		enabled: $isLogged
 	}));
 	let title_rating = createQuery(() => ({
 		queryKey: ["title", data.layoutData.id, "user-defined", "rating"],
 		queryFn() {
 			return get_manga_rating(data.layoutData.id);
 		},
-		networkMode: "online"
+		enabled: $isLogged
 	}));
 	function refetchReadingFollowingStatus() {
 		Promise.all([
@@ -248,7 +266,8 @@
 				} else {
 					return res.data?.readMarker.mangaReadMarkersByMangaId.map(String) ?? [];
 				}
-			}
+			},
+			enabled: $isLogged
 		} satisfies CreateQueryOptions;
 	});
 
@@ -341,6 +360,7 @@
 		}
 	}
 	let shouldInfoBeneathDesc = $derived(mangaInfoPos == MangaInfosPositions.BeneathDescription);
+	console.log("sad");
 </script>
 
 <svelte:window
@@ -353,7 +373,7 @@
 <AppTitle title={`${layoutData.title ?? ""} | MangaDex`} />
 
 <MangaPageTopInfo
-	bind:id={layoutData.id}
+	id={layoutData.id}
 	title={layoutData.title ?? ""}
 	altTitle={layoutData.altTitle}
 	coverImage={layoutData.coverImage}
@@ -362,10 +382,10 @@
 	tags={layoutData.tags}
 	status={layoutData.status}
 	year={layoutData.year ?? undefined}
-	stats={$stats}
+	{stats}
 	oncomments={() => {
-		if ($stats != undefined) {
-			const url = $stats?.threadUrl;
+		if (stats != undefined) {
+			const url = stats.threadUrl;
 			if (url) {
 				open(url);
 			} else {
@@ -500,10 +520,10 @@
 	<MangaNavBar
 		id={layoutData.id}
 		{hasRelation}
-		comments={$stats?.comments}
+		comments={stats?.comments}
 		oncomment={() => {
-			if ($stats != undefined) {
-				const url = $stats?.threadUrl;
+			if (stats != undefined) {
+				const url = stats?.threadUrl;
 				if (url) {
 					open(url);
 				} else {
@@ -511,7 +531,7 @@
 				}
 			}
 		}}
-		disableComments={createForumThreadMutation.isPending}
+		disableComments={createForumThreadMutation.isPending || statsQuery.isLoading}
 	/>
 	{@render children?.()}
 </div>
