@@ -50,7 +50,8 @@
 		showMenuDisplay: "flex",
 		setOpen: (o) => (open = o),
 		sameWidth: true,
-		closeOnClick: true
+		closeOnClick: true,
+		closeOnOutClick: true
 	});
 </script>
 
@@ -71,37 +72,36 @@
 			{/if}
 		</ButtonAccent>
 	</div>
+	{#if open}
+		<div class="menu-outer" bind:this={menu}>
+			<MangaDexVarThemeProvider>
+				<menu transition:slide={{ duration: 150, axis: "y" }}>
+					{#each menu_options as [volume, chapters]}
+						<section>
+							<div class="label">
+								<span>
+									Volume {upperCase(volume)}
+								</span>
+								<hr />
+							</div>
+							{#each chapters as chapter}
+								<button
+									class="li"
+									onclick={() => {
+										fireSelectChapterEvent(chapter.id);
+									}}
+									class:isSelected={isSelected(chapter.id)}
+								>
+									<h4>{chapter.label}</h4>
+								</button>
+							{/each}
+						</section>
+					{/each}
+				</menu>
+			</MangaDexVarThemeProvider>
+		</div>
+	{/if}
 </div>
-
-{#if open}
-	<div class="menu-outer" bind:this={menu}>
-		<MangaDexVarThemeProvider>
-			<menu transition:slide={{ duration: 150, axis: "y" }}>
-				{#each menu_options as [volume, chapters]}
-					<section>
-						<div class="label">
-							<span>
-								Volume {upperCase(volume)}
-							</span>
-							<hr />
-						</div>
-						{#each chapters as chapter}
-							<button
-								class="li"
-								onclick={() => {
-									fireSelectChapterEvent(chapter.id);
-								}}
-								class:isSelected={isSelected(chapter.id)}
-							>
-								<h4>{chapter.label}</h4>
-							</button>
-						{/each}
-					</section>
-				{/each}
-			</menu>
-		</MangaDexVarThemeProvider>
-	</div>
-{/if}
 
 <style lang="scss">
 	.label {
@@ -124,17 +124,19 @@
 		display: flex;
 		flex-direction: column;
 		height: 200px;
+		position: absolute;
 	}
 	.layout {
 		flex: 3;
 		display: flex;
 		flex-direction: column;
 		gap: 4px;
+		position: relative;
 	}
 	menu {
 		margin: 0px;
 		border-radius: 0.25em;
-
+		display: grid;
 		background-color: var(--accent);
 		z-index: 10;
 		overflow-y: scroll;
@@ -142,15 +144,19 @@
 		padding-left: 0em;
 		section {
 			list-style: none;
+			display: grid;
 			.li {
-				transition: background-color 200ms ease-in-out;
+				padding: 0px;
+				transition: background-color 40ms ease-in-out;
 				background: transparent;
 				border: 0px;
 				font-family: var(--fonts);
+				color: var(--text-color);
 				h4 {
 					padding-left: 0.5em;
 					margin: 0px;
 					font-size: 14px;
+					text-align: start;
 				}
 			}
 			.li:not(.isSelected):hover {
