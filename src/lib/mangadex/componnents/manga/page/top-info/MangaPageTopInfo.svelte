@@ -28,14 +28,14 @@
 	import { ContextMenuItemProvider } from "@special-eureka/core/commands/contextMenu";
 	import { writeText } from "@tauri-apps/plugin-clipboard-manager";
 
-	type ClickEventHandler<A = {}> = (
+	type ClickEventHandler<A = object> = (
 		ev: MouseEvent & {
 			currentTarget: EventTarget & HTMLElement;
 		} & A
-	) => any;
+	) => unknown;
 	interface Events {
-		onreadingStatus?: (ev: ReadingStatusEventDetail) => any;
-		onrating?: (ev: number) => any;
+		onreadingStatus?: (ev: ReadingStatusEventDetail) => unknown;
+		onrating?: (ev: number) => unknown;
 		ondownload?: ClickEventHandler;
 		ondelete?: ClickEventHandler;
 		onaddToList?: ClickEventHandler;
@@ -109,12 +109,19 @@
 	}: Props = $props();
 
 	setTopMangaIdContextStore(id);
+	// svelte-ignore state_referenced_locally
 	setTopMangaTitleContextStore(title);
+	// svelte-ignore state_referenced_locally
 	setTopCoverContextStore(coverImage);
+	// svelte-ignore state_referenced_locally
 	setTopMangaReadingStatusContextStore(reading_status);
+	// svelte-ignore state_referenced_locally
 	setTopCoverAltContextStore(coverImageAlt);
+	// svelte-ignore state_referenced_locally
 	setTopMangaIsFollowingContextStore(isFollowing);
+	// svelte-ignore state_referenced_locally
 	setTopMangaRatingContextStore(rating);
+	// svelte-ignore state_referenced_locally
 	setTopMangaDownloadContextStore(downloadState);
 </script>
 
@@ -190,7 +197,7 @@
 			{#if stats != undefined}
 				<div class="stats">
 					<TopMangaStats
-						bind:stats
+						{stats}
 						oncommentClick={(detail) => {
 							oncomments?.(detail);
 						}}
