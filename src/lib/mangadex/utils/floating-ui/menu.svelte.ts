@@ -8,7 +8,7 @@ async function update({
 		const { x, y } = await computePosition(triggerElement, menuElement, {
 			placement: "bottom",
 			middleware: [
-				offset(6),
+				offset(3),
 				flip(),
 				shift({
 					padding: 5
