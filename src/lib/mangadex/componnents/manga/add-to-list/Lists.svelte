@@ -61,27 +61,25 @@
 	let selectedListMap = $state(new Map<string, ActionMode>());
 	let addToListMut = mutationQueryMutation();
 
-	$effect.pre(() => {
-		mutate = async (manga_id: string) => {
-			isMutating = true;
-			try {
-				await addToListMut.mutateAsync(
-					{
-						selectedListMap,
-						title: manga_id,
-						client
-					},
-					{
-						onSettled() {
-							query.refetch();
-						}
+	mutate = async (manga_id: string) => {
+		isMutating = true;
+		try {
+			await addToListMut.mutateAsync(
+				{
+					selectedListMap,
+					title: manga_id,
+					client
+				},
+				{
+					onSettled() {
+						query.refetch();
 					}
-				);
-			} finally {
-				isMutating = false;
-			}
-		};
-	});
+				}
+			);
+		} finally {
+			isMutating = false;
+		}
+	};
 	let hasNext = $derived(query.hasNextPage);
 	let isFetching = $derived(query.isLoading);
 	const debounce_wait = 450;
