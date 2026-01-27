@@ -11,10 +11,10 @@
 		ev: MouseEvent & {
 			currentTarget: EventTarget & HTMLElement;
 		}
-	) => any;
+	) => unknown;
 	interface Events {
-		onreadingStatus?: (ev: ReadingStatusEventDetail) => any;
-		onrating?: (ev: number) => any;
+		onreadingStatus?: (ev: ReadingStatusEventDetail) => unknown;
+		onrating?: (ev: number) => unknown;
 		ondownload?: ClickEventHandler;
 		ondelete?: ClickEventHandler;
 		onaddToList?: ClickEventHandler;

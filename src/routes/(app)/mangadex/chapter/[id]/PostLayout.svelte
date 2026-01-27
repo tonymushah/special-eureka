@@ -123,9 +123,7 @@
 							onSuccess() {
 								if (dev) {
 									addToast({
-										data: {
-											title: "Marked chapter as read"
-										}
+										title: "Marked chapter as read"
 									});
 								}
 							},

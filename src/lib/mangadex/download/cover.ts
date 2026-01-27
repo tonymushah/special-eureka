@@ -106,18 +106,17 @@ export const downloadMutationQuery = () =>
 					.toPromise();
 				return res;
 			},
-			onSettled(_data, _error, variables, _context) {
+			onSettled(_data, _error, variables) {
 				invalidateCoverOfflinePresence(variables);
 			},
-			onError(error, variables, _context) {
+			onError(error, variables) {
 				addErrorToast(`Cannot download cover art ${variables}`, error);
 			},
-			onSuccess(_data, variables, _context) {
+			onSuccess(_data, variables) {
 				addToast({
-					data: {
-						title: "Downloaded cover art",
-						description: variables
-					}
+					title: "Downloaded cover art",
+					description: variables,
+					type: "success"
 				});
 			}
 		}),
@@ -136,18 +135,17 @@ export const removeMutation = () =>
 					.toPromise();
 				return res;
 			},
-			onSettled(_data, _error, variables, _context) {
+			onSettled(_data, _error, variables) {
 				invalidateCoverOfflinePresence(variables);
 			},
-			onSuccess(_data, variables, _context) {
+			onSuccess(_data, variables) {
 				addToast({
-					data: {
-						title: `Removed cover`,
-						description: variables
-					}
+					title: `Removed cover`,
+					description: variables,
+					type: "success"
 				});
 			},
-			onError(error, variables, _context) {
+			onError(error, variables) {
 				addErrorToast(`Cannot remove cover ${variables}`, error);
 			},
 			networkMode: "always"
@@ -167,18 +165,17 @@ export const cancelDonwloadMutation = () =>
 					.toPromise();
 				return res;
 			},
-			onSettled(_data, _error, variables, _context) {
+			onSettled(_data, _error, variables) {
 				invalidateCoverOfflinePresence(variables);
 			},
-			onSuccess(_data, variables, _context) {
+			onSuccess(_data, variables) {
 				addToast({
-					data: {
-						title: `Removed cover`,
-						description: variables
-					}
+					title: `Removed cover`,
+					description: variables,
+					type: "success"
 				});
 			},
-			onError(error, variables, _context) {
+			onError(error, variables) {
 				addErrorToast(`Cannot remove cover ${variables}`, error);
 			},
 			networkMode: "always"
@@ -278,6 +275,7 @@ export default function coverDownloadState({
 				return CoverDownloadState.Pending;
 			}
 		})();
+		_set(res);
 	});
 }
 

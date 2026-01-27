@@ -34,53 +34,72 @@ const globalIsMutatingInner = writable(false);
 
 export const isChangingListFollowing = readonly(globalIsMutatingInner);
 
-export const followCustomListMutation = () => createMutation(() => ({
-	mutationKey: ["custom-list", "follow"],
-	async mutationFn(id: string) {
-		const res = await client.mutation(followCustomListGQLMutation, {
-			id
-		}).toPromise();
-		if (res.error) {
-			throw res.error;
-		}
-	},
-	onMutate(variables, context) {
-		globalIsMutatingInner.set(true);
-	},
-	onSettled(data, error, variables, onMutateResult, context) {
-		globalIsMutatingInner.set(false);
-	},
-}), () => mangadexQueryClient);
+export const followCustomListMutation = () =>
+	createMutation(
+		() => ({
+			mutationKey: ["custom-list", "follow"],
+			async mutationFn(id: string) {
+				const res = await client
+					.mutation(followCustomListGQLMutation, {
+						id
+					})
+					.toPromise();
+				if (res.error) {
+					throw res.error;
+				}
+			},
+			onMutate() {
+				globalIsMutatingInner.set(true);
+			},
+			onSettled() {
+				globalIsMutatingInner.set(false);
+			}
+		}),
+		() => mangadexQueryClient
+	);
 
-export const unfollowCustomListMutation = () => createMutation(() => ({
-	mutationKey: ["custom-list", "unfollow"],
-	async mutationFn(id: string) {
-		const res = await client.mutation(unfollowCustomListGQLMutation, {
-			id
-		}).toPromise();
-		if (res.error) {
-			throw res.error;
-		}
-	},
-	onMutate(variables, context) {
-		globalIsMutatingInner.set(true);
-	},
-	onSettled(data, error, variables, onMutateResult, context) {
-		globalIsMutatingInner.set(false);
-	},
-}), () => mangadexQueryClient);
+export const unfollowCustomListMutation = () =>
+	createMutation(
+		() => ({
+			mutationKey: ["custom-list", "unfollow"],
+			async mutationFn(id: string) {
+				const res = await client
+					.mutation(unfollowCustomListGQLMutation, {
+						id
+					})
+					.toPromise();
+				if (res.error) {
+					throw res.error;
+				}
+			},
+			onMutate() {
+				globalIsMutatingInner.set(true);
+			},
+			onSettled() {
+				globalIsMutatingInner.set(false);
+			}
+		}),
+		() => mangadexQueryClient
+	);
 
-export default function isFollowingCustomList(id: string, options?: {
-	onSettled?: (error: Error | null, variables: string) => void;
-	onError?: (error: Error, variables: string) => void;
-	onSucess?: (variables: string) => void;
-	toast?: boolean
-}): Writable<boolean> {
+export default function isFollowingCustomList(
+	id: string,
+	options?: {
+		onSettled?: (error: Error | null, variables: string) => void;
+		onError?: (error: Error, variables: string) => void;
+		onSucess?: (variables: string) => void;
+		toast?: boolean;
+	}
+): Writable<boolean> {
 	const toast = options?.toast ?? true;
 	const query = isFollowingCustomListQuery_(id);
-	const queryDerived = derived(internalToStore(query), ($query) => {
-		return $query.data ?? false
-	}, false);
+	const queryDerived = derived(
+		internalToStore(query),
+		($query) => {
+			return $query.data ?? false;
+		},
+		false
+	);
 	return {
 		subscribe(run, invalidate) {
 			return queryDerived.subscribe(run, invalidate);
@@ -98,21 +117,27 @@ export default function isFollowingCustomList(id: string, options?: {
 }
 
 export function isFollowingCustomListQuery_(id: string) {
-	return () => createQuery(() => ({
-		queryKey: ["custom-list", id, "is-following"],
-		async queryFn() {
-			const res = await client.query(isFollowingCustomListQuery, {
-				id
-			}).toPromise();
-			if (res.error) {
-				throw res.error;
-			} else if (res.data) {
-				return res.data.follows.isFollowingCustomList;
-			} else {
-				throw new Error("no data??");
-			}
-		}
-	}), () => mangadexQueryClient);
+	return () =>
+		createQuery(
+			() => ({
+				queryKey: ["custom-list", id, "is-following"],
+				async queryFn() {
+					const res = await client
+						.query(isFollowingCustomListQuery, {
+							id
+						})
+						.toPromise();
+					if (res.error) {
+						throw res.error;
+					} else if (res.data) {
+						return res.data.follows.isFollowingCustomList;
+					} else {
+						throw new Error("no data??");
+					}
+				}
+			}),
+			() => mangadexQueryClient
+		);
 }
 
 function setFollowingStatus(
@@ -122,35 +147,33 @@ function setFollowingStatus(
 	query: CreateQueryResult,
 	options:
 		| {
-			onSettled?: (error: Error | null, variables: string) => void;
-			onError?: (error: Error, variables: string) => void;
-			onSucess?: (variables: string) => void;
-			toast?: boolean;
-		}
+				onSettled?: (error: Error | null, variables: string) => void;
+				onError?: (error: Error, variables: string) => void;
+				onSucess?: (variables: string) => void;
+				toast?: boolean;
+		  }
 		| undefined
 ) {
 	if (value) {
 		const mut = extractFromAccessor(followCustomListMutation);
 		mut.value.mutate(id, {
-			onError(error, variables, context) {
+			onError(error, variables) {
 				if (toast) {
 					addErrorToast("Cannot change custom list following status", error);
 				}
 				options?.onError?.(error, variables);
 			},
-			onSuccess(data, variables, context) {
+			onSuccess(data, variables) {
 				if (toast) {
 					addToast({
-						data: {
-							title: "Followed custom list",
-							description: id,
-							variant: "green"
-						}
+						title: "Followed custom list",
+						description: id,
+						type: "success"
 					});
 				}
 				options?.onSucess?.(variables);
 			},
-			onSettled(data, error, variables, context) {
+			onSettled(data, error, variables) {
 				using _ = mut;
 				query.refetch();
 				options?.onSettled?.(error, variables);
@@ -159,25 +182,23 @@ function setFollowingStatus(
 	} else {
 		const mut = extractFromAccessor(unfollowCustomListMutation);
 		mut.value.mutate(id, {
-			onError(error, variables, context) {
+			onError(error, variables) {
 				if (toast) {
 					addErrorToast("Cannot change custom list following status", error);
 				}
 				options?.onError?.(error, variables);
 			},
-			onSuccess(data, variables, context) {
+			onSuccess(data, variables) {
 				if (toast) {
 					addToast({
-						data: {
-							title: "Unfollowed custom list",
-							description: id,
-							variant: "yellow"
-						}
+						title: "Unfollowed custom list",
+						description: id,
+						type: "warning"
 					});
 				}
 				options?.onSucess?.(variables);
 			},
-			onSettled(data, error, variables, context) {
+			onSettled(data, error, variables) {
 				using _ = mut;
 				query.refetch();
 				options?.onSettled?.(error, variables);

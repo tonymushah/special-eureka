@@ -15,7 +15,6 @@
 	import { exportTaskEvent } from "@mangadex/stores/library/export/mal";
 	import { isLogged } from "@mangadex/utils/auth";
 	import defaultReadingStatusPriorities from "@mangadex/utils/readingStatusPriorities";
-	import { createProgress, melt } from "@melt-ui/svelte";
 	import { isLinuxStore } from "@special-eureka/core/commands/isLinux";
 	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
 	import { save } from "@tauri-apps/plugin-dialog";
@@ -24,6 +23,8 @@
 	import { writable } from "svelte/store";
 	import { slide } from "svelte/transition";
 	import { v4 } from "uuid";
+	import { Progress } from "@ark-ui/svelte/progress";
+	import malCssMod from "@mangadex/componnents/selecto/dialog/titles/export/mal.module.scss";
 
 	type Options = Omit<MdlibraryToMyAnimeListExportOption, "priorities" | "exportPath"> & {
 		priorities: ReadingStatusPriorities;
@@ -65,10 +66,9 @@
 						},
 						onSuccess(data) {
 							addToast({
-								data: {
-									title: "Library exported",
-									description: data
-								}
+								title: "Library exported",
+								description: data,
+								type: "success"
 							});
 							if (revealAfterFinish) {
 								revealItemInDir(data);
@@ -100,13 +100,6 @@
 			set(d?.progress ?? 0);
 		});
 	});
-	const {
-		elements: { root: progressRoot },
-		options: { max: progressMax }
-	} = createProgress({
-		value: progressValue,
-		max: 255
-	});
 </script>
 
 <AppTitle title="Export Library as MyAnimeList - MangaDex" />
@@ -135,31 +128,29 @@
 			}}
 			class="loading"
 		>
-			<p>
-				{#if c_state == "Preloading"}
-					Preloading...
-				{:else if c_state == "AssemblingInfo"}
-					Assembling infos...
-				{:else if c_state == "GettingScores"}
-					Getting scores...
-				{:else if c_state == "GettingStatuses"}
-					Getting statuses...
-				{:else if c_state == "GettingTitlesData"}
-					Getting titltes data...
-				{:else if c_state == "WritingToFile"}
-					Writing file...
-				{:else if c_state.FetchingReadChapter}
-					Fetching {c_state.FetchingReadChapter.manga} read chapters...
-				{/if}
-			</p>
-			<div class="progress" use:melt={$progressRoot}>
-				<div
-					class="progress-inner"
-					style={`transform: translateX(-${
-						100 - (100 * ($progressValue ?? 0)) / ($progressMax ?? 1)
-					}%)`}
-				></div>
-			</div>
+			<Progress.Root value={$progressValue} max={255}>
+				<Progress.Label
+					>{#if c_state == "Preloading"}
+						Preloading...
+					{:else if c_state == "AssemblingInfo"}
+						Assembling infos...
+					{:else if c_state == "GettingScores"}
+						Getting scores...
+					{:else if c_state == "GettingStatuses"}
+						Getting statuses...
+					{:else if c_state == "GettingTitlesData"}
+						Getting titltes data...
+					{:else if c_state == "WritingToFile"}
+						Writing file...
+					{:else if c_state.FetchingReadChapter}
+						Fetching {c_state.FetchingReadChapter.manga} read chapters...
+					{/if}</Progress.Label
+				>
+				<Progress.ValueText />
+				<Progress.Track class={malCssMod.progress}>
+					<Progress.Range class={malCssMod.progressRange} />
+				</Progress.Track>
+			</Progress.Root>
 		</div>
 	{/if}
 	<section class="input-row">
@@ -330,7 +321,7 @@
 		<PrimaryButton
 			isBase
 			disabled={exportLibraryToMyAnimeList.isPending || !$isLogged}
-			onclick={(e) => {
+			onclick={() => {
 				submitExport();
 			}}
 		>
@@ -444,26 +435,6 @@
 				margin: 0px;
 			}
 		}
-	}
-	.progress {
-		position: relative;
-		height: 1em;
-		width: 80%;
-		overflow: hidden;
-		border-radius: 99999999px;
-		background-color: var(--accent-l5);
-		.progress-inner {
-			height: 100%;
-			width: 100%;
-			background-color: var(--primary-l2);
-			transition: transform ease-in-out 100ms;
-		}
-	}
-	.progress:hover {
-		background-color: var(--accent-l5-hover);
-	}
-	.progress:active {
-		background-color: var(--accent-l5-active);
 	}
 	.loading {
 		display: flex;

@@ -1,47 +1,28 @@
 <script lang="ts">
-	import { emptyMeltElement, melt, type AnyMeltElement } from "@melt-ui/svelte";
 	import { type Component } from "svelte";
+	import cssMod from "./menu-base-item.module.scss";
 	interface Props {
 		icon: Component;
 		label: string;
 		key?: string | undefined;
 		tabindex: number;
 		isDisabled?: boolean;
-		element?: AnyMeltElement;
 		onClick: (
 			ev: MouseEvent & {
-				currentTarget: EventTarget & HTMLDivElement;
+				currentTarget: EventTarget & HTMLElement;
 			}
-		) => any;
+		) => unknown;
 	}
 
-	let {
-		icon,
-		label,
-		key = undefined,
-		tabindex,
-		isDisabled = false,
-		element = emptyMeltElement,
-		onClick
-	}: Props = $props();
-	let isFocused = $state(false);
+	let { icon, label, tabindex, isDisabled = false, onClick }: Props = $props();
 
 	const SvelteComponent_1 = $derived(icon);
 </script>
 
-<div
-	use:melt={$element}
-	role="button"
+<button
 	onclick={(e) => {
 		if (!isDisabled) {
 			onClick(e);
-		}
-	}}
-	onkeypress={(e) => {
-		if (e.key == key) {
-			isFocused = true;
-		} else {
-			isFocused = false;
 		}
 	}}
 	{tabindex}
@@ -49,13 +30,13 @@
 	class:isDisabled
 >
 	{#if SvelteComponent_1}
-		<SvelteComponent_1 class="icon" />
+		<SvelteComponent_1 class={cssMod.icon} />
 	{/if}
 	<p class="label">{label}</p>
-</div>
+</button>
 
 <style lang="scss">
-	div.menu-item {
+	.menu-item {
 		transition: background-color 300ms ease-in-out;
 		background-color: var(--accent-l3);
 		display: flex;
@@ -65,20 +46,13 @@
 		padding: var(--menu-item-padding);
 		cursor: pointer;
 	}
-	.icon {
-		width: var(--context-menu-font-size);
-		height: var(--context-menu-font-size);
-		display: flex;
-		align-self: center;
-		justify-content: center;
-	}
-	div.menu-item.isDisabled {
+	.menu-item.isDisabled {
 		cursor: not-allowed;
 	}
-	div.menu-item:hover {
+	.menu-item:hover {
 		background-color: var(--accent-l3-hover);
 	}
-	div.menu-item:active {
+	.menu-item:active {
 		background-color: var(--accent-l3-active);
 	}
 	p.label {

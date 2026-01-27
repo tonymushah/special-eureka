@@ -1,90 +1,83 @@
 <script lang="ts">
-	// TODO refactor to `tanstack/query`
 	import FormInput from "@mangadex/componnents/theme/form/input/FormInput.svelte";
-	import { createCombobox, createTagsInput, melt, type Tag } from "@melt-ui/svelte";
-	import { debounce, type DebouncedFunc } from "lodash";
+	import type { Tag } from "@mangadex/utils/legacy/melt-ui-tag.ts";
+	import { debounce } from "lodash";
 	import { onDestroy } from "svelte";
 	import { XIcon } from "@lucide/svelte";
-	import { get, writable, type Writable } from "svelte/store";
-	import {
-		getMangaSearchAuthorSearchFetcher,
-		type AuthorSearchFetcherResultData
-	} from "../../contexts/authorArtist";
-	import { tagWritableToComboboxOptionWritable } from "./utils";
+	import { type Writable } from "svelte/store";
 	import AuthorsSearchSelectMenu from "./AuthorsSearchSelectMenu.svelte";
-	import type { PortalConfig } from "@melt-ui/svelte/internal/actions";
+	import { floatingUImenu } from "@mangadex/utils/floating-ui/menu.svelte";
+	import { createInfiniteQuery } from "@tanstack/svelte-query";
+	import pageLimit from "@mangadex/stores/page-limit";
+	import { getContextClient } from "@urql/svelte";
+	import executeSearchQuery from "@mangadex/routes/author/(search)/search";
 
 	interface Props {
 		store: Writable<Tag[]>;
-		portal?: PortalConfig | null;
 	}
 
-	let { store, portal = "dialog" }: Props = $props();
-	const {
-		elements: { input, menu, option },
-		states: { open, inputValue, touchedInput },
-		helpers: { isSelected }
-	} = createCombobox<string, true>({
-		selected: tagWritableToComboboxOptionWritable(store),
-		forceVisible: true,
-		multiple: true,
-		positioning: {
-			placement: "top",
-			fitViewport: true,
-			sameWidth: true
-			// strategy: "fixed"
+	let { store: tags }: Props = $props();
+	let touchedInput = $state(false);
+	let inputValue = $state("");
+	let menu = $state<HTMLElement | undefined>();
+	let trigger = $state<HTMLElement | undefined>();
+	let shouldOpen = $derived(touchedInput);
+	floatingUImenu({
+		menuElement: () => menu,
+		triggerElement: () => trigger,
+		open: () => shouldOpen,
+		closeOnClick: true,
+		sameWidth: true,
+		setOpen: (o) => (shouldOpen = o),
+		showMenuDisplay: "flex"
+	});
+	const client = getContextClient();
+	let authorSearchQuery = createInfiniteQuery(() => ({
+		queryKey: ["author-quick-search", `name:${inputValue}`],
+		async queryFn({ pageParam }) {
+			const res = await executeSearchQuery(client, {
+				limit: pageParam.limit,
+				offset: pageParam.offset,
+				name: pageParam.inputValue.length == 0 ? undefined : pageParam.inputValue
+			});
+			return {
+				data: res.data,
+				...res.paginationData
+			};
 		},
-		portal
-	});
-	const {
-		elements: { root, tag, deleteTrigger },
-		states: { tags }
-	} = createTagsInput({
-		tags: store,
-		unique: true
-	});
-	const authorFetch = getMangaSearchAuthorSearchFetcher();
-	const currentAuthorSearch = writable<Tag[]>([]);
-	let nextFetch: (() => Promise<AuthorSearchFetcherResultData>) | undefined = $state(undefined);
-	let hasNext = $derived(nextFetch != undefined && typeof nextFetch == "function");
-	const isFetching = writable(false);
-	const start: DebouncedFunc<() => void> = debounce(() => {
-		if (!get(isFetching)) {
-			currentAuthorSearch.set([]);
-			isFetching.set(true);
-			handleASFRDPromise(authorFetch($inputValue));
-		}
-	}, 350);
-	onDestroy(() => {
-		start?.cancel();
-	});
-	const handleASFRDPromise = debounce(async function (
-		prom: Promise<AuthorSearchFetcherResultData>
-	) {
-		await prom
-			.then((result) => {
-				currentAuthorSearch.update(($as) => {
-					return [...$as, ...result.data];
-				});
-				if (result.hasNext()) {
-					nextFetch = () => result.next();
-				} else {
-					nextFetch = undefined;
-				}
-			})
-			.finally(() => isFetching.set(false));
-	}, 300);
-	$effect(() => {
-		if ($touchedInput) {
-			start?.cancel();
-			start();
-		}
-	});
+
+		initialPageParam: {
+			inputValue,
+			offset: 0,
+			limit: $pageLimit
+		},
+		getNextPageParam(lastPage, allPages, lastPageParam) {
+			const next_offset = lastPage.limit + lastPage.offset;
+			if (next_offset > lastPage.total) {
+				return null;
+			} else {
+				return {
+					...lastPageParam,
+					limit: lastPage.limit,
+					offset: next_offset
+				};
+			}
+		},
+		enabled: touchedInput && inputValue.length != 0
+	}));
+
+	let currentAuthorSearch = $derived<Tag[]>(
+		authorSearchQuery.data?.pages.flatMap((p) =>
+			p.data.map((a) => ({
+				id: a.id,
+				value: a.name
+			}))
+		) ?? []
+	);
+	let hasNext = $derived(authorSearchQuery.hasNextPage);
+
 	const next = debounce(function () {
-		if (!get(isFetching) && nextFetch != undefined && typeof nextFetch == "function") {
-			isFetching.set(true);
-			handleASFRDPromise?.(nextFetch());
-		}
+		authorSearchQuery.fetchNextPage();
 	}, 300);
 	let toObserve: HTMLElement | undefined = $state(undefined);
 	const obs_debounce_func = debounce<IntersectionObserverCallback>((entries) => {
@@ -112,35 +105,43 @@
 	onDestroy(() => {
 		obs.disconnect();
 		next.cancel();
-		handleASFRDPromise.cancel();
 	});
 	// $: console.debug($tags);
 	// $: console.debug(`Is fetching author ${$isFetching}`);
 </script>
 
 <div class="layout">
-	<div class="root" use:melt={$root}>
+	<div class="root" bind:this={trigger}>
 		{#each $tags as t}
-			<div class="tag" use:melt={$tag(t)}>
+			<div class="tag">
 				<span>{t.value}</span>
-				<button use:melt={$deleteTrigger(t)}>
+				<button>
 					<XIcon size={"24"} />
 				</button>
 			</div>
 		{/each}
-		<FormInput element={input} />
+		<FormInput
+			bind:value={inputValue}
+			inputProps={{
+				onfocus() {
+					touchedInput = true;
+				},
+				onblur() {
+					touchedInput = false;
+				}
+			}}
+		/>
 	</div>
 </div>
 
 <AuthorsSearchSelectMenu
-	{menu}
+	bind:menu
 	bind:toObserve
-	{open}
+	open={shouldOpen}
 	{currentAuthorSearch}
-	{isFetching}
-	{isSelected}
-	{option}
+	isFetching={authorSearchQuery.isFetching}
 	{hasNext}
+	{tags}
 />
 
 <style lang="scss">
@@ -159,15 +160,6 @@
 		border-radius: 0.25em;
 		padding: 5px;
 		background-color: var(--accent);
-	}
-	.edit {
-		color: var(--text-color);
-		padding-left: 10px;
-		padding-right: 10px;
-		padding-top: 2px;
-		padding-bottom: 2px;
-		background-color: var(--accent-l1);
-		border-radius: 0.25em;
 	}
 	.tag {
 		display: flex;

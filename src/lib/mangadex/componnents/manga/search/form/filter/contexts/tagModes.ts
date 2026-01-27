@@ -1,6 +1,6 @@
 import { TagSearchMode } from "@mangadex/gql/graphql";
 import { generateContextStoresMethods } from "@mangadex/utils/contexts";
-import { derived, get, type Readable, type Writable } from "svelte/store";
+import { derived, type Readable, type Writable } from "svelte/store";
 
 export type TagModes = {
 	include: TagSearchMode;

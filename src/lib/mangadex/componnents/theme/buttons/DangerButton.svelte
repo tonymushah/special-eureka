@@ -1,12 +1,10 @@
 <script lang="ts">
-	import type { AnyMeltElement } from "@melt-ui/svelte";
 	import type { HTMLButtonAttributes } from "svelte/elements";
 	import ButtonBase from "./base/ButtonBase.svelte";
 
 	interface Props extends HTMLButtonAttributes {
 		variant?: "default" | "1" | "2";
 		isBase?: boolean;
-		meltElement?: AnyMeltElement;
 	}
 
 	let { variant = "default", isBase = false, ...restProps }: Props = $props();

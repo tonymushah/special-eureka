@@ -1,0 +1,22 @@
+.root.fullHeight {
+	height: 100%;
+}
+.root.fillAvailableHeight {
+	height: -webkit-fill-available;
+}
+.root.flex {
+	display: flex;
+	flex-direction: column;
+}
+.root.content {
+	display: contents;
+}
+.list {
+	display: flex;
+	gap: 3px;
+}
+.indicator {
+	--transition-duration: 0.2s;
+	--transition-timing-function: ease-in-out;
+	color: var(--mid-tone);
+}

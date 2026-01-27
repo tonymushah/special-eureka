@@ -9,8 +9,8 @@
 	import { getCurrentChapterReadingMode } from "@mangadex/componnents/chapter/page/contexts/currentChapterReadingMode";
 
 	interface Events {
-		onnext?: () => any;
-		onprevious?: () => any;
+		onnext?: () => unknown;
+		onprevious?: () => unknown;
 	}
 
 	interface Props extends Events {
@@ -73,7 +73,11 @@
 
 <ButtonAccent {variant} onclick={onPrevious} disabled={$images_context.pagesLen == undefined}>
 	{#if isLongstrip}
-		<ArrowUpIcon />
+		{#if $direction == ReadingDirection.Ltr}
+			<ArrowUpIcon />
+		{:else}
+			<ArrowDownIcon />
+		{/if}
 	{:else}
 		<ArrowLeftIcon />
 	{/if}
@@ -83,7 +87,11 @@
 
 <ButtonAccent {variant} onclick={onNext} disabled={$images_context.pagesLen == undefined}>
 	{#if isLongstrip}
-		<ArrowDownIcon />
+		{#if $direction == ReadingDirection.Ltr}
+			<ArrowDownIcon />
+		{:else}
+			<ArrowUpIcon />
+		{/if}
 	{:else}
 		<ArrowRightIcon />
 	{/if}

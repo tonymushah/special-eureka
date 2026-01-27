@@ -7,87 +7,77 @@
 </script>
 
 <script lang="ts">
-	import { createTabs, melt } from "@melt-ui/svelte";
 	import type { Snippet } from "svelte";
 	import MangaDexTabButton from "./MangaDexTabButton.svelte";
+	import { Tabs } from "@ark-ui/svelte/tabs";
+	import cssMod from "./tabs.module.scss";
+
 	interface Props {
 		triggers: MangaDexTabTrigger[];
 		defaultValue?: string;
-		children?: Snippet<[string]>;
+		children?: Snippet;
 		fontSize?: "small" | "medium" | "large" | "larger" | string;
 		fullHeight?: boolean;
 		fillAvailableHeight?: boolean;
 		flex?: boolean;
 		content?: boolean;
+		unmountOnExit?: boolean;
+		lazyMount?: boolean;
+		manual?: boolean;
 	}
 	let {
 		triggers = $bindable([]),
-		defaultValue,
 		children,
 		fontSize = "medium",
 		fullHeight,
 		fillAvailableHeight,
 		flex,
-		content
+		content,
+		defaultValue,
+		unmountOnExit,
+		lazyMount,
+		manual
 	}: Props = $props();
-	const {
-		elements: { root, list },
-		states: { value }
-	} = createTabs({
-		//defaultValue
-	});
-	$effect(() => {
-		if (defaultValue) {
-			value.set(defaultValue);
-		}
-	});
 </script>
 
-<div
-	class="root"
-	use:melt={$root}
-	class:fullHeight
-	class:fillAvailableHeight
-	class:flex
-	class:content
+<Tabs.Root
+	{unmountOnExit}
+	{lazyMount}
+	{defaultValue}
+	class={[
+		cssMod.root,
+		fullHeight && cssMod.fullHeight,
+		fillAvailableHeight && cssMod.fillAvailableHeight,
+		flex && cssMod.flex,
+		content && cssMod.content
+	]}
+	activationMode={manual ? "manual" : "automatic"}
 >
-	<div class="list" use:melt={$list}>
+	<!-- class:root={true}
+		class:fullHeight
+		class:fillAvailableHeight
+		class:flex
+		class:content -->
+	<Tabs.List class={cssMod.list}>
 		{#each triggers as triggerItem}
 			<MangaDexTabButton
 				disabled={triggerItem.disabled}
-				id={triggerItem.id}
-				title={triggerItem.title}
-				{value}
-				--button-font-size={fontSize}
-			/>
+				value={triggerItem.id}
+				--button-font-size={fontSize}>{triggerItem.title}</MangaDexTabButton
+			>
 		{/each}
-	</div>
+		<Tabs.Indicator class={cssMod.indicator} style="width: var(--width)" />
+	</Tabs.List>
 	<hr />
-	{@render children?.($value)}
-</div>
+	{@render children?.()}
+</Tabs.Root>
 
 <style lang="scss">
-	.root.fullHeight {
-		height: 100%;
-	}
-	.root.fillAvailableHeight {
-		height: -webkit-fill-available;
-	}
-	.root.flex {
-		display: flex;
-		flex-direction: column;
-	}
 	hr {
 		width: 100%;
 		height: 1px;
 	}
-	.root.content {
-		display: contents;
-	}
-	.list {
-		display: flex;
-		gap: 3px;
-	}
+
 	hr {
 		color: var(--contrast-l1);
 	}

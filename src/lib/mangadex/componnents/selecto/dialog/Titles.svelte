@@ -19,7 +19,7 @@
 	let { titles: titles_main }: Props = $props();
 	let titlesDownload = titlesDownloadLoader();
 	let exportIdsToTxt = exportIdsToTxtLoader();
-	let titles = $state(titles_main);
+	let titles = $derived(titles_main);
 	let currentAction: "lists" | "status" | "selections" | "export-csv" | "export-mal" =
 		$state("lists");
 	function showLists() {
@@ -93,10 +93,8 @@
 					.mutateAsync(titles)
 					.then(() => {
 						addToast({
-							data: {
-								variant: "primary",
-								title: "Titles downloaded"
-							}
+							title: "Titles downloaded",
+							type: "success"
 						});
 					})
 					.catch((e) => {
@@ -128,10 +126,10 @@
 						uuids: titles
 					},
 					{
-						onSuccess(data, variables, context) {
+						onSuccess(data) {
 							revealItemInDir(data);
 						},
-						onError(error, variables, context) {
+						onError(error) {
 							addErrorToast("Cannot export ids as txt", error);
 						}
 					}

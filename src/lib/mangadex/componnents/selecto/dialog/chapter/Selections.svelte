@@ -27,11 +27,11 @@
 	const client = getContextClient();
 	let selectedChapter = createQuery(() => {
 		return {
-			queryKey: ["get", "chapter", "data", ...chapters],
+			queryKey: ["get", "chapter", "data", "selecto"],
 			async queryFn(): Promise<SelectedData[]> {
 				const res = await client
 					.query(query, {
-						ids: chapters
+						ids: [...chapters]
 					})
 					.toPromise();
 				if (res.error) {
@@ -42,10 +42,8 @@
 							title: {
 								id: data.manga.id,
 								title:
-									get_value_from_title_and_random_if_undefined(
-										data.manga.attributes.title,
-										"en"
-									) ?? data.manga.id
+									get_value_from_title_and_random_if_undefined(data.manga.attributes.title, "en") ??
+									data.manga.id
 							},
 							chapters: data.chapters.map((data) => {
 								return {

@@ -5,11 +5,11 @@
 	import ButtonAccentOnlyLabel from "@mangadex/componnents/theme/buttons/ButtonAccentOnlyLabel.svelte";
 	import Icon from "./reading-mode/Icon.svelte";
 	import SettingsTransitComp from "./utils/SettingsTransitComp.svelte";
-	import { createPopover, melt } from "@melt-ui/svelte";
 	import MangaDexVarThemeProvider from "@mangadex/componnents/theme/MangaDexVarThemeProvider.svelte";
 	import { slide } from "svelte/transition";
 	import { BookOpenIcon, FileIcon, MoreHorizontalIcon, MoreVerticalIcon } from "@lucide/svelte";
 	import { getCurrentChapterData } from "../../../contexts/currentChapter";
+	import { floatingUImenu } from "@mangadex/utils/floating-ui/menu.svelte";
 
 	const mode = getCurrentChapterReadingModeWritable();
 	const currentData = getCurrentChapterData();
@@ -29,141 +29,141 @@
 		}
 	});
 	const size = "18";
-	const {
-		elements: { content: menu, trigger, close },
-		states: { open }
-	} = createPopover({
-		forceVisible: true,
-		positioning: {
-			placement: "bottom",
-			sameWidth: true
-		}
+	let open = $state(false);
+	let trigger = $state<HTMLElement | undefined>();
+	let menu = $state<HTMLElement | undefined>();
+	floatingUImenu({
+		open: () => open,
+		triggerElement: () => trigger,
+		menuElement: () => menu,
+		showMenuDisplay: "flex",
+		setOpen: (o) => (open = o),
+		sameWidth: true,
+		closeOnClick: true,
+		closeOnOutClick: true
 	});
 </script>
 
 <SettingsTransitComp>
-	<div
-		role="menu"
-		tabindex="0"
-		class="outer"
-		oncontextmenu={(e) => {
-			e.preventDefault();
-			if (!$currentData.isLongstrip) {
-				switch ($mode) {
-					case ReadingMode.SinglePage:
-						mode.set(ReadingMode.DoublePage);
-						break;
-					case ReadingMode.DoublePage:
-						mode.set(ReadingMode.LongStrip);
-						break;
-					case ReadingMode.LongStrip:
-						mode.set(ReadingMode.WideStrip);
-						break;
-					case ReadingMode.WideStrip:
-						mode.set(ReadingMode.SinglePage);
-						break;
-					default:
-						break;
-				}
-			}
-		}}
-		use:melt={$trigger}
-	>
+	<div class="outer" bind:this={trigger}>
 		<ButtonAccentOnlyLabel
 			variant="3"
 			icon={Icon}
 			disabled={$currentData.isLongstrip}
 			label={$label}
 			oneLine
+			onclick={() => {
+				open = !open;
+			}}
+			oncontextmenu={(e) => {
+				e.preventDefault();
+				if (!$currentData.isLongstrip) {
+					switch ($mode) {
+						case ReadingMode.SinglePage:
+							mode.set(ReadingMode.DoublePage);
+							break;
+						case ReadingMode.DoublePage:
+							mode.set(ReadingMode.LongStrip);
+							break;
+						case ReadingMode.LongStrip:
+							mode.set(ReadingMode.WideStrip);
+							break;
+						case ReadingMode.WideStrip:
+							mode.set(ReadingMode.SinglePage);
+							break;
+						default:
+							break;
+					}
+				}
+			}}
 		/>
 	</div>
+	{#if open && !$currentData.isLongstrip}
+		<div class="menu-outer" bind:this={menu}>
+			<MangaDexVarThemeProvider>
+				<menu transition:slide={{ duration: 150, axis: "y" }}>
+					<!-- svelte-ignore a11y_no_noninteractive_element_to_interactive_role -->
+					<li
+						role="button"
+						tabindex="0"
+						onclick={() => {
+							mode.set(ReadingMode.SinglePage);
+						}}
+						onkeypress={() => {}}
+						class:isSelected={$mode == ReadingMode.SinglePage}
+					>
+						<div class="icon">
+							<BookOpenIcon {size} />
+						</div>
+						<h4>Single Page</h4>
+					</li>
+					<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+					<!-- svelte-ignore a11y_click_events_have_key_events -->
+					<li
+						onclick={() => {
+							mode.set(ReadingMode.DoublePage);
+						}}
+						class:isSelected={$mode == ReadingMode.DoublePage}
+					>
+						<div class="icon">
+							<FileIcon {size} />
+						</div>
+						<h4>Double Page</h4>
+					</li>
+					<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+					<!-- svelte-ignore a11y_click_events_have_key_events -->
+					<li
+						onclick={() => {
+							mode.set(ReadingMode.LongStrip);
+						}}
+						class:isSelected={$mode == ReadingMode.LongStrip}
+					>
+						<div class="icon">
+							<MoreVerticalIcon {size} />
+						</div>
+						<h4>Longstrip</h4>
+					</li>
+					<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+					<!-- svelte-ignore a11y_click_events_have_key_events -->
+					<li
+						onclick={() => {
+							mode.set(ReadingMode.WideStrip);
+						}}
+						class:isSelected={$mode == ReadingMode.WideStrip}
+					>
+						<div class="icon">
+							<MoreHorizontalIcon {size} />
+						</div>
+						<h4>Widestrip</h4>
+					</li>
+				</menu>
+			</MangaDexVarThemeProvider>
+		</div>
+	{/if}
 </SettingsTransitComp>
-
-{#if $open && !$currentData.isLongstrip}
-	<div class="menu-outer" use:melt={$menu}>
-		<MangaDexVarThemeProvider>
-			<menu transition:slide={{ duration: 150, axis: "y" }}>
-				<!-- svelte-ignore a11y_no_noninteractive_element_to_interactive_role -->
-				<li
-					role="button"
-					tabindex="0"
-					use:melt={$close}
-					onclick={() => {
-						mode.set(ReadingMode.SinglePage);
-					}}
-					onkeypress={() => {}}
-					class:isSelected={$mode == ReadingMode.SinglePage}
-				>
-					<div class="icon">
-						<BookOpenIcon {size} />
-					</div>
-					<h4>Single Page</h4>
-				</li>
-				<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-				<li
-					use:melt={$close}
-					onclick={() => {
-						mode.set(ReadingMode.DoublePage);
-					}}
-					class:isSelected={$mode == ReadingMode.DoublePage}
-				>
-					<div class="icon">
-						<FileIcon {size} />
-					</div>
-					<h4>Double Page</h4>
-				</li>
-				<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-				<li
-					use:melt={$close}
-					onclick={() => {
-						mode.set(ReadingMode.LongStrip);
-					}}
-					class:isSelected={$mode == ReadingMode.LongStrip}
-				>
-					<div class="icon">
-						<MoreVerticalIcon {size} />
-					</div>
-					<h4>Longstrip</h4>
-				</li>
-				<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-				<li
-					use:melt={$close}
-					onclick={() => {
-						mode.set(ReadingMode.WideStrip);
-					}}
-					class:isSelected={$mode == ReadingMode.WideStrip}
-				>
-					<div class="icon">
-						<MoreHorizontalIcon {size} />
-					</div>
-					<h4>Widestrip</h4>
-				</li>
-			</menu>
-		</MangaDexVarThemeProvider>
-	</div>
-{/if}
 
 <style lang="scss">
 	.menu-outer {
-		display: flex;
 		flex-direction: column;
 		position: absolute;
+		z-index: 10;
 	}
-	.layout {
+	/* .layout {
 		flex: 3;
 		display: flex;
 		flex-direction: column;
 		gap: 4px;
-	}
+	} */
 	menu {
 		margin: 0px;
 		border-radius: 0.25em;
 		list-style: none;
 		background-color: var(--accent);
 		z-index: 10;
-		overflow-y: scroll;
+		/* overflow-y: scroll; */
 		color: var(--text-color);
 		padding-left: 0em;
+		overflow: hidden;
 		li {
 			padding-left: 1em;
 			transition: background-color 200ms ease-in-out;
@@ -184,9 +184,9 @@
 			background-color: var(--primary);
 		}
 	}
-	.input {
+	/* .input {
 		display: grid;
-	}
+	} */
 	div.outer {
 		display: grid;
 	}

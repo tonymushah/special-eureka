@@ -43,19 +43,17 @@
 		await exportTitlesToCSV.mutateAsync(
 			{ ...options, ids: titles, exportPath: path },
 			{
-				onError(error, variables, context) {
+				onError(error) {
 					addErrorToast("Cannot export titles as CSV", error);
 				},
-				onSuccess(data, variables, context) {
+				onSuccess(data) {
 					if (revealAfterFinish) {
 						revealItemInDir(data);
 					} else {
 						addToast({
-							data: {
-								title: `Exported ${titles.length} titles`,
-								description: data,
-								variant: "blue"
-							}
+							title: `Exported ${titles.length} titles`,
+							description: data,
+							type: "success"
 						});
 					}
 				}
@@ -137,7 +135,7 @@
 		<PrimaryButton
 			isBase
 			disabled={exportTitlesToCSV.isPending}
-			onclick={(e) => {
+			onclick={() => {
 				submitExport();
 			}}
 		>
@@ -151,7 +149,7 @@
 		<ButtonAccent
 			isBase
 			variant="3"
-			onclick={(e) => {
+			onclick={() => {
 				options = defaultOptions();
 			}}
 			disabled={exportTitlesToCSV.isPending}

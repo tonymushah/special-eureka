@@ -1,6 +1,4 @@
 <script lang="ts" module>
-	import { createDialog, melt } from "@melt-ui/svelte";
-
 	export type SelectoDialogData = {
 		titles?: string[];
 		chapters?: string[];
@@ -9,12 +7,7 @@
 	const nothingSelected = der(selected, ($selected) => {
 		return ($selected?.chapters?.length ?? 0) == 0 && ($selected?.titles?.length ?? 0) == 0;
 	});
-	const {
-		elements: { portalled, overlay, content, title, description, close },
-		states: { open }
-	} = createDialog({
-		portal: "#mangadex-scroll-container"
-	});
+	const open = writable(false);
 	export function openSelectoDialog(data: SelectoDialogData) {
 		selected.set(data);
 		open.set(true);
@@ -28,13 +21,61 @@
 </script>
 
 <script lang="ts">
-	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
+	import { Dialog } from "@ark-ui/svelte/dialog";
+	import { Portal } from "@ark-ui/svelte/portal";
 	import { XIcon as CloseIcon } from "@lucide/svelte";
 	import { derived as der, writable } from "svelte/store";
-	import { fade } from "svelte/transition";
 	import ChapterFeedSelectoDialogBody from "./ChapterFeedSelectoDialogBody.svelte";
+	import cssMod from "@mangadex/componnents/theme/dialog/dialog.module.scss";
+	import MangaDexVarThemeProvider from "../theme/MangaDexVarThemeProvider.svelte";
 </script>
 
+<Dialog.Root
+	bind:open={
+		() => $isOpened,
+		(o) => {
+			$open = o;
+		}
+	}
+>
+	<Portal container={document.getElementById("mangadex-scroll-container") ?? undefined}>
+		<Dialog.Backdrop class={cssMod.overlay} />
+		<Dialog.Positioner>
+			<MangaDexVarThemeProvider>
+				<Dialog.Content class={cssMod.dialog}>
+					<div class="content">
+						<div class="top">
+							<div class="title-desc">
+								<Dialog.Title class={cssMod.title}>Selecto</Dialog.Title>
+								{#if !$nothingSelected}
+									<Dialog.Description class={cssMod.description}>
+										You have selected {$mangasLen} title{#if $mangasLen > 1}s{/if}{#if $chaptersLen > 0}
+											and {$chaptersLen}
+											chapter{#if $chaptersLen > 1}s{/if}
+										{/if}.
+									</Dialog.Description>
+								{/if}
+							</div>
+							<div class="close">
+								<Dialog.CloseTrigger class={cssMod.closeButton}>
+									<CloseIcon />
+								</Dialog.CloseTrigger>
+							</div>
+						</div>
+						{#if $selected?.titles && $selected?.chapters}
+							<ChapterFeedSelectoDialogBody
+								titles={$selected?.titles}
+								chapters={$selected?.chapters}
+							/>
+						{/if}
+					</div>
+				</Dialog.Content>
+			</MangaDexVarThemeProvider>
+		</Dialog.Positioner>
+	</Portal>
+</Dialog.Root>
+
+<!-- 
 {#if $isOpened}
 	<div use:melt={$portalled} class="portalled">
 		<div use:melt={$overlay} class="overlay" transition:fade={{ duration: 150 }}></div>
@@ -71,29 +112,9 @@
 		</div>
 	</div>
 {/if}
+-->
 
 <style lang="scss">
-	.portaled {
-		position: absolute;
-		top: 0px;
-		width: 100%;
-		height: 100%;
-	}
-	.dialog {
-		background-color: var(--main-background);
-		color: var(--text-color);
-		width: 75vw;
-		border: 3px solid var(--primary);
-		border-radius: 0.5rem;
-		position: fixed;
-		z-index: 50;
-		transform: translateY(-50%);
-		transform: translateX(-50%);
-		top: 10vh;
-		left: 50%;
-		padding: 0.5rem; /* 24px */
-		height: 75vh;
-	}
 	.content {
 		height: 100%;
 		display: flex;
@@ -105,26 +126,12 @@
 		display: flex;
 		justify-content: center;
 	}
-	.overlay {
-		backdrop-filter: blur(10px);
-		-webkit-backdrop-filter: blur(10px);
-		z-index: 50;
-		inset: 0px;
-		position: fixed;
-	}
+
 	.top {
 		justify-content: space-between;
 		display: flex;
 		.title-desc {
 			display: grid;
-			h2 {
-				margin: 0px;
-			}
-		}
-		p {
-			margin: 0px;
-			font-weight: 800;
-			font-size: large;
 		}
 	}
 </style>

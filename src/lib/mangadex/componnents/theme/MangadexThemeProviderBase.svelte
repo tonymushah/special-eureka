@@ -1,9 +1,8 @@
 <script lang="ts">
 	import { type MangadexTheme } from "@mangadex/theme";
 	import { setMangaDexThemeContextWritable } from "@mangadex/utils/contexts";
-	import { writable } from "svelte/store";
+	import { toStore } from "svelte/store";
 	import { setMangaDexFontsContext } from "@mangadex/utils/contexts/fonts";
-	import Toaster from "./toast/Toaster.svelte";
 	import MangaDexVarThemeProvider from "./MangaDexVarThemeProvider.svelte";
 
 	interface Props {
@@ -11,21 +10,20 @@
 		fonts?: string;
 		children?: import("svelte").Snippet;
 	}
+	let { theme = $bindable(), fonts = "Poppins", children }: Props = $props();
 
-	let { theme, fonts = "Poppins", children }: Props = $props();
-	const theme_store = writable(theme);
-	$effect(() => {
-		theme_store.set(theme);
-	});
-	$effect(() => {
-		setMangaDexThemeContextWritable(theme_store);
-	});
-	$effect(() => {
-		setMangaDexFontsContext(writable(fonts));
-	});
+	const theme_store = toStore(
+		() => theme,
+		(t) => (theme = t)
+	);
+	setMangaDexThemeContextWritable(theme_store);
+	const fontStore = toStore(
+		() => fonts,
+		(f) => (fonts = f)
+	);
+	setMangaDexFontsContext(fontStore);
 </script>
 
 <MangaDexVarThemeProvider>
-	<Toaster />
 	{@render children?.()}
 </MangaDexVarThemeProvider>

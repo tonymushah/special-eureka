@@ -32,10 +32,8 @@
 					})
 					.then(() => {
 						addToast({
-							data: {
-								variant: "primary",
-								title: "Added titles to custom lists"
-							}
+							title: "Added titles to custom lists",
+							type: "success"
 						});
 					})
 					.catch((err) => {

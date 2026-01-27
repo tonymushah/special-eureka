@@ -1,0 +1,55 @@
+.dialog {
+	background-color: var(--main-background);
+	color: var(--text-color);
+	width: 75vw;
+	border: 3px solid var(--primary);
+	border-radius: 0.5rem;
+	position: fixed;
+	z-index: 50;
+	transform: translateY(-50%);
+	transform: translateX(-50%);
+	top: 10vh;
+	left: 50%;
+	padding: 0.5rem; /* 24px */
+	height: 75vh;
+}
+
+.overlay {
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);
+	z-index: 50;
+	inset: 0px;
+	position: fixed;
+}
+
+.description {
+	margin: 0px;
+	font-weight: 800;
+	font-size: large;
+}
+
+.title {
+	margin: 0px;
+}
+
+.closeButton {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: var(--text-color);
+	background-color: var(--accent-l4);
+	border: 3px solid var(--mid-tone);
+	border-radius: 3px;
+	box-shadow: 0px 3px 0px var(--mid-tone);
+	transform: translateY(-3px);
+}
+
+.closeButton:hover {
+	background-color: var(--accent-l4-hover);
+}
+
+.closeButton:active {
+	background-color: var(--accent-l4-active);
+	transform: translateY(0px);
+	box-shadow: none;
+}

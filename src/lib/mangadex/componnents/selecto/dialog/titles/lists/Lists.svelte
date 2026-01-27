@@ -2,7 +2,6 @@
 	import executeSearchQuery, {
 		type CurrentUserCustomListItemData
 	} from "@mangadex/componnents/manga/add-to-list/content";
-	import CustomListCheckbox from "@mangadex/componnents/manga/add-to-list/CustomListCheckbox.svelte";
 	import Fetching from "@mangadex/componnents/search/content/Fetching.svelte";
 	import HasNext from "@mangadex/componnents/search/content/HasNext.svelte";
 	import NothingToShow from "@mangadex/componnents/search/content/NothingToShow.svelte";
@@ -13,7 +12,7 @@
 	import { getContextClient } from "@urql/svelte";
 	import { debounce } from "lodash";
 	import { onDestroy } from "svelte";
-	import { derived as der, get } from "svelte/store";
+	import { derived as der } from "svelte/store";
 	import MakeEmptyList from "./MakeEmptyList.svelte";
 	import ErrorComponent from "@mangadex/componnents/ErrorComponent.svelte";
 
@@ -26,14 +25,7 @@
 	let { selectedLists = $bindable() }: Props = $props();
 	const queryOptions = der(pageLimit, (limit) => {
 		return {
-			queryKey: [
-				"current",
-				"user",
-				"custom-list",
-				"for-add-to-list",
-				"batch",
-				`limit:${limit}`
-			],
+			queryKey: ["current", "user", "custom-list", "for-add-to-list", "batch", `limit:${limit}`],
 			initialPageParam: {
 				offset: 0,
 				limit
@@ -122,9 +114,7 @@
 								if (checked) {
 									selectedLists.push(customList.id);
 								} else {
-									selectedLists = selectedLists.filter(
-										(dd) => dd != customList.id
-									);
+									selectedLists = selectedLists.filter((dd) => dd != customList.id);
 								}
 							}
 						}

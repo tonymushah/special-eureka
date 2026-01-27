@@ -5,6 +5,7 @@ import { client } from "@mangadex/gql/urql";
 import { mangadexQueryClient } from "@mangadex/index";
 import chapterTitle from "@mangadex/utils/chapter/title";
 import type { ComponentProps } from "svelte";
+import { v7 } from "uuid";
 import { chapterCommentsQuery, getMangaAggregateChapterQuery } from "./query";
 
 export async function fetchChapters({
@@ -27,11 +28,7 @@ export async function fetchChapters({
 	if (result.error) {
 		throw result.error;
 	}
-	if (dev)
-		mangadexQueryClient.setQueryData(
-			["getMangaAggregateChapterQuery", ...ids, `feedContent:${feedContent}`],
-			() => result
-		);
+	if (dev) mangadexQueryClient.setQueryData(["getMangaAggregateChapterQuery", v7()], () => result);
 	const chapters = result.data?.chapter.list.data.map<ComponentProps<typeof ChapterElement1>>(
 		(c) => {
 			let isLastChapter = false;

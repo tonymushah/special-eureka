@@ -5,7 +5,6 @@
 	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
 	import openTitle from "@mangadex/utils/links/title/[id]";
 	import { getContextClient } from "@urql/svelte";
-	import { onMount } from "svelte";
 	import type { Readable } from "svelte/store";
 	import type { SwiperContainer } from "swiper/element";
 	import type { SwiperOptions } from "swiper/types";
@@ -42,35 +41,35 @@
 	);
 
 	let swiper_container: SwiperContainer | undefined = $state(undefined);
-	onMount(() => {
-		// swiper parameters
-		const swiperParams: SwiperOptions = {
-			slidesPerView: "auto",
-			breakpoints: {
-				640: {
-					slidesPerView: 3
-				},
-				1024: {
-					slidesPerView: 5
-				},
-				1360: {
-					slidesPerView: 6
-				},
-				1500: {
-					slidesPerView: 7
-				},
-				1920: {
-					slidesPerView: 8
-				}
+	const swiperParams: SwiperOptions = {
+		slidesPerView: "auto",
+		breakpoints: {
+			640: {
+				slidesPerView: 3
 			},
-			mousewheel: true,
-			freeMode: true,
-			on: {
-				init() {
-					// ...
-				}
+			1024: {
+				slidesPerView: 5
+			},
+			1360: {
+				slidesPerView: 6
+			},
+			1500: {
+				slidesPerView: 7
+			},
+			1920: {
+				slidesPerView: 8
 			}
-		};
+		},
+		mousewheel: true,
+		freeMode: true,
+		on: {
+			init() {
+				// ...
+			}
+		}
+	};
+	$effect(() => {
+		// swiper parameters
 
 		if (swiper_container) {
 			// now we need to assign all parameters to Swiper element
@@ -80,6 +79,7 @@
 			swiper_container.initialize();
 		}
 	});
+	$inspect(seasonal);
 </script>
 
 {#if seasonal.length > 0}

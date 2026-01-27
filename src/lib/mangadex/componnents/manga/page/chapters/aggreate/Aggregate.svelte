@@ -98,7 +98,7 @@
 		unlistens.push(
 			$effect.root(() => {
 				$effect(() => {
-					let ids: string[] = query?.data?.manga.aggregate.chunked.at(selectedIndex)?.ids ?? [];
+					let ids: string[] = query.data?.manga.aggregate.chunked.at(selectedIndex)?.ids ?? [];
 					const task = delay(() => {
 						if (ids.length > 0)
 							if (!chaptersStore.isPresents(ids)) {
@@ -155,7 +155,7 @@
 	}
 	const webview = getCurrentWebview();
 	$effect(() => {
-		const sub = webview.listen(`mangadex-title-read-markers-change-${__res.layoutData.id}`, (d) => {
+		const sub = webview.listen(`mangadex-title-read-markers-change-${__res.layoutData.id}`, () => {
 			refetchTitleReadMarker();
 		});
 		return () => {
@@ -169,10 +169,10 @@
 		let readChapters = new Set(
 			$readMarkers
 				.entries()
-				.filter(([k, v]) => {
+				.filter(([, v]) => {
 					return v;
 				})
-				.map(([k, v]) => {
+				.map(([k]) => {
 					return k;
 				})
 		);
@@ -281,6 +281,7 @@
 				{/if}
 			</div>
 			<div class="bottom">
+				<!-- eslint-disable-next-line @typescript-eslint/no-unused-vars-->
 				{#each aggregate as _, i}
 					<button
 						class="selector"

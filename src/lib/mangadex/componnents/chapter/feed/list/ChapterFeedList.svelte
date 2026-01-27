@@ -27,52 +27,52 @@
 			ev: MouseEnvDiv & {
 				id: string;
 			}
-		) => any;
+		) => unknown;
 		ondownloadKeyPress?: (
 			ev: KeyboardEnvDiv & {
 				id: string;
 			}
-		) => any;
+		) => unknown;
 		onread?: (
 			ev: MouseEnvDiv & {
 				id: string;
 			}
-		) => any;
+		) => unknown;
 		onreadKeyPress?: (
 			ev: KeyboardEnvDiv & {
 				id: string;
 			}
-		) => any;
+		) => unknown;
 		onmangaClick?: (
 			ev: MouseEnvDiv & {
 				id: string;
 			}
-		) => any;
+		) => unknown;
 		onmangaKeyPress?: (
 			ev: KeyboardEnvDiv & {
 				id: string;
 			}
-		) => any;
+		) => unknown;
 		onremoveClick?: (
 			ev: MouseEnvDiv & {
 				id: string;
 			}
-		) => any;
+		) => unknown;
 		onremoveKeyPress?: (
 			ev: KeyboardEnvDiv & {
 				id: string;
 			}
-		) => any;
+		) => unknown;
 		oncomments?: (
 			ev: Partial<MouseEnvDiv> & {
 				id: string;
 			}
-		) => any;
+		) => unknown;
 		oncommentsKeyPress?: (
 			ev: KeyboardEnvDiv & {
 				id: string;
 			}
-		) => any;
+		) => unknown;
 	}
 	interface Props extends Events {
 		list?: ChapterFeedListItem[];
@@ -91,9 +91,7 @@
 	const ctxMarkers = derived(
 		[toStore(() => list)],
 		([$list], set, update) => {
-			const chapterIds = new Set(
-				$list.flatMap((item) => item.chapters.map((c) => c.chapterId))
-			);
+			const chapterIds = new Set($list.flatMap((item) => item.chapters.map((c) => c.chapterId)));
 			const mangaIds = new Set($list.map((item) => item.mangaId));
 
 			const sub = client

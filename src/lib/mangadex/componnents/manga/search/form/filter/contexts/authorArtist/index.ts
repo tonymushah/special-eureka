@@ -1,5 +1,5 @@
 import { generateContextMethods, generateContextStoresMethods } from "@mangadex/utils/contexts";
-import type { Tag } from "@melt-ui/svelte";
+import type { Tag } from "@mangadex/utils/legacy/melt-ui-tag";
 import { derived, type Readable, type Writable } from "svelte/store";
 
 export type AuthorArtistOptions = {
