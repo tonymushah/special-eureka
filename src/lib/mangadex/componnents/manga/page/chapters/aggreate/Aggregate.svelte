@@ -98,7 +98,7 @@
 		unlistens.push(
 			$effect.root(() => {
 				$effect(() => {
-					let ids: string[] = query?.data?.manga.aggregate.chunked.at(selectedIndex)?.ids ?? [];
+					let ids: string[] = query.data?.manga.aggregate.chunked.at(selectedIndex)?.ids ?? [];
 					const task = delay(() => {
 						if (ids.length > 0)
 							if (!chaptersStore.isPresents(ids)) {
