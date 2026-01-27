@@ -49,7 +49,8 @@
 		showMenuDisplay: "flex",
 		setOpen: (o) => (open = o),
 		sameWidth: true,
-		closeOnClick: true
+		closeOnClick: true,
+		closeOnOutClick: true
 	});
 </script>
 
@@ -63,39 +64,40 @@
 			Page: {$selected.label}
 		</ButtonAccent>
 	</div>
+	{#if open}
+		<div class="menu-outer" bind:this={menu}>
+			<MangaDexVarThemeProvider>
+				<menu transition:slide={{ duration: 150, axis: "y" }}>
+					{#each $options as { value, label } (value)}
+						<button
+							class="li"
+							onclick={() => {
+								$currentPageContext = value;
+							}}
+							class:isSelected={isSelected(value)}
+						>
+							<h4>{label}</h4>
+						</button>
+					{/each}
+				</menu>
+			</MangaDexVarThemeProvider>
+		</div>
+	{/if}
 </div>
-
-{#if open}
-	<div class="menu-outer" bind:this={menu}>
-		<MangaDexVarThemeProvider>
-			<menu transition:slide={{ duration: 150, axis: "y" }}>
-				{#each $options as { value, label } (value)}
-					<button
-						class="li"
-						onclick={() => {
-							$currentPageContext = value;
-						}}
-						class:isSelected={isSelected(value)}
-					>
-						<h4>{label}</h4>
-					</button>
-				{/each}
-			</menu>
-		</MangaDexVarThemeProvider>
-	</div>
-{/if}
 
 <style lang="scss">
 	.menu-outer {
 		display: flex;
 		flex-direction: column;
 		height: 200px;
+		position: absolute;
 	}
 	.layout {
 		flex: 3;
 		display: flex;
 		flex-direction: column;
 		gap: 4px;
+		position: relative;
 	}
 	menu {
 		margin: 0px;
@@ -103,17 +105,21 @@
 		list-style: none;
 		background-color: var(--accent);
 		z-index: 10;
-		overflow-y: scroll;
+		overflow-y: auto;
 		color: var(--text-color);
 		padding-left: 0em;
+		display: grid;
 		.li {
+			padding: 0px;
 			padding-left: 1em;
-			transition: background-color 200ms ease-in-out;
+			transition: background-color 40ms ease-in-out;
 			background: transparent;
 			border: 0px;
 			font-family: var(--fonts);
+			color: var(--text-color);
 			h4 {
 				margin: 0px;
+				text-align: start;
 			}
 		}
 		.li:not(.isSelected):hover {
