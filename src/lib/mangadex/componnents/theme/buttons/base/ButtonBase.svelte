@@ -51,14 +51,7 @@
 		align-items: var(--button-align-items);
 		justify-content: var(--button-justify-content);
 	}
-	button:disabled {
-		cursor: not-allowed;
-		background: linear-gradient(
-			225deg,
-			color-mix(in srgb, var(--main-background) 95%, var(--danger, transparent) 5%) 0%,
-			var(--button-color) 100%
-		);
-	}
+
 	button:hover:disabled {
 		background: linear-gradient(
 			45deg,
@@ -98,5 +91,18 @@
 	}
 	button:not(.with-active):active {
 		filter: brightness(70%);
+	}
+	button:disabled {
+		cursor: not-allowed;
+		background: linear-gradient(
+			225deg,
+			color-mix(in srgb, var(--main-background) 95%, var(--danger, transparent) 5%) 0%,
+			var(--button-color) 100%
+		);
+		box-shadow: none;
+		transform: translateY(3px);
+	}
+	button.isBase:disabled {
+		box-shadow: none;
 	}
 </style>
