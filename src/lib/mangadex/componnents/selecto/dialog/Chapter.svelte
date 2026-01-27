@@ -69,10 +69,10 @@
 						uuids: chapters
 					},
 					{
-						onError(error, variables, context) {
+						onError(error) {
 							addErrorToast("Cannot export chapters ids as txt", error);
 						},
-						onSuccess(data, variables, context) {
+						onSuccess(data) {
 							revealItemInDir(data);
 						}
 					}
