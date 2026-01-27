@@ -88,15 +88,13 @@
 								page: pageToUse
 							},
 							{
-								onSuccess(data, variables, onMutateResult, context) {
-									addToast({
-										data: { title: "Exported page" }
-									});
+								onSuccess(data) {
+									addToast({ title: "Exported page", type: "success" });
 									if (typeof data == "string") {
 										revealItemInDir(data);
 									}
 								},
-								onError(error, variables, onMutateResult, context) {
+								onError(error) {
 									addErrorToast("Cannot export page", error);
 								}
 							}
