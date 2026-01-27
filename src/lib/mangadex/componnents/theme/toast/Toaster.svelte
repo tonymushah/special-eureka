@@ -84,9 +84,11 @@
 			<MangaDexVarThemeProvider>
 				<Toast.Root class={toastStyles.toast}>
 					<Toast.Title class={toastStyles.title}>{toast().title}</Toast.Title>
-					<Toast.Description class={toastStyles.description}
-						>{toast().description}</Toast.Description
-					>
+					{#if toast().description}
+						<Toast.Description class={toastStyles.description}
+							>{toast().description}</Toast.Description
+						>
+					{/if}
 					<Toast.CloseTrigger class={toastStyles.close}>
 						<X class={toastStyles.x} />
 					</Toast.CloseTrigger>

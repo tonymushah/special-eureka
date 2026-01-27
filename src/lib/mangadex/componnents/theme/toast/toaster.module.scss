@@ -8,13 +8,13 @@
 	max-width: calc(100vw - 2rem);
 	align-items: center;
 	justify-content: space-between;
-	gap: 1rem; /* 16px */
+	gap: 0.25rem; /* 16px */
 	padding: 1.25rem; /* 20px */
-	overflow: hidden;
 	translate: var(--x) var(--y);
 	scale: var(--scale);
 	z-index: var(--z-index);
-	/* height: var(--height); */
+	max-height: 3rem;
+	overflow: hidden;
 	opacity: var(--opacity);
 	will-change: translate, opacity, scale;
 	transition:
