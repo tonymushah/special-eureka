@@ -1,4 +1,4 @@
-import { autoPlacement, autoUpdate, computePosition, offset, shift } from "@floating-ui/dom";
+import { autoUpdate, computePosition, flip, offset, shift } from "@floating-ui/dom";
 
 async function update({
 	triggerElement,
@@ -6,9 +6,10 @@ async function update({
 }: { triggerElement?: HTMLElement; menuElement?: HTMLElement } = {}) {
 	if (triggerElement && menuElement) {
 		const { x, y } = await computePosition(triggerElement, menuElement, {
+			placement: "bottom",
 			middleware: [
 				offset(6),
-				autoPlacement(),
+				flip(),
 				shift({
 					padding: 5
 				})
@@ -29,7 +30,8 @@ export function floatingUImenu({
 	hideMenuDisplay,
 	closeOnClick,
 	setOpen,
-	sameWidth
+	sameWidth,
+	closeOnOutClick
 }: {
 	open: () => boolean;
 	triggerElement?: () => HTMLElement | undefined;
@@ -39,6 +41,7 @@ export function floatingUImenu({
 	closeOnClick?: boolean;
 	setOpen?: (o: boolean) => void;
 	sameWidth?: boolean;
+	closeOnOutClick?: boolean;
 }) {
 	const trigger = $derived(triggerElement?.());
 	const menu = $derived(menuElement?.());
@@ -71,6 +74,21 @@ export function floatingUImenu({
 			menu.addEventListener("click", menuEvClick);
 			return () => {
 				menu.removeEventListener("click", menuEvClick);
+			};
+		}
+	});
+	$effect(() => {
+		if (menu && closeOnOutClick && open == true && trigger) {
+			const menuEvClick = (_e: MouseEvent) => {
+				if (_e.target instanceof Node) {
+					if (!menu.contains(_e.target) && !trigger.contains(_e.target)) {
+						setOpen?.(false);
+					}
+				}
+			};
+			window.addEventListener("click", menuEvClick);
+			return () => {
+				window.removeEventListener("click", menuEvClick);
 			};
 		}
 	});
