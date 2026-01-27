@@ -48,10 +48,10 @@ export const followTitleMutation = () =>
 					throw res.error;
 				}
 			},
-			onMutate(variables, context) {
+			onMutate() {
 				globalIsMutatingInner.set(true);
 			},
-			onSettled(data, error, variables, onMutateResult, context) {
+			onSettled() {
 				globalIsMutatingInner.set(false);
 			}
 		}),
@@ -72,10 +72,10 @@ export const unfollowTitleMutation = () =>
 					throw res.error;
 				}
 			},
-			onMutate(variables, context) {
+			onMutate() {
 				globalIsMutatingInner.set(true);
 			},
-			onSettled(data, error, variables, onMutateResult, context) {
+			onSettled() {
 				globalIsMutatingInner.set(false);
 			}
 		}),
@@ -157,25 +157,23 @@ function setFollowingStatus(
 	if (value) {
 		const mut = extractFromAccessor(followTitleMutation);
 		mut.value.mutate(id, {
-			onError(error, variables, context) {
+			onError(error, variables) {
 				if (toast) {
 					addErrorToast("Cannot change title following status", error);
 				}
 				options?.onError?.(error, variables);
 			},
-			onSuccess(data, variables, context) {
+			onSuccess(data, variables) {
 				if (toast) {
 					addToast({
-						data: {
-							title: "Followed title",
-							description: id,
-							variant: "green"
-						}
+						title: "Followed title",
+						description: id,
+						type: "success"
 					});
 				}
 				options?.onSucess?.(variables);
 			},
-			onSettled(data, error, variables, context) {
+			onSettled(data, error, variables) {
 				using _ = mut;
 				query.refetch();
 				options?.onSettled?.(error, variables);
@@ -184,25 +182,23 @@ function setFollowingStatus(
 	} else {
 		const mut = extractFromAccessor(unfollowTitleMutation);
 		mut.value.mutate(id, {
-			onError(error, variables, context) {
+			onError(error, variables) {
 				if (toast) {
 					addErrorToast("Cannot change title following status", error);
 				}
 				options?.onError?.(error, variables);
 			},
-			onSuccess(data, variables, context) {
+			onSuccess(data, variables) {
 				if (toast) {
 					addToast({
-						data: {
-							title: "Unfollowed title",
-							description: id,
-							variant: "yellow"
-						}
+						title: "Unfollowed title",
+						description: id,
+						type: "warning"
 					});
 				}
 				options?.onSucess?.(variables);
 			},
-			onSettled(data, error, variables ) {
+			onSettled(data, error, variables) {
 				using _ = mut;
 				query.refetch();
 				options?.onSettled?.(error, variables);

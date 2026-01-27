@@ -108,7 +108,8 @@
 											onSuccess(data) {
 												addToast({
 													title: `Forked ${listToForkName ? listToForkName : `${listToFork} MD List`}`,
-													description: `New MD List ID: ${data.id}`
+													description: `New MD List ID: ${data.id}`,
+													type: "success"
 												});
 												if (open) {
 													goto(

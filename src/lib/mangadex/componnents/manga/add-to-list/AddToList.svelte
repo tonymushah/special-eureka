@@ -48,10 +48,8 @@
 						mutate?.($currentMangaId)
 							?.then(() => {
 								addToast({
-									data: {
-										title: "Title Added/Removed to List(s) succefully",
-										variant: "green"
-									}
+									title: "Title Added/Removed to List(s) succefully",
+									type: "success"
 								});
 							})
 							.catch((e) => {

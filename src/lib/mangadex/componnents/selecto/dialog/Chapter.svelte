@@ -1,4 +1,6 @@
 <script lang="ts">
+,
+
 	import ButtonAccentOnlyLabel from "@mangadex/componnents/theme/buttons/ButtonAccentOnlyLabel.svelte";
 	import SectionBase from "./SectionBase.svelte";
 	import DangerButtonOnlyLabel from "@mangadex/componnents/theme/buttons/DangerButtonOnlyLabel.svelte";
@@ -96,9 +98,7 @@
 							},
 							onSuccess(data, variables) {
 								addToast({
-									data: {
-										title: `Marked ${variables.reads.length} chapter${variables.reads.length == 1 ? "" : "s"} as read`
-									}
+									title: `Marked ${variables.reads.length} chapter${variables.reads.length == 1 ? "" : "s"} as read`
 								});
 							}
 						}
@@ -121,9 +121,8 @@
 							},
 							onSuccess(data, variables) {
 								addToast({
-									data: {
-										title: `Marked ${variables.reads.length} chapter${variables.reads.length == 1 ? "" : "s"} as read`
-									}
+									title: `Marked ${variables.reads.length} chapter${variables.reads.length == 1 ? "" : "s"} as read`,
+									type: "success"
 								});
 							}
 						}

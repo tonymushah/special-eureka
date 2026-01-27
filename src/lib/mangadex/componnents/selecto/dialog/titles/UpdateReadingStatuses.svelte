@@ -90,10 +90,8 @@
 						switch (status.status) {
 							case "fulfilled":
 								addToast({
-									data: {
-										title: "Updated titles statuses",
-										variant: "primary"
-									}
+									title: "Updated titles statuses",
+									type: "success"
 								});
 								break;
 							case "rejected":
@@ -105,17 +103,12 @@
 						switch (following.status) {
 							case "fulfilled":
 								addToast({
-									data: {
-										title: "Updated titles follow statuses",
-										variant: "primary"
-									}
+									title: "Updated titles follow statuses",
+									type: "success"
 								});
 								break;
 							case "rejected":
-								addErrorToast(
-									"Error on updateing titles following statuses",
-									following.reason
-								);
+								addErrorToast("Error on updateing titles following statuses", following.reason);
 								break;
 							default:
 								break;

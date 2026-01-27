@@ -42,8 +42,11 @@
 
 	setContextMenuContext(
 		customListElementContextMenu({
+			// svelte-ignore state_referenced_locally
 			id: data.id,
+			// svelte-ignore state_referenced_locally
 			name: data.attributes.name,
+			// svelte-ignore state_referenced_locally
 			isMine: data.isMine,
 			onVisibilityChange(vis) {
 				switch (vis) {
@@ -88,11 +91,9 @@
 								{
 									onSuccess() {
 										addToast({
-											data: {
-												title: "Sucefully made custom list public",
-												description: data.attributes.name,
-												variant: "yellow"
-											}
+											title: "Sucefully made custom list public",
+											description: data.attributes.name,
+											type: "warning"
 										});
 										goto(
 											route("/mangadex/list/[id]", {
@@ -122,11 +123,9 @@
 								{
 									onSuccess() {
 										addToast({
-											data: {
-												title: "Sucefully made custom list private",
-												description: data.attributes.name,
-												variant: "yellow"
-											}
+											title: "Sucefully made custom list private",
+											description: data.attributes.name,
+											type: "warning"
 										});
 										goto(
 											route("/mangadex/list/[id]", {
@@ -155,11 +154,9 @@
 							},
 							onSuccess() {
 								addToast({
-									data: {
-										title: "Deleted custom list",
-										description: data.attributes.name ?? data.id,
-										variant: "yellow"
-									}
+									title: "Deleted custom list",
+									description: data.attributes.name ?? data.id,
+									type: "warning"
 								});
 								goto(route("/mangadex/list"));
 							}
