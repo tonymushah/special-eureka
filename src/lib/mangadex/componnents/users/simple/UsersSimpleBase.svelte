@@ -9,6 +9,7 @@
 		profilePicture?: string;
 		name: string;
 		_this?: HTMLButtonElement | undefined;
+		selectable?: boolean;
 	}
 
 	let {
@@ -16,11 +17,12 @@
 		name,
 		_this = $bindable(undefined),
 		children,
+		selectable,
 		...restProps
 	}: Props = $props();
 </script>
 
-<button bind:this={_this} {...restProps}>
+<button bind:this={_this} {...restProps} class:users-simple-selectable={selectable}>
 	<img alt="{camelCase(name)}-profile-picture" src={profilePicture} />
 	<p>{name}</p>
 	<div class="right">
@@ -69,5 +71,9 @@
 	}
 	.right {
 		justify-content: end;
+	}
+	.users-simple-selectable:global([data-selecto-selected]) {
+		background-color: var(--accent-l1);
+		border-color: var(--primary-l2);
 	}
 </style>

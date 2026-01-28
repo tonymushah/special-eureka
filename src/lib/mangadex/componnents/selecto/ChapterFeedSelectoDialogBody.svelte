@@ -10,10 +10,25 @@
 	interface Props {
 		titles: string[];
 		chapters: string[];
+		covers: string[];
+		scanlationGroups: string[];
+		users: string[];
+		customLists: string[];
 	}
 	const titleId = "titles";
 	const chapterId = "chapters";
-	let { titles = $bindable(), chapters = $bindable() }: Props = $props();
+	const coversId = "covers";
+	const scanlationGroupsId = "scanlation_groups";
+	const usersId = "users";
+	const customListsId = "customLists";
+	let {
+		titles = $bindable(),
+		chapters = $bindable(),
+		covers = $bindable(),
+		scanlationGroups = $bindable(),
+		users = $bindable(),
+		customLists = $bindable()
+	}: Props = $props();
 	let triggers = $derived.by(() => {
 		return [
 			{
@@ -25,6 +40,26 @@
 				id: chapterId,
 				title: `Chapters (${chapters.length})`,
 				disabled: chapters.length == 0
+			},
+			{
+				id: coversId,
+				title: `Covers (${covers.length})`,
+				disabled: chapters.length == 0
+			},
+			{
+				id: scanlationGroupsId,
+				title: `Scanlation Groups (${scanlationGroups.length})`,
+				disabled: scanlationGroups.length == 0
+			},
+			{
+				id: usersId,
+				title: `Users (${users.length})`,
+				disabled: users.length == 0
+			},
+			{
+				id: customListsId,
+				title: `CustomLists (${customLists.length})`,
+				disabled: customLists.length == 0
 			}
 		] as MangaDexTabTrigger[];
 	});
@@ -38,11 +73,23 @@
 	});
 </script>
 
-<MangaDexTabs {triggers} defaultValue={titleId} content lazyMount unmountOnExit manual>
+<MangaDexTabs {triggers} content lazyMount unmountOnExit manual>
 	<TabContent value={titleId} class={cssMod.content}>
 		<Titles {titles} />
 	</TabContent>
 	<TabContent value={chapterId} class={cssMod.content}>
 		<Chapter {chapters} />
+	</TabContent>
+	<TabContent value={coversId} class={cssMod.content}>
+		<p>nothing</p>
+	</TabContent>
+	<TabContent value={scanlationGroupsId} class={cssMod.content}>
+		<p>nothing</p>
+	</TabContent>
+	<TabContent value={usersId} class={cssMod.content}>
+		<p>nothing</p>
+	</TabContent>
+	<TabContent value={customListsId} class={cssMod.content}>
+		<p>nothing</p>
 	</TabContent>
 </MangaDexTabs>
