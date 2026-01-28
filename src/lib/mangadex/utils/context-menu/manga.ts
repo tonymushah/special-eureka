@@ -98,20 +98,14 @@ export default function mangaElementContextMenu({
 	const isFollowed = isFollowingTitle(id);
 	const set_manga_reading_status_success_toast = () => {
 		addToast({
-			data: {
-				title: "Updated title reading status",
-				description: id,
-				variant: "blue"
-			}
+			title: "Updated title reading status",
+			description: id
 		});
 	};
 	const set_manga_rating_success_toast = () => {
 		addToast({
-			data: {
-				title: "Updated title rating",
-				description: id,
-				variant: "blue"
-			}
+			title: "Updated title rating",
+			description: id
 		});
 	};
 	const set_manga_reading_status_error_toast = (e: unknown) => {
@@ -250,10 +244,9 @@ export default function mangaElementContextMenu({
 								},
 								onSuccess() {
 									addToast({
-										data: {
-											title: "Downloaded titile",
-											description: id
-										}
+										title: "Downloaded titile",
+										description: id,
+										type: "success"
 									});
 								}
 							});

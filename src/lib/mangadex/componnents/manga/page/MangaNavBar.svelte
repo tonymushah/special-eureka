@@ -17,7 +17,7 @@
 			ev: MouseEvent & {
 				currentTarget: EventTarget & HTMLButtonElement;
 			}
-		) => any;
+		) => unknown;
 	}
 	interface Props extends Events {
 		id: string;
@@ -85,9 +85,7 @@
 		font-size: 16px;
 		padding: 5px 10px;
 	}
-	button:disabled {
-		background-color: var(--accent);
-	}
+
 	button:hover {
 		background-color: var(--accent-l1-hover);
 	}
@@ -103,6 +101,9 @@
 	}
 	button.active:active {
 		background-color: var(--accent-l3-active);
+	}
+	button:disabled {
+		background-color: var(--accent);
 	}
 	nav {
 		background-color: var(--accent);

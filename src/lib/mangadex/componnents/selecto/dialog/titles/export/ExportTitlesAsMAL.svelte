@@ -15,13 +15,14 @@
 	import { exportTaskEvent } from "@mangadex/stores/library/export/mal";
 	import { isLogged } from "@mangadex/utils/auth";
 	import defaultReadingStatusPriorities from "@mangadex/utils/readingStatusPriorities";
-	import { createProgress, melt } from "@melt-ui/svelte";
 	import { save } from "@tauri-apps/plugin-dialog";
 	import { revealItemInDir } from "@tauri-apps/plugin-opener";
 	import { RotateCwIcon, SaveIcon } from "@lucide/svelte";
 	import { writable } from "svelte/store";
 	import { slide } from "svelte/transition";
 	import { v4 } from "uuid";
+	import { Progress } from "@ark-ui/svelte/progress";
+	import cssMod from "./mal.module.scss";
 
 	interface Props {
 		titles: string[];
@@ -59,26 +60,23 @@
 				await exportTitlesToMAL.mutateAsync(
 					{ ...options, exportPath, ids: titles },
 					{
-						onSettled(data, error, variables, context) {
+						onSettled(data, error, variables) {
 							console.debug(variables);
 						},
-						onSuccess(data, variables, context) {
+						onSuccess(data) {
 							if (revealAfterFinish) {
 								revealItemInDir(data);
 							} else {
 								addToast({
-									data: {
-										title: `${titles.length} titles exported`,
-										description: data
-									}
+									title: `${titles.length} titles exported`,
+									description: data,
+
+									type: "success"
 								});
 							}
 						},
-						onError(error, variables, context) {
-							addErrorToast(
-								"Cannot export library as a My Anime List XML Import file",
-								error
-							);
+						onError(error) {
+							addErrorToast("Cannot export library as a My Anime List XML Import file", error);
 						}
 					}
 				);
@@ -102,13 +100,6 @@
 		return exportTaskEvent.subscribe((d) => {
 			set(d?.progress ?? 0);
 		});
-	});
-	const {
-		elements: { root: progressRoot },
-		options: { max: progressMax }
-	} = createProgress({
-		value: progressValue,
-		max: 255
 	});
 </script>
 
@@ -136,31 +127,29 @@
 			}}
 			class="loading"
 		>
-			<p>
-				{#if c_state == "Preloading"}
-					Preloading...
-				{:else if c_state == "AssemblingInfo"}
-					Assembling infos...
-				{:else if c_state == "GettingScores"}
-					Getting scores...
-				{:else if c_state == "GettingStatuses"}
-					Getting statuses...
-				{:else if c_state == "GettingTitlesData"}
-					Getting titltes data...
-				{:else if c_state == "WritingToFile"}
-					Writing file...
-				{:else if c_state.FetchingReadChapter}
-					Fetching {c_state.FetchingReadChapter.manga} read chapters...
-				{/if}
-			</p>
-			<div class="progress" use:melt={$progressRoot}>
-				<div
-					class="progress-inner"
-					style={`transform: translateX(-${
-						100 - (100 * ($progressValue ?? 0)) / ($progressMax ?? 1)
-					}%)`}
-				></div>
-			</div>
+			<Progress.Root value={$progressValue} max={255}>
+				<Progress.Label
+					>{#if c_state == "Preloading"}
+						Preloading...
+					{:else if c_state == "AssemblingInfo"}
+						Assembling infos...
+					{:else if c_state == "GettingScores"}
+						Getting scores...
+					{:else if c_state == "GettingStatuses"}
+						Getting statuses...
+					{:else if c_state == "GettingTitlesData"}
+						Getting titltes data...
+					{:else if c_state == "WritingToFile"}
+						Writing file...
+					{:else if c_state.FetchingReadChapter}
+						Fetching {c_state.FetchingReadChapter.manga} read chapters...
+					{/if}</Progress.Label
+				>
+				<Progress.ValueText />
+				<Progress.Track class={cssMod.progress}>
+					<Progress.Range class={cssMod.progressRange} />
+				</Progress.Track>
+			</Progress.Root>
 		</div>
 	{/if}
 	<section class="input-row">
@@ -309,7 +298,7 @@
 		<PrimaryButton
 			isBase
 			disabled={exportTitlesToMAL.isPending || !$isLogged}
-			onclick={(e) => {
+			onclick={() => {
 				submitExport();
 			}}
 		>
@@ -323,7 +312,7 @@
 		<ButtonAccent
 			isBase
 			variant="3"
-			onclick={(e) => {
+			onclick={() => {
 				options = defaultOptions();
 			}}
 			disabled={exportTitlesToMAL.isPending}
@@ -338,13 +327,13 @@
 	</section>
 	<section class="notes">
 		<p>
-			<u>Note:</u> Since exporting your library sends a lot of requests to the MangaDex API,
-			it is <b>recommended to not open MangaDex on your browser </b>
+			<u>Note:</u> Since exporting your library sends a lot of requests to the MangaDex API, it is
+			<b>recommended to not open MangaDex on your browser </b>
 			<i>or any similar activities that might send unecessary requests to the API </i>
 			because it might blow your
 			<i>IP rate-limit</i>
-			and also check if <b>your internet connection is smooth enough</b> for this operation.
-			(also check if you have enough RAM too.
+			and also check if <b>your internet connection is smooth enough</b> for this operation. (also
+			check if you have enough RAM too.
 			<code>`The bigger the library, the more it needs RAM`</code>)
 		</p>
 	</section>
@@ -419,26 +408,7 @@
 			}
 		}
 	}
-	.progress {
-		position: relative;
-		height: 1em;
-		width: 80%;
-		overflow: hidden;
-		border-radius: 99999999px;
-		background-color: var(--accent-l5);
-		.progress-inner {
-			height: 100%;
-			width: 100%;
-			background-color: var(--primary-l2);
-			transition: transform ease-in-out 100ms;
-		}
-	}
-	.progress:hover {
-		background-color: var(--accent-l5-hover);
-	}
-	.progress:active {
-		background-color: var(--accent-l5-active);
-	}
+
 	.loading {
 		display: flex;
 		align-items: center;

@@ -11,7 +11,7 @@
 			ev: MouseEvent & {
 				currentTarget: EventTarget & HTMLButtonElement;
 			}
-		) => any;
+		) => unknown;
 	}
 	interface Props extends Events {
 		dialog_bind?: HTMLDialogElement | undefined;
@@ -44,7 +44,7 @@
 		</div>
 	</div>
 	<main>
-		<MangaSearchFilterDialogContent portal="null" />
+		<MangaSearchFilterDialogContent />
 	</main>
 	{#if requireValidation}
 		<footer>

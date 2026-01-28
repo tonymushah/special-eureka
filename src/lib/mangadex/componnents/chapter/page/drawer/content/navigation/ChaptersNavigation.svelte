@@ -5,7 +5,7 @@
 	const hasRelated = hasRelatedChapters();
 </script>
 
-{#if !$hasRelated}
+{#if $hasRelated}
 	<div class="layout">
 		<PreviousNext>
 			<div class="select">

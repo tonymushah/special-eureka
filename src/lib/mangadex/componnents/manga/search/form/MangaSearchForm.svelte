@@ -13,8 +13,8 @@
 	import { isMounted } from "@mangadex/stores/offlineIsMounted";
 
 	interface Events {
-		onsubmit?: (ev: MangaSearchParams) => any;
-		onchange?: (ev: MangaSearchParams) => any;
+		onsubmit?: (ev: MangaSearchParams) => unknown;
+		onchange?: (ev: MangaSearchParams) => unknown;
 	}
 
 	interface Props extends Events {
@@ -112,6 +112,7 @@
 <form
 	onsubmit={(e) => {
 		e.preventDefault();
+		e.stopPropagation();
 		onsubmit?.($params);
 	}}
 >

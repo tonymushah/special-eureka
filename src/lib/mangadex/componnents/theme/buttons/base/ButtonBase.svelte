@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { emptyMeltElement, melt, type AnyMeltElement } from "@melt-ui/svelte";
 	import type { HTMLButtonAttributes } from "svelte/elements";
 
 	interface Props extends HTMLButtonAttributes {
@@ -9,7 +8,6 @@
 		haveBorderRadius?: boolean;
 		noPadding?: boolean;
 		children?: import("svelte").Snippet;
-		meltElement?: AnyMeltElement;
 	}
 
 	let {
@@ -21,7 +19,6 @@
 		haveBorderRadius = true,
 		noPadding = false,
 		children,
-		meltElement = emptyMeltElement,
 		...restProps
 	}: Props = $props();
 </script>
@@ -33,7 +30,7 @@
 	class:with-active={with_active}
 	class:with-hover={with_hover}
 	class:noPadding
-	use:melt={$meltElement}
+	{type}
 	{...restProps}
 >
 	{@render children?.()}
@@ -54,14 +51,7 @@
 		align-items: var(--button-align-items);
 		justify-content: var(--button-justify-content);
 	}
-	button:disabled {
-		cursor: not-allowed;
-		background: linear-gradient(
-			225deg,
-			color-mix(in srgb, var(--main-background) 95%, var(--danger, transparent) 5%) 0%,
-			var(--button-color) 100%
-		);
-	}
+
 	button:hover:disabled {
 		background: linear-gradient(
 			45deg,
@@ -101,5 +91,18 @@
 	}
 	button:not(.with-active):active {
 		filter: brightness(70%);
+	}
+	button:disabled {
+		cursor: not-allowed;
+		background: linear-gradient(
+			225deg,
+			color-mix(in srgb, var(--main-background) 95%, var(--danger, transparent) 5%) 0%,
+			var(--button-color) 100%
+		);
+		box-shadow: none;
+		transform: translateY(3px);
+	}
+	button.isBase:disabled {
+		box-shadow: none;
 	}
 </style>

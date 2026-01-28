@@ -2,26 +2,21 @@
 	import { TagSearchMode } from "@mangadex/gql/graphql";
 	import type { Writable } from "svelte/store";
 	import { tagModeWritableToBoolWritable } from "../../contexts/tagModes";
-	import { createToggle, melt } from "@melt-ui/svelte";
 
 	interface Props {
 		writableTag: Writable<TagSearchMode>;
-		trueValue?: any;
+		trueValue?: TagSearchMode;
 	}
 
 	let { writableTag, trueValue = TagSearchMode.And }: Props = $props();
 	let toUse = $derived(tagModeWritableToBoolWritable(writableTag, trueValue));
-
-	let toggle = $derived(
-		createToggle({
-			pressed: toUse
-		})
-	);
-	let root = $derived(toggle.elements.root);
-	let pressed = $derived(toggle.states.pressed);
 </script>
 
-<button use:melt={$root}>
+<button
+	onclick={() => {
+		toUse.update((d) => (d = !d));
+	}}
+>
 	<div class:selected={$writableTag == TagSearchMode.And}>And</div>
 	<div class:selected={$writableTag == TagSearchMode.Or}>Or</div>
 </button>

@@ -1,23 +1,23 @@
 <script lang="ts">
-	import { emptyMeltElement, melt, type AnyMeltElement } from "@melt-ui/svelte";
 	import type { HTMLInputAttributes } from "svelte/elements";
 
 	interface Props {
 		inputProps?: Omit<HTMLInputAttributes, "value">;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		value?: any;
 		widthFull?: boolean;
-		element?: AnyMeltElement;
+		self?: HTMLInputElement;
 	}
 
 	let {
 		inputProps,
 		value = $bindable(undefined),
 		widthFull = false,
-		element = emptyMeltElement
+		self = $bindable()
 	}: Props = $props();
 </script>
 
-<input {...inputProps} use:melt={$element} bind:value class:widthFull />
+<input {...inputProps} bind:value class:widthFull bind:this={self} />
 
 <style lang="scss">
 	input {

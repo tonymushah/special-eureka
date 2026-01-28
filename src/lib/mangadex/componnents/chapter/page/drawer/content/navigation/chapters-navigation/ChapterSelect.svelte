@@ -1,36 +1,20 @@
 <script lang="ts">
-	import {
-		createCombobox,
-		createPopover,
-		melt,
-		type ComboboxOptionProps,
-		type SelectOption
-	} from "@melt-ui/svelte";
 	import { getRelatedChapters, hasRelatedChapters } from "../../../../contexts/relatedChapters";
-	import { derived } from "svelte/store";
 	import MangaDexVarThemeProvider from "@mangadex/componnents/theme/MangaDexVarThemeProvider.svelte";
 	import { getCurrentChapterData } from "../../../../contexts/currentChapter";
 	import { slide } from "svelte/transition";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import { fireSelectChapterEvent } from "../../../../contexts/previousNextEventTarget";
-	import { groupBy, map, reverse, upperCase } from "lodash";
-	import MidToneLine from "@mangadex/componnents/theme/lines/MidToneLine.svelte";
+	import { groupBy, reverse, upperCase } from "lodash";
+	import { floatingUImenu } from "@mangadex/utils/floating-ui/menu.svelte";
 	const hasRelated = hasRelatedChapters();
-	const {
-		elements: { menu, input: trigger, option, group, groupLabel },
-		states: { open }
-	} = createCombobox<string>({
-		forceVisible: true,
-		positioning: {
-			placement: "bottom",
-			fitViewport: true,
-			sameWidth: true
-		}
-	});
-	type OptionsMap = ComboboxOptionProps<string> & {
+	type OptionsMap = {
+		label: string;
+		id: string;
 		volume: string;
 	};
-	const options = derived(getRelatedChapters(), ($related) =>
+	const related = getRelatedChapters();
+	let options = $derived(
 		groupBy(
 			$related.map<OptionsMap>(({ chapter, volume, id }) => {
 				let label: string;
@@ -44,7 +28,7 @@
 					label = "No label??";
 				}
 				return {
-					value: id,
+					id,
 					label,
 					volume: volume ?? "none"
 				};
@@ -53,15 +37,32 @@
 		)
 	);
 	const current = getCurrentChapterData();
-	const isSelected = derived([current], ([$current]) => {
-		return (value: string) => $current.id == value;
+	const isSelected = (value: string) => $current.id == value;
+
+	let menu_options = $derived(reverse(Object.entries(options)));
+	let open = $state(false);
+	let trigger = $state<HTMLElement | undefined>();
+	let menu = $state<HTMLElement | undefined>();
+	floatingUImenu({
+		open: () => open,
+		triggerElement: () => trigger,
+		menuElement: () => menu,
+		showMenuDisplay: "flex",
+		setOpen: (o) => (open = o),
+		sameWidth: true,
+		closeOnClick: true,
+		closeOnOutClick: true
 	});
-	const menu_options = derived(options, ($options) => reverse(Object.entries($options)));
 </script>
 
 <div class="layout">
-	<div class="input" use:melt={$trigger}>
-		<ButtonAccent>
+	<div class="input" bind:this={trigger}>
+		<ButtonAccent
+			disabled={!$hasRelated}
+			onclick={() => {
+				open = !open;
+			}}
+		>
 			{#if $current.chapterNumber != undefined}
 				Chapter {$current.chapterNumber}
 			{:else if $current.isOneshot}
@@ -71,37 +72,36 @@
 			{/if}
 		</ButtonAccent>
 	</div>
+	{#if open}
+		<div class="menu-outer" bind:this={menu}>
+			<MangaDexVarThemeProvider>
+				<menu transition:slide={{ duration: 150, axis: "y" }}>
+					{#each menu_options as [volume, chapters]}
+						<section>
+							<div class="label">
+								<span>
+									Volume {upperCase(volume)}
+								</span>
+								<hr />
+							</div>
+							{#each chapters as chapter}
+								<button
+									class="li"
+									onclick={() => {
+										fireSelectChapterEvent(chapter.id);
+									}}
+									class:isSelected={isSelected(chapter.id)}
+								>
+									<h4>{chapter.label}</h4>
+								</button>
+							{/each}
+						</section>
+					{/each}
+				</menu>
+			</MangaDexVarThemeProvider>
+		</div>
+	{/if}
 </div>
-
-{#if $open}
-	<div class="menu-outer" use:melt={$menu}>
-		<MangaDexVarThemeProvider>
-			<menu transition:slide={{ duration: 150, axis: "y" }}>
-				{#each $menu_options as [volume, chapters]}
-					<section use:melt={$group(volume)}>
-						<div class="label">
-							<span use:melt={$groupLabel(volume)}>
-								Volume {upperCase(volume)}
-							</span>
-							<hr />
-						</div>
-						{#each chapters as chapter}
-							<li
-								use:melt={$option(chapter)}
-								on:m-click={() => {
-									fireSelectChapterEvent(chapter.value);
-								}}
-								class:isSelected={$isSelected(chapter.value)}
-							>
-								<h4>{chapter.label}</h4>
-							</li>
-						{/each}
-					</section>
-				{/each}
-			</menu>
-		</MangaDexVarThemeProvider>
-	</div>
-{/if}
 
 <style lang="scss">
 	.label {
@@ -124,17 +124,19 @@
 		display: flex;
 		flex-direction: column;
 		height: 200px;
+		position: absolute;
 	}
 	.layout {
 		flex: 3;
 		display: flex;
 		flex-direction: column;
 		gap: 4px;
+		position: relative;
 	}
 	menu {
 		margin: 0px;
 		border-radius: 0.25em;
-
+		display: grid;
 		background-color: var(--accent);
 		z-index: 10;
 		overflow-y: scroll;
@@ -142,21 +144,28 @@
 		padding-left: 0em;
 		section {
 			list-style: none;
-			li {
-				transition: background-color 200ms ease-in-out;
+			display: grid;
+			.li {
+				padding: 0px;
+				transition: background-color 40ms ease-in-out;
+				background: transparent;
+				border: 0px;
+				font-family: var(--fonts);
+				color: var(--text-color);
 				h4 {
 					padding-left: 0.5em;
 					margin: 0px;
 					font-size: 14px;
+					text-align: start;
 				}
 			}
-			li:not(.isSelected):hover {
+			.li:not(.isSelected):hover {
 				background-color: var(--accent-hover);
 			}
-			li:not(.isSelected):active {
+			.li:not(.isSelected):active {
 				background-color: var(--accent-active);
 			}
-			li.isSelected {
+			.li.isSelected {
 				background-color: var(--primary);
 			}
 		}

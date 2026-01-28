@@ -7,11 +7,9 @@ import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/g
 import manga_altTitle_to_lang_map from "@mangadex/utils/lang/record-to-map/manga-altTitle-to-lang-map";
 import type { Tag } from "@mangadex/utils/types/Tag";
 import type { Client } from "@urql/svelte";
-import { queryStore } from "@urql/svelte";
 import { getContext, setContext } from "svelte";
 import { get } from "svelte/store";
 import query from "./(layout)/query";
-import statsQuery from "./(layout)/statsQuery";
 
 const contextKey = "title-layout-data";
 
@@ -63,13 +61,6 @@ export async function load(id: string, client: Client) {
 				),
 				contentRating: data.attributes.contentRating
 			},
-			statsQueryStore: queryStore({
-				client,
-				query: statsQuery,
-				variables: {
-					id
-				}
-			}),
 			conflicts
 		};
 	} else {

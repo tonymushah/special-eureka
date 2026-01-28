@@ -1,12 +1,8 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
-	import contextMenu, {
-		ContextMenuItemProvider
-	} from "@special-eureka/core/commands/contextMenu";
+	import { ContextMenuItemProvider } from "@special-eureka/core/commands/contextMenu";
 	import openNewWindow from "@special-eureka/core/commands/openNewWindow";
-	import registerContextMenuEvent, {
-		getContextMenuContext
-	} from "@special-eureka/core/utils/contextMenuContext";
+	import registerContextMenuEvent from "@special-eureka/core/utils/contextMenuContext";
 	import { currentLocationWithNewPath } from "@special-eureka/core/utils/url";
 	import type { UnlistenFn } from "@tauri-apps/api/event";
 	import { openUrl } from "@tauri-apps/plugin-opener";
@@ -16,7 +12,7 @@
 		href: string;
 		ext_href?: string | undefined;
 		children?: import("svelte").Snippet;
-		onclick?: (e?: MouseEvent & { currentTarget: EventTarget & HTMLElement }) => any;
+		onclick?: (e?: MouseEvent & { currentTarget: EventTarget & HTMLElement }) => unknown;
 	}
 	let unlistens: UnlistenFn[] = [];
 	onDestroy(() => {

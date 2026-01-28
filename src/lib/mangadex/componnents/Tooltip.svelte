@@ -12,6 +12,7 @@
 		tooltipContent: Snippet;
 		openOnLayoutClick?: boolean;
 		placement?: Placement;
+		rootDisplay?: string;
 	}
 
 	let {
@@ -19,7 +20,8 @@
 		tooltipContent,
 		triggerContent,
 		openOnLayoutClick,
-		placement: plc = "bottom"
+		placement: plc = "bottom",
+		rootDisplay
 	}: Props = $props();
 
 	async function update() {
@@ -89,7 +91,9 @@
 <!-- svelte-ignore a11y_click_events_have_key_events -->
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
-<span
+<div
+	class="tooltip-root-trigger"
+	style:--root-display={rootDisplay}
 	bind:this={layout}
 	tabindex="0"
 	onclick={() => {
@@ -103,7 +107,7 @@
 	}}
 >
 	{@render triggerContent()}
-</span>
+</div>
 
 <div class="tooltip" role="tooltip" bind:this={tooltip}>
 	{@render tooltipContent()}
@@ -111,6 +115,9 @@
 </div>
 
 <style lang="scss">
+	.tooltip-root-trigger {
+		display: var(--root-display, inline);
+	}
 	.arrow {
 		position: absolute;
 		background: var(--accent-l5);

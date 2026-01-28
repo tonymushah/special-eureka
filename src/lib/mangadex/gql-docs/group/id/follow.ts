@@ -30,58 +30,76 @@ export const isFollowingGroupQuery = graphql(`
 	}
 `);
 
-
 const globalIsMutatingInner = writable(false);
 
 export const isChangingGroupFollowing = readonly(globalIsMutatingInner);
 
-export const followGroupMutation = () => createMutation(() => ({
-	mutationKey: ["scanlation-group", "follow"],
-	async mutationFn(id: string) {
-		const res = await client.mutation(followGroupGQLMutation, {
-			id
-		}).toPromise();
-		if (res.error) {
-			throw res.error;
-		}
-	},
-	onMutate(variables, context) {
-		globalIsMutatingInner.set(true);
-	},
-	onSettled(data, error, variables, onMutateResult, context) {
-		globalIsMutatingInner.set(false);
-	},
-}), () => mangadexQueryClient);
+export const followGroupMutation = () =>
+	createMutation(
+		() => ({
+			mutationKey: ["scanlation-group", "follow"],
+			async mutationFn(id: string) {
+				const res = await client
+					.mutation(followGroupGQLMutation, {
+						id
+					})
+					.toPromise();
+				if (res.error) {
+					throw res.error;
+				}
+			},
+			onMutate() {
+				globalIsMutatingInner.set(true);
+			},
+			onSettled() {
+				globalIsMutatingInner.set(false);
+			}
+		}),
+		() => mangadexQueryClient
+	);
 
-export const unfollowGroupMutation = () => createMutation(() => ({
-	mutationKey: ["scanlation-group", "unfollow"],
-	async mutationFn(id: string) {
-		const res = await client.mutation(unfollowGroupGQLMutation, {
-			id
-		}).toPromise();
-		if (res.error) {
-			throw res.error;
-		}
-	},
-	onMutate(variables, context) {
-		globalIsMutatingInner.set(true);
-	},
-	onSettled(data, error, variables, onMutateResult, context) {
-		globalIsMutatingInner.set(false);
-	},
-}), () => mangadexQueryClient);
+export const unfollowGroupMutation = () =>
+	createMutation(
+		() => ({
+			mutationKey: ["scanlation-group", "unfollow"],
+			async mutationFn(id: string) {
+				const res = await client
+					.mutation(unfollowGroupGQLMutation, {
+						id
+					})
+					.toPromise();
+				if (res.error) {
+					throw res.error;
+				}
+			},
+			onMutate() {
+				globalIsMutatingInner.set(true);
+			},
+			onSettled() {
+				globalIsMutatingInner.set(false);
+			}
+		}),
+		() => mangadexQueryClient
+	);
 
-export default function isFollowingGroup(id: string, options?: {
-	onSettled?: (error: Error | null, variables: string) => void;
-	onError?: (error: Error, variables: string) => void;
-	onSucess?: (variables: string) => void;
-	toast?: boolean
-}): Writable<boolean> {
+export default function isFollowingGroup(
+	id: string,
+	options?: {
+		onSettled?: (error: Error | null, variables: string) => void;
+		onError?: (error: Error, variables: string) => void;
+		onSucess?: (variables: string) => void;
+		toast?: boolean;
+	}
+): Writable<boolean> {
 	const toast = options?.toast ?? true;
 	const query = isFollowingGroupQuery_(id);
-	const queryDerived = derived(internalToStore(query), ($query) => {
-		return $query.data ?? false
-	}, false);
+	const queryDerived = derived(
+		internalToStore(query),
+		($query) => {
+			return $query.data ?? false;
+		},
+		false
+	);
 	return {
 		subscribe(run, invalidate) {
 			return queryDerived.subscribe(run, invalidate);
@@ -99,21 +117,27 @@ export default function isFollowingGroup(id: string, options?: {
 }
 
 export function isFollowingGroupQuery_(id: string) {
-	return () => createQuery(() => ({
-		queryKey: ["scanlation-group", id, "is-following"],
-		async queryFn() {
-			const res = await client.query(isFollowingGroupQuery, {
-				id
-			}).toPromise();
-			if (res.error) {
-				throw res.error;
-			} else if (res.data) {
-				return res.data.follows.isFollowingGroup;
-			} else {
-				throw new Error("no data??");
-			}
-		}
-	}), () => mangadexQueryClient);
+	return () =>
+		createQuery(
+			() => ({
+				queryKey: ["scanlation-group", id, "is-following"],
+				async queryFn() {
+					const res = await client
+						.query(isFollowingGroupQuery, {
+							id
+						})
+						.toPromise();
+					if (res.error) {
+						throw res.error;
+					} else if (res.data) {
+						return res.data.follows.isFollowingGroup;
+					} else {
+						throw new Error("no data??");
+					}
+				}
+			}),
+			() => mangadexQueryClient
+		);
 }
 
 function setFollowingStatus(
@@ -123,11 +147,11 @@ function setFollowingStatus(
 	query: CreateQueryResult,
 	options:
 		| {
-			onSettled?: (error: Error | null, variables: string) => void;
-			onError?: (error: Error, variables: string) => void;
-			onSucess?: (variables: string) => void;
-			toast?: boolean;
-		}
+				onSettled?: (error: Error | null, variables: string) => void;
+				onError?: (error: Error, variables: string) => void;
+				onSucess?: (variables: string) => void;
+				toast?: boolean;
+		  }
 		| undefined
 ) {
 	if (value) {
@@ -139,48 +163,44 @@ function setFollowingStatus(
 				}
 				options?.onError?.(error, variables);
 			},
-			onSuccess(data, variables, context) {
+			onSuccess(data, variables) {
 				if (toast) {
 					addToast({
-						data: {
-							title: "Followed scanlation group",
-							description: id,
-							variant: "green"
-						}
+						title: "Followed scanlation group",
+						description: id,
+						type: "success"
 					});
 				}
 				options?.onSucess?.(variables);
 			},
-			onSettled(data, error, variables, context) {
+			onSettled(data, error, variables) {
 				using _ = mut_;
-				query.refetch()
+				query.refetch();
 				options?.onSettled?.(error, variables);
 			}
 		});
 	} else {
 		const mut = extractFromAccessor(unfollowGroupMutation);
 		mut.value.mutate(id, {
-			onError(error, variables, context) {
+			onError(error, variables) {
 				if (toast) {
 					addErrorToast("Cannot change scanlation group following status", error);
 				}
 				options?.onError?.(error, variables);
 			},
-			onSuccess(data, variables, context) {
+			onSuccess(data, variables) {
 				if (toast) {
 					addToast({
-						data: {
-							title: "Unfollowed scanlation group",
-							description: id,
-							variant: "yellow"
-						}
+						title: "Unfollowed scanlation group",
+						description: id,
+						type: "warning"
 					});
 				}
 				options?.onSucess?.(variables);
 			},
-			onSettled(data, error, variables, context) {
+			onSettled(data, error, variables) {
 				using _ = mut;
-				query.refetch()
+				query.refetch();
 				options?.onSettled?.(error, variables);
 			}
 		});

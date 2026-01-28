@@ -3,14 +3,12 @@
 	import getCurrentChapterImages from "@mangadex/componnents/chapter/page/utils/getCurrentChapterImages";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import MangaDexVarThemeProvider from "@mangadex/componnents/theme/MangaDexVarThemeProvider.svelte";
-	import { createSelect, melt, type SelectOption } from "@melt-ui/svelte";
+	import { floatingUImenu } from "@mangadex/utils/floating-ui/menu.svelte";
+	import type { SelectOption } from "@mangadex/utils/legacy/melt-ui-select-option";
 	import { range } from "lodash";
-	import { derived, get } from "svelte/store";
+	import { derived, get, type Writable } from "svelte/store";
 	import { slide } from "svelte/transition";
 
-	type Page = {
-		index: number;
-	};
 	const currentPageContext = getChapterCurrentPageContext();
 	const currentPageSelectedReadable = derived(currentPageContext, ($page) => {
 		return {
@@ -26,65 +24,80 @@
 			label: `${index + 1}`
 		}))
 	);
-	const {
-		elements: { trigger, menu, option },
-		states: { selectedLabel, open },
-		helpers: { isSelected }
-	} = createSelect<number>({
-		forceVisible: true,
-		positioning: {
-			placement: "bottom",
-			fitViewport: true,
-			sameWidth: true
+	const selected: Writable<SelectOption<number>> = {
+		subscribe(run, invalidate) {
+			return currentPageSelectedReadable.subscribe(run, invalidate);
 		},
-		selected: {
-			subscribe(run, invalidate) {
-				return currentPageSelectedReadable.subscribe(run, invalidate);
-			},
-			set(value) {
-				currentPageContext.set(value.value);
-			},
-			update(updater) {
-				currentPageContext.set(updater(get(currentPageSelectedReadable)).value);
-			}
+		set(value) {
+			currentPageContext.set(value.value);
+		},
+		update(updater) {
+			currentPageContext.set(updater(get(currentPageSelectedReadable)).value);
 		}
-	});
+	};
+	function isSelected(val: number) {
+		return $selected.value == val;
+	}
 	//onMount(() => options.subscribe(noop));
+	let open = $state(false);
+	let trigger = $state<HTMLElement | undefined>();
+	let menu = $state<HTMLElement | undefined>();
+	floatingUImenu({
+		open: () => open,
+		triggerElement: () => trigger,
+		menuElement: () => menu,
+		showMenuDisplay: "flex",
+		setOpen: (o) => (open = o),
+		sameWidth: true,
+		closeOnClick: true,
+		closeOnOutClick: true
+	});
 </script>
 
 <div class="layout">
-	<div class="input">
-		<ButtonAccent meltElement={trigger}>
-			Page: {$selectedLabel}
+	<div class="input" bind:this={trigger}>
+		<ButtonAccent
+			onclick={() => {
+				open = !open;
+			}}
+		>
+			Page: {$selected.label}
 		</ButtonAccent>
 	</div>
+	{#if open}
+		<div class="menu-outer" bind:this={menu}>
+			<MangaDexVarThemeProvider>
+				<menu transition:slide={{ duration: 150, axis: "y" }}>
+					{#each $options as { value, label } (value)}
+						<button
+							class="li"
+							onclick={() => {
+								$currentPageContext = value;
+							}}
+							class:isSelected={isSelected(value)}
+						>
+							<h4>{label}</h4>
+						</button>
+					{/each}
+				</menu>
+			</MangaDexVarThemeProvider>
+		</div>
+	{/if}
 </div>
-
-{#if $open}
-	<div class="menu-outer" use:melt={$menu}>
-		<MangaDexVarThemeProvider>
-			<menu transition:slide={{ duration: 150, axis: "y" }}>
-				{#each $options as { value, label } (value)}
-					<li use:melt={$option({ value, label })} class:isSelected={$isSelected(value)}>
-						<h4>{label}</h4>
-					</li>
-				{/each}
-			</menu>
-		</MangaDexVarThemeProvider>
-	</div>
-{/if}
 
 <style lang="scss">
 	.menu-outer {
 		display: flex;
 		flex-direction: column;
 		height: 200px;
+		position: absolute;
 	}
 	.layout {
 		flex: 3;
 		display: flex;
 		flex-direction: column;
 		gap: 4px;
+		position: relative;
 	}
 	menu {
 		margin: 0px;
@@ -92,29 +105,36 @@
 		list-style: none;
 		background-color: var(--accent);
 		z-index: 10;
-		overflow-y: scroll;
+		overflow-y: auto;
 		color: var(--text-color);
 		padding-left: 0em;
-		li {
+		display: grid;
+		.li {
+			padding: 0px;
 			padding-left: 1em;
-			transition: background-color 200ms ease-in-out;
+			transition: background-color 40ms ease-in-out;
+			background: transparent;
+			border: 0px;
+			font-family: var(--fonts);
+			color: var(--text-color);
 			h4 {
 				margin: 0px;
+				text-align: start;
 			}
 		}
-		li:not(.isSelected):hover {
+		.li:not(.isSelected):hover {
 			background-color: var(--accent-hover);
 		}
-		li:not(.isSelected):active {
+		.li:not(.isSelected):active {
 			background-color: var(--accent-active);
 		}
-		li.isSelected {
+		.li.isSelected {
 			background-color: var(--primary);
 		}
-		li.isSelected:hover {
+		.li.isSelected:hover {
 			background-color: color-mix(in srgb, var(--primary) 70%, var(--accent-hover) 30%);
 		}
-		li.isSelected:active {
+		.li.isSelected:active {
 			background-color: color-mix(in srgb, var(--primary) 70%, var(--accent-active) 30%);
 		}
 	}

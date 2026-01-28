@@ -3,9 +3,11 @@
 	import ReadDialog from "@mangadex/componnents/manga/read/ReadDialog.svelte";
 	import AddToList from "@mangadex/componnents/manga/add-to-list/AddToList.svelte";
 	import ChapterFeedSelectoDialog from "../selecto/ChapterFeedSelectoDialog.svelte";
+	import Toaster from "../theme/toast/Toaster.svelte";
 </script>
 
 <SetTitle />
 <ReadDialog />
 <AddToList />
 <ChapterFeedSelectoDialog />
+<Toaster />

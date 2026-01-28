@@ -93,4 +93,7 @@
 	ul {
 		margin: 0px;
 	}
+	li {
+		overflow: hidden;
+	}
 </style>

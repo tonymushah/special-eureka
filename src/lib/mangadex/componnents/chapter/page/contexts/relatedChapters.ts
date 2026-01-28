@@ -1,5 +1,5 @@
 import { generateContextStoresMethods } from "@mangadex/utils/contexts";
-import { derived, type Writable } from "svelte/store";
+import { derived } from "svelte/store";
 
 export type RelatedChapter = {
 	volume?: string;
@@ -19,14 +19,15 @@ export const {
 );
 
 export function hasRelatedChapters() {
-	return derived(getRelatedChapters(), ($related) => $related.length == 0);
+	return derived(getRelatedChapters(), ($related) => $related.length != 0);
 }
 
 export class RelatedNextPrevious {
 	next?: string;
 	previous?: string;
 	constructor({ next, previous }: { next?: string; previous?: string }) {
-		((this.next = next), (this.previous = previous));
+		this.next = next;
+		this.previous = previous;
 	}
 }
 

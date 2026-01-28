@@ -1,5 +1,4 @@
 <script lang="ts">
-	import type { PortalConfig } from "@melt-ui/svelte/internal/actions";
 	import AuthorArtists from "./content/AuthorArtists.svelte";
 	import ContentRating from "./content/ContentRating.svelte";
 	import Languages from "./content/Languages.svelte";
@@ -8,15 +7,11 @@
 	import TagMode from "./content/TagMode.svelte";
 	import Tags from "./content/Tags.svelte";
 	import Year from "./content/Year.svelte";
-	interface Props {
-		portal?: PortalConfig | null;
-	}
-	let { portal }: Props = $props();
 </script>
 
 <article>
 	<div class="flexed author-artists">
-		<AuthorArtists {portal} />
+		<AuthorArtists />
 	</div>
 
 	<div class="flexed top">
@@ -38,7 +33,7 @@
 	</div>
 
 	<div class="flexed languages">
-		<Languages {portal} />
+		<Languages />
 	</div>
 </article>
 

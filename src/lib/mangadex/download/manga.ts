@@ -89,18 +89,17 @@ export const downloadMutationQuery = () =>
 				}
 				return res;
 			},
-			onSettled(data, error, variables, context) {
+			onSettled(data, error, variables) {
 				invalidateMangaOfflinePresence(variables);
 			},
-			onError(error, variables, context) {
+			onError(error) {
 				addErrorToast("Error on downloading title", error);
 			},
-			onSuccess(data, variables, context) {
+			onSuccess(data, variables) {
 				addToast({
-					data: {
-						title: "Downloaded title",
-						description: variables
-					}
+					title: "Downloaded title",
+					description: variables,
+					type: "success"
 				});
 			}
 		}),
@@ -122,18 +121,17 @@ export const removeMutation = () =>
 				}
 				return res;
 			},
-			onSettled(data, error, variables, context) {
+			onSettled(data, error, variables) {
 				invalidateMangaOfflinePresence(variables);
 			},
-			onError(error, variables, context) {
+			onError(error) {
 				addErrorToast("Cannot remove title", error);
 			},
-			onSuccess(data, variables, context) {
+			onSuccess(data, variables) {
 				addToast({
-					data: {
-						title: "Removed title",
-						description: variables
-					}
+					title: "Removed title",
+					description: variables,
+					type: "success"
 				});
 			},
 			networkMode: "always"
@@ -156,18 +154,17 @@ export const cancelMutation = () =>
 				}
 				return res;
 			},
-			onSettled(data, error, variables, context) {
+			onSettled(data, error, variables) {
 				invalidateMangaOfflinePresence(variables);
 			},
-			onError(error, variables, context) {
+			onError(error) {
 				addErrorToast("Cannot cancel download", error);
 			},
-			onSuccess(data, variables, context) {
+			onSuccess(data, variables) {
 				addToast({
-					data: {
-						title: "Canceled download title",
-						description: variables
-					}
+					title: "Canceled download title",
+					description: variables,
+					type: "success"
 				});
 			},
 			networkMode: "always"

@@ -1,11 +1,9 @@
 <script lang="ts">
-	import { tagWritableToComboboxOptionWritable } from "@mangadex/componnents/manga/search/form/filter/content/authors/utils";
 	import FormInput from "@mangadex/componnents/theme/form/input/FormInput.svelte";
 	import MangaDexVarThemeProvider from "@mangadex/componnents/theme/MangaDexVarThemeProvider.svelte";
 	import { groupSearchAndGetNameOnly } from "@mangadex/gql-docs/group/search/name-only";
 	import { client } from "@mangadex/gql/urql";
 	import pageLimit from "@mangadex/stores/page-limit";
-	import { createCombobox, createTagsInput, melt } from "@melt-ui/svelte";
 	import { createInfiniteQuery } from "@tanstack/svelte-query";
 	import { onDestroy } from "svelte";
 	import { XIcon } from "@lucide/svelte";
@@ -17,6 +15,7 @@
 	import { createSessionMutation } from "@mangadex/gql-docs/upload/mutations/create-session";
 	import { addErrorToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 	import { titleOnlyQuery } from "@mangadex/stores/title/title-only-query";
+	import { floatingUImenu } from "@mangadex/utils/floating-ui/menu.svelte";
 
 	interface Props {
 		mangaId: string;
@@ -25,35 +24,15 @@
 		rootElement?: ParentNode | undefined;
 		onclose?: () => void;
 	}
-	let { mangaId, title, ondone, rootElement: portal }: Props = $props();
+	let { mangaId, title, ondone }: Props = $props();
 	let mutation = createSessionMutation();
-	const {
-		elements: { root, tag, deleteTrigger },
-		states: { tags: groups }
-	} = createTagsInput({
-		unique: true
-	});
-	const {
-		elements: { input, menu, option },
-		states: { open, inputValue, touchedInput },
-		helpers: { isSelected }
-	} = createCombobox<string, true>({
-		selected: tagWritableToComboboxOptionWritable(groups),
-		forceVisible: true,
-		multiple: true,
-		positioning: {
-			placement: "bottom",
-			fitViewport: true,
-			sameWidth: true
-			// strategy: "fixed"
-		},
-		rootElement: portal
-	});
 	type GroupSearchQueryParams = {
 		limit?: number;
 		offset?: number;
 		name?: string;
 	};
+	let inputValue = $state<string>("");
+	let touchedInput = $state<boolean>(false);
 
 	let groupSearchQuery = createInfiniteQuery(() => ({
 		queryKey: [
@@ -62,7 +41,7 @@
 			"body",
 			"scanlation-groups",
 			"search",
-			`nameInput:${$inputValue}`,
+			`nameInput:${inputValue}`,
 			`limit:${$pageLimit}`
 		],
 		async queryFn({ pageParam }) {
@@ -81,10 +60,10 @@
 				throw new Error("no data");
 			}
 		},
-		enabled: $touchedInput && !mutation.isPending,
+		enabled: touchedInput && !mutation.isPending,
 		initialPageParam: {
 			limit: $pageLimit,
-			name: $inputValue.length == 0 ? undefined : $inputValue
+			name: inputValue.length == 0 ? undefined : inputValue
 		} as GroupSearchQueryParams,
 		getNextPageParam(lastPage, _, lastPageParam) {
 			const nextOffset = lastPage.limit + lastPage.limit;
@@ -140,6 +119,20 @@
 			return get_value_from_title_and_random_if_undefined(mangaTitleQuery.data, "en");
 		}
 	});
+	let groups = $state(new Map<string, string>());
+	let menu = $state<HTMLElement | undefined>(undefined);
+	let trigger = $state<HTMLElement | undefined>(undefined);
+	let shouldOpen = $derived(touchedInput && !mutation.isPending);
+	floatingUImenu({
+		open: () => shouldOpen,
+		triggerElement: () => trigger,
+		menuElement: () => menu,
+		showMenuDisplay: "flex",
+		closeOnClick: true,
+		setOpen(o) {
+			shouldOpen = o;
+		}
+	});
 </script>
 
 <div class="body">
@@ -163,20 +156,30 @@
 			</Tooltip>
 		</p>
 	</div>
-	<div class="groups" use:melt={$root}>
+	<div class="groups" bind:this={trigger}>
 		<p>Scanlation Groups:</p>
-		{#each $groups as group}
-			<div class="group" use:melt={$tag(group)}>
-				<span>{group.value}</span>
-				<button use:melt={$deleteTrigger(group)}>
+		{#each groups as [groupId, groupName]}
+			<div class="group">
+				<span>{groupName}</span>
+				<button
+					onclick={() => {
+						groups.delete(groupId);
+					}}
+				>
 					<XIcon size={"24"} />
 				</button>
 			</div>
 		{/each}
 		<FormInput
-			element={input}
+			bind:value={inputValue}
 			inputProps={{
-				disabled: mutation.isPending
+				disabled: mutation.isPending,
+				onfocus() {
+					touchedInput = true;
+				},
+				onblur() {
+					touchedInput = false;
+				}
 			}}
 		/>
 	</div>
@@ -189,7 +192,7 @@
 			onclick={() => {
 				mutation.mutate(
 					{
-						groups: $groups.map((group) => group.id),
+						groups: groups.keys().toArray(),
 						mangaId
 					},
 					{
@@ -206,25 +209,20 @@
 	</div>
 </div>
 
-{#if $open && !mutation.isPending}
-	<div class="menu-outer" use:melt={$menu}>
-		<MangaDexVarThemeProvider>
-			<menu transition:slide={{ duration: 150, axis: "y" }}>
-				{#each groupSearchData as group (group.id)}
-					<li
-						use:melt={$option({ value: group.id, label: group.value })}
-						class:isSelected={$isSelected(group.id)}
-					>
-						<h4>{group.value}</h4>
-					</li>
-				{/each}
-				{#if !groupSearchQuery.isFetching && groupSearchQuery.hasNextPage}
-					<div bind:this={toObserve}></div>
-				{/if}
-			</menu>
-		</MangaDexVarThemeProvider>
-	</div>
-{/if}
+<div class="menu-outer" bind:this={menu}>
+	<MangaDexVarThemeProvider>
+		<menu transition:slide={{ duration: 150, axis: "y" }}>
+			{#each groupSearchData as group (group.id)}
+				<button class="mi" onclick={() => {}} class:isSelected={groups.has(group.id)}>
+					<h4>{group.value}</h4>
+				</button>
+			{/each}
+			{#if !groupSearchQuery.isFetching && groupSearchQuery.hasNextPage}
+				<div bind:this={toObserve}></div>
+			{/if}
+		</menu>
+	</MangaDexVarThemeProvider>
+</div>
 
 <style lang="scss">
 	.groups {
@@ -239,7 +237,7 @@
 	.groups:hover {
 		background-color: var(--accent);
 	}
-	.edit {
+	/* .edit {
 		color: var(--text-color);
 		padding-left: 10px;
 		padding-right: 10px;
@@ -247,7 +245,7 @@
 		padding-bottom: 2px;
 		background-color: var(--accent-l1);
 		border-radius: 0.25em;
-	}
+	} */
 	.group {
 		display: flex;
 		gap: 5px;
@@ -285,7 +283,7 @@
 		background-color: var(--accent-l1-active);
 	}
 	.menu-outer {
-		display: flex;
+		display: none;
 		flex-direction: column;
 		height: 200px;
 		z-index: 100;
@@ -298,23 +296,27 @@
 		overflow-y: scroll;
 		color: var(--text-color);
 		padding-left: 0em;
-		li {
+		.mi {
 			padding-left: 1em;
-			transition: background-color 200ms ease-in-out;
+			transition: background-color 50ms ease-in-out;
+			background-color: transparent;
+			color: var(--text-color);
+			border: 0px;
+			align-items: center;
 			h4 {
 				margin: 0px;
 			}
 		}
-		li:global([data-highlighted]) {
+		.mi:global([data-highlighted]) {
 			background-color: var(--accent-hover);
 		}
-		li:not(.isSelected):hover {
+		.mi:not(.isSelected):hover {
 			background-color: var(--accent-hover);
 		}
-		li:not(.isSelected):active {
+		.mi:not(.isSelected):active {
 			background-color: var(--accent-active);
 		}
-		li.isSelected {
+		.mi.isSelected {
 			background-color: var(--primary);
 		}
 	}

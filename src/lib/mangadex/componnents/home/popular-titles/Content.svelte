@@ -8,37 +8,34 @@
 	import openTitle from "@mangadex/utils/links/title/[id]";
 	import { goto } from "$app/navigation";
 	import { route } from "$lib/ROUTES";
-	import { onMount } from "svelte";
 	import type { SwiperOptions } from "swiper/types";
 	import { random } from "lodash";
 	import NothingToShow from "../NothingToShow.svelte";
 
 	let swiper_container: SwiperContainer | undefined = $state(undefined);
 	let current_page_: number | undefined = $state(undefined);
-
-	onMount(() => {
-		// swiper parameters
-		const swiperParams: SwiperOptions = {
-			initialSlide: random(0, 9, false),
-			slidesPerView: 1,
-			autoplay: {
-				pauseOnMouseEnter: true,
-				delay: 5000
-			},
-			on: {
-				init() {
-					if (swiper_container != undefined) {
-						if (swiper_container.swiper != undefined) {
-							current_page_ = swiper_container.swiper.activeIndex;
-						}
+	// swiper parameters
+	const swiperParams: SwiperOptions = {
+		initialSlide: random(0, 9, false),
+		slidesPerView: 1,
+		autoplay: {
+			pauseOnMouseEnter: true,
+			delay: 5000
+		},
+		on: {
+			init() {
+				if (swiper_container != undefined) {
+					if (swiper_container.swiper != undefined) {
+						current_page_ = swiper_container.swiper.activeIndex;
 					}
-				},
-				slideChange(swiper) {
-					current_page_ = swiper.activeIndex;
 				}
+			},
+			slideChange(swiper) {
+				current_page_ = swiper.activeIndex;
 			}
-		};
-
+		}
+	};
+	$effect(() => {
 		if (swiper_container) {
 			// now we need to assign all parameters to Swiper element
 			Object.assign(swiper_container, swiperParams);

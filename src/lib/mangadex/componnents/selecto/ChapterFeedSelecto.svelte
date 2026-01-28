@@ -5,7 +5,7 @@
 </script>
 
 <script lang="ts">
-	import cssMod from "./ChapterFeedSelecto.module.css";
+	import cssMod from "./ChapterFeedSelecto.module.scss";
 	import SelectionArea from "@viselect/vanilla";
 	import { validate } from "uuid";
 	import { uniq } from "lodash";

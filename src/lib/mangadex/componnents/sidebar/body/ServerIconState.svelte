@@ -20,10 +20,8 @@
 		},
 		onSuccess() {
 			addToast({
-				data: {
-					title: "Offline data loaded",
-					variant: "green"
-				}
+				title: "Offline data loaded",
+				type: "success"
 			});
 		}
 	}));
@@ -39,10 +37,8 @@
 		},
 		onSuccess() {
 			addToast({
-				data: {
-					title: "Offline data unmounted",
-					variant: "green"
-				}
+				title: "Offline data unmounted",
+				type: "success"
 			});
 		}
 	}));

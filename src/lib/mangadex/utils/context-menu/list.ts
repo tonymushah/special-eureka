@@ -1,4 +1,5 @@
 import { goto } from "$app/navigation";
+import { extractFromAccessor } from "$lib/index.svelte";
 import { route } from "$lib/ROUTES";
 import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 import exportCustomListsToCSV from "@mangadex/gql-docs/list/export/csv";
@@ -16,14 +17,13 @@ import { save } from "@tauri-apps/plugin-dialog";
 import { openUrl, revealItemInDir } from "@tauri-apps/plugin-opener";
 import { derived, get } from "svelte/store";
 import { isLogged } from "../auth";
-import { extractFromAccessor } from "$lib/index.svelte";
 
 type CustomListElementContextMenuOptions = {
 	id: string;
 	name?: string;
 	isMine?: boolean;
-	onVisibilityChange?: (newVis: CustomListVisibility) => any;
-	onDelete?: () => any
+	onVisibilityChange?: (newVis: CustomListVisibility) => unknown;
+	onDelete?: () => unknown;
 };
 
 export default function customListElementContextMenu({
@@ -72,11 +72,14 @@ export default function customListElementContextMenu({
 	const isFollowed = isFollowingCustomList(id);
 	items.push(
 		ContextMenuItemProvider.menuItem({
-			text: derived(isFollowed, (isFollowed) => isFollowed ? "Unfollow" : "Follow"),
+			text: derived(isFollowed, (isFollowed) => (isFollowed ? "Unfollow" : "Follow")),
 			action() {
 				isFollowed.update((value) => !value);
 			},
-			enabled: derived([isLogged, isChangingListFollowing], ([isLogged, changing]) => isLogged && !changing)
+			enabled: derived(
+				[isLogged, isChangingListFollowing],
+				([isLogged, changing]) => isLogged && !changing
+			)
 		}),
 		ContextMenuItemProvider.menuItem({
 			text: "Export custom list as CSV",
@@ -105,17 +108,15 @@ export default function customListElementContextMenu({
 							includeReadVolumes: get(isLogged)
 						},
 						{
-							onError(error, variables, context) {
+							onError(error) {
 								addErrorToast("Cannot export custom list as CSV", error);
 							},
-							onSuccess(data, variables, context) {
+							onSuccess(data) {
 								revealItemInDir(data);
 								addToast({
-									data: {
-										title: `Exported list ${name ?? id} as CSV`,
-										description: data,
-										variant: "primary"
-									}
+									title: `Exported list ${name ?? id} as CSV`,
+									description: data,
+									type: "success"
 								});
 							}
 						}
@@ -124,10 +125,10 @@ export default function customListElementContextMenu({
 					addErrorToast("Invalid input", undefined);
 				}
 			},
-			enabled: (() => {
+			enabled: () => {
 				const mut = exportCustomListsToCSV();
-				return !mut.isPending
-			}),
+				return !mut.isPending;
+			}
 		})
 	);
 	if (isMine) {
@@ -144,19 +145,18 @@ export default function customListElementContextMenu({
 								{
 									onSuccess() {
 										addToast({
-											data: {
-												title: "Sucefully made custom list public",
-												description: name ?? id
-											}
+											title: "Sucefully made custom list public",
+											description: name ?? id,
+											type: "success"
 										});
 										onVisibilityChange?.(CustomListVisibility.Public);
 									},
-									onError(error, variables, context) {
+									onError(error) {
 										addErrorToast("Cannot update custom list visibity", error);
 									}
 								}
 							);
-						},
+						}
 					}),
 					ContextMenuItemProvider.menuItem({
 						text: "Private",
@@ -167,14 +167,13 @@ export default function customListElementContextMenu({
 								{
 									onSuccess() {
 										addToast({
-											data: {
-												title: "Sucefully made custom list private",
-												description: name ?? id
-											}
+											title: "Sucefully made custom list private",
+											description: name ?? id,
+											type: "success"
 										});
 										onVisibilityChange?.(CustomListVisibility.Private);
 									},
-									onError(error, variables, context) {
+									onError(error) {
 										addErrorToast("Cannot update custom list visibity", error);
 									}
 								}
@@ -189,18 +188,16 @@ export default function customListElementContextMenu({
 				action() {
 					using mut = extractFromAccessor(deleteCustomListMutation);
 					mut.value.mutate(id, {
-						onError(error, variables, context) {
+						onError(error) {
 							addErrorToast("Cannot delete custom list", error);
 						},
 						onSuccess() {
 							addToast({
-								data: {
-									title: "Deleted custom list",
-									description: name ?? id,
-									variant: "yellow"
-								}
+								title: "Deleted custom list",
+								description: name ?? id,
+								type: "warning"
 							});
-							onDelete?.()
+							onDelete?.();
 						}
 					});
 				}

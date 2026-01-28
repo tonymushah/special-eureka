@@ -4,6 +4,8 @@
 	import Titles from "./dialog/Titles.svelte";
 	import { makeScroll, preventScroll } from "../layout/scrollElement";
 	import Chapter from "./dialog/Chapter.svelte";
+	import { TabContent } from "@ark-ui/svelte/tabs";
+	import cssMod from "./dialog-body.module.scss";
 
 	interface Props {
 		titles: string[];
@@ -71,47 +73,23 @@
 	});
 </script>
 
-<div class="body">
-	<MangaDexTabs bind:triggers content>
-		{#snippet children(key)}
-			{#if key == titleId}
-				<Titles {titles} />
-			{:else if key == chapterId}
-				<Chapter {chapters} />
-			{:else if key == coversId}
-				<div class="nothing">
-					<h2>wip</h2>
-				</div>
-			{:else if key == scanlationGroupsId}
-				<div class="nothing">
-					<h2>wip</h2>
-				</div>
-			{:else if key == usersId}
-				<div class="nothing">
-					<h2>wip</h2>
-				</div>
-			{:else if key == customListsId}
-				<div class="nothing">
-					<h2>wip</h2>
-				</div>
-			{:else}
-				<div class="nothing">
-					<h2>Nothing selected</h2>
-				</div>
-			{/if}
-		{/snippet}
-	</MangaDexTabs>
-</div>
-
-<style lang="scss">
-	.body {
-		display: contents;
-	}
-	.nothing {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		width: 100%;
-		height: 100%;
-	}
-</style>
+<MangaDexTabs {triggers} content lazyMount unmountOnExit manual>
+	<TabContent value={titleId} class={cssMod.content}>
+		<Titles {titles} />
+	</TabContent>
+	<TabContent value={chapterId} class={cssMod.content}>
+		<Chapter {chapters} />
+	</TabContent>
+	<TabContent value={coversId} class={cssMod.content}>
+		<p>nothing</p>
+	</TabContent>
+	<TabContent value={scanlationGroupsId} class={cssMod.content}>
+		<p>nothing</p>
+	</TabContent>
+	<TabContent value={usersId} class={cssMod.content}>
+		<p>nothing</p>
+	</TabContent>
+	<TabContent value={customListsId} class={cssMod.content}>
+		<p>nothing</p>
+	</TabContent>
+</MangaDexTabs>

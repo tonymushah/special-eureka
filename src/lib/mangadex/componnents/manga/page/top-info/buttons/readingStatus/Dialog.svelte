@@ -4,7 +4,7 @@
 	import CoverImage from "./dialog/CoverImage.svelte";
 	import { getTopMangaTitleContextStore } from "../../context";
 	import PrimaryButton from "@mangadex/componnents/theme/buttons/PrimaryButton.svelte";
-	import { writable } from "svelte/store";
+	import { toStore } from "svelte/store";
 	import type { ReadingStatus } from "@mangadex/gql/graphql";
 	import StatusSelect from "./dialog/StatusSelect.svelte";
 	import type { ReadingStatusEventDetail } from ".";
@@ -12,7 +12,7 @@
 
 	const title = getTopMangaTitleContextStore();
 	interface Events {
-		onreadingStatus?: (ev: ReadingStatusEventDetail) => any;
+		onreadingStatus?: (ev: ReadingStatusEventDetail) => unknown;
 	}
 
 	interface Props extends Events {
@@ -32,15 +32,14 @@
 		disabled
 	}: Props = $props();
 
-	const selectedStatus = writable<ReadingStatus | undefined>(status);
-	$effect(() => {
-		selectedStatus.set(status);
-	});
-
-	const selectedIsFollowing = writable(isFollowing);
-	$effect(() => {
-		selectedIsFollowing.set(isFollowing);
-	});
+	const selectedStatus = toStore<ReadingStatus | undefined>(
+		() => status,
+		(s) => (status = s)
+	);
+	const selectedIsFollowing = toStore(
+		() => isFollowing,
+		(i) => (isFollowing = i)
+	);
 
 	function closeDialog() {
 		if (dialog) {

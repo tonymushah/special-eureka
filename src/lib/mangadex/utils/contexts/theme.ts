@@ -5,13 +5,18 @@ import { readonly, type Readable, type Writable } from "svelte/store";
 const key = "mangadex-theme";
 
 export function getMangaDexThemeContext(): Readable<MangadexTheme> {
-	return readonly(getContext(key));
+	const d = getContext<Writable<MangadexTheme> | undefined>(key);
+	if (d == undefined) {
+		throw new Error(`${key} context is undefined`);
+	}
+	return readonly(d);
 }
 
 export function setMangaDexThemeContextWritable(
 	theme: Writable<MangadexTheme>
 ): Writable<MangadexTheme> {
-	return setContext(key, theme);
+	const d = setContext(key, theme);
+	return d;
 }
 
 export function getMangaDexThemeContextWritable(): Writable<MangadexTheme> {

@@ -1,8 +1,9 @@
 <script lang="ts">
 	import { computePosition, flip } from "@floating-ui/dom";
-	import type { Item } from "../context-menu/base";
-	import ContextMenuBase from "../context-menu/base/ContextMenuBase.svelte";
-
+	import ContextMenuItem from "./MenuBaseItem.svelte";
+	import type { ComponentProps } from "svelte";
+	import MenuBase from "./MenuBase.svelte";
+	type Item = ComponentProps<typeof ContextMenuItem>;
 	interface Props {
 		target: HTMLElement | undefined;
 		isOpen?: boolean;
@@ -44,7 +45,7 @@
 </script>
 
 <div class="menu" class:isOpen bind:this={menu}>
-	<ContextMenuBase {items} tabindex={0} {fitContent} />
+	<MenuBase {items} tabindex={0} {fitContent} />
 </div>
 
 <style lang="scss">

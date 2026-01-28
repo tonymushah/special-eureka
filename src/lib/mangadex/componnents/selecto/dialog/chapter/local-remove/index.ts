@@ -12,36 +12,35 @@ const removeMultipleChapterMutationBase = graphql(`
 	}
 `);
 
-export const removeMultipleChapterMutation = () => createMutation<void, Error, string[]>(() => (
-	{
-		mutationKey: ["remove", "multitple", "chapters", "localy"],
-		async mutationFn(chapters) {
-			await Promise.all(
-				chapters.map(async (id) => {
-					const res = await client
-						.mutation(removeMultipleChapterMutationBase, {
-							id
-						})
-						.toPromise();
-					if (res.error) {
-						throw res.error;
-					}
-				})
-			);
-		},
-		onSuccess(data, variables, context) {
-			addToast({
-				data: {
+export const removeMultipleChapterMutation = () =>
+	createMutation<void, Error, string[]>(
+		() => ({
+			mutationKey: ["remove", "multitple", "chapters", "localy"],
+			async mutationFn(chapters) {
+				await Promise.all(
+					chapters.map(async (id) => {
+						const res = await client
+							.mutation(removeMultipleChapterMutationBase, {
+								id
+							})
+							.toPromise();
+						if (res.error) {
+							throw res.error;
+						}
+					})
+				);
+			},
+			onSuccess(data, variables) {
+				addToast({
 					title: "Removed",
 					description: `${variables.length}s chapters removed locally`,
-					variant: "primary"
-				}
-			});
-		},
-		onError(error, variables, context) {
-			addErrorToast("Error on removing chapters", error);
-		},
-		networkMode: "always"
-	}),
-	() => mangadexQueryClient
-);
+					type: "warning"
+				});
+			},
+			onError(error) {
+				addErrorToast("Error on removing chapters", error);
+			},
+			networkMode: "always"
+		}),
+		() => mangadexQueryClient
+	);

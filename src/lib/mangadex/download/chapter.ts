@@ -138,10 +138,9 @@ export const removeMutation = () =>
 			},
 			onSuccess(data, variables) {
 				addToast({
-					data: {
-						title: "Removed chapter",
-						description: variables
-					}
+					title: "Removed chapter",
+					description: variables,
+					type: "warning"
 				});
 			},
 			networkMode: "always"
@@ -165,10 +164,9 @@ export const cancelDownloadMutation = () =>
 			},
 			onSuccess(data, variables) {
 				addToast({
-					data: {
-						title: "Cancelled chapter download",
-						description: variables
-					}
+					title: "Cancelled chapter download",
+					description: variables,
+					type: "success"
 				});
 			},
 			networkMode: "always"

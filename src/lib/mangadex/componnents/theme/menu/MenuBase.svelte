@@ -1,24 +1,19 @@
 <script lang="ts">
-	import { emptyMeltElement, melt, type AnyMeltElement } from "@melt-ui/svelte";
-	import type { Item } from ".";
-	import MangaDexVarThemeProvider from "../../MangaDexVarThemeProvider.svelte";
-	import SomeDiv from "../../SomeDiv.svelte";
-	import ContextMenuItem from "./ContextMenuItem.svelte";
-
+	import SomeDiv from "../SomeDiv.svelte";
+	import MangaDexVarThemeProvider from "../MangaDexVarThemeProvider.svelte";
+	import ContextMenuItem from "./MenuBaseItem.svelte";
+	import type { ComponentProps } from "svelte";
+	type MenuItem = ComponentProps<typeof ContextMenuItem>;
 	interface Props {
-		items: (Item | undefined)[];
+		items: (MenuItem | undefined)[];
 		font_size?: string;
 		menu_padding?: string;
-		menu?: AnyMeltElement;
-		item_?: AnyMeltElement;
-		separator?: AnyMeltElement;
-		arrow?: AnyMeltElement;
 		tabindex?: number;
 		onMenuItemClick?: (
 			ev: MouseEvent & {
-				currentTarget: EventTarget & HTMLDivElement;
+				currentTarget: EventTarget & HTMLElement;
 			}
-		) => any;
+		) => unknown;
 		fitContent?: boolean;
 	}
 
@@ -26,17 +21,13 @@
 		items,
 		font_size = "var(--font-size)",
 		menu_padding = "0.5em",
-		menu = emptyMeltElement,
-		item_ = emptyMeltElement,
-		separator = emptyMeltElement,
-		arrow = emptyMeltElement,
 		tabindex = 0,
 		onMenuItemClick,
 		fitContent
 	}: Props = $props();
 </script>
 
-<div class="menu" use:melt={$menu} class:fitContent>
+<div class="menu" class:fitContent>
 	<MangaDexVarThemeProvider>
 		<div class="inner">
 			<SomeDiv --menu-item-padding={menu_padding} --font-size={font_size}>
@@ -56,15 +47,13 @@
 								}
 								onMenuItemClick?.(e);
 							}}
-							isDisabled={item.disabled}
-							element={item_}
+							isDisabled={item.isDisabled}
 						/>
 						{#if index < items.length - 1}
-							<hr use:melt={$separator} />
+							<hr />
 						{/if}
 					{/if}
 				{/each}
-				<div use:melt={$arrow}></div>
 			</SomeDiv>
 		</div>
 	</MangaDexVarThemeProvider>

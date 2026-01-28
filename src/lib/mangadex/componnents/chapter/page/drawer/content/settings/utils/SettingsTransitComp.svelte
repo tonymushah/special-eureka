@@ -14,5 +14,6 @@
 <style lang="scss">
 	div {
 		display: grid;
+		position: relative;
 	}
 </style>

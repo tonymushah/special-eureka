@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { emptyMeltElement, melt, type AnyMeltElement } from "@melt-ui/svelte";
 	import { camelCase } from "lodash";
 	import BeeDexRaw from "@mangadex/assets/Bee Dex Raw.jpg";
 	import MangaDexUserSvg from "@mangadex/assets/artworks/user.png";
@@ -9,7 +8,6 @@
 	interface Props extends HTMLButtonAttributes {
 		profilePicture?: string;
 		name: string;
-		element?: AnyMeltElement;
 		_this?: HTMLButtonElement | undefined;
 		selectable?: boolean;
 	}
@@ -17,7 +15,6 @@
 	let {
 		profilePicture = dev ? BeeDexRaw : MangaDexUserSvg,
 		name,
-		element = emptyMeltElement,
 		_this = $bindable(undefined),
 		children,
 		selectable,
@@ -25,12 +22,7 @@
 	}: Props = $props();
 </script>
 
-<button
-	bind:this={_this}
-	use:melt={$element}
-	{...restProps}
-	class:users-simple-selectable={selectable}
->
+<button bind:this={_this} {...restProps} class:users-simple-selectable={selectable}>
 	<img alt="{camelCase(name)}-profile-picture" src={profilePicture} />
 	<p>{name}</p>
 	<div class="right">

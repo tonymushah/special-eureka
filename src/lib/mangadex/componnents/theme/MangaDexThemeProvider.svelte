@@ -8,7 +8,7 @@
 		children?: import("svelte").Snippet;
 	}
 
-	let { theme, fonts = "Poppins", children }: Props = $props();
+	let { theme = $bindable(), fonts = "Poppins", children }: Props = $props();
 </script>
 
 <MangadexThemeProviderBase {theme} {fonts}>

@@ -1,8 +1,8 @@
 import { graphql } from "@mangadex/gql/exports";
-import type { AuthorSearchFetcher, AuthorSearchFetcherResultData } from ".";
-import type { Tag } from "@melt-ui/svelte";
-import type { Client } from "@urql/svelte";
 import { client as mangadexClient } from "@mangadex/gql/urql";
+import type { Tag } from "@mangadex/utils/legacy/melt-ui-tag";
+import type { Client } from "@urql/svelte";
+import type { AuthorSearchFetcher, AuthorSearchFetcherResultData } from ".";
 
 export const query = graphql(`
 	query authorSearchFetcher($name: String!, $offset: Int! = 0, $limit: Int! = 10) {
