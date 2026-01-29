@@ -10,7 +10,7 @@ export const readMarkers = () => createMutation(() => ({
 			read: reads,
 			unreads: unreads,
 			updateHistory
-		});
+		}).toPromise();
 		if (res.error) {
 			throw res.error;
 		}

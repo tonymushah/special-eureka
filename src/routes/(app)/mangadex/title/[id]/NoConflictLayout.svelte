@@ -65,6 +65,7 @@
 	import { fade } from "svelte/transition";
 	import { mangaInfoPosition } from "@mangadex/stores/manga-info-position";
 	import statsGQLQuery from "./(layout)/statsQuery";
+	import { getCurrentWebview } from "@tauri-apps/api/webview";
 
 	type TopMangaStatisticsStoreData = TopMangaStatistics & {
 		threadUrl?: string;
@@ -271,6 +272,15 @@
 		} satisfies CreateQueryOptions;
 	});
 
+	const webview = getCurrentWebview();
+	$effect(() => {
+		const sub = webview.listen(`mangadex-title-read-markers-change-${data.layoutData.id}`, () => {
+			chapterReadMarkers.refetch();
+		});
+		return () => {
+			sub.then((v) => v());
+		};
+	});
 	const readMarkerStores = toStore(() => {
 		return {
 			...chapterReadMarkers
