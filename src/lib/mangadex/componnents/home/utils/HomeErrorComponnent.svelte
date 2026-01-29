@@ -58,7 +58,6 @@
 		.details {
 			display: flex;
 			align-items: center;
-			justify-self: center;
 			gap: 10px;
 			flex-direction: row;
 			overflow: hidden;
