@@ -67,6 +67,18 @@
 										You have selected {$mangasLen} title{#if $mangasLen > 1}s{/if}{#if $chaptersLen > 0}
 											and {$chaptersLen}
 											chapter{#if $chaptersLen > 1}s{/if}
+										{/if}
+										{#if $coversLen >= 1}
+											and {$coversLen} cover{#if $coversLen > 1}s{/if}
+										{/if}
+										{#if $customListLen >= 1}
+											and {$customListLen} MD custom list{#if $customListLen > 1}s{/if}
+										{/if}
+										{#if $scanGroupsLen >= 1}
+											and {$scanGroupsLen} scanlation group{#if $scanGroupsLen > 1}s{/if}
+										{/if}
+										{#if $usersLen >= 1}
+											and {$usersLen} user{#if $usersLen > 1}s{/if}
 										{/if}.
 									</Dialog.Description>
 								{/if}
@@ -77,10 +89,14 @@
 								</Dialog.CloseTrigger>
 							</div>
 						</div>
-						{#if $selected?.titles && $selected?.chapters}
+						{#if $selected?.titles && $selected?.chapters && $selected?.covers && $selected?.customLists && $selected?.scanGroups && $selected?.users}
 							<ChapterFeedSelectoDialogBody
 								titles={$selected?.titles}
 								chapters={$selected?.chapters}
+								covers={$selected?.covers}
+								customLists={$selected?.customLists}
+								scanlationGroups={$selected?.scanGroups}
+								users={$selected?.users}
 							/>
 						{/if}
 					</div>
