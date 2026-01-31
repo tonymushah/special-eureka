@@ -18,8 +18,8 @@
 
 	interface Props {
 		container: HTMLElement | undefined;
-		selectedMangas: string[];
-		selectedChapters: string[];
+		selectedMangas?: string[];
+		selectedChapters?: string[];
 		onEnd?: (ev?: MouseEvent | TouchEvent) => void;
 		useDialog?: boolean;
 		selectedCustomLists?: string[];
@@ -29,8 +29,8 @@
 	}
 	let {
 		container = $bindable(),
-		selectedMangas = $bindable(),
-		selectedChapters = $bindable(),
+		selectedMangas = $bindable([]),
+		selectedChapters = $bindable([]),
 		selectedCustomLists = $bindable([]),
 		selectedCovers = $bindable([]),
 		selectedScansGroups = $bindable([]),
@@ -94,7 +94,7 @@
 				}
 			})();
 			const dragselect = new SelectionArea({
-				selectables: [".manga-element", ".chapter-element"],
+				selectables: [".manga-element", ".chapter-element", ".users-simple-selectable"],
 				boundaries: [`#${scrollElementId}`],
 				selectionAreaClass
 			})
