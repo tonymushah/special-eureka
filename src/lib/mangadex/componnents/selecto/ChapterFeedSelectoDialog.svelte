@@ -78,8 +78,7 @@
 											and {$scanGroupsLen} scanlation group{#if $scanGroupsLen > 1}s{/if}
 										{/if}
 										{#if $usersLen >= 1}
-											and {$usersLen} user{#if $usersLen > 1}s{/if}
-										{/if}.
+											and {$usersLen} user{#if $usersLen > 1}s{/if}{/if}.
 									</Dialog.Description>
 								{/if}
 							</div>
@@ -89,7 +88,7 @@
 								</Dialog.CloseTrigger>
 							</div>
 						</div>
-						{#if $selected?.titles && $selected?.chapters && $selected?.covers && $selected?.customLists && $selected?.scanGroups && $selected?.users}
+						{#if $selected?.titles?.length != 0 || $selected?.chapters?.length != 0 || $selected?.covers?.length != 0 || $selected?.customLists?.length != 0 || $selected?.scanGroups?.length != 0 || $selected?.users?.length != 0}
 							<ChapterFeedSelectoDialogBody
 								titles={$selected?.titles}
 								chapters={$selected?.chapters}
