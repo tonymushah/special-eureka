@@ -27,9 +27,10 @@
 		fixedWidth?: boolean;
 		alt: string;
 		title: string;
+		coverId: string;
 	}
 
-	let { coverImage, fixedWidth = true, alt, title }: Props = $props();
+	let { coverImage, fixedWidth = true, alt, title, coverId }: Props = $props();
 	let src = $derived($coverImage);
 	let container: HTMLDivElement | undefined = $state(undefined);
 	let sW = $state("var(--cover-w)");
@@ -61,7 +62,8 @@
 </script>
 
 <div
-	class="cover"
+	class="cover cover-art-element"
+	data-cover-id={coverId}
 	onmouseenter={() => {
 		isHovered = true;
 	}}

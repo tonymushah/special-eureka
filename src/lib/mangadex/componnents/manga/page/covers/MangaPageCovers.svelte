@@ -12,6 +12,7 @@
 	import CoverImage from "./CoverImage.svelte";
 	import type { Readable } from "svelte/store";
 	import { Variant } from "./MangaPageCovers.utils";
+	import ChapterFeedSelecto from "@mangadex/componnents/selecto/ChapterFeedSelecto.svelte";
 
 	interface Props {
 		items: MangaCoversItems;
@@ -23,11 +24,14 @@
 	let flex = $derived(variant == Variant.Flex);
 	let grid = $derived(variant == Variant.Grid);
 	let fixedWidth = $derived(flex || fixedWidth_);
+	let container = $state<HTMLElement | undefined>();
 </script>
 
-<div class:flex class:grid>
+<ChapterFeedSelecto bind:container />
+
+<div class:flex class:grid bind:this={container}>
 	{#each items as { coverImage, title, alt, id } (id)}
-		<CoverImage {coverImage} {title} {alt} {fixedWidth} />
+		<CoverImage {coverImage} {title} {alt} {fixedWidth} coverId={id} />
 	{/each}
 </div>
 
