@@ -45,7 +45,7 @@
 			{
 				id: coversId,
 				title: `Covers (${covers.length})`,
-				disabled: chapters.length == 0
+				disabled: covers.length == 0
 			},
 			{
 				id: scanlationGroupsId,
