@@ -1,27 +1,26 @@
 <script lang="ts">
-	import type { Readable } from "svelte/store";
 	import type { CoverInput } from "./CoverContents.svelte";
 	import { fade, slide } from "svelte/transition";
 	import CoverContents from "./CoverContents.svelte";
 
 	interface Props {
-		isDataEmpty: Readable<boolean>;
-		isInitialLoading: Readable<boolean>;
-		isLoading: Readable<boolean>;
-		coversData: Readable<CoverInput[]>;
+		isDataEmpty: boolean;
+		isInitialLoading: boolean;
+		isLoading: boolean;
+		coversData: CoverInput[];
 	}
 	let { isDataEmpty, isInitialLoading, isLoading, coversData }: Props = $props();
 </script>
 
-{#if $isInitialLoading}
+{#if isInitialLoading}
 	<div class="init-loading" transition:fade>
 		<h3>Loading...</h3>
 	</div>
-{:else if !$isDataEmpty}
+{:else if !isDataEmpty}
 	<article class="covers">
-		<CoverContents covers={$coversData} />
+		<CoverContents covers={coversData} />
 	</article>
-	{#if $isLoading}
+	{#if isLoading}
 		<div
 			class="init-loading"
 			transition:slide={{
