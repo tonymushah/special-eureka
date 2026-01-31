@@ -8,12 +8,12 @@
 	import cssMod from "./dialog-body.module.scss";
 
 	interface Props {
-		titles: string[];
-		chapters: string[];
-		covers: string[];
-		scanlationGroups: string[];
-		users: string[];
-		customLists: string[];
+		titles?: string[];
+		chapters?: string[];
+		covers?: string[];
+		scanlationGroups?: string[];
+		users?: string[];
+		customLists?: string[];
 	}
 	const titleId = "titles";
 	const chapterId = "chapters";
@@ -22,12 +22,12 @@
 	const usersId = "users";
 	const customListsId = "customLists";
 	let {
-		titles = $bindable(),
-		chapters = $bindable(),
-		covers = $bindable(),
-		scanlationGroups = $bindable(),
-		users = $bindable(),
-		customLists = $bindable()
+		titles = $bindable([]),
+		chapters = $bindable([]),
+		covers = $bindable([]),
+		scanlationGroups = $bindable([]),
+		users = $bindable([]),
+		customLists = $bindable([])
 	}: Props = $props();
 	let triggers = $derived.by(() => {
 		return [
