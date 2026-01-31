@@ -116,7 +116,11 @@
 		height: 50cqh;
 		.title {
 			top: 0px;
-			background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, var(--accent) 100%);
+			background: linear-gradient(
+				180deg,
+				rgba(0, 0, 0, 0) 0%,
+				var(--cover-background, var(--accent)) 100%
+			);
 		}
 		img {
 			width: 100%;
@@ -138,7 +142,11 @@
 		align-items: end;
 		height: 50cqh;
 		top: -50cqh;
-		background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, var(--accent) 100%);
+		background: linear-gradient(
+			180deg,
+			rgba(0, 0, 0, 0) 0%,
+			var(--cover-background, var(--accent)) 100%
+		);
 		font-weight: 800;
 		font-size: 16px;
 		border-radius: 0.25em;
@@ -170,7 +178,11 @@
 			display: flex;
 			align-items: end;
 			justify-content: center;
-			background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, var(--accent) 100%);
+			background: linear-gradient(
+				180deg,
+				rgba(0, 0, 0, 0) 0%,
+				var(--cover-background, var(--accent)) 100%
+			);
 			transition: opacity 200ms ease-in-out;
 			border-radius: 6px;
 			overflow: hidden;
@@ -189,6 +201,9 @@
 		img {
 			border-radius: 0.25em;
 		}
+	}
+	.cover:global([data-selecto-selected]) {
+		--cover-background: var(--primary-l2);
 	}
 	/*
 	@keyframes title-hovered {
