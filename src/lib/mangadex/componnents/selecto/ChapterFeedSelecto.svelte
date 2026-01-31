@@ -94,7 +94,12 @@
 				}
 			})();
 			const dragselect = new SelectionArea({
-				selectables: [".manga-element", ".chapter-element", ".users-simple-selectable"],
+				selectables: [
+					".manga-element",
+					".chapter-element",
+					".users-simple-selectable",
+					".cover-art-element"
+				],
 				boundaries: [`#${scrollElementId}`],
 				selectionAreaClass
 			})
