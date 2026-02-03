@@ -13,6 +13,10 @@
 		{
 			"matchManagers": ["cargo"],
 			"addLabels": ["rust"]
+		},
+		{
+			"matchManagers": ["github-actions"],
+			"addLabels": ["chore"]
 		}
 	]
 }
