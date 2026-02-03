@@ -3,5 +3,16 @@
 	"extends": ["config:recommended"],
 	"ignoreDeps": ["window-vibrancy"],
 	"baseBranches": ["main"],
-	"commitMessagePrefix": "chore(deps)"
+	"commitMessagePrefix": "chore(deps)",
+	"labels": ["dependencies"],
+	"packageRules": [
+		{
+			"matchManagers": ["npm", "nvm"],
+			"addLabels": ["javascript"]
+		},
+		{
+			"matchManagers": ["cargo"],
+			"addLabels": ["rust"]
+		}
+	]
 }
