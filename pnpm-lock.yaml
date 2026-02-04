@@ -39,7 +39,7 @@ importers:
         version: 3.2.0(graphql@16.12.0)
       '@humanspeak/svelte-markdown':
         specifier: ^0.8.14
-        version: 0.8.14(svelte@5.49.1)
+        version: 0.8.15(svelte@5.49.1)
       '@lucide/svelte':
         specifier: ^0.563.1
         version: 0.563.1(svelte@5.49.1)
@@ -989,12 +989,12 @@ packages:
     resolution: {integrity: sha512-/zUx+yOsIrG4Y43Eh2peDeKCxlRt/gET6aHfaKpuq267qXdYDFViVHfMaLyygZOnl0kGWxFIgsBy8QFuTLUXEQ==}
     engines: {node: '>=18.18.0'}
 
-  '@humanspeak/memory-cache@1.0.2':
-    resolution: {integrity: sha512-UgyiEqv10ioIXcz10Le7ZRdnr5AAxnSJC8rtxulAozDfoiiIPsxa3e8v58OWqxUlev+5BbwfCtulQsrtJIRjgg==}
+  '@humanspeak/memory-cache@1.0.4':
+    resolution: {integrity: sha512-S/63Uqn0HzZuAKW3ieF3G8tDpsdQx5ssKHhtxG8Z/E592xSMayrUB0bzNojJ4SwC1kTEsbl14lr0voyR1HiWbA==}
     engines: {node: '>=18.0.0'}
 
-  '@humanspeak/svelte-markdown@0.8.14':
-    resolution: {integrity: sha512-soaeyTClgBz56W1o2Xj15I6EijewdLUEqFBe2LBrnOqyWrdIwPGfDgP4Qm++3Yy26JjlP2B9rz+RstjYUrfX8A==}
+  '@humanspeak/svelte-markdown@0.8.15':
+    resolution: {integrity: sha512-aQ3nL0eFbh/EhStAQBuSeeaMGa0uacYL/g5zEV1vMLjCrcj9stId5aBrAAVNv5FD/jTlkRsXxmUWFmdgoNV2dw==}
     peerDependencies:
       svelte: ^5.0.0
 
@@ -5789,11 +5789,11 @@ snapshots:
       '@humanfs/core': 0.19.1
       '@humanwhocodes/retry': 0.4.3
 
-  '@humanspeak/memory-cache@1.0.2': {}
+  '@humanspeak/memory-cache@1.0.4': {}
 
-  '@humanspeak/svelte-markdown@0.8.14(svelte@5.49.1)':
+  '@humanspeak/svelte-markdown@0.8.15(svelte@5.49.1)':
     dependencies:
-      '@humanspeak/memory-cache': 1.0.2
+      '@humanspeak/memory-cache': 1.0.4
       github-slugger: 2.0.0
       htmlparser2: 10.1.0
       marked: 17.0.1
