@@ -38,27 +38,17 @@
 
 <section class="medium">
 	{#each realList as data (`${data.mangaId}`)}
-		<span
-			animate:flip
-			in:receive={{
-				key: data.mangaId
+		<MangaElementBase1
+			{...data}
+			withFull
+			onclick={() => {
+				goto(
+					route("/mangadex/title/[id]", {
+						id: data.id
+					})
+				);
 			}}
-			out:send={{
-				key: data.mangaId
-			}}
-		>
-			<MangaElementBase1
-				{...data}
-				withFull
-				onclick={() => {
-					goto(
-						route("/mangadex/title/[id]", {
-							id: data.id
-						})
-					);
-				}}
-			/></span
-		>
+		/>
 	{/each}
 </section>
 
