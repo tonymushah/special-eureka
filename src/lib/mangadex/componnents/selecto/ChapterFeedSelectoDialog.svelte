@@ -43,6 +43,14 @@
 	import ChapterFeedSelectoDialogBody from "./ChapterFeedSelectoDialogBody.svelte";
 	import cssMod from "@mangadex/componnents/theme/dialog/dialog.module.scss";
 	import MangaDexVarThemeProvider from "../theme/MangaDexVarThemeProvider.svelte";
+	let showBody = $derived(
+		($selected?.titles?.length ?? 0) > 0 ||
+			($selected?.chapters?.length ?? 0) > 0 ||
+			($selected?.covers?.length ?? 0) != 0 ||
+			($selected?.customLists?.length ?? 0) != 0 ||
+			($selected?.scanGroups?.length ?? 0) != 0 ||
+			($selected?.users?.length ?? 0) != 0
+	);
 </script>
 
 <Dialog.Root
@@ -88,7 +96,7 @@
 								</Dialog.CloseTrigger>
 							</div>
 						</div>
-						{#if $selected?.titles?.length != 0 || $selected?.chapters?.length != 0 || $selected?.covers?.length != 0 || $selected?.customLists?.length != 0 || $selected?.scanGroups?.length != 0 || $selected?.users?.length != 0}
+						{#if showBody}
 							<ChapterFeedSelectoDialogBody
 								titles={$selected?.titles}
 								chapters={$selected?.chapters}
