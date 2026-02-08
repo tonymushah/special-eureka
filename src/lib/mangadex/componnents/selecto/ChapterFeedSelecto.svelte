@@ -1,3 +1,6 @@
+<!--
+	BUG: i dunno if it is because of the logic sometime the drag select doesn't works
+-->
 <script lang="ts" module>
 	const canSelect = writable(false);
 
