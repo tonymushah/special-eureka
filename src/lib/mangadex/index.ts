@@ -11,7 +11,7 @@ export const mangadexQueryClient = new QueryClient({
 	}
 });
 
-interface GetCoverParam {
+export interface GetCoverParam {
 	id: string;
 	asManga?: boolean;
 	quality?: "256" | "512";
