@@ -7,7 +7,7 @@ use std::{
     path::PathBuf,
 };
 
-use crate::{Result, query::cover::image::CoverImageQuery};
+use crate::Result;
 use async_graphql::Enum;
 use mangadex_api::{CDN_URL, MangaDexClient};
 use mangadex_api_schema_rust::{ApiObjectNoRelationships, v5::CoverAttributes};
@@ -298,22 +298,5 @@ impl CoverImageCache {
                 .await?
         };
         Ok(buf)
-    }
-}
-
-impl From<CoverImageQuery> for CoverImageCache {
-    fn from(value: CoverImageQuery) -> Self {
-        let CoverImageQuery {
-            manga_id,
-            cover_id,
-            filename,
-            mode,
-        } = value;
-        Self {
-            manga_id,
-            cover_id,
-            filename,
-            mode,
-        }
     }
 }
