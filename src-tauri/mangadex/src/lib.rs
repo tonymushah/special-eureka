@@ -41,15 +41,23 @@ pub fn init<R: Runtime>() -> MizukiPlugin<R, Q, M, S> {
         "mangadex-desktop-api",
         Schema::new(Query, Mutation, Subscriptions::default()),
     )
-    // .js_init_script(
-    // 	format!(r"
-    //  		window.__MANGADEX_UTILS__ = {
-    //    			getCoverImageUrl(cover){
-    //       			return `\$\{\}`
-    //       		}
-    //    		}
-    //  	")
-    // )
+    .js_init_script(format!(
+        r"
+     		window.__MANGADEX_UTILS__ = {{
+       			__getCoverImageUrl({{
+					id,
+					asManga,
+					quality
+				}}){{
+					const new_url = new URL(`{}covers/${{id}}`)
+					if (asManga) new_url.searchParams.append('manga', '');
+					if (quality) new_url.searchParams.append('mode', quality);
+					return new_url.toString()
+				}}
+       		}}
+     	",
+        crate::constants::PROTOCOL
+    ))
     .setup(setup)
     .build()
 }
