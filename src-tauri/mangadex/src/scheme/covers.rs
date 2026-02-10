@@ -3,7 +3,8 @@ use std::{
     ops::Deref,
 };
 
-use eureka_mmanager::prelude::CoverDataPullAsyncTrait;
+use actix::Addr;
+use eureka_mmanager::{DownloadManager, prelude::CoverDataPullAsyncTrait};
 use regex::Regex;
 use reqwest::header::{ACCESS_CONTROL_ALLOW_ORIGIN, CONTENT_LENGTH, CONTENT_TYPE};
 use tauri::{
@@ -12,38 +13,49 @@ use tauri::{
 };
 use uuid::Uuid;
 
-use crate::{cache::cover::CoverImageCache, utils::traits_utils::MangadexTauriManagerExt};
+use crate::{
+    cache::cover::{CoverImageCache, CoverImageQuality},
+    utils::traits_utils::MangadexTauriManagerExt,
+};
 
 use super::{SchemeResponseError, SchemeResponseResult, parse_uri};
 
+#[derive(Clone, Debug, Copy)]
+enum CoverHandlingId {
+    Cover(Uuid),
+    Manga(Uuid),
+}
+
+impl CoverHandlingId {
+    async fn get_as_offline_cover_id(self, app: &Addr<DownloadManager>) -> crate::Result<Uuid> {
+        match self {
+            CoverHandlingId::Cover(id) => Ok(id),
+            CoverHandlingId::Manga(id) => {
+                use eureka_mmanager::prelude::MangaDataPullAsyncTrait;
+                Ok(app
+                    .get_manga(id)
+                    .await?
+                    .find_first_relationships(mangadex_api_types_rust::RelationshipType::CoverArt)
+                    .ok_or(crate::Error::RelatedCoverArtNotFound)?
+                    .id)
+            }
+        }
+    }
+}
+
+impl From<CoverHandlingId> for Uuid {
+    fn from(value: CoverHandlingId) -> Self {
+        match value {
+            CoverHandlingId::Cover(id) => id,
+            CoverHandlingId::Manga(id) => id,
+        }
+    }
+}
+
 #[derive(Debug, Clone)]
 struct HandleCoversParams {
-    pub cover_id: Uuid,
-    pub filename: String,
-    pub manga_id: Option<Uuid>,
+    pub id: CoverHandlingId,
     pub quality: Option<u32>,
-}
-
-#[derive(Debug, thiserror::Error)]
-pub enum TryFromHandleCoversParamsToCache {
-    #[error("The manga id is not found")]
-    MangaIdNotFound,
-    #[error(transparent)]
-    Quality(#[from] crate::cache::cover::TryFromCoverImageQualityError),
-}
-
-impl TryFrom<HandleCoversParams> for CoverImageCache {
-    type Error = TryFromHandleCoversParamsToCache;
-    fn try_from(value: HandleCoversParams) -> Result<Self, Self::Error> {
-        Ok(Self {
-            manga_id: value
-                .manga_id
-                .ok_or(TryFromHandleCoversParamsToCache::MangaIdNotFound)?,
-            cover_id: value.cover_id,
-            filename: value.filename,
-            mode: value.quality.and_then(|e| (e as u16).try_into().ok()),
-        })
-    }
 }
 
 impl TryFrom<&Request<Vec<u8>>> for HandleCoversParams {
@@ -52,32 +64,16 @@ impl TryFrom<&Request<Vec<u8>>> for HandleCoversParams {
     fn try_from(value: &Request<Vec<u8>>) -> Result<Self, Self::Error> {
         let uri = parse_uri(value)?;
         let regex = Regex::new(
-            r"(?x)/(?P<cover_id>[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/(?P<filename>\w*.*)",
+            r"(?x)/(?P<id>[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})",
         )?;
         let captures = regex
             .captures(uri.path())
             .ok_or(SchemeResponseError::InvalidURLInput)?;
-        let cover_id = captures
-            .name("cover_id")
+        let id = captures
+            .name("id")
             .and_then(|id| Uuid::parse_str(id.as_str()).ok())
             .ok_or(SchemeResponseError::InvalidURLInput)?;
-        let filename: String = captures
-            .name("filename")
-            .map(|f| {
-                let res = f.as_str();
-                if let Some((file_, _)) = res.split_once('?') {
-                    file_
-                } else {
-                    res
-                }
-            })
-            .map(|str| str.into())
-            .ok_or(SchemeResponseError::InvalidURLInput)?;
-        let manga_id = uri
-            .query_pairs()
-            .find(|(k, _)| k == "mangaId")
-            .map(|(_, v)| v.to_string())
-            .and_then(|id| Uuid::parse_str(&id).ok());
+        let as_manga_id = uri.query_pairs().any(|(k, _)| k == "manga");
         let quality = uri
             .query_pairs()
             .find(|(k, _)| k == "mode")
@@ -88,9 +84,11 @@ impl TryFrom<&Request<Vec<u8>>> for HandleCoversParams {
                 _ => None,
             });
         Ok(Self {
-            cover_id,
-            filename,
-            manga_id,
+            id: if as_manga_id {
+                CoverHandlingId::Manga(id)
+            } else {
+                CoverHandlingId::Cover(id)
+            },
             quality,
         })
     }
@@ -107,8 +105,23 @@ impl<'a, R: Runtime> CoverImagesOfflineHandler<'a, R> {
         Self { param, app }
     }
     fn get_from_cache(&self) -> crate::Result<Vec<u8>> {
-        let cache: CoverImageCache = self.param.clone().try_into()?;
-        cache.get_from_cache()
+        let id = self.param.id;
+        let quality: Option<CoverImageQuality> = self
+            .param
+            .quality
+            .and_then(|d| TryInto::<_>::try_into(d).ok());
+        let app = self.app.clone();
+        crate::utils::block_on(async move {
+            let client = app.get_mangadex_client()?;
+            match id {
+                CoverHandlingId::Cover(cover_id) => {
+                    CoverImageCache::get_cover_image_by_cover_id(cover_id, quality, &client).await
+                }
+                CoverHandlingId::Manga(manga_id) => {
+                    CoverImageCache::get_cover_image_by_manga_id(manga_id, quality, &client).await
+                }
+            }
+        })
     }
 
     pub fn handle(&self) -> SchemeResponseResult<tauri::http::Response<Vec<u8>>> {
@@ -123,16 +136,19 @@ impl<'a, R: Runtime> CoverImagesOfflineHandler<'a, R> {
                 .map(|e| e.app_state.clone())
                 .ok_or(SchemeResponseError::NotLoaded)?;
             {
-                let id = self.param.cover_id;
+                let id = self.param.id;
                 io::copy(
                     &mut BufReader::new(crate::utils::block_on(async move {
-                        inner_state.get_cover_image(id).await
+                        let id = id.get_as_offline_cover_id(&inner_state).await?;
+                        let file = inner_state.get_cover_image(id).await?;
+                        Ok::<_, crate::Error>(file)
                     })?),
                     &mut buf,
                 )?;
             }
         }
         buf.flush()?;
+        buf.shrink_to_fit();
         tauri::http::Response::builder()
             .header(ACCESS_CONTROL_ALLOW_ORIGIN, "*")
             .status(StatusCode::OK)
