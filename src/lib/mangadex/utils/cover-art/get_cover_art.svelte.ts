@@ -27,8 +27,9 @@ export function get_cover_image(_param: () => GetCoverParam) {
 
 export function get_cover_image_auto_handle_error(_param: () => GetCoverParam) {
 	let query = get_cover_image(_param);
-	return $derived.by(() => {
+	let maybe_url = $derived.by(() => {
 		if (query.isSuccess) return query.data;
 		if (query.isError) return coverNotFound;
 	});
+	return maybe_url;
 }
