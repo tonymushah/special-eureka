@@ -11,8 +11,8 @@
 	}));
 </script>
 
-{#if coverImage}
-	<img {alt} src={coverImage} />
+{#if coverImage.value}
+	<img {alt} src={coverImage.value} />
 {:else}
 	<Skeleton width={"100%"} height={"100%"} />
 {/if}

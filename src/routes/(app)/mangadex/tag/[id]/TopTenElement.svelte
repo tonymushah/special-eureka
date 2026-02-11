@@ -65,8 +65,8 @@
 	class="manga-element"
 	data-manga-id={mangaId}
 >
-	{#if cover_art}
-		<img src={cover_art} alt={coverId} />
+	{#if cover_art.value}
+		<img src={cover_art.value} alt={coverId} />
 	{:else}
 		<Skeleton width="100%" height="100%" />
 	{/if}

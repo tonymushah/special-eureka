@@ -25,9 +25,9 @@
 	const alt = getTopCoverAltContextStore();
 </script>
 
-{#if coverImage}
+{#if coverImage.value}
 	<div class="show-dialog">
-		<img {alt} src={coverImage} bind:this={coverImageInstance} />
+		<img {alt} src={coverImage.value} bind:this={coverImageInstance} />
 	</div>
 {:else}
 	<Skeleton height="100%" width="100%" />

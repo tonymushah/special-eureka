@@ -153,8 +153,8 @@
 			preventDefault: true
 		})}
 	>
-		{#if coverImage}
-			<img src={coverImage} alt={coverImageAlt} />
+		{#if coverImage.value}
+			<img src={coverImage.value} alt={coverImageAlt} />
 		{:else}
 			<Skeleton height="16em" width="10em" />
 		{/if}

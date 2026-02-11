@@ -17,7 +17,7 @@
 
 <article
 	class="layout-image"
-	style={`background-image: url(${coverImage});`}
+	style={`background-image: url(${coverImage.value});`}
 	oncontextmenu={registerContextMenuEvent({
 		preventDefault: true
 	})}

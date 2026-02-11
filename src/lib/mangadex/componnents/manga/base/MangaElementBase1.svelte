@@ -44,8 +44,8 @@
 </script>
 
 <Layout {onclick} --layout-width={withFull ? "100%" : "19em"} {mangaId}>
-	{#if coverImage}
-		<Image {coverImage} {coverImageAlt} {blur} />
+	{#if coverImage.value}
+		<Image coverImage={coverImage.value} {coverImageAlt} {blur} />
 	{:else}
 		<Skeleton width="100px" height="160px" />
 	{/if}

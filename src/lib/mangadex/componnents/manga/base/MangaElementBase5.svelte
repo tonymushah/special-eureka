@@ -40,8 +40,8 @@
 </script>
 
 <Layout bind:isHover {mangaId}>
-	{#if coverImage}
-		<img src={coverImage} alt={coverImageAlt} class:blur />
+	{#if coverImage.value}
+		<img src={coverImage.value} alt={coverImageAlt} class:blur />
 	{:else}
 		<Skeleton width="var(--width)" height="var(--height)" />
 	{/if}

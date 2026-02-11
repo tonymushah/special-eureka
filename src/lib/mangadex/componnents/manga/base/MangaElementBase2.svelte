@@ -67,8 +67,8 @@
 </script>
 
 <Layout {onclick} --max-height="11em" {mangaId}>
-	{#if coverImage}
-		<Image {coverImage} {coverImageAlt} {blur} />
+	{#if coverImage.value}
+		<Image coverImage={coverImage.value} {coverImageAlt} {blur} />
 	{:else}
 		<Skeleton width={"var(--element-w)"} height={"var(--element-h)"} />
 	{/if}

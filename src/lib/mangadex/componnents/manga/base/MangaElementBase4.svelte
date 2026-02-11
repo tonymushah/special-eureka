@@ -32,8 +32,8 @@
 </script>
 
 <Layout {onclick} --w-base={"9.5em"} --img-h={"12.5em"} {mangaId}>
-	{#if coverImage}
-		<CoverImage {coverImage} {coverImageAlt} {blur} />
+	{#if coverImage.value}
+		<CoverImage coverImage={coverImage.value} {coverImageAlt} {blur} />
 	{:else}
 		<Skeleton width="var(--w-base)" height="var(--img-h)" />
 	{/if}

@@ -86,8 +86,14 @@
 </script>
 
 <Layout bind:haveBeenRead {mangaId}>
-	{#if coverImage}
-		<CoverImage {coverImage} {coverImageAlt} {mangaId} {onmangaClick} {onmangaKeyClick} />
+	{#if coverImage.value}
+		<CoverImage
+			coverImage={coverImage.value}
+			{coverImageAlt}
+			{mangaId}
+			{onmangaClick}
+			{onmangaKeyClick}
+		/>
 	{:else}
 		<LoaderImage {mangaId} {onmangaClick} {onmangaKeyClick} />
 	{/if}

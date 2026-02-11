@@ -92,8 +92,8 @@
 		isHovered = false;
 	}}
 >
-	{#if src}
-		<img {alt} {src} bind:this={coverImageInstance} />
+	{#if src.value}
+		<img {alt} src={src.value} bind:this={coverImageInstance} />
 	{:else}
 		<Skeleton width={sW} height={sH} />
 	{/if}
