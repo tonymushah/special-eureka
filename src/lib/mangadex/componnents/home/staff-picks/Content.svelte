@@ -55,7 +55,7 @@
 {#if mangas.length > 0}
 	<div class="result">
 		<swiper-container bind:this={swiper_container} init="false">
-			{#each mangas as { id, coverImage, coverImageAlt, title, description } (id)}
+			{#each mangas as { id, coverImageAlt, title, description } (id)}
 				<swiper-slide>
 					<MangaElementBase5
 						{coverImageAlt}
