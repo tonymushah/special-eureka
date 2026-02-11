@@ -9,6 +9,7 @@ use std::{
 
 use crate::Result;
 use async_graphql::Enum;
+use itertools::Itertools;
 use mangadex_api::{CDN_URL, MangaDexClient};
 use mangadex_api_schema_rust::{ApiObjectNoRelationships, v5::CoverAttributes};
 use mangadex_api_types_rust::ReferenceExpansionResource;
@@ -98,13 +99,18 @@ impl CoverImageCacheEntry {
     }
     fn append_entry(&self) -> csv::Result<()> {
         let mut file = Self::get_cover_image_cache_file()?;
-        if !csv::Reader::from_reader(&mut file)
+        let mut all_entry = csv::Reader::from_reader(&mut file)
             .deserialize::<Self>()
             .flatten()
-            .any(|entry| entry == *self)
-        {
-            file.rewind()?;
-            csv::Writer::from_writer(&mut file).serialize(self)?;
+            .collect_vec();
+        file.rewind()?;
+        if !all_entry.iter().any(|entry| entry == self) {
+            all_entry.push(self.clone());
+            let mut writer = csv::Writer::from_writer(&mut file);
+            for e in all_entry {
+                writer.serialize(e)?;
+            }
+            writer.flush()?;
         }
         Ok(())
     }
