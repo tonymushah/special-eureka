@@ -1,7 +1,6 @@
 import type { MangaListContentItemProps } from "@mangadex/componnents/manga/list/MangaListContent.svelte";
 import libraryReadingQuery from "@mangadex/gql-docs/library/reading";
-import { CoverImageQuality, type UserLibrarySectionParam } from "@mangadex/gql/graphql";
-import get_cover_art from "@mangadex/utils/cover-art/get_cover_art";
+import { type UserLibrarySectionParam } from "@mangadex/gql/graphql";
 import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
 import AbstractSearchResult, {
 	type PaginationData
@@ -88,13 +87,6 @@ export default async function executeSearchQuery(
 				return {
 					mangaId: v.id,
 					id: v.id,
-					coverImage: get_cover_art({
-						cover_id: v.relationships.coverArt.id,
-						manga_id: v.id,
-						filename: v.relationships.coverArt.attributes.fileName,
-						client,
-						mode: CoverImageQuality.V256
-					}),
 					status: v.attributes.status,
 					contentRating: contentRating != null ? contentRating : undefined,
 					description:
