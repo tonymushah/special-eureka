@@ -37,11 +37,8 @@
 	}
 	button {
 		font-size: var(--font-size);
-		transition:
-			background-color,
-			filter 100ms ease-in-out;
 		color: var(--text-color);
-		background-color: var(--main-background);
+		background-color: var(--accent-l2);
 		font-family: var(--fonts);
 		border: var(--mid-tone) solid 3px;
 		padding: 0px;
@@ -61,6 +58,7 @@
 	button:active {
 		box-shadow: none;
 		transform: translateY(0px);
+		filter: brightness(75%);
 	}
 	.manga-element:global([data-selecto-selected]) {
 		background-color: color-mix(in srgb, var(--primary) 50%, transparent 50%);
