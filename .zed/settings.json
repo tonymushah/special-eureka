@@ -26,7 +26,8 @@
 			"format_on_save": "on"
 		},
 		"Svelte": {
-			"format_on_save": "on"
+			"format_on_save": "on",
+			"language_servers": ["svelte-language-server", "vtsls"]
 		}
 	}
 }
