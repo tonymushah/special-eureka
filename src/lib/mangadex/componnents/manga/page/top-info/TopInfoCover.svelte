@@ -1,10 +1,10 @@
 <script lang="ts">
-	import Skeleton from "@mangadex/componnents/theme/loader/Skeleton.svelte";
 	import { getTopCoverAltContextStore, getTopMangaIdContextStore } from "./context";
 	import mediumZoom, { type Zoom } from "medium-zoom";
 	import { onDestroy } from "svelte";
 	import { getMangaDexThemeContext } from "@mangadex/utils/contexts";
 	import { get_cover_image_auto_handle_error } from "@mangadex/utils/cover-art/get_cover_art.svelte";
+	import Fetching from "@mangadex/componnents/search/content/Fetching.svelte";
 	const theme = getMangaDexThemeContext();
 	let coverImageInstance: HTMLImageElement | undefined = $state(undefined);
 	let zoom: Zoom | undefined = $state(undefined);
@@ -30,7 +30,7 @@
 		<img {alt} src={coverImage.value} bind:this={coverImageInstance} />
 	</div>
 {:else}
-	<Skeleton height="100%" width="100%" />
+	<Fetching />
 {/if}
 
 <style lang="scss">
