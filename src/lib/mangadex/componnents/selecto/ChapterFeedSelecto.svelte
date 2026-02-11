@@ -1,7 +1,16 @@
+<!--
+	BUG: i dunno if it is because of the logic sometime the drag select doesn't works
+-->
 <script lang="ts" module>
 	const canSelect = writable(false);
 
 	export const canSelect_ = readonly(canSelect);
+	const selectables = [
+		".manga-element",
+		".chapter-element",
+		".users-simple-selectable",
+		".cover-art-element"
+	];
 </script>
 
 <script lang="ts">
@@ -18,8 +27,8 @@
 
 	interface Props {
 		container: HTMLElement | undefined;
-		selectedMangas: string[];
-		selectedChapters: string[];
+		selectedMangas?: string[];
+		selectedChapters?: string[];
 		onEnd?: (ev?: MouseEvent | TouchEvent) => void;
 		useDialog?: boolean;
 		selectedCustomLists?: string[];
@@ -29,8 +38,8 @@
 	}
 	let {
 		container = $bindable(),
-		selectedMangas = $bindable(),
-		selectedChapters = $bindable(),
+		selectedMangas = $bindable([]),
+		selectedChapters = $bindable([]),
 		selectedCustomLists = $bindable([]),
 		selectedCovers = $bindable([]),
 		selectedScansGroups = $bindable([]),
@@ -94,7 +103,7 @@
 				}
 			})();
 			const dragselect = new SelectionArea({
-				selectables: [".manga-element", ".chapter-element"],
+				selectables,
 				boundaries: [`#${scrollElementId}`],
 				selectionAreaClass
 			})
@@ -111,8 +120,12 @@
 						});
 						if (useDialog) {
 							openSelectoDialog({
-								titles: selected_mangas,
-								chapters: selected_chapters
+								titles: [...selected_mangas],
+								chapters: [...selected_chapters],
+								covers: [...selected_covers],
+								scanGroups: [...selected_scans_groups],
+								users: [...selected_users],
+								customLists: [...selected_custom_lists]
 							});
 						}
 						onEnd?.(ev.event ?? undefined);
@@ -165,7 +178,7 @@
 			$canSelect = true;
 		} else if (e.key == "a" && $canSelect && container) {
 			e.preventDefault();
-			[".manga-element", ".chapter-element"]
+			selectables
 				.map((d) => container.querySelectorAll(d))
 				.forEach((d) => {
 					d.forEach(pushSelected);

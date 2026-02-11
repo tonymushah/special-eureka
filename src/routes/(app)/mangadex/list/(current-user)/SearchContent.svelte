@@ -18,6 +18,7 @@
 	import { flip } from "svelte/animate";
 	import { crossfade } from "svelte/transition";
 	import executeSearchQuery, { type CurrentUserCustomListItemData } from "./search";
+	import ChapterFeedSelecto from "@mangadex/componnents/selecto/ChapterFeedSelecto.svelte";
 
 	const client = getContextClient();
 	let query = createInfiniteQuery(() => {
@@ -83,9 +84,12 @@
 		}
 	});
 	const [send, receive] = crossfade({});
+	let container = $state<HTMLElement | undefined>();
 </script>
 
-<div class="result">
+<ChapterFeedSelecto bind:container />
+
+<div class="result" bind:this={container}>
 	{#each lists as list (list.id)}
 		{@const isPrivate = list.visibility == CustomListVisibility.Private}
 		{@const isPublic = list.visibility == CustomListVisibility.Public}
@@ -99,6 +103,8 @@
 			}}
 		>
 			<UsersSimpleBase
+				data-custom-list-id={list.id}
+				selectable
 				name={list.name}
 				onclick={() => {
 					goto(

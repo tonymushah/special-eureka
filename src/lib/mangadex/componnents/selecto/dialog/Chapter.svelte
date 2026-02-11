@@ -38,6 +38,7 @@
 			onclick={() => {
 				currentAction = "selection";
 			}}
+			disabled={currentAction == "selection"}
 		/>
 		<ButtonAccentOnlyLabel
 			variant="3"

@@ -5,7 +5,7 @@
 	import type { CoverInput } from "./CoverContents.svelte";
 	import CoverContents from "./CoverContents__.svelte";
 	import getMangaCoversQuery from "./utils/query";
-	import { get, toStore } from "svelte/store";
+	import { get } from "svelte/store";
 	import { createInfiniteQuery } from "@tanstack/svelte-query";
 	import pageLimit from "@mangadex/stores/page-limit";
 	import ErrorComponent from "@mangadex/componnents/ErrorComponent.svelte";
@@ -92,10 +92,10 @@
 </script>
 
 <CoverContents
-	isDataEmpty={toStore(() => isDataEmpty)}
-	isLoading={toStore(() => query.isLoading)}
-	isInitialLoading={toStore(() => query.isLoading)}
-	coversData={toStore(() => coversData)}
+	{isDataEmpty}
+	isLoading={query.isLoading}
+	isInitialLoading={query.isLoading}
+	{coversData}
 />
 {#if query.isError}
 	<ErrorComponent

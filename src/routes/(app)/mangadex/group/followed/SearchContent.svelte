@@ -6,7 +6,7 @@
 	import { getContextClient } from "@urql/svelte";
 	import { debounce } from "lodash";
 	import { onDestroy } from "svelte";
-	import { derived, type Readable } from "svelte/store";
+	import { derived } from "svelte/store";
 	import executeSearchQuery from "./search";
 
 	import { goto } from "$app/navigation";
@@ -20,6 +20,7 @@
 	import { flip } from "svelte/animate";
 	import { crossfade } from "svelte/transition";
 	import type { ScanlationGroupListItemData } from "../(search)/search";
+	import ChapterFeedSelecto from "@mangadex/componnents/selecto/ChapterFeedSelecto.svelte";
 
 	const client = getContextClient();
 
@@ -38,7 +39,7 @@
 		return {
 			queryKey: ["user", "following", "groups", JSON.stringify($params)],
 			initialPageParam: $params,
-			getNextPageParam(lastPage, allPages, lastPageParam, allPageParams) {
+			getNextPageParam(lastPage, allPages, lastPageParam) {
 				const next_offset = lastPage.limit + lastPage.offset;
 				if (next_offset > lastPage.total) {
 					return null;
@@ -57,7 +58,7 @@
 					...res.paginationData
 				};
 			},
-			getPreviousPageParam(firstPage, allPages, firstPageParam, allPageParams) {
+			getPreviousPageParam(firstPage, allPages, firstPageParam) {
 				const next_offset = firstPage.limit - firstPage.offset;
 				if (next_offset < 0) {
 					return null;
@@ -119,9 +120,12 @@
 		observer.disconnect();
 	});
 	const [send, receive] = crossfade({});
+	let container = $state<HTMLElement | undefined>();
 </script>
 
-<div class="result">
+<ChapterFeedSelecto bind:container />
+
+<div class="result" bind:this={container}>
 	{#each scanGroups as group (group.id)}
 		<span
 			animate:flip

@@ -17,7 +17,9 @@
 			"code_actions_on_format": {
 				"source.organizeImports": true
 			},
-			"format_on_save": "on"
+			"format_on_save": "on",
+			// This is a no-tailwind project sir...
+			"language_servers": ["!tailwindcss-language-server", "eslint", "vtsls", "graphql"]
 		},
 		"TSX": {
 			"code_actions_on_format": {
@@ -27,7 +29,12 @@
 		},
 		"Svelte": {
 			"format_on_save": "on",
-			"language_servers": ["svelte-language-server", "vtsls"]
+			"language_servers": [
+				"!tailwindcss-language-server",
+				"!eslint",
+				"svelte-language-server",
+				"vtsls"
+			]
 		}
 	}
 }
