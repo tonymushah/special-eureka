@@ -8,7 +8,6 @@
 	} from "@mangadex/componnents/manga/add-to-list/AddToList.svelte";
 	import { initChapterStoreContext } from "@mangadex/componnents/manga/page/chapters/aggreate/utils/chapterStores";
 	import MangaPageInfo from "@mangadex/componnents/manga/page/chapters/MangaPageInfo.svelte";
-	import { initCoverImageStoreContext } from "@mangadex/componnents/manga/page/covers/utils/coverImageStoreContext";
 	import MangaNavBar from "@mangadex/componnents/manga/page/MangaNavBar.svelte";
 	import { initRelatedTitlesStoreContext } from "@mangadex/componnents/manga/page/related/utils/relatedTitleStore";
 	import type { ReadingStatusEventDetail } from "@mangadex/componnents/manga/page/top-info/buttons/readingStatus";
@@ -130,7 +129,6 @@
 			})
 	);
 	initChapterStoreContext();
-	initCoverImageStoreContext();
 	initRelatedTitlesStoreContext();
 	let layoutData = $derived(data.layoutData!);
 	let description = $derived(layoutData.description);
@@ -386,7 +384,6 @@
 	id={layoutData.id}
 	title={layoutData.title ?? ""}
 	altTitle={layoutData.altTitle}
-	coverImage={layoutData.coverImage}
 	coverImageAlt={layoutData.coverImageAlt}
 	authors={layoutData.authors}
 	tags={layoutData.tags}

@@ -1,9 +1,10 @@
 <script lang="ts">
 	import Skeleton from "@mangadex/componnents/theme/loader/Skeleton.svelte";
-	import { getTopCoverAltContextStore, getTopCoverContextStore } from "./context";
+	import { getTopCoverAltContextStore, getTopMangaIdContextStore } from "./context";
 	import mediumZoom, { type Zoom } from "medium-zoom";
 	import { onDestroy } from "svelte";
 	import { getMangaDexThemeContext } from "@mangadex/utils/contexts";
+	import { get_cover_image_auto_handle_error } from "@mangadex/utils/cover-art/get_cover_art.svelte";
 	const theme = getMangaDexThemeContext();
 	let coverImageInstance: HTMLImageElement | undefined = $state(undefined);
 	let zoom: Zoom | undefined = $state(undefined);
@@ -15,8 +16,12 @@
 	onDestroy(() => {
 		zoom?.close();
 	});
-	const coverImageStore = getTopCoverContextStore();
-	let coverImage = $derived($coverImageStore);
+
+	const mangaId = getTopMangaIdContextStore();
+	let coverImage = get_cover_image_auto_handle_error(() => ({
+		id: mangaId,
+		asManga: true
+	}));
 	const alt = getTopCoverAltContextStore();
 </script>
 
