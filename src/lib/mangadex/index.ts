@@ -10,3 +10,19 @@ export const mangadexQueryClient = new QueryClient({
 		}
 	}
 });
+
+export interface GetCoverParam {
+	id: string;
+	asManga?: boolean;
+	quality?: "256" | "512";
+}
+
+interface MangaDexInternalUtil {
+	__getCoverImageUrl(param: GetCoverParam): string;
+}
+
+declare global {
+	interface Window {
+		__MANGADEX_UTILS__: MangaDexInternalUtil;
+	}
+}

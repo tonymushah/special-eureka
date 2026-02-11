@@ -1,6 +1,5 @@
 <script lang="ts" module>
 	export type MangaCoversItem = {
-		coverImage: Readable<string | undefined>;
 		title: string;
 		alt: string;
 		id: string;
@@ -10,7 +9,6 @@
 
 <script lang="ts">
 	import CoverImage from "./CoverImage.svelte";
-	import type { Readable } from "svelte/store";
 	import { Variant } from "./MangaPageCovers.utils";
 
 	interface Props {
@@ -26,8 +24,8 @@
 </script>
 
 <div class:flex class:grid>
-	{#each items as { coverImage, title, alt, id } (id)}
-		<CoverImage {coverImage} {title} {alt} {fixedWidth} />
+	{#each items as { title, alt, id } (id)}
+		<CoverImage coverId={id} {title} {alt} {fixedWidth} />
 	{/each}
 </div>
 

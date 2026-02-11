@@ -5,6 +5,8 @@
 	import Layout from "./inner/Layout.svelte";
 	import { setContextMenuContext } from "@special-eureka/core/utils/contextMenuContext";
 	import mangaElementContextMenu from "@mangadex/utils/context-menu/manga";
+	import { get_cover_image_auto_handle_error } from "@mangadex/utils/cover-art/get_cover_art.svelte";
+	import LoaderImage from "./inner/LoaderImage.svelte";
 
 	type Group = {
 		id: string;
@@ -46,7 +48,6 @@
 	interface Props extends Events {
 		mangaId: string;
 		chapterId: string;
-		coverImage: string;
 		coverImageAlt: string;
 		mangaTitle: string;
 		chapterTitle?: string | undefined;
@@ -61,7 +62,6 @@
 	let {
 		mangaId,
 		chapterId,
-		coverImage,
 		coverImageAlt,
 		mangaTitle,
 		chapterTitle = undefined,
@@ -77,10 +77,26 @@
 		end
 	}: Props = $props();
 	setContextMenuContext(() => mangaElementContextMenu({ id: mangaId, coverArtId: mangaId }));
+
+	let coverImage = get_cover_image_auto_handle_error(() => ({
+		id: mangaId,
+		asManga: true,
+		quality: "256"
+	}));
 </script>
 
 <Layout bind:haveBeenRead {mangaId}>
-	<CoverImage {coverImage} {coverImageAlt} {mangaId} {onmangaClick} {onmangaKeyClick} />
+	{#if coverImage.value}
+		<CoverImage
+			coverImage={coverImage.value}
+			{coverImageAlt}
+			{mangaId}
+			{onmangaClick}
+			{onmangaKeyClick}
+		/>
+	{:else}
+		<LoaderImage {mangaId} {onmangaClick} {onmangaKeyClick} />
+	{/if}
 	<Content
 		{mangaId}
 		{mangaTitle}

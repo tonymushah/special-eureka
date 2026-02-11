@@ -4,7 +4,6 @@ import { type Readable, writable } from "svelte/store";
 
 export type RelatedTitle = {
 	id: string;
-	coverArt: Readable<string | undefined>;
 	coverArtAlt: string;
 	title: string;
 	description: string;

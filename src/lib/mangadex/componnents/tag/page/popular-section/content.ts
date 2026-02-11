@@ -1,7 +1,6 @@
 import type { MangaListContentItemProps } from "@mangadex/componnents/manga/list/MangaListContent.svelte";
 import tagPopularTitlesQuery from "@mangadex/gql-docs/tag/page/popularInfQuery";
-import { CoverImageQuality, type TagPopularList } from "@mangadex/gql/graphql";
-import get_cover_art from "@mangadex/utils/cover-art/get_cover_art";
+import { type TagPopularList } from "@mangadex/gql/graphql";
 import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
 import AbstractSearchResult, {
 	type PaginationData
@@ -89,32 +88,16 @@ export default async function executeSearchQuery(
 				return {
 					mangaId: v.id,
 					id: v.id,
-					coverImage: get_cover_art({
-						cover_id: v.relationships.coverArt.id,
-						manga_id: v.id,
-						filename: v.relationships.coverArt.attributes.fileName,
-						client,
-						mode: CoverImageQuality.V256
-					}),
 					status: v.attributes.status,
 					contentRating: contentRating != null ? contentRating : undefined,
 					description:
-						get_value_from_title_and_random_if_undefined(
-							v.attributes.description,
-							"en"
-						) ?? "",
-					title:
-						get_value_from_title_and_random_if_undefined(v.attributes.title, "en") ??
-						"",
+						get_value_from_title_and_random_if_undefined(v.attributes.description, "en") ?? "",
+					title: get_value_from_title_and_random_if_undefined(v.attributes.title, "en") ?? "",
 					coverImageAlt: v.relationships.coverArt.id,
 					withFull: true,
 					tags: v.attributes.tags.map((tag) => ({
 						id: tag.id,
-						name:
-							get_value_from_title_and_random_if_undefined(
-								tag.attributes.name,
-								"en"
-							) ?? ""
+						name: get_value_from_title_and_random_if_undefined(tag.attributes.name, "en") ?? ""
 					})),
 					language: v.attributes.originalLanguage
 				};

@@ -1,13 +1,7 @@
 import type { Chapter } from "@mangadex/componnents/chapter/feed";
 import type { ChapterFeedListItem } from "@mangadex/componnents/chapter/feed/list";
 import getChapterDownloadState from "@mangadex/componnents/home/latest-updates/getChapterDownloadState";
-import {
-	CoverImageQuality,
-	type ChapterSortOrder,
-	type Language,
-	type MangaListParams
-} from "@mangadex/gql/graphql";
-import get_cover_art from "@mangadex/utils/cover-art/get_cover_art";
+import { type ChapterSortOrder, type Language, type MangaListParams } from "@mangadex/gql/graphql";
 import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
 import AbstractSearchResult, {
 	type PaginationData
@@ -114,19 +108,11 @@ export default async function executeSearchQuery(
 			mangaListParams,
 			hideReadTitle,
 			data: data.data.map<ChapterFeedListItem>((e) => {
-				const cover_art = get_cover_art({
-					client,
-					cover_id: e.manga.relationships.coverArt.id,
-					manga_id: e.manga.id,
-					filename: e.manga.relationships.coverArt.attributes.fileName,
-					mode: CoverImageQuality.V256
-				});
 				return {
 					mangaId: e.manga.id,
 					title:
 						get_value_from_title_and_random_if_undefined(e.manga.attributes.title, "en") ??
 						e.manga.id,
-					coverImage: cover_art,
 					coverImageAlt: e.manga.relationships.coverArt.id,
 					mangaLang: e.manga.attributes.originalLanguage,
 					chapters: e.chapters.map<Chapter>((chap) => {

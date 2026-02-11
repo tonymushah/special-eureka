@@ -1,11 +1,11 @@
 <script lang="ts">
 	import Skeleton from "@mangadex/componnents/theme/loader/Skeleton.svelte";
 	import { getMangaDexThemeContext } from "@mangadex/utils/contexts";
+	import { get_cover_image_auto_handle_error } from "@mangadex/utils/cover-art/get_cover_art.svelte";
 	import type { UnlistenFn } from "@tauri-apps/api/event";
 	import type { Zoom } from "medium-zoom";
 	import mediumZoom from "medium-zoom";
 	import { onDestroy } from "svelte";
-	import type { Readable } from "svelte/store";
 
 	let isHovered = $state(false);
 	let coverImageInstance: HTMLImageElement | undefined = $state(undefined);
@@ -23,14 +23,16 @@
 	});
 
 	interface Props {
-		coverImage: Readable<string | undefined>;
 		fixedWidth?: boolean;
 		alt: string;
 		title: string;
+		coverId: string;
 	}
 
-	let { coverImage, fixedWidth = true, alt, title }: Props = $props();
-	let src = $derived($coverImage);
+	let { coverId, fixedWidth = true, alt, title }: Props = $props();
+	let src = get_cover_image_auto_handle_error(() => ({
+		id: coverId
+	}));
 	let container: HTMLDivElement | undefined = $state(undefined);
 	let sW = $state("var(--cover-w)");
 	let sH = $state("var(--cover-h)");
@@ -90,8 +92,8 @@
 		isHovered = false;
 	}}
 >
-	{#if src}
-		<img {alt} {src} bind:this={coverImageInstance} />
+	{#if src.value}
+		<img {alt} src={src.value} bind:this={coverImageInstance} />
 	{:else}
 		<Skeleton width={sW} height={sH} />
 	{/if}

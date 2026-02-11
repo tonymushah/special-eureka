@@ -3,13 +3,13 @@
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import Skeleton from "@mangadex/componnents/theme/loader/Skeleton.svelte";
 	import type { Language } from "@mangadex/gql/graphql";
-	import type { Readable } from "svelte/store";
 	import type { Chapter } from "..";
 	import ChapterElement1 from "../../base/element1/ChapterElement1.svelte";
 	import mangaElementContextMenu from "@mangadex/utils/context-menu/manga";
 	import registerContextMenuEvent, {
 		setContextMenuContext
 	} from "@special-eureka/core/utils/contextMenuContext";
+	import { get_cover_image_auto_handle_error } from "@mangadex/utils/cover-art/get_cover_art.svelte";
 
 	type MouseEnvDiv = MouseEvent & {
 		currentTarget: HTMLDivElement & EventTarget;
@@ -70,7 +70,6 @@
 		) => any;
 	}
 	interface Props extends Events {
-		coverImage: Readable<string | undefined>;
 		coverImageAlt: string;
 		title: string;
 		mangaId: string;
@@ -79,7 +78,6 @@
 	}
 
 	let {
-		coverImage,
 		coverImageAlt,
 		title,
 		mangaId,
@@ -103,6 +101,12 @@
 	});
 	let canCollaspe = $derived(toHide.length > 0);
 	setContextMenuContext(() => mangaElementContextMenu({ id: mangaId, coverArtId: mangaId }));
+
+	let coverImage = get_cover_image_auto_handle_error(() => ({
+		id: mangaId,
+		asManga: true,
+		quality: "256"
+	}));
 </script>
 
 {#snippet _chapters(chaps: Chapter[])}
@@ -149,8 +153,8 @@
 			preventDefault: true
 		})}
 	>
-		{#if $coverImage}
-			<img src={$coverImage} alt={coverImageAlt} />
+		{#if coverImage.value}
+			<img src={coverImage.value} alt={coverImageAlt} />
 		{:else}
 			<Skeleton height="16em" width="10em" />
 		{/if}

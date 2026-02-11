@@ -1,20 +1,23 @@
 <script lang="ts">
 	import registerContextMenuEvent from "@special-eureka/core/utils/contextMenuContext";
-	import { getTopCoverContextStore } from "./context";
+	import { getTopMangaIdContextStore } from "./context";
+	import { get_cover_image_auto_handle_error } from "@mangadex/utils/cover-art/get_cover_art.svelte";
 	interface Props {
 		cover?: import("svelte").Snippet;
 		children?: import("svelte").Snippet;
 	}
 
 	let { cover, children }: Props = $props();
-
-	const coverImageStore = getTopCoverContextStore();
-	let coverImage = $derived($coverImageStore ?? "");
+	const mangaId = getTopMangaIdContextStore();
+	let coverImage = get_cover_image_auto_handle_error(() => ({
+		id: mangaId,
+		asManga: true
+	}));
 </script>
 
 <article
 	class="layout-image"
-	style={`background-image: url(${coverImage});`}
+	style={`background-image: url(${coverImage.value});`}
 	oncontextmenu={registerContextMenuEvent({
 		preventDefault: true
 	})}

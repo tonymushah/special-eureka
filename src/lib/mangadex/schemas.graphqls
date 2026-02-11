@@ -647,11 +647,6 @@ input CoverEditParam {
 	version: Int!
 }
 
-enum CoverImageQuality {
-	V512
-	V256
-}
-
 input CoverListParam {
 	limit: Int
 	offset: Int
@@ -675,7 +670,6 @@ type CoverMutations {
 type CoverQueries {
 	list(params: CoverListParam): CoverResults!
 	get(id: UUID!): Cover!
-	getImage(mangaId: UUID!, coverId: UUID!, filename: String!, mode: CoverImageQuality): Url!
 	isDownloaded(id: UUID!): DownloadState!
 }
 

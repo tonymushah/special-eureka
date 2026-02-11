@@ -16,19 +16,16 @@
 	let { children, mangaId, onclick }: Props = $props();
 </script>
 
-<ButtonBase
-	{onclick}
-	isBase={false}
+<button
+	class="layout manga-element"
+	data-manga-id={mangaId}
 	oncontextmenu={registerContextMenuEvent({
 		preventDefault: true
 	})}
-	noPadding
-	--button-color={"var(--main-background)"}
+	{onclick}
 >
-	<article class="layout manga-element" data-manga-id={mangaId}>
-		{@render children?.()}
-	</article>
-</ButtonBase>
+	{@render children?.()}
+</button>
 
 <style lang="scss">
 	.layout {
@@ -37,6 +34,31 @@
 		border-radius: 0.25rem;
 		display: flex;
 		flex-direction: column;
+	}
+	button {
+		font-size: var(--font-size);
+		color: var(--text-color);
+		background-color: var(--accent-l2);
+		font-family: var(--fonts);
+		border: var(--mid-tone) solid 3px;
+		padding: 0px;
+	}
+	button:hover {
+		box-shadow: 0px 3px 0px var(--mid-tone);
+		cursor: pointer;
+		transform: translateY(-3px);
+	}
+	button:hover:disabled {
+		background: linear-gradient(
+			45deg,
+			color-mix(in srgb, var(--main-background) 95%, var(--danger, transparent) 05%) 0% 0%,
+			var(--mid-tone) 100%
+		);
+	}
+	button:active {
+		box-shadow: none;
+		transform: translateY(0px);
+		filter: brightness(75%);
 	}
 	.manga-element:global([data-selecto-selected]) {
 		background-color: color-mix(in srgb, var(--primary) 50%, transparent 50%);
