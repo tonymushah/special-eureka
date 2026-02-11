@@ -70,6 +70,7 @@
 	button:active {
 		box-shadow: none;
 		transform: translateY(0px);
+		filter: brightness(75%);
 	}
 	.manga-element:global([data-selecto-selected]) {
 		--content-bg: color-mix(in srgb, var(--primary) 75%, var(--accent-l3) 25%);
