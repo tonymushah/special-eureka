@@ -1,7 +1,5 @@
 <script lang="ts">
 	import defaultContentProfile from "@mangadex/content-profile/graphql/defaultProfile";
-	import { CoverImageQuality } from "@mangadex/gql/graphql";
-	import get_cover_art from "@mangadex/utils/cover-art/get_cover_art";
 	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
 	import type { Tag } from "@mangadex/utils/types/Tag";
 	import { createQuery } from "@tanstack/svelte-query";
@@ -12,6 +10,7 @@
 	import HomeErrorComponnent from "./utils/HomeErrorComponnent.svelte";
 	import PopularTitleSpinner from "./utils/PopularTitleSpinner.svelte";
 	import TopTitle from "./utils/TopTitle.svelte";
+	import { get_cover_image_url } from "@mangadex/utils/cover-art/get_cover_art";
 
 	const client = getContextClient();
 
@@ -55,12 +54,9 @@
 			title: get_value_from_title_and_random_if_undefined(manga.attributes.title, "en") ?? "",
 			description:
 				get_value_from_title_and_random_if_undefined(manga.attributes.description, "en") ?? "",
-			coverImage: get_cover_art({
-				client,
-				manga_id: manga.id,
-				cover_id: manga.relationships.coverArt.id,
-				filename: manga.relationships.coverArt.attributes.fileName,
-				mode: CoverImageQuality.V512
+			coverImage: get_cover_image_url({
+				id: manga.relationships.coverArt.id,
+				quality: "512"
 			}),
 			coverImageAlt: manga.attributes.title["en"] ?? manga.relationships.coverArt.id,
 			contentRating: manga.attributes.contentRating ?? undefined,

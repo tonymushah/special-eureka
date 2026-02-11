@@ -1,4 +1,5 @@
 <script lang="ts">
+	import coverNotFound from "@mangadex/assets/artworks/cover-not-found.jpg";
 	import Skeleton from "@mangadex/componnents/theme/loader/Skeleton.svelte";
 	import { ContentRating } from "@mangadex/gql/graphql";
 	import type { Tag } from "@mangadex/utils/types/Tag";
@@ -103,7 +104,7 @@
 		{#if isCoverLoading}
 			<Skeleton width="13em" height="20em" />
 		{:else if isCoverError}
-			<Skeleton width="13em" height="20em" />
+			<img src={coverNotFound} alt={coverImageAlt} />
 		{:else}
 			<img src={coverImage} alt={coverImageAlt} />
 		{/if}
