@@ -1,10 +1,8 @@
 <script lang="ts">
 	import ErrorComponent from "@mangadex/componnents/ErrorComponent.svelte";
-	import MangaElementBase4WithReadableCoverImage from "@mangadex/componnents/manga/base/base4/MangaElementBase4WithReadableCoverImage.svelte";
+	import MangaElementBase4 from "@mangadex/componnents/manga/base/MangaElementBase4.svelte";
 	import defaultContentProfile from "@mangadex/content-profile/graphql/defaultProfile";
 	import tagRecentlyAddedQuery from "@mangadex/gql-docs/tag/page/recentlyAdded";
-	import { CoverImageQuality } from "@mangadex/gql/graphql";
-	import get_cover_art from "@mangadex/utils/cover-art/get_cover_art";
 	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
 	import { createQuery } from "@tanstack/svelte-query";
 	import { getContextClient } from "@urql/svelte";
@@ -94,18 +92,8 @@
 		<swiper-container bind:this={swiper_container} init="false">
 			{#each query.data as title (title.id)}
 				<swiper-slide>
-					<MangaElementBase4WithReadableCoverImage
-						title={get_value_from_title_and_random_if_undefined(
-							title.attributes.title,
-							"en"
-						) ?? ""}
-						coverImage={get_cover_art({
-							cover_id: title.relationships.coverArt.id,
-							manga_id: title.id,
-							mode: CoverImageQuality.V256,
-							filename: title.relationships.coverArt.attributes.fileName,
-							client
-						})}
+					<MangaElementBase4
+						title={get_value_from_title_and_random_if_undefined(title.attributes.title, "en") ?? ""}
 						coverImageAlt={title.relationships.coverArt.attributes.description}
 						mangaId={title.id}
 					/>
