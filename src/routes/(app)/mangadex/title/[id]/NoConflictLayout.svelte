@@ -368,7 +368,6 @@
 		}
 	}
 	let shouldInfoBeneathDesc = $derived(mangaInfoPos == MangaInfosPositions.BeneathDescription);
-	console.log("sad");
 </script>
 
 <svelte:window
