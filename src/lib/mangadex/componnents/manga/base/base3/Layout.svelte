@@ -1,5 +1,6 @@
 <script lang="ts">
 	import ButtonBase from "@mangadex/componnents/theme/buttons/base/ButtonBase.svelte";
+	import SomeDiv from "@mangadex/componnents/theme/SomeDiv.svelte";
 	import registerContextMenuEvent from "@special-eureka/core/utils/contextMenuContext";
 
 	interface Events {
@@ -18,22 +19,22 @@
 </script>
 
 <!-- TODO Remove <ButtonBase/> for layout -->
-<ButtonBase
-	{onclick}
-	isBase={false}
-	with_hover
-	noPadding
+<SomeDiv
 	--button-color={"var(--accent-l3)"}
 	--button-hover={"var(--accent-l3-hover)"}
 	--button-active={"var(--accent-l-active)"}
-	oncontextmenu={registerContextMenuEvent({
-		preventDefault: true
-	})}
 >
-	<article class="layout manga-element" data-manga-id={mangaId}>
+	<button
+		class="layout manga-element"
+		data-manga-id={mangaId}
+		{onclick}
+		oncontextmenu={registerContextMenuEvent({
+			preventDefault: true
+		})}
+	>
 		{@render children?.()}
-	</article>
-</ButtonBase>
+	</button>
+</SomeDiv>
 
 <style lang="scss">
 	.layout {
@@ -41,6 +42,34 @@
 		height: var(--element-h);
 		overflow: hidden;
 		border-radius: 0.25rem;
+	}
+	button {
+		font-size: var(--font-size);
+		transition:
+			background-color,
+			filter 100ms ease-in-out;
+		color: var(--text-color);
+		background-color: var(--button-color);
+		font-family: var(--fonts);
+		border: var(--mid-tone) solid 3px;
+		padding: 0px;
+	}
+	button:hover {
+		background-color: var(--button-hover);
+		box-shadow: 0px 3px 0px var(--mid-tone);
+		cursor: pointer;
+		transform: translateY(-3px);
+	}
+	button:hover:disabled {
+		background: linear-gradient(
+			45deg,
+			color-mix(in srgb, var(--main-background) 95%, var(--danger, transparent) 05%) 0% 0%,
+			var(--button-color) 100%
+		);
+	}
+	button:active {
+		box-shadow: none;
+		transform: translateY(0px);
 	}
 	.manga-element:global([data-selecto-selected]) {
 		--content-bg: color-mix(in srgb, var(--primary) 75%, var(--accent-l3) 25%);

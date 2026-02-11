@@ -10,7 +10,7 @@
 	import { isArray } from "lodash";
 	import type { ComponentProps } from "svelte";
 	import { flip } from "svelte/animate";
-	import MangaElementBase1 from "../../base/base1/MangaElementBase1WithReadableCoverImage.svelte";
+	import MangaElementBase1 from "../../base/MangaElementBase1.svelte";
 	import { crossfade, fade } from "svelte/transition";
 
 	interface Props {

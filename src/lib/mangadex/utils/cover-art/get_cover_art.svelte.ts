@@ -9,10 +9,10 @@ export function get_cover_image(_param: () => GetCoverParam) {
 		return {
 			queryKey: ["cover-image", base_url],
 			queryFn() {
-				return new Promise<string>((res) => {
+				return new Promise<string>((res, rej) => {
 					let image = new Image();
-					image.addEventListener("error", () => {
-						res(coverNotFound);
+					image.addEventListener("error", (ev) => {
+						rej(ev.error);
 					});
 					image.addEventListener("load", () => {
 						res(base_url);
@@ -22,5 +22,13 @@ export function get_cover_image(_param: () => GetCoverParam) {
 			},
 			networkMode: "always"
 		};
+	});
+}
+
+export function get_cover_image_auto_handle_error(_param: () => GetCoverParam) {
+	let query = get_cover_image(_param);
+	return $derived.by(() => {
+		if (query.isSuccess) return query.data;
+		if (query.isError) return coverNotFound;
 	});
 }
