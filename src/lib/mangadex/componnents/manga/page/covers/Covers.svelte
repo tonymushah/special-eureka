@@ -1,11 +1,9 @@
 <script lang="ts">
 	import { getTitleLayoutData } from "@mangadex/routes/title/[id]/layout.context";
-	import get_cover_art from "@mangadex/utils/cover-art/get_cover_art";
 	import { getContextClient } from "@urql/svelte";
 	import { onDestroy } from "svelte";
 	import type { CoverInput } from "./CoverContents.svelte";
 	import CoverContents from "./CoverContents__.svelte";
-	import { getCoversImageStoreContext } from "./utils/coverImageStoreContext";
 	import getMangaCoversQuery from "./utils/query";
 	import { get, toStore } from "svelte/store";
 	import { createInfiniteQuery } from "@tanstack/svelte-query";
@@ -19,7 +17,6 @@
 	let data = $derived(d.layoutData);
 	let id = $derived(data!.id);
 	const client = getContextClient();
-	const imagesStore = getCoversImageStoreContext();
 
 	let query = createInfiniteQuery(() => ({
 		queryKey: ["title", id, "covers"],
@@ -36,11 +33,7 @@
 				throw new Error("Require data");
 			} else {
 				return {
-					list: res.data.cover.list.data.map<
-						CoverInput & {
-							filename: string;
-						}
-					>((v) => {
+					list: res.data.cover.list.data.map<CoverInput>((v) => {
 						const locale = v.attributes.locale == null ? undefined : v.attributes.locale;
 						const title =
 							v.attributes.volume == null || v.attributes.volume == undefined
@@ -50,8 +43,7 @@
 							id: v.id,
 							title,
 							alt: v.attributes.fileName,
-							locale: locale,
-							filename: v.attributes.fileName
+							locale: locale
 						};
 					}),
 					offset: res.data.cover.list.offset,
@@ -92,26 +84,9 @@
 		}
 	});
 	let coversData = $derived(new Set(query.data?.pages.flatMap((c) => c.list)).values().toArray());
-	const querySub = $effect.root(() => {
-		$effect(() => {
-			const set = coversData.map((c) => {
-				return {
-					id: c.id,
-					image: get_cover_art({
-						client,
-						cover_id: c.id,
-						manga_id: id,
-						filename: c.filename
-					})
-				};
-			});
-			imagesStore.setByBatch(set);
-		});
-	});
 
 	let isDataEmpty = $derived(coversData.length == 0);
 	onDestroy(() => {
-		querySub();
 		interObs.disconnect();
 	});
 </script>
