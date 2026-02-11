@@ -1,11 +1,9 @@
 <script lang="ts">
-	import { CoverImageQuality, type RecentlyAddedHomeQueryQuery } from "@mangadex/gql/graphql";
-	import get_cover_art from "@mangadex/utils/cover-art/get_cover_art";
+	import { type RecentlyAddedHomeQueryQuery } from "@mangadex/gql/graphql";
 	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
 	import { getContextClient } from "@urql/svelte";
-	import type { Readable } from "svelte/store";
 	import type { SwiperContainer } from "swiper/element";
-	import MangaElementBase4 from "@mangadex/componnents/manga/base/base4/MangaElementBase4WithReadableCoverImage.svelte";
+	import MangaElementBase4 from "@mangadex/componnents/manga/base/MangaElementBase4.svelte";
 	import openTitle from "@mangadex/utils/links/title/[id]";
 	import type { SwiperOptions } from "swiper/types";
 	import NothingToShow from "../NothingToShow.svelte";
@@ -19,7 +17,6 @@
 	type Title = {
 		id: string;
 		title: string;
-		coverImage: Readable<string | undefined>;
 		coverImageAlt: string;
 	};
 	function getLangData(title: Record<string, string>): string {
@@ -29,13 +26,6 @@
 		data.home.recentlyAdded.data.map<Title>((t) => ({
 			id: t.id,
 			title: getLangData(t.attributes.title),
-			coverImage: get_cover_art({
-				cover_id: t.relationships.coverArt.id,
-				manga_id: t.id,
-				mode: CoverImageQuality.V256,
-				filename: t.relationships.coverArt.attributes.fileName,
-				client
-			}),
 			coverImageAlt: t.relationships.coverArt.id
 		}))
 	);
@@ -83,14 +73,13 @@
 {#if titles.length > 0}
 	<div class="result">
 		<swiper-container bind:this={swiper_container} init="false">
-			{#each titles as { id, title, coverImage, coverImageAlt } (id)}
+			{#each titles as { id, title, coverImageAlt } (id)}
 				<swiper-slide>
 					<MangaElementBase4
 						onclick={() => {
 							openTitle(id);
 						}}
 						{title}
-						{coverImage}
 						{coverImageAlt}
 						mangaId={id}
 					/>
