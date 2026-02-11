@@ -1,11 +1,9 @@
 <script lang="ts">
-	import MangaElementBase3 from "@mangadex/componnents/manga/base/base3/MangaElementBase3WithReadableCoverImage.svelte";
-	import { CoverImageQuality, type SeasonalQuery } from "@mangadex/gql/graphql";
-	import get_cover_art from "@mangadex/utils/cover-art/get_cover_art";
+	import MangaElementBase3 from "@mangadex/componnents/manga/base/MangaElementBase3.svelte";
+	import { type SeasonalQuery } from "@mangadex/gql/graphql";
 	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
 	import openTitle from "@mangadex/utils/links/title/[id]";
 	import { getContextClient } from "@urql/svelte";
-	import type { Readable } from "svelte/store";
 	import type { SwiperContainer } from "swiper/element";
 	import type { SwiperOptions } from "swiper/types";
 	import NothingToShow from "../NothingToShow.svelte";
@@ -19,7 +17,6 @@
 	type SeasonalTitle = {
 		id: string;
 		title: string;
-		coverImage: Readable<string | undefined>;
 		coverImageAlt: string;
 	};
 	function getLangData(title: Record<string, string>): string {
@@ -29,13 +26,6 @@
 		data.home.seasonal.relationships.titles.map<SeasonalTitle>((t) => ({
 			id: t.id,
 			title: getLangData(t.attributes.title),
-			coverImage: get_cover_art({
-				cover_id: t.relationships.coverArt.id,
-				manga_id: t.id,
-				mode: CoverImageQuality.V256,
-				filename: t.relationships.coverArt.attributes.fileName,
-				client
-			}),
 			coverImageAlt: t.relationships.coverArt.id
 		}))
 	);
@@ -85,11 +75,10 @@
 {#if seasonal.length > 0}
 	<div class="result">
 		<swiper-container bind:this={swiper_container} init="false">
-			{#each seasonal as { id, title, coverImage, coverImageAlt } (id)}
+			{#each seasonal as { id, title, coverImageAlt } (id)}
 				<swiper-slide>
 					<MangaElementBase3
 						{title}
-						{coverImage}
 						{coverImageAlt}
 						onclick={() => {
 							openTitle(id);
