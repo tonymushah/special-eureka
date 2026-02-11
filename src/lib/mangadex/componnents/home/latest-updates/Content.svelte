@@ -1,7 +1,6 @@
 <script lang="ts">
-	import ChapterFeedElement1 from "@mangadex/componnents/chapter/feed/element1/ChapterFeedElement1WithReadableCoverAndDownloadState.svelte";
-	import { CoverImageQuality, type RecentlyAddedHomeQuery } from "@mangadex/gql/graphql";
-	import get_cover_art from "@mangadex/utils/cover-art/get_cover_art";
+	import ChapterFeedElement1 from "@mangadex/componnents/chapter/feed/element1/ChapterFeedElement1.svelte";
+	import { type RecentlyAddedHomeQuery } from "@mangadex/gql/graphql";
 	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
 	import openTitle from "@mangadex/utils/links/title/[id]";
 	import { getContextClient } from "@urql/svelte";
@@ -16,13 +15,6 @@
 		chapters.home.recentlyUploaded.data.map((c) => ({
 			mangaId: c.relationships.manga.id,
 			chapterId: c.id,
-			coverImage: get_cover_art({
-				client,
-				cover_id: c.relationships.manga.relationships.coverArt.id,
-				filename: c.relationships.manga.relationships.coverArt.attributes.fileName,
-				manga_id: c.relationships.manga.id,
-				mode: CoverImageQuality.V256
-			}),
 			upload_date: new Date(c.attributes.readableAt),
 			lang: c.attributes.translatedLanguage,
 			uploader: {
@@ -77,12 +69,11 @@
 {#if data.length > 0}
 	<div class="content">
 		<div class="chapter-col data1">
-			{#each data1 as { chapterId, mangaId, coverImage, upload_date, lang, uploader, groups, mangaTitle, chapterTitle, coverImageAlt, end } (chapterId)}
+			{#each data1 as { chapterId, mangaId, upload_date, lang, uploader, groups, mangaTitle, chapterTitle, coverImageAlt, end } (chapterId)}
 				<div class="chapter">
 					<ChapterFeedElement1
 						{mangaId}
 						{chapterId}
-						{coverImage}
 						{upload_date}
 						{lang}
 						{uploader}
@@ -99,12 +90,11 @@
 			{/each}
 		</div>
 		<div class="chapter-col data2">
-			{#each data2 as { chapterId, mangaId, coverImage, upload_date, lang, uploader, groups, mangaTitle, chapterTitle, coverImageAlt, end } (chapterId)}
+			{#each data2 as { chapterId, mangaId, upload_date, lang, uploader, groups, mangaTitle, chapterTitle, coverImageAlt, end } (chapterId)}
 				<div class="chapter">
 					<ChapterFeedElement1
 						{mangaId}
 						{chapterId}
-						{coverImage}
 						{upload_date}
 						{lang}
 						{uploader}
