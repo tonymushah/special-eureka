@@ -4,8 +4,8 @@
 	import ContentRatingTag from "@mangadex/componnents/content-rating/ContentRatingTag.svelte";
 	import TagComponnentsFlex from "@mangadex/componnents/tag/TagComponnentsFlex.svelte";
 	import Skeleton from "@mangadex/componnents/theme/loader/Skeleton.svelte";
-	import { ContentRating, CoverImageQuality, type Language } from "@mangadex/gql/graphql";
-	import get_cover_art from "@mangadex/utils/cover-art/get_cover_art";
+	import { ContentRating, type Language } from "@mangadex/gql/graphql";
+	import { get_cover_image_auto_handle_error } from "@mangadex/utils/cover-art/get_cover_art.svelte";
 	import get_value_and_random_if_undefined from "@mangadex/utils/lang/get_value_and_random_if_undefined";
 	import { getContextClient } from "@urql/svelte";
 	import { slide } from "svelte/transition";
@@ -34,13 +34,11 @@
 
 	const client = getContextClient();
 
-	const cover_art = get_cover_art({
-		cover_id: coverId,
-		manga_id: mangaId,
-		filename,
-		client,
-		mode: CoverImageQuality.V512
-	});
+	let cover_art = get_cover_image_auto_handle_error(() => ({
+		id: mangaId,
+		asManga: true,
+		quality: "256"
+	}));
 
 	let title = $derived(get_value_and_random_if_undefined(rawTitle, "en") ?? mangaId);
 	let tags = $derived(
@@ -67,8 +65,8 @@
 	class="manga-element"
 	data-manga-id={mangaId}
 >
-	{#if $cover_art}
-		<img src={$cover_art} alt={coverId} />
+	{#if cover_art}
+		<img src={cover_art} alt={coverId} />
 	{:else}
 		<Skeleton width="100%" height="100%" />
 	{/if}
