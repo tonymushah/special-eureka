@@ -1,5 +1,5 @@
 <script lang="ts">
-	import MangaElementBase5WithReadableCoverImage from "@mangadex/componnents/manga/base/base5/MangaElementBase5WithReadableCoverImage.svelte";
+	import MangaElementBase5 from "@mangadex/componnents/manga/base/MangaElementBase5.svelte";
 	import type { StaffPicksTitle } from ".";
 	import type { SwiperContainer } from "swiper/element";
 	import openTitle from "@mangadex/utils/links/title/[id]";
@@ -55,10 +55,9 @@
 {#if mangas.length > 0}
 	<div class="result">
 		<swiper-container bind:this={swiper_container} init="false">
-			{#each mangas as { id, coverImage, coverImageAlt, title, description } (id)}
+			{#each mangas as { id, coverImageAlt, title, description } (id)}
 				<swiper-slide>
-					<MangaElementBase5WithReadableCoverImage
-						{coverImage}
+					<MangaElementBase5
 						{coverImageAlt}
 						{title}
 						{description}

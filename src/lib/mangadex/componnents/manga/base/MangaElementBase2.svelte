@@ -6,6 +6,8 @@
 	import Layout from "./base2/Layout.svelte";
 	import mangaElementContextMenu from "@mangadex/utils/context-menu/manga";
 	import { setContextMenuContext } from "@special-eureka/core/utils/contextMenuContext";
+	import { get_cover_image_auto_handle_error } from "@mangadex/utils/cover-art/get_cover_art.svelte";
+	import Skeleton from "@mangadex/componnents/theme/loader/Skeleton.svelte";
 
 	interface Events {
 		onclick?: (
@@ -22,7 +24,6 @@
 	}
 
 	interface Props extends Events {
-		coverImage: string;
 		coverImageAlt: string;
 		title: string;
 		status: MangaStatus;
@@ -35,7 +36,6 @@
 	}
 
 	let {
-		coverImage,
 		coverImageAlt,
 		title,
 		status,
@@ -58,9 +58,19 @@
 			}))
 		})
 	);
+
+	let coverImage = get_cover_image_auto_handle_error(() => ({
+		id: mangaId,
+		asManga: true,
+		quality: "256"
+	}));
 </script>
 
 <Layout {onclick} --max-height="11em" {mangaId}>
-	<Image {coverImage} {coverImageAlt} {blur} />
+	{#if coverImage.value}
+		<Image coverImage={coverImage.value} {coverImageAlt} {blur} />
+	{:else}
+		<Skeleton width={"var(--element-w)"} height={"var(--element-h)"} />
+	{/if}
 	<Content {ontagClick} {title} {status} {description} {tags} {contentRating} {language} />
 </Layout>

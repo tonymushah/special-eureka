@@ -2,6 +2,21 @@
 	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
 	"extends": ["config:recommended"],
 	"ignoreDeps": ["window-vibrancy"],
-	"baseBranches": ["main"],
-	"commitMessagePrefix": "chore(deps)"
+	"baseBranchPatterns": ["main"],
+	"commitMessagePrefix": "chore(deps)",
+	"labels": ["dependencies"],
+	"packageRules": [
+		{
+			"matchManagers": ["npm", "nvm"],
+			"addLabels": ["javascript"]
+		},
+		{
+			"matchManagers": ["cargo"],
+			"addLabels": ["rust"]
+		},
+		{
+			"matchManagers": ["github-actions"],
+			"addLabels": ["chore"]
+		}
+	]
 }

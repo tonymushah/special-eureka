@@ -44,15 +44,16 @@
 			filter 200ms ease-in-out;
 		background-color: var(--accent-l3);
 		border: var(--mid-tone) solid 3px;
-		box-shadow: 0px 3px 0px var(--mid-tone);
 	}
 	article.layout:hover {
 		background-color: var(--accent-l3-hover);
+		box-shadow: 0px 3px 0px var(--mid-tone);
+		transform: translateY(-3px);
 	}
 	article.layout:active {
 		background-color: var(--accent-l3-active);
 		box-shadow: none;
-		transform: translateY(3px);
+		transform: translateY(0px);
 	}
 	.manga-element:global([data-selecto-selected]) {
 		background-color: color-mix(in srgb, var(--primary) 50%, transparent 50%);

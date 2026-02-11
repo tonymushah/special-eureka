@@ -1,6 +1,5 @@
 <script lang="ts" module>
 	export type MangaCoversItem = {
-		coverImage: Readable<string | undefined>;
 		title: string;
 		alt: string;
 		id: string;
@@ -10,7 +9,6 @@
 
 <script lang="ts">
 	import CoverImage from "./CoverImage.svelte";
-	import type { Readable } from "svelte/store";
 	import { Variant } from "./MangaPageCovers.utils";
 	import ChapterFeedSelecto from "@mangadex/componnents/selecto/ChapterFeedSelecto.svelte";
 
@@ -30,8 +28,8 @@
 <ChapterFeedSelecto bind:container />
 
 <div class:flex class:grid bind:this={container}>
-	{#each items as { coverImage, title, alt, id } (id)}
-		<CoverImage {coverImage} {title} {alt} {fixedWidth} coverId={id} />
+	{#each items as { title, alt, id } (id)}
+		<CoverImage {title} {alt} {fixedWidth} coverId={id} />
 	{/each}
 </div>
 

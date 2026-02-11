@@ -28,8 +28,10 @@
 		excludeContentProfile,
 		hideReadTitle = $bindable(false)
 	}: Props = $props();
+	// svelte-ignore state_referenced_locally
 	const params = writable(get(initialParam), (set) => initialParam.subscribe(set));
 	const p_p_offline = derived(
+		// svelte-ignore state_referenced_locally
 		[params, offlineStore, toStore(() => hideReadTitle)],
 		(merged) => merged
 	);

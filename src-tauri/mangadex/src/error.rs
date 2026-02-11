@@ -81,10 +81,6 @@ pub enum Error {
     TokioJoinError(#[from] tokio::task::JoinError),
     #[error(transparent)]
     TryFromCoverImageQuality(#[from] crate::cache::cover::TryFromCoverImageQualityError),
-    #[error(transparent)]
-    TryFromHandleCoversParamsToCache(
-        #[from] crate::scheme::covers::TryFromHandleCoversParamsToCache,
-    ),
     #[error("Got an error while joining a thread")]
     StdThreadJoinError,
     #[error("No default theme selected")]

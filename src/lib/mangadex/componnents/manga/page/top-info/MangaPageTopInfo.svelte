@@ -8,7 +8,6 @@
 	import type { ReadingStatusEventDetail } from "./buttons/readingStatus";
 	import {
 		setTopCoverAltContextStore,
-		setTopCoverContextStore,
 		setTopMangaDownloadContextStore,
 		setTopMangaIdContextStore,
 		setTopMangaIsFollowingContextStore,
@@ -51,7 +50,6 @@
 		id: string;
 		title: string;
 		altTitle?: string | undefined;
-		coverImage: Readable<string | undefined>;
 		coverImageAlt: string;
 		authors: Author[];
 		tags: Tag[];
@@ -76,7 +74,6 @@
 		id = $bindable(),
 		title,
 		altTitle = undefined,
-		coverImage,
 		coverImageAlt,
 		authors,
 		tags = $bindable(),
@@ -111,8 +108,6 @@
 	setTopMangaIdContextStore(id);
 	// svelte-ignore state_referenced_locally
 	setTopMangaTitleContextStore(title);
-	// svelte-ignore state_referenced_locally
-	setTopCoverContextStore(coverImage);
 	// svelte-ignore state_referenced_locally
 	setTopMangaReadingStatusContextStore(reading_status);
 	// svelte-ignore state_referenced_locally

@@ -163,7 +163,6 @@
 				<ChapterFeedElement2
 					title={item.title}
 					chapters={item.chapters}
-					coverImage={item.coverImage}
 					coverImageAlt={item.coverImageAlt}
 					mangaLang={item.mangaLang}
 					mangaId={item.mangaId}

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { type ComponentProps } from "svelte";
-	import MangaElementBase1 from "../../base/base1/MangaElementBase1WithReadableCoverImage.svelte";
+	import MangaElementBase1 from "../../base/MangaElementBase1.svelte";
 
 	interface Events {
 		ontitles?: (

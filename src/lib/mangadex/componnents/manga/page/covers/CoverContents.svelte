@@ -13,27 +13,19 @@
 	import MangaPageCovers from "./MangaPageCovers.svelte";
 	import type { MangaCoversItem } from "./MangaPageCovers.svelte";
 
-	import { getCoversImageStoreContext } from "./utils/coverImageStoreContext";
-
 	interface Props {
 		covers: CoverInput[];
 	}
 
 	let { covers }: Props = $props();
-	const images = getCoversImageStoreContext();
 	let data: MangaCoversItem[] = $derived.by(() => {
-		const store = $images;
 		const res: MangaCoversItem[] = [];
 		covers.forEach((cover) => {
-			const image = store.get(cover.id);
-
-			if (image)
-				res.push({
-					title: cover.title,
-					alt: cover.alt,
-					coverImage: image,
-					id: cover.id
-				});
+			res.push({
+				title: cover.title,
+				alt: cover.alt,
+				id: cover.id
+			});
 		});
 		return res;
 	});

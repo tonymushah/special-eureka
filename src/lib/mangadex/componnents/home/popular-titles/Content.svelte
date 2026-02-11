@@ -3,7 +3,7 @@
 	import { ArrowLeftIcon, ArrowRightIcon } from "@lucide/svelte";
 	import type { Readable } from "svelte/store";
 	import type { SwiperContainer } from "swiper/element";
-	import MangaPopularElement from "../../manga/popular/MangaPopulatElementWithReadableCoverImage.svelte";
+	import MangaPopularElement from "../../manga/popular/MangaPopularElement.svelte";
 	import ButtonAccent from "../../theme/buttons/ButtonAccent.svelte";
 	import openTitle from "@mangadex/utils/links/title/[id]";
 	import { goto } from "$app/navigation";
@@ -49,7 +49,7 @@
 		id: string;
 		title: string;
 		description: string;
-		coverImage: Readable<string | undefined>;
+		coverImage: string;
 		coverImageAlt: string;
 		contentRating: ContentRating | undefined;
 		tags: {

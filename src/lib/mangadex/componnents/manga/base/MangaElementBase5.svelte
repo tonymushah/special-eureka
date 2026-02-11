@@ -3,6 +3,8 @@
 	import Content from "./base5/Content.svelte";
 	import Layout from "./base5/Layout.svelte";
 	import { setContextMenuContext } from "@special-eureka/core/utils/contextMenuContext";
+	import { get_cover_image_auto_handle_error } from "@mangadex/utils/cover-art/get_cover_art.svelte";
+	import Skeleton from "@mangadex/componnents/theme/loader/Skeleton.svelte";
 
 	interface Events {
 		onreadClick?: (
@@ -18,7 +20,6 @@
 	}
 
 	interface Props extends Events {
-		coverImage: string;
 		coverImageAlt: string;
 		title: string;
 		description: string;
@@ -26,22 +27,24 @@
 		blur?: boolean;
 	}
 
-	let {
-		coverImage,
-		coverImageAlt,
-		title,
-		description,
-		mangaId,
-		onmoreInfoClick,
-		onreadClick,
-		blur
-	}: Props = $props();
+	let { coverImageAlt, title, description, mangaId, onmoreInfoClick, onreadClick, blur }: Props =
+		$props();
 	let isHover = $state(false);
 	setContextMenuContext(() => mangaElementContextMenu({ id: mangaId, coverArtId: mangaId }));
+
+	let coverImage = get_cover_image_auto_handle_error(() => ({
+		id: mangaId,
+		asManga: true,
+		quality: "256"
+	}));
 </script>
 
 <Layout bind:isHover {mangaId}>
-	<img src={coverImage} alt={coverImageAlt} class:blur />
+	{#if coverImage.value}
+		<img src={coverImage.value} alt={coverImageAlt} class:blur />
+	{:else}
+		<Skeleton width="var(--width)" height="var(--height)" />
+	{/if}
 	<Content {title} {description} {isHover} {onmoreInfoClick} {onreadClick} />
 </Layout>
 

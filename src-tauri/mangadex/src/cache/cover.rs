@@ -3,14 +3,18 @@ use std::{
     error::Error,
     fmt::Display,
     fs::{File, create_dir_all, remove_dir_all},
-    io::{BufReader, BufWriter, Read, Write},
+    io::{BufReader, BufWriter, Read, Seek, Write},
     path::PathBuf,
 };
 
-use crate::{Result, query::cover::image::CoverImageQuery};
+use crate::Result;
 use async_graphql::Enum;
-use mangadex_api::CDN_URL;
+use itertools::Itertools;
+use mangadex_api::{CDN_URL, MangaDexClient};
+use mangadex_api_schema_rust::{ApiObjectNoRelationships, v5::CoverAttributes};
+use mangadex_api_types_rust::ReferenceExpansionResource;
 use reqwest::{Client, header::CACHE_CONTROL};
+use serde::{Deserialize, Serialize};
 use url::Url;
 use uuid::Uuid;
 
@@ -44,15 +48,96 @@ impl Display for TryFromCoverImageQualityError {
     }
 }
 
+macro_rules! impl_quality_try_convert {
+	($($t:ty,)*) => {
+        $(
+	       	impl TryFrom<$t> for CoverImageQuality {
+	            type Error = TryFromCoverImageQualityError;
+	            fn try_from(value: $t) -> std::result::Result<Self, Self::Error> {
+	                match value {
+	                    512 => Ok(CoverImageQuality::V512),
+	                    256 => Ok(CoverImageQuality::V256),
+	                    _ => Err(TryFromCoverImageQualityError(())),
+	                }
+	            }
+	        }
+        )*
+    };
+}
+
+impl_quality_try_convert!(u16, u32, u64, usize,);
+impl_quality_try_convert!(i16, i32, i64, isize,);
+
 impl Error for TryFromCoverImageQualityError {}
 
-impl TryFrom<u16> for CoverImageQuality {
-    type Error = TryFromCoverImageQualityError;
-    fn try_from(value: u16) -> std::result::Result<Self, Self::Error> {
-        match value {
-            512 => Ok(CoverImageQuality::V512),
-            256 => Ok(CoverImageQuality::V256),
-            _ => Err(TryFromCoverImageQualityError(())),
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Eq, PartialOrd, Ord)]
+struct CoverImageCacheEntry {
+    cover_id: Uuid,
+    manga_id: Uuid,
+    filename: String,
+    primary_cover: bool,
+}
+
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
+impl CoverImageCacheEntry {
+    const CACHE_FILENAME: &str = "cover_image_entries.csv";
+    fn get_cover_image_cache_file() -> std::io::Result<File> {
+        let path = CoverImageCache::get_cover_temp_dir().join(Self::CACHE_FILENAME);
+        if !std::fs::exists(&path)? {
+            std::fs::OpenOptions::new()
+                .read(true)
+                .create(true)
+                .truncate(true)
+                .write(true)
+                .open(path)
+        } else {
+            std::fs::OpenOptions::new()
+                .read(true)
+                .write(true)
+                .open(path)
+        }
+    }
+    fn append_entry(&self) -> csv::Result<()> {
+        let mut file = Self::get_cover_image_cache_file()?;
+        let mut all_entry = csv::Reader::from_reader(&mut file)
+            .deserialize::<Self>()
+            .flatten()
+            .collect_vec();
+        file.rewind()?;
+        if !all_entry.iter().any(|entry| entry == self) {
+            all_entry.push(self.clone());
+            let mut writer = csv::Writer::from_writer(&mut file);
+            for e in all_entry {
+                writer.serialize(e)?;
+            }
+            writer.flush()?;
+        }
+        Ok(())
+    }
+    fn get_csv_reader() -> csv::Result<csv::Reader<File>> {
+        Ok(csv::Reader::from_reader(Self::get_cover_image_cache_file()?))
+    }
+    fn get_entry_by_cover_id(cover_id: Uuid) -> csv::Result<Option<Self>> {
+        Ok(Self::get_csv_reader()?
+            .deserialize::<Self>()
+            .flatten()
+            .find(|entry| entry.cover_id == cover_id))
+    }
+    fn get_entry_by_manga_id(manga_id: Uuid) -> csv::Result<Option<Self>> {
+        Ok(Self::get_csv_reader()?
+            .deserialize::<Self>()
+            .flatten()
+            .find(|entry| entry.manga_id == manga_id && entry.primary_cover))
+    }
+}
+
+impl From<CoverImageCacheEntry> for CoverImageCache {
+    fn from(value: CoverImageCacheEntry) -> Self {
+        Self {
+            manga_id: value.manga_id,
+            cover_id: value.cover_id,
+            filename: value.filename,
+            mode: None,
         }
     }
 }
@@ -129,21 +214,95 @@ impl CoverImageCache {
             Err(crate::Error::CoverFetch)
         }
     }
-}
-
-impl From<CoverImageQuery> for CoverImageCache {
-    fn from(value: CoverImageQuery) -> Self {
-        let CoverImageQuery {
-            manga_id,
-            cover_id,
-            filename,
-            mode,
-        } = value;
-        Self {
-            manga_id,
-            cover_id,
-            filename,
-            mode,
-        }
+    pub async fn get_cover_image_by_cover_id(
+        cover_id: Uuid,
+        quality: Option<CoverImageQuality>,
+        client: &MangaDexClient,
+    ) -> crate::Result<Vec<u8>> {
+        let cache: Self =
+            if let Some(entry) = CoverImageCacheEntry::get_entry_by_cover_id(cover_id)? {
+                let mut c: Self = entry.into();
+                c.mode = quality;
+                c
+            } else {
+                let cover_obj = client.cover().cover_id(cover_id).get().send().await?.data;
+                let manga_id = cover_obj
+                    .find_first_relationships(mangadex_api_types_rust::RelationshipType::Manga)
+                    .map(|rel| rel.id)
+                    .ok_or(crate::Error::RelatedMangaNotFound)?;
+                let filename = cover_obj.attributes.file_name;
+                CoverImageCacheEntry {
+                    cover_id,
+                    manga_id,
+                    primary_cover: false,
+                    filename: filename.clone(),
+                }
+                .append_entry()?;
+                Self {
+                    manga_id,
+                    cover_id,
+                    filename,
+                    mode: quality,
+                }
+            };
+        let buf = if cache.is_in_cache() {
+            cache.get_from_cache()?
+        } else {
+            cache
+                .get_online(&client.get_http_client().read().await.client)
+                .await?
+        };
+        Ok(buf)
+    }
+    /// This function will automatically handle if it is
+    pub async fn get_cover_image_by_manga_id(
+        manga_id: Uuid,
+        quality: Option<CoverImageQuality>,
+        client: &MangaDexClient,
+    ) -> crate::Result<Vec<u8>> {
+        let cache: Self = if let Some(entry) =
+            CoverImageCacheEntry::get_entry_by_manga_id(manga_id)?
+        {
+            let mut c: Self = entry.into();
+            c.mode = quality;
+            c
+        } else {
+            let manga_obj = client
+                .manga()
+                .id(manga_id)
+                .get()
+                .include(ReferenceExpansionResource::CoverArt)
+                .send()
+                .await?
+                .data;
+            let cover_obj = manga_obj
+                .find_first_relationships(mangadex_api_types_rust::RelationshipType::CoverArt)
+                .and_then(|rel| {
+                    TryInto::<ApiObjectNoRelationships<CoverAttributes>>::try_into(rel.clone()).ok()
+                })
+                .ok_or(crate::Error::RelatedMangaNotFound)?;
+            let filename = cover_obj.attributes.file_name;
+            CoverImageCacheEntry {
+                cover_id: cover_obj.id,
+                manga_id,
+                primary_cover: true,
+                filename: filename.clone(),
+            }
+            .append_entry()?;
+            Self {
+                manga_id,
+                cover_id: cover_obj.id,
+                filename,
+                mode: quality,
+            }
+        };
+        let buf = if cache.is_in_cache() {
+            cache.get_from_cache()?
+        } else {
+            cache
+                .get_online(&client.get_http_client().read().await.client)
+                .await?
+        };
+        Ok(buf)
     }
 }

@@ -1,7 +1,5 @@
 <script lang="ts">
 	import defaultContentProfile from "@mangadex/content-profile/graphql/defaultProfile";
-	import { CoverImageQuality } from "@mangadex/gql/graphql";
-	import get_cover_art from "@mangadex/utils/cover-art/get_cover_art";
 	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
 	import { createQuery } from "@tanstack/svelte-query";
 	import { getContextClient } from "@urql/svelte";
@@ -31,20 +29,11 @@
 		return staff_picks.data?.home.staffPicks.relationships.titles.map<StaffPicksTitle>((t) => {
 			const manga_id: string = t.id;
 			const cover_id: string = t.relationships.coverArt.id;
-			const filename: string = t.relationships.coverArt.attributes.fileName;
-			const coverImage = get_cover_art({
-				client,
-				cover_id,
-				filename,
-				manga_id,
-				mode: CoverImageQuality.V256
-			});
 			const title = get_value_from_title_and_random_if_undefined(t.attributes.title, "en") ?? "";
 			const description =
 				get_value_from_title_and_random_if_undefined(t.attributes.description, "en") ?? "";
 			return {
 				id: manga_id,
-				coverImage,
 				coverImageAlt: cover_id,
 				title,
 				description

@@ -4,9 +4,8 @@
 	import { route } from "$lib/ROUTES";
 	import ErrorComponent from "@mangadex/componnents/ErrorComponent.svelte";
 	import Fetching from "@mangadex/componnents/search/content/Fetching.svelte";
-	import { CoverImageQuality, type MangaRelation } from "@mangadex/gql/graphql";
+	import { type MangaRelation } from "@mangadex/gql/graphql";
 	import { getTitleLayoutData } from "@mangadex/routes/title/[id]/layout.context";
-	import get_cover_art from "@mangadex/utils/cover-art/get_cover_art";
 	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
 	import { createQuery } from "@tanstack/svelte-query";
 	import { getContextClient } from "@urql/svelte";
@@ -38,19 +37,11 @@
 			}
 			const ts = res.data?.manga.list.data.map<RelatedTitle>((t) => ({
 				id: t.id,
-				coverArt: get_cover_art({
-					client,
-					cover_id: t.relationships.coverArt.id,
-					filename: t.relationships.coverArt.attributes.fileName,
-					manga_id: t.id,
-					mode: CoverImageQuality.V256
-				}),
 				coverArtAlt: t.relationships.coverArt.id,
 				title: get_value_from_title_and_random_if_undefined(t.attributes.title, "en") ?? "",
 				status: t.attributes.status,
 				description:
-					get_value_from_title_and_random_if_undefined(t.attributes.description, "en") ??
-					""
+					get_value_from_title_and_random_if_undefined(t.attributes.description, "en") ?? ""
 			}));
 			if (ts) store.addTitles(ts);
 			return ts;
@@ -84,17 +75,14 @@
 			if (title.length > 0) {
 				res.push({
 					title: loadash.camelCase(k),
-					titles: title.map(
-						({ id, coverArt, coverArtAlt, title, description, status }) => ({
-							id,
-							coverImage: coverArt,
-							coverImageAlt: coverArtAlt,
-							title,
-							description,
-							status,
-							mangaId: id
-						})
-					)
+					titles: title.map(({ id, coverArtAlt, title, description, status }) => ({
+						id,
+						coverImageAlt: coverArtAlt,
+						title,
+						description,
+						status,
+						mangaId: id
+					}))
 				});
 			}
 		});

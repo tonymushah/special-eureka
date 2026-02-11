@@ -11,7 +11,7 @@
 	import { route } from "$lib/ROUTES";
 	import { isArray } from "lodash";
 	import { flip } from "svelte/animate";
-	import MangaElementBase3 from "../../base/base3/MangaElementBase3WithReadableCoverImage.svelte";
+	import MangaElementBase3 from "../../base/MangaElementBase3.svelte";
 	import { crossfade, fade } from "svelte/transition";
 
 	interface Props {

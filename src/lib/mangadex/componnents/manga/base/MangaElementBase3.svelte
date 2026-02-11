@@ -4,6 +4,8 @@
 	import Image from "./base3/Image.svelte";
 	import mangaElementContextMenu from "@mangadex/utils/context-menu/manga";
 	import { setContextMenuContext } from "@special-eureka/core/utils/contextMenuContext";
+	import { get_cover_image_auto_handle_error } from "@mangadex/utils/cover-art/get_cover_art.svelte";
+	import Skeleton from "@mangadex/componnents/theme/loader/Skeleton.svelte";
 	interface Events {
 		onclick?: (
 			ev: MouseEvent & {
@@ -12,14 +14,18 @@
 		) => any;
 	}
 	interface Props extends Events {
-		coverImage: string;
 		coverImageAlt: string;
 		title: string;
 		mangaId: string;
 		blur?: boolean;
 	}
 
-	let { coverImage, coverImageAlt, title, mangaId, onclick, blur }: Props = $props();
+	let { coverImageAlt, title, mangaId, onclick, blur }: Props = $props();
+	let coverImage = get_cover_image_auto_handle_error(() => ({
+		id: mangaId,
+		asManga: true,
+		quality: "256"
+	}));
 	setContextMenuContext(() =>
 		mangaElementContextMenu({
 			id: mangaId,
@@ -29,6 +35,10 @@
 </script>
 
 <Layout --element-w="10em" {onclick} --element-h="15em" {mangaId}>
-	<Image {coverImage} {coverImageAlt} {blur} />
+	{#if coverImage.value}
+		<Image coverImage={coverImage.value} {coverImageAlt} {blur} />
+	{:else}
+		<Skeleton width={"var(--element-w)"} height={"var(--element-h)"} />
+	{/if}
 	<Content {title} />
 </Layout>

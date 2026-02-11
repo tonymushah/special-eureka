@@ -843,11 +843,6 @@ export type CoverEditParam = {
 	volume: Scalars["String"]["input"];
 };
 
-export enum CoverImageQuality {
-	V256 = "V256",
-	V512 = "V512"
-}
-
 export type CoverListParam = {
 	coverIds?: Array<Scalars["UUID"]["input"]>;
 	limit?: InputMaybe<Scalars["Int"]["input"]>;
@@ -901,20 +896,12 @@ export type CoverMutationsUploadArgs = {
 export type CoverQueries = {
 	__typename?: "CoverQueries";
 	get: Cover;
-	getImage: Scalars["Url"]["output"];
 	isDownloaded: DownloadState;
 	list: CoverResults;
 };
 
 export type CoverQueriesGetArgs = {
 	id: Scalars["UUID"]["input"];
-};
-
-export type CoverQueriesGetImageArgs = {
-	coverId: Scalars["UUID"]["input"];
-	filename: Scalars["String"]["input"];
-	mangaId: Scalars["UUID"]["input"];
-	mode?: InputMaybe<CoverImageQuality>;
 };
 
 export type CoverQueriesIsDownloadedArgs = {
@@ -8354,18 +8341,6 @@ export type UpdateThemeProfileMutation = {
 			danger: { __typename?: "DangerColor"; default: string; l1: string; l2: string };
 		};
 	};
-};
-
-export type CoverImageQueryVariables = Exact<{
-	cover_id: Scalars["UUID"]["input"];
-	manga_id: Scalars["UUID"]["input"];
-	filename: Scalars["String"]["input"];
-	mode?: InputMaybe<CoverImageQuality>;
-}>;
-
-export type CoverImageQuery = {
-	__typename?: "Query";
-	cover: { __typename?: "CoverQueries"; getImage: any };
 };
 
 export type FaviconQueryVariables = Exact<{
@@ -31384,99 +31359,6 @@ export const UpdateThemeProfileDocument = {
 		}
 	]
 } as unknown as DocumentNode<UpdateThemeProfileMutation, UpdateThemeProfileMutationVariables>;
-export const CoverImageDocument = {
-	kind: "Document",
-	definitions: [
-		{
-			kind: "OperationDefinition",
-			operation: "query",
-			name: { kind: "Name", value: "coverImage" },
-			variableDefinitions: [
-				{
-					kind: "VariableDefinition",
-					variable: { kind: "Variable", name: { kind: "Name", value: "cover_id" } },
-					type: {
-						kind: "NonNullType",
-						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
-					}
-				},
-				{
-					kind: "VariableDefinition",
-					variable: { kind: "Variable", name: { kind: "Name", value: "manga_id" } },
-					type: {
-						kind: "NonNullType",
-						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
-					}
-				},
-				{
-					kind: "VariableDefinition",
-					variable: { kind: "Variable", name: { kind: "Name", value: "filename" } },
-					type: {
-						kind: "NonNullType",
-						type: { kind: "NamedType", name: { kind: "Name", value: "String" } }
-					}
-				},
-				{
-					kind: "VariableDefinition",
-					variable: { kind: "Variable", name: { kind: "Name", value: "mode" } },
-					type: { kind: "NamedType", name: { kind: "Name", value: "CoverImageQuality" } }
-				}
-			],
-			selectionSet: {
-				kind: "SelectionSet",
-				selections: [
-					{
-						kind: "Field",
-						name: { kind: "Name", value: "cover" },
-						selectionSet: {
-							kind: "SelectionSet",
-							selections: [
-								{
-									kind: "Field",
-									name: { kind: "Name", value: "getImage" },
-									arguments: [
-										{
-											kind: "Argument",
-											name: { kind: "Name", value: "coverId" },
-											value: {
-												kind: "Variable",
-												name: { kind: "Name", value: "cover_id" }
-											}
-										},
-										{
-											kind: "Argument",
-											name: { kind: "Name", value: "mangaId" },
-											value: {
-												kind: "Variable",
-												name: { kind: "Name", value: "manga_id" }
-											}
-										},
-										{
-											kind: "Argument",
-											name: { kind: "Name", value: "filename" },
-											value: {
-												kind: "Variable",
-												name: { kind: "Name", value: "filename" }
-											}
-										},
-										{
-											kind: "Argument",
-											name: { kind: "Name", value: "mode" },
-											value: {
-												kind: "Variable",
-												name: { kind: "Name", value: "mode" }
-											}
-										}
-									]
-								}
-							]
-						}
-					}
-				]
-			}
-		}
-	]
-} as unknown as DocumentNode<CoverImageQuery, CoverImageQueryVariables>;
 export const FaviconDocument = {
 	kind: "Document",
 	definitions: [
