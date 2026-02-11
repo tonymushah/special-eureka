@@ -165,5 +165,7 @@ pub fn handle_covers<'a, R: Runtime>(
     req: &'a Request<Vec<u8>>,
 ) -> SchemeResponseResult<tauri::http::Response<Vec<u8>>> {
     let param: HandleCoversParams = req.try_into()?;
-    CoverImagesOfflineHandler::new(&param, app).handle()
+    CoverImagesOfflineHandler::new(&param, app)
+        .handle()
+        .inspect_err(|err| log::error!("handling cover error {:?}", err))
 }
