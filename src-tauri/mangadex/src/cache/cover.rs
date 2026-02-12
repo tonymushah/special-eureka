@@ -3,12 +3,13 @@ use std::{
     error::Error,
     fmt::Display,
     fs::{File, create_dir_all, remove_dir_all},
-    io::{BufReader, BufWriter, Read, Seek, Write},
+    io::{BufReader, BufWriter, Cursor, Read, Seek, Write},
     path::PathBuf,
 };
 
 use crate::Result;
 use async_graphql::Enum;
+use image::DynamicImage;
 use itertools::Itertools;
 use mangadex_api::{CDN_URL, MangaDexClient};
 use mangadex_api_schema_rust::{ApiObjectNoRelationships, v5::CoverAttributes};
@@ -188,6 +189,27 @@ impl CoverImageCache {
     }
     pub fn is_in_cache(&self) -> bool {
         self.get_cover_temp_image_path().exists()
+    }
+    pub fn seed_from_dynamic_image(&self, mut img: DynamicImage) -> Result<Vec<u8>> {
+        if let Some(quality) = self.mode {
+            let new_width: u32 = match quality {
+                CoverImageQuality::V256 => 256,
+                CoverImageQuality::V512 => 512,
+            };
+            img = img.resize(
+                new_width,
+                (img.height() * new_width) / img.width(),
+                image::imageops::FilterType::Nearest,
+            );
+        }
+        let mut buf = Cursor::new(Vec::<u8>::new());
+        img.write_to(&mut buf, image::ImageFormat::Jpeg)?;
+        buf.rewind()?;
+        buf.get_mut().shrink_to_fit();
+        let mut writer = self.get_temp_buf_writer()?;
+        std::io::copy(&mut buf, &mut writer)?;
+        writer.flush()?;
+        Ok(buf.into_inner())
     }
     pub fn seed(&self, bytes: &[u8]) -> Result<()> {
         let mut writer = self.get_temp_buf_writer()?;

@@ -5,6 +5,7 @@ use std::{
 
 use actix::Addr;
 use eureka_mmanager::{DownloadManager, prelude::CoverDataPullAsyncTrait};
+use image::ImageFormat;
 use regex::Regex;
 use reqwest::header::{ACCESS_CONTROL_ALLOW_ORIGIN, CONTENT_LENGTH, CONTENT_TYPE};
 use tauri::{
@@ -126,7 +127,10 @@ impl<'a, R: Runtime> CoverImagesOfflineHandler<'a, R> {
 
     pub fn handle(&self) -> SchemeResponseResult<tauri::http::Response<Vec<u8>>> {
         let mut buf = Vec::<u8>::new();
-        if let Ok(cache) = self.get_from_cache().inspect_err(|err| log::error!("handling cover cache error {:?}", err)) {
+        if let Ok(cache) = self
+            .get_from_cache()
+            .inspect_err(|err| log::error!("handling cover cache error {:?}", err))
+        {
             buf = cache;
         } else {
             let inner__ = self.app.get_offline_app_state()?.deref().deref().clone();
@@ -137,14 +141,39 @@ impl<'a, R: Runtime> CoverImagesOfflineHandler<'a, R> {
                 .ok_or(SchemeResponseError::NotLoaded)?;
             {
                 let id = self.param.id;
-                io::copy(
-                    &mut BufReader::new(crate::utils::block_on(async move {
-                        let id = id.get_as_offline_cover_id(&inner_state).await?;
-                        let file = inner_state.get_cover_image(id).await?;
-                        Ok::<_, crate::Error>(file)
-                    })?),
-                    &mut buf,
-                )?;
+                let (raw_file, cover_id, manga_id, filename) =
+                    crate::utils::block_on(async move {
+                        let cover_id = id.get_as_offline_cover_id(&inner_state).await?;
+                        let file = inner_state.get_cover_image(cover_id).await?;
+                        let cover_obj = inner_state.get_cover(cover_id).await?;
+                        let manga_id = cover_obj
+                            .find_first_relationships(
+                                mangadex_api_types_rust::RelationshipType::Manga,
+                            )
+                            .map(|manga| manga.id)
+                            .ok_or(crate::Error::RelatedMangaNotFound)?;
+                        let filename = cover_obj.attributes.file_name;
+                        Ok::<_, crate::Error>((file, cover_id, manga_id, filename))
+                    })?;
+                let quality: Option<CoverImageQuality> = self
+                    .param
+                    .quality
+                    .and_then(|d| TryInto::<_>::try_into(d).ok());
+                if let Some(quality) = quality {
+                    let img_format = ImageFormat::from_path(&filename)?;
+                    buf = CoverImageCache {
+                        cover_id,
+                        manga_id,
+                        filename,
+                        mode: Some(quality),
+                    }
+                    .seed_from_dynamic_image(
+                        image::ImageReader::with_format(BufReader::new(raw_file), img_format)
+                            .decode()?,
+                    )?;
+                } else {
+                    io::copy(&mut BufReader::new(raw_file), &mut buf)?;
+                }
             }
         }
         buf.flush()?;
