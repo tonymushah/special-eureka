@@ -2,15 +2,6 @@
 	BUG: i dunno if it is because of the logic sometime the drag select doesn't works
 -->
 <script lang="ts" module>
-	const canSelect = writable(false);
-
-	export const canSelect_ = readonly(canSelect);
-	const selectables = [
-		".manga-element",
-		".chapter-element",
-		".users-simple-selectable",
-		".cover-art-element"
-	];
 </script>
 
 <script lang="ts">
@@ -53,6 +44,14 @@
 	let selected_covers = $derived(uniq(selectedCovers));
 	let selected_scans_groups = $derived(uniq(selectedScansGroups));
 	let selected_users = $derived(uniq(selectedUsers));
+	let canSelect = $state(false);
+
+	const selectables = [
+		".manga-element",
+		".chapter-element",
+		".users-simple-selectable",
+		".cover-art-element"
+	];
 
 	const selectionAreaClass = cssMod.selectoArea;
 	function pushSelected(element: Element) {
@@ -87,11 +86,15 @@
 		}
 	}
 	function cleatSelecteds() {
-		selectedChapters = [];
 		selectedMangas = [];
+		selectedChapters = [];
+		selectedCustomLists = [];
+		selectedCovers = [];
+		selectedScansGroups = [];
+		selectedUsers = [];
 	}
 	$effect(() => {
-		if (container && $canSelect) {
+		if (container && canSelect) {
 			cleatSelecteds();
 			container.style.userSelect = "none";
 			(() => {
@@ -161,7 +164,7 @@
 	onMount(async () => {
 		const unlisten = await currentWindow.onFocusChanged(({ payload: isFocused }) => {
 			if (isFocused == false) {
-				$canSelect = false;
+				canSelect = false;
 			}
 		});
 		unlistens.push(unlisten);
@@ -175,8 +178,8 @@
 	onkeydown={(e) => {
 		if (e.key == "Control") {
 			e.preventDefault();
-			$canSelect = true;
-		} else if (e.key == "a" && $canSelect && container) {
+			canSelect = true;
+		} else if (e.key == "a" && canSelect && container) {
 			e.preventDefault();
 			selectables
 				.map((d) => container.querySelectorAll(d))
@@ -199,10 +202,10 @@
 	}}
 	onkeyup={(e) => {
 		if (e.key == "Control") {
-			$canSelect = false;
+			canSelect = false;
 		}
 	}}
 	onfocusout={() => {
-		$canSelect = false;
+		canSelect = false;
 	}}
 />
