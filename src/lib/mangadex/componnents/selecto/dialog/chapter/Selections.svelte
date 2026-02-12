@@ -27,7 +27,7 @@
 	const client = getContextClient();
 	let selectedChapter = createQuery(() => {
 		return {
-			queryKey: ["get", "chapter", "data", "selecto"],
+			queryKey: ["get", "chapter", "data", "selecto", ...chapters],
 			async queryFn(): Promise<SelectedData[]> {
 				const res = await client
 					.query(query, {
@@ -59,10 +59,11 @@
 				} else {
 					throw new Error("No Data?");
 				}
-			}
+			},
+			enabled: chapters.length > 0
 		} satisfies CreateQueryOptions<SelectedData[]>;
 	});
-	let hasData = $derived(selectedChapter.data?.length != 0);
+	let hasData = $derived(selectedChapter.isSuccess);
 </script>
 
 <p>Click on the badge to remove it from the selection</p>
