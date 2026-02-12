@@ -64,14 +64,14 @@
 			}
 		] as MangaDexTabTrigger[];
 	});
-	// onMount(() => {
-	// 	console.debug("Opening");
-	// 	preventScroll();
-	// });
-	// onDestroy(() => {
-	// 	makeScroll();
-	// 	console.debug("Closing");
-	// });
+	onMount(() => {
+		console.debug("Opening");
+		preventScroll();
+	});
+	onDestroy(() => {
+		makeScroll();
+		console.debug("Closing");
+	});
 </script>
 
 <MangaDexTabs {triggers} content lazyMount unmountOnExit>
