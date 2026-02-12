@@ -1,4 +1,5 @@
 <script lang="ts" module>
+	import coverCssModule from "./covers.module.scss";
 	export type MangaCoversItem = {
 		title: string;
 		alt: string;
@@ -27,7 +28,7 @@
 
 <ChapterFeedSelecto bind:container />
 
-<div class:flex class:grid bind:this={container}>
+<div class:flex class:grid bind:this={container} class={[coverCssModule.grid]}>
 	{#each items as { title, alt, id } (id)}
 		<CoverImage {title} {alt} {fixedWidth} coverId={id} />
 	{/each}
@@ -45,7 +46,6 @@
 	}
 	div.grid {
 		display: grid;
-		grid-template-columns: 1fr 1fr 1fr 1fr;
 		gap: 10px;
 	}
 </style>

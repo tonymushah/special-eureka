@@ -2,6 +2,7 @@
 	import type { CoverInput } from "./CoverContents.svelte";
 	import { fade, slide } from "svelte/transition";
 	import CoverContents from "./CoverContents.svelte";
+	import coverCssModule from "./covers.module.scss";
 
 	interface Props {
 		isDataEmpty: boolean;
@@ -17,7 +18,7 @@
 		<h3>Loading...</h3>
 	</div>
 {:else if !isDataEmpty}
-	<article class="covers">
+	<article class={["covers", coverCssModule.grid]}>
 		<CoverContents covers={coversData} />
 	</article>
 	{#if isLoading}
@@ -36,7 +37,6 @@
 	.covers {
 		margin-top: 10px;
 		display: grid;
-		grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
 		width: 100%;
 		gap: 10px;
 		margin-bottom: 10px;
