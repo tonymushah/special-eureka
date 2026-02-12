@@ -43,6 +43,7 @@
 	let isSelecting = $derived(currentAction == "selections");
 	let isExportCSV = $derived(currentAction == "export-csv");
 	let isExportMAL = $derived(currentAction == "export-mal");
+	let titlesEmpty = $derived(titles_main.length == 0);
 </script>
 
 <SectionBase>
@@ -121,7 +122,7 @@
 		<ButtonAccentOnlyLabel
 			variant="3"
 			label="Export ids to txt"
-			disabled={exportIdsToTxt.isPending}
+			disabled={exportIdsToTxt.isPending || titlesEmpty}
 			onclick={() => {
 				exportIdsToTxt.mutateAsync(
 					{
