@@ -20,6 +20,7 @@
 	});
 	const open = writable(false);
 	export function openSelectoDialog(data: SelectoDialogData) {
+		console.log(data);
 		selected.set(data);
 		open.set(true);
 	}
@@ -44,13 +45,14 @@
 	import cssMod from "@mangadex/componnents/theme/dialog/dialog.module.scss";
 	import MangaDexVarThemeProvider from "../theme/MangaDexVarThemeProvider.svelte";
 	let showBody = $derived(
-		($selected?.titles?.length ?? 0) > 0 ||
-			($selected?.chapters?.length ?? 0) > 0 ||
+		($selected?.titles?.length ?? 0) != 0 ||
+			($selected?.chapters?.length ?? 0) != 0 ||
 			($selected?.covers?.length ?? 0) != 0 ||
 			($selected?.customLists?.length ?? 0) != 0 ||
 			($selected?.scanGroups?.length ?? 0) != 0 ||
 			($selected?.users?.length ?? 0) != 0
 	);
+	$inspect($isOpened);
 </script>
 
 <Dialog.Root
