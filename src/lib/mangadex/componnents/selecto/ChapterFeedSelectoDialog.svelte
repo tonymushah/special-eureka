@@ -55,6 +55,8 @@
 			$open = o;
 		}
 	}
+	unmountOnExit
+	lazyMount
 >
 	<Portal container={document.getElementById("mangadex-scroll-container") ?? undefined}>
 		<Dialog.Backdrop class={cssMod.overlay} />
