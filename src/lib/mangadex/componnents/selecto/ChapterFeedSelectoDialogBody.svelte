@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { onDestroy, onMount } from "svelte";
+	// import { onDestroy, onMount } from "svelte";
 	import MangaDexTabs, { type MangaDexTabTrigger } from "../theme/tabs/MangaDexTabs.svelte";
 	import Titles from "./dialog/Titles.svelte";
-	import { makeScroll, preventScroll } from "../layout/scrollElement";
+	// import { makeScroll, preventScroll } from "../layout/scrollElement";
 	import Chapter from "./dialog/Chapter.svelte";
 	import { TabContent } from "@ark-ui/svelte/tabs";
 	import cssMod from "./dialog-body.module.scss";
@@ -64,14 +64,14 @@
 			}
 		] as MangaDexTabTrigger[];
 	});
-	onMount(() => {
-		console.debug("Opening");
-		preventScroll();
-	});
-	onDestroy(() => {
-		makeScroll();
-		console.debug("Closing");
-	});
+	// onMount(() => {
+	// 	console.debug("Opening");
+	// 	preventScroll();
+	// });
+	// onDestroy(() => {
+	// 	makeScroll();
+	// 	console.debug("Closing");
+	// });
 </script>
 
 <MangaDexTabs {triggers} content lazyMount unmountOnExit>
