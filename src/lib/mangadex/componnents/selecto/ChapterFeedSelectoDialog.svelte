@@ -52,7 +52,7 @@
 			($selected?.scanGroups?.length ?? 0) != 0 ||
 			($selected?.users?.length ?? 0) != 0
 	);
-	$inspect($isOpened);
+	// $inspect($isOpened);
 </script>
 
 <Dialog.Root
