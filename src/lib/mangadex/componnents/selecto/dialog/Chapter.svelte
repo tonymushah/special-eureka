@@ -19,7 +19,8 @@
 	let multiChapterDownload = multiChapterDownloadLoader();
 	let removeMultipleChapterMutation = removeMultipleChapterMutationLoader();
 	let exportIdsToTxt = exportIdsToTxtLoader();
-	let { chapters = $bindable([]) }: Props = $props();
+	let { chapters: chapters_main = [] }: Props = $props();
+	let chapters = $derived(chapters_main);
 	let currentAction: "selection" = $state("selection");
 	let canDelete = false;
 	let readMarker = readMarkers();
