@@ -4,21 +4,29 @@ use std::{
     path::Path,
 };
 
-use async_graphql::{Context, Object};
+use async_graphql::{Context, Enum, InputObject, Object, OneofObject};
 use bytes::Buf;
 use eureka_mmanager::{
     download::cover::CoverDownloadMessage,
     prelude::{AsyncCancelable, DeleteDataAsyncTrait, GetCoverDownloadManager, TaskManagerAddr},
 };
+use image::DynamicImage;
+use mangadex_api::MangaDexClient;
 use mangadex_api_input_types::cover::{edit::CoverEditParam, upload::CoverUploadParam};
-use mangadex_api_schema_rust::{ApiObjectNoRelationships, v5::CoverAttributes};
+use mangadex_api_schema_rust::{
+    ApiObjectNoRelationships,
+    v5::{CoverAttributes, CoverObject},
+};
 use uuid::Uuid;
 
 use crate::{
     error::Error,
     error::wrapped::Result,
     query::download_state::DownloadStateQueries,
-    utils::{download::cover::cover_download, traits_utils::MangadexAsyncGraphQLContextExt},
+    utils::{
+        download::cover::cover_download, guards::PercentageValidator,
+        traits_utils::MangadexAsyncGraphQLContextExt,
+    },
 };
 use crate::{
     objects::cover::Cover,
@@ -138,4 +146,49 @@ impl CoverMutations {
             .map(String::from)
             .ok_or(crate::error::ErrorWrapper::from(crate::Error::PathToStr))
     }
+}
+
+#[derive(Debug, OneofObject)]
+pub enum CoverArtResizeOption {
+    #[graphql(validator(custom = "PercentageValidator::default().non_zero(true)"))]
+    Width(u32),
+    #[graphql(validator(custom = "PercentageValidator::default().non_zero(true)"))]
+    Height(u32),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Ord, Eq, Hash, Enum, Default)]
+pub enum CoverImageFormat {
+    #[default]
+    Jpeg,
+    Png,
+    Avif,
+    Webp,
+}
+
+impl From<CoverImageFormat> for image::ImageFormat {
+    fn from(value: CoverImageFormat) -> Self {
+        match value {
+            CoverImageFormat::Jpeg => Self::Jpeg,
+            CoverImageFormat::Png => Self::Png,
+            CoverImageFormat::Avif => Self::Avif,
+            CoverImageFormat::Webp => Self::WebP,
+        }
+    }
+}
+
+#[derive(Debug, InputObject)]
+pub struct CoverArtSaveOption {
+    resize_percentage: Option<CoverArtResizeOption>,
+    format: Option<CoverImageFormat>,
+}
+
+// - [ ] extract image from cache first
+// - [ ] if not fetch it and make the entry back in cache
+// - [ ] return buffer after
+fn get_cover_image_online(client: &MangaDexClient, cover_id: Uuid) -> crate::Result<DynamicImage> {
+    todo!()
+}
+
+fn get_cover_image_offline(client: &MangaDexClient, cover_id: Uuid) -> crate::Result<DynamicImage> {
+    todo!()
 }
