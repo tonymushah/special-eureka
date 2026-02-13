@@ -56,7 +56,7 @@ macro_rules! impl_percentage_validator {
 impl_percentage_validator!(u8, u16, u32, u64,);
 
 impl Guard for U32PercentageGuard {
-    async fn check(&self, ctx: &async_graphql::Context<'_>) -> async_graphql::Result<()> {
+    async fn check(&self, _ctx: &async_graphql::Context<'_>) -> async_graphql::Result<()> {
         if self.non_zero && self.value == 0 {
             Err("Cannot accept zero values".into())
         } else if self.value > 100 {
