@@ -166,6 +166,8 @@ pub enum Error {
     UploadFilesError(Vec<MangaDexError_>),
     #[error("the file `{}` in the `{}` session is not yet uploaded", .0, .1)]
     FileNotYetUploaded(String, Uuid),
+    #[error("The `crate::mutation::cover::save_images` with a single id returned nothing")]
+    SaveCoverReturnSinglePathEmpty,
 }
 
 impl Error {
