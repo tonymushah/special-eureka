@@ -240,7 +240,7 @@ impl CoverImageCache {
         cover_id: Uuid,
         quality: Option<CoverImageQuality>,
         client: &MangaDexClient,
-    ) -> crate::Result<Vec<u8>> {
+    ) -> crate::Result<(Vec<u8>, Self)> {
         let cache: Self =
             if let Some(entry) = CoverImageCacheEntry::get_entry_by_cover_id(cover_id)? {
                 let mut c: Self = entry.into();
@@ -274,14 +274,14 @@ impl CoverImageCache {
                 .get_online(&client.get_http_client().read().await.client)
                 .await?
         };
-        Ok(buf)
+        Ok((buf, cache))
     }
     /// This function will automatically handle if it is
     pub async fn get_cover_image_by_manga_id(
         manga_id: Uuid,
         quality: Option<CoverImageQuality>,
         client: &MangaDexClient,
-    ) -> crate::Result<Vec<u8>> {
+    ) -> crate::Result<(Vec<u8>, Self)> {
         let cache: Self = if let Some(entry) =
             CoverImageCacheEntry::get_entry_by_manga_id(manga_id)?
         {
@@ -325,6 +325,6 @@ impl CoverImageCache {
                 .get_online(&client.get_http_client().read().await.client)
                 .await?
         };
-        Ok(buf)
+        Ok((buf, cache))
     }
 }

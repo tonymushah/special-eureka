@@ -112,7 +112,7 @@ impl<'a, R: Runtime> CoverImagesOfflineHandler<'a, R> {
             .quality
             .and_then(|d| TryInto::<_>::try_into(d).ok());
         let app = self.app.clone();
-        crate::utils::block_on(async move {
+        Ok(crate::utils::block_on(async move {
             let client = app.get_mangadex_client()?;
             match id {
                 CoverHandlingId::Cover(cover_id) => {
@@ -122,7 +122,8 @@ impl<'a, R: Runtime> CoverImagesOfflineHandler<'a, R> {
                     CoverImageCache::get_cover_image_by_manga_id(manga_id, quality, &client).await
                 }
             }
-        })
+        })?
+        .0)
     }
 
     pub fn handle(&self) -> SchemeResponseResult<tauri::http::Response<Vec<u8>>> {
