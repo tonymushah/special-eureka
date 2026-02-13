@@ -149,6 +149,7 @@ impl CoverMutations {
             .next()
             .ok_or(crate::Error::SaveCoverReturnSinglePathEmpty)?)
     }
+    // TODO export images as compressed zip or tar.{whatever compression mode}
 }
 
 #[derive(Debug, OneofObject)]
