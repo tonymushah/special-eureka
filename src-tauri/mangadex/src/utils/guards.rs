@@ -36,9 +36,9 @@ macro_rules! impl_percentage_validator {
 		$(
 			impl CustomValidator<$num> for PercentageValidator {
 				fn check(&self, value: &$num) -> Result<(), InputValueError<$num>> {
-					if self.non_zero && value == 0 {
+					if self.non_zero && *value == 0 {
 		                Err("Cannot accept zero values".into())
-		            } else if self.value > 100 {
+		            } else if value > 100 {
 		                Err(format!(
 		                    "Percentage value should be set between 0 to 100 ({} > 100)",
 		                    value
