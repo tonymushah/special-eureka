@@ -57,18 +57,16 @@ impl_percentage_validator!(u8, u16, u32, u64,);
 
 impl Guard for U32PercentageGuard {
     async fn check(&self, ctx: &async_graphql::Context<'_>) -> async_graphql::Result<()> {
-        async move {
-            if self.non_zero && self.value == 0 {
-                Err("Cannot accept zero values".into())
-            } else if self.value > 100 {
-                Err(format!(
-                    "Percentage value should be set between 0 to 100 ({} > 100)",
-                    self.value
-                )
-                .into())
-            } else {
-                Ok(())
-            }
+        if self.non_zero && self.value == 0 {
+            Err("Cannot accept zero values".into())
+        } else if self.value > 100 {
+            Err(format!(
+                "Percentage value should be set between 0 to 100 ({} > 100)",
+                self.value
+            )
+            .into())
+        } else {
+            Ok(())
         }
     }
 }
