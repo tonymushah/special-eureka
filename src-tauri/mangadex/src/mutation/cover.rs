@@ -1,27 +1,29 @@
 use std::{
     fs::{File, create_dir_all},
-    io::{self, BufWriter, Write},
+    io::{self, BufReader, BufWriter, Cursor, Seek, Write},
     path::Path,
 };
 
+use actix::Addr;
 use async_graphql::{Context, Enum, InputObject, Object, OneofObject};
-use bytes::Buf;
 use eureka_mmanager::{
+    DownloadManager,
     download::cover::CoverDownloadMessage,
-    prelude::{AsyncCancelable, DeleteDataAsyncTrait, GetCoverDownloadManager, TaskManagerAddr},
+    prelude::{
+        AsyncCancelable, CoverDataPullAsyncTrait, DeleteDataAsyncTrait, GetCoverDownloadManager,
+        TaskManagerAddr,
+    },
 };
-use image::DynamicImage;
+use image::{DynamicImage, ImageReader};
 use mangadex_api::MangaDexClient;
 use mangadex_api_input_types::cover::{edit::CoverEditParam, upload::CoverUploadParam};
-use mangadex_api_schema_rust::{
-    ApiObjectNoRelationships,
-    v5::{CoverAttributes, CoverObject},
-};
+use mangadex_api_schema_rust::{ApiObjectNoRelationships, v5::CoverAttributes};
+use tauri::{AppHandle, Manager, Runtime};
 use uuid::Uuid;
 
 use crate::{
-    error::Error,
-    error::wrapped::Result,
+    cache::cover::CoverImageCache,
+    error::{Error, wrapped::Result},
     query::download_state::DownloadStateQueries,
     utils::{
         download::cover::cover_download, guards::PercentageValidator,
@@ -31,9 +33,8 @@ use crate::{
 use crate::{
     objects::cover::Cover,
     utils::{
-        download_state::DownloadState, get_mangadex_client_from_graphql_context,
-        get_mangadex_client_from_graphql_context_with_auth_refresh, get_offline_app_state,
-        get_watches_from_graphql_context, source::SendMultiSourceData,
+        download_state::DownloadState, get_mangadex_client_from_graphql_context_with_auth_refresh,
+        get_offline_app_state, get_watches_from_graphql_context, source::SendMultiSourceData,
         traits_utils::MangadexTauriManagerExt,
     },
 };
@@ -118,33 +119,35 @@ impl CoverMutations {
             .await?;
         Ok(true)
     }
+    /// by default, it will be exported to the download folder
+    pub async fn save_images(
+        &self,
+        ctx: &Context<'_>,
+        cover_ids: Vec<Uuid>,
+        export_dir: Option<String>,
+        options: Option<CoverArtSaveOption>,
+    ) -> Result<Option<String>, crate::error::ErrorWrapper> {
+        let app_handle = ctx.get_app_handle::<tauri::Wry>()?;
+        Ok(save_images(app_handle, cover_ids, export_dir, options)
+            .await?
+            .into_iter()
+            .next())
+    }
+    /// by default, it will be exported to the download folder
     pub async fn save_image(
         &self,
         ctx: &Context<'_>,
         cover_id: Uuid,
-        export_dir: String,
+        export_dir: Option<String>,
+        options: Option<CoverArtSaveOption>,
     ) -> Result<String, crate::error::ErrorWrapper> {
-        let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
-        let (file, bytes) = client
-            .download()
-            .cover()
-            .build()
-            .map_err(mangadex_api_types_rust::error::Error::BuilderError)?
-            .via_cover_id(cover_id)
-            .await?;
-        let bytes = bytes?;
-        create_dir_all(&export_dir)?;
-        let export_path = Path::new(&export_dir).join(file);
-        let mut file = File::create(&export_path)?;
-        {
-            let mut buf_writer = BufWriter::new(&mut file);
-            io::copy(&mut bytes.reader(), &mut buf_writer)?;
-            buf_writer.flush()?;
-        }
-        export_path
-            .to_str()
-            .map(String::from)
-            .ok_or(crate::error::ErrorWrapper::from(crate::Error::PathToStr))
+        let app_handle = ctx.get_app_handle::<tauri::Wry>()?;
+
+        Ok(save_images(app_handle, vec![cover_id], export_dir, options)
+            .await?
+            .into_iter()
+            .next()
+            .ok_or(crate::Error::SaveCoverReturnSinglePathEmpty)?)
     }
 }
 
@@ -182,13 +185,110 @@ pub struct CoverArtSaveOption {
     format: Option<CoverImageFormat>,
 }
 
-// - [ ] extract image from cache first
-// - [ ] if not fetch it and make the entry back in cache
-// - [ ] return buffer after
-fn get_cover_image_online(client: &MangaDexClient, cover_id: Uuid) -> crate::Result<DynamicImage> {
-    todo!()
+async fn save_images<R: Runtime>(
+    app: &AppHandle<R>,
+    cover_ids: Vec<Uuid>,
+    export_dir: Option<String>,
+    options: Option<CoverArtSaveOption>,
+) -> crate::Result<Vec<String>> {
+    let client = app.get_mangadex_client()?;
+    let export_dir = export_dir.unwrap_or(
+        app.path()
+            .download_dir()?
+            .to_str()
+            .map(String::from)
+            .ok_or(crate::Error::PathToStr)?,
+    );
+    create_dir_all(&export_dir)?;
+    let mut paths = Vec::<String>::new();
+    for cover_id in cover_ids {
+        let mut img = match get_cover_image_online(&client, cover_id).await {
+            Ok(i) => i,
+            Err(err) => {
+                log::error!("{err}");
+                let handle = app.get_offline_app_state()?;
+                let read = handle.read().await;
+                let app_state = read
+                    .as_ref()
+                    .ok_or(crate::Error::OfflineAppStateNotLoaded)?;
+                get_cover_image_offline(&app_state.app_state, cover_id).await?
+            }
+        };
+        let mut bytes = Cursor::new(Vec::<u8>::new());
+        let file: String = if let Some(options) = &options {
+            if let Some(resize) = &options.resize_percentage {
+                let (nw, nh) = match resize {
+                    CoverArtResizeOption::Width(per) => {
+                        let new_width = (img.width() * per) / 100;
+                        let new_height = (img.height() * new_width) / img.width();
+                        (new_width, new_height)
+                    }
+                    CoverArtResizeOption::Height(per) => {
+                        let new_height = (img.height() * per) / 100;
+                        let new_width = (img.width() * new_height) / img.height();
+                        (new_width, new_height)
+                    }
+                };
+                img = img.resize(nw, nh, image::imageops::FilterType::Lanczos3);
+            }
+            match options.format {
+                Some(CoverImageFormat::Avif) => {
+                    img.write_to(&mut bytes, image::ImageFormat::Avif)?;
+                    format!("{cover_id}.avif")
+                }
+                Some(CoverImageFormat::Png) => {
+                    img.write_to(&mut bytes, image::ImageFormat::Png)?;
+                    format!("{cover_id}.png")
+                }
+                Some(CoverImageFormat::Webp) => {
+                    img.write_to(&mut bytes, image::ImageFormat::WebP)?;
+                    format!("{cover_id}.webp")
+                }
+                _ => {
+                    img.write_to(&mut bytes, image::ImageFormat::Jpeg)?;
+                    format!("{cover_id}.jpg")
+                }
+            }
+        } else {
+            img.write_to(&mut bytes, image::ImageFormat::Jpeg)?;
+            format!("{cover_id}.jpg")
+        };
+        bytes.rewind()?;
+        drop(img);
+        let export_path = Path::new(&export_dir).join(file);
+        let mut file = File::create(&export_path)?;
+        {
+            let mut buf_writer = BufWriter::new(&mut file);
+            io::copy(&mut bytes, &mut buf_writer)?;
+            buf_writer.flush()?;
+        }
+        paths.push(
+            export_path
+                .to_str()
+                .map(String::from)
+                .ok_or(crate::Error::PathToStr)?,
+        );
+    }
+    Ok(paths)
 }
 
-fn get_cover_image_offline(client: &MangaDexClient, cover_id: Uuid) -> crate::Result<DynamicImage> {
-    todo!()
+// - [x] extract image from cache first
+// - [x] if not fetch it and make the entry back in cache
+// - [x] return buffer after
+async fn get_cover_image_online(
+    client: &MangaDexClient,
+    cover_id: Uuid,
+) -> crate::Result<DynamicImage> {
+    let (buf, _) = CoverImageCache::get_cover_image_by_cover_id(cover_id, None, client).await?;
+    Ok(ImageReader::new(Cursor::new(buf))
+        .with_guessed_format()?
+        .decode()?)
+}
+
+async fn get_cover_image_offline(
+    app: &Addr<DownloadManager>,
+    cover_id: Uuid,
+) -> crate::Result<DynamicImage> {
+    let buf = BufReader::new(app.get_cover_image(cover_id).await?);
+    Ok(ImageReader::new(buf).with_guessed_format()?.decode()?)
 }
