@@ -28,9 +28,10 @@
 	.covers {
 		display: grid;
 		/* grid-template-columns: repeat(5, 1fr); */
-		gap: 3px;
+		gap: 6px;
 		height: 100%;
 		overflow-y: scroll;
+		padding: 6px;
 	}
 	.covers.empty {
 		display: flex;
