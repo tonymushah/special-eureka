@@ -5400,6 +5400,28 @@ export type SubContentProfileWarningModeSubscription = {
 	watchContentProfileWarningMode: ContentProfileWarningMode;
 };
 
+export type DownloadCoversInADirectoryMutationVariables = Exact<{
+	ids: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
+	exportDir: Scalars["String"]["input"];
+	options?: InputMaybe<CoverArtSaveOption>;
+}>;
+
+export type DownloadCoversInADirectoryMutation = {
+	__typename?: "Mutation";
+	cover: { __typename?: "CoverMutations"; saveImages?: string | null };
+};
+
+export type DownloadCoverInADirectoryMutationVariables = Exact<{
+	id: Scalars["UUID"]["input"];
+	exportDir: Scalars["String"]["input"];
+	options?: InputMaybe<CoverArtSaveOption>;
+}>;
+
+export type DownloadCoverInADirectoryMutation = {
+	__typename?: "Mutation";
+	cover: { __typename?: "CoverMutations"; saveImage: string };
+};
+
 export type ListenToMangaTasksIDsSubscriptionVariables = Exact<{ [key: string]: never }>;
 
 export type ListenToMangaTasksIDsSubscription = {
@@ -15244,6 +15266,172 @@ export const SubContentProfileWarningModeDocument = {
 } as unknown as DocumentNode<
 	SubContentProfileWarningModeSubscription,
 	SubContentProfileWarningModeSubscriptionVariables
+>;
+export const DownloadCoversInADirectoryDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "downloadCoversInADirectory" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "ids" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "ListType",
+							type: {
+								kind: "NonNullType",
+								type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+							}
+						}
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "exportDir" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "String" } }
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "options" } },
+					type: { kind: "NamedType", name: { kind: "Name", value: "CoverArtSaveOption" } }
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "cover" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "saveImages" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "coverIds" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "ids" }
+											}
+										},
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "exportDir" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "exportDir" }
+											}
+										},
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "options" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "options" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	DownloadCoversInADirectoryMutation,
+	DownloadCoversInADirectoryMutationVariables
+>;
+export const DownloadCoverInADirectoryDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "downloadCoverInADirectory" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "exportDir" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "String" } }
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "options" } },
+					type: { kind: "NamedType", name: { kind: "Name", value: "CoverArtSaveOption" } }
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "cover" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "saveImage" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "coverId" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "id" }
+											}
+										},
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "exportDir" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "exportDir" }
+											}
+										},
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "options" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "options" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	DownloadCoverInADirectoryMutation,
+	DownloadCoverInADirectoryMutationVariables
 >;
 export const ListenToMangaTasksIDsDocument = {
 	kind: "Document",
