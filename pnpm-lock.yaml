@@ -238,7 +238,7 @@ importers:
         version: 4.4.0(picomatch@4.0.3)(svelte@5.50.3)(typescript@5.9.3)
       svelte2tsx:
         specifier: ~0.7.46
-        version: 0.7.47(svelte@5.50.3)(typescript@5.9.3)
+        version: 0.7.48(svelte@5.50.3)(typescript@5.9.3)
       svgo:
         specifier: ^4.0.0
         version: 4.0.0
@@ -4497,8 +4497,8 @@ packages:
       svelte:
         optional: true
 
-  svelte2tsx@0.7.47:
-    resolution: {integrity: sha512-1aw/MFKVPM96OBevJdC12do2an9t5Zwr3Va9amLgTLpJje36ibD1iIHpuqCYWUrdR9vw6g6btKGQPmsqE8ZYCw==}
+  svelte2tsx@0.7.48:
+    resolution: {integrity: sha512-B15C8dtOY6C9MbnQJDCkzbK3yByInzKtXrr23QCoF8APHMh6JaDhjCMcRl6ay4qaeKYqkX4X3tNaJrsZL45Zlg==}
     peerDependencies:
       svelte: '>=4.2.19'
       typescript: ^4.9.4 || ^5.0.0
@@ -6948,7 +6948,7 @@ snapshots:
       magic-string: 0.30.21
       storybook: 10.2.8(@testing-library/dom@10.4.0)(prettier@3.8.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       svelte: 5.50.3
-      svelte2tsx: 0.7.47(svelte@5.50.3)(typescript@5.9.3)
+      svelte2tsx: 0.7.48(svelte@5.50.3)(typescript@5.9.3)
       typescript: 5.9.3
       vite: 7.3.1(@types/node@25.0.10)(jiti@2.6.1)(less@4.5.1)(sass@1.97.3)(yaml@2.8.2)
     transitivePeerDependencies:
@@ -9595,7 +9595,7 @@ snapshots:
     optionalDependencies:
       svelte: 5.50.3
 
-  svelte2tsx@0.7.47(svelte@5.50.3)(typescript@5.9.3):
+  svelte2tsx@0.7.48(svelte@5.50.3)(typescript@5.9.3):
     dependencies:
       dedent-js: 1.0.1
       scule: 1.3.0
