@@ -31,7 +31,7 @@ export function saveCoversInADirectory() {
 				if (res) {
 					exportDir = res;
 				} else {
-					return;
+					throw new Error("Nothing... selected...");
 				}
 			}
 			const res = await client.mutation(downloadCoversInDirectoryGQLDoc, {
@@ -69,7 +69,7 @@ export function saveCoverInADirectory() {
 				if (res) {
 					exportDir = res;
 				} else {
-					return;
+					throw new Error("Nothing... selected...");
 				}
 			}
 			const res = await client.mutation(downloadCoverInDirectoryGQLDoc, {
