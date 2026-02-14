@@ -20,6 +20,7 @@
 	import userElementContextMenu from "@mangadex/utils/context-menu/user";
 	import { flip } from "svelte/animate";
 	import { crossfade } from "svelte/transition";
+	import ChapterFeedSelecto from "@mangadex/componnents/selecto/ChapterFeedSelecto.svelte";
 
 	const client = getContextClient();
 	interface Props {
@@ -128,13 +129,18 @@
 		observer.disconnect();
 	});
 	const [send, receive] = crossfade({});
+	let container = $state<HTMLElement | undefined>();
 </script>
 
-<div class="result">
+<ChapterFeedSelecto bind:container />
+
+<div class="result" bind:this={container}>
 	{#each users as user (user.id)}
 		<span animate:flip in:receive={{ key: user.id }} out:send={{ key: user.id }}>
 			<UserRolesColorProvider roles={user.roles}>
 				<UsersSimpleBase
+					data-users-id={user.id}
+					selectable
 					name={user.name}
 					oncontextmenu={registerContextMenuEvent({
 						includeContext: false,

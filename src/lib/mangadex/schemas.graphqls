@@ -605,6 +605,16 @@ type Cover {
 	relationships: CoverRelationships!
 }
 
+input CoverArtResizeOption @oneOf {
+	width: Int
+	height: Int
+}
+
+input CoverArtSaveOption {
+	resizePercentage: CoverArtResizeOption
+	format: CoverImageFormat
+}
+
 type CoverAttributes {
 	description: String!
 	locale: Language
@@ -647,6 +657,13 @@ input CoverEditParam {
 	version: Int!
 }
 
+enum CoverImageFormat {
+	JPEG
+	PNG
+	AVIF
+	WEBP
+}
+
 input CoverListParam {
 	limit: Int
 	offset: Int
@@ -664,7 +681,14 @@ type CoverMutations {
 	download(id: UUID!): DownloadState!
 	remove(id: UUID!): Boolean!
 	cancelDownload(id: UUID!): Boolean!
-	saveImage(coverId: UUID!, exportDir: String!): String!
+	"""
+	by default, it will be exported to the download folder
+	"""
+	saveImages(coverIds: [UUID!]!, exportDir: String, options: CoverArtSaveOption): String
+	"""
+	by default, it will be exported to the download folder
+	"""
+	saveImage(coverId: UUID!, exportDir: String, options: CoverArtSaveOption): String!
 }
 
 type CoverQueries {

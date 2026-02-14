@@ -805,6 +805,15 @@ export type Cover = {
 	relationships: CoverRelationships;
 };
 
+export type CoverArtResizeOption =
+	| { height: Scalars["Int"]["input"]; width?: never }
+	| { height?: never; width: Scalars["Int"]["input"] };
+
+export type CoverArtSaveOption = {
+	format?: InputMaybe<CoverImageFormat>;
+	resizePercentage?: InputMaybe<CoverArtResizeOption>;
+};
+
 export type CoverAttributes = {
 	__typename?: "CoverAttributes";
 	createdAt: Scalars["MangaDexDateTime"]["output"];
@@ -843,6 +852,13 @@ export type CoverEditParam = {
 	volume: Scalars["String"]["input"];
 };
 
+export enum CoverImageFormat {
+	Avif = "AVIF",
+	Jpeg = "JPEG",
+	Png = "PNG",
+	Webp = "WEBP"
+}
+
 export type CoverListParam = {
 	coverIds?: Array<Scalars["UUID"]["input"]>;
 	limit?: InputMaybe<Scalars["Int"]["input"]>;
@@ -860,7 +876,10 @@ export type CoverMutations = {
 	download: DownloadState;
 	edit: Cover;
 	remove: Scalars["Boolean"]["output"];
+	/** by default, it will be exported to the download folder */
 	saveImage: Scalars["String"]["output"];
+	/** by default, it will be exported to the download folder */
+	saveImages?: Maybe<Scalars["String"]["output"]>;
 	upload: Cover;
 };
 
@@ -886,7 +905,14 @@ export type CoverMutationsRemoveArgs = {
 
 export type CoverMutationsSaveImageArgs = {
 	coverId: Scalars["UUID"]["input"];
-	exportDir: Scalars["String"]["input"];
+	exportDir?: InputMaybe<Scalars["String"]["input"]>;
+	options?: InputMaybe<CoverArtSaveOption>;
+};
+
+export type CoverMutationsSaveImagesArgs = {
+	coverIds: Array<Scalars["UUID"]["input"]>;
+	exportDir?: InputMaybe<Scalars["String"]["input"]>;
+	options?: InputMaybe<CoverArtSaveOption>;
 };
 
 export type CoverMutationsUploadArgs = {

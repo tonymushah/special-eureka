@@ -39,35 +39,25 @@
 
 <section class="long-list">
 	{#each realList as data (`${data.id}`)}
-		<span
-			animate:flip
-			out:send={{
-				key: data.id
+		<MangaElementBase2
+			{...data}
+			onclick={() => {
+				goto(
+					route("/mangadex/title/[id]", {
+						id: data.id
+					})
+				);
 			}}
-			in:receive={{
-				key: data.id
+			ontagClick={(e) => {
+				const id = e.id;
+				goto(
+					route("/mangadex/tag/[id]", {
+						id
+					})
+				);
 			}}
-		>
-			<MangaElementBase2
-				{...data}
-				onclick={() => {
-					goto(
-						route("/mangadex/title/[id]", {
-							id: data.id
-						})
-					);
-				}}
-				ontagClick={(e) => {
-					const id = e.id;
-					goto(
-						route("/mangadex/tag/[id]", {
-							id
-						})
-					);
-				}}
-				--button-justify-content="start"
-			/>
-		</span>
+			--button-justify-content="start"
+		/>
 	{/each}
 </section>
 

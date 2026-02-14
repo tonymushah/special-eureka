@@ -9,6 +9,7 @@
 		"vite:build": "vite build --emptyOutDir",
 		"vite:preview": "vite preview --port 9305",
 		"dev": "tauri dev",
+		"dev:hotpath": "tauri dev -f hotpath",
 		"build": "tauri build",
 		"preview": "pnpm vite:preview",
 		"test": "npm run test:integration && npm run test:unit",

@@ -1,0 +1,34 @@
+@use "@special-eureka/core/sass/_breakpoints.scss" as bp;
+@use "sass:map";
+@include bp.media-only-screen-breakpoint-up(map.get(bp.$grid-breakpoints, "xxl")) {
+	.grid {
+		grid-template-columns: repeat(6, 1fr);
+	}
+}
+@include bp.media-only-screen-breakpoint-down(map.get(bp.$grid-breakpoints, "xxl")) {
+	.grid {
+		grid-template-columns: repeat(5, 1fr);
+	}
+}
+@include bp.media-only-screen-breakpoint-down(map.get(bp.$grid-breakpoints, "xl")) {
+	.grid {
+		grid-template-columns: repeat(4, 1fr);
+	}
+}
+@include bp.media-only-screen-breakpoint-down(map.get(bp.$grid-breakpoints, "lg")) {
+	.grid {
+		grid-template-columns: repeat(4, 1fr);
+	}
+}
+
+@include bp.media-only-screen-breakpoint-down(map.get(bp.$grid-breakpoints, "md")) {
+	.grid {
+		grid-template-columns: repeat(3, 1fr);
+	}
+}
+
+@include bp.media-only-screen-breakpoint-down(map.get(bp.$grid-breakpoints, "sm")) {
+	.grid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}

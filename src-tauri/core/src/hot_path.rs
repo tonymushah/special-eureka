@@ -1,3 +1,3 @@
-pub fn init_hotpath() -> hotpath::HotPath {
-    hotpath::GuardBuilder::new("special-eureka").build()
+pub fn init_hotpath() -> hotpath::FunctionsGuard {
+    hotpath::FunctionsGuardBuilder::new("special-eureka").build()
 }

@@ -7,7 +7,6 @@
 	import UsersSimpleBase from "@mangadex/componnents/users/simple/UsersSimpleBase.svelte";
 	import {
 		CustomListVisibility,
-		type CurrentLoggedLists,
 		type UserFollowedCustomListsQueryVariables
 	} from "@mangadex/gql/graphql";
 	import pageLimit from "@mangadex/stores/page-limit";
@@ -105,14 +104,13 @@
 			}}
 		>
 			<UsersSimpleBase
+				selectable
+				data-custom-list-id={list.id}
 				name={list.name}
 				onclick={() => {
 					goto(
 						route("/mangadex/list/[id]", {
-							id:
-								list.visibility == CustomListVisibility.Private
-									? `private:${list.id}`
-									: list.id
+							id: list.visibility == CustomListVisibility.Private ? `private:${list.id}` : list.id
 						})
 					);
 				}}
