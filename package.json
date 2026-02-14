@@ -10,6 +10,7 @@
 		"vite:preview": "vite preview --port 9305",
 		"dev": "tauri dev",
 		"dev:hotpath": "tauri dev -f hotpath",
+		"dev:hotpath:alloc": "tauri dev -f hotpath-alloc",
 		"build": "tauri build",
 		"preview": "pnpm vite:preview",
 		"test": "npm run test:integration && npm run test:unit",
