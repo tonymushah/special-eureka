@@ -27,6 +27,7 @@ enum CoverHandlingId {
     Manga(Uuid),
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl CoverHandlingId {
     async fn get_as_offline_cover_id(self, app: &Addr<DownloadManager>) -> crate::Result<Uuid> {
         match self {
@@ -59,6 +60,7 @@ struct HandleCoversParams {
     pub quality: Option<u32>,
 }
 
+#[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl TryFrom<&Request<Vec<u8>>> for HandleCoversParams {
     type Error = SchemeResponseError;
     #[cfg_attr(feature = "hotpath", hotpath::measure)]
@@ -128,10 +130,7 @@ impl<'a, R: Runtime> CoverImagesOfflineHandler<'a, R> {
 
     pub fn handle(&self) -> SchemeResponseResult<tauri::http::Response<Vec<u8>>> {
         let mut buf = Vec::<u8>::new();
-        if let Ok(cache) = self
-            .get_from_cache()
-            .inspect_err(|err| log::error!("handling cover cache error {:?}", err))
-        {
+        if let Ok(cache) = self.get_from_cache() {
             buf = cache;
         } else {
             let inner__ = self.app.get_offline_app_state()?.deref().deref().clone();
