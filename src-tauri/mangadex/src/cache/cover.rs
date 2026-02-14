@@ -199,7 +199,7 @@ impl CoverImageCache {
             img = img.resize(
                 new_width,
                 (img.height() * new_width) / img.width(),
-                image::imageops::FilterType::Lanczos3,
+                image::imageops::FilterType::Triangle,
             );
         }
         let mut buf = Cursor::new(Vec::<u8>::new());
