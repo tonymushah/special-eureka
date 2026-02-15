@@ -14,6 +14,7 @@
 	import { dev } from "$app/environment";
 	import ButtonAccentOnlyLabel from "@mangadex/componnents/theme/buttons/ButtonAccentOnlyLabel.svelte";
 	import ReadButton from "@mangadex/componnents/manga/page/top-info/buttons/ReadButton.svelte";
+	import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 
 	interface Props {
 		covers?: string[];
@@ -97,10 +98,23 @@
 			label="Save images in a new directory"
 			disabled={dirMutation.isPending}
 			onclick={() => {
-				dirMutation.mutate({
-					ids: covers,
-					option: options
-				});
+				dirMutation.mutate(
+					{
+						ids: covers,
+						option: options
+					},
+					{
+						onSuccess() {
+							addToast({
+								title: "Exported covers",
+								type: "success"
+							});
+						},
+						onError(error) {
+							addErrorToast("Cannot export covers in the directory", error);
+						}
+					}
+				);
 			}}
 		/>
 		{#if dev}
