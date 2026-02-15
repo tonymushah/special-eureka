@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { range } from "lodash";
 	import ImageElement from "./selections/ImageElement.svelte";
 	import NothingToShow from "@mangadex/componnents/search/content/NothingToShow.svelte";
 
