@@ -25,7 +25,7 @@
 	let resize = $state(false);
 	let resizeMode = $state<"width" | "height">("width");
 	let resizeValue = $state<number>(75);
-	let options = $derived.by<InputMaybe<CoverArtSaveOption>>(() => {
+	let options = $derived.by<CoverArtSaveOption | undefined>(() => {
 		if (resize) {
 			let resizePercentage: CoverArtResizeOption;
 			switch (resizeMode) {
@@ -45,7 +45,9 @@
 				resizePercentage
 			};
 		} else {
-			return null;
+			return {
+				format: imageFormat
+			};
 		}
 	});
 </script>
@@ -60,8 +62,8 @@
 			placeholder="JPEG by default"
 			class:isNotLinux={!$isLinuxStore}
 		>
-			<option value={CoverImageFormat.Avif}>Avif</option>
 			<option value={CoverImageFormat.Jpeg}>Jpeg</option>
+			<option value={CoverImageFormat.Avif}>Avif</option>
 			<option value={CoverImageFormat.Png}>Png</option>
 			<option value={CoverImageFormat.Webp}>Webp</option>
 		</select>
