@@ -93,6 +93,8 @@ type Documents = {
 	"\n\tmutation setContentProfileWarningMode($mode: ContentProfileWarningMode!) {\n\t\tuserOption {\n\t\t\tsetContentProfileWarningMode(mode: $mode)\n\t\t}\n\t}\n": typeof types.SetContentProfileWarningModeDocument;
 	"\n\tquery getContentProfileWarningMode {\n\t\tuserOption {\n\t\t\tgetContentProfileWarningMode\n\t\t}\n\t}\n": typeof types.GetContentProfileWarningModeDocument;
 	"\n\tsubscription subContentProfileWarningMode {\n\t\twatchContentProfileWarningMode\n\t}\n": typeof types.SubContentProfileWarningModeDocument;
+	"\n\tmutation downloadCoversInADirectory(\n\t\t$ids: [UUID!]!\n\t\t$exportDir: String!\n\t\t$options: CoverArtSaveOption\n\t) {\n\t\tcover {\n\t\t\tsaveImages(coverIds: $ids, exportDir: $exportDir, options: $options)\n\t\t}\n\t}\n": typeof types.DownloadCoversInADirectoryDocument;
+	"\n\tmutation downloadCoverInADirectory(\n\t\t$id: UUID!\n\t\t$exportDir: String!\n\t\t$options: CoverArtSaveOption\n\t) {\n\t\tcover {\n\t\t\tsaveImage(coverId: $id, exportDir: $exportDir, options: $options)\n\t\t}\n\t}\n": typeof types.DownloadCoverInADirectoryDocument;
 	"\n\tsubscription listenToMangaTasksIDs {\n\t\twatchMangaTasksList\n\t}\n": typeof types.ListenToMangaTasksIDsDocument;
 	"\n\tsubscription listenToChapterTasksIDs {\n\t\twatchChaptersTasksList\n\t}\n": typeof types.ListenToChapterTasksIDsDocument;
 	"\n\tsubscription listenToCoverTasksIDs {\n\t\twatchCoverTasksList\n\t}\n": typeof types.ListenToCoverTasksIDsDocument;
@@ -403,6 +405,10 @@ const documents: Documents = {
 		types.GetContentProfileWarningModeDocument,
 	"\n\tsubscription subContentProfileWarningMode {\n\t\twatchContentProfileWarningMode\n\t}\n":
 		types.SubContentProfileWarningModeDocument,
+	"\n\tmutation downloadCoversInADirectory(\n\t\t$ids: [UUID!]!\n\t\t$exportDir: String!\n\t\t$options: CoverArtSaveOption\n\t) {\n\t\tcover {\n\t\t\tsaveImages(coverIds: $ids, exportDir: $exportDir, options: $options)\n\t\t}\n\t}\n":
+		types.DownloadCoversInADirectoryDocument,
+	"\n\tmutation downloadCoverInADirectory(\n\t\t$id: UUID!\n\t\t$exportDir: String!\n\t\t$options: CoverArtSaveOption\n\t) {\n\t\tcover {\n\t\t\tsaveImage(coverId: $id, exportDir: $exportDir, options: $options)\n\t\t}\n\t}\n":
+		types.DownloadCoverInADirectoryDocument,
 	"\n\tsubscription listenToMangaTasksIDs {\n\t\twatchMangaTasksList\n\t}\n":
 		types.ListenToMangaTasksIDsDocument,
 	"\n\tsubscription listenToChapterTasksIDs {\n\t\twatchChaptersTasksList\n\t}\n":
@@ -1191,6 +1197,18 @@ export function graphql(
 export function graphql(
 	source: "\n\tsubscription subContentProfileWarningMode {\n\t\twatchContentProfileWarningMode\n\t}\n"
 ): (typeof documents)["\n\tsubscription subContentProfileWarningMode {\n\t\twatchContentProfileWarningMode\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tmutation downloadCoversInADirectory(\n\t\t$ids: [UUID!]!\n\t\t$exportDir: String!\n\t\t$options: CoverArtSaveOption\n\t) {\n\t\tcover {\n\t\t\tsaveImages(coverIds: $ids, exportDir: $exportDir, options: $options)\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tmutation downloadCoversInADirectory(\n\t\t$ids: [UUID!]!\n\t\t$exportDir: String!\n\t\t$options: CoverArtSaveOption\n\t) {\n\t\tcover {\n\t\t\tsaveImages(coverIds: $ids, exportDir: $exportDir, options: $options)\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tmutation downloadCoverInADirectory(\n\t\t$id: UUID!\n\t\t$exportDir: String!\n\t\t$options: CoverArtSaveOption\n\t) {\n\t\tcover {\n\t\t\tsaveImage(coverId: $id, exportDir: $exportDir, options: $options)\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tmutation downloadCoverInADirectory(\n\t\t$id: UUID!\n\t\t$exportDir: String!\n\t\t$options: CoverArtSaveOption\n\t) {\n\t\tcover {\n\t\t\tsaveImage(coverId: $id, exportDir: $exportDir, options: $options)\n\t\t}\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

@@ -1,4 +1,5 @@
 <script lang="ts" module>
+	import coverCssModule from "./covers.module.scss";
 	export type MangaCoversItem = {
 		title: string;
 		alt: string;
@@ -10,6 +11,7 @@
 <script lang="ts">
 	import CoverImage from "./CoverImage.svelte";
 	import { Variant } from "./MangaPageCovers.utils";
+	import ChapterFeedSelecto from "@mangadex/componnents/selecto/ChapterFeedSelecto.svelte";
 
 	interface Props {
 		items: MangaCoversItems;
@@ -21,11 +23,14 @@
 	let flex = $derived(variant == Variant.Flex);
 	let grid = $derived(variant == Variant.Grid);
 	let fixedWidth = $derived(flex || fixedWidth_);
+	let container = $state<HTMLElement | undefined>();
 </script>
 
-<div class:flex class:grid>
+<ChapterFeedSelecto bind:container />
+
+<div class:flex class:grid bind:this={container} class={[coverCssModule.grid]}>
 	{#each items as { title, alt, id } (id)}
-		<CoverImage coverId={id} {title} {alt} {fixedWidth} />
+		<CoverImage {title} {alt} {fixedWidth} coverId={id} />
 	{/each}
 </div>
 
@@ -41,7 +46,6 @@
 	}
 	div.grid {
 		display: grid;
-		grid-template-columns: 1fr 1fr 1fr 1fr;
 		gap: 10px;
 	}
 </style>

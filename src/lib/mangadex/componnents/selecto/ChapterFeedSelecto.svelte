@@ -1,7 +1,7 @@
+<!--
+	BUG: i dunno if it is because of the logic sometime the drag select doesn't works
+-->
 <script lang="ts" module>
-	const canSelect = writable(false);
-
-	export const canSelect_ = readonly(canSelect);
 </script>
 
 <script lang="ts">
@@ -18,8 +18,8 @@
 
 	interface Props {
 		container: HTMLElement | undefined;
-		selectedMangas: string[];
-		selectedChapters: string[];
+		selectedMangas?: string[];
+		selectedChapters?: string[];
 		onEnd?: (ev?: MouseEvent | TouchEvent) => void;
 		useDialog?: boolean;
 		selectedCustomLists?: string[];
@@ -29,8 +29,8 @@
 	}
 	let {
 		container = $bindable(),
-		selectedMangas = $bindable(),
-		selectedChapters = $bindable(),
+		selectedMangas = $bindable([]),
+		selectedChapters = $bindable([]),
 		selectedCustomLists = $bindable([]),
 		selectedCovers = $bindable([]),
 		selectedScansGroups = $bindable([]),
@@ -44,6 +44,14 @@
 	let selected_covers = $derived(uniq(selectedCovers));
 	let selected_scans_groups = $derived(uniq(selectedScansGroups));
 	let selected_users = $derived(uniq(selectedUsers));
+	let canSelect = $state(false);
+
+	const selectables = [
+		".manga-element",
+		".chapter-element",
+		".users-simple-selectable",
+		".cover-art-element"
+	];
 
 	const selectionAreaClass = cssMod.selectoArea;
 	function pushSelected(element: Element) {
@@ -78,11 +86,15 @@
 		}
 	}
 	function cleatSelecteds() {
-		selectedChapters = [];
 		selectedMangas = [];
+		selectedChapters = [];
+		selectedCustomLists = [];
+		selectedCovers = [];
+		selectedScansGroups = [];
+		selectedUsers = [];
 	}
 	$effect(() => {
-		if (container && $canSelect) {
+		if (container && canSelect) {
 			cleatSelecteds();
 			container.style.userSelect = "none";
 			(() => {
@@ -94,7 +106,7 @@
 				}
 			})();
 			const dragselect = new SelectionArea({
-				selectables: [".manga-element", ".chapter-element"],
+				selectables,
 				boundaries: [`#${scrollElementId}`],
 				selectionAreaClass
 			})
@@ -111,8 +123,12 @@
 						});
 						if (useDialog) {
 							openSelectoDialog({
-								titles: selected_mangas,
-								chapters: selected_chapters
+								titles: [...selected_mangas],
+								chapters: [...selected_chapters],
+								covers: [...selected_covers],
+								scanGroups: [...selected_scans_groups],
+								users: [...selected_users],
+								customLists: [...selected_custom_lists]
 							});
 						}
 						onEnd?.(ev.event ?? undefined);
@@ -148,7 +164,7 @@
 	onMount(async () => {
 		const unlisten = await currentWindow.onFocusChanged(({ payload: isFocused }) => {
 			if (isFocused == false) {
-				$canSelect = false;
+				canSelect = false;
 			}
 		});
 		unlistens.push(unlisten);
@@ -162,10 +178,10 @@
 	onkeydown={(e) => {
 		if (e.key == "Control") {
 			e.preventDefault();
-			$canSelect = true;
-		} else if (e.key == "a" && $canSelect && container) {
+			canSelect = true;
+		} else if (e.key == "a" && canSelect && container) {
 			e.preventDefault();
-			[".manga-element", ".chapter-element"]
+			selectables
 				.map((d) => container.querySelectorAll(d))
 				.forEach((d) => {
 					d.forEach(pushSelected);
@@ -186,10 +202,10 @@
 	}}
 	onkeyup={(e) => {
 		if (e.key == "Control") {
-			$canSelect = false;
+			canSelect = false;
 		}
 	}}
 	onfocusout={() => {
-		$canSelect = false;
+		canSelect = false;
 	}}
 />

@@ -27,16 +27,13 @@
 				} else if (res.data) {
 					return res.data.manga.list.data.map((e) => ({
 						id: e.id,
-						title:
-							get_value_from_title_and_random_if_undefined(
-								e.attributes.title,
-								"en"
-							) ?? e.id
+						title: get_value_from_title_and_random_if_undefined(e.attributes.title, "en") ?? e.id
 					}));
 				} else {
 					throw new Error("No data");
 				}
-			}
+			},
+			enabled: titles.length > 0
 		} satisfies CreateQueryOptions<
 			{
 				id: string;

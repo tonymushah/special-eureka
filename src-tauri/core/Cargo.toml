@@ -5,7 +5,6 @@ description = "a manga reader desktop app build with tauri"
 authors = ["tonymushah"]
 license = ""
 repository = "https://github.com/tonymushah/special-eureka"
-default-run = "special-eureka"
 edition = "2024"
 exclude = ["./examples", "./data"]
 rust-version = "1.91"
@@ -43,6 +42,9 @@ tauri-plugin-single-instance.workspace = true
 hotpath = { workspace = true, optional = true }
 # csv = { workspace = true, optional = true }
 
+[target.'cfg(not(target_env = "msvc"))'.dependencies]
+tikv-jemallocator = { version = "0.6", optional = true }
+
 [target."cfg(not(any(target_os = \"android\", target_os = \"ios\")))".dependencies.tauri-plugin-updater]
 workspace = true
 optional = true
@@ -63,7 +65,4 @@ hotpath-alloc = ["hotpath/hotpath-alloc", "hotpath"]
 hotpath-off = ["hotpath/hotpath-off"]
 single-runtime = []
 actix-multi-threaded = []
-
-[[bin]]
-name = "special-eureka"
-path = "../bin/main.rs"
+jemalloc = ["tikv-jemallocator"]

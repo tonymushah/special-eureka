@@ -20,6 +20,7 @@
 	});
 	const open = writable(false);
 	export function openSelectoDialog(data: SelectoDialogData) {
+		console.log(data);
 		selected.set(data);
 		open.set(true);
 	}
@@ -43,6 +44,8 @@
 	import ChapterFeedSelectoDialogBody from "./ChapterFeedSelectoDialogBody.svelte";
 	import cssMod from "@mangadex/componnents/theme/dialog/dialog.module.scss";
 	import MangaDexVarThemeProvider from "../theme/MangaDexVarThemeProvider.svelte";
+	let showBody = $derived(!$nothingSelected);
+	$inspect($isOpened);
 </script>
 
 <Dialog.Root
@@ -52,6 +55,8 @@
 			$open = o;
 		}
 	}
+	unmountOnExit
+	lazyMount
 >
 	<Portal container={document.getElementById("mangadex-scroll-container") ?? undefined}>
 		<Dialog.Backdrop class={cssMod.overlay} />
@@ -67,7 +72,18 @@
 										You have selected {$mangasLen} title{#if $mangasLen > 1}s{/if}{#if $chaptersLen > 0}
 											and {$chaptersLen}
 											chapter{#if $chaptersLen > 1}s{/if}
-										{/if}.
+										{/if}
+										{#if $coversLen >= 1}
+											and {$coversLen} cover{#if $coversLen > 1}s{/if}
+										{/if}
+										{#if $customListLen >= 1}
+											and {$customListLen} MD custom list{#if $customListLen > 1}s{/if}
+										{/if}
+										{#if $scanGroupsLen >= 1}
+											and {$scanGroupsLen} scanlation group{#if $scanGroupsLen > 1}s{/if}
+										{/if}
+										{#if $usersLen >= 1}
+											and {$usersLen} user{#if $usersLen > 1}s{/if}{/if}.
 									</Dialog.Description>
 								{/if}
 							</div>
@@ -77,10 +93,14 @@
 								</Dialog.CloseTrigger>
 							</div>
 						</div>
-						{#if $selected?.titles && $selected?.chapters}
+						{#if showBody}
 							<ChapterFeedSelectoDialogBody
 								titles={$selected?.titles}
 								chapters={$selected?.chapters}
+								covers={$selected?.covers}
+								customLists={$selected?.customLists}
+								scanlationGroups={$selected?.scanGroups}
+								users={$selected?.users}
 							/>
 						{/if}
 					</div>
