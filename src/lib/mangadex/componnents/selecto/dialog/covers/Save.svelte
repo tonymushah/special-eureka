@@ -13,7 +13,6 @@
 	import { FolderUp, FolderArchive } from "@lucide/svelte";
 	import { dev } from "$app/environment";
 	import ButtonAccentOnlyLabel from "@mangadex/componnents/theme/buttons/ButtonAccentOnlyLabel.svelte";
-	import ReadButton from "@mangadex/componnents/manga/page/top-info/buttons/ReadButton.svelte";
 	import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 
 	interface Props {
