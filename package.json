@@ -87,7 +87,7 @@
 		"@graphiql/toolkit": "~0.11.3",
 		"@graphql-typed-document-node/core": "^3.2.0",
 		"@humanspeak/svelte-markdown": "^0.8.14",
-		"@lucide/svelte": "^0.564.0",
+		"@lucide/svelte": "^0.569.0",
 		"@panzoom/panzoom": "^4.6.1",
 		"@storybook/addon-a11y": "^10.2.1",
 		"@tanstack/svelte-query": "^6.0.18",
