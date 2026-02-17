@@ -1,6 +1,6 @@
 use std::{
     fs::{File, create_dir_all},
-    io::{self, BufReader, BufWriter, Cursor, Seek, Write},
+    io::{self, BufReader, BufWriter, Cursor, Write},
     path::Path,
 };
 
@@ -149,6 +149,15 @@ impl CoverMutations {
             .next()
             .ok_or(crate::Error::SaveCoverReturnSinglePathEmpty)?)
     }
+    pub async fn save_images_to_archive(
+        &self,
+        ctx: &Context<'_>,
+        cover_ids: Vec<Uuid>,
+        archive_file: String,
+        options: Option<CoverArtSaveOption>,
+    ) -> Result<String, crate::error::ErrorWrapper> {
+        todo!()
+    }
     // TODO export images as compressed zip or tar.{whatever compression mode}
 }
 
@@ -192,7 +201,6 @@ async fn save_images<R: Runtime>(
     export_dir: Option<String>,
     options: Option<CoverArtSaveOption>,
 ) -> crate::Result<Vec<String>> {
-    let client = app.get_mangadex_client()?;
     let export_dir = export_dir.unwrap_or(
         app.path()
             .download_dir()?
@@ -203,64 +211,13 @@ async fn save_images<R: Runtime>(
     create_dir_all(&export_dir)?;
     let mut paths = Vec::<String>::new();
     for cover_id in cover_ids {
-        let mut img = match get_cover_image_online(&client, cover_id).await {
-            Ok(i) => i,
-            Err(err) => {
-                log::error!("{err}");
-                let handle = app.get_offline_app_state()?;
-                let read = handle.read().await;
-                let app_state = read
-                    .as_ref()
-                    .ok_or(crate::Error::OfflineAppStateNotLoaded)?;
-                get_cover_image_offline(&app_state.app_state, cover_id).await?
-            }
-        };
-        let mut bytes = Cursor::new(Vec::<u8>::new());
-        let file: String = if let Some(options) = &options {
-            if let Some(resize) = &options.resize_percentage {
-                let (nw, nh) = match resize {
-                    CoverArtResizeOption::Width(per) => {
-                        let new_width = (img.width() * per) / 100;
-                        let new_height = (img.height() * new_width) / img.width();
-                        (new_width, new_height)
-                    }
-                    CoverArtResizeOption::Height(per) => {
-                        let new_height = (img.height() * per) / 100;
-                        let new_width = (img.width() * new_height) / img.height();
-                        (new_width, new_height)
-                    }
-                };
-                img = img.resize(nw, nh, image::imageops::FilterType::Lanczos3);
-            }
-            match options.format {
-                Some(CoverImageFormat::Avif) => {
-                    img.write_to(&mut bytes, image::ImageFormat::Avif)?;
-                    format!("{cover_id}.avif")
-                }
-                Some(CoverImageFormat::Png) => {
-                    img.write_to(&mut bytes, image::ImageFormat::Png)?;
-                    format!("{cover_id}.png")
-                }
-                Some(CoverImageFormat::Webp) => {
-                    img.write_to(&mut bytes, image::ImageFormat::WebP)?;
-                    format!("{cover_id}.webp")
-                }
-                _ => {
-                    img.write_to(&mut bytes, image::ImageFormat::Jpeg)?;
-                    format!("{cover_id}.jpg")
-                }
-            }
-        } else {
-            img.write_to(&mut bytes, image::ImageFormat::Jpeg)?;
-            format!("{cover_id}.jpg")
-        };
-        bytes.rewind()?;
-        drop(img);
+        let (file, bytes) =
+            handle_cover_image_with_options(app, cover_id, options.as_ref()).await?;
         let export_path = Path::new(&export_dir).join(file);
         let mut file = File::create(&export_path)?;
         {
             let mut buf_writer = BufWriter::new(&mut file);
-            io::copy(&mut bytes, &mut buf_writer)?;
+            io::copy(&mut Cursor::new(bytes), &mut buf_writer)?;
             buf_writer.flush()?;
         }
         paths.push(
@@ -271,6 +228,67 @@ async fn save_images<R: Runtime>(
         );
     }
     Ok(paths)
+}
+
+async fn handle_cover_image_with_options<R: Runtime>(
+    app: &AppHandle<R>,
+    cover_id: Uuid,
+    options: Option<&CoverArtSaveOption>,
+) -> crate::Result<(String, Vec<u8>)> {
+    let client = app.get_mangadex_client()?;
+    let mut img = match get_cover_image_online(&client, cover_id).await {
+        Ok(i) => i,
+        Err(err) => {
+            log::error!("{err}");
+            let handle = app.get_offline_app_state()?;
+            let read = handle.read().await;
+            let app_state = read
+                .as_ref()
+                .ok_or(crate::Error::OfflineAppStateNotLoaded)?;
+            get_cover_image_offline(&app_state.app_state, cover_id).await?
+        }
+    };
+    let mut bytes = Cursor::new(Vec::<u8>::new());
+
+    let file: String = if let Some(options) = options {
+        if let Some(resize) = &options.resize_percentage {
+            let (nw, nh) = match resize {
+                CoverArtResizeOption::Width(per) => {
+                    let new_width = (img.width() * per) / 100;
+                    let new_height = (img.height() * new_width) / img.width();
+                    (new_width, new_height)
+                }
+                CoverArtResizeOption::Height(per) => {
+                    let new_height = (img.height() * per) / 100;
+                    let new_width = (img.width() * new_height) / img.height();
+                    (new_width, new_height)
+                }
+            };
+            img = img.resize(nw, nh, image::imageops::FilterType::Lanczos3);
+        }
+        match options.format {
+            Some(CoverImageFormat::Avif) => {
+                img.write_to(&mut bytes, image::ImageFormat::Avif)?;
+                format!("{cover_id}.avif")
+            }
+            Some(CoverImageFormat::Png) => {
+                img.write_to(&mut bytes, image::ImageFormat::Png)?;
+                format!("{cover_id}.png")
+            }
+            Some(CoverImageFormat::Webp) => {
+                img.write_to(&mut bytes, image::ImageFormat::WebP)?;
+                format!("{cover_id}.webp")
+            }
+            _ => {
+                img.write_to(&mut bytes, image::ImageFormat::Jpeg)?;
+                format!("{cover_id}.jpg")
+            }
+        }
+    } else {
+        img.write_to(&mut bytes, image::ImageFormat::Jpeg)?;
+        format!("{cover_id}.jpg")
+    };
+    Ok((file, bytes.into_inner()))
 }
 
 // - [x] extract image from cache first
@@ -293,3 +311,4 @@ async fn get_cover_image_offline(
     let buf = BufReader::new(app.get_cover_image(cover_id).await?);
     Ok(ImageReader::new(buf).with_guessed_format()?.decode()?)
 }
+
