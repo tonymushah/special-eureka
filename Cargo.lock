@@ -6634,6 +6634,7 @@ dependencies = [
  "eureka-mmanager",
  "eureka-mmanager-core",
  "favicon-picker",
+ "flate2",
  "futures-util",
  "governor",
  "hotpath",
@@ -6656,6 +6657,7 @@ dependencies = [
  "serde_json",
  "serde_repr",
  "shrink_fit_wrapper",
+ "tar",
  "tauri",
  "tauri-plugin-notification",
  "tauri-plugin-store",
@@ -6669,6 +6671,7 @@ dependencies = [
  "url",
  "uuid",
  "zip 8.1.0",
+ "zstd",
 ]
 
 [[package]]

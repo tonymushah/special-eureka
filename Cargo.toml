@@ -41,6 +41,9 @@ rand = "0.9"
 itertools = "0.14"
 favicon-picker = "1.0.0"
 zip = "8"
+tar = "0.4"
+zstd = "0.13"
+flate2 = "1"
 
 # Temporary fix before upgrading reqwest to v0.13.x
 [patch.crates-io]
