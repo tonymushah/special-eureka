@@ -5,8 +5,9 @@
 	import exportIdsToTxtLoader from "@mangadex/gql-docs/export/ids";
 	import { addErrorToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 	import { revealItemInDir } from "@tauri-apps/plugin-opener";
-	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import Save from "./covers/Save.svelte";
+	import { isMounted } from "@mangadex/stores/offlineIsMounted";
+	import { dev } from "$app/environment";
 
 	interface Props {
 		covers?: string[];
@@ -63,5 +64,6 @@
 				currentAction = "save";
 			}}
 		/>
+		<ButtonAccentOnlyLabel variant="3" disabled={!dev || $isMounted} label="Download metadata" />
 	{/snippet}
 </SectionBase>
