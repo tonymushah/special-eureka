@@ -1,3 +1,4 @@
+mod archive;
 mod save;
 
 use async_graphql::{Context, Object};
