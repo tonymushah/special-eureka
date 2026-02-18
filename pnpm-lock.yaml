@@ -38,8 +38,8 @@ importers:
         specifier: ^3.2.0
         version: 3.2.0(graphql@16.12.0)
       '@humanspeak/svelte-markdown':
-        specifier: ^0.8.14
-        version: 0.8.17(svelte@5.51.3)
+        specifier: ^1.0.0
+        version: 1.0.0(svelte@5.51.3)
       '@lucide/svelte':
         specifier: ^0.574.0
         version: 0.574.0(svelte@5.51.3)
@@ -1151,12 +1151,12 @@ packages:
     resolution: {integrity: sha512-/zUx+yOsIrG4Y43Eh2peDeKCxlRt/gET6aHfaKpuq267qXdYDFViVHfMaLyygZOnl0kGWxFIgsBy8QFuTLUXEQ==}
     engines: {node: '>=18.18.0'}
 
-  '@humanspeak/memory-cache@1.0.4':
-    resolution: {integrity: sha512-S/63Uqn0HzZuAKW3ieF3G8tDpsdQx5ssKHhtxG8Z/E592xSMayrUB0bzNojJ4SwC1kTEsbl14lr0voyR1HiWbA==}
+  '@humanspeak/memory-cache@1.0.5':
+    resolution: {integrity: sha512-bNo+xAL2KT8Zv9wHjeLloyQrbEv8aea9gjL2eHhNki3/1xapDRYm/W5gGgBQNvpdBJFoYcA6VQJcbm0ZjKML+g==}
     engines: {node: '>=18.0.0'}
 
-  '@humanspeak/svelte-markdown@0.8.17':
-    resolution: {integrity: sha512-Ia7gR+EK/KuwnTnSgEQyNPBbPP7TjEpBxaTsbW0CDb6IKn7YHYK0wu1JpOaz124lhURM1B2Am7O/t4HFFhGU8A==}
+  '@humanspeak/svelte-markdown@1.0.0':
+    resolution: {integrity: sha512-CAm4epr+JjCt3RRERKIzhv0GFO2E43jgSn9/cdBzcgxRv2wTwRIFB7OPwadu4jSovqfufrKJ0Bkz2VWxnX3pZg==}
     peerDependencies:
       svelte: ^5.0.0
 
@@ -3863,8 +3863,8 @@ packages:
     resolution: {integrity: sha512-a54IwgWPaeBCAAsv13YgmALOF1elABB08FxO9i+r4VFk5Vl4pKokRPeX8u5TCgSsPi6ec1otfLjdOpVcgbpshg==}
     hasBin: true
 
-  marked@17.0.2:
-    resolution: {integrity: sha512-s5HZGFQea7Huv5zZcAGhJLT3qLpAfnY7v7GWkICUr0+Wd5TFEtdlRR2XUL5Gg+RH7u2Df595ifrxR03mBaw7gA==}
+  marked@17.0.3:
+    resolution: {integrity: sha512-jt1v2ObpyOKR8p4XaUJVk3YWRJ5n+i4+rjQopxvV32rSndTJXvIzuUdWWIy/1pFQMkQmvTXawzDNqOH/CUmx6A==}
     engines: {node: '>= 20'}
     hasBin: true
 
@@ -6041,14 +6041,14 @@ snapshots:
       '@humanfs/core': 0.19.1
       '@humanwhocodes/retry': 0.4.3
 
-  '@humanspeak/memory-cache@1.0.4': {}
+  '@humanspeak/memory-cache@1.0.5': {}
 
-  '@humanspeak/svelte-markdown@0.8.17(svelte@5.51.3)':
+  '@humanspeak/svelte-markdown@1.0.0(svelte@5.51.3)':
     dependencies:
-      '@humanspeak/memory-cache': 1.0.4
+      '@humanspeak/memory-cache': 1.0.5
       github-slugger: 2.0.0
       htmlparser2: 10.1.0
-      marked: 17.0.2
+      marked: 17.0.3
       svelte: 5.51.3
 
   '@humanwhocodes/module-importer@1.0.1': {}
@@ -8964,7 +8964,7 @@ snapshots:
       punycode.js: 2.3.1
       uc.micro: 2.1.0
 
-  marked@17.0.2: {}
+  marked@17.0.3: {}
 
   mdn-data@2.0.28: {}
 
