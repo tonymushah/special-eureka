@@ -84,6 +84,13 @@ impl CoverMutations {
         res?;
         Ok(state)
     }
+    pub async fn download_covers(&self, ctx: &Context<'_>, ids: Vec<Uuid>) -> Result<Option<bool>> {
+        let app = ctx.get_app_handle::<tauri::Wry>()?;
+        for id in ids {
+            let _ = cover_download(app, id).await?;
+        }
+        Ok(None)
+    }
     pub async fn remove(&self, ctx: &Context<'_>, id: Uuid) -> Result<bool> {
         let ola = get_offline_app_state::<tauri::Wry>(ctx)?;
         let offline_app_state_write = ola.read().await;
