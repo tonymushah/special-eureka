@@ -1,6 +1,8 @@
 mod archive;
 mod save;
 
+use std::path::Path;
+
 use async_graphql::{Context, Object};
 use eureka_mmanager::{
     download::cover::CoverDownloadMessage,
@@ -24,10 +26,9 @@ use crate::{
     },
 };
 
+pub use archive::UnsupportedCoverArchiveFormat;
 pub use save::{CoverArtResizeOption, CoverArtSaveOption, CoverImageFormat};
-use save::{
-    get_cover_image_offline, get_cover_image_online, handle_cover_image_with_options, save_images,
-};
+use save::{handle_cover_image_with_options, save_images};
 
 #[derive(Debug, Clone, Copy)]
 pub struct CoverMutations;
@@ -146,7 +147,14 @@ impl CoverMutations {
         archive_file: String,
         options: Option<CoverArtSaveOption>,
     ) -> Result<String, crate::error::ErrorWrapper> {
-        todo!()
+        archive::save_covers_to_archive(
+            ctx.get_app_handle::<tauri::Wry>()?,
+            cover_ids,
+            Path::new(archive_file.as_str()).to_path_buf(),
+            options,
+        )
+        .await?;
+        Ok(archive_file)
     }
     // TODO export images as compressed zip or tar.{whatever compression mode}
 }
