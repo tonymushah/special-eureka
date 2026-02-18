@@ -874,12 +874,14 @@ export type CoverMutations = {
 	cancelDownload: Scalars["Boolean"]["output"];
 	delete: Scalars["Boolean"]["output"];
 	download: DownloadState;
+	downloadCovers?: Maybe<Scalars["Boolean"]["output"]>;
 	edit: Cover;
 	remove: Scalars["Boolean"]["output"];
 	/** by default, it will be exported to the download folder */
 	saveImage: Scalars["String"]["output"];
 	/** by default, it will be exported to the download folder */
 	saveImages?: Maybe<Scalars["String"]["output"]>;
+	saveImagesToArchive: Scalars["String"]["output"];
 	upload: Cover;
 };
 
@@ -893,6 +895,10 @@ export type CoverMutationsDeleteArgs = {
 
 export type CoverMutationsDownloadArgs = {
 	id: Scalars["UUID"]["input"];
+};
+
+export type CoverMutationsDownloadCoversArgs = {
+	ids: Array<Scalars["UUID"]["input"]>;
 };
 
 export type CoverMutationsEditArgs = {
@@ -912,6 +918,12 @@ export type CoverMutationsSaveImageArgs = {
 export type CoverMutationsSaveImagesArgs = {
 	coverIds: Array<Scalars["UUID"]["input"]>;
 	exportDir?: InputMaybe<Scalars["String"]["input"]>;
+	options?: InputMaybe<CoverArtSaveOption>;
+};
+
+export type CoverMutationsSaveImagesToArchiveArgs = {
+	archiveFile: Scalars["String"]["input"];
+	coverIds: Array<Scalars["UUID"]["input"]>;
 	options?: InputMaybe<CoverArtSaveOption>;
 };
 

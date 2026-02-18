@@ -679,6 +679,7 @@ type CoverMutations {
 	edit(params: CoverEditParam!): Cover!
 	delete(id: UUID!): Boolean!
 	download(id: UUID!): DownloadState!
+	downloadCovers(ids: [UUID!]!): Boolean
 	remove(id: UUID!): Boolean!
 	cancelDownload(id: UUID!): Boolean!
 	"""
@@ -689,6 +690,7 @@ type CoverMutations {
 	by default, it will be exported to the download folder
 	"""
 	saveImage(coverId: UUID!, exportDir: String, options: CoverArtSaveOption): String!
+	saveImagesToArchive(coverIds: [UUID!]!, archiveFile: String!, options: CoverArtSaveOption): String!
 }
 
 type CoverQueries {
