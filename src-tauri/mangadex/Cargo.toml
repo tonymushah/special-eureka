@@ -64,6 +64,7 @@ zip.workspace = true
 tar.workspace = true
 flate2.workspace = true
 zstd.workspace = true
+bzip2.workspace = true
 
 [dependencies.eureka-mmanager]
 version = "0.4"

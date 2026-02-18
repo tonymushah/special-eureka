@@ -44,6 +44,7 @@ zip = "8"
 tar = "0.4"
 zstd = "0.13"
 flate2 = "1"
+bzip2 = "0.6"
 
 # Temporary fix before upgrading reqwest to v0.13.x
 [patch.crates-io]

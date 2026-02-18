@@ -12,6 +12,8 @@ enum SupportedCoverArchiveFormat {
     Zip,
     TarGz,
     TarZstd,
+    TarBz2,
+    TarZlib,
 }
 
 #[derive(Debug, thiserror::Error)]
@@ -29,6 +31,8 @@ impl TryFrom<&Path> for SupportedCoverArchiveFormat {
             "zip" => Ok(Self::Zip),
             "zst" | "zstd" => Ok(Self::TarZstd),
             "gz" => Ok(Self::TarGz),
+            "bz2" => Ok(Self::TarBz2),
+            "zlib" => Ok(Self::TarZlib),
             _ => Err(UnsupportedCoverArchiveFormat(())),
         }
     }
@@ -103,6 +107,40 @@ async fn save_covers_as_tar_zstd<R: Runtime>(
     Ok(())
 }
 
+async fn save_covers_as_tar_bz2<R: Runtime>(
+    app: &AppHandle<R>,
+    cover_ids: Vec<Uuid>,
+    archive_path: PathBuf,
+    options: Option<&super::CoverArtSaveOption>,
+) -> crate::Result<()> {
+    let mut tar_buf = Cursor::new(save_covers_as_tar(app, cover_ids, options).await?);
+    let mut writer = bzip2::write::BzEncoder::new(
+        BufWriter::new(File::create(archive_path)?),
+        bzip2::Compression::best(),
+    );
+    std::io::copy(&mut tar_buf, &mut writer)?;
+    writer.flush()?;
+    writer.finish()?;
+    Ok(())
+}
+
+async fn save_covers_as_tar_zlib<R: Runtime>(
+    app: &AppHandle<R>,
+    cover_ids: Vec<Uuid>,
+    archive_path: PathBuf,
+    options: Option<&super::CoverArtSaveOption>,
+) -> crate::Result<()> {
+    let mut tar_buf = Cursor::new(save_covers_as_tar(app, cover_ids, options).await?);
+    let mut writer = flate2::write::ZlibEncoder::new(
+        BufWriter::new(File::create(archive_path)?),
+        flate2::Compression::best(),
+    );
+    std::io::copy(&mut tar_buf, &mut writer)?;
+    writer.flush()?;
+    writer.finish()?;
+    Ok(())
+}
+
 pub async fn save_covers_to_archive<R: Runtime>(
     app: &AppHandle<R>,
     cover_ids: Vec<Uuid>,
@@ -119,6 +157,12 @@ pub async fn save_covers_to_archive<R: Runtime>(
         }
         SupportedCoverArchiveFormat::TarZstd => {
             save_covers_as_tar_zstd(app, cover_ids, archive_path, options.as_ref()).await?
+        }
+        SupportedCoverArchiveFormat::TarBz2 => {
+            save_covers_as_tar_bz2(app, cover_ids, archive_path, options.as_ref()).await?
+        }
+        SupportedCoverArchiveFormat::TarZlib => {
+            save_covers_as_tar_zlib(app, cover_ids, archive_path, options.as_ref()).await?
         }
     }
     Ok(())

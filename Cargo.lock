@@ -6624,6 +6624,7 @@ dependencies = [
  "async-graphql",
  "async-stream",
  "bytes",
+ "bzip2",
  "convert_case 0.11.0",
  "csv",
  "dirs",
