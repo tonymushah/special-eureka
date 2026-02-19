@@ -2,7 +2,7 @@ import { downloadCoversLocalyGQLDoc } from "@mangadex/gql-docs/cover/local-downl
 import { client } from "@mangadex/gql/urql";
 import { createMutation } from "@tanstack/svelte-query";
 
-export function saveCoversInADirectory() {
+export function downloadCoversLocally() {
 	return createMutation(() => ({
 		mutationKey: ["download", "covers"],
 		async mutationFn(ids: string[]) {
