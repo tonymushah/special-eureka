@@ -96,6 +96,7 @@ type Documents = {
 	"\n\tmutation saveCoversInArchive(\n\t\t$ids: [UUID!]!\n\t\t$archivePath: String!\n\t\t$options: CoverArtSaveOption\n\t) {\n\t\tcover {\n\t\t\tsaveImagesToArchive(coverIds: $ids, archiveFile: $archivePath, options: $options)\n\t\t}\n\t}\n": typeof types.SaveCoversInArchiveDocument;
 	"\n\tmutation downloadCoversInADirectory(\n\t\t$ids: [UUID!]!\n\t\t$exportDir: String!\n\t\t$options: CoverArtSaveOption\n\t) {\n\t\tcover {\n\t\t\tsaveImages(coverIds: $ids, exportDir: $exportDir, options: $options)\n\t\t}\n\t}\n": typeof types.DownloadCoversInADirectoryDocument;
 	"\n\tmutation downloadCoverInADirectory(\n\t\t$id: UUID!\n\t\t$exportDir: String!\n\t\t$options: CoverArtSaveOption\n\t) {\n\t\tcover {\n\t\t\tsaveImage(coverId: $id, exportDir: $exportDir, options: $options)\n\t\t}\n\t}\n": typeof types.DownloadCoverInADirectoryDocument;
+	"\n\tmutation downloadCoversLocaly($ids: [UUID!]!) {\n\t\tcover {\n\t\t\tdownloadCovers(ids: $ids)\n\t\t}\n\t}\n": typeof types.DownloadCoversLocalyDocument;
 	"\n\tsubscription listenToMangaTasksIDs {\n\t\twatchMangaTasksList\n\t}\n": typeof types.ListenToMangaTasksIDsDocument;
 	"\n\tsubscription listenToChapterTasksIDs {\n\t\twatchChaptersTasksList\n\t}\n": typeof types.ListenToChapterTasksIDsDocument;
 	"\n\tsubscription listenToCoverTasksIDs {\n\t\twatchCoverTasksList\n\t}\n": typeof types.ListenToCoverTasksIDsDocument;
@@ -412,6 +413,8 @@ const documents: Documents = {
 		types.DownloadCoversInADirectoryDocument,
 	"\n\tmutation downloadCoverInADirectory(\n\t\t$id: UUID!\n\t\t$exportDir: String!\n\t\t$options: CoverArtSaveOption\n\t) {\n\t\tcover {\n\t\t\tsaveImage(coverId: $id, exportDir: $exportDir, options: $options)\n\t\t}\n\t}\n":
 		types.DownloadCoverInADirectoryDocument,
+	"\n\tmutation downloadCoversLocaly($ids: [UUID!]!) {\n\t\tcover {\n\t\t\tdownloadCovers(ids: $ids)\n\t\t}\n\t}\n":
+		types.DownloadCoversLocalyDocument,
 	"\n\tsubscription listenToMangaTasksIDs {\n\t\twatchMangaTasksList\n\t}\n":
 		types.ListenToMangaTasksIDsDocument,
 	"\n\tsubscription listenToChapterTasksIDs {\n\t\twatchChaptersTasksList\n\t}\n":
@@ -1218,6 +1221,12 @@ export function graphql(
 export function graphql(
 	source: "\n\tmutation downloadCoverInADirectory(\n\t\t$id: UUID!\n\t\t$exportDir: String!\n\t\t$options: CoverArtSaveOption\n\t) {\n\t\tcover {\n\t\t\tsaveImage(coverId: $id, exportDir: $exportDir, options: $options)\n\t\t}\n\t}\n"
 ): (typeof documents)["\n\tmutation downloadCoverInADirectory(\n\t\t$id: UUID!\n\t\t$exportDir: String!\n\t\t$options: CoverArtSaveOption\n\t) {\n\t\tcover {\n\t\t\tsaveImage(coverId: $id, exportDir: $exportDir, options: $options)\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tmutation downloadCoversLocaly($ids: [UUID!]!) {\n\t\tcover {\n\t\t\tdownloadCovers(ids: $ids)\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tmutation downloadCoversLocaly($ids: [UUID!]!) {\n\t\tcover {\n\t\t\tdownloadCovers(ids: $ids)\n\t\t}\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

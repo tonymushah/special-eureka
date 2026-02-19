@@ -5445,6 +5445,15 @@ export type DownloadCoverInADirectoryMutation = {
 	cover: { __typename?: "CoverMutations"; saveImage: string };
 };
 
+export type DownloadCoversLocalyMutationVariables = Exact<{
+	ids: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
+}>;
+
+export type DownloadCoversLocalyMutation = {
+	__typename?: "Mutation";
+	cover: { __typename?: "CoverMutations"; downloadCovers?: boolean | null };
+};
+
 export type ListenToMangaTasksIDsSubscriptionVariables = Exact<{ [key: string]: never }>;
 
 export type ListenToMangaTasksIDsSubscription = {
@@ -15539,6 +15548,60 @@ export const DownloadCoverInADirectoryDocument = {
 	DownloadCoverInADirectoryMutation,
 	DownloadCoverInADirectoryMutationVariables
 >;
+export const DownloadCoversLocalyDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "downloadCoversLocaly" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "ids" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "ListType",
+							type: {
+								kind: "NonNullType",
+								type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+							}
+						}
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "cover" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "downloadCovers" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "ids" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "ids" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<DownloadCoversLocalyMutation, DownloadCoversLocalyMutationVariables>;
 export const ListenToMangaTasksIDsDocument = {
 	kind: "Document",
 	definitions: [
