@@ -58,6 +58,10 @@ export function saveCoversInAArchive() {
 			});
 			if (res.error) {
 				throw res.error;
+			} else if (res.data) {
+				return res.data.cover.saveImagesToArchive;
+			} else {
+				throw new Error("no data??");
 			}
 		}
 	}));
