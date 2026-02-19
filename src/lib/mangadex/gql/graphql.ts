@@ -5412,6 +5412,17 @@ export type SubContentProfileWarningModeSubscription = {
 	watchContentProfileWarningMode: ContentProfileWarningMode;
 };
 
+export type SaveCoversInArchiveMutationVariables = Exact<{
+	ids: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
+	archivePath: Scalars["String"]["input"];
+	options?: InputMaybe<CoverArtSaveOption>;
+}>;
+
+export type SaveCoversInArchiveMutation = {
+	__typename?: "Mutation";
+	cover: { __typename?: "CoverMutations"; saveImagesToArchive: string };
+};
+
 export type DownloadCoversInADirectoryMutationVariables = Exact<{
 	ids: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
 	exportDir: Scalars["String"]["input"];
@@ -15279,6 +15290,89 @@ export const SubContentProfileWarningModeDocument = {
 	SubContentProfileWarningModeSubscription,
 	SubContentProfileWarningModeSubscriptionVariables
 >;
+export const SaveCoversInArchiveDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "saveCoversInArchive" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "ids" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "ListType",
+							type: {
+								kind: "NonNullType",
+								type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+							}
+						}
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "archivePath" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "String" } }
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "options" } },
+					type: { kind: "NamedType", name: { kind: "Name", value: "CoverArtSaveOption" } }
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "cover" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "saveImagesToArchive" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "coverIds" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "ids" }
+											}
+										},
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "archiveFile" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "archivePath" }
+											}
+										},
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "options" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "options" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<SaveCoversInArchiveMutation, SaveCoversInArchiveMutationVariables>;
 export const DownloadCoversInADirectoryDocument = {
 	kind: "Document",
 	definitions: [
