@@ -14,12 +14,15 @@
 	import { dev } from "$app/environment";
 	import ButtonAccentOnlyLabel from "@mangadex/componnents/theme/buttons/ButtonAccentOnlyLabel.svelte";
 	import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
+	import { saveCoversInAArchive } from "@mangadex/utils/covers/save-archive";
+	import { revealItemInDir } from "@tauri-apps/plugin-opener";
 
 	interface Props {
 		covers?: string[];
 	}
 	let { covers = $bindable([]) }: Props = $props();
 	let dirMutation = saveCoversInADirectory();
+	let archiveMutation = saveCoversInAArchive();
 	let imageFormat = $state<CoverImageFormat | undefined>();
 	let resize = $state(false);
 	let resizeMode = $state<"width" | "height">("width");
@@ -118,9 +121,30 @@
 				);
 			}}
 		/>
-		{#if dev}
-			<ButtonAccentOnlyLabel icon={FolderArchive} label="Save images in a archive" />
-		{/if}
+		<ButtonAccentOnlyLabel
+			icon={FolderArchive}
+			label="Save images in a archive"
+			onclick={() => {
+				archiveMutation.mutate(
+					{
+						ids: covers,
+						option: options
+					},
+					{
+						onSuccess(archive) {
+							revealItemInDir(archive).catch(console.warn);
+							addToast({
+								title: "Exported covers",
+								type: "success"
+							});
+						},
+						onError(error) {
+							addErrorToast("Cannot export covers in a archive", error);
+						}
+					}
+				);
+			}}
+		/>
 	</div>
 </section>
 
