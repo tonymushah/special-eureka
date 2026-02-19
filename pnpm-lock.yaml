@@ -44,8 +44,8 @@ importers:
         specifier: ^1.0.0
         version: 1.0.1(svelte@5.53.0)
       '@lucide/svelte':
-        specifier: ^0.574.0
-        version: 0.574.0(svelte@5.53.0)
+        specifier: ^0.575.0
+        version: 0.575.0(svelte@5.53.0)
       '@panzoom/panzoom':
         specifier: ^4.6.1
         version: 4.6.1
@@ -1497,8 +1497,8 @@ packages:
     resolution: {integrity: sha512-2v75bu2vJB0xf7+qSAu0xcUyCYqzc7KeRE1RcKSpOGQTV9UpCqCs/xCsFWLUGnZRWb1VU6XYf+l6GJsDUW9pRQ==}
     engines: {node: ^16.14 || >=18}
 
-  '@lucide/svelte@0.574.0':
-    resolution: {integrity: sha512-tFkSfaKi22uDBkw72xV40oGkSXSQhURTSYn4VK3sNaPzb4dPOYw3znciVCP0VIh5BpgZXfOXRpSp3Dk8eG9EFg==}
+  '@lucide/svelte@0.575.0':
+    resolution: {integrity: sha512-FEFp/0McZwsjBqh1Dn8H+UBm1yHFQYk+utuVMFDw57155+wz2XMoc1pw027ylCPzs+bi14UEXYKbekFhuJKtnw==}
     peerDependencies:
       svelte: ^5
 
@@ -6325,7 +6325,7 @@ snapshots:
       recast: 0.23.11
       svelte: 5.53.0
 
-  '@lucide/svelte@0.574.0(svelte@5.53.0)':
+  '@lucide/svelte@0.575.0(svelte@5.53.0)':
     dependencies:
       svelte: 5.53.0
 
