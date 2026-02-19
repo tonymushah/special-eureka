@@ -58,12 +58,13 @@ async fn save_covers_as_zip<R: Runtime>(
     Ok(())
 }
 
-async fn save_covers_as_tar<R: Runtime>(
+async fn save_covers_as_tar<R: Runtime, W: Write>(
     app: &AppHandle<R>,
     cover_ids: Vec<Uuid>,
     options: Option<&super::CoverArtSaveOption>,
-) -> crate::Result<Vec<u8>> {
-    let mut tar_buf = tar::Builder::new(Cursor::new(Vec::<u8>::new()));
+    writer: W,
+) -> crate::Result<()> {
+    let mut tar_buf = tar::Builder::new(writer);
     for cover_id in cover_ids {
         let (file_name, buf) =
             super::handle_cover_image_with_options(app, cover_id, options).await?;
@@ -73,7 +74,8 @@ async fn save_covers_as_tar<R: Runtime>(
         header.set_cksum();
         tar_buf.append(&header, Cursor::new(buf))?;
     }
-    Ok(tar_buf.into_inner()?.into_inner())
+    tar_buf.finish()?;
+    Ok(())
 }
 
 async fn save_covers_as_tar_gz<R: Runtime>(
@@ -82,12 +84,11 @@ async fn save_covers_as_tar_gz<R: Runtime>(
     archive_path: PathBuf,
     options: Option<&super::CoverArtSaveOption>,
 ) -> crate::Result<()> {
-    let mut tar_buf = Cursor::new(save_covers_as_tar(app, cover_ids, options).await?);
     let mut writer = flate2::write::GzEncoder::new(
         BufWriter::new(File::create(archive_path)?),
         flate2::Compression::best(),
     );
-    std::io::copy(&mut tar_buf, &mut writer)?;
+    save_covers_as_tar(app, cover_ids, options, &mut writer).await?;
     writer.flush()?;
     writer.finish()?;
     Ok(())
@@ -99,9 +100,8 @@ async fn save_covers_as_tar_zstd<R: Runtime>(
     archive_path: PathBuf,
     options: Option<&super::CoverArtSaveOption>,
 ) -> crate::Result<()> {
-    let mut tar_buf = Cursor::new(save_covers_as_tar(app, cover_ids, options).await?);
     let mut writer = zstd::Encoder::new(BufWriter::new(File::create(archive_path)?), 5)?;
-    std::io::copy(&mut tar_buf, &mut writer)?;
+    save_covers_as_tar(app, cover_ids, options, &mut writer).await?;
     writer.flush()?;
     writer.finish()?;
     Ok(())
@@ -113,12 +113,11 @@ async fn save_covers_as_tar_bz2<R: Runtime>(
     archive_path: PathBuf,
     options: Option<&super::CoverArtSaveOption>,
 ) -> crate::Result<()> {
-    let mut tar_buf = Cursor::new(save_covers_as_tar(app, cover_ids, options).await?);
     let mut writer = bzip2::write::BzEncoder::new(
         BufWriter::new(File::create(archive_path)?),
         bzip2::Compression::best(),
     );
-    std::io::copy(&mut tar_buf, &mut writer)?;
+    save_covers_as_tar(app, cover_ids, options, &mut writer).await?;
     writer.flush()?;
     writer.finish()?;
     Ok(())
@@ -130,12 +129,11 @@ async fn save_covers_as_tar_zlib<R: Runtime>(
     archive_path: PathBuf,
     options: Option<&super::CoverArtSaveOption>,
 ) -> crate::Result<()> {
-    let mut tar_buf = Cursor::new(save_covers_as_tar(app, cover_ids, options).await?);
     let mut writer = flate2::write::ZlibEncoder::new(
         BufWriter::new(File::create(archive_path)?),
         flate2::Compression::best(),
     );
-    std::io::copy(&mut tar_buf, &mut writer)?;
+    save_covers_as_tar(app, cover_ids, options, &mut writer).await?;
     writer.flush()?;
     writer.finish()?;
     Ok(())
