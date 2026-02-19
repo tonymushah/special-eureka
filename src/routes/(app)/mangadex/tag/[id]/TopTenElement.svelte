@@ -19,14 +19,12 @@
 			id: string;
 			name: Map<string, string>;
 		}[];
-		filename: string;
 		cttRating?: ContentRating;
 	}
 
 	let {
 		mangaId,
 		coverId,
-		filename,
 		title: rawTitle,
 		tags: rawTags,
 		cttRating: contentRating = ContentRating.Safe
@@ -37,7 +35,7 @@
 	let cover_art = get_cover_image_auto_handle_error(() => ({
 		id: mangaId,
 		asManga: true,
-		quality: "256"
+		quality: "512"
 	}));
 
 	let title = $derived(get_value_and_random_if_undefined(rawTitle, "en") ?? mangaId);
