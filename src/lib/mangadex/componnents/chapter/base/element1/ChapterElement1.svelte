@@ -299,7 +299,7 @@
 							})}
 							ext_href={`https://mangadex.org/group/${id}`}
 						>
-							<span>
+							<span data-scanlation-group-id={id} class="users-simple-selectable">
 								{name}
 							</span>
 						</Link>
@@ -318,7 +318,8 @@
 					href={route("/mangadex/user/[id]", {
 						id: uploader.id
 					})}
-					class="uploader"
+					class="uploader users-simple-selectable"
+					data-user-id={uploader.id}
 				>
 					{uploader.name}
 				</a>
