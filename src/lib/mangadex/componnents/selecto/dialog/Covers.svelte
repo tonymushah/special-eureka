@@ -3,11 +3,12 @@
 	import SectionBase from "./SectionBase.svelte";
 	import Selections from "./covers/Selections.svelte";
 	import exportIdsToTxtLoader from "@mangadex/gql-docs/export/ids";
-	import { addErrorToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
+	import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 	import { revealItemInDir } from "@tauri-apps/plugin-opener";
 	import Save from "./covers/Save.svelte";
 	import { isMounted } from "@mangadex/stores/offlineIsMounted";
 	import { dev } from "$app/environment";
+	import { downloadCoversLocally } from "@mangadex/utils/covers/download";
 
 	interface Props {
 		covers?: string[];
@@ -16,6 +17,7 @@
 	let currentAction = $state<"selection" | "save">("selection");
 	let exportIdsToTxt = exportIdsToTxtLoader();
 	let coversEmpty = $derived(covers.length == 0);
+	let downloadCovers = downloadCoversLocally();
 </script>
 
 <SectionBase>
@@ -64,6 +66,23 @@
 				currentAction = "save";
 			}}
 		/>
-		<ButtonAccentOnlyLabel variant="3" disabled={!dev || $isMounted} label="Download metadata" />
+		<ButtonAccentOnlyLabel
+			variant="3"
+			disabled={!$isMounted || downloadCovers.isPending}
+			label="Download in offline database"
+			onclick={() => {
+				downloadCovers.mutate(covers, {
+					onError(error) {
+						addErrorToast("Cannot download cover ids in offline database", error);
+					},
+					onSuccess() {
+						addToast({
+							title: "Downloaded in offline database",
+							type: "success"
+						});
+					}
+				});
+			}}
+		/>
 	{/snippet}
 </SectionBase>
