@@ -41,7 +41,7 @@ importers:
         version: 3.2.0(graphql@16.12.0)
       '@humanspeak/svelte-markdown':
         specifier: ^1.0.0
-        version: 1.0.0(svelte@5.51.4)
+        version: 1.0.1(svelte@5.51.4)
       '@lucide/svelte':
         specifier: ^0.574.0
         version: 0.574.0(svelte@5.51.4)
@@ -1166,8 +1166,8 @@ packages:
     resolution: {integrity: sha512-bNo+xAL2KT8Zv9wHjeLloyQrbEv8aea9gjL2eHhNki3/1xapDRYm/W5gGgBQNvpdBJFoYcA6VQJcbm0ZjKML+g==}
     engines: {node: '>=18.0.0'}
 
-  '@humanspeak/svelte-markdown@1.0.0':
-    resolution: {integrity: sha512-CAm4epr+JjCt3RRERKIzhv0GFO2E43jgSn9/cdBzcgxRv2wTwRIFB7OPwadu4jSovqfufrKJ0Bkz2VWxnX3pZg==}
+  '@humanspeak/svelte-markdown@1.0.1':
+    resolution: {integrity: sha512-/qv5uTS7SeezTVqK01mYRNjCmDCYb5OaD1KiCg1rUft4UGsK7iGCb7oJAjpywsvB8DRO9/C+YH9sRYWjtlUHnw==}
     peerDependencies:
       svelte: ^5.0.0
 
@@ -6065,7 +6065,7 @@ snapshots:
 
   '@humanspeak/memory-cache@1.0.5': {}
 
-  '@humanspeak/svelte-markdown@1.0.0(svelte@5.51.4)':
+  '@humanspeak/svelte-markdown@1.0.1(svelte@5.51.4)':
     dependencies:
       '@humanspeak/memory-cache': 1.0.5
       github-slugger: 2.0.0
