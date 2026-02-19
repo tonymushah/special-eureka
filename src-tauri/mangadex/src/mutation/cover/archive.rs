@@ -72,6 +72,7 @@ async fn save_covers_as_tar<R: Runtime, W: Write>(
         header.set_path(file_name)?;
         header.set_size(buf.len().try_into()?);
         header.set_cksum();
+        header.set_mode(0o644);
         tar_buf.append(&header, Cursor::new(buf))?;
     }
     tar_buf.finish()?;
