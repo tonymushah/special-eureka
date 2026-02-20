@@ -73,12 +73,12 @@
 			{/each}
 		</swiper-container>
 	</div>
-
-	<style lang="scss">
-		.result {
-			margin: 1em;
-		}
-	</style>
 {:else}
 	<NothingToShow />
 {/if}
+
+<style lang="scss">
+	.result {
+		margin: 1em;
+	}
+</style>
