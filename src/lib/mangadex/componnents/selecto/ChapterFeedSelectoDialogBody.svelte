@@ -7,6 +7,7 @@
 	import { TabContent } from "@ark-ui/svelte/tabs";
 	import cssMod from "./dialog-body.module.scss";
 	import Covers from "./dialog/Covers.svelte";
+	import ScanlationGroups from "./dialog/ScanlationGroups.svelte";
 
 	interface Props {
 		titles?: string[];
@@ -85,7 +86,7 @@
 		<Covers {covers} />
 	</TabContent>
 	<TabContent value={scanlationGroupsId} class={cssMod.content}>
-		<p>nothing</p>
+		<ScanlationGroups {scanlationGroups} />
 	</TabContent>
 	<TabContent value={usersId} class={cssMod.content}>
 		<p>nothing</p>
