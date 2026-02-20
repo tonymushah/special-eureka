@@ -59,11 +59,9 @@
 					Leader: {leader.attributes.username}
 				</span>
 			{/if}
-			{#if members.length != 0}
-				<span class="members">
-					Members: {members.length}
-				</span>
-			{/if}
+			<span class="members">
+				Members: {members.length}
+			</span>
 		</button>
 	{/each}
 {/snippet}
