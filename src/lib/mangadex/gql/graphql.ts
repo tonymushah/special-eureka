@@ -1205,14 +1205,18 @@ export type CustomListMutations = {
 	__typename?: "CustomListMutations";
 	addManga: Scalars["Boolean"]["output"];
 	addMangaBatch: Scalars["Boolean"]["output"];
+	assembleCustomListsIntoOne: CustomList;
 	create: CustomList;
 	delete: Scalars["Boolean"]["output"];
+	downloadListTitles?: Maybe<Scalars["Boolean"]["output"]>;
 	export: CustomListExportMutations;
 	follow: Scalars["Boolean"]["output"];
+	followBatch?: Maybe<Scalars["Boolean"]["output"]>;
 	fork: CustomList;
 	removeManga: Scalars["Boolean"]["output"];
 	removeMangaBatch: Scalars["Boolean"]["output"];
 	unfollow: Scalars["Boolean"]["output"];
+	unfollowBatch?: Maybe<Scalars["Boolean"]["output"]>;
 	update: CustomList;
 };
 
@@ -1225,6 +1229,13 @@ export type CustomListMutationsAddMangaBatchArgs = {
 	mangaIds: Array<Scalars["UUID"]["input"]>;
 };
 
+export type CustomListMutationsAssembleCustomListsIntoOneArgs = {
+	filterContent?: InputMaybe<Scalars["Boolean"]["input"]>;
+	name: Scalars["String"]["input"];
+	toAssemble: Array<Scalars["UUID"]["input"]>;
+	visibility?: InputMaybe<CustomListVisibility>;
+};
+
 export type CustomListMutationsCreateArgs = {
 	params: CustomListCreateParam;
 };
@@ -1233,8 +1244,18 @@ export type CustomListMutationsDeleteArgs = {
 	id: Scalars["UUID"]["input"];
 };
 
+export type CustomListMutationsDownloadListTitlesArgs = {
+	extras?: InputMaybe<MangaDownloadExtras>;
+	filterContent?: InputMaybe<Scalars["Boolean"]["input"]>;
+	toDowload: Array<Scalars["UUID"]["input"]>;
+};
+
 export type CustomListMutationsFollowArgs = {
 	id: Scalars["UUID"]["input"];
+};
+
+export type CustomListMutationsFollowBatchArgs = {
+	ids: Array<Scalars["UUID"]["input"]>;
 };
 
 export type CustomListMutationsForkArgs = {
@@ -1255,6 +1276,10 @@ export type CustomListMutationsRemoveMangaBatchArgs = {
 
 export type CustomListMutationsUnfollowArgs = {
 	id: Scalars["UUID"]["input"];
+};
+
+export type CustomListMutationsUnfollowBatchArgs = {
+	ids: Array<Scalars["UUID"]["input"]>;
 };
 
 export type CustomListMutationsUpdateArgs = {
@@ -3188,7 +3213,9 @@ export type ScanlationGroupMutation = {
 	delete: Scalars["Boolean"]["output"];
 	edit: ScanlationGroup;
 	follow: Scalars["Boolean"]["output"];
+	followBatch?: Maybe<Scalars["Boolean"]["output"]>;
 	unfollow: Scalars["Boolean"]["output"];
+	unfollowBatch?: Maybe<Scalars["Boolean"]["output"]>;
 };
 
 export type ScanlationGroupMutationCreateArgs = {
@@ -3207,8 +3234,16 @@ export type ScanlationGroupMutationFollowArgs = {
 	id: Scalars["UUID"]["input"];
 };
 
+export type ScanlationGroupMutationFollowBatchArgs = {
+	ids: Array<Scalars["UUID"]["input"]>;
+};
+
 export type ScanlationGroupMutationUnfollowArgs = {
 	id: Scalars["UUID"]["input"];
+};
+
+export type ScanlationGroupMutationUnfollowBatchArgs = {
+	ids: Array<Scalars["UUID"]["input"]>;
 };
 
 export type ScanlationGroupQueries = {
@@ -3746,15 +3781,25 @@ export type UserListParam = {
 export type UserMutations = {
 	__typename?: "UserMutations";
 	follow: Scalars["Boolean"]["output"];
+	followBatch?: Maybe<Scalars["Boolean"]["output"]>;
 	unfollow: Scalars["Boolean"]["output"];
+	unfollowBatch?: Maybe<Scalars["Boolean"]["output"]>;
 };
 
 export type UserMutationsFollowArgs = {
 	id: Scalars["UUID"]["input"];
 };
 
+export type UserMutationsFollowBatchArgs = {
+	ids: Array<Scalars["UUID"]["input"]>;
+};
+
 export type UserMutationsUnfollowArgs = {
 	id: Scalars["UUID"]["input"];
+};
+
+export type UserMutationsUnfollowBatchArgs = {
+	ids: Array<Scalars["UUID"]["input"]>;
 };
 
 export type UserOptionMutations = {

@@ -953,6 +953,10 @@ type CustomListMutations {
 	removeMangaBatch(listId: UUID!, mangaIds: [UUID!]!): Boolean!
 	export: CustomListExportMutations!
 	fork(toFork: UUID!, name: String!, visibility: CustomListVisibility, filterContent: Boolean): CustomList!
+	followBatch(ids: [UUID!]!): Boolean
+	unfollowBatch(ids: [UUID!]!): Boolean
+	assembleCustomListsIntoOne(toAssemble: [UUID!]!, name: String!, visibility: CustomListVisibility, filterContent: Boolean): CustomList!
+	downloadListTitles(toDowload: [UUID!]!, extras: MangaDownloadExtras, filterContent: Boolean): Boolean
 }
 
 type CustomListQueries {
@@ -2448,6 +2452,8 @@ type ScanlationGroupMutation {
 	delete(id: UUID!): Boolean!
 	follow(id: UUID!): Boolean!
 	unfollow(id: UUID!): Boolean!
+	followBatch(ids: [UUID!]!): Boolean
+	unfollowBatch(ids: [UUID!]!): Boolean
 }
 
 type ScanlationGroupQueries {
@@ -2832,6 +2838,8 @@ input UserListParam {
 type UserMutations {
 	follow(id: UUID!): Boolean!
 	unfollow(id: UUID!): Boolean!
+	followBatch(ids: [UUID!]!): Boolean
+	unfollowBatch(ids: [UUID!]!): Boolean
 }
 
 type UserOptionMutations {
