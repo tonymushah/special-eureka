@@ -103,6 +103,8 @@ type Documents = {
 	"\n\tmutation exportIdsToTxt($uuids: [UUID!]!, $path: String!) {\n\t\texport {\n\t\t\tuuidsToAsTxt(file: $path, uuids: $uuids)\n\t\t}\n\t}\n": typeof types.ExportIdsToTxtDocument;
 	"\n\tmutation setForcePort443($force: Boolean!) {\n\t\tuserOption {\n\t\t\tsetForcePort443(force: $force)\n\t\t}\n\t}\n": typeof types.SetForcePort443Document;
 	"\n\tsubscription subForce443 {\n\t\twatchForcePort443\n\t}\n": typeof types.SubForce443Document;
+	"\n\tmutation followScanlationGroupBatch($ids: [UUID!]!) {\n\t\tscanlationGroup {\n\t\t\tfollowBatch(ids: $ids)\n\t\t}\n\t}\n": typeof types.FollowScanlationGroupBatchDocument;
+	"\n\tmutation unfollowScanlationGroupBatch($ids: [UUID!]!) {\n\t\tscanlationGroup {\n\t\t\tunfollowBatch(ids: $ids)\n\t\t}\n\t}\n": typeof types.UnfollowScanlationGroupBatchDocument;
 	"\n\tquery groupPageQuery($id: UUID!) {\n\t\tscanlationGroup {\n\t\t\tgetUnique(id: $id) {\n\t\t\t\tid\n\t\t\t\tattributes {\n\t\t\t\t\twebsite\n\t\t\t\t\ttwitter\n\t\t\t\t\tname\n\t\t\t\t\taltNames\n\t\t\t\t\tircServer\n\t\t\t\t\tircChannel\n\t\t\t\t\tcontactEmail\n\t\t\t\t\tmangaUpdates\n\t\t\t\t\tfocusedLanguages\n\t\t\t\t\tlocked\n\t\t\t\t\tofficial\n\t\t\t\t\tverified\n\t\t\t\t\texLicensed\n\t\t\t\t\tpublishDelay\n\t\t\t\t\tcreatedAt\n\t\t\t\t\tdescription\n\t\t\t\t\tdiscord\n\t\t\t\t}\n\t\t\t\trelationships {\n\t\t\t\t\tleader {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\troles\n\t\t\t\t\t\t\tusername\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\tmembers {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\troles\n\t\t\t\t\t\t\tusername\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\tmanga {\n\t\t\tlist(params: { group: $id }) {\n\t\t\t\ttotal\n\t\t\t}\n\t\t}\n\t\tstatistics {\n\t\t\tgroup {\n\t\t\t\tget(id: $id) {\n\t\t\t\t\tcomments {\n\t\t\t\t\t\tthreadUrl\n\t\t\t\t\t\trepliesCount\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\tchapter {\n\t\t\tlist(params: { groups: [$id] }) {\n\t\t\t\ttotal\n\t\t\t}\n\t\t}\n\t}\n": typeof types.GroupPageQueryDocument;
 	"\n\tmutation followScanlationGroupMutation($id: UUID!) {\n\t\tscanlationGroup {\n\t\t\tfollow(id: $id)\n\t\t}\n\t}\n": typeof types.FollowScanlationGroupMutationDocument;
 	"\n\tmutation unfollowScanlationGroupMutation($id: UUID!) {\n\t\tscanlationGroup {\n\t\t\tunfollow(id: $id)\n\t\t}\n\t}\n": typeof types.UnfollowScanlationGroupMutationDocument;
@@ -127,8 +129,11 @@ type Documents = {
 	"\n\tquery currentUserLibraryReading($param: UserLibrarySectionParam) {\n\t\tlibrary {\n\t\t\treading(param: $param) {\n\t\t\t\tlimit\n\t\t\t\toffset\n\t\t\t\ttotal\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\tdescription\n\t\t\t\t\t\tyear\n\t\t\t\t\t\ttitle\n\t\t\t\t\t\tstatus\n\t\t\t\t\t\tstate\n\t\t\t\t\t\toriginalLanguage\n\t\t\t\t\t\ttags {\n\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\tname\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t\tcontentRating\n\t\t\t\t\t\tpublicationDemographic\n\t\t\t\t\t}\n\t\t\t\t\trelationships {\n\t\t\t\t\t\tcoverArt {\n\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\tdescription\n\t\t\t\t\t\t\t\tfileName\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.CurrentUserLibraryReadingDocument;
 	"\n\tquery librarySize {\n\t\tlibrary {\n\t\t\tsize {\n\t\t\t\tunfiltered\n\t\t\t\tcompleted\n\t\t\t\tdropped\n\t\t\t\tplanToRead\n\t\t\t\treading\n\t\t\t\treReading\n\t\t\t\tonHold\n\t\t\t}\n\t\t}\n\t}\n": typeof types.LibrarySizeDocument;
 	"\n\tquery currentUserCustomLists($params: CurrentLoggedLists!) {\n\t\tcustomList {\n\t\t\tcurrentLoggedLists(params: $params) {\n\t\t\t\tlimit\n\t\t\t\toffset\n\t\t\t\ttotal\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\tname\n\t\t\t\t\t\tvisibility\n\t\t\t\t\t}\n\t\t\t\t\trelationships {\n\t\t\t\t\t\ttitlesIds\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.CurrentUserCustomListsDocument;
+	"\n\tmutation downloadMDListsTitles(\n\t\t$listIDs: [UUID!]!\n\t\t$extras: MangaDownloadExtras\n\t\t$filterContent: Boolean!\n\t) {\n\t\tcustomList {\n\t\t\tdownloadListTitles(extras: $extras, toDowload: $listIDs, filterContent: $filterContent)\n\t\t}\n\t}\n": typeof types.DownloadMdListsTitlesDocument;
 	"\n\tmutation exportCustomListsToCSV($options: ExportCustomListsToCSVOptions!) {\n\t\tcustomList {\n\t\t\texport {\n\t\t\t\tasCsv(option: $options)\n\t\t\t}\n\t\t}\n\t}\n": typeof types.ExportCustomListsToCsvDocument;
 	"\n\tmutation exportCustomListsToMAL($options: MdcustomListsToMyAnimeListExportOption!) {\n\t\tcustomList {\n\t\t\texport {\n\t\t\t\tasMyAnimeList(option: $options)\n\t\t\t}\n\t\t}\n\t}\n": typeof types.ExportCustomListsToMalDocument;
+	"\n\tmutation followMDListBatch($ids: [UUID!]!) {\n\t\tcustomList {\n\t\t\tfollowBatch(ids: $ids)\n\t\t}\n\t}\n": typeof types.FollowMdListBatchDocument;
+	"\n\tmutation unfollowMDListBatch($ids: [UUID!]!) {\n\t\tcustomList {\n\t\t\tunfollowBatch(ids: $ids)\n\t\t}\n\t}\n": typeof types.UnfollowMdListBatchDocument;
 	"\n\tmutation deleteCustomListMutation($id: UUID!) {\n\t\tcustomList {\n\t\t\tdelete(id: $id)\n\t\t}\n\t}\n": typeof types.DeleteCustomListMutationDocument;
 	"\n\tquery customListChapterFeed(\n\t\t$feedParam: CustomListMangaFeedParams!\n\t\t$mangaParam: MangaListParams\n\t\t$private: Boolean\n\t\t$onlyUnreadTitles: Boolean\n\t) {\n\t\tfeed {\n\t\t\tcustomListFeedGrouped(\n\t\t\t\tfeedParams: $feedParam\n\t\t\t\tmangaListParams: $mangaParam\n\t\t\t\tprivate: $private\n\t\t\t\tonlyUnreadTitles: $onlyUnreadTitles\n\t\t\t) {\n\t\t\t\tlimit\n\t\t\t\toffset\n\t\t\t\ttotal\n\t\t\t\tdata {\n\t\t\t\t\tmanga {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\ttitle\n\t\t\t\t\t\t\toriginalLanguage\n\t\t\t\t\t\t\tlastVolume\n\t\t\t\t\t\t\tlastChapter\n\t\t\t\t\t\t}\n\t\t\t\t\t\trelationships {\n\t\t\t\t\t\t\tcoverArt {\n\t\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\t\tfileName\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\tchapters {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\ttitle\n\t\t\t\t\t\t\tchapter\n\t\t\t\t\t\t\tvolume\n\t\t\t\t\t\t\ttranslatedLanguage\n\t\t\t\t\t\t\texternalUrl\n\t\t\t\t\t\t\tcreatedAt\n\t\t\t\t\t\t\treadableAt\n\t\t\t\t\t\t}\n\t\t\t\t\t\trelationships {\n\t\t\t\t\t\t\tscanlationGroups {\n\t\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\t\tname\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\tuser {\n\t\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\t\troles\n\t\t\t\t\t\t\t\t\tusername\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.CustomListChapterFeedDocument;
 	"\n\tmutation followCustomListMutation($id: UUID!) {\n\t\tcustomList {\n\t\t\tfollow(id: $id)\n\t\t}\n\t}\n": typeof types.FollowCustomListMutationDocument;
@@ -186,6 +191,8 @@ type Documents = {
 	"\n\tmutation swapInternalUploadSessionFiles($sessionId: UUID!, $a: Int!, $b: Int!) {\n\t\tupload {\n\t\t\tinternal {\n\t\t\t\tsession(id: $sessionId) {\n\t\t\t\t\tswapFileOrder(a: $a, b: $b)\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.SwapInternalUploadSessionFilesDocument;
 	"\n\tmutation startInternalQueueRunner {\n\t\tupload {\n\t\t\tinternal {\n\t\t\t\tstartQueueRunner\n\t\t\t}\n\t\t}\n\t}\n": typeof types.StartInternalQueueRunnerDocument;
 	"\n\tmutation swapInternalQueueOrder($a: UUID!, $b: UUID!) {\n\t\tupload {\n\t\t\tinternal {\n\t\t\t\tswapQueueOrder(a: $a, b: $b)\n\t\t\t}\n\t\t}\n\t}\n": typeof types.SwapInternalQueueOrderDocument;
+	"\n\tmutation followUserBatch($ids: [UUID!]!) {\n\t\tuser {\n\t\t\tfollowBatch(ids: $ids)\n\t\t}\n\t}\n": typeof types.FollowUserBatchDocument;
+	"\n\tmutation unfollowUserBatch($ids: [UUID!]!) {\n\t\tuser {\n\t\t\tunfollowBatch(ids: $ids)\n\t\t}\n\t}\n": typeof types.UnfollowUserBatchDocument;
 	"\n\tquery userPageQuery($id: UUID!) {\n\t\tuser {\n\t\t\tget(id: $id) {\n\t\t\t\tid\n\t\t\t\tattributes {\n\t\t\t\t\tusername\n\t\t\t\t\troles\n\t\t\t\t}\n\t\t\t\trelationships {\n\t\t\t\t\tgroups {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\tname\n\t\t\t\t\t\t}\n\t\t\t\t\t\trelationships {\n\t\t\t\t\t\t\tleader {\n\t\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\tchapter {\n\t\t\tlist(params: { uploaders: [$id] }) {\n\t\t\t\ttotal\n\t\t\t}\n\t\t}\n\t}\n": typeof types.UserPageQueryDocument;
 	"\n\tmutation followUserMutation($id: UUID!) {\n\t\tuser {\n\t\t\tfollow(id: $id)\n\t\t}\n\t}\n": typeof types.FollowUserMutationDocument;
 	"\n\tmutation unfollowUserMutation($id: UUID!) {\n\t\tuser {\n\t\t\tunfollow(id: $id)\n\t\t}\n\t}\n": typeof types.UnfollowUserMutationDocument;
@@ -426,6 +433,10 @@ const documents: Documents = {
 	"\n\tmutation setForcePort443($force: Boolean!) {\n\t\tuserOption {\n\t\t\tsetForcePort443(force: $force)\n\t\t}\n\t}\n":
 		types.SetForcePort443Document,
 	"\n\tsubscription subForce443 {\n\t\twatchForcePort443\n\t}\n": types.SubForce443Document,
+	"\n\tmutation followScanlationGroupBatch($ids: [UUID!]!) {\n\t\tscanlationGroup {\n\t\t\tfollowBatch(ids: $ids)\n\t\t}\n\t}\n":
+		types.FollowScanlationGroupBatchDocument,
+	"\n\tmutation unfollowScanlationGroupBatch($ids: [UUID!]!) {\n\t\tscanlationGroup {\n\t\t\tunfollowBatch(ids: $ids)\n\t\t}\n\t}\n":
+		types.UnfollowScanlationGroupBatchDocument,
 	"\n\tquery groupPageQuery($id: UUID!) {\n\t\tscanlationGroup {\n\t\t\tgetUnique(id: $id) {\n\t\t\t\tid\n\t\t\t\tattributes {\n\t\t\t\t\twebsite\n\t\t\t\t\ttwitter\n\t\t\t\t\tname\n\t\t\t\t\taltNames\n\t\t\t\t\tircServer\n\t\t\t\t\tircChannel\n\t\t\t\t\tcontactEmail\n\t\t\t\t\tmangaUpdates\n\t\t\t\t\tfocusedLanguages\n\t\t\t\t\tlocked\n\t\t\t\t\tofficial\n\t\t\t\t\tverified\n\t\t\t\t\texLicensed\n\t\t\t\t\tpublishDelay\n\t\t\t\t\tcreatedAt\n\t\t\t\t\tdescription\n\t\t\t\t\tdiscord\n\t\t\t\t}\n\t\t\t\trelationships {\n\t\t\t\t\tleader {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\troles\n\t\t\t\t\t\t\tusername\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\tmembers {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\troles\n\t\t\t\t\t\t\tusername\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\tmanga {\n\t\t\tlist(params: { group: $id }) {\n\t\t\t\ttotal\n\t\t\t}\n\t\t}\n\t\tstatistics {\n\t\t\tgroup {\n\t\t\t\tget(id: $id) {\n\t\t\t\t\tcomments {\n\t\t\t\t\t\tthreadUrl\n\t\t\t\t\t\trepliesCount\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\tchapter {\n\t\t\tlist(params: { groups: [$id] }) {\n\t\t\t\ttotal\n\t\t\t}\n\t\t}\n\t}\n":
 		types.GroupPageQueryDocument,
 	"\n\tmutation followScanlationGroupMutation($id: UUID!) {\n\t\tscanlationGroup {\n\t\t\tfollow(id: $id)\n\t\t}\n\t}\n":
@@ -474,10 +485,16 @@ const documents: Documents = {
 		types.LibrarySizeDocument,
 	"\n\tquery currentUserCustomLists($params: CurrentLoggedLists!) {\n\t\tcustomList {\n\t\t\tcurrentLoggedLists(params: $params) {\n\t\t\t\tlimit\n\t\t\t\toffset\n\t\t\t\ttotal\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\tname\n\t\t\t\t\t\tvisibility\n\t\t\t\t\t}\n\t\t\t\t\trelationships {\n\t\t\t\t\t\ttitlesIds\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
 		types.CurrentUserCustomListsDocument,
+	"\n\tmutation downloadMDListsTitles(\n\t\t$listIDs: [UUID!]!\n\t\t$extras: MangaDownloadExtras\n\t\t$filterContent: Boolean!\n\t) {\n\t\tcustomList {\n\t\t\tdownloadListTitles(extras: $extras, toDowload: $listIDs, filterContent: $filterContent)\n\t\t}\n\t}\n":
+		types.DownloadMdListsTitlesDocument,
 	"\n\tmutation exportCustomListsToCSV($options: ExportCustomListsToCSVOptions!) {\n\t\tcustomList {\n\t\t\texport {\n\t\t\t\tasCsv(option: $options)\n\t\t\t}\n\t\t}\n\t}\n":
 		types.ExportCustomListsToCsvDocument,
 	"\n\tmutation exportCustomListsToMAL($options: MdcustomListsToMyAnimeListExportOption!) {\n\t\tcustomList {\n\t\t\texport {\n\t\t\t\tasMyAnimeList(option: $options)\n\t\t\t}\n\t\t}\n\t}\n":
 		types.ExportCustomListsToMalDocument,
+	"\n\tmutation followMDListBatch($ids: [UUID!]!) {\n\t\tcustomList {\n\t\t\tfollowBatch(ids: $ids)\n\t\t}\n\t}\n":
+		types.FollowMdListBatchDocument,
+	"\n\tmutation unfollowMDListBatch($ids: [UUID!]!) {\n\t\tcustomList {\n\t\t\tunfollowBatch(ids: $ids)\n\t\t}\n\t}\n":
+		types.UnfollowMdListBatchDocument,
 	"\n\tmutation deleteCustomListMutation($id: UUID!) {\n\t\tcustomList {\n\t\t\tdelete(id: $id)\n\t\t}\n\t}\n":
 		types.DeleteCustomListMutationDocument,
 	"\n\tquery customListChapterFeed(\n\t\t$feedParam: CustomListMangaFeedParams!\n\t\t$mangaParam: MangaListParams\n\t\t$private: Boolean\n\t\t$onlyUnreadTitles: Boolean\n\t) {\n\t\tfeed {\n\t\t\tcustomListFeedGrouped(\n\t\t\t\tfeedParams: $feedParam\n\t\t\t\tmangaListParams: $mangaParam\n\t\t\t\tprivate: $private\n\t\t\t\tonlyUnreadTitles: $onlyUnreadTitles\n\t\t\t) {\n\t\t\t\tlimit\n\t\t\t\toffset\n\t\t\t\ttotal\n\t\t\t\tdata {\n\t\t\t\t\tmanga {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\ttitle\n\t\t\t\t\t\t\toriginalLanguage\n\t\t\t\t\t\t\tlastVolume\n\t\t\t\t\t\t\tlastChapter\n\t\t\t\t\t\t}\n\t\t\t\t\t\trelationships {\n\t\t\t\t\t\t\tcoverArt {\n\t\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\t\tfileName\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\tchapters {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\ttitle\n\t\t\t\t\t\t\tchapter\n\t\t\t\t\t\t\tvolume\n\t\t\t\t\t\t\ttranslatedLanguage\n\t\t\t\t\t\t\texternalUrl\n\t\t\t\t\t\t\tcreatedAt\n\t\t\t\t\t\t\treadableAt\n\t\t\t\t\t\t}\n\t\t\t\t\t\trelationships {\n\t\t\t\t\t\t\tscanlationGroups {\n\t\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\t\tname\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\tuser {\n\t\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\t\troles\n\t\t\t\t\t\t\t\t\tusername\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
@@ -592,6 +609,10 @@ const documents: Documents = {
 		types.StartInternalQueueRunnerDocument,
 	"\n\tmutation swapInternalQueueOrder($a: UUID!, $b: UUID!) {\n\t\tupload {\n\t\t\tinternal {\n\t\t\t\tswapQueueOrder(a: $a, b: $b)\n\t\t\t}\n\t\t}\n\t}\n":
 		types.SwapInternalQueueOrderDocument,
+	"\n\tmutation followUserBatch($ids: [UUID!]!) {\n\t\tuser {\n\t\t\tfollowBatch(ids: $ids)\n\t\t}\n\t}\n":
+		types.FollowUserBatchDocument,
+	"\n\tmutation unfollowUserBatch($ids: [UUID!]!) {\n\t\tuser {\n\t\t\tunfollowBatch(ids: $ids)\n\t\t}\n\t}\n":
+		types.UnfollowUserBatchDocument,
 	"\n\tquery userPageQuery($id: UUID!) {\n\t\tuser {\n\t\t\tget(id: $id) {\n\t\t\t\tid\n\t\t\t\tattributes {\n\t\t\t\t\tusername\n\t\t\t\t\troles\n\t\t\t\t}\n\t\t\t\trelationships {\n\t\t\t\t\tgroups {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\tname\n\t\t\t\t\t\t}\n\t\t\t\t\t\trelationships {\n\t\t\t\t\t\t\tleader {\n\t\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\tchapter {\n\t\t\tlist(params: { uploaders: [$id] }) {\n\t\t\t\ttotal\n\t\t\t}\n\t\t}\n\t}\n":
 		types.UserPageQueryDocument,
 	"\n\tmutation followUserMutation($id: UUID!) {\n\t\tuser {\n\t\t\tfollow(id: $id)\n\t\t}\n\t}\n":
@@ -1267,6 +1288,18 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
+	source: "\n\tmutation followScanlationGroupBatch($ids: [UUID!]!) {\n\t\tscanlationGroup {\n\t\t\tfollowBatch(ids: $ids)\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tmutation followScanlationGroupBatch($ids: [UUID!]!) {\n\t\tscanlationGroup {\n\t\t\tfollowBatch(ids: $ids)\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tmutation unfollowScanlationGroupBatch($ids: [UUID!]!) {\n\t\tscanlationGroup {\n\t\t\tunfollowBatch(ids: $ids)\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tmutation unfollowScanlationGroupBatch($ids: [UUID!]!) {\n\t\tscanlationGroup {\n\t\t\tunfollowBatch(ids: $ids)\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
 	source: "\n\tquery groupPageQuery($id: UUID!) {\n\t\tscanlationGroup {\n\t\t\tgetUnique(id: $id) {\n\t\t\t\tid\n\t\t\t\tattributes {\n\t\t\t\t\twebsite\n\t\t\t\t\ttwitter\n\t\t\t\t\tname\n\t\t\t\t\taltNames\n\t\t\t\t\tircServer\n\t\t\t\t\tircChannel\n\t\t\t\t\tcontactEmail\n\t\t\t\t\tmangaUpdates\n\t\t\t\t\tfocusedLanguages\n\t\t\t\t\tlocked\n\t\t\t\t\tofficial\n\t\t\t\t\tverified\n\t\t\t\t\texLicensed\n\t\t\t\t\tpublishDelay\n\t\t\t\t\tcreatedAt\n\t\t\t\t\tdescription\n\t\t\t\t\tdiscord\n\t\t\t\t}\n\t\t\t\trelationships {\n\t\t\t\t\tleader {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\troles\n\t\t\t\t\t\t\tusername\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\tmembers {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\troles\n\t\t\t\t\t\t\tusername\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\tmanga {\n\t\t\tlist(params: { group: $id }) {\n\t\t\t\ttotal\n\t\t\t}\n\t\t}\n\t\tstatistics {\n\t\t\tgroup {\n\t\t\t\tget(id: $id) {\n\t\t\t\t\tcomments {\n\t\t\t\t\t\tthreadUrl\n\t\t\t\t\t\trepliesCount\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\tchapter {\n\t\t\tlist(params: { groups: [$id] }) {\n\t\t\t\ttotal\n\t\t\t}\n\t\t}\n\t}\n"
 ): (typeof documents)["\n\tquery groupPageQuery($id: UUID!) {\n\t\tscanlationGroup {\n\t\t\tgetUnique(id: $id) {\n\t\t\t\tid\n\t\t\t\tattributes {\n\t\t\t\t\twebsite\n\t\t\t\t\ttwitter\n\t\t\t\t\tname\n\t\t\t\t\taltNames\n\t\t\t\t\tircServer\n\t\t\t\t\tircChannel\n\t\t\t\t\tcontactEmail\n\t\t\t\t\tmangaUpdates\n\t\t\t\t\tfocusedLanguages\n\t\t\t\t\tlocked\n\t\t\t\t\tofficial\n\t\t\t\t\tverified\n\t\t\t\t\texLicensed\n\t\t\t\t\tpublishDelay\n\t\t\t\t\tcreatedAt\n\t\t\t\t\tdescription\n\t\t\t\t\tdiscord\n\t\t\t\t}\n\t\t\t\trelationships {\n\t\t\t\t\tleader {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\troles\n\t\t\t\t\t\t\tusername\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\tmembers {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\troles\n\t\t\t\t\t\t\tusername\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\tmanga {\n\t\t\tlist(params: { group: $id }) {\n\t\t\t\ttotal\n\t\t\t}\n\t\t}\n\t\tstatistics {\n\t\t\tgroup {\n\t\t\t\tget(id: $id) {\n\t\t\t\t\tcomments {\n\t\t\t\t\t\tthreadUrl\n\t\t\t\t\t\trepliesCount\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\tchapter {\n\t\t\tlist(params: { groups: [$id] }) {\n\t\t\t\ttotal\n\t\t\t}\n\t\t}\n\t}\n"];
 /**
@@ -1411,6 +1444,12 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
+	source: "\n\tmutation downloadMDListsTitles(\n\t\t$listIDs: [UUID!]!\n\t\t$extras: MangaDownloadExtras\n\t\t$filterContent: Boolean!\n\t) {\n\t\tcustomList {\n\t\t\tdownloadListTitles(extras: $extras, toDowload: $listIDs, filterContent: $filterContent)\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tmutation downloadMDListsTitles(\n\t\t$listIDs: [UUID!]!\n\t\t$extras: MangaDownloadExtras\n\t\t$filterContent: Boolean!\n\t) {\n\t\tcustomList {\n\t\t\tdownloadListTitles(extras: $extras, toDowload: $listIDs, filterContent: $filterContent)\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
 	source: "\n\tmutation exportCustomListsToCSV($options: ExportCustomListsToCSVOptions!) {\n\t\tcustomList {\n\t\t\texport {\n\t\t\t\tasCsv(option: $options)\n\t\t\t}\n\t\t}\n\t}\n"
 ): (typeof documents)["\n\tmutation exportCustomListsToCSV($options: ExportCustomListsToCSVOptions!) {\n\t\tcustomList {\n\t\t\texport {\n\t\t\t\tasCsv(option: $options)\n\t\t\t}\n\t\t}\n\t}\n"];
 /**
@@ -1419,6 +1458,18 @@ export function graphql(
 export function graphql(
 	source: "\n\tmutation exportCustomListsToMAL($options: MdcustomListsToMyAnimeListExportOption!) {\n\t\tcustomList {\n\t\t\texport {\n\t\t\t\tasMyAnimeList(option: $options)\n\t\t\t}\n\t\t}\n\t}\n"
 ): (typeof documents)["\n\tmutation exportCustomListsToMAL($options: MdcustomListsToMyAnimeListExportOption!) {\n\t\tcustomList {\n\t\t\texport {\n\t\t\t\tasMyAnimeList(option: $options)\n\t\t\t}\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tmutation followMDListBatch($ids: [UUID!]!) {\n\t\tcustomList {\n\t\t\tfollowBatch(ids: $ids)\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tmutation followMDListBatch($ids: [UUID!]!) {\n\t\tcustomList {\n\t\t\tfollowBatch(ids: $ids)\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tmutation unfollowMDListBatch($ids: [UUID!]!) {\n\t\tcustomList {\n\t\t\tunfollowBatch(ids: $ids)\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tmutation unfollowMDListBatch($ids: [UUID!]!) {\n\t\tcustomList {\n\t\t\tunfollowBatch(ids: $ids)\n\t\t}\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -1761,6 +1812,18 @@ export function graphql(
 export function graphql(
 	source: "\n\tmutation swapInternalQueueOrder($a: UUID!, $b: UUID!) {\n\t\tupload {\n\t\t\tinternal {\n\t\t\t\tswapQueueOrder(a: $a, b: $b)\n\t\t\t}\n\t\t}\n\t}\n"
 ): (typeof documents)["\n\tmutation swapInternalQueueOrder($a: UUID!, $b: UUID!) {\n\t\tupload {\n\t\t\tinternal {\n\t\t\t\tswapQueueOrder(a: $a, b: $b)\n\t\t\t}\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tmutation followUserBatch($ids: [UUID!]!) {\n\t\tuser {\n\t\t\tfollowBatch(ids: $ids)\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tmutation followUserBatch($ids: [UUID!]!) {\n\t\tuser {\n\t\t\tfollowBatch(ids: $ids)\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tmutation unfollowUserBatch($ids: [UUID!]!) {\n\t\tuser {\n\t\t\tunfollowBatch(ids: $ids)\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tmutation unfollowUserBatch($ids: [UUID!]!) {\n\t\tuser {\n\t\t\tunfollowBatch(ids: $ids)\n\t\t}\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
