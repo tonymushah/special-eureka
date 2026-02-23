@@ -9,6 +9,7 @@
 		followScanlationGroupBatchMutation,
 		unfollowScanlationGroupBatchMutation
 	} from "@mangadex/mutations/group/follow-batch";
+	import { dev } from "$app/environment";
 
 	interface Props {
 		scanlationGroups?: string[];
@@ -94,5 +95,9 @@
 				});
 			}}
 		/>
+		{#if dev}
+			<ButtonAccentOnlyLabel variant="3" disabled label="Block" />
+			<ButtonAccentOnlyLabel variant="3" disabled label="Unblock" />
+		{/if}
 	{/snippet}
 </SectionBase>
