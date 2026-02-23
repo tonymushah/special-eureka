@@ -196,6 +196,8 @@
 		},
 		onSettled(data, error, variables) {
 			variables.closeDialog?.();
+			followingStatusQuery.refetch();
+			readingStatusQuery.refetch();
 		},
 		onError(err) {
 			onSetReadingStatusError(err);
@@ -205,8 +207,6 @@
 				title: "Manga reading and follow status sucessufully updated",
 				type: "success"
 			});
-			followingStatusQuery.refetch();
-			readingStatusQuery.refetch();
 		}
 	}));
 	let disableAddToLibrary = $derived(readingStatusMutation.isPending);
