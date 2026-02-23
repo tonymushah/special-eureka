@@ -99,27 +99,31 @@
 	{/each}
 {/snippet}
 
-<div class="scanlation-groups" class:empty>
-	{#if empty}
-		{@render emptySnippet()}
-	{:else if query.isSuccess}
-		{@render showSelectionsName()}
-	{:else}
-		{@render showSelectionsIds()}
-	{/if}
-</div>
+<section>
+	<div class="scanlation-groups" class:empty>
+		{#if empty}
+			{@render emptySnippet()}
+		{:else if query.isSuccess}
+			{@render showSelectionsName()}
+		{:else}
+			{@render showSelectionsIds()}
+		{/if}
+	</div>
+</section>
 
 <style lang="scss">
+	section {
+		display: grid;
+		height: 100%;
+		overflow-y: scroll;
+	}
 	.scanlation-groups {
 		display: flex;
 		/* align-items: center; */
 		/* grid-template-columns: repeat(5, 1fr); */
 		gap: 6px;
-		height: 100%;
-		overflow-y: scroll;
 		padding: 6px;
 		flex-wrap: wrap;
-		flex-direction: column;
 		width: 100%;
 	}
 	.scanlation-groups.empty {
