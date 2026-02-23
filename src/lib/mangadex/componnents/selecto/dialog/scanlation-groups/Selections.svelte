@@ -3,7 +3,6 @@
 	import { createQuery } from "@tanstack/svelte-query";
 	import queryGQLDoc from "@mangadex/gql-docs/group/search";
 	import NothingToShow from "@mangadex/componnents/search/content/NothingToShow.svelte";
-	import UserRolesColorProvider from "@mangadex/componnents/user/UserRolesColorProvider.svelte";
 
 	interface Props {
 		scanlationGroups?: string[];
@@ -11,7 +10,7 @@
 	let { scanlationGroups = $bindable([]) }: Props = $props();
 	let empty = $derived(scanlationGroups.length == 0);
 	let query = createQuery(() => ({
-		queryKey: ["selecto", "scanlation-groups", "fetch", ...scanlationGroups],
+		queryKey: ["selecto", "scanlation-groups", "fetch"],
 		async queryFn() {
 			return await client
 				.query(queryGQLDoc, {
@@ -32,7 +31,28 @@
 		},
 		enabled: !empty
 	}));
-	let query_data = $derived(query.data ?? []);
+	let query_data = $derived.by(() => {
+		let data = new Map(
+			query.data?.map((d) => [
+				d.id as string,
+				{
+					attributes: d.attributes,
+					relationships: d.relationships
+				}
+			])
+		);
+		return scanlationGroups
+			.map((d) => {
+				const aaa = data.get(d);
+				if (aaa) {
+					return {
+						...aaa,
+						id: d
+					};
+				}
+			})
+			.filter((d) => d != undefined);
+	});
 	function removeGroupSelection(id: string) {
 		scanlationGroups = scanlationGroups.filter((g) => id != g);
 	}
