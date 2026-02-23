@@ -8,7 +8,7 @@ export const followMDListBatchGQLDoc = graphql(`
 	}
 `);
 
-export const unfollowMDListGQLDoc = graphql(`
+export const unfollowMDListBatchGQLDoc = graphql(`
 	mutation unfollowMDListBatch($ids: [UUID!]!) {
 		customList {
 			unfollowBatch(ids: $ids)

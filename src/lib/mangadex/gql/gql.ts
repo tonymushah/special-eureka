@@ -129,7 +129,7 @@ type Documents = {
 	"\n\tquery currentUserLibraryReading($param: UserLibrarySectionParam) {\n\t\tlibrary {\n\t\t\treading(param: $param) {\n\t\t\t\tlimit\n\t\t\t\toffset\n\t\t\t\ttotal\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\tdescription\n\t\t\t\t\t\tyear\n\t\t\t\t\t\ttitle\n\t\t\t\t\t\tstatus\n\t\t\t\t\t\tstate\n\t\t\t\t\t\toriginalLanguage\n\t\t\t\t\t\ttags {\n\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\tname\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t\tcontentRating\n\t\t\t\t\t\tpublicationDemographic\n\t\t\t\t\t}\n\t\t\t\t\trelationships {\n\t\t\t\t\t\tcoverArt {\n\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\tdescription\n\t\t\t\t\t\t\t\tfileName\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.CurrentUserLibraryReadingDocument;
 	"\n\tquery librarySize {\n\t\tlibrary {\n\t\t\tsize {\n\t\t\t\tunfiltered\n\t\t\t\tcompleted\n\t\t\t\tdropped\n\t\t\t\tplanToRead\n\t\t\t\treading\n\t\t\t\treReading\n\t\t\t\tonHold\n\t\t\t}\n\t\t}\n\t}\n": typeof types.LibrarySizeDocument;
 	"\n\tquery currentUserCustomLists($params: CurrentLoggedLists!) {\n\t\tcustomList {\n\t\t\tcurrentLoggedLists(params: $params) {\n\t\t\t\tlimit\n\t\t\t\toffset\n\t\t\t\ttotal\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\tname\n\t\t\t\t\t\tvisibility\n\t\t\t\t\t}\n\t\t\t\t\trelationships {\n\t\t\t\t\t\ttitlesIds\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.CurrentUserCustomListsDocument;
-	"\n\tmutation downloadMDListsTitles(\n\t\t$listIDs: [UUID!]!\n\t\t$extras: MangaDownloadExtras\n\t\t$filterContent: Boolean!\n\t) {\n\t\tcustomList {\n\t\t\tdownloadListTitles(extras: $extras, toDowload: $listIDs, filterContent: $filterContent)\n\t\t}\n\t}\n": typeof types.DownloadMdListsTitlesDocument;
+	"\n\tmutation downloadMDListsTitles(\n\t\t$listIDs: [UUID!]!\n\t\t$extras: MangaDownloadExtras\n\t\t$filterContent: Boolean\n\t) {\n\t\tcustomList {\n\t\t\tdownloadListTitles(extras: $extras, toDowload: $listIDs, filterContent: $filterContent)\n\t\t}\n\t}\n": typeof types.DownloadMdListsTitlesDocument;
 	"\n\tmutation exportCustomListsToCSV($options: ExportCustomListsToCSVOptions!) {\n\t\tcustomList {\n\t\t\texport {\n\t\t\t\tasCsv(option: $options)\n\t\t\t}\n\t\t}\n\t}\n": typeof types.ExportCustomListsToCsvDocument;
 	"\n\tmutation exportCustomListsToMAL($options: MdcustomListsToMyAnimeListExportOption!) {\n\t\tcustomList {\n\t\t\texport {\n\t\t\t\tasMyAnimeList(option: $options)\n\t\t\t}\n\t\t}\n\t}\n": typeof types.ExportCustomListsToMalDocument;
 	"\n\tmutation followMDListBatch($ids: [UUID!]!) {\n\t\tcustomList {\n\t\t\tfollowBatch(ids: $ids)\n\t\t}\n\t}\n": typeof types.FollowMdListBatchDocument;
@@ -485,7 +485,7 @@ const documents: Documents = {
 		types.LibrarySizeDocument,
 	"\n\tquery currentUserCustomLists($params: CurrentLoggedLists!) {\n\t\tcustomList {\n\t\t\tcurrentLoggedLists(params: $params) {\n\t\t\t\tlimit\n\t\t\t\toffset\n\t\t\t\ttotal\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\tname\n\t\t\t\t\t\tvisibility\n\t\t\t\t\t}\n\t\t\t\t\trelationships {\n\t\t\t\t\t\ttitlesIds\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
 		types.CurrentUserCustomListsDocument,
-	"\n\tmutation downloadMDListsTitles(\n\t\t$listIDs: [UUID!]!\n\t\t$extras: MangaDownloadExtras\n\t\t$filterContent: Boolean!\n\t) {\n\t\tcustomList {\n\t\t\tdownloadListTitles(extras: $extras, toDowload: $listIDs, filterContent: $filterContent)\n\t\t}\n\t}\n":
+	"\n\tmutation downloadMDListsTitles(\n\t\t$listIDs: [UUID!]!\n\t\t$extras: MangaDownloadExtras\n\t\t$filterContent: Boolean\n\t) {\n\t\tcustomList {\n\t\t\tdownloadListTitles(extras: $extras, toDowload: $listIDs, filterContent: $filterContent)\n\t\t}\n\t}\n":
 		types.DownloadMdListsTitlesDocument,
 	"\n\tmutation exportCustomListsToCSV($options: ExportCustomListsToCSVOptions!) {\n\t\tcustomList {\n\t\t\texport {\n\t\t\t\tasCsv(option: $options)\n\t\t\t}\n\t\t}\n\t}\n":
 		types.ExportCustomListsToCsvDocument,
@@ -1444,8 +1444,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-	source: "\n\tmutation downloadMDListsTitles(\n\t\t$listIDs: [UUID!]!\n\t\t$extras: MangaDownloadExtras\n\t\t$filterContent: Boolean!\n\t) {\n\t\tcustomList {\n\t\t\tdownloadListTitles(extras: $extras, toDowload: $listIDs, filterContent: $filterContent)\n\t\t}\n\t}\n"
-): (typeof documents)["\n\tmutation downloadMDListsTitles(\n\t\t$listIDs: [UUID!]!\n\t\t$extras: MangaDownloadExtras\n\t\t$filterContent: Boolean!\n\t) {\n\t\tcustomList {\n\t\t\tdownloadListTitles(extras: $extras, toDowload: $listIDs, filterContent: $filterContent)\n\t\t}\n\t}\n"];
+	source: "\n\tmutation downloadMDListsTitles(\n\t\t$listIDs: [UUID!]!\n\t\t$extras: MangaDownloadExtras\n\t\t$filterContent: Boolean\n\t) {\n\t\tcustomList {\n\t\t\tdownloadListTitles(extras: $extras, toDowload: $listIDs, filterContent: $filterContent)\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tmutation downloadMDListsTitles(\n\t\t$listIDs: [UUID!]!\n\t\t$extras: MangaDownloadExtras\n\t\t$filterContent: Boolean\n\t) {\n\t\tcustomList {\n\t\t\tdownloadListTitles(extras: $extras, toDowload: $listIDs, filterContent: $filterContent)\n\t\t}\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

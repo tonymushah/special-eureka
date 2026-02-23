@@ -6332,7 +6332,7 @@ export type CurrentUserCustomListsQuery = {
 export type DownloadMdListsTitlesMutationVariables = Exact<{
 	listIDs: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
 	extras?: InputMaybe<MangaDownloadExtras>;
-	filterContent: Scalars["Boolean"]["input"];
+	filterContent?: InputMaybe<Scalars["Boolean"]["input"]>;
 }>;
 
 export type DownloadMdListsTitlesMutation = {
@@ -20019,10 +20019,7 @@ export const DownloadMdListsTitlesDocument = {
 				{
 					kind: "VariableDefinition",
 					variable: { kind: "Variable", name: { kind: "Name", value: "filterContent" } },
-					type: {
-						kind: "NonNullType",
-						type: { kind: "NamedType", name: { kind: "Name", value: "Boolean" } }
-					}
+					type: { kind: "NamedType", name: { kind: "Name", value: "Boolean" } }
 				}
 			],
 			selectionSet: {

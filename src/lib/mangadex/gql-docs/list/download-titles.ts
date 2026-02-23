@@ -4,7 +4,7 @@ export const downloadMDListsTitlesGQLDoc = graphql(`
 	mutation downloadMDListsTitles(
 		$listIDs: [UUID!]!
 		$extras: MangaDownloadExtras
-		$filterContent: Boolean!
+		$filterContent: Boolean
 	) {
 		customList {
 			downloadListTitles(extras: $extras, toDowload: $listIDs, filterContent: $filterContent)
