@@ -21,6 +21,7 @@
 	let customListsQuery = createQuery(() => ({
 		queryKey: ["selecto", "custom-lists", "info"],
 		staleTime: 0,
+		gcTime: 10,
 		async queryFn() {
 			const res = await client
 				.query(getCustomListInfoByBatchGQLDoc, {
@@ -106,27 +107,33 @@
 	{/each}
 {/snippet}
 
-<div class="md-lists-selected" class:empty={customListsEmpty}>
-	{#if customListsEmpty}
-		<NothingToShow />
-	{:else if customListsQuery.isSuccess}
-		{@render showinfos()}
-	{:else}
-		{@render showIDsOnly()}
-	{/if}
-</div>
+<section>
+	<div class="md-lists-selected" class:empty={customListsEmpty}>
+		{#if customListsEmpty}
+			<NothingToShow />
+		{:else if customListsQuery.isSuccess}
+			{@render showinfos()}
+		{:else}
+			{@render showIDsOnly()}
+		{/if}
+	</div>
+</section>
 
 <style lang="scss">
+	section {
+		display: grid;
+		height: 100%;
+		overflow-y: scroll;
+	}
 	.md-lists-selected {
 		display: flex;
 		/* align-items: center; */
 		/* grid-template-columns: repeat(5, 1fr); */
 		gap: 6px;
-		height: 100%;
 		overflow-y: scroll;
 		padding: 6px;
 		flex-wrap: wrap;
-		flex-direction: column;
+		/* flex-direction: column; */
 		width: 100%;
 	}
 	.md-lists-selected.empty {
@@ -141,6 +148,7 @@
 		color: inherit;
 		border: none;
 		border-radius: 3px;
+		gap: 12px;
 	}
 	.list.as-name {
 		background-color: var(--accent-l4);
