@@ -33,7 +33,8 @@
 					throw new Error("No data");
 				}
 			},
-			enabled: titles.length > 0
+			enabled: titles.length > 0,
+			staleTime: 0
 		} satisfies CreateQueryOptions<
 			{
 				id: string;
