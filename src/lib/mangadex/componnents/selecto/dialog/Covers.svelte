@@ -7,7 +7,7 @@
 	import { revealItemInDir } from "@tauri-apps/plugin-opener";
 	import Save from "./covers/Save.svelte";
 	import { isMounted } from "@mangadex/stores/offlineIsMounted";
-	import { downloadCoversLocally } from "@mangadex/utils/covers/download";
+	import { downloadCoversLocally } from "@mangadex/mutations/covers/download";
 
 	interface Props {
 		covers?: string[];

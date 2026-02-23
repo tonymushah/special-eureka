@@ -5,7 +5,7 @@
 		type InputMaybe,
 		type CoverArtSaveOption
 	} from "@mangadex/gql/graphql";
-	import { saveCoversInADirectory } from "@mangadex/utils/covers/save";
+	import { saveCoversInADirectory } from "@mangadex/mutations/covers/save";
 	import { isLinuxStore } from "@special-eureka/core/commands/isLinux";
 	import { Slider } from "@ark-ui/svelte/slider";
 	import cssSliderMod from "@mangadex/componnents/chapter/page/drawer/content/settings/longstrip-image-width.module.scss";
@@ -14,7 +14,7 @@
 	import { dev } from "$app/environment";
 	import ButtonAccentOnlyLabel from "@mangadex/componnents/theme/buttons/ButtonAccentOnlyLabel.svelte";
 	import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
-	import { saveCoversInAArchive } from "@mangadex/utils/covers/save-archive";
+	import { saveCoversInAArchive } from "@mangadex/mutations/covers/save-archive";
 	import { revealItemInDir } from "@tauri-apps/plugin-opener";
 
 	interface Props {
