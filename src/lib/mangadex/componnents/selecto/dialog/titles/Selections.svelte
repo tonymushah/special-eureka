@@ -14,7 +14,7 @@
 	const client = getContextClient();
 	const selectedTitles = createQuery(() => {
 		return {
-			queryKey: ["get", "title", "titles", ...titles],
+			queryKey: ["selecto", "titles", "fetch"],
 
 			async queryFn(): Promise<{ id: string; title: string }[]> {
 				const res = await client
@@ -41,6 +41,20 @@
 			}[]
 		>;
 	});
+	let titlesData = $derived.by(() => {
+		const data = new Map<string, string>(selectedTitles.data?.map((o) => [o.id, o.title]));
+		return titles
+			.map((id) => {
+				const aaa = data.get(id);
+				if (aaa) {
+					return {
+						id,
+						title: aaa
+					};
+				}
+			})
+			.filter((a) => a != undefined);
+	});
 	function removeSelection(id: string) {
 		titles = titles.filter((v) => v != id);
 	}
@@ -48,8 +62,8 @@
 
 <p>Click on the badge to remove it from the selection</p>
 <div class="titles-selected">
-	{#if selectedTitles.data}
-		{@const _titles = selectedTitles.data}
+	{#if selectedTitles.isSuccess}
+		{@const _titles = titlesData}
 		{#each _titles as title}
 			<StatusBadgeOnlyLabel
 				label={title.title}
