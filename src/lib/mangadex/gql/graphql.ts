@@ -1290,6 +1290,7 @@ export type CustomListQueries = {
 	__typename?: "CustomListQueries";
 	currentLoggedLists: CustomListResults;
 	get: CustomList;
+	getCustomListBatch: Array<CustomList>;
 	getUserLists: CustomListResults;
 };
 
@@ -1299,6 +1300,11 @@ export type CustomListQueriesCurrentLoggedListsArgs = {
 
 export type CustomListQueriesGetArgs = {
 	id: Scalars["UUID"]["input"];
+	private?: InputMaybe<Scalars["Boolean"]["input"]>;
+};
+
+export type CustomListQueriesGetCustomListBatchArgs = {
+	ids: Array<Scalars["UUID"]["input"]>;
 	private?: InputMaybe<Scalars["Boolean"]["input"]>;
 };
 
@@ -6380,6 +6386,28 @@ export type UnfollowMdListBatchMutationVariables = Exact<{
 export type UnfollowMdListBatchMutation = {
 	__typename?: "Mutation";
 	customList: { __typename?: "CustomListMutations"; unfollowBatch?: boolean | null };
+};
+
+export type GetCustomListInfoByBatchQueryVariables = Exact<{
+	ids: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
+	private?: InputMaybe<Scalars["Boolean"]["input"]>;
+}>;
+
+export type GetCustomListInfoByBatchQuery = {
+	__typename?: "Query";
+	customList: {
+		__typename?: "CustomListQueries";
+		getCustomListBatch: Array<{
+			__typename?: "CustomList";
+			id: any;
+			attributes: {
+				__typename?: "CustomListAttributes";
+				name: string;
+				visibility: CustomListVisibility;
+			};
+			relationships: { __typename?: "CustomListRelationships"; titlesIds: Array<any> };
+		}>;
+	};
 };
 
 export type DeleteCustomListMutationMutationVariables = Exact<{
@@ -20303,6 +20331,115 @@ export const UnfollowMdListBatchDocument = {
 		}
 	]
 } as unknown as DocumentNode<UnfollowMdListBatchMutation, UnfollowMdListBatchMutationVariables>;
+export const GetCustomListInfoByBatchDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "getCustomListInfoByBatch" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "ids" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "ListType",
+							type: {
+								kind: "NonNullType",
+								type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+							}
+						}
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "private" } },
+					type: { kind: "NamedType", name: { kind: "Name", value: "Boolean" } }
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "customList" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "getCustomListBatch" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "ids" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "ids" }
+											}
+										},
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "private" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "private" }
+											}
+										}
+									],
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{ kind: "Field", name: { kind: "Name", value: "id" } },
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "attributes" },
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "name" }
+														},
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "visibility"
+															}
+														}
+													]
+												}
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "relationships" },
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "titlesIds"
+															}
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<GetCustomListInfoByBatchQuery, GetCustomListInfoByBatchQueryVariables>;
 export const DeleteCustomListMutationDocument = {
 	kind: "Document",
 	definitions: [

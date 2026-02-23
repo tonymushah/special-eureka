@@ -8,6 +8,7 @@
 	import cssMod from "./dialog-body.module.scss";
 	import Covers from "./dialog/Covers.svelte";
 	import ScanlationGroups from "./dialog/ScanlationGroups.svelte";
+	import CustomLists from "./dialog/CustomLists.svelte";
 
 	interface Props {
 		titles?: string[];
@@ -92,6 +93,6 @@
 		<p>nothing</p>
 	</TabContent>
 	<TabContent value={customListsId} class={cssMod.content}>
-		<p>nothing</p>
+		<CustomLists {customLists} />
 	</TabContent>
 </MangaDexTabs>

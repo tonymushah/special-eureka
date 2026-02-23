@@ -963,6 +963,7 @@ type CustomListQueries {
 	get(id: UUID!, private: Boolean): CustomList!
 	currentLoggedLists(params: CurrentLoggedLists): CustomListResults!
 	getUserLists(params: UserCustomListParams!): CustomListResults!
+	getCustomListBatch(ids: [UUID!]!, private: Boolean): [CustomList!]!
 }
 
 type CustomListRelationships {
