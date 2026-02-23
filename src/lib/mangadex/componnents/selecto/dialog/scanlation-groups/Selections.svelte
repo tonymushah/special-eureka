@@ -29,7 +29,8 @@
 					}
 				});
 		},
-		enabled: !empty
+		enabled: !empty,
+		staleTime: 0
 	}));
 	let query_data = $derived.by(() => {
 		let data = new Map(
