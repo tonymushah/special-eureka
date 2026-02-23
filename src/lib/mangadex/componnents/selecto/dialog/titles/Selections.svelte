@@ -61,7 +61,19 @@
 	}
 </script>
 
-<p>Click on the badge to remove it from the selection</p>
+{#snippet showIDsOnly()}
+	{#each titles as title}
+		<StatusBadgeOnlyLabel
+			label={title}
+			color="gray"
+			onclick={() => {
+				removeSelection(title);
+			}}
+		/>
+	{/each}
+{/snippet}
+
+<p>Click on the badge to remove the title from the selection</p>
 <div class="titles-selected">
 	{#if selectedTitles.isSuccess}
 		{@const _titles = titlesData}
@@ -74,26 +86,10 @@
 				}}
 			/>
 		{:else}
-			{#each titles as title}
-				<StatusBadgeOnlyLabel
-					label={title}
-					color="gray"
-					onclick={() => {
-						removeSelection(title);
-					}}
-				/>
-			{/each}
+			{@render showIDsOnly()}
 		{/each}
 	{:else}
-		{#each titles as title}
-			<StatusBadgeOnlyLabel
-				label={title}
-				color="gray"
-				onclick={() => {
-					removeSelection(title);
-				}}
-			/>
-		{/each}
+		{@render showIDsOnly()}
 	{/if}
 </div>
 
