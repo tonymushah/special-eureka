@@ -87,6 +87,19 @@ impl CustomListQueries {
         }
         Ok(res)
     }
+    pub async fn get_custom_list_batch(
+        &self,
+        ctx: &Context<'_>,
+        #[graphql(validator(min_items = 1))] ids: Vec<Uuid>,
+        private: Option<bool>,
+    ) -> crate::error::wrapped::Result<Vec<CustomList>> {
+        let mut lists = Vec::with_capacity(ids.len());
+        for id in ids {
+            lists.push(self.get(ctx, id, private).await?);
+        }
+        lists.shrink_to_fit();
+        Ok(lists)
+    }
 }
 
 #[derive(Debug, Clone, Default, InputObject)]
