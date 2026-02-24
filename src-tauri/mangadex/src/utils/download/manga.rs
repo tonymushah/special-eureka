@@ -252,15 +252,33 @@ where
     R: Runtime,
     M: Manager<R> + Sync,
 {
-    // Humm... won't this call `GET /manga/{id}/aggregate` twice?
+    // [x]: make this `fn` only call `GET /manga/{id}/aggregate` once
     //
-    // This is somewhat dumb but I am lazy to copy-paste and rethink again about how to do it
-    // _Heh_ I am sure it will be fine...
-    // Let me add a TODO for those who want to make some useful contribution in the ~far~ future.
+    // We could call the function we made above but that would be too inefficient
+    // since we will call the `/manga/{id}/aggregate` twice.
     //
-    // TODO: make this func only call `GET /manga/{id}/aggregate` once
-    let undownloaded = get_title_undownloaded_chapters(app, title_id).await?;
-    let unread = get_title_unread_chapters(app, title_id).await?;
+    // In area where internet connection is slow and rare,
+    // this `fn` can take a lot of time.
+    //
+    // Yeah... my internet connection speed has gone so bad
+    // that i made the perfomance optimization myself.
+    let downloaded: HashSet<_> = get_title_downloaded_chapters_id(app, title_id).await?;
+    let all_chapters = get_title_chapter_ids(app, title_id).await?;
+    let read: HashSet<_> = {
+        let client = app.get_mangadex_client_with_auth_refresh().await?;
+        client
+            .manga()
+            .id(title_id)
+            .read()
+            .get()
+            .send()
+            .await?
+            .data
+            .into_iter()
+            .collect()
+    };
+    let undownloaded = &all_chapters - &downloaded;
+    let unread = &all_chapters - &read;
     // I love HashSet man...
     Ok(&undownloaded & &unread)
 }

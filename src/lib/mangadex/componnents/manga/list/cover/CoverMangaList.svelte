@@ -39,26 +39,16 @@
 
 <section class="cover-list">
 	{#each realList as item (`${item.id}`)}
-		<span
-			animate:flip
-			out:send={{
-				key: item.id
+		<MangaElementBase3
+			{...item}
+			onclick={() => {
+				goto(
+					route("/mangadex/title/[id]", {
+						id: item.id
+					})
+				);
 			}}
-			in:receive={{
-				key: item.id
-			}}
-		>
-			<MangaElementBase3
-				{...item}
-				onclick={() => {
-					goto(
-						route("/mangadex/title/[id]", {
-							id: item.id
-						})
-					);
-				}}
-			/>
-		</span>
+		/>
 	{/each}
 </section>
 

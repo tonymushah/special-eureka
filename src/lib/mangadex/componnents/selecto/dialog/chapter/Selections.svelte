@@ -25,10 +25,10 @@
 		}[];
 	};
 	const client = getContextClient();
-	let selectedChapter = createQuery(() => {
+	let _selectedChapter = createQuery(() => {
 		return {
-			queryKey: ["get", "chapter", "data", "selecto"],
-			async queryFn(): Promise<SelectedData[]> {
+			queryKey: ["get", "chapter", "data", "in", "selecto"],
+			async queryFn() {
 				const res = await client
 					.query(query, {
 						ids: [...chapters]
@@ -37,15 +37,29 @@
 				if (res.error) {
 					throw res.error;
 				} else if (res.data) {
-					return res.data.chapter.listWithGroupByManga.data.map<SelectedData>((data) => {
-						return {
-							title: {
-								id: data.manga.id,
-								title:
-									get_value_from_title_and_random_if_undefined(data.manga.attributes.title, "en") ??
-									data.manga.id
-							},
-							chapters: data.chapters.map((data) => {
+					return res.data.chapter.listWithGroupByManga.data;
+				} else {
+					throw new Error("No Data?");
+				}
+			},
+			enabled: chapters.length > 0,
+			staleTime: 0
+		};
+	});
+	let selectedChapters: SelectedData[] = $derived.by(() => {
+		return (
+			_selectedChapter.data
+				?.map<SelectedData>((data) => {
+					return {
+						title: {
+							id: data.manga.id,
+							title:
+								get_value_from_title_and_random_if_undefined(data.manga.attributes.title, "en") ??
+								data.manga.id
+						},
+						chapters: data.chapters
+							.filter((data) => chapters.includes(data.id))
+							.map((data) => {
 								return {
 									id: data.id,
 									title: data.attributes.title ?? undefined,
@@ -54,22 +68,31 @@
 									isOneshot: data.attributes.title == "Oneshot"
 								};
 							})
-						};
-					});
-				} else {
-					throw new Error("No Data?");
-				}
-			}
-		} satisfies CreateQueryOptions<SelectedData[]>;
+					};
+				})
+				.filter((data) => data.chapters.length != 0) ?? []
+		);
 	});
-	let hasData = $derived(selectedChapter.data?.length != 0);
+	let hasData = $derived(_selectedChapter.isSuccess);
 </script>
 
 <p>Click on the badge to remove it from the selection</p>
 
+{#snippet showIds()}
+	{#each chapters as chapter}
+		<StatusBadgeOnlyLabel
+			label={chapter}
+			color="gray"
+			onclick={() => {
+				chapters = chapters.filter((id) => id != chapter);
+			}}
+		/>
+	{/each}
+{/snippet}
+
 <div class:hasData class="chapter-selected">
-	{#if selectedChapter.data}
-		{#each selectedChapter.data as section}
+	{#if _selectedChapter.isSuccess}
+		{#each selectedChapters as section}
 			<article>
 				<h4>{section.title.title}</h4>
 				<div class="chapaters">
@@ -94,26 +117,10 @@
 				</div>
 			</article>
 		{:else}
-			{#each chapters as chapter}
-				<StatusBadgeOnlyLabel
-					label={chapter}
-					color="gray"
-					onclick={() => {
-						chapters = chapters.filter((id) => id != chapter);
-					}}
-				/>
-			{/each}
+			{@render showIds()}
 		{/each}
 	{:else}
-		{#each chapters as chapter}
-			<StatusBadgeOnlyLabel
-				label={chapter}
-				color="gray"
-				onclick={() => {
-					chapters = chapters.filter((id) => id != chapter);
-				}}
-			/>
-		{/each}
+		{@render showIds()}
 	{/if}
 </div>
 

@@ -196,6 +196,8 @@
 		},
 		onSettled(data, error, variables) {
 			variables.closeDialog?.();
+			followingStatusQuery.refetch();
+			readingStatusQuery.refetch();
 		},
 		onError(err) {
 			onSetReadingStatusError(err);

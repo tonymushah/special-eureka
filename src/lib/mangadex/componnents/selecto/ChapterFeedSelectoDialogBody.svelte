@@ -6,14 +6,18 @@
 	import Chapter from "./dialog/Chapter.svelte";
 	import { TabContent } from "@ark-ui/svelte/tabs";
 	import cssMod from "./dialog-body.module.scss";
+	import Covers from "./dialog/Covers.svelte";
+	import ScanlationGroups from "./dialog/ScanlationGroups.svelte";
+	import CustomLists from "./dialog/CustomLists.svelte";
+	import Users from "./dialog/Users.svelte";
 
 	interface Props {
-		titles: string[];
-		chapters: string[];
-		covers: string[];
-		scanlationGroups: string[];
-		users: string[];
-		customLists: string[];
+		titles?: string[];
+		chapters?: string[];
+		covers?: string[];
+		scanlationGroups?: string[];
+		users?: string[];
+		customLists?: string[];
 	}
 	const titleId = "titles";
 	const chapterId = "chapters";
@@ -22,12 +26,12 @@
 	const usersId = "users";
 	const customListsId = "customLists";
 	let {
-		titles = $bindable(),
-		chapters = $bindable(),
-		covers = $bindable(),
-		scanlationGroups = $bindable(),
-		users = $bindable(),
-		customLists = $bindable()
+		titles = $bindable([]),
+		chapters = $bindable([]),
+		covers = $bindable([]),
+		scanlationGroups = $bindable([]),
+		users = $bindable([]),
+		customLists = $bindable([])
 	}: Props = $props();
 	let triggers = $derived.by(() => {
 		return [
@@ -44,7 +48,7 @@
 			{
 				id: coversId,
 				title: `Covers (${covers.length})`,
-				disabled: chapters.length == 0
+				disabled: covers.length == 0
 			},
 			{
 				id: scanlationGroupsId,
@@ -73,7 +77,7 @@
 	});
 </script>
 
-<MangaDexTabs {triggers} content lazyMount unmountOnExit manual>
+<MangaDexTabs {triggers} content lazyMount unmountOnExit>
 	<TabContent value={titleId} class={cssMod.content}>
 		<Titles {titles} />
 	</TabContent>
@@ -81,15 +85,15 @@
 		<Chapter {chapters} />
 	</TabContent>
 	<TabContent value={coversId} class={cssMod.content}>
-		<p>nothing</p>
+		<Covers {covers} />
 	</TabContent>
 	<TabContent value={scanlationGroupsId} class={cssMod.content}>
-		<p>nothing</p>
+		<ScanlationGroups {scanlationGroups} />
 	</TabContent>
 	<TabContent value={usersId} class={cssMod.content}>
-		<p>nothing</p>
+		<Users {users} />
 	</TabContent>
 	<TabContent value={customListsId} class={cssMod.content}>
-		<p>nothing</p>
+		<CustomLists {customLists} />
 	</TabContent>
 </MangaDexTabs>

@@ -60,6 +60,11 @@ hotpath = { workspace = true, optional = true }
 shrink_fit_wrapper.workspace = true
 rand.workspace = true
 itertools.workspace = true
+zip.workspace = true
+tar.workspace = true
+flate2.workspace = true
+zstd.workspace = true
+bzip2.workspace = true
 
 [dependencies.eureka-mmanager]
 version = "0.4"

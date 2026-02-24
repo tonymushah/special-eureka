@@ -113,4 +113,16 @@ impl ScanlationGroupMutation {
         ));
         Ok(true)
     }
+    pub async fn follow_batch(&self, ctx: &Context<'_>, ids: Vec<Uuid>) -> Result<Option<bool>> {
+        for id in ids {
+            self.follow(ctx, id).await?;
+        }
+        Ok(None)
+    }
+    pub async fn unfollow_batch(&self, ctx: &Context<'_>, ids: Vec<Uuid>) -> Result<Option<bool>> {
+        for id in ids {
+            self.unfollow(ctx, id).await?;
+        }
+        Ok(None)
+    }
 }

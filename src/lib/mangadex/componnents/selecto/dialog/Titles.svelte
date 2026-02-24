@@ -20,8 +20,9 @@
 	let titlesDownload = titlesDownloadLoader();
 	let exportIdsToTxt = exportIdsToTxtLoader();
 	let titles = $derived(titles_main);
-	let currentAction: "lists" | "status" | "selections" | "export-csv" | "export-mal" =
-		$state("lists");
+	let currentAction = $state<"lists" | "status" | "selections" | "export-csv" | "export-mal">(
+		"lists"
+	);
 	function showLists() {
 		currentAction = "lists";
 	}
@@ -38,14 +39,11 @@
 		currentAction = "export-mal";
 	}
 	let isLists = $derived(currentAction == "lists");
-	// @ts-ignore
 	let isStatus = $derived(currentAction == "status");
-	//@ts-ignore
 	let isSelecting = $derived(currentAction == "selections");
-	//@ts-ignore
 	let isExportCSV = $derived(currentAction == "export-csv");
-	//@ts-ignore
 	let isExportMAL = $derived(currentAction == "export-mal");
+	let titlesEmpty = $derived(titles_main.length == 0);
 </script>
 
 <SectionBase>
@@ -69,6 +67,7 @@
 			onclick={() => {
 				showSelecetions();
 			}}
+			disabled={isSelecting}
 		/>
 		<ButtonAccentOnlyLabel
 			variant={isLists ? "5" : "3"}
@@ -76,6 +75,7 @@
 			onclick={() => {
 				showLists();
 			}}
+			disabled={isLists}
 		/>
 		<ButtonAccentOnlyLabel
 			variant={isStatus ? "5" : "3"}
@@ -83,6 +83,7 @@
 			onclick={() => {
 				showStatus();
 			}}
+			disabled={isStatus}
 		/>
 		<ButtonAccentOnlyLabel
 			variant="3"
@@ -108,6 +109,7 @@
 			onclick={() => {
 				showExportCSV();
 			}}
+			disabled={isExportCSV}
 		/>
 		<ButtonAccentOnlyLabel
 			label="Export titles as MAL"
@@ -115,11 +117,12 @@
 			onclick={() => {
 				showExportMAL();
 			}}
+			disabled={isExportMAL}
 		/>
 		<ButtonAccentOnlyLabel
 			variant="3"
 			label="Export ids to txt"
-			disabled={exportIdsToTxt.isPending}
+			disabled={exportIdsToTxt.isPending || titlesEmpty}
 			onclick={() => {
 				exportIdsToTxt.mutateAsync(
 					{

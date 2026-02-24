@@ -54,12 +54,11 @@
 			}}
 			mousewheel
 		>
-			{#each topTen.data as title}
+			{#each topTen.data as title (`tag-${id}-${title.id}`)}
 				{@const _title = manga_title_to_lang_map(title.attributes.title)}
 				<TopTenElement
 					mangaId={title.id}
 					coverId={title.relationships.coverArt.id}
-					filename={title.relationships.coverArt.attributes.fileName}
 					originalLanguage={title.attributes.originalLanguage}
 					tags={title.attributes.tags.map((tag) => ({
 						id: tag.id,

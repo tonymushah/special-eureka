@@ -7,6 +7,15 @@ use tokio::runtime::Builder as RuntimeBuilder;
 
 use std::sync::{Arc, Mutex};
 
+#[cfg(feature = "jemalloc")]
+#[cfg(not(target_env = "msvc"))]
+use tikv_jemallocator::Jemalloc;
+
+#[cfg(feature = "jemalloc")]
+#[cfg(not(target_env = "msvc"))]
+#[global_allocator]
+static GLOBAL: Jemalloc = Jemalloc;
+
 pub(crate) mod builder;
 pub(crate) mod commands;
 #[cfg(feature = "hotpath")]
@@ -14,6 +23,7 @@ mod hot_path;
 pub(crate) mod logging;
 pub(crate) mod runtime;
 pub(crate) mod states;
+
 
 pub fn run() {
     #[cfg(feature = "hotpath")]
