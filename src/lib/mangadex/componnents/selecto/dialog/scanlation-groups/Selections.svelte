@@ -122,9 +122,10 @@
 		/* align-items: center; */
 		/* grid-template-columns: repeat(5, 1fr); */
 		gap: 6px;
-		padding: 6px;
 		flex-wrap: wrap;
 		width: 100%;
+		max-height: 100%;
+		flex-direction: column;
 	}
 	.scanlation-groups.empty {
 		align-items: center;
