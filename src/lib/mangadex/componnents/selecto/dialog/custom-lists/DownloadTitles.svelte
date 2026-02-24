@@ -21,6 +21,7 @@
 		<h3>Download custom list titles</h3>
 		<div class="option">
 			<input
+				class="checkbox"
 				id="download-titles-list-filter-content-checkbox"
 				type="checkbox"
 				bind:checked={filterContent}
@@ -68,6 +69,9 @@
 <style lang="scss">
 	.layout {
 		display: grid;
+		h3 {
+			margin: 0px;
+		}
 	}
 	.option {
 		display: flex;
@@ -78,15 +82,24 @@
 	select {
 		background-color: var(--accent-l1);
 		border-radius: 6px;
-		padding: 8px 12px;
 		border: 3px solid var(--mid-tone);
 		min-height: 3em;
 		min-width: 3em;
-		padding-left: 0.75rem;
-		padding-right: 0.75rem;
+		padding-left: 0.25rem;
+		padding-right: 0.25rem;
 		font-family: inherit;
 	}
 	select.isNotLinux {
 		color: var(--text-color);
+	}
+	.checkbox {
+		width: 24px;
+		height: 24px;
+	}
+	.actions {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-top: 12px;
 	}
 </style>
