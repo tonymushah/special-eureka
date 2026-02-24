@@ -65,15 +65,18 @@
 		overflow-y: scroll;
 		color: var(--text-color);
 		padding-left: 0em;
+		display: grid;
 		.li {
 			padding-left: 1em;
 			transition: background-color 50ms ease-in-out;
 			background-color: transparent;
 			color: var(--text-color);
 			border: 0px;
-			align-items: center;
+			align-items: start;
 			h4 {
 				margin: 0px;
+				font-family: var(--fonts);
+				text-align: start;
 			}
 		}
 		.li:not(.isSelected):hover {
