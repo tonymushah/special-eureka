@@ -6,7 +6,7 @@
 	import { getContextClient } from "@urql/svelte";
 	import { debounce } from "lodash";
 	import { onDestroy } from "svelte";
-	import { derived, get, type Readable } from "svelte/store";
+	import { derived, type Readable } from "svelte/store";
 	import executeSearchQuery, { type ScanlationGroupListItemData } from "./search";
 
 	import { goto } from "$app/navigation";
@@ -19,15 +19,16 @@
 	import scanlationGroupElementContextMenu from "@mangadex/utils/context-menu/scanlationGroup";
 	import { crossfade } from "svelte/transition";
 	import { flip } from "svelte/animate";
+	import ChapterFeedSelecto from "@mangadex/componnents/selecto/ChapterFeedSelecto.svelte";
 
 	const client = getContextClient();
 
-	const debounce_wait = 450;
 	interface Props {
 		groupName: Readable<string | undefined>;
 	}
 
 	let { groupName }: Props = $props();
+	// svelte-ignore state_referenced_locally
 	const params = derived([groupName, pageLimit], ([$groupName, $limit]) => {
 		return {
 			name: $groupName,
@@ -44,7 +45,7 @@
 		return {
 			queryKey: ["scanalation-group-search", $params],
 			initialPageParam: $params,
-			getNextPageParam(lastPage, allPages, lastPageParam, allPageParams) {
+			getNextPageParam(lastPage, allPages, lastPageParam) {
 				const next_offset = lastPage.limit + lastPage.offset;
 				if (next_offset > lastPage.total) {
 					return null;
@@ -63,7 +64,7 @@
 					...res.paginationData
 				};
 			},
-			getPreviousPageParam(firstPage, allPages, firstPageParam, allPageParams) {
+			getPreviousPageParam(firstPage, allPages, firstPageParam) {
 				const next_offset = firstPage.limit - firstPage.offset;
 				if (next_offset < 0) {
 					return null;
@@ -125,9 +126,12 @@
 		observer.disconnect();
 	});
 	const [send, receive] = crossfade({});
+	let container = $state<HTMLElement | undefined>();
 </script>
 
-<div class="result">
+<ChapterFeedSelecto bind:container />
+
+<div class="result" bind:this={container}>
 	{#each scanGroups as group (group.id)}
 		<span
 			animate:flip

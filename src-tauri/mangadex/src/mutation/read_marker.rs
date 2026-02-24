@@ -47,7 +47,7 @@ impl ReadMarkerMutations {
         });
         ctx.get_app_handle::<tauri::Wry>()?.emit(
             format!("mangadex-title-read-markers-change-{}", params.manga_id).as_str(),
-            (),
+            None::<()>,
         )?;
         Ok(true)
     }

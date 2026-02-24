@@ -1,11 +1,9 @@
-use std::{
-    fs::{File, create_dir_all},
-    io::{self, BufWriter, Write},
-    path::Path,
-};
+mod archive;
+mod save;
+
+use std::path::Path;
 
 use async_graphql::{Context, Object};
-use bytes::Buf;
 use eureka_mmanager::{
     download::cover::CoverDownloadMessage,
     prelude::{AsyncCancelable, DeleteDataAsyncTrait, GetCoverDownloadManager, TaskManagerAddr},
@@ -15,20 +13,22 @@ use mangadex_api_schema_rust::{ApiObjectNoRelationships, v5::CoverAttributes};
 use uuid::Uuid;
 
 use crate::{
-    error::Error,
-    error::wrapped::Result,
+    error::{Error, wrapped::Result},
     query::download_state::DownloadStateQueries,
     utils::{download::cover::cover_download, traits_utils::MangadexAsyncGraphQLContextExt},
 };
 use crate::{
     objects::cover::Cover,
     utils::{
-        download_state::DownloadState, get_mangadex_client_from_graphql_context,
-        get_mangadex_client_from_graphql_context_with_auth_refresh, get_offline_app_state,
-        get_watches_from_graphql_context, source::SendMultiSourceData,
+        download_state::DownloadState, get_mangadex_client_from_graphql_context_with_auth_refresh,
+        get_offline_app_state, get_watches_from_graphql_context, source::SendMultiSourceData,
         traits_utils::MangadexTauriManagerExt,
     },
 };
+
+pub use archive::UnsupportedCoverArchiveFormat;
+pub use save::{CoverArtResizeOption, CoverArtSaveOption, CoverImageFormat};
+use save::{handle_cover_image_with_options, save_images};
 
 #[derive(Debug, Clone, Copy)]
 pub struct CoverMutations;
@@ -84,6 +84,13 @@ impl CoverMutations {
         res?;
         Ok(state)
     }
+    pub async fn download_covers(&self, ctx: &Context<'_>, ids: Vec<Uuid>) -> Result<Option<bool>> {
+        let app = ctx.get_app_handle::<tauri::Wry>()?;
+        for id in ids {
+            let _ = cover_download(app, id).await?;
+        }
+        Ok(None)
+    }
     pub async fn remove(&self, ctx: &Context<'_>, id: Uuid) -> Result<bool> {
         let ola = get_offline_app_state::<tauri::Wry>(ctx)?;
         let offline_app_state_write = ola.read().await;
@@ -110,32 +117,51 @@ impl CoverMutations {
             .await?;
         Ok(true)
     }
+    /// by default, it will be exported to the download folder
+    pub async fn save_images(
+        &self,
+        ctx: &Context<'_>,
+        cover_ids: Vec<Uuid>,
+        export_dir: Option<String>,
+        options: Option<CoverArtSaveOption>,
+    ) -> Result<Option<String>, crate::error::ErrorWrapper> {
+        let app_handle = ctx.get_app_handle::<tauri::Wry>()?;
+        Ok(save_images(app_handle, cover_ids, export_dir, options)
+            .await?
+            .into_iter()
+            .next())
+    }
+    /// by default, it will be exported to the download folder
     pub async fn save_image(
         &self,
         ctx: &Context<'_>,
         cover_id: Uuid,
-        export_dir: String,
+        export_dir: Option<String>,
+        options: Option<CoverArtSaveOption>,
     ) -> Result<String, crate::error::ErrorWrapper> {
-        let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
-        let (file, bytes) = client
-            .download()
-            .cover()
-            .build()
-            .map_err(mangadex_api_types_rust::error::Error::BuilderError)?
-            .via_cover_id(cover_id)
-            .await?;
-        let bytes = bytes?;
-        create_dir_all(&export_dir)?;
-        let export_path = Path::new(&export_dir).join(file);
-        let mut file = File::create(&export_path)?;
-        {
-            let mut buf_writer = BufWriter::new(&mut file);
-            io::copy(&mut bytes.reader(), &mut buf_writer)?;
-            buf_writer.flush()?;
-        }
-        export_path
-            .to_str()
-            .map(String::from)
-            .ok_or(crate::error::ErrorWrapper::from(crate::Error::PathToStr))
+        let app_handle = ctx.get_app_handle::<tauri::Wry>()?;
+
+        Ok(save_images(app_handle, vec![cover_id], export_dir, options)
+            .await?
+            .into_iter()
+            .next()
+            .ok_or(crate::Error::SaveCoverReturnSinglePathEmpty)?)
     }
+    pub async fn save_images_to_archive(
+        &self,
+        ctx: &Context<'_>,
+        cover_ids: Vec<Uuid>,
+        archive_file: String,
+        options: Option<CoverArtSaveOption>,
+    ) -> Result<String, crate::error::ErrorWrapper> {
+        archive::save_covers_to_archive(
+            ctx.get_app_handle::<tauri::Wry>()?,
+            cover_ids,
+            Path::new(archive_file.as_str()).to_path_buf(),
+            options,
+        )
+        .await?;
+        Ok(archive_file)
+    }
+    // TODO export images as compressed zip or tar.{whatever compression mode}
 }

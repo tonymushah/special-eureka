@@ -19,10 +19,12 @@
 	let multiChapterDownload = multiChapterDownloadLoader();
 	let removeMultipleChapterMutation = removeMultipleChapterMutationLoader();
 	let exportIdsToTxt = exportIdsToTxtLoader();
-	let { chapters = $bindable([]) }: Props = $props();
+	let { chapters: chapters_main = [] }: Props = $props();
+	let chapters = $derived(chapters_main);
 	let currentAction: "selection" = $state("selection");
 	let canDelete = false;
 	let readMarker = readMarkers();
+	let chaptersEmpty = $derived(chapters.length == 0);
 </script>
 
 <SectionBase>
@@ -38,13 +40,15 @@
 			onclick={() => {
 				currentAction = "selection";
 			}}
+			disabled={currentAction == "selection"}
 		/>
 		<ButtonAccentOnlyLabel
 			variant="3"
 			label="Download"
 			disabled={multiChapterDownload.isPending ||
 				removeMultipleChapterMutation.isPending ||
-				!$isMounted}
+				!$isMounted ||
+				chaptersEmpty}
 			onclick={() => {
 				multiChapterDownload.mutate(chapters);
 			}}
@@ -53,7 +57,8 @@
 			variant="3"
 			disabled={multiChapterDownload.isPending ||
 				removeMultipleChapterMutation.isPending ||
-				!$isMounted}
+				!$isMounted ||
+				chaptersEmpty}
 			label="Remove them locally"
 			onclick={() => {
 				removeMultipleChapterMutation.mutate(chapters);
@@ -61,7 +66,7 @@
 		/>
 		<ButtonAccentOnlyLabel
 			variant="3"
-			disabled={exportIdsToTxt.isPending}
+			disabled={exportIdsToTxt.isPending || chaptersEmpty}
 			label="Export ids as txt"
 			onclick={() => {
 				exportIdsToTxt.mutateAsync(
@@ -82,7 +87,7 @@
 		{#if $isLogged || dev}
 			<ButtonAccentOnlyLabel
 				variant="3"
-				disabled={readMarker.isPending}
+				disabled={readMarker.isPending || chaptersEmpty}
 				label="Mark as read"
 				onclick={() => {
 					readMarker.mutateAsync(
@@ -105,7 +110,7 @@
 			/>
 			<ButtonAccentOnlyLabel
 				variant="3"
-				disabled={readMarker.isPending}
+				disabled={readMarker.isPending || chaptersEmpty}
 				label="Mark as unread"
 				onclick={() => {
 					readMarker.mutateAsync(

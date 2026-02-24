@@ -805,6 +805,15 @@ export type Cover = {
 	relationships: CoverRelationships;
 };
 
+export type CoverArtResizeOption =
+	| { height: Scalars["Int"]["input"]; width?: never }
+	| { height?: never; width: Scalars["Int"]["input"] };
+
+export type CoverArtSaveOption = {
+	format?: InputMaybe<CoverImageFormat>;
+	resizePercentage?: InputMaybe<CoverArtResizeOption>;
+};
+
 export type CoverAttributes = {
 	__typename?: "CoverAttributes";
 	createdAt: Scalars["MangaDexDateTime"]["output"];
@@ -843,6 +852,13 @@ export type CoverEditParam = {
 	volume: Scalars["String"]["input"];
 };
 
+export enum CoverImageFormat {
+	Avif = "AVIF",
+	Jpeg = "JPEG",
+	Png = "PNG",
+	Webp = "WEBP"
+}
+
 export type CoverListParam = {
 	coverIds?: Array<Scalars["UUID"]["input"]>;
 	limit?: InputMaybe<Scalars["Int"]["input"]>;
@@ -858,9 +874,14 @@ export type CoverMutations = {
 	cancelDownload: Scalars["Boolean"]["output"];
 	delete: Scalars["Boolean"]["output"];
 	download: DownloadState;
+	downloadCovers?: Maybe<Scalars["Boolean"]["output"]>;
 	edit: Cover;
 	remove: Scalars["Boolean"]["output"];
+	/** by default, it will be exported to the download folder */
 	saveImage: Scalars["String"]["output"];
+	/** by default, it will be exported to the download folder */
+	saveImages?: Maybe<Scalars["String"]["output"]>;
+	saveImagesToArchive: Scalars["String"]["output"];
 	upload: Cover;
 };
 
@@ -876,6 +897,10 @@ export type CoverMutationsDownloadArgs = {
 	id: Scalars["UUID"]["input"];
 };
 
+export type CoverMutationsDownloadCoversArgs = {
+	ids: Array<Scalars["UUID"]["input"]>;
+};
+
 export type CoverMutationsEditArgs = {
 	params: CoverEditParam;
 };
@@ -886,7 +911,20 @@ export type CoverMutationsRemoveArgs = {
 
 export type CoverMutationsSaveImageArgs = {
 	coverId: Scalars["UUID"]["input"];
-	exportDir: Scalars["String"]["input"];
+	exportDir?: InputMaybe<Scalars["String"]["input"]>;
+	options?: InputMaybe<CoverArtSaveOption>;
+};
+
+export type CoverMutationsSaveImagesArgs = {
+	coverIds: Array<Scalars["UUID"]["input"]>;
+	exportDir?: InputMaybe<Scalars["String"]["input"]>;
+	options?: InputMaybe<CoverArtSaveOption>;
+};
+
+export type CoverMutationsSaveImagesToArchiveArgs = {
+	archiveFile: Scalars["String"]["input"];
+	coverIds: Array<Scalars["UUID"]["input"]>;
+	options?: InputMaybe<CoverArtSaveOption>;
 };
 
 export type CoverMutationsUploadArgs = {
@@ -1167,14 +1205,18 @@ export type CustomListMutations = {
 	__typename?: "CustomListMutations";
 	addManga: Scalars["Boolean"]["output"];
 	addMangaBatch: Scalars["Boolean"]["output"];
+	assembleCustomListsIntoOne: CustomList;
 	create: CustomList;
 	delete: Scalars["Boolean"]["output"];
+	downloadListTitles?: Maybe<Scalars["Boolean"]["output"]>;
 	export: CustomListExportMutations;
 	follow: Scalars["Boolean"]["output"];
+	followBatch?: Maybe<Scalars["Boolean"]["output"]>;
 	fork: CustomList;
 	removeManga: Scalars["Boolean"]["output"];
 	removeMangaBatch: Scalars["Boolean"]["output"];
 	unfollow: Scalars["Boolean"]["output"];
+	unfollowBatch?: Maybe<Scalars["Boolean"]["output"]>;
 	update: CustomList;
 };
 
@@ -1187,6 +1229,13 @@ export type CustomListMutationsAddMangaBatchArgs = {
 	mangaIds: Array<Scalars["UUID"]["input"]>;
 };
 
+export type CustomListMutationsAssembleCustomListsIntoOneArgs = {
+	filterContent?: InputMaybe<Scalars["Boolean"]["input"]>;
+	name: Scalars["String"]["input"];
+	toAssemble: Array<Scalars["UUID"]["input"]>;
+	visibility?: InputMaybe<CustomListVisibility>;
+};
+
 export type CustomListMutationsCreateArgs = {
 	params: CustomListCreateParam;
 };
@@ -1195,8 +1244,18 @@ export type CustomListMutationsDeleteArgs = {
 	id: Scalars["UUID"]["input"];
 };
 
+export type CustomListMutationsDownloadListTitlesArgs = {
+	extras?: InputMaybe<MangaDownloadExtras>;
+	filterContent?: InputMaybe<Scalars["Boolean"]["input"]>;
+	toDowload: Array<Scalars["UUID"]["input"]>;
+};
+
 export type CustomListMutationsFollowArgs = {
 	id: Scalars["UUID"]["input"];
+};
+
+export type CustomListMutationsFollowBatchArgs = {
+	ids: Array<Scalars["UUID"]["input"]>;
 };
 
 export type CustomListMutationsForkArgs = {
@@ -1219,6 +1278,10 @@ export type CustomListMutationsUnfollowArgs = {
 	id: Scalars["UUID"]["input"];
 };
 
+export type CustomListMutationsUnfollowBatchArgs = {
+	ids: Array<Scalars["UUID"]["input"]>;
+};
+
 export type CustomListMutationsUpdateArgs = {
 	params: CustomListUpdateParams;
 };
@@ -1227,6 +1290,7 @@ export type CustomListQueries = {
 	__typename?: "CustomListQueries";
 	currentLoggedLists: CustomListResults;
 	get: CustomList;
+	getCustomListBatch: Array<CustomList>;
 	getUserLists: CustomListResults;
 };
 
@@ -1236,6 +1300,11 @@ export type CustomListQueriesCurrentLoggedListsArgs = {
 
 export type CustomListQueriesGetArgs = {
 	id: Scalars["UUID"]["input"];
+	private?: InputMaybe<Scalars["Boolean"]["input"]>;
+};
+
+export type CustomListQueriesGetCustomListBatchArgs = {
+	ids: Array<Scalars["UUID"]["input"]>;
 	private?: InputMaybe<Scalars["Boolean"]["input"]>;
 };
 
@@ -3150,7 +3219,9 @@ export type ScanlationGroupMutation = {
 	delete: Scalars["Boolean"]["output"];
 	edit: ScanlationGroup;
 	follow: Scalars["Boolean"]["output"];
+	followBatch?: Maybe<Scalars["Boolean"]["output"]>;
 	unfollow: Scalars["Boolean"]["output"];
+	unfollowBatch?: Maybe<Scalars["Boolean"]["output"]>;
 };
 
 export type ScanlationGroupMutationCreateArgs = {
@@ -3169,8 +3240,16 @@ export type ScanlationGroupMutationFollowArgs = {
 	id: Scalars["UUID"]["input"];
 };
 
+export type ScanlationGroupMutationFollowBatchArgs = {
+	ids: Array<Scalars["UUID"]["input"]>;
+};
+
 export type ScanlationGroupMutationUnfollowArgs = {
 	id: Scalars["UUID"]["input"];
+};
+
+export type ScanlationGroupMutationUnfollowBatchArgs = {
+	ids: Array<Scalars["UUID"]["input"]>;
 };
 
 export type ScanlationGroupQueries = {
@@ -3708,15 +3787,25 @@ export type UserListParam = {
 export type UserMutations = {
 	__typename?: "UserMutations";
 	follow: Scalars["Boolean"]["output"];
+	followBatch?: Maybe<Scalars["Boolean"]["output"]>;
 	unfollow: Scalars["Boolean"]["output"];
+	unfollowBatch?: Maybe<Scalars["Boolean"]["output"]>;
 };
 
 export type UserMutationsFollowArgs = {
 	id: Scalars["UUID"]["input"];
 };
 
+export type UserMutationsFollowBatchArgs = {
+	ids: Array<Scalars["UUID"]["input"]>;
+};
+
 export type UserMutationsUnfollowArgs = {
 	id: Scalars["UUID"]["input"];
+};
+
+export type UserMutationsUnfollowBatchArgs = {
+	ids: Array<Scalars["UUID"]["input"]>;
 };
 
 export type UserOptionMutations = {
@@ -5374,6 +5463,48 @@ export type SubContentProfileWarningModeSubscription = {
 	watchContentProfileWarningMode: ContentProfileWarningMode;
 };
 
+export type SaveCoversInArchiveMutationVariables = Exact<{
+	ids: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
+	archivePath: Scalars["String"]["input"];
+	options?: InputMaybe<CoverArtSaveOption>;
+}>;
+
+export type SaveCoversInArchiveMutation = {
+	__typename?: "Mutation";
+	cover: { __typename?: "CoverMutations"; saveImagesToArchive: string };
+};
+
+export type DownloadCoversInADirectoryMutationVariables = Exact<{
+	ids: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
+	exportDir: Scalars["String"]["input"];
+	options?: InputMaybe<CoverArtSaveOption>;
+}>;
+
+export type DownloadCoversInADirectoryMutation = {
+	__typename?: "Mutation";
+	cover: { __typename?: "CoverMutations"; saveImages?: string | null };
+};
+
+export type DownloadCoverInADirectoryMutationVariables = Exact<{
+	id: Scalars["UUID"]["input"];
+	exportDir: Scalars["String"]["input"];
+	options?: InputMaybe<CoverArtSaveOption>;
+}>;
+
+export type DownloadCoverInADirectoryMutation = {
+	__typename?: "Mutation";
+	cover: { __typename?: "CoverMutations"; saveImage: string };
+};
+
+export type DownloadCoversLocalyMutationVariables = Exact<{
+	ids: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
+}>;
+
+export type DownloadCoversLocalyMutation = {
+	__typename?: "Mutation";
+	cover: { __typename?: "CoverMutations"; downloadCovers?: boolean | null };
+};
+
 export type ListenToMangaTasksIDsSubscriptionVariables = Exact<{ [key: string]: never }>;
 
 export type ListenToMangaTasksIDsSubscription = {
@@ -5417,6 +5548,24 @@ export type SetForcePort443Mutation = {
 export type SubForce443SubscriptionVariables = Exact<{ [key: string]: never }>;
 
 export type SubForce443Subscription = { __typename?: "Subscriptions"; watchForcePort443: boolean };
+
+export type FollowScanlationGroupBatchMutationVariables = Exact<{
+	ids: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
+}>;
+
+export type FollowScanlationGroupBatchMutation = {
+	__typename?: "Mutation";
+	scanlationGroup: { __typename?: "ScanlationGroupMutation"; followBatch?: boolean | null };
+};
+
+export type UnfollowScanlationGroupBatchMutationVariables = Exact<{
+	ids: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
+}>;
+
+export type UnfollowScanlationGroupBatchMutation = {
+	__typename?: "Mutation";
+	scanlationGroup: { __typename?: "ScanlationGroupMutation"; unfollowBatch?: boolean | null };
+};
 
 export type GroupPageQueryQueryVariables = Exact<{
 	id: Scalars["UUID"]["input"];
@@ -6159,6 +6308,25 @@ export type LibrarySizeQuery = {
 	};
 };
 
+export type AssembleCustomListsTitlesIntoOneMutationVariables = Exact<{
+	ids: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
+	newListName: Scalars["String"]["input"];
+	visibility?: InputMaybe<CustomListVisibility>;
+	filterContent?: InputMaybe<Scalars["Boolean"]["input"]>;
+}>;
+
+export type AssembleCustomListsTitlesIntoOneMutation = {
+	__typename?: "Mutation";
+	customList: {
+		__typename?: "CustomListMutations";
+		assembleCustomListsIntoOne: {
+			__typename?: "CustomList";
+			id: any;
+			attributes: { __typename?: "CustomListAttributes"; visibility: CustomListVisibility };
+		};
+	};
+};
+
 export type CurrentUserCustomListsQueryVariables = Exact<{
 	params: CurrentLoggedLists;
 }>;
@@ -6186,6 +6354,17 @@ export type CurrentUserCustomListsQuery = {
 	};
 };
 
+export type DownloadMdListsTitlesMutationVariables = Exact<{
+	listIDs: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
+	extras?: InputMaybe<MangaDownloadExtras>;
+	filterContent?: InputMaybe<Scalars["Boolean"]["input"]>;
+}>;
+
+export type DownloadMdListsTitlesMutation = {
+	__typename?: "Mutation";
+	customList: { __typename?: "CustomListMutations"; downloadListTitles?: boolean | null };
+};
+
 export type ExportCustomListsToCsvMutationVariables = Exact<{
 	options: ExportCustomListsToCsvOptions;
 }>;
@@ -6207,6 +6386,46 @@ export type ExportCustomListsToMalMutation = {
 	customList: {
 		__typename?: "CustomListMutations";
 		export: { __typename?: "CustomListExportMutations"; asMyAnimeList: string };
+	};
+};
+
+export type FollowMdListBatchMutationVariables = Exact<{
+	ids: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
+}>;
+
+export type FollowMdListBatchMutation = {
+	__typename?: "Mutation";
+	customList: { __typename?: "CustomListMutations"; followBatch?: boolean | null };
+};
+
+export type UnfollowMdListBatchMutationVariables = Exact<{
+	ids: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
+}>;
+
+export type UnfollowMdListBatchMutation = {
+	__typename?: "Mutation";
+	customList: { __typename?: "CustomListMutations"; unfollowBatch?: boolean | null };
+};
+
+export type GetCustomListInfoByBatchQueryVariables = Exact<{
+	ids: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
+	private?: InputMaybe<Scalars["Boolean"]["input"]>;
+}>;
+
+export type GetCustomListInfoByBatchQuery = {
+	__typename?: "Query";
+	customList: {
+		__typename?: "CustomListQueries";
+		getCustomListBatch: Array<{
+			__typename?: "CustomList";
+			id: any;
+			attributes: {
+				__typename?: "CustomListAttributes";
+				name: string;
+				visibility: CustomListVisibility;
+			};
+			relationships: { __typename?: "CustomListRelationships"; titlesIds: Array<any> };
+		}>;
 	};
 };
 
@@ -7496,6 +7715,47 @@ export type SwapInternalQueueOrderMutation = {
 	upload: {
 		__typename?: "UploadMutations";
 		internal: { __typename?: "InternalSessionsMutations"; swapQueueOrder?: boolean | null };
+	};
+};
+
+export type FollowUserBatchMutationVariables = Exact<{
+	ids: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
+}>;
+
+export type FollowUserBatchMutation = {
+	__typename?: "Mutation";
+	user: { __typename?: "UserMutations"; followBatch?: boolean | null };
+};
+
+export type UnfollowUserBatchMutationVariables = Exact<{
+	ids: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
+}>;
+
+export type UnfollowUserBatchMutation = {
+	__typename?: "Mutation";
+	user: { __typename?: "UserMutations"; unfollowBatch?: boolean | null };
+};
+
+export type GetUsersInfoQueryVariables = Exact<{
+	ids: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
+}>;
+
+export type GetUsersInfoQuery = {
+	__typename?: "Query";
+	user: {
+		__typename?: "UserQueries";
+		list: {
+			__typename?: "UserResults";
+			data: Array<{
+				__typename?: "User";
+				id: any;
+				attributes: {
+					__typename?: "UserAttributes";
+					username: string;
+					roles: Array<UserRole>;
+				};
+			}>;
+		};
 	};
 };
 
@@ -15219,6 +15479,309 @@ export const SubContentProfileWarningModeDocument = {
 	SubContentProfileWarningModeSubscription,
 	SubContentProfileWarningModeSubscriptionVariables
 >;
+export const SaveCoversInArchiveDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "saveCoversInArchive" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "ids" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "ListType",
+							type: {
+								kind: "NonNullType",
+								type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+							}
+						}
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "archivePath" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "String" } }
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "options" } },
+					type: { kind: "NamedType", name: { kind: "Name", value: "CoverArtSaveOption" } }
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "cover" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "saveImagesToArchive" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "coverIds" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "ids" }
+											}
+										},
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "archiveFile" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "archivePath" }
+											}
+										},
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "options" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "options" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<SaveCoversInArchiveMutation, SaveCoversInArchiveMutationVariables>;
+export const DownloadCoversInADirectoryDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "downloadCoversInADirectory" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "ids" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "ListType",
+							type: {
+								kind: "NonNullType",
+								type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+							}
+						}
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "exportDir" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "String" } }
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "options" } },
+					type: { kind: "NamedType", name: { kind: "Name", value: "CoverArtSaveOption" } }
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "cover" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "saveImages" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "coverIds" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "ids" }
+											}
+										},
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "exportDir" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "exportDir" }
+											}
+										},
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "options" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "options" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	DownloadCoversInADirectoryMutation,
+	DownloadCoversInADirectoryMutationVariables
+>;
+export const DownloadCoverInADirectoryDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "downloadCoverInADirectory" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "exportDir" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "String" } }
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "options" } },
+					type: { kind: "NamedType", name: { kind: "Name", value: "CoverArtSaveOption" } }
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "cover" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "saveImage" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "coverId" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "id" }
+											}
+										},
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "exportDir" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "exportDir" }
+											}
+										},
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "options" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "options" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	DownloadCoverInADirectoryMutation,
+	DownloadCoverInADirectoryMutationVariables
+>;
+export const DownloadCoversLocalyDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "downloadCoversLocaly" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "ids" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "ListType",
+							type: {
+								kind: "NonNullType",
+								type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+							}
+						}
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "cover" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "downloadCovers" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "ids" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "ids" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<DownloadCoversLocalyMutation, DownloadCoversLocalyMutationVariables>;
 export const ListenToMangaTasksIDsDocument = {
 	kind: "Document",
 	definitions: [
@@ -15408,6 +15971,120 @@ export const SubForce443Document = {
 		}
 	]
 } as unknown as DocumentNode<SubForce443Subscription, SubForce443SubscriptionVariables>;
+export const FollowScanlationGroupBatchDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "followScanlationGroupBatch" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "ids" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "ListType",
+							type: {
+								kind: "NonNullType",
+								type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+							}
+						}
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "scanlationGroup" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "followBatch" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "ids" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "ids" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	FollowScanlationGroupBatchMutation,
+	FollowScanlationGroupBatchMutationVariables
+>;
+export const UnfollowScanlationGroupBatchDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "unfollowScanlationGroupBatch" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "ids" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "ListType",
+							type: {
+								kind: "NonNullType",
+								type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+							}
+						}
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "scanlationGroup" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "unfollowBatch" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "ids" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "ids" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	UnfollowScanlationGroupBatchMutation,
+	UnfollowScanlationGroupBatchMutationVariables
+>;
 export const GroupPageQueryDocument = {
 	kind: "Document",
 	definitions: [
@@ -19253,6 +19930,130 @@ export const LibrarySizeDocument = {
 		}
 	]
 } as unknown as DocumentNode<LibrarySizeQuery, LibrarySizeQueryVariables>;
+export const AssembleCustomListsTitlesIntoOneDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "assembleCustomListsTitlesIntoOne" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "ids" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "ListType",
+							type: {
+								kind: "NonNullType",
+								type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+							}
+						}
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "newListName" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "String" } }
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "visibility" } },
+					type: {
+						kind: "NamedType",
+						name: { kind: "Name", value: "CustomListVisibility" }
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "filterContent" } },
+					type: { kind: "NamedType", name: { kind: "Name", value: "Boolean" } }
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "customList" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "assembleCustomListsIntoOne" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "toAssemble" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "ids" }
+											}
+										},
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "name" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "newListName" }
+											}
+										},
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "visibility" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "visibility" }
+											}
+										},
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "filterContent" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "filterContent" }
+											}
+										}
+									],
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{ kind: "Field", name: { kind: "Name", value: "id" } },
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "attributes" },
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "visibility"
+															}
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	AssembleCustomListsTitlesIntoOneMutation,
+	AssembleCustomListsTitlesIntoOneMutationVariables
+>;
 export const CurrentUserCustomListsDocument = {
 	kind: "Document",
 	definitions: [
@@ -19379,6 +20180,89 @@ export const CurrentUserCustomListsDocument = {
 		}
 	]
 } as unknown as DocumentNode<CurrentUserCustomListsQuery, CurrentUserCustomListsQueryVariables>;
+export const DownloadMdListsTitlesDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "downloadMDListsTitles" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "listIDs" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "ListType",
+							type: {
+								kind: "NonNullType",
+								type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+							}
+						}
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "extras" } },
+					type: {
+						kind: "NamedType",
+						name: { kind: "Name", value: "MangaDownloadExtras" }
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "filterContent" } },
+					type: { kind: "NamedType", name: { kind: "Name", value: "Boolean" } }
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "customList" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "downloadListTitles" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "extras" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "extras" }
+											}
+										},
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "toDowload" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "listIDs" }
+											}
+										},
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "filterContent" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "filterContent" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<DownloadMdListsTitlesMutation, DownloadMdListsTitlesMutationVariables>;
 export const ExportCustomListsToCsvDocument = {
 	kind: "Document",
 	definitions: [
@@ -19505,6 +20389,223 @@ export const ExportCustomListsToMalDocument = {
 	ExportCustomListsToMalMutation,
 	ExportCustomListsToMalMutationVariables
 >;
+export const FollowMdListBatchDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "followMDListBatch" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "ids" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "ListType",
+							type: {
+								kind: "NonNullType",
+								type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+							}
+						}
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "customList" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "followBatch" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "ids" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "ids" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<FollowMdListBatchMutation, FollowMdListBatchMutationVariables>;
+export const UnfollowMdListBatchDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "unfollowMDListBatch" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "ids" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "ListType",
+							type: {
+								kind: "NonNullType",
+								type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+							}
+						}
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "customList" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "unfollowBatch" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "ids" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "ids" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<UnfollowMdListBatchMutation, UnfollowMdListBatchMutationVariables>;
+export const GetCustomListInfoByBatchDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "getCustomListInfoByBatch" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "ids" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "ListType",
+							type: {
+								kind: "NonNullType",
+								type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+							}
+						}
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "private" } },
+					type: { kind: "NamedType", name: { kind: "Name", value: "Boolean" } }
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "customList" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "getCustomListBatch" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "ids" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "ids" }
+											}
+										},
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "private" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "private" }
+											}
+										}
+									],
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{ kind: "Field", name: { kind: "Name", value: "id" } },
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "attributes" },
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "name" }
+														},
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "visibility"
+															}
+														}
+													]
+												}
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "relationships" },
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "titlesIds"
+															}
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<GetCustomListInfoByBatchQuery, GetCustomListInfoByBatchQueryVariables>;
 export const DeleteCustomListMutationDocument = {
 	kind: "Document",
 	definitions: [
@@ -26525,6 +27626,221 @@ export const SwapInternalQueueOrderDocument = {
 	SwapInternalQueueOrderMutation,
 	SwapInternalQueueOrderMutationVariables
 >;
+export const FollowUserBatchDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "followUserBatch" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "ids" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "ListType",
+							type: {
+								kind: "NonNullType",
+								type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+							}
+						}
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "user" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "followBatch" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "ids" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "ids" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<FollowUserBatchMutation, FollowUserBatchMutationVariables>;
+export const UnfollowUserBatchDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "unfollowUserBatch" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "ids" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "ListType",
+							type: {
+								kind: "NonNullType",
+								type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+							}
+						}
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "user" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "unfollowBatch" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "ids" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "ids" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<UnfollowUserBatchMutation, UnfollowUserBatchMutationVariables>;
+export const GetUsersInfoDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "getUsersInfo" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "ids" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "ListType",
+							type: {
+								kind: "NonNullType",
+								type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+							}
+						}
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "user" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "list" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "params" },
+											value: {
+												kind: "ObjectValue",
+												fields: [
+													{
+														kind: "ObjectField",
+														name: { kind: "Name", value: "userIds" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "ids" }
+														}
+													}
+												]
+											}
+										}
+									],
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "data" },
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "id" }
+														},
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "attributes"
+															},
+															selectionSet: {
+																kind: "SelectionSet",
+																selections: [
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "username"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "roles"
+																		}
+																	}
+																]
+															}
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<GetUsersInfoQuery, GetUsersInfoQueryVariables>;
 export const UserPageQueryDocument = {
 	kind: "Document",
 	definitions: [

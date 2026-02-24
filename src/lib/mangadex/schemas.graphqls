@@ -605,6 +605,16 @@ type Cover {
 	relationships: CoverRelationships!
 }
 
+input CoverArtResizeOption @oneOf {
+	width: Int
+	height: Int
+}
+
+input CoverArtSaveOption {
+	resizePercentage: CoverArtResizeOption
+	format: CoverImageFormat
+}
+
 type CoverAttributes {
 	description: String!
 	locale: Language
@@ -647,6 +657,13 @@ input CoverEditParam {
 	version: Int!
 }
 
+enum CoverImageFormat {
+	JPEG
+	PNG
+	AVIF
+	WEBP
+}
+
 input CoverListParam {
 	limit: Int
 	offset: Int
@@ -662,9 +679,18 @@ type CoverMutations {
 	edit(params: CoverEditParam!): Cover!
 	delete(id: UUID!): Boolean!
 	download(id: UUID!): DownloadState!
+	downloadCovers(ids: [UUID!]!): Boolean
 	remove(id: UUID!): Boolean!
 	cancelDownload(id: UUID!): Boolean!
-	saveImage(coverId: UUID!, exportDir: String!): String!
+	"""
+	by default, it will be exported to the download folder
+	"""
+	saveImages(coverIds: [UUID!]!, exportDir: String, options: CoverArtSaveOption): String
+	"""
+	by default, it will be exported to the download folder
+	"""
+	saveImage(coverId: UUID!, exportDir: String, options: CoverArtSaveOption): String!
+	saveImagesToArchive(coverIds: [UUID!]!, archiveFile: String!, options: CoverArtSaveOption): String!
 }
 
 type CoverQueries {
@@ -927,12 +953,17 @@ type CustomListMutations {
 	removeMangaBatch(listId: UUID!, mangaIds: [UUID!]!): Boolean!
 	export: CustomListExportMutations!
 	fork(toFork: UUID!, name: String!, visibility: CustomListVisibility, filterContent: Boolean): CustomList!
+	followBatch(ids: [UUID!]!): Boolean
+	unfollowBatch(ids: [UUID!]!): Boolean
+	assembleCustomListsIntoOne(toAssemble: [UUID!]!, name: String!, visibility: CustomListVisibility, filterContent: Boolean): CustomList!
+	downloadListTitles(toDowload: [UUID!]!, extras: MangaDownloadExtras, filterContent: Boolean): Boolean
 }
 
 type CustomListQueries {
 	get(id: UUID!, private: Boolean): CustomList!
 	currentLoggedLists(params: CurrentLoggedLists): CustomListResults!
 	getUserLists(params: UserCustomListParams!): CustomListResults!
+	getCustomListBatch(ids: [UUID!]!, private: Boolean): [CustomList!]!
 }
 
 type CustomListRelationships {
@@ -2422,6 +2453,8 @@ type ScanlationGroupMutation {
 	delete(id: UUID!): Boolean!
 	follow(id: UUID!): Boolean!
 	unfollow(id: UUID!): Boolean!
+	followBatch(ids: [UUID!]!): Boolean
+	unfollowBatch(ids: [UUID!]!): Boolean
 }
 
 type ScanlationGroupQueries {
@@ -2806,6 +2839,8 @@ input UserListParam {
 type UserMutations {
 	follow(id: UUID!): Boolean!
 	unfollow(id: UUID!): Boolean!
+	followBatch(ids: [UUID!]!): Boolean
+	unfollowBatch(ids: [UUID!]!): Boolean
 }
 
 type UserOptionMutations {

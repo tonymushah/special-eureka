@@ -14,7 +14,7 @@
 	const client = getContextClient();
 	const selectedTitles = createQuery(() => {
 		return {
-			queryKey: ["get", "title", "titles", ...titles],
+			queryKey: ["selecto", "titles", "fetch"],
 
 			async queryFn(): Promise<{ id: string; title: string }[]> {
 				const res = await client
@@ -27,16 +27,14 @@
 				} else if (res.data) {
 					return res.data.manga.list.data.map((e) => ({
 						id: e.id,
-						title:
-							get_value_from_title_and_random_if_undefined(
-								e.attributes.title,
-								"en"
-							) ?? e.id
+						title: get_value_from_title_and_random_if_undefined(e.attributes.title, "en") ?? e.id
 					}));
 				} else {
 					throw new Error("No data");
 				}
-			}
+			},
+			enabled: titles.length > 0,
+			staleTime: 0
 		} satisfies CreateQueryOptions<
 			{
 				id: string;
@@ -44,15 +42,41 @@
 			}[]
 		>;
 	});
+	let titlesData = $derived.by(() => {
+		const data = new Map<string, string>(selectedTitles.data?.map((o) => [o.id, o.title]));
+		return titles
+			.map((id) => {
+				const aaa = data.get(id);
+				if (aaa) {
+					return {
+						id,
+						title: aaa
+					};
+				}
+			})
+			.filter((a) => a != undefined);
+	});
 	function removeSelection(id: string) {
 		titles = titles.filter((v) => v != id);
 	}
 </script>
 
-<p>Click on the badge to remove it from the selection</p>
+{#snippet showIDsOnly()}
+	{#each titles as title}
+		<StatusBadgeOnlyLabel
+			label={title}
+			color="gray"
+			onclick={() => {
+				removeSelection(title);
+			}}
+		/>
+	{/each}
+{/snippet}
+
+<p>Click on the badge to remove the title from the selection</p>
 <div class="titles-selected">
-	{#if selectedTitles.data}
-		{@const _titles = selectedTitles.data}
+	{#if selectedTitles.isSuccess}
+		{@const _titles = titlesData}
 		{#each _titles as title}
 			<StatusBadgeOnlyLabel
 				label={title.title}
@@ -62,26 +86,10 @@
 				}}
 			/>
 		{:else}
-			{#each titles as title}
-				<StatusBadgeOnlyLabel
-					label={title}
-					color="gray"
-					onclick={() => {
-						removeSelection(title);
-					}}
-				/>
-			{/each}
+			{@render showIDsOnly()}
 		{/each}
 	{:else}
-		{#each titles as title}
-			<StatusBadgeOnlyLabel
-				label={title}
-				color="gray"
-				onclick={() => {
-					removeSelection(title);
-				}}
-			/>
-		{/each}
+		{@render showIDsOnly()}
 	{/if}
 </div>
 
