@@ -81,10 +81,10 @@
 <style lang="scss">
 	.layout {
 		display: grid;
+		padding-right: 12px;
 		h3 {
 			margin: 0px;
 		}
-		padding-right: 12px;
 	}
 	.option {
 		display: flex;
