@@ -10,6 +10,8 @@
 	import { Portal } from "@ark-ui/svelte";
 	import cssDialogMod from "@mangadex/componnents/theme/dialog/dialog.module.scss";
 	import cssMod from "./lib-content-filter.module.scss";
+	import MangaDexThemeProvider from "../theme/MangaDexThemeProvider.svelte";
+	import MangaDexVarThemeProvider from "../theme/MangaDexVarThemeProvider.svelte";
 
 	interface Props {
 		params: Writable<UserLibrarySectionParam>;
@@ -31,30 +33,32 @@
 	}}
 >
 	<div class="icon">
-		<Filter size="20" />
+		<Filter size="24" />
 	</div>
 </ButtonAccent>
 
 <Dialog.Root bind:open>
 	<Portal>
-		<Dialog.Backdrop class={cssMod.overlay} />
-		<Dialog.Positioner>
-			<Dialog.Content class={cssMod.dialog}>
-				<div class="content">
-					<div class="top">
-						<div class="title-desc">
-							<Dialog.Title class={cssDialogMod.title}>Filter Library</Dialog.Title>
+		<MangaDexVarThemeProvider>
+			<Dialog.Backdrop class={cssMod.overlay} />
+			<Dialog.Positioner>
+				<Dialog.Content class={cssMod.dialog}>
+					<div class="content">
+						<div class="top">
+							<div class="title-desc">
+								<Dialog.Title class={cssDialogMod.title}>Filter Library</Dialog.Title>
+							</div>
+							<div class="close">
+								<Dialog.CloseTrigger class={cssDialogMod.closeButton}>
+									<CloseIcon class={cssMod.icon} />
+								</Dialog.CloseTrigger>
+							</div>
 						</div>
-						<div class="close">
-							<Dialog.CloseTrigger class={cssDialogMod.closeButton}>
-								<CloseIcon class={cssMod.icon} />
-							</Dialog.CloseTrigger>
-						</div>
+						<FilterContent {params} />
 					</div>
-					<FilterContent {params} />
-				</div>
-			</Dialog.Content>
-		</Dialog.Positioner>
+				</Dialog.Content>
+			</Dialog.Positioner>
+		</MangaDexVarThemeProvider>
 	</Portal>
 </Dialog.Root>
 
@@ -64,6 +68,11 @@
 		display: flex;
 		//grid-template-rows: fit-content auto;
 		flex-direction: column;
+	}
+	.icon {
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 	.close {
 		align-items: center;
