@@ -32,5 +32,7 @@
 		display: flex;
 		flex-direction: column;
 		gap: 6px;
+		height: 100%;
+		overflow-y: scroll;
 	}
 </style>
