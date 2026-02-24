@@ -10,6 +10,7 @@
 		unfollowCustomlistBatchMutation,
 		followCustomlistBatchMutation
 	} from "@mangadex/mutations/custom-list/follow-batch";
+	import Assemble from "./custom-lists/Assemble.svelte";
 
 	interface Props {
 		customLists?: string[];
@@ -29,6 +30,8 @@
 			<Selections {customLists} />
 		{:else if currentAction == "download-titles"}
 			<DownloadTitles {customLists} />
+		{:else if currentAction == "assemble"}
+			<Assemble {customLists} />
 		{/if}
 	{/snippet}
 	{#snippet actions()}

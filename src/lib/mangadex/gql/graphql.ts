@@ -6308,6 +6308,25 @@ export type LibrarySizeQuery = {
 	};
 };
 
+export type AssembleCustomListsTitlesIntoOneMutationVariables = Exact<{
+	ids: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
+	newListName: Scalars["String"]["input"];
+	visibility?: InputMaybe<CustomListVisibility>;
+	filterContent?: InputMaybe<Scalars["Boolean"]["input"]>;
+}>;
+
+export type AssembleCustomListsTitlesIntoOneMutation = {
+	__typename?: "Mutation";
+	customList: {
+		__typename?: "CustomListMutations";
+		assembleCustomListsIntoOne: {
+			__typename?: "CustomList";
+			id: any;
+			attributes: { __typename?: "CustomListAttributes"; visibility: CustomListVisibility };
+		};
+	};
+};
+
 export type CurrentUserCustomListsQueryVariables = Exact<{
 	params: CurrentLoggedLists;
 }>;
@@ -19888,6 +19907,130 @@ export const LibrarySizeDocument = {
 		}
 	]
 } as unknown as DocumentNode<LibrarySizeQuery, LibrarySizeQueryVariables>;
+export const AssembleCustomListsTitlesIntoOneDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "assembleCustomListsTitlesIntoOne" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "ids" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "ListType",
+							type: {
+								kind: "NonNullType",
+								type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+							}
+						}
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "newListName" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "String" } }
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "visibility" } },
+					type: {
+						kind: "NamedType",
+						name: { kind: "Name", value: "CustomListVisibility" }
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "filterContent" } },
+					type: { kind: "NamedType", name: { kind: "Name", value: "Boolean" } }
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "customList" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "assembleCustomListsIntoOne" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "toAssemble" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "ids" }
+											}
+										},
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "name" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "newListName" }
+											}
+										},
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "visibility" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "visibility" }
+											}
+										},
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "filterContent" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "filterContent" }
+											}
+										}
+									],
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{ kind: "Field", name: { kind: "Name", value: "id" } },
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "attributes" },
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "visibility"
+															}
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	AssembleCustomListsTitlesIntoOneMutation,
+	AssembleCustomListsTitlesIntoOneMutationVariables
+>;
 export const CurrentUserCustomListsDocument = {
 	kind: "Document",
 	definitions: [
