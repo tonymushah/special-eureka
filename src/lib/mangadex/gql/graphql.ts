@@ -7736,6 +7736,29 @@ export type UnfollowUserBatchMutation = {
 	user: { __typename?: "UserMutations"; unfollowBatch?: boolean | null };
 };
 
+export type GetUsersInfoQueryVariables = Exact<{
+	ids: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
+}>;
+
+export type GetUsersInfoQuery = {
+	__typename?: "Query";
+	user: {
+		__typename?: "UserQueries";
+		list: {
+			__typename?: "UserResults";
+			data: Array<{
+				__typename?: "User";
+				id: any;
+				attributes: {
+					__typename?: "UserAttributes";
+					username: string;
+					roles: Array<UserRole>;
+				};
+			}>;
+		};
+	};
+};
+
 export type UserPageQueryQueryVariables = Exact<{
 	id: Scalars["UUID"]["input"];
 }>;
@@ -27711,6 +27734,113 @@ export const UnfollowUserBatchDocument = {
 		}
 	]
 } as unknown as DocumentNode<UnfollowUserBatchMutation, UnfollowUserBatchMutationVariables>;
+export const GetUsersInfoDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "getUsersInfo" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "ids" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "ListType",
+							type: {
+								kind: "NonNullType",
+								type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+							}
+						}
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "user" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "list" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "params" },
+											value: {
+												kind: "ObjectValue",
+												fields: [
+													{
+														kind: "ObjectField",
+														name: { kind: "Name", value: "userIds" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "ids" }
+														}
+													}
+												]
+											}
+										}
+									],
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "data" },
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "id" }
+														},
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "attributes"
+															},
+															selectionSet: {
+																kind: "SelectionSet",
+																selections: [
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "username"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "roles"
+																		}
+																	}
+																]
+															}
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<GetUsersInfoQuery, GetUsersInfoQueryVariables>;
 export const UserPageQueryDocument = {
 	kind: "Document",
 	definitions: [

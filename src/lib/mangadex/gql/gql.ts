@@ -195,6 +195,7 @@ type Documents = {
 	"\n\tmutation swapInternalQueueOrder($a: UUID!, $b: UUID!) {\n\t\tupload {\n\t\t\tinternal {\n\t\t\t\tswapQueueOrder(a: $a, b: $b)\n\t\t\t}\n\t\t}\n\t}\n": typeof types.SwapInternalQueueOrderDocument;
 	"\n\tmutation followUserBatch($ids: [UUID!]!) {\n\t\tuser {\n\t\t\tfollowBatch(ids: $ids)\n\t\t}\n\t}\n": typeof types.FollowUserBatchDocument;
 	"\n\tmutation unfollowUserBatch($ids: [UUID!]!) {\n\t\tuser {\n\t\t\tunfollowBatch(ids: $ids)\n\t\t}\n\t}\n": typeof types.UnfollowUserBatchDocument;
+	"\n\tquery getUsersInfo($ids: [UUID!]!) {\n\t\tuser {\n\t\t\tlist(params: { userIds: $ids }) {\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\tusername\n\t\t\t\t\t\troles\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.GetUsersInfoDocument;
 	"\n\tquery userPageQuery($id: UUID!) {\n\t\tuser {\n\t\t\tget(id: $id) {\n\t\t\t\tid\n\t\t\t\tattributes {\n\t\t\t\t\tusername\n\t\t\t\t\troles\n\t\t\t\t}\n\t\t\t\trelationships {\n\t\t\t\t\tgroups {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\tname\n\t\t\t\t\t\t}\n\t\t\t\t\t\trelationships {\n\t\t\t\t\t\t\tleader {\n\t\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\tchapter {\n\t\t\tlist(params: { uploaders: [$id] }) {\n\t\t\t\ttotal\n\t\t\t}\n\t\t}\n\t}\n": typeof types.UserPageQueryDocument;
 	"\n\tmutation followUserMutation($id: UUID!) {\n\t\tuser {\n\t\t\tfollow(id: $id)\n\t\t}\n\t}\n": typeof types.FollowUserMutationDocument;
 	"\n\tmutation unfollowUserMutation($id: UUID!) {\n\t\tuser {\n\t\t\tunfollow(id: $id)\n\t\t}\n\t}\n": typeof types.UnfollowUserMutationDocument;
@@ -619,6 +620,8 @@ const documents: Documents = {
 		types.FollowUserBatchDocument,
 	"\n\tmutation unfollowUserBatch($ids: [UUID!]!) {\n\t\tuser {\n\t\t\tunfollowBatch(ids: $ids)\n\t\t}\n\t}\n":
 		types.UnfollowUserBatchDocument,
+	"\n\tquery getUsersInfo($ids: [UUID!]!) {\n\t\tuser {\n\t\t\tlist(params: { userIds: $ids }) {\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\tusername\n\t\t\t\t\t\troles\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
+		types.GetUsersInfoDocument,
 	"\n\tquery userPageQuery($id: UUID!) {\n\t\tuser {\n\t\t\tget(id: $id) {\n\t\t\t\tid\n\t\t\t\tattributes {\n\t\t\t\t\tusername\n\t\t\t\t\troles\n\t\t\t\t}\n\t\t\t\trelationships {\n\t\t\t\t\tgroups {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\tname\n\t\t\t\t\t\t}\n\t\t\t\t\t\trelationships {\n\t\t\t\t\t\t\tleader {\n\t\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\tchapter {\n\t\t\tlist(params: { uploaders: [$id] }) {\n\t\t\t\ttotal\n\t\t\t}\n\t\t}\n\t}\n":
 		types.UserPageQueryDocument,
 	"\n\tmutation followUserMutation($id: UUID!) {\n\t\tuser {\n\t\t\tfollow(id: $id)\n\t\t}\n\t}\n":
@@ -1842,6 +1845,12 @@ export function graphql(
 export function graphql(
 	source: "\n\tmutation unfollowUserBatch($ids: [UUID!]!) {\n\t\tuser {\n\t\t\tunfollowBatch(ids: $ids)\n\t\t}\n\t}\n"
 ): (typeof documents)["\n\tmutation unfollowUserBatch($ids: [UUID!]!) {\n\t\tuser {\n\t\t\tunfollowBatch(ids: $ids)\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tquery getUsersInfo($ids: [UUID!]!) {\n\t\tuser {\n\t\t\tlist(params: { userIds: $ids }) {\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\tusername\n\t\t\t\t\t\troles\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tquery getUsersInfo($ids: [UUID!]!) {\n\t\tuser {\n\t\t\tlist(params: { userIds: $ids }) {\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\tusername\n\t\t\t\t\t\troles\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

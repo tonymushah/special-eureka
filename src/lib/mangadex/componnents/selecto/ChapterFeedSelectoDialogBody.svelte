@@ -9,6 +9,7 @@
 	import Covers from "./dialog/Covers.svelte";
 	import ScanlationGroups from "./dialog/ScanlationGroups.svelte";
 	import CustomLists from "./dialog/CustomLists.svelte";
+	import Users from "./dialog/Users.svelte";
 
 	interface Props {
 		titles?: string[];
@@ -90,7 +91,7 @@
 		<ScanlationGroups {scanlationGroups} />
 	</TabContent>
 	<TabContent value={usersId} class={cssMod.content}>
-		<p>nothing</p>
+		<Users {users} />
 	</TabContent>
 	<TabContent value={customListsId} class={cssMod.content}>
 		<CustomLists {customLists} />
