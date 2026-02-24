@@ -23,8 +23,8 @@
 <div class="layout">
 	<div class="content">
 		<h3>Assemble MD Lists into one</h3>
-		<div class="option">
-			<label for="new-list-name">New List Name</label>
+		<div class="option new-name">
+			<label for="new-list-name" class="no-wrap">New List Name</label>
 			<FormInput
 				bind:value={newListName}
 				widthFull
@@ -34,11 +34,16 @@
 			/>
 		</div>
 		<div class="option">
-			<input type="checkbox" bind:checked={isPublic} id="is-public-checkbox" />
+			<input class="checkbox" type="checkbox" bind:checked={isPublic} id="is-public-checkbox" />
 			<label for="is-public-checkbox">Make public</label>
 		</div>
 		<div class="option">
-			<input type="checkbox" bind:checked={filterContent} id="filter-content-checkbox" />
+			<input
+				class="checkbox"
+				type="checkbox"
+				bind:checked={filterContent}
+				id="filter-content-checkbox"
+			/>
 			<label for="filter-content-checkbox">Filter contents</label>
 		</div>
 	</div>
@@ -76,11 +81,28 @@
 <style lang="scss">
 	.layout {
 		display: grid;
+		h3 {
+			margin: 0px;
+		}
+		padding-right: 12px;
 	}
 	.option {
 		display: flex;
 		align-items: center;
 		gap: 4px;
 		flex-direction: row;
+	}
+	.checkbox {
+		width: 24px;
+		height: 24px;
+	}
+	.new-name {
+		display: grid;
+		grid-template-columns: auto 1fr;
+	}
+	.actions {
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 </style>
