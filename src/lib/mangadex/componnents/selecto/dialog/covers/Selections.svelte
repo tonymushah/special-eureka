@@ -28,7 +28,7 @@
 		display: grid;
 		/* grid-template-columns: repeat(5, 1fr); */
 		gap: 6px;
-		height: 100%;
+		max-height: 100%;
 		overflow-y: scroll;
 		padding: 6px;
 	}

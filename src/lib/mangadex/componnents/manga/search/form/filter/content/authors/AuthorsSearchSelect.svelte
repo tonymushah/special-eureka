@@ -132,17 +132,17 @@
 			}}
 		/>
 	</div>
-</div>
 
-<AuthorsSearchSelectMenu
-	bind:menu
-	bind:toObserve
-	open={shouldOpen}
-	{currentAuthorSearch}
-	isFetching={authorSearchQuery.isFetching}
-	{hasNext}
-	{tags}
-/>
+	<AuthorsSearchSelectMenu
+		bind:menu
+		bind:toObserve
+		open={shouldOpen}
+		{currentAuthorSearch}
+		isFetching={authorSearchQuery.isFetching}
+		{hasNext}
+		{tags}
+	/>
+</div>
 
 <style lang="scss">
 	.layout {
@@ -150,6 +150,7 @@
 		flex-direction: column;
 		align-items: start;
 		justify-content: center;
+		position: relative;
 	}
 	.root {
 		display: flex;
