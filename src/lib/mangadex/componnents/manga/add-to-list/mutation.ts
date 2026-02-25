@@ -1,3 +1,4 @@
+// import { dev } from "$app/environment";
 import { mangadexQueryClient } from "@mangadex/index";
 import { createMutation } from "@tanstack/svelte-query";
 import type { Client } from "@urql/svelte";
