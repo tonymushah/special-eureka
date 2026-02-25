@@ -13,18 +13,16 @@
 	import { ActionMode } from ".";
 	import type { CurrentUserCustomListItemData } from "./content";
 	import executeSearchQuery from "./content";
-	import CustomListCheckbox from "./CustomListCheckbox.svelte";
 	import MakeANewList from "./MakeANewList.svelte";
 	import { mutationQueryMutation } from "./mutation";
 
 	const client = getContextClient();
 
 	interface Props {
-		mutate?: (manga_id: string) => Promise<void> | undefined;
-		isMutating?: boolean;
 		mangaId: string;
+		selectedListMap: Map<string, ActionMode>;
 	}
-	let { mutate = $bindable(), isMutating = $bindable(), mangaId }: Props = $props();
+	let { mangaId, selectedListMap = $bindable() }: Props = $props();
 	const queryOptions = der(pageLimit, (limit) => {
 		return {
 			queryKey: ["current", "user", "custom-list", "for-add-to-list", `limit:${limit}`],
@@ -58,30 +56,8 @@
 	});
 	let query = createInfiniteQuery(() => $queryOptions);
 
-	let selectedListMap = $state(new Map<string, ActionMode>());
-	let addToListMut = mutationQueryMutation();
-
-	mutate = async (manga_id: string) => {
-		isMutating = true;
-		try {
-			await addToListMut.mutateAsync(
-				{
-					selectedListMap,
-					title: manga_id,
-					client
-				},
-				{
-					onSettled() {
-						query.refetch();
-					}
-				}
-			);
-		} finally {
-			isMutating = false;
-		}
-	};
 	let hasNext = $derived(query.hasNextPage);
-	let isFetching = $derived(query.isLoading);
+	let isFetching = $derived(query.isFetching);
 	const debounce_wait = 450;
 	const fetchNext = debounce(() => {
 		return query.fetchNextPage();
@@ -111,19 +87,40 @@
 			observer.observe(to_obserce_bind);
 		}
 	});
+	let queryData = $derived.by(() => {
+		return new Map(query.data?.pages.flatMap((p) => p.data).map((d) => [d.id, d]))
+			.values()
+			.toArray();
+	});
+	let customListSelections = $derived.by(
+		() =>
+			new Map(
+				queryData.map((customList) => {
+					const isSelected = customList.titles.includes(mangaId);
+					let toRet: boolean;
+					if (selectedListMap.has(customList.id)) {
+						toRet = selectedListMap.get(customList.id) == ActionMode.Add;
+					} else {
+						toRet = isSelected;
+					}
+					return [customList.id, toRet];
+				})
+			)
+	);
 </script>
 
 <div class="list-w-make">
 	<div class="lists">
-		{#if query.data}
-			{#each query.data.pages as pages}
-				{#each pages.data as customList (customList.id)}
-					{@const isSelected = customList.titles.includes(mangaId)}
-					<div>
-						<CustomListCheckbox
-							name={customList.name}
-							defaultChecked={isSelected}
-							onChange={(value) => {
+		{#if query.isSuccess}
+			{#each queryData as customList (customList.id)}
+				{@const isSelected = customList.titles.includes(mangaId)}
+				<div class="list-entry">
+					<input
+						class="checkbox"
+						id={`select-list-${customList.id}`}
+						bind:checked={
+							() => customListSelections.get(customList.id),
+							(value) => {
 								switch (value) {
 									case true:
 										if (!isSelected) {
@@ -142,10 +139,12 @@
 									default:
 										break;
 								}
-							}}
-						/>
-					</div>
-				{/each}
+							}
+						}
+						type="checkbox"
+					/>
+					<label for={`select-list-${customList.id}`}>{customList.name}</label>
+				</div>
 			{/each}
 		{/if}
 		<div class="observer-trigger" bind:this={to_obserce_bind}>
@@ -173,6 +172,7 @@
 		gap: 4px;
 		overflow-y: scroll;
 		padding: 0px 12px;
+		flex: 1;
 	}
 	.list-w-make {
 		display: contents;
@@ -181,5 +181,15 @@
 		align-items: center;
 		justify-content: center;
 		display: flex;
+	}
+	.list-entry {
+		display: grid;
+		grid-template-columns: auto 1fr;
+		align-items: center;
+		gap: 6px;
+		.checkbox {
+			width: 24px;
+			height: 24px;
+		}
 	}
 </style>
