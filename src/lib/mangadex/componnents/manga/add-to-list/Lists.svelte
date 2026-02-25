@@ -14,7 +14,6 @@
 	import type { CurrentUserCustomListItemData } from "./content";
 	import executeSearchQuery from "./content";
 	import MakeANewList from "./MakeANewList.svelte";
-	import { mutationQueryMutation } from "./mutation";
 
 	const client = getContextClient();
 
@@ -92,21 +91,6 @@
 			.values()
 			.toArray();
 	});
-	let customListSelections = $derived.by(
-		() =>
-			new Map(
-				queryData.map((customList) => {
-					const isSelected = customList.titles.includes(mangaId);
-					let toRet: boolean;
-					if (selectedListMap.has(customList.id)) {
-						toRet = selectedListMap.get(customList.id) == ActionMode.Add;
-					} else {
-						toRet = isSelected;
-					}
-					return [customList.id, toRet];
-				})
-			)
-	);
 </script>
 
 <div class="list-w-make">
@@ -118,29 +102,30 @@
 					<input
 						class="checkbox"
 						id={`select-list-${customList.id}`}
-						bind:checked={
-							() => customListSelections.get(customList.id),
-							(value) => {
-								switch (value) {
-									case true:
-										if (!isSelected) {
-											selectedListMap.set(customList.id, ActionMode.Add);
-										}
-										break;
+						defaultChecked={isSelected}
+						onchange={(e) => {
+							const value = e.currentTarget.checked;
+							switch (value) {
+								case true:
+									if (!isSelected) {
+										selectedListMap.set(customList.id, ActionMode.Add);
+									} else {
+										selectedListMap.delete(customList.id);
+									}
+									break;
 
-									case false:
-										if (isSelected) {
-											selectedListMap.set(customList.id, ActionMode.Remove);
-										} else {
-											selectedListMap.delete(customList.id);
-										}
-										break;
+								case false:
+									if (isSelected) {
+										selectedListMap.set(customList.id, ActionMode.Remove);
+									} else {
+										selectedListMap.delete(customList.id);
+									}
+									break;
 
-									default:
-										break;
-								}
+								default:
+									break;
 							}
-						}
+						}}
 						type="checkbox"
 					/>
 					<label for={`select-list-${customList.id}`}>{customList.name}</label>
