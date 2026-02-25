@@ -31,34 +31,37 @@
 		e.currentTarget.close();
 	}}
 >
-	<div class="top">
-		<Title type={2}>Search Filters</Title>
-		<div class="exit">
-			<ButtonAccent
-				onclick={() => {
-					dialog_bind?.close();
-				}}
-			>
-				<X size={"24"} />
-			</ButtonAccent>
+	<div class="dialog-content">
+		<div class="content"></div>
+		<div class="top">
+			<Title type={2}>Search Filters</Title>
+			<div class="exit">
+				<ButtonAccent
+					onclick={() => {
+						dialog_bind?.close();
+					}}
+				>
+					<X size={"24"} />
+				</ButtonAccent>
+			</div>
 		</div>
+		<main>
+			<MangaSearchFilterDialogContent />
+		</main>
+		{#if requireValidation}
+			<footer>
+				<PrimaryButton
+					onclick={(e) => {
+						onvalidate?.(e);
+					}}
+				>
+					<div class="accept-inner">
+						<Title type={4}>Accept</Title>
+					</div>
+				</PrimaryButton>
+			</footer>
+		{/if}
 	</div>
-	<main>
-		<MangaSearchFilterDialogContent />
-	</main>
-	{#if requireValidation}
-		<footer>
-			<PrimaryButton
-				onclick={(e) => {
-					onvalidate?.(e);
-				}}
-			>
-				<div class="accept-inner">
-					<Title type={4}>Accept</Title>
-				</div>
-			</PrimaryButton>
-		</footer>
-	{/if}
 </dialog>
 
 <style lang="scss">
@@ -67,7 +70,16 @@
 		border-color: var(--mid-tone);
 		border-radius: 1em;
 		width: 70vw;
+	}
+	.dialog-content {
+		display: flex;
 		height: 80vh;
+		flex-direction: column;
+		gap: 12px;
+		main {
+			flex-grow: 1;
+			overflow-y: scroll;
+		}
 	}
 	.top {
 		display: flex;
