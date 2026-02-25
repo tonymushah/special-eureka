@@ -97,7 +97,7 @@
 				}}
 			/>
 		{:else}
-			<div>
+			<div class="ctt-div">
 				<h1>Select a chapter to read</h1>
 				<div class="chapters">
 					{#each chapters as chapter (chapter.id)}
@@ -128,6 +128,9 @@
 </dialog>
 
 <style lang="scss">
+	.ctt-div {
+		display: contents;
+	}
 	dialog {
 		background-color: var(--main-background);
 		color: var(--text-color);
@@ -143,7 +146,7 @@
 		flex-direction: column;
 		justify-content: space-between;
 		align-items: center;
-		height: 100%;
+		max-height: 100%;
 	}
 	.bottom {
 		display: flex;
@@ -157,5 +160,6 @@
 	.chapters {
 		display: grid;
 		overflow-y: scroll;
+		flex: 1;
 	}
 </style>
