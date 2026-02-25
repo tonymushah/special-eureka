@@ -4,6 +4,10 @@
 	import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 	import { readonly, writable } from "svelte/store";
 	import Lists from "./Lists.svelte";
+	import { mutationQueryMutation } from "./mutation";
+	import type { ActionMode } from ".";
+	import { client } from "@mangadex/gql/urql";
+	import { SvelteMap } from "svelte/reactivity";
 
 	const currentMangaId = writable<string | null>(null);
 
@@ -20,7 +24,6 @@
 
 <script lang="ts">
 	let dialog: HTMLDialogElement | undefined = $state();
-	let mutate: ((manga_id: string) => Promise<void> | undefined) | undefined = $state();
 	function closeDialog() {
 		dialog?.close();
 		unsetManga();
@@ -30,47 +33,65 @@
 			dialog?.showModal();
 		}
 	});
+
+	let addToListMut = mutationQueryMutation();
+	$effect(() => {
+		isMutating_.set(addToListMut.isPending);
+	});
+	let selectedListMap = $state(new SvelteMap<string, ActionMode>());
 </script>
 
-<dialog bind:this={dialog}>
-	<div class="content">
-		<h3>Add to list</h3>
+<dialog
+	bind:this={dialog}
+	onclose={() => {
+		selectedListMap.clear();
+	}}
+>
+	{#if $currentMangaId}
+		<div class="content">
+			<h3>Add to list</h3>
 
-		{#if $currentMangaId}
-			<Lists mangaId={$currentMangaId} bind:mutate bind:isMutating={$isMutating_} />
-		{/if}
-		<div class="bottom">
-			{#if mutate && $currentMangaId}
+			<Lists mangaId={$currentMangaId} bind:selectedListMap />
+
+			<div class="bottom">
 				<PrimaryButtonOnlyLabel
-					label={"Add to list"}
-					disabled={$isMutating_}
+					label={"Add/remove to list(s)"}
+					disabled={$isMutating_ || selectedListMap.size == 0}
 					onclick={() => {
-						mutate?.($currentMangaId)
-							?.then(() => {
-								addToast({
-									title: "Title Added/Removed to List(s) succefully",
-									type: "success"
-								});
-							})
-							.catch((e) => {
-								const title = "Error on adding title to list(s)";
-								addErrorToast(title, e);
-							})
-							.finally(() => {
-								closeDialog();
-							});
+						addToListMut.mutate(
+							{
+								title: structuredClone($currentMangaId),
+								selectedListMap: structuredClone(selectedListMap),
+								client
+							},
+							{
+								onSettled() {
+									closeDialog();
+								},
+								onSuccess() {
+									addToast({
+										title: "Title Added/Removed to List(s) succefully",
+										type: "success"
+									});
+								},
+								onError(e) {
+									const title = "Error on adding title to list(s)";
+									addErrorToast(title, e);
+								}
+							}
+						);
 					}}
 				/>
-			{/if}
 
-			<ButtonAccentOnlyLabel
-				label="Close"
-				onclick={() => {
-					closeDialog();
-				}}
-			/>
+				<ButtonAccentOnlyLabel
+					label="Close"
+					onclick={() => {
+						closeDialog();
+					}}
+				/>
+			</div>
 		</div>
-	</div>
+	{/if}
 </dialog>
 
 <style lang="scss">
@@ -87,6 +108,7 @@
 		border-radius: 3px;
 		padding: 12px;
 		z-index: 30;
+		overflow: hidden;
 	}
 	.bottom {
 		display: flex;
@@ -95,11 +117,13 @@
 		gap: 8px;
 	}
 	.content {
-		display: grid;
+		/* display: grid; */
 		gap: 12px;
 		width: 100%;
-		grid-template-rows: 1fr auto 1fr 1fr;
-		height: -webkit-fill-available;
+		/* grid-template-rows: 1fr auto 1fr 1fr; */
+		display: flex;
+		flex-direction: column;
+		max-height: 100%;
 	}
 	dialog::backdrop {
 		backdrop-filter: blur(10px);
