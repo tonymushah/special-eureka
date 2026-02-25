@@ -65,6 +65,7 @@
 	import { mangaInfoPosition } from "@mangadex/stores/manga-info-position";
 	import statsGQLQuery from "./(layout)/statsQuery";
 	import { getCurrentWebview } from "@tauri-apps/api/webview";
+	import { waitAsync } from "$lib/utils";
 
 	type TopMangaStatisticsStoreData = TopMangaStatistics & {
 		threadUrl?: string;
@@ -189,10 +190,12 @@
 	let readingStatusMutation = createMutation(() => ({
 		mutationKey: ["title", layoutData.id as string, "setReadingStatus"],
 		async mutationFn(e: ReadingStatusEventDetail) {
-			return await Promise.all([
+			const res = await Promise.all([
 				set_manga_reading_status(layoutData.id, e.readingStatus ?? null),
 				set_manga_following_status(layoutData.id, e.isFollowing)
 			]);
+			await waitAsync(1000);
+			return res;
 		},
 		onSettled(data, error, variables) {
 			variables.closeDialog?.();
