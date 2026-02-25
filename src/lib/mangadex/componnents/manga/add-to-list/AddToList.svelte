@@ -7,6 +7,7 @@
 	import { mutationQueryMutation } from "./mutation";
 	import type { ActionMode } from ".";
 	import { client } from "@mangadex/gql/urql";
+	import { SvelteMap } from "svelte/reactivity";
 
 	const currentMangaId = writable<string | null>(null);
 
@@ -37,7 +38,7 @@
 	$effect(() => {
 		isMutating_.set(addToListMut.isPending);
 	});
-	let selectedListMap: Map<string, ActionMode> = $state(new Map<string, ActionMode>());
+	let selectedListMap = $state(new SvelteMap<string, ActionMode>());
 </script>
 
 <dialog
@@ -54,8 +55,8 @@
 
 			<div class="bottom">
 				<PrimaryButtonOnlyLabel
-					label={"Add to list"}
-					disabled={$isMutating_ && selectedListMap.size == 0}
+					label={"Add/remove to list(s)"}
+					disabled={$isMutating_ || selectedListMap.size == 0}
 					onclick={() => {
 						addToListMut.mutate(
 							{
