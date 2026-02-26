@@ -19,6 +19,7 @@
 	import { GitBranchIcon } from "@lucide/svelte";
 	import CustomListForkDialog from "@mangadex/componnents/custom-list/fork/CustomListForkDialog.svelte";
 	import layoutButtonCssMod from "./layout-buttons.module.scss";
+	import DownloadTitlesButton from "./DownloadTitlesButton.svelte";
 
 	interface Props {
 		data: LayoutData;
@@ -179,6 +180,7 @@
 			>
 				<p class={layoutButtonCssMod.innerButton}><GitBranchIcon /> Fork</p>
 			</ButtonAccent>
+			<DownloadTitlesButton listId={data.id} />
 		</div>
 	{/snippet}
 	{#snippet topRight()}
