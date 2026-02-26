@@ -69,6 +69,9 @@
 </UsersPageBaseLayout>
 
 <style lang="scss">
+	div {
+		position: relative;
+	}
 	@media (width< 500px) {
 		article.right {
 			div.bottom {
