@@ -20,6 +20,7 @@
 	import CustomListForkDialog from "@mangadex/componnents/custom-list/fork/CustomListForkDialog.svelte";
 	import layoutButtonCssMod from "./layout-buttons.module.scss";
 	import DownloadTitlesButton from "./DownloadTitlesButton.svelte";
+	import { isLogged } from "@mangadex/utils/auth";
 
 	interface Props {
 		data: LayoutData;
@@ -173,7 +174,7 @@
 			{/if}
 			<ButtonAccent
 				isBase
-				disabled={openForkDialog}
+				disabled={openForkDialog || !$isLogged}
 				onclick={() => {
 					openForkDialog = !openForkDialog;
 				}}
