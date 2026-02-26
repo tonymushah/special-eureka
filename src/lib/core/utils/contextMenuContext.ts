@@ -58,7 +58,7 @@ export default function registerContextMenuEvent(
 		}
 		const menu = contextMenuFunc();
 		if (options?.additionalMenus) {
-			if (addSeparator) {
+			if (addSeparator || menu.length > 0) {
 				menu.push(ContextMenuItemProvider.seperator());
 			}
 			if (typeof options.additionalMenus == "function") {
