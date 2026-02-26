@@ -279,6 +279,18 @@ export default function mangaElementContextMenu({
 							);
 						},
 						enabled: isLogged
+					}),
+					ContextMenuItemProvider.menuItem({
+						text: "Re-download all failed chapters",
+						action() {
+							downloadTitleWithExtra(id, MangaDownloadExtras.Failed).catch(console.error);
+						}
+					}),
+					ContextMenuItemProvider.menuItem({
+						text: "Re-download all failed unread chapters",
+						action() {
+							downloadTitleWithExtra(id, MangaDownloadExtras.UnReadFailed).catch(console.error);
+						}
 					})
 				]
 			})
