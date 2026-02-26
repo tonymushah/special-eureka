@@ -39,7 +39,7 @@
 		},
 		{
 			mode: MangaDownloadExtras.Failed,
-			label: "ReDownload all Failed downloaded Chaptes"
+			label: "ReDownload all Failed downloaded Chapters"
 		},
 		{
 			mode: MangaDownloadExtras.UnDownloadeds,
@@ -63,22 +63,24 @@
 	]);
 </script>
 
-<ButtonAccent
-	isBase
-	disabled={$isMounted || downloadMutation.isPending}
-	onclick={() => {
-		open = !open;
-	}}
-	variant="2"
->
-	<p class={layoutButtonCssMod.innerButton} bind:this={trigger}>
-		{#if downloadMutation.isPending}
-			Downloading...
-		{:else}
-			<Download /> Download titles
-		{/if}
-	</p>
-</ButtonAccent>
+<div class="trigger" bind:this={trigger}>
+	<ButtonAccent
+		isBase
+		disabled={$isMounted || downloadMutation.isPending}
+		onclick={() => {
+			open = !open;
+		}}
+		variant="2"
+	>
+		<p class={layoutButtonCssMod.innerButton}>
+			{#if downloadMutation.isPending}
+				Downloading...
+			{:else}
+				<Download /> Download titles
+			{/if}
+		</p>
+	</ButtonAccent>
+</div>
 
 {#if open}
 	<div class="menu-outer" bind:this={menu}>
@@ -141,6 +143,9 @@
 			display: flex;
 			gap: 10px;
 			font-family: var(--fonts);
+			color: var(--text-color);
+			text-align: start;
+			width: 100%;
 			h4 {
 				margin: 0px;
 				font-weight: 500;
