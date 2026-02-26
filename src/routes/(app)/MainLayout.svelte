@@ -105,5 +105,6 @@
 	}
 	:global(body) {
 		margin: 0px;
+		position: relative;
 	}
 </style>
