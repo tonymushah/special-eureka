@@ -57,7 +57,7 @@
 	let query = createInfiniteQuery(() => $queryOptions);
 
 	let hasNext = $derived(query.hasNextPage);
-	let isFetching = $derived(query.isLoading);
+	let isFetching = $derived(query.isFetching);
 	const debounce_wait = 450;
 	const fetchNext = debounce(() => {
 		return query.fetchNextPage();
