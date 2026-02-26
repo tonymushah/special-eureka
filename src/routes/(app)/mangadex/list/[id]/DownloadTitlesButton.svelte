@@ -10,6 +10,7 @@
 	import { MangaDownloadExtras } from "@mangadex/gql/graphql";
 	import { addErrorToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 	import { isLogged } from "@mangadex/utils/auth";
+	import { dev } from "$app/environment";
 	interface Props {
 		listId: string;
 	}
@@ -66,7 +67,7 @@
 <div class="trigger" bind:this={trigger}>
 	<ButtonAccent
 		isBase
-		disabled={$isMounted || downloadMutation.isPending}
+		disabled={!$isMounted || downloadMutation.isPending}
 		onclick={() => {
 			open = !open;
 		}}
@@ -114,6 +115,9 @@
 {/if}
 
 <style lang="scss">
+	.trigger {
+		display: grid;
+	}
 	.menu-outer {
 		flex-direction: column;
 		position: absolute;
