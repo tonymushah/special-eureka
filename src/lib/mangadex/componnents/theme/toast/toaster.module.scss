@@ -1,21 +1,22 @@
-.toast[data-scope="toast"][data-part="root"] {
-	color: var(--text-color);
-	border-radius: 0.5rem; /* 8px */
-	background-color: var(--accent-l1);
-	border: 2px solid var(--mid-tone);
-	display: grid;
-	width: 24rem;
-	max-width: calc(100vw - 2rem);
-	align-items: center;
-	justify-content: space-between;
-	gap: 0.25rem; /* 16px */
-	padding: 1.25rem; /* 20px */
+.toast {
+	/* width: 100%; */
+	min-width: 20rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+	align-items: flex-start;
+	position: relative;
+	padding-block: 1rem;
+	padding-inline-start: 1rem;
+	padding-inline-end: 2.5rem;
+	border-radius: 0.5rem;
+	inset: unset;
 	translate: var(--x) var(--y);
 	scale: var(--scale);
 	z-index: var(--z-index);
-	max-height: 3rem;
-	overflow: hidden;
+
 	opacity: var(--opacity);
+
 	will-change: translate, opacity, scale;
 	transition:
 		translate 400ms,
@@ -24,6 +25,10 @@
 		height 400ms,
 		box-shadow 200ms;
 	transition-timing-function: cubic-bezier(0.21, 1.02, 0.73, 1);
+
+	background: var(--accent-l1);
+	color: var(--text-color);
+	border: 3px solid var(--mid-tone);
 
 	&[data-state="closed"] {
 		transition:
@@ -53,16 +58,13 @@
 }
 
 .title {
-	margin: 0px;
+	font-weight: 500;
+	font-size: 0.875rem;
+	line-height: 1.25rem;
+	margin: 0;
+	display: flex;
 	align-items: center;
-	gap: 0.5rem; /* 8px */
-	font-weight: 600;
-	font-size: 16px;
-	line-clamp: 2;
-	-webkit-line-clamp: 2;
-	display: -webkit-box;
-	-webkit-box-orient: vertical;
-	overflow: hidden;
+	gap: 0.5rem;
 }
 .close {
 	position: absolute;
@@ -87,8 +89,11 @@
 	background-color: var(--accent-l1-active);
 }
 .description {
-	font-size: 12px;
-	color: var(--text-color);
+	display: inline;
+	font-size: 0.875rem;
+	line-height: 1.25rem;
+	margin: 0;
+	opacity: 0.8;
 }
 
 .x {
