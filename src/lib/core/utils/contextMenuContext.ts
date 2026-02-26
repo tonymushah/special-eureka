@@ -48,7 +48,7 @@ export default function registerContextMenuEvent(
 ): (e: MouseEvent) => any {
 	const includeContext = options?.includeContext ?? true;
 	const contextMenuFunc = includeContext ? getContextMenuContext() : () => [];
-	const addSeparator = options?.addSeparator ?? true;
+	const addSeparator = options?.addSeparator ?? false;
 	return async (e) => {
 		if (options?.preventDefault) {
 			e.preventDefault();
