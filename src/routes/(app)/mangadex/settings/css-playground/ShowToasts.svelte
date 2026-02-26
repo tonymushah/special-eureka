@@ -13,6 +13,16 @@
 		}}
 		label="show toast"
 	/>
+	<ButtonAccentOnlyLabel
+		onclick={() => {
+			addToast({
+				title: "Toast!",
+				description: "sadsada",
+				duration: Infinity
+			});
+		}}
+		label="show time infinite toast"
+	/>
 </div>
 
 <style lang="scss"></style>
