@@ -18,6 +18,7 @@
 	import FollowButton from "./FollowButton.svelte";
 	import { GitBranchIcon } from "@lucide/svelte";
 	import CustomListForkDialog from "@mangadex/componnents/custom-list/fork/CustomListForkDialog.svelte";
+	import layoutButtonCssMod from "./layout-buttons.module.scss";
 
 	interface Props {
 		data: LayoutData;
@@ -109,7 +110,7 @@
 						}}
 						disabled={updateCustomListVisibilityMutation.isPending}
 					>
-						<p>Make Public</p></DangerButton
+						<p class={layoutButtonCssMod.innerButton}>Make Public</p></DangerButton
 					>
 				{:else}
 					<ButtonAccent
@@ -141,7 +142,7 @@
 						}}
 						disabled={updateCustomListVisibilityMutation.isPending}
 					>
-						<p>Make Private</p>
+						<p class={layoutButtonCssMod.innerButton}>Make Private</p>
 					</ButtonAccent>
 				{/if}
 				<DangerButton
@@ -164,7 +165,7 @@
 					}}
 					disabled={deleteCustomList.isPending}
 				>
-					<p>Delete</p>
+					<p class={layoutButtonCssMod.innerButton}>Delete</p>
 				</DangerButton>
 			{:else}
 				<FollowButton id={data.id} />
@@ -176,7 +177,7 @@
 					openForkDialog = !openForkDialog;
 				}}
 			>
-				<p><GitBranchIcon /> Fork</p>
+				<p class={layoutButtonCssMod.innerButton}><GitBranchIcon /> Fork</p>
 			</ButtonAccent>
 		</div>
 	{/snippet}
@@ -283,14 +284,5 @@
 		display: grid;
 		gap: 10px;
 		margin: 10px;
-		p {
-			display: flex;
-			gap: 8px;
-			margin: 0px;
-			font-weight: 700;
-			font-size: 1.125em;
-			align-items: center;
-			justify-content: center;
-		}
 	}
 </style>
