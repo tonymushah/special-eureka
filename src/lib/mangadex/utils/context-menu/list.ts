@@ -6,7 +6,9 @@ import exportCustomListsToCSV from "@mangadex/gql-docs/list/export/csv";
 import deleteCustomListMutation from "@mangadex/gql-docs/list/id/delete";
 import isFollowingCustomList, { isChangingListFollowing } from "@mangadex/gql-docs/list/id/follow";
 import updateCustomListVisibilityMutation from "@mangadex/gql-docs/list/id/update-visibilty";
-import { CustomListVisibility } from "@mangadex/gql/graphql";
+import { CustomListVisibility, MangaDownloadExtras } from "@mangadex/gql/graphql";
+import { downloadTitlesCustomLists } from "@mangadex/mutations/custom-list/download-titles";
+import { isMounted } from "@mangadex/stores/offlineIsMounted";
 import {
 	ContextMenuItemProvider,
 	type ContextMenuItem
@@ -131,6 +133,77 @@ export default function customListElementContextMenu({
 			}
 		})
 	);
+	items.push(
+		ContextMenuItemProvider.seperator(),
+		ContextMenuItemProvider.subMenu({
+			enabled: isMounted,
+			text: "Download titles",
+			items: [
+				ContextMenuItemProvider.menuItem({
+					text: "Download all chapters",
+					action() {
+						downloadTitlesCustomLists({
+							listIDs: [id],
+							extras: MangaDownloadExtras.AllChapters,
+							filter: true
+						}).catch(console.error);
+					}
+				}),
+				ContextMenuItemProvider.menuItem({
+					text: "Download all unread",
+					action() {
+						downloadTitlesCustomLists({
+							listIDs: [id],
+							extras: MangaDownloadExtras.Unreads,
+							filter: true
+						}).catch(console.error);
+					},
+					enabled: isLogged
+				}),
+				ContextMenuItemProvider.menuItem({
+					text: "Download all undownloaded",
+					action() {
+						downloadTitlesCustomLists({
+							listIDs: [id],
+							extras: MangaDownloadExtras.UnDownloadeds,
+							filter: true
+						}).catch(console.error);
+					}
+				}),
+				ContextMenuItemProvider.menuItem({
+					text: "Download all undownloaded unread",
+					action() {
+						downloadTitlesCustomLists({
+							listIDs: [id],
+							extras: MangaDownloadExtras.UnReadUnDownloadeds,
+							filter: true
+						}).catch(console.error);
+					},
+					enabled: isLogged
+				}),
+				ContextMenuItemProvider.menuItem({
+					text: "Re-download all failed chapters",
+					action() {
+						downloadTitlesCustomLists({
+							listIDs: [id],
+							extras: MangaDownloadExtras.Failed,
+							filter: true
+						}).catch(console.error);
+					}
+				}),
+				ContextMenuItemProvider.menuItem({
+					text: "Re-download all failed unread chapters",
+					action() {
+						downloadTitlesCustomLists({
+							listIDs: [id],
+							extras: MangaDownloadExtras.UnReadFailed,
+							filter: true
+						}).catch(console.error);
+					}
+				})
+			]
+		})
+	);
 	if (isMine) {
 		items.push(
 			ContextMenuItemProvider.subMenu({
@@ -204,5 +277,6 @@ export default function customListElementContextMenu({
 			})
 		);
 	}
+
 	return items;
 }
