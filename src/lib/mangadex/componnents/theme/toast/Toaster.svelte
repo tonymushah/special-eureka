@@ -1,7 +1,8 @@
 <script lang="ts" module>
 	export const toaster = createToaster({
 		overlap: true,
-		placement: "bottom"
+		placement: "bottom",
+		gap: 16
 	});
 
 	// TODO fix function calls
@@ -76,27 +77,30 @@
 	import { dev } from "$app/environment";
 	import { X } from "@lucide/svelte";
 	import toastStyles from "./toaster.module.scss";
+	import { isLinuxStore } from "@special-eureka/core/commands/isLinux";
 </script>
 
-<Portal>
-	<ArkToaster {toaster}>
-		{#snippet children(toast)}
-			<MangaDexVarThemeProvider>
-				<Toast.Root class={toastStyles.toast}>
-					<Toast.Title class={toastStyles.title}>{toast().title}</Toast.Title>
-					{#if toast().description}
-						<Toast.Description class={toastStyles.description}
-							>{toast().description}</Toast.Description
-						>
-					{/if}
-					<Toast.CloseTrigger class={toastStyles.close}>
-						<X class={toastStyles.x} />
-					</Toast.CloseTrigger>
-				</Toast.Root>
-			</MangaDexVarThemeProvider>
-		{/snippet}
-	</ArkToaster>
-</Portal>
+<div>
+	<Portal>
+		<MangaDexVarThemeProvider>
+			<ArkToaster {toaster}>
+				{#snippet children(toast)}
+					<Toast.Root class={[toastStyles.toast, !$isLinuxStore && toastStyles.notLinux]}>
+						<Toast.Title class={toastStyles.title}>{toast().title}</Toast.Title>
+						{#if toast().description}
+							<Toast.Description class={toastStyles.description}
+								>{toast().description}</Toast.Description
+							>
+						{/if}
+						<Toast.CloseTrigger class={toastStyles.close}>
+							<X class={toastStyles.x} />
+						</Toast.CloseTrigger>
+					</Toast.Root>
+				{/snippet}
+			</ArkToaster>
+		</MangaDexVarThemeProvider>
+	</Portal>
+</div>
 
 <!-- 
 <div use:portal class="portal" class:rtl={$isSidebarRtl} style="--decoH: {$decoHStore}px">
@@ -131,4 +135,7 @@
 </div>
 -->
 <style lang="scss">
+	div {
+		display: contents;
+	}
 </style>
