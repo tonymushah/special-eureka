@@ -144,6 +144,7 @@ type Documents = {
 	"\n\tmutation forkCustomList(\n\t\t$name: String!\n\t\t$visibility: CustomListVisibility\n\t\t$toFork: UUID!\n\t\t$filter: Boolean\n\t) {\n\t\tcustomList {\n\t\t\tfork(filterContent: $filter, name: $name, visibility: $visibility, toFork: $toFork) {\n\t\t\t\tid\n\t\t\t\tattributes {\n\t\t\t\t\tname\n\t\t\t\t\tvisibility\n\t\t\t\t}\n\t\t\t\trelationships {\n\t\t\t\t\ttitlesIds\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.ForkCustomListDocument;
 	"\n\tquery getCustomListVersion1($id: UUID!) {\n\t\tcustomList {\n\t\t\tget(id: $id, private: true) {\n\t\t\t\tid\n\t\t\t\tattributes {\n\t\t\t\t\tversion\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.GetCustomListVersion1Document;
 	"\n\tmutation updateCustomListVisibility1(\n\t\t$id: UUID!\n\t\t$visibility: CustomListVisibility!\n\t\t$version: Int!\n\t) {\n\t\tcustomList {\n\t\t\tupdate(params: { listId: $id, version: $version, visibility: $visibility }) {\n\t\t\t\tid\n\t\t\t}\n\t\t}\n\t}\n": typeof types.UpdateCustomListVisibility1Document;
+	"\n\tmutation removeTitlesFromCustomList($customListId: UUID!, $titlesIds: [UUID!]!) {\n\t\tcustomList {\n\t\t\tremoveMangaBatch(listId: $customListId, mangaIds: $titlesIds)\n\t\t}\n\t}\n": typeof types.RemoveTitlesFromCustomListDocument;
 	"\n\tquery userFollowedCustomLists($limit: Int, $offset: Int) {\n\t\tfollows {\n\t\t\tcustomLists(param:  {\n\t\t\t   limit: $limit\n\t\t\t   offset: $offset\n\t\t\t}) {\n\t\t\t\tlimit\n\t\t\t\toffset\n\t\t\t\ttotal\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\tname\n\t\t\t\t\t\tvisibility\n\t\t\t\t\t}\n\t\t\t\t\trelationships {\n\t\t\t\t\t\ttitlesIds\n\t\t\t\t\t\tuser {\n\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\tusername\n\t\t\t\t\t\t\t\troles \n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.UserFollowedCustomListsDocument;
 	"\n\tsubscription mangaInfoPositionGQLDoc {\n\t\twatchMangaInfosPosition\n\t}\n": typeof types.MangaInfoPositionGqlDocDocument;
 	"\n\tmutation setMangaInfoPosition($position: MangaInfosPositions!) {\n\t\tuserOption {\n\t\t\tsetMangaInfosPosition(position: $position)\n\t\t}\n\t}\n": typeof types.SetMangaInfoPositionDocument;
@@ -518,6 +519,8 @@ const documents: Documents = {
 		types.GetCustomListVersion1Document,
 	"\n\tmutation updateCustomListVisibility1(\n\t\t$id: UUID!\n\t\t$visibility: CustomListVisibility!\n\t\t$version: Int!\n\t) {\n\t\tcustomList {\n\t\t\tupdate(params: { listId: $id, version: $version, visibility: $visibility }) {\n\t\t\t\tid\n\t\t\t}\n\t\t}\n\t}\n":
 		types.UpdateCustomListVisibility1Document,
+	"\n\tmutation removeTitlesFromCustomList($customListId: UUID!, $titlesIds: [UUID!]!) {\n\t\tcustomList {\n\t\t\tremoveMangaBatch(listId: $customListId, mangaIds: $titlesIds)\n\t\t}\n\t}\n":
+		types.RemoveTitlesFromCustomListDocument,
 	"\n\tquery userFollowedCustomLists($limit: Int, $offset: Int) {\n\t\tfollows {\n\t\t\tcustomLists(param:  {\n\t\t\t   limit: $limit\n\t\t\t   offset: $offset\n\t\t\t}) {\n\t\t\t\tlimit\n\t\t\t\toffset\n\t\t\t\ttotal\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\tname\n\t\t\t\t\t\tvisibility\n\t\t\t\t\t}\n\t\t\t\t\trelationships {\n\t\t\t\t\t\ttitlesIds\n\t\t\t\t\t\tuser {\n\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\tusername\n\t\t\t\t\t\t\t\troles \n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
 		types.UserFollowedCustomListsDocument,
 	"\n\tsubscription mangaInfoPositionGQLDoc {\n\t\twatchMangaInfosPosition\n\t}\n":
@@ -1539,6 +1542,12 @@ export function graphql(
 export function graphql(
 	source: "\n\tmutation updateCustomListVisibility1(\n\t\t$id: UUID!\n\t\t$visibility: CustomListVisibility!\n\t\t$version: Int!\n\t) {\n\t\tcustomList {\n\t\t\tupdate(params: { listId: $id, version: $version, visibility: $visibility }) {\n\t\t\t\tid\n\t\t\t}\n\t\t}\n\t}\n"
 ): (typeof documents)["\n\tmutation updateCustomListVisibility1(\n\t\t$id: UUID!\n\t\t$visibility: CustomListVisibility!\n\t\t$version: Int!\n\t) {\n\t\tcustomList {\n\t\t\tupdate(params: { listId: $id, version: $version, visibility: $visibility }) {\n\t\t\t\tid\n\t\t\t}\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tmutation removeTitlesFromCustomList($customListId: UUID!, $titlesIds: [UUID!]!) {\n\t\tcustomList {\n\t\t\tremoveMangaBatch(listId: $customListId, mangaIds: $titlesIds)\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tmutation removeTitlesFromCustomList($customListId: UUID!, $titlesIds: [UUID!]!) {\n\t\tcustomList {\n\t\t\tremoveMangaBatch(listId: $customListId, mangaIds: $titlesIds)\n\t\t}\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

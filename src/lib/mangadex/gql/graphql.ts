@@ -6592,6 +6592,16 @@ export type UpdateCustomListVisibility1Mutation = {
 	};
 };
 
+export type RemoveTitlesFromCustomListMutationVariables = Exact<{
+	customListId: Scalars["UUID"]["input"];
+	titlesIds: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
+}>;
+
+export type RemoveTitlesFromCustomListMutation = {
+	__typename?: "Mutation";
+	customList: { __typename?: "CustomListMutations"; removeMangaBatch: boolean };
+};
+
 export type UserFollowedCustomListsQueryVariables = Exact<{
 	limit?: InputMaybe<Scalars["Int"]["input"]>;
 	offset?: InputMaybe<Scalars["Int"]["input"]>;
@@ -21529,6 +21539,79 @@ export const UpdateCustomListVisibility1Document = {
 } as unknown as DocumentNode<
 	UpdateCustomListVisibility1Mutation,
 	UpdateCustomListVisibility1MutationVariables
+>;
+export const RemoveTitlesFromCustomListDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "removeTitlesFromCustomList" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "customListId" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "titlesIds" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "ListType",
+							type: {
+								kind: "NonNullType",
+								type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+							}
+						}
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "customList" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "removeMangaBatch" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "listId" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "customListId" }
+											}
+										},
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "mangaIds" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "titlesIds" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	RemoveTitlesFromCustomListMutation,
+	RemoveTitlesFromCustomListMutationVariables
 >;
 export const UserFollowedCustomListsDocument = {
 	kind: "Document",
