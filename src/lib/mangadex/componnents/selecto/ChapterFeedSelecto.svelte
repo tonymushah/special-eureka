@@ -9,12 +9,12 @@
 	import SelectionArea from "@viselect/vanilla";
 	import { validate } from "uuid";
 	import { uniq } from "lodash";
-	import { openSelectoDialog } from "./ChapterFeedSelectoDialog.svelte";
+	import ChapterFeedSelectoDialog from "./ChapterFeedSelectoDialog.svelte";
 	import { scrollElementId } from "../layout/scrollElement";
 	import { getCurrentWebviewWindow } from "@tauri-apps/api/webviewWindow";
 	import { onDestroy, onMount } from "svelte";
 	import type { UnlistenFn } from "@tauri-apps/api/event";
-	import { readonly, writable } from "svelte/store";
+	import type { SelectoDialogContextData, SelectoDialogData } from "./utils";
 
 	interface Props {
 		container: HTMLElement | undefined;
@@ -52,6 +52,20 @@
 		".users-simple-selectable",
 		".cover-art-element"
 	];
+	let selectoDialogData = $derived<SelectoDialogData>({
+		titles: [...selected_mangas],
+		chapters: [...selected_chapters],
+		covers: [...selected_covers],
+		scanGroups: [...selected_scans_groups],
+		users: [...selected_users],
+		customLists: [...selected_custom_lists]
+	});
+	let dialogOpen = $state<boolean>(false);
+	let selectoDialogContextData = $state<SelectoDialogContextData | undefined>();
+	function openSelectoDialog(ctx?: SelectoDialogContextData) {
+		selectoDialogContextData = ctx;
+		dialogOpen = true;
+	}
 
 	const selectionAreaClass = cssMod.selectoArea;
 	function pushSelected(element: Element) {
@@ -122,14 +136,7 @@
 							element.removeAttribute("data-selecto-selected");
 						});
 						if (useDialog) {
-							openSelectoDialog({
-								titles: [...selected_mangas],
-								chapters: [...selected_chapters],
-								covers: [...selected_covers],
-								scanGroups: [...selected_scans_groups],
-								users: [...selected_users],
-								customLists: [...selected_custom_lists]
-							});
+							openSelectoDialog();
 						}
 						onEnd?.(ev.event ?? undefined);
 					}
@@ -187,14 +194,7 @@
 					d.forEach(pushSelected);
 				});
 			if (useDialog) {
-				openSelectoDialog({
-					titles: [...selected_mangas],
-					chapters: [...selected_chapters],
-					covers: [...selected_covers],
-					scanGroups: [...selected_scans_groups],
-					users: [...selected_users],
-					customLists: [...selected_custom_lists]
-				});
+				openSelectoDialog();
 			}
 
 			onEnd?.();
@@ -208,4 +208,10 @@
 	onfocusout={() => {
 		canSelect = false;
 	}}
+/>
+
+<ChapterFeedSelectoDialog
+	selected={selectoDialogData}
+	contextData={selectoDialogContextData}
+	bind:open={dialogOpen}
 />
