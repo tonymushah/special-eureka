@@ -109,7 +109,7 @@
 						}
 					);
 				}}
-				disabled={!$isLogged}
+				disabled={!$isLogged || removeFromCustomList.isPending}
 			/>
 		{/if}
 		<ButtonAccentOnlyLabel
