@@ -44,7 +44,7 @@ importers:
         version: 3.2.0(graphql@16.13.0)
       '@humanspeak/svelte-markdown':
         specifier: ^1.0.0
-        version: 1.0.2(svelte@5.53.5)
+        version: 1.0.3(svelte@5.53.5)
       '@lucide/svelte':
         specifier: ^0.575.0
         version: 0.575.0(svelte@5.53.5)
@@ -1004,10 +1004,14 @@ packages:
     resolution: {integrity: sha512-bNo+xAL2KT8Zv9wHjeLloyQrbEv8aea9gjL2eHhNki3/1xapDRYm/W5gGgBQNvpdBJFoYcA6VQJcbm0ZjKML+g==}
     engines: {node: '>=18.0.0'}
 
-  '@humanspeak/svelte-markdown@1.0.2':
-    resolution: {integrity: sha512-jAKrbA0/woa0JV0OsBFrciXwn4lAZf/ffXln9JUopu0tGPo+mt1uFqdVKgdMw6bGhNFtIOQ99a7wH8eoHp8kYA==}
+  '@humanspeak/svelte-markdown@1.0.3':
+    resolution: {integrity: sha512-R1nRE+5iCs8JgABXYbQwFvJF+M7ifvzf8BUbAsdOaeZ8DGDfJJfJ37umH6TqWNf9BYP2xtj4ThPBPSJAWBQ+4g==}
     peerDependencies:
+      mermaid: '>=10.0.0'
       svelte: ^5.0.0
+    peerDependenciesMeta:
+      mermaid:
+        optional: true
 
   '@humanwhocodes/module-importer@1.0.1':
     resolution: {integrity: sha512-bxveV4V8v5Yb4ncFTT3rPSgZBOpCkjfK0y4oVVVJwIuDVBRMDXrPyXRL988i5ap9m9bnyEEjWfm5WkBmtffLfA==}
@@ -5817,7 +5821,7 @@ snapshots:
 
   '@humanspeak/memory-cache@1.0.5': {}
 
-  '@humanspeak/svelte-markdown@1.0.2(svelte@5.53.5)':
+  '@humanspeak/svelte-markdown@1.0.3(svelte@5.53.5)':
     dependencies:
       '@humanspeak/memory-cache': 1.0.5
       github-slugger: 2.0.0
