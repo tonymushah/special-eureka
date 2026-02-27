@@ -66,6 +66,22 @@
 		selectoDialogContextData = ctx;
 		dialogOpen = true;
 	}
+	function getParentContextData(element: HTMLElement): SelectoDialogContextData | undefined {
+		let selectoCtxData: SelectoDialogContextData = {};
+		while (element.parentElement != null) {
+			element = element.parentElement;
+			if (element.hasAttribute("data-selecto-context-data-provider")) {
+				(() => {
+					const customListId = element.getAttribute("data-custom-list-id");
+					if (customListId != null) {
+						if (validate(customListId)) selectoCtxData.currentCustomList = customListId;
+					}
+				})();
+				break;
+			}
+		}
+		return selectoCtxData;
+	}
 
 	const selectionAreaClass = cssMod.selectoArea;
 	function pushSelected(element: Element) {
@@ -136,7 +152,7 @@
 							element.removeAttribute("data-selecto-selected");
 						});
 						if (useDialog) {
-							openSelectoDialog();
+							openSelectoDialog(getParentContextData(container));
 						}
 						onEnd?.(ev.event ?? undefined);
 					}
