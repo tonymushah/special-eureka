@@ -12,6 +12,11 @@
 	import ExportTitlesAsCsv from "./titles/export/ExportTitlesAsCSV.svelte";
 	import ExportTitlesAsMal from "./titles/export/ExportTitlesAsMAL.svelte";
 	import { isMounted } from "@mangadex/stores/offlineIsMounted";
+	import { getSelectoDialogContextData } from "../utils";
+	import { isLogged } from "@mangadex/utils/auth";
+	import { removeTitlesFromCustomListMutation } from "@mangadex/mutations/custom-list/remove-titles";
+	import { goto } from "$app/navigation";
+	import { route } from "$lib/ROUTES";
 
 	interface Props {
 		titles: string[];
@@ -21,7 +26,7 @@
 	let exportIdsToTxt = exportIdsToTxtLoader();
 	let titles = $derived(titles_main);
 	let currentAction = $state<"lists" | "status" | "selections" | "export-csv" | "export-mal">(
-		"lists"
+		"selections"
 	);
 	function showLists() {
 		currentAction = "lists";
@@ -44,6 +49,9 @@
 	let isExportCSV = $derived(currentAction == "export-csv");
 	let isExportMAL = $derived(currentAction == "export-mal");
 	let titlesEmpty = $derived(titles_main.length == 0);
+	const contextData = getSelectoDialogContextData();
+	let toRemoveCustomList = $derived.by(() => contextData()?.currentCustomList);
+	let removeFromCustomList = removeTitlesFromCustomListMutation();
 </script>
 
 <SectionBase>
@@ -69,6 +77,41 @@
 			}}
 			disabled={isSelecting}
 		/>
+		{#if toRemoveCustomList}
+			<ButtonAccentOnlyLabel
+				variant={isLists ? "5" : "3"}
+				label="Remove from current custom list"
+				onclick={() => {
+					removeFromCustomList.mutate(
+						{
+							titlesIds: titles,
+							customListId: toRemoveCustomList
+						},
+						{
+							onSuccess() {
+								addToast({
+									title: `Removed ${titles.length} from current custom list`,
+									type: "success",
+									description: "You will be redirected to the custom list shortly"
+								});
+								goto(
+									route("/mangadex/list/[id]", {
+										id: toRemoveCustomList
+									})
+								);
+							},
+							onError(error) {
+								addErrorToast(
+									`Cannot remove ${titles.length} titles from current custom list`,
+									error
+								);
+							}
+						}
+					);
+				}}
+				disabled={!$isLogged}
+			/>
+		{/if}
 		<ButtonAccentOnlyLabel
 			variant={isLists ? "5" : "3"}
 			label="Add to list"
