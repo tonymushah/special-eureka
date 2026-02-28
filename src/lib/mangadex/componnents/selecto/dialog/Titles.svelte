@@ -92,13 +92,15 @@
 								addToast({
 									title: `Removed ${titles.length} from current custom list`,
 									type: "success",
-									description: "You will be redirected to the custom list shortly"
+									description: "You might "
 								});
 								invalidate(
-									route("/mangadex/list/[id]", {
-										id: toRemoveCustomList
-									})
-								);
+									(u) =>
+										u.pathname ===
+										route("/mangadex/list/[id]", {
+											id: toRemoveCustomList
+										})
+								).catch(console.error);
 							},
 							onError(error) {
 								addErrorToast(
