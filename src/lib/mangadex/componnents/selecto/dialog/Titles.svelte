@@ -15,7 +15,7 @@
 	import { getSelectoDialogContextData } from "../utils";
 	import { isLogged } from "@mangadex/utils/auth";
 	import { removeTitlesFromCustomListMutation } from "@mangadex/mutations/custom-list/remove-titles";
-	import { goto } from "$app/navigation";
+	import { invalidate } from "$app/navigation";
 	import { route } from "$lib/ROUTES";
 
 	interface Props {
@@ -94,7 +94,7 @@
 									type: "success",
 									description: "You will be redirected to the custom list shortly"
 								});
-								goto(
+								invalidate(
 									route("/mangadex/list/[id]", {
 										id: toRemoveCustomList
 									})
