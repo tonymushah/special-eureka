@@ -78,165 +78,167 @@
 	let openForkDialog = $state(false);
 </script>
 
-<UsersPageBase title={data.attributes.name}>
-	{#snippet _left()}
-		<div class="buttons">
-			{#if data.isMine}
-				{#if isPrivate}
+<div class="selecto-ctt-provider" data-selecto-context-data-provider data-custom-list-id={data.id}>
+	<UsersPageBase title={data.attributes.name}>
+		{#snippet _left()}
+			<div class="buttons">
+				{#if data.isMine}
+					{#if isPrivate}
+						<DangerButton
+							isBase
+							onclick={() => {
+								updateCustomListVisibilityMutation.mutate(
+									{
+										id: data.id,
+										visibility: CustomListVisibility.Public
+									},
+									{
+										onSuccess() {
+											addToast({
+												title: "Sucefully made custom list public",
+												description: data.attributes.name,
+												type: "warning"
+											});
+											goto(
+												route("/mangadex/list/[id]", {
+													id: data.id
+												})
+											);
+										},
+										onError(error) {
+											addErrorToast("Cannot update visibility", error);
+										}
+									}
+								);
+							}}
+							disabled={updateCustomListVisibilityMutation.isPending}
+						>
+							<p class={layoutButtonCssMod.innerButton}>Make Public</p></DangerButton
+						>
+					{:else}
+						<ButtonAccent
+							isBase
+							onclick={() => {
+								updateCustomListVisibilityMutation.mutate(
+									{
+										id: data.id,
+										visibility: CustomListVisibility.Private
+									},
+									{
+										onSuccess() {
+											addToast({
+												title: "Sucefully made custom list private",
+												description: data.attributes.name,
+												type: "warning"
+											});
+											goto(
+												route("/mangadex/list/[id]", {
+													id: `private:${data.id}`
+												})
+											);
+										},
+										onError(error) {
+											addErrorToast("Cannot update visibility", error);
+										}
+									}
+								);
+							}}
+							disabled={updateCustomListVisibilityMutation.isPending}
+						>
+							<p class={layoutButtonCssMod.innerButton}>Make Private</p>
+						</ButtonAccent>
+					{/if}
 					<DangerButton
 						isBase
+						variant="2"
 						onclick={() => {
-							updateCustomListVisibilityMutation.mutate(
-								{
-									id: data.id,
-									visibility: CustomListVisibility.Public
+							deleteCustomList.mutate(data.id, {
+								onError(error) {
+									addErrorToast("Cannot delete custom list", error);
 								},
-								{
-									onSuccess() {
-										addToast({
-											title: "Sucefully made custom list public",
-											description: data.attributes.name,
-											type: "warning"
-										});
-										goto(
-											route("/mangadex/list/[id]", {
-												id: data.id
-											})
-										);
-									},
-									onError(error) {
-										addErrorToast("Cannot update visibility", error);
-									}
+								onSuccess() {
+									addToast({
+										title: "Deleted custom list",
+										description: data.attributes.name ?? data.id,
+										type: "warning"
+									});
+									goto(route("/mangadex/list"));
 								}
-							);
+							});
 						}}
-						disabled={updateCustomListVisibilityMutation.isPending}
+						disabled={deleteCustomList.isPending}
 					>
-						<p class={layoutButtonCssMod.innerButton}>Make Public</p></DangerButton
-					>
+						<p class={layoutButtonCssMod.innerButton}>Delete</p>
+					</DangerButton>
 				{:else}
-					<ButtonAccent
-						isBase
-						onclick={() => {
-							updateCustomListVisibilityMutation.mutate(
-								{
-									id: data.id,
-									visibility: CustomListVisibility.Private
-								},
-								{
-									onSuccess() {
-										addToast({
-											title: "Sucefully made custom list private",
-											description: data.attributes.name,
-											type: "warning"
-										});
-										goto(
-											route("/mangadex/list/[id]", {
-												id: `private:${data.id}`
-											})
-										);
-									},
-									onError(error) {
-										addErrorToast("Cannot update visibility", error);
-									}
-								}
-							);
-						}}
-						disabled={updateCustomListVisibilityMutation.isPending}
-					>
-						<p class={layoutButtonCssMod.innerButton}>Make Private</p>
-					</ButtonAccent>
+					<FollowButton id={data.id} />
 				{/if}
-				<DangerButton
+				<ButtonAccent
 					isBase
-					variant="2"
+					disabled={openForkDialog || !$isLogged}
 					onclick={() => {
-						deleteCustomList.mutate(data.id, {
-							onError(error) {
-								addErrorToast("Cannot delete custom list", error);
-							},
-							onSuccess() {
-								addToast({
-									title: "Deleted custom list",
-									description: data.attributes.name ?? data.id,
-									type: "warning"
-								});
-								goto(route("/mangadex/list"));
-							}
-						});
+						openForkDialog = !openForkDialog;
 					}}
-					disabled={deleteCustomList.isPending}
 				>
-					<p class={layoutButtonCssMod.innerButton}>Delete</p>
-				</DangerButton>
-			{:else}
-				<FollowButton id={data.id} />
-			{/if}
-			<ButtonAccent
-				isBase
-				disabled={openForkDialog || !$isLogged}
-				onclick={() => {
-					openForkDialog = !openForkDialog;
-				}}
-			>
-				<p class={layoutButtonCssMod.innerButton}><GitBranchIcon /> Fork</p>
-			</ButtonAccent>
-			<DownloadTitlesButton listId={data.id} />
-		</div>
-	{/snippet}
-	{#snippet topRight()}
-		<div class="visibility">
+					<p class={layoutButtonCssMod.innerButton}><GitBranchIcon /> Fork</p>
+				</ButtonAccent>
+				<DownloadTitlesButton listId={data.id} />
+			</div>
+		{/snippet}
+		{#snippet topRight()}
+			<div class="visibility">
+				<p>
+					Visibility: {data.attributes.visibility == CustomListVisibility.Public
+						? "Public"
+						: "Private"}
+				</p>
+			</div>
 			<p>
-				Visibility: {data.attributes.visibility == CustomListVisibility.Public
-					? "Public"
-					: "Private"}
+				Created by <UserLink
+					name={user.attributes.username}
+					roles={user.attributes.roles}
+					id={user.id}
+				/>
 			</p>
-		</div>
-		<p>
-			Created by <UserLink
-				name={user.attributes.username}
-				roles={user.attributes.roles}
-				id={user.id}
-			/>
-		</p>
-	{/snippet}
-	{#snippet _right()}
-		<nav class="custom-list-nav">
-			<button
-				class:active={path ==
-					route("/mangadex/list/[id]", {
-						id: isPrivate ? `private:${data.id}` : data.id
-					})}
-				onclick={() => {
-					goto(
+		{/snippet}
+		{#snippet _right()}
+			<nav class="custom-list-nav">
+				<button
+					class:active={path ==
 						route("/mangadex/list/[id]", {
 							id: isPrivate ? `private:${data.id}` : data.id
-						})
-					);
-				}}
-			>
-				Titles
-			</button>
-			<button
-				class:active={path ==
-					route("/mangadex/list/[id]/feed", {
-						id: isPrivate ? `private:${data.id}` : data.id
-					})}
-				onclick={() => {
-					goto(
+						})}
+					onclick={() => {
+						goto(
+							route("/mangadex/list/[id]", {
+								id: isPrivate ? `private:${data.id}` : data.id
+							})
+						);
+					}}
+				>
+					Titles
+				</button>
+				<button
+					class:active={path ==
 						route("/mangadex/list/[id]/feed", {
 							id: isPrivate ? `private:${data.id}` : data.id
-						})
-					);
-				}}
-			>
-				Feed
-			</button>
-		</nav>
-		<MidToneLine />
-		{@render children?.()}
-	{/snippet}
-</UsersPageBase>
+						})}
+					onclick={() => {
+						goto(
+							route("/mangadex/list/[id]/feed", {
+								id: isPrivate ? `private:${data.id}` : data.id
+							})
+						);
+					}}
+				>
+					Feed
+				</button>
+			</nav>
+			<MidToneLine />
+			{@render children?.()}
+		{/snippet}
+	</UsersPageBase>
+</div>
 
 <CustomListForkDialog
 	bind:open={openForkDialog}
@@ -287,5 +289,8 @@
 		display: grid;
 		gap: 10px;
 		margin: 10px;
+	}
+	.selecto-ctt-provider {
+		display: contents;
 	}
 </style>
