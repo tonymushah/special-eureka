@@ -138,6 +138,7 @@
 				: undefined
 		});
 	}, true);
+	// TODO make a reaction read marker system
 	const hasBeenRead = getContextReadChapterMarker(id);
 	const handleRead = debounce(() => {
 		if ($isLogged) {
