@@ -2,48 +2,31 @@
 	import ButtonAccentOnlyLabel from "@mangadex/componnents/theme/buttons/ButtonAccentOnlyLabel.svelte";
 	import DangerButtonOnlyLabel from "@mangadex/componnents/theme/buttons/DangerButtonOnlyLabel.svelte";
 	import PrimaryButtonOnlyLabel from "@mangadex/componnents/theme/buttons/PrimaryButtonOnlyLabel.svelte";
-	import {
-		cancelDownloadMutation as cancelDownloadMutationLoader,
+	import ChapterDownload, {
 		downloadMutation as downloadMutationLoader,
-		hasChapterDownloadingFailed,
-		isChapterDownloaded,
-		isChapterDownloading,
-		removeMutation as removeMutationLoader
-	} from "@mangadex/download/chapter";
+		cancelDownloadMutation as cancelDownloadMutationLoader
+	} from "@mangadex/download/chapter.svelte";
 	import { derived as storeDerived } from "svelte/store";
 
 	interface Props {
 		id: string;
 	}
 	let { id }: Props = $props();
-	const is_downloading = isChapterDownloading({
-		id,
-		deferred: true
-	});
-	const is_downloaded = storeDerived(
-		[
-			isChapterDownloaded({
-				id,
-				deferred: true
-			}),
-			hasChapterDownloadingFailed({
-				id,
-				deferred: true
-			})
-		],
-		([downloaded, failed]) => downloaded || failed
+	let downloadInstance = new ChapterDownload(() => id);
+	let is_downloading = $derived(downloadInstance.isDownloading);
+	let is_downloaded = $derived(
+		downloadInstance.isChapterDownloaded || downloadInstance.hasChapterDownloadingFailed
 	);
-	let removeMutation = removeMutationLoader();
 	let downloadMutation = downloadMutationLoader();
 	let cancelDownloadMutation = cancelDownloadMutationLoader();
 </script>
 
 <div>
-	{#if $is_downloaded}
+	{#if is_downloaded}
 		<DangerButtonOnlyLabel
 			label="Delete"
 			onclick={() => {
-				removeMutation.mutateAsync(id);
+				downloadInstance.remove();
 			}}
 		/>
 		<PrimaryButtonOnlyLabel
@@ -54,7 +37,7 @@
 				});
 			}}
 		/>
-	{:else if $is_downloading}
+	{:else if is_downloading}
 		<ButtonAccentOnlyLabel
 			label="Cancel"
 			variant="5"
