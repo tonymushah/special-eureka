@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { chapterDownloadStateImages } from "@mangadex/download/chapter";
+	import ChapterDownload from "@mangadex/download/chapter.svelte";
 	import { isLogged } from "@mangadex/utils/auth";
 	import type { Snippet } from "svelte";
 
@@ -22,7 +22,8 @@
 		id
 	}: Props = $props();
 
-	const download_state_images = chapterDownloadStateImages({ id });
+	let downloadInstance = new ChapterDownload(() => id);
+	let download_state_images = $derived(downloadInstance.chapterDownloadStateImages);
 </script>
 
 <div
@@ -30,9 +31,9 @@
 	class:isNotLogged={!$isLogged}
 	class:haveBeenRead
 	class:haveNotBeenRead={!haveBeenRead && $isLogged}
-	class:hasImages={$download_state_images.hasImages}
+	class:hasImages={download_state_images.hasImages}
 	data-chapter-id={id}
-	style="--status-left: {$download_state_images.left}; --status-right: {$download_state_images.right};"
+	style="--status-left: {download_state_images.left}; --status-right: {download_state_images.right};"
 >
 	<div class="state">
 		{#if state}
