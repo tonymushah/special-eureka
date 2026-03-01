@@ -34,7 +34,8 @@ export async function get_manga_reading_status(id: string): Promise<ReadingStatu
 	if (res.error) {
 		throw res.error;
 	} else if (res.data) {
-		return res.data.manga.readingStatus ?? null;
+		const status = res.data.manga.readingStatus ?? null;
+		return status;
 	} else {
 		throw new Error("no result");
 	}

@@ -199,8 +199,6 @@
 		},
 		onSettled(data, error, variables) {
 			variables.closeDialog?.();
-			followingStatusQuery.refetch();
-			readingStatusQuery.refetch();
 		},
 		onError(err) {
 			onSetReadingStatusError(err);
@@ -425,10 +423,10 @@
 			})
 		);
 	}}
-	disableAddToLibrary={disableAddToLibrary && !$isLogged}
+	disableAddToLibrary={disableAddToLibrary || !$isLogged}
 	rating={der(manga_rating(data.layoutData.id), (d) => d ?? undefined)}
 	{onrating}
-	disableRating={disableRating && !$isLogged}
+	disableRating={disableRating || !$isLogged}
 	disableRead={!$hasChaptToRead}
 	onread={() => {
 		readManga(data.layoutData.id);
