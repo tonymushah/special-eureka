@@ -1,34 +1,24 @@
 <script lang="ts">
-	import {
-		hasChapterDownloadingFailed,
-		isChapterDownloaded,
-		isChapterDownloading
-	} from "@mangadex/download/chapter";
+	import ChapterDownload from "@mangadex/download/chapter.svelte";
 	import { CheckIcon, DownloadCloudIcon, DownloadIcon, XIcon } from "@lucide/svelte";
 	interface Props {
 		id: string;
 	}
 
 	let { id }: Props = $props();
-
-	const downloading_ = isChapterDownloading({
-		id
-	});
-	const failed_ = hasChapterDownloadingFailed({
-		id
-	});
-	const downloaded_ = isChapterDownloaded({
-		id
-	});
-	let [downloaded, downloading, failed] = $derived([$downloaded_, $downloading_, $failed_]);
+	let downloadInstance = new ChapterDownload(() => id);
 </script>
 
-<span class:downloaded class:downloading class:failed>
-	{#if downloading}
+<span
+	class:downloaded={downloadInstance.isChapterDownloaded}
+	class:downloading={downloadInstance.isDownloading}
+	class:failed={downloadInstance.hasChapterDownloadingFailed}
+>
+	{#if downloadInstance.isDownloading}
 		<DownloadCloudIcon />
-	{:else if failed}
+	{:else if downloadInstance.hasChapterDownloadingFailed}
 		<XIcon />
-	{:else if downloaded}
+	{:else if downloadInstance.isChapterDownloaded}
 		<CheckIcon />
 	{:else}
 		<DownloadIcon />
