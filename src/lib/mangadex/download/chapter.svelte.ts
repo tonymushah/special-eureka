@@ -12,7 +12,8 @@ import {
 	createMutation,
 	createQuery,
 	type Accessor,
-	type CreateMutationResult
+	type CreateMutationResult,
+	type MutateOptions
 } from "@tanstack/svelte-query";
 import { type OperationResult } from "@urql/svelte";
 import { derived, readable, type Readable } from "svelte/store";
@@ -247,7 +248,9 @@ export default class ChapterDownload {
 	private _state = $state<{ value: ChapterSubOpType | undefined }>({ value: undefined });
 	private _remove_mutation: CreateMutationResult<unknown, Error, string>;
 	private _isChapterPresentRaw: ReturnType<ReturnType<typeof isChapterPresentRaw>>;
+	private _chapterId: Accessor<string>;
 	public constructor(chapterId: Accessor<string>) {
+		this._chapterId = chapterId;
 		this._isChapterPresentRaw = isChapterPresentRaw(chapterId)();
 		let $removeMutation = removeMutation();
 		this._remove_mutation = $removeMutation;
@@ -258,6 +261,15 @@ export default class ChapterDownload {
 				toSet.value = $rawState;
 			});
 		});
+	}
+	public get chapterId(): string {
+		return this._chapterId();
+	}
+	public remove(options?: MutateOptions<unknown, Error, string>) {
+		this._remove_mutation.mutate(this.chapterId, options);
+	}
+	public get isRemoving(): boolean {
+		return this._remove_mutation.isPending;
 	}
 	public get state(): ChapterDownloadState {
 		if (this._remove_mutation.isPending) {
