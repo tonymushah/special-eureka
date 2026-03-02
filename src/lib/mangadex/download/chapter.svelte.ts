@@ -245,15 +245,16 @@ export function isChapterPresentRaw(id: () => string) {
 }
 
 export default class ChapterDownload {
-	private _state = $state<{ value: ChapterSubOpType | undefined }>({ value: undefined });
+	private _state: { value: ChapterSubOpType | undefined };
 	private _remove_mutation: CreateMutationResult<unknown, Error, string>;
 	private _isChapterPresentRaw: ReturnType<ReturnType<typeof isChapterPresentRaw>>;
 	private _chapterId: Accessor<string>;
 	public constructor(chapterId: Accessor<string>) {
+		this._state = $state({ value: undefined });
 		this._chapterId = chapterId;
 		this._isChapterPresentRaw = isChapterPresentRaw(chapterId)();
-		let $removeMutation = removeMutation();
-		this._remove_mutation = $removeMutation;
+		let _removeMutation = removeMutation();
+		this._remove_mutation = _removeMutation;
 		let toSet = this._state;
 		$effect(() => {
 			let id = chapterId();
@@ -276,7 +277,7 @@ export default class ChapterDownload {
 			return ChapterDownloadState.Removing;
 		}
 		if (this._isChapterPresentRaw?.data) {
-			const data = this._state.value?.data?.watchChapterDownloadState;
+			const data = this._state?.value?.data?.watchChapterDownloadState;
 			if (data?.downloading) {
 				const downloading = data.downloading;
 				if (downloading.fetchingImage) {
@@ -295,7 +296,7 @@ export default class ChapterDownload {
 			} else if (data?.isOfflineAppStateNotLoaded) {
 				return ChapterDownloadState.OfflineAppStateNotLoaded;
 			}
-		} else if (this._state.value?.error) {
+		} else if (this._state?.value?.error) {
 			return ChapterDownloadState.Error;
 		}
 		const isPresentData = this._isChapterPresentRaw?.data?.data?.downloadState?.chapter;
@@ -325,13 +326,13 @@ export default class ChapterDownload {
 		| { filename: string; index: number; len: number }
 		| undefined
 		| null {
-		return this._state.value?.data?.watchChapterDownloadState.downloading?.fetchingImage;
+		return this._state?.value?.data?.watchChapterDownloadState.downloading?.fetchingImage;
 	}
 	public get chapterDownloadingError(): Error | null {
-		if (this._state.value?.error) {
+		if (this._state?.value?.error) {
 			return this._state.value?.error;
-		} else if (this._state.value?.data?.watchChapterDownloadState.error) {
-			return new Error(this._state.value?.data.watchChapterDownloadState.error);
+		} else if (this._state?.value?.data?.watchChapterDownloadState.error) {
+			return new Error(this._state?.value?.data.watchChapterDownloadState.error);
 		} else {
 			return null;
 		}
@@ -351,9 +352,9 @@ export default class ChapterDownload {
 	}
 	public get chapterDownloadStateImages(): { left: string; right: string; hasImages: boolean } {
 		let _state = this.chapterDowloadingImageState;
-		let $is_downloading = this.isDownloading;
+		let is_downloading = this.isDownloading;
 		const [left, right, hasImages] = (() => {
-			if (_state && $is_downloading) {
+			if (_state && is_downloading) {
 				return [
 					`${(_state.index * 100) / _state.len}%`,
 					`${100 - (_state.index * 100) / _state.len}%`,
