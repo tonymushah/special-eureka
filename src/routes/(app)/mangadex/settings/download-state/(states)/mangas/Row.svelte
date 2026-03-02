@@ -1,5 +1,5 @@
 <script lang="ts">
-	import mangaDownloadState, { MangaDownloadState } from "@mangadex/download/manga";
+	import MangaDownload, { MangaDownloadState } from "@mangadex/download/manga.svelte";
 	import { startCase } from "lodash";
 	import type { TableData } from "../Mangas.svelte";
 	import ActionButton from "./row/ActionButton.svelte";
@@ -7,7 +7,7 @@
 	interface Props extends TableData {}
 	let { id, title: title_store }: Props = $props();
 
-	const donwload_state = mangaDownloadState({ id, deferred: true });
+	let mangaDownload = new MangaDownload(() => id);
 	let title: string | undefined = $state();
 	$effect(() =>
 		title_store.subscribe((e) => {
@@ -18,7 +18,7 @@
 
 <tr>
 	<td>{id}</td>
-	<td>{startCase(MangaDownloadState[$donwload_state])}</td>
+	<td>{startCase(MangaDownloadState[mangaDownload.mangaDownloadState])}</td>
 	<td>
 		{#if title}
 			{title}
