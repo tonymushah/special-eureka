@@ -2,33 +2,21 @@
 	import ButtonAccentOnlyLabel from "@mangadex/componnents/theme/buttons/ButtonAccentOnlyLabel.svelte";
 	import DangerButtonOnlyLabel from "@mangadex/componnents/theme/buttons/DangerButtonOnlyLabel.svelte";
 	import PrimaryButtonOnlyLabel from "@mangadex/componnents/theme/buttons/PrimaryButtonOnlyLabel.svelte";
-	import {
+	import CoverDownload, {
 		cancelDonwloadMutation as cancelDonwloadMutationLoader,
 		downloadMutationQuery as downloadMutationQueryLoader,
-		hasCoverDownloadingFailed,
-		isCoverDownloaded,
-		isCoverDownloading,
 		removeMutation as removeMutationLoader
-	} from "@mangadex/download/cover";
+	} from "@mangadex/download/cover.svelte";
 	import { derived as storeDerived } from "svelte/store";
 
 	interface Props {
 		id: string;
 	}
 	let { id }: Props = $props();
-	const is_downloading = isCoverDownloading({ id, deferred: true });
-	const is_downloaded = storeDerived(
-		[
-			isCoverDownloaded({
-				id,
-				deferred: true
-			}),
-			hasCoverDownloadingFailed({
-				id,
-				deferred: true
-			})
-		],
-		([downloaded, failed]) => downloaded || failed
+	let downloadInstance = new CoverDownload(() => id);
+	let is_downloading = $derived(downloadInstance.isCoverDownloading);
+	const is_downloaded = $derived(
+		downloadInstance.isCoverDownloaded || downloadInstance.hasCoverDownloadingFailed
 	);
 	let cancelMutation = cancelDonwloadMutationLoader();
 	let downloadMutationQuery = downloadMutationQueryLoader();
@@ -36,7 +24,7 @@
 </script>
 
 <div>
-	{#if $is_downloaded}
+	{#if is_downloaded}
 		<DangerButtonOnlyLabel
 			label="Delete"
 			onclick={() => {
@@ -49,7 +37,7 @@
 				downloadMutationQuery.mutateAsync(id);
 			}}
 		/>
-	{:else if $is_downloading}
+	{:else if is_downloading}
 		<ButtonAccentOnlyLabel
 			label="Cancel"
 			variant="5"
