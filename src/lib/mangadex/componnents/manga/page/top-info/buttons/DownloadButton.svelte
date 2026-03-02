@@ -1,7 +1,7 @@
 <script lang="ts">
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import DangerButton from "@mangadex/componnents/theme/buttons/DangerButton.svelte";
-	import { MangaDownloadState } from "@mangadex/download/manga";
+	import { MangaDownloadState } from "@mangadex/download/manga.svelte";
 	import { getTopMangaDownloadContextStore } from "../context";
 	import DownloadIcon from "./download/DownloadIcon.svelte";
 	import LoadingIcon from "./download/LoadingIcon.svelte";
