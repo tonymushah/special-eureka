@@ -9,7 +9,7 @@ import {
 	isMangaDownloaded,
 	isMangaDownloading,
 	removeMutation
-} from "@mangadex/download/manga";
+} from "@mangadex/download/manga.svelte";
 import { downloadTitleWithExtra } from "@mangadex/gql-docs/title/id/download-with-extras";
 import isFollowingTitle, { isChangingTitleFollowing } from "@mangadex/gql-docs/title/id/follow";
 import { MangaDownloadExtras, ReadingStatus } from "@mangadex/gql/graphql";
