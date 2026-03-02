@@ -1,4 +1,4 @@
-import type { MangaDownloadState } from "@mangadex/download/manga";
+import type { MangaDownloadState } from "@mangadex/download/manga.svelte";
 import { getContext, setContext } from "svelte";
 import type { Readable } from "svelte/store";
 
