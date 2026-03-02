@@ -17,11 +17,11 @@
 	import { readManga } from "@mangadex/componnents/manga/read/ReadDialog.svelte";
 	import Markdown from "@mangadex/componnents/markdown/Markdown.svelte";
 	import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
-	import mangaDownloadState, {
+	import MangaDownload, {
 		cancelMutation as cancelMutationLoader,
 		downloadMutationQuery as downloadMutationQueryLoader,
 		removeMutation as removeMutationLoader
-	} from "@mangadex/download/manga";
+	} from "@mangadex/download/manga.svelte";
 	import { mangaReadMarkers } from "@mangadex/gql-docs/read-markers/chapters";
 	import { client } from "@mangadex/gql/urql";
 	import manga_following_status, {
@@ -134,9 +134,9 @@
 	let layoutData = $derived(data.layoutData!);
 	let description = $derived(layoutData.description);
 	let hasRelation = $derived(data.queryResult!.relationships.manga.length > 0);
-
+	let mangaDownload = new MangaDownload(() => data.layoutData.id);
 	// svelte-ignore state_referenced_locally
-	const _state = mangaDownloadState({ id: data.layoutData.id, deferred: true });
+	const _state = toStore(() => mangaDownload.mangaDownloadState);
 	const reading_status = der(
 		// svelte-ignore state_referenced_locally
 		manga_reading_status(data.layoutData.id, {
