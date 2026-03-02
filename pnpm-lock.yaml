@@ -56,7 +56,7 @@ importers:
         version: 10.2.13(storybook@10.2.13(@testing-library/dom@10.4.0)(prettier@3.8.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))
       '@tanstack/svelte-query':
         specifier: ^6.0.18
-        version: 6.0.18(svelte@5.53.6)
+        version: 6.1.0(svelte@5.53.6)
       '@tanstack/table-core':
         specifier: ^8.21.3
         version: 8.21.3
@@ -165,7 +165,7 @@ importers:
         version: 6.2.4(svelte@5.53.6)(vite@7.3.1(@types/node@25.3.3)(jiti@2.6.1)(less@4.5.1)(sass@1.97.3)(yaml@2.8.2))
       '@tanstack/svelte-query-devtools':
         specifier: ^6.0.4
-        version: 6.0.4(@tanstack/svelte-query@6.0.18(svelte@5.53.6))(svelte@5.53.6)
+        version: 6.0.4(@tanstack/svelte-query@6.1.0(svelte@5.53.6))(svelte@5.53.6)
       '@tauri-apps/cli':
         specifier: ^2.10.0
         version: 2.10.0
@@ -2138,8 +2138,8 @@ packages:
       '@tanstack/svelte-query': ^6.0.18
       svelte: ^5.25.0
 
-  '@tanstack/svelte-query@6.0.18':
-    resolution: {integrity: sha512-iGS8osfrIVUW5pkV4Ig6pspNIMtiNjGnVTNJKDas0m/QaNDFFIKbgg74rCzcjwrTIvO38tMpzb4VUKklvAmjxw==}
+  '@tanstack/svelte-query@6.1.0':
+    resolution: {integrity: sha512-iKeMaBalk5NeRvp1Y2LgtG3j9HCeLcTEpfsyM+jL1wASnW/EYdCqyyotMKkOY4SNsnBpPDM5zrmstMn6tOzKFQ==}
     peerDependencies:
       svelte: ^5.25.0
 
@@ -6791,14 +6791,14 @@ snapshots:
       react: 19.2.4
       react-dom: 19.2.4(react@19.2.4)
 
-  '@tanstack/svelte-query-devtools@6.0.4(@tanstack/svelte-query@6.0.18(svelte@5.53.6))(svelte@5.53.6)':
+  '@tanstack/svelte-query-devtools@6.0.4(@tanstack/svelte-query@6.1.0(svelte@5.53.6))(svelte@5.53.6)':
     dependencies:
       '@tanstack/query-devtools': 5.93.0
-      '@tanstack/svelte-query': 6.0.18(svelte@5.53.6)
+      '@tanstack/svelte-query': 6.1.0(svelte@5.53.6)
       esm-env: 1.2.2
       svelte: 5.53.6
 
-  '@tanstack/svelte-query@6.0.18(svelte@5.53.6)':
+  '@tanstack/svelte-query@6.1.0(svelte@5.53.6)':
     dependencies:
       '@tanstack/query-core': 5.90.20
       svelte: 5.53.6
