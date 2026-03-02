@@ -1,6 +1,6 @@
 <script lang="ts">
 	import CoverDownload from "@mangadex/download/cover.svelte";
-	import { MangaDownloadState } from "@mangadex/download/manga";
+	import { MangaDownloadState } from "@mangadex/download/manga.svelte";
 	import { startCase } from "lodash";
 	import type { TableData } from "../Covers.svelte";
 	import ActionButton from "./row/ActionButton.svelte";
