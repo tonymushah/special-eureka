@@ -1,6 +1,7 @@
 <script lang="ts">
 	import ChapterDownload from "@mangadex/download/chapter.svelte";
 	import { isLogged } from "@mangadex/utils/auth";
+	import { IsInViewport } from "runed";
 	import type { Snippet } from "svelte";
 
 	interface Props {
@@ -14,7 +15,7 @@
 	}
 	let {
 		haveBeenRead = $bindable(),
-		state,
+		state: _state,
 		flagReadingState,
 		titleGroups,
 		dateUploader,
@@ -22,11 +23,17 @@
 		id
 	}: Props = $props();
 
-	let downloadInstance = new ChapterDownload(() => id);
+	let layout = $state<HTMLElement | undefined>();
+	let isInViewport = new IsInViewport(() => layout);
+	let downloadInstance = new ChapterDownload(
+		() => id,
+		() => isInViewport.current
+	);
 	let download_state_images = $derived(downloadInstance.chapterDownloadStateImages);
 </script>
 
 <div
+	bind:this={layout}
 	class="layout chapter-element"
 	class:isNotLogged={!$isLogged}
 	class:haveBeenRead
@@ -36,8 +43,8 @@
 	style="--status-left: {download_state_images.left}; --status-right: {download_state_images.right};"
 >
 	<div class="state">
-		{#if state}
-			{@render state()}
+		{#if _state}
+			{@render _state()}
 		{/if}
 	</div>
 	<div class="flag-reading-state">
