@@ -347,7 +347,7 @@ export default class CoverDownload {
 		this._coverId = coverId;
 		this.__state = () => _state;
 		this._downloadState = downloadStateQuery(coverId)();
-		$effect(() => {
+		$effect.pre(() => {
 			let id = coverId();
 			return subOPCover(id).subscribe((res) => {
 				_state.value = res ?? null;

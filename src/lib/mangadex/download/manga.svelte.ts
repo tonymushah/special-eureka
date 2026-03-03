@@ -363,7 +363,7 @@ export default class MangaDownload {
 		this.__state = () => _state;
 		this._download_state = downloadStateQuery(mangaId)();
 
-		$effect(() => {
+		$effect.pre(() => {
 			let id = mangaId();
 			return subOpManga(id).subscribe((res) => {
 				_state.value = res ?? null;
