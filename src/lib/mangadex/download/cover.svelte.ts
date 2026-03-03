@@ -15,7 +15,6 @@ import {
 	type QueryClient
 } from "@tanstack/svelte-query";
 import type { OperationResult } from "@urql/svelte";
-import { untrack } from "svelte";
 import { derived, readable, type Readable } from "svelte/store";
 import { mangadexQueryClient } from "..";
 
@@ -351,14 +350,14 @@ export default class CoverDownload {
 		this._downloadState = downloadStateQuery(coverId)();
 		$effect(() => {
 			return subOPCover(id).subscribe((res) => {
-				if (untrack(() => _state)) _state.value = res ?? null;
+				_state.value = res ?? null;
 			});
 		});
 	}
-	public get coverId(): string {
+	coverId: string = $derived.by(() => {
 		return this._coverId();
-	}
-	public get coverDownloadState(): CoverDownloadState {
+	});
+	coverDownloadState: CoverDownloadState = $derived.by(() => {
 		if (this._state.value?.data) {
 			const data = this._state.value?.data.watchCoverDownloadState;
 			if (data.downloading) {
@@ -392,8 +391,8 @@ export default class CoverDownload {
 		} else {
 			return CoverDownloadState.Pending;
 		}
-	}
-	public get isCoverDownloading(): boolean {
+	});
+	isCoverDownloading: boolean = $derived.by(() => {
 		switch (this.coverDownloadState) {
 			case CoverDownloadState.FetchingData:
 				return true;
@@ -404,8 +403,8 @@ export default class CoverDownload {
 			default:
 				return false;
 		}
-	}
-	public get coverDownloadingError(): Error | null {
+	});
+	coverDownloadingError: Error | null = $derived.by(() => {
 		if (this._state.value?.error) {
 			return this._state.value?.error;
 		} else if (this._state.value?.data?.watchCoverDownloadState.error) {
@@ -413,8 +412,8 @@ export default class CoverDownload {
 		} else {
 			return null;
 		}
-	}
-	public get hasCoverDownloadingFailed(): boolean {
+	});
+	hasCoverDownloadingFailed: boolean = $derived.by(() => {
 		switch (this.coverDownloadState) {
 			case CoverDownloadState.Error:
 				return true;
@@ -423,8 +422,8 @@ export default class CoverDownload {
 			default:
 				return false;
 		}
-	}
-	public get isCoverDownloaded(): boolean {
+	});
+	isCoverDownloaded: boolean = $derived.by(() => {
 		switch (this.coverDownloadState) {
 			case CoverDownloadState.Done:
 				return true;
@@ -432,5 +431,5 @@ export default class CoverDownload {
 			default:
 				return false;
 		}
-	}
+	});
 }
