@@ -91,6 +91,7 @@
 	import Layout from "./Layout.svelte";
 	import { cancelChapterDownload, downloadChapter } from "./utils";
 	import IndicationBadge from "@mangadex/componnents/theme/tag/IndicationBadge.svelte";
+	import { IsInViewport } from "runed";
 
 	let {
 		id,
@@ -113,7 +114,12 @@
 	}: Props = $props();
 
 	let readMarkers = readMarkersLoader();
-	let downloadInstance = new ChapterDownload(() => id);
+	let layoutElement = $state<HTMLElement | undefined>();
+	let isInViewport = new IsInViewport(() => layoutElement);
+	let downloadInstance = new ChapterDownload(
+		() => id,
+		() => isInViewport.current
+	);
 
 	const handle_download_event = debounce(async function () {
 		if (downloadInstance.isDownloading) {
@@ -164,6 +170,7 @@
 	oncontextmenu={registerContextMenuEvent({
 		preventDefault: true
 	})}
+	bind:this={layoutElement}
 >
 	<Layout haveBeenRead={$hasBeenRead} {id}>
 		{#snippet state()}
