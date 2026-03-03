@@ -14,7 +14,6 @@ import {
 	type QueryClient
 } from "@tanstack/svelte-query";
 import type { OperationResult } from "@urql/svelte";
-import { untrack } from "svelte";
 import { derived, readable, type Readable } from "svelte/store";
 import { mangadexQueryClient } from "..";
 
@@ -363,18 +362,18 @@ export default class MangaDownload {
 		this._mangaId = mangaId;
 		this._state = $derived(_state);
 		this._download_state = downloadStateQuery(mangaId)();
+		let id = $derived.by(mangaId);
 		$effect(() => {
-			let id = $derived.by(mangaId);
 			return subOpManga(id).subscribe((res) => {
-				if (untrack(() => _state)) _state.value = res ?? null;
+				_state.value = res ?? null;
 			});
 		});
 	}
-	public get mangaId(): string {
+	mangaId: string = $derived.by(() => {
 		return this._mangaId();
-	}
-	public get mangaDownloadState(): MangaDownloadState {
-		if (this._state.value?.data) {
+	});
+	mangaDownloadState: MangaDownloadState = $derived.by(() => {
+		if (this._state?.value?.data) {
 			const data = this._state.value?.data.watchMangaDownloadState;
 			if (data.downloading) {
 				return MangaDownloadState.Downloading;
@@ -387,22 +386,22 @@ export default class MangaDownload {
 			} else if (data.isOfflineAppStateNotLoaded) {
 				return MangaDownloadState.OfflineAppStateNotLoaded;
 			}
-		} else if (this._state.value?.error) {
+		} else if (this._state?.value?.error) {
 			return MangaDownloadState.Error;
 		}
 		if (
-			this._download_state.data?.error != undefined ||
-			this._download_state.error != null ||
-			this._download_state.data?.data?.downloadState.manga.hasFailed == true
+			this._download_state?.data?.error != undefined ||
+			this._download_state?.error != null ||
+			this._download_state?.data?.data?.downloadState.manga.hasFailed == true
 		) {
 			return MangaDownloadState.Error;
-		} else if (this._download_state.data?.data?.downloadState.manga.isDownloaded == true) {
+		} else if (this._download_state?.data?.data?.downloadState.manga.isDownloaded == true) {
 			return MangaDownloadState.Done;
 		} else {
 			return MangaDownloadState.Pending;
 		}
-	}
-	public get isMangaDownloading(): boolean {
+	});
+	isMangaDownloading: boolean = $derived.by(() => {
 		switch (this.mangaDownloadState) {
 			case MangaDownloadState.Downloading:
 				return true;
@@ -410,17 +409,17 @@ export default class MangaDownload {
 				return false;
 				break;
 		}
-	}
-	public get mangaDownloadingError(): Error | null {
-		if (this._state.value?.error) {
-			return this._state.value.error;
-		} else if (this._state.value?.data?.watchMangaDownloadState.error) {
-			return new Error(this._state.value?.data.watchMangaDownloadState.error);
+	});
+	mangaDownloadingError: Error | null = $derived.by(() => {
+		if (this._state?.value?.error) {
+			return this._state?.value.error;
+		} else if (this._state?.value?.data?.watchMangaDownloadState.error) {
+			return new Error(this._state?.value?.data.watchMangaDownloadState.error);
 		} else {
 			return null;
 		}
-	}
-	public get isMangaDownloaded(): boolean {
+	});
+	isMangaDownloaded: boolean = $derived.by(() => {
 		switch (this.mangaDownloadState) {
 			case MangaDownloadState.Done:
 				return true;
@@ -428,8 +427,8 @@ export default class MangaDownload {
 			default:
 				return false;
 		}
-	}
-	public get hasMangaDownloadingFailed(): boolean {
+	});
+	hasMangaDownloadingFailed: boolean = $derived.by(() => {
 		switch (this.mangaDownloadState) {
 			case MangaDownloadState.Error:
 				return true;
@@ -438,5 +437,5 @@ export default class MangaDownload {
 			default:
 				return false;
 		}
-	}
+	});
 }
