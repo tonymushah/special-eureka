@@ -4,11 +4,17 @@
 	import { startCase } from "lodash";
 	import type { TableData } from "../Covers.svelte";
 	import ActionButton from "./row/ActionButton.svelte";
+	import { IsInViewport } from "runed";
 
 	interface Props extends TableData {}
 	let { id, title: title_store }: Props = $props();
 
-	let coverDownload = new CoverDownload(() => id);
+	let layout = $state<HTMLElement | undefined>();
+	let isInViewport = new IsInViewport(() => layout);
+	let coverDownload = new CoverDownload(
+		() => id,
+		() => isInViewport.current
+	);
 	let title: string | undefined = $state();
 	$effect(() =>
 		title_store.subscribe((e) => {
@@ -17,7 +23,7 @@
 	);
 </script>
 
-<tr>
+<tr bind:this={layout}>
 	<td>{id}</td>
 	<td>{startCase(MangaDownloadState[coverDownload.coverDownloadState])}</td>
 	<td>
