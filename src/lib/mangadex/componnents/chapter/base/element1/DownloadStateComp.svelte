@@ -1,21 +1,28 @@
 <script lang="ts">
 	import ChapterDownload from "@mangadex/download/chapter.svelte";
-	import { CheckIcon, DownloadCloudIcon, DownloadIcon, XIcon } from "@lucide/svelte";
+	import { CheckIcon, CloudDownload, DownloadIcon, XIcon } from "@lucide/svelte";
+	import { IsInViewport } from "runed";
 	interface Props {
 		id: string;
 	}
 
 	let { id }: Props = $props();
-	let downloadInstance = new ChapterDownload(() => id);
+	let spanElement = $state<HTMLElement | undefined>();
+	let isInViewport = new IsInViewport(() => spanElement);
+	let downloadInstance = new ChapterDownload(
+		() => id,
+		() => isInViewport.current
+	);
 </script>
 
 <span
 	class:downloaded={downloadInstance.isChapterDownloaded}
 	class:downloading={downloadInstance.isDownloading}
 	class:failed={downloadInstance.hasChapterDownloadingFailed}
+	bind:this={spanElement}
 >
 	{#if downloadInstance.isDownloading}
-		<DownloadCloudIcon />
+		<CloudDownload />
 	{:else if downloadInstance.hasChapterDownloadingFailed}
 		<XIcon />
 	{:else if downloadInstance.isChapterDownloaded}
