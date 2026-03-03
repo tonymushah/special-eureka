@@ -340,7 +340,7 @@ export default class CoverDownload {
 	private __state: () => { value: CoverSubOpType | null };
 	private _coverId: Accessor<string>;
 	private _downloadState: ReturnType<ReturnType<typeof downloadStateQuery>>;
-	public constructor(coverId: () => string) {
+	public constructor(coverId: () => string, enabled: Accessor<boolean> = () => true) {
 		let _state = $state<{ value: CoverSubOpType | null }>({
 			value: null
 		});
@@ -348,10 +348,12 @@ export default class CoverDownload {
 		this.__state = () => _state;
 		this._downloadState = downloadStateQuery(coverId)();
 		$effect.pre(() => {
-			let id = coverId();
-			return subOPCover(id).subscribe((res) => {
-				_state.value = res ?? null;
-			});
+			if (enabled()) {
+				let id = coverId();
+				return subOPCover(id).subscribe((res) => {
+					_state.value = res ?? null;
+				});
+			}
 		});
 	}
 	private get _state(): ReturnType<typeof this.__state> {

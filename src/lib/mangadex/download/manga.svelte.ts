@@ -357,17 +357,19 @@ export default class MangaDownload {
 	private __state: () => { value: MangaSubOpType | null };
 	private _mangaId: Accessor<string>;
 	private _download_state: ReturnType<ReturnType<typeof downloadStateQuery>>;
-	public constructor(mangaId: () => string) {
+	public constructor(mangaId: () => string, enabled: Accessor<boolean> = () => true) {
 		let _state = $state<{ value: MangaSubOpType | null }>({ value: null });
 		this._mangaId = mangaId;
 		this.__state = () => _state;
 		this._download_state = downloadStateQuery(mangaId)();
 
 		$effect.pre(() => {
-			let id = mangaId();
-			return subOpManga(id).subscribe((res) => {
-				_state.value = res ?? null;
-			});
+			if (enabled()) {
+				let id = mangaId();
+				return subOpManga(id).subscribe((res) => {
+					_state.value = res ?? null;
+				});
+			}
 		});
 	}
 	private get _state(): ReturnType<typeof this.__state> {
