@@ -1,3 +1,4 @@
+<!-- TODO make the popup follow the layout on scroll -->
 <script lang="ts">
 	import { arrow, computePosition, flip, offset, shift } from "@floating-ui/dom";
 	import MangaDexFlagIcon from "@mangadex/componnents/FlagIcon.svelte";
@@ -19,6 +20,7 @@
 	} from "@lucide/svelte";
 	import { cancelChapterDownload, downloadChapter } from "./utils";
 	import IndicationBadge from "@mangadex/componnents/theme/tag/IndicationBadge.svelte";
+	import { IsInViewport } from "runed";
 
 	type Group = {
 		id: string;
@@ -126,7 +128,11 @@
 		}
 	}
 
-	let downloadInstance = new ChapterDownload(() => id);
+	let isInViewport = new IsInViewport(() => layout);
+	let downloadInstance = new ChapterDownload(
+		() => id,
+		() => isInViewport.current
+	);
 
 	const handle_download_event = debounce(async function () {
 		if (downloadInstance.isRemoving) {
