@@ -340,15 +340,16 @@ export default class CoverDownload {
 	private __state: () => { value: CoverSubOpType | null };
 	private _coverId: Accessor<string>;
 	private _downloadState: ReturnType<ReturnType<typeof downloadStateQuery>>;
-	public constructor(coverId: () => string, enabled: Accessor<boolean> = () => true) {
+	public constructor(coverId: () => string, _enabled: Accessor<boolean> = () => true) {
 		let _state = $state<{ value: CoverSubOpType | null }>({
 			value: null
 		});
 		this._coverId = coverId;
 		this.__state = () => _state;
 		this._downloadState = downloadStateQuery(coverId)();
+		let enabled = $derived.by(_enabled);
 		$effect.pre(() => {
-			if (enabled()) {
+			if (enabled) {
 				let id = coverId();
 				return subOPCover(id).subscribe((res) => {
 					_state.value = res ?? null;

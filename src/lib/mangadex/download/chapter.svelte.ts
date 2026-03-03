@@ -250,16 +250,16 @@ export default class ChapterDownload {
 	private _remove_mutation: CreateMutationResult<unknown, Error, string>;
 	private _isChapterPresentRaw: ReturnType<ReturnType<typeof isChapterPresentRaw>>;
 	private _chapterId: Accessor<string>;
-	public constructor(chapterId: Accessor<string>, enable: Accessor<boolean> = () => true) {
+	public constructor(chapterId: Accessor<string>, _enable: Accessor<boolean> = () => true) {
 		let toSet = $state<{ value: ChapterSubOpType | null }>({ value: null });
 		this.__state = () => toSet;
 		this._chapterId = chapterId;
 		this._isChapterPresentRaw = isChapterPresentRaw(chapterId)();
 		let _removeMutation = removeMutation();
 		this._remove_mutation = _removeMutation;
-
+		let enable = $derived.by(_enable);
 		$effect.pre(() => {
-			if (enable()) {
+			if (enable) {
 				let id = chapterId();
 				let unsub = chapterDownloadStateRaw({ id }).subscribe((rawState) => {
 					if (untrack(() => toSet)) {
