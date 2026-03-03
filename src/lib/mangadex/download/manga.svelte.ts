@@ -354,25 +354,29 @@ export function hasMangaDownloadingFailed(param: { id: string; deferred?: boolea
 }
 
 export default class MangaDownload {
-	private _state: { value: MangaSubOpType | null };
+	private __state: () => { value: MangaSubOpType | null };
 	private _mangaId: Accessor<string>;
 	private _download_state: ReturnType<ReturnType<typeof downloadStateQuery>>;
 	public constructor(mangaId: () => string) {
 		let _state = $state<{ value: MangaSubOpType | null }>({ value: null });
 		this._mangaId = mangaId;
-		this._state = $derived(_state);
+		this.__state = () => _state;
 		this._download_state = downloadStateQuery(mangaId)();
-		let id = $derived.by(mangaId);
+
 		$effect(() => {
+			let id = mangaId();
 			return subOpManga(id).subscribe((res) => {
 				_state.value = res ?? null;
 			});
 		});
 	}
-	mangaId: string = $derived.by(() => {
+	private get _state(): ReturnType<typeof this.__state> {
+		return this.__state();
+	}
+	public get mangaId(): string {
 		return this._mangaId();
-	});
-	mangaDownloadState: MangaDownloadState = $derived.by(() => {
+	}
+	public get mangaDownloadState(): MangaDownloadState {
 		if (this._state?.value?.data) {
 			const data = this._state.value?.data.watchMangaDownloadState;
 			if (data.downloading) {
@@ -400,8 +404,8 @@ export default class MangaDownload {
 		} else {
 			return MangaDownloadState.Pending;
 		}
-	});
-	isMangaDownloading: boolean = $derived.by(() => {
+	}
+	public get isMangaDownloading(): boolean {
 		switch (this.mangaDownloadState) {
 			case MangaDownloadState.Downloading:
 				return true;
@@ -409,8 +413,8 @@ export default class MangaDownload {
 				return false;
 				break;
 		}
-	});
-	mangaDownloadingError: Error | null = $derived.by(() => {
+	}
+	public get mangaDownloadingError(): Error | null {
 		if (this._state?.value?.error) {
 			return this._state?.value.error;
 		} else if (this._state?.value?.data?.watchMangaDownloadState.error) {
@@ -418,8 +422,8 @@ export default class MangaDownload {
 		} else {
 			return null;
 		}
-	});
-	isMangaDownloaded: boolean = $derived.by(() => {
+	}
+	public get isMangaDownloaded(): boolean {
 		switch (this.mangaDownloadState) {
 			case MangaDownloadState.Done:
 				return true;
@@ -427,8 +431,8 @@ export default class MangaDownload {
 			default:
 				return false;
 		}
-	});
-	hasMangaDownloadingFailed: boolean = $derived.by(() => {
+	}
+	public get hasMangaDownloadingFailed(): boolean {
 		switch (this.mangaDownloadState) {
 			case MangaDownloadState.Error:
 				return true;
@@ -437,5 +441,5 @@ export default class MangaDownload {
 			default:
 				return false;
 		}
-	});
+	}
 }

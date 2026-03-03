@@ -337,7 +337,7 @@ export function isCoverDownloaded(param: { id: string; deferred?: boolean }) {
 }
 
 export default class CoverDownload {
-	private _state: { value: CoverSubOpType | null };
+	private __state: () => { value: CoverSubOpType | null };
 	private _coverId: Accessor<string>;
 	private _downloadState: ReturnType<ReturnType<typeof downloadStateQuery>>;
 	public constructor(coverId: () => string) {
@@ -345,19 +345,22 @@ export default class CoverDownload {
 			value: null
 		});
 		this._coverId = coverId;
-		this._state = $derived(_state);
-		let id = $derived.by(coverId);
+		this.__state = () => _state;
 		this._downloadState = downloadStateQuery(coverId)();
 		$effect(() => {
+			let id = coverId();
 			return subOPCover(id).subscribe((res) => {
 				_state.value = res ?? null;
 			});
 		});
 	}
-	coverId: string = $derived.by(() => {
+	private get _state(): ReturnType<typeof this.__state> {
+		return this.__state();
+	}
+	public get coverId(): string {
 		return this._coverId();
-	});
-	coverDownloadState: CoverDownloadState = $derived.by(() => {
+	}
+	public get coverDownloadState(): CoverDownloadState {
 		if (this._state.value?.data) {
 			const data = this._state.value?.data.watchCoverDownloadState;
 			if (data.downloading) {
@@ -391,8 +394,8 @@ export default class CoverDownload {
 		} else {
 			return CoverDownloadState.Pending;
 		}
-	});
-	isCoverDownloading: boolean = $derived.by(() => {
+	}
+	public get isCoverDownloading(): boolean {
 		switch (this.coverDownloadState) {
 			case CoverDownloadState.FetchingData:
 				return true;
@@ -403,8 +406,8 @@ export default class CoverDownload {
 			default:
 				return false;
 		}
-	});
-	coverDownloadingError: Error | null = $derived.by(() => {
+	}
+	public get coverDownloadingError(): Error | null {
 		if (this._state.value?.error) {
 			return this._state.value?.error;
 		} else if (this._state.value?.data?.watchCoverDownloadState.error) {
@@ -412,8 +415,8 @@ export default class CoverDownload {
 		} else {
 			return null;
 		}
-	});
-	hasCoverDownloadingFailed: boolean = $derived.by(() => {
+	}
+	public get hasCoverDownloadingFailed(): boolean {
 		switch (this.coverDownloadState) {
 			case CoverDownloadState.Error:
 				return true;
@@ -422,8 +425,8 @@ export default class CoverDownload {
 			default:
 				return false;
 		}
-	});
-	isCoverDownloaded: boolean = $derived.by(() => {
+	}
+	public get isCoverDownloaded(): boolean {
 		switch (this.coverDownloadState) {
 			case CoverDownloadState.Done:
 				return true;
@@ -431,5 +434,5 @@ export default class CoverDownload {
 			default:
 				return false;
 		}
-	});
+	}
 }

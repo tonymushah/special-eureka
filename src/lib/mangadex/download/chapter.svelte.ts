@@ -246,38 +246,46 @@ export function isChapterPresentRaw(id: () => string) {
 }
 
 export default class ChapterDownload {
-	private _state: { value: ChapterSubOpType | null };
+	private __state: () => { value: ChapterSubOpType | null };
 	private _remove_mutation: CreateMutationResult<unknown, Error, string>;
 	private _isChapterPresentRaw: ReturnType<ReturnType<typeof isChapterPresentRaw>>;
 	private _chapterId: Accessor<string>;
 	public constructor(chapterId: Accessor<string>) {
 		let toSet = $state<{ value: ChapterSubOpType | null }>({ value: null });
-		this._state = $derived(toSet);
+		this.__state = () => toSet;
 		this._chapterId = chapterId;
 		this._isChapterPresentRaw = isChapterPresentRaw(chapterId)();
 		let _removeMutation = removeMutation();
 		this._remove_mutation = _removeMutation;
-		let id = $derived.by(chapterId);
-		$effect.pre(() => {
-			return chapterDownloadStateRaw({ id }).subscribe((rawState) => {
+
+		$effect(() => {
+			let id = chapterId();
+			let unsub = chapterDownloadStateRaw({ id }).subscribe((rawState) => {
 				if (untrack(() => toSet)) {
 					toSet.value = rawState ?? null;
 				} else {
 					console.log("toSet is nulllllll");
 				}
 			});
+			return () => {
+				unsub();
+			};
 		});
 	}
-	chapterId: string = $derived.by(() => {
-		return this._chapterId();
-	});
+	private get _state(): ReturnType<typeof this.__state> {
+		return this.__state();
+	}
 	public remove(options?: MutateOptions<unknown, Error, string>) {
 		this._remove_mutation.mutate(this.chapterId, options);
 	}
+	public get chapterId(): string {
+		return this._chapterId();
+	}
+
 	public get isRemoving(): boolean {
 		return this._remove_mutation.isPending;
 	}
-	state: ChapterDownloadState = $derived.by(() => {
+	public get state(): ChapterDownloadState {
 		if (this._remove_mutation.isPending) {
 			return ChapterDownloadState.Removing;
 		}
@@ -312,8 +320,8 @@ export default class ChapterDownload {
 		} else {
 			return ChapterDownloadState.Pending;
 		}
-	});
-	isDownloading: boolean = $derived.by(() => {
+	}
+	public get isDownloading(): boolean {
 		switch (this.state) {
 			case ChapterDownloadState.Preloading:
 				return true;
@@ -326,12 +334,14 @@ export default class ChapterDownload {
 			default:
 				return false;
 		}
-	});
-	chapterDowloadingImageState: { filename: string; index: number; len: number } | undefined | null =
-		$derived.by(() => {
-			return this._state?.value?.data?.watchChapterDownloadState.downloading?.fetchingImage;
-		});
-	chapterDownloadingError: Error | null = $derived.by(() => {
+	}
+	public get chapterDowloadingImageState():
+		| { filename: string; index: number; len: number }
+		| undefined
+		| null {
+		return this._state?.value?.data?.watchChapterDownloadState.downloading?.fetchingImage;
+	}
+	public get chapterDownloadingError(): Error | null {
 		if (this._state?.value?.error) {
 			return this._state?.value?.error;
 		} else if (this._state?.value?.data?.watchChapterDownloadState.error) {
@@ -339,8 +349,8 @@ export default class ChapterDownload {
 		} else {
 			return null;
 		}
-	});
-	hasChapterDownloadingFailed: boolean = $derived.by(() => {
+	}
+	public get hasChapterDownloadingFailed(): boolean {
 		switch (this.state) {
 			case ChapterDownloadState.Error:
 				return true;
@@ -349,32 +359,30 @@ export default class ChapterDownload {
 			default:
 				return false;
 		}
-	});
-	isChapterDownloaded: boolean = $derived.by(() => {
+	}
+	public get isChapterDownloaded(): boolean {
 		return this.state === ChapterDownloadState.Done;
-	});
-	chapterDownloadStateImages: { left: string; right: string; hasImages: boolean } = $derived.by(
-		() => {
-			let _state = this.chapterDowloadingImageState;
-			let is_downloading = this.isDownloading;
-			const [left, right, hasImages] = (() => {
-				if (_state && is_downloading) {
-					return [
-						`${(_state.index * 100) / _state.len}%`,
-						`${100 - (_state.index * 100) / _state.len}%`,
-						true
-					];
-				} else {
-					return ["0%", "100%", false];
-				}
-			})();
-			return {
-				left,
-				right,
-				hasImages
-			};
-		}
-	);
+	}
+	public get chapterDownloadStateImages(): { left: string; right: string; hasImages: boolean } {
+		let _state = this.chapterDowloadingImageState;
+		let is_downloading = this.isDownloading;
+		const [left, right, hasImages] = (() => {
+			if (_state && is_downloading) {
+				return [
+					`${(_state.index * 100) / _state.len}%`,
+					`${100 - (_state.index * 100) / _state.len}%`,
+					true
+				];
+			} else {
+				return ["0%", "100%", false];
+			}
+		})();
+		return {
+			left,
+			right,
+			hasImages
+		};
+	}
 }
 
 // Why we are keeping the existance of these function.
