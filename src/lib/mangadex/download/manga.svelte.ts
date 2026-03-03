@@ -14,6 +14,7 @@ import {
 	type QueryClient
 } from "@tanstack/svelte-query";
 import type { OperationResult } from "@urql/svelte";
+import { untrack } from "svelte";
 import { derived, readable, type Readable } from "svelte/store";
 import { mangadexQueryClient } from "..";
 
@@ -354,18 +355,18 @@ export function hasMangaDownloadingFailed(param: { id: string; deferred?: boolea
 }
 
 export default class MangaDownload {
-	private _state: { value: MangaSubOpType | undefined };
+	private _state: { value: MangaSubOpType | null };
 	private _mangaId: Accessor<string>;
 	private _download_state: ReturnType<ReturnType<typeof downloadStateQuery>>;
 	public constructor(mangaId: () => string) {
-		this._state = $state({ value: undefined });
+		let _state = $state<{ value: MangaSubOpType | null }>({ value: null });
 		this._mangaId = mangaId;
-		let _state = this._state;
+		this._state = $derived(_state);
 		this._download_state = downloadStateQuery(mangaId)();
 		$effect(() => {
 			let id = $derived.by(mangaId);
 			return subOpManga(id).subscribe((res) => {
-				_state.value = res;
+				if (untrack(() => _state)) _state.value = res ?? null;
 			});
 		});
 	}

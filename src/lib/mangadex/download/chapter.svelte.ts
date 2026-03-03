@@ -16,6 +16,7 @@ import {
 	type MutateOptions
 } from "@tanstack/svelte-query";
 import { type OperationResult } from "@urql/svelte";
+import { untrack } from "svelte";
 import { derived, readable, type Readable } from "svelte/store";
 import { mangadexQueryClient } from "..";
 
@@ -245,21 +246,21 @@ export function isChapterPresentRaw(id: () => string) {
 }
 
 export default class ChapterDownload {
-	private _state: { value: ChapterSubOpType | undefined };
+	private _state: { value: ChapterSubOpType | null };
 	private _remove_mutation: CreateMutationResult<unknown, Error, string>;
 	private _isChapterPresentRaw: ReturnType<ReturnType<typeof isChapterPresentRaw>>;
 	private _chapterId: Accessor<string>;
 	public constructor(chapterId: Accessor<string>) {
-		this._state = $state({ value: undefined });
+		let toSet = $state<{ value: ChapterSubOpType | null }>({ value: null });
+		this._state = $derived(toSet);
 		this._chapterId = chapterId;
 		this._isChapterPresentRaw = isChapterPresentRaw(chapterId)();
 		let _removeMutation = removeMutation();
 		this._remove_mutation = _removeMutation;
-		let toSet = this._state;
 		let id = $derived.by(chapterId);
 		$effect(() => {
 			return chapterDownloadStateRaw({ id }).subscribe(($rawState) => {
-				toSet.value = $rawState;
+				if (untrack(() => toSet)) toSet.value = $rawState ?? null;
 			});
 		});
 	}

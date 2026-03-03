@@ -15,6 +15,7 @@ import {
 	type QueryClient
 } from "@tanstack/svelte-query";
 import type { OperationResult } from "@urql/svelte";
+import { untrack } from "svelte";
 import { derived, readable, type Readable } from "svelte/store";
 import { mangadexQueryClient } from "..";
 
@@ -337,20 +338,20 @@ export function isCoverDownloaded(param: { id: string; deferred?: boolean }) {
 }
 
 export default class CoverDownload {
-	private _state: { value: CoverSubOpType | undefined };
+	private _state: { value: CoverSubOpType | null };
 	private _coverId: Accessor<string>;
 	private _downloadState: ReturnType<ReturnType<typeof downloadStateQuery>>;
 	public constructor(coverId: () => string) {
-		this._state = $state({
-			value: undefined
+		let _state = $state<{ value: CoverSubOpType | null }>({
+			value: null
 		});
 		this._coverId = coverId;
-		let _state = this._state;
+		this._state = $derived(_state);
 		let id = $derived.by(coverId);
 		this._downloadState = downloadStateQuery(coverId)();
 		$effect(() => {
 			return subOPCover(id).subscribe((res) => {
-				_state.value = res;
+				if (untrack(() => _state)) _state.value = res ?? null;
 			});
 		});
 	}
