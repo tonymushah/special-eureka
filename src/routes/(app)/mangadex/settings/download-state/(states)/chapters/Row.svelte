@@ -3,10 +3,16 @@
 	import { startCase } from "lodash";
 	import type { TableData } from "../Chapters.svelte";
 	import ActionButton from "./row/ActionButton.svelte";
+	import { IsInViewport } from "runed";
 
 	interface Props extends TableData {}
 	let { id, title: title_store }: Props = $props();
-	let downloadInstance = new ChapterDownload(() => id);
+	let layout = $state<HTMLElement | undefined>();
+	let isInViewport = new IsInViewport(() => layout);
+	let downloadInstance = new ChapterDownload(
+		() => id,
+		() => isInViewport.current
+	);
 	let donwload_state = $derived(downloadInstance.state);
 	let title: string | undefined = $state();
 	$effect(() =>
@@ -18,6 +24,7 @@
 </script>
 
 <tr
+	bind:this={layout}
 	class:hasImages={download_state_images.hasImages}
 	style="--status-left: {download_state_images.left}; --status-right: {download_state_images.right};"
 >
