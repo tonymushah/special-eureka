@@ -6,13 +6,18 @@
 		downloadMutation as downloadMutationLoader,
 		cancelDownloadMutation as cancelDownloadMutationLoader
 	} from "@mangadex/download/chapter.svelte";
-	import { derived as storeDerived } from "svelte/store";
+	import { IsInViewport } from "runed";
 
 	interface Props {
 		id: string;
 	}
 	let { id }: Props = $props();
-	let downloadInstance = new ChapterDownload(() => id);
+	let layout = $state<HTMLElement | undefined>();
+	let isInViewport = new IsInViewport(() => layout);
+	let downloadInstance = new ChapterDownload(
+		() => id,
+		() => isInViewport.current
+	);
 	let is_downloading = $derived(downloadInstance.isDownloading);
 	let is_downloaded = $derived(
 		downloadInstance.isChapterDownloaded || downloadInstance.hasChapterDownloadingFailed
@@ -21,7 +26,7 @@
 	let cancelDownloadMutation = cancelDownloadMutationLoader();
 </script>
 
-<div>
+<div bind:this={layout}>
 	{#if is_downloaded}
 		<DangerButtonOnlyLabel
 			label="Delete"
