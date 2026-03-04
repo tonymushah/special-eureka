@@ -7,12 +7,19 @@
 		downloadMutationQuery as downloadMutationQueryLoader,
 		removeMutation as removeMutationLoader
 	} from "@mangadex/download/manga.svelte";
+	import { IsInViewport } from "runed";
 
 	interface Props {
 		id: string;
 	}
 	let { id }: Props = $props();
-	let mangaDownload = new MangaDownload(() => id);
+
+	let layout = $state<HTMLElement | undefined>();
+	let isInViewPort = new IsInViewport(() => layout);
+	let mangaDownload = new MangaDownload(
+		() => id,
+		() => isInViewPort.current
+	);
 	let is_downloading = $derived(mangaDownload.isMangaDownloading);
 	let is_downloaded = $derived(
 		mangaDownload.isMangaDownloaded || mangaDownload.hasMangaDownloadingFailed
@@ -22,7 +29,7 @@
 	let removeMutation = removeMutationLoader();
 </script>
 
-<div>
+<div bind:this={layout}>
 	{#if is_downloaded}
 		<DangerButtonOnlyLabel
 			label="Delete"
