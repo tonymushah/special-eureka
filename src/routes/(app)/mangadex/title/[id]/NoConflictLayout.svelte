@@ -66,6 +66,7 @@
 	import statsGQLQuery from "./(layout)/statsQuery";
 	import { getCurrentWebview } from "@tauri-apps/api/webview";
 	import { waitAsync } from "$lib/utils";
+	import { IsInViewport } from "runed";
 
 	type TopMangaStatisticsStoreData = TopMangaStatistics & {
 		threadUrl?: string;
@@ -79,6 +80,8 @@
 		setTitleLayoutData(data);
 	});
 
+	let isInViewPortTrigger = $state<HTMLElement | undefined>();
+	let isInViewport = new IsInViewport(() => isInViewPortTrigger);
 	// NOTE: this is completely intentional
 	// svelte-ignore state_referenced_locally
 	let statsQuery = createQuery(() => ({
@@ -97,6 +100,7 @@
 				throw new Error("no data");
 			}
 		},
+		enabled: isInViewport.current,
 		networkMode: "online"
 	}));
 	let stats: TopMangaStatisticsStoreData | undefined = $derived.by(() => {
@@ -134,7 +138,11 @@
 	let layoutData = $derived(data.layoutData!);
 	let description = $derived(layoutData.description);
 	let hasRelation = $derived(data.queryResult!.relationships.manga.length > 0);
-	let mangaDownload = new MangaDownload(() => data.layoutData.id);
+
+	let mangaDownload = new MangaDownload(
+		() => data.layoutData.id,
+		() => isInViewport.current
+	);
 	// svelte-ignore state_referenced_locally
 	const _state = toStore(() => mangaDownload.mangaDownloadState);
 	const reading_status = der(
@@ -154,21 +162,21 @@
 		queryFn() {
 			return get_manga_following_status(data.layoutData.id);
 		},
-		enabled: $isLogged
+		enabled: $isLogged && isInViewport.current
 	}));
 	let readingStatusQuery = createQuery(() => ({
 		queryKey: ["title", data.layoutData.id, "reading", "status"],
 		queryFn() {
 			return get_manga_reading_status(data.layoutData.id);
 		},
-		enabled: $isLogged
+		enabled: $isLogged && isInViewport.current
 	}));
 	let title_rating = createQuery(() => ({
 		queryKey: ["title", data.layoutData.id, "user-defined", "rating"],
 		queryFn() {
 			return get_manga_rating(data.layoutData.id);
 		},
-		enabled: $isLogged
+		enabled: $isLogged && isInViewport.current
 	}));
 	function refetchReadingFollowingStatus() {
 		Promise.all([
@@ -382,67 +390,69 @@
 
 <AppTitle title={`${layoutData.title ?? ""} | MangaDex`} />
 
-<MangaPageTopInfo
-	id={layoutData.id}
-	title={layoutData.title ?? ""}
-	altTitle={layoutData.altTitle}
-	coverImageAlt={layoutData.coverImageAlt}
-	authors={layoutData.authors}
-	tags={layoutData.tags}
-	status={layoutData.status}
-	year={layoutData.year ?? undefined}
-	{stats}
-	oncomments={() => {
-		if (stats != undefined) {
-			const url = stats.threadUrl;
-			if (url) {
-				open(url);
-			} else {
-				createForumThreadAndOpen();
+<div bind:this={isInViewPortTrigger}>
+	<MangaPageTopInfo
+		id={layoutData.id}
+		title={layoutData.title ?? ""}
+		altTitle={layoutData.altTitle}
+		coverImageAlt={layoutData.coverImageAlt}
+		authors={layoutData.authors}
+		tags={layoutData.tags}
+		status={layoutData.status}
+		year={layoutData.year ?? undefined}
+		{stats}
+		oncomments={() => {
+			if (stats != undefined) {
+				const url = stats.threadUrl;
+				if (url) {
+					open(url);
+				} else {
+					createForumThreadAndOpen();
+				}
 			}
-		}
-	}}
-	contentRating={layoutData.contentRating ?? undefined}
-	downloadState={_state}
-	ondownload={async () => {
-		await downloadMutationQuery.mutateAsync(data.layoutData.id);
-	}}
-	ondelete={async () => {
-		await removeMutation.mutateAsync(data.layoutData.id);
-	}}
-	ondownloading={async () => {
-		await cancelMutation.mutateAsync(data.layoutData.id);
-	}}
-	{reading_status}
-	{isFollowing}
-	{onreadingStatus}
-	ontag={({ id }) => {
-		goto(
-			route("/mangadex/tag/[id]", {
-				id
-			})
-		);
-	}}
-	disableAddToLibrary={disableAddToLibrary || !$isLogged}
-	rating={der(manga_rating(data.layoutData.id), (d) => d ?? undefined)}
-	{onrating}
-	disableRating={disableRating || !$isLogged}
-	disableRead={!$hasChaptToRead}
-	onread={() => {
-		readManga(data.layoutData.id);
-	}}
-	disableAddToList={$isAddingToList}
-	onaddToList={() => {
-		addMangaToAList(data.layoutData.id);
-	}}
-	disableReport={!$isLogged && !dev}
-	onreport={() => {
-		openReportDialog = true;
-	}}
-	onupload={() => {
-		openUploadDialog = true;
-	}}
-/>
+		}}
+		contentRating={layoutData.contentRating ?? undefined}
+		downloadState={_state}
+		ondownload={async () => {
+			await downloadMutationQuery.mutateAsync(data.layoutData.id);
+		}}
+		ondelete={async () => {
+			await removeMutation.mutateAsync(data.layoutData.id);
+		}}
+		ondownloading={async () => {
+			await cancelMutation.mutateAsync(data.layoutData.id);
+		}}
+		{reading_status}
+		{isFollowing}
+		{onreadingStatus}
+		ontag={({ id }) => {
+			goto(
+				route("/mangadex/tag/[id]", {
+					id
+				})
+			);
+		}}
+		disableAddToLibrary={disableAddToLibrary || !$isLogged}
+		rating={der(manga_rating(data.layoutData.id), (d) => d ?? undefined)}
+		{onrating}
+		disableRating={disableRating || !$isLogged}
+		disableRead={!$hasChaptToRead}
+		onread={() => {
+			readManga(data.layoutData.id);
+		}}
+		disableAddToList={$isAddingToList}
+		onaddToList={() => {
+			addMangaToAList(data.layoutData.id);
+		}}
+		disableReport={!$isLogged && !dev}
+		onreport={() => {
+			openReportDialog = true;
+		}}
+		onupload={() => {
+			openUploadDialog = true;
+		}}
+	/>
+</div>
 
 <ReportDialog
 	bind:open={openReportDialog}
