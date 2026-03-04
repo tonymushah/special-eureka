@@ -16,4 +16,12 @@ diesel::table! {
     }
 }
 
-diesel::allow_tables_to_appear_in_same_query!(authors_artists, scanlation_groups,);
+diesel::table! {
+    users (user_id) {
+        user_id -> Binary,
+        username -> Text,
+        insert_time -> Nullable<Timestamp>,
+    }
+}
+
+diesel::allow_tables_to_appear_in_same_query!(authors_artists, scanlation_groups, users,);
