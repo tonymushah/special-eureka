@@ -20,7 +20,7 @@
 	} from "@lucide/svelte";
 	import { cancelChapterDownload, downloadChapter } from "./utils";
 	import IndicationBadge from "@mangadex/componnents/theme/tag/IndicationBadge.svelte";
-	import { IsInViewport } from "runed";
+	import { Debounced, IsInViewport } from "runed";
 
 	type Group = {
 		id: string;
@@ -129,9 +129,10 @@
 	}
 
 	let isInViewport = new IsInViewport(() => layout);
+	let isInViewportDebounced = new Debounced(() => isInViewport.current, 500);
 	let downloadInstance = new ChapterDownload(
 		() => id,
-		() => isInViewport.current
+		() => isInViewportDebounced.current
 	);
 
 	const handle_download_event = debounce(async function () {
