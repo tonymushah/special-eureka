@@ -1,3 +1,4 @@
+import { dev } from "$app/environment";
 import { internalToStore } from "$lib/index.svelte";
 import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 import { graphql } from "@mangadex/gql";
@@ -264,11 +265,12 @@ export default class ChapterDownload {
 				let unsub = chapterDownloadStateRaw({ id }).subscribe((rawState) => {
 					if (untrack(() => toSet)) {
 						toSet.value = rawState ?? null;
-					} else {
+					} else if (dev) {
 						console.log("toSet is nulllllll");
 					}
 				});
 				return () => {
+					if (dev) console.log("chapter unsub");
 					unsub();
 				};
 			}
