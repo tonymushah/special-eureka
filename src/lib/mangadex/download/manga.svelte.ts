@@ -363,9 +363,9 @@ export default class MangaDownload {
 		this.__state = () => _state;
 		this._download_state = downloadStateQuery(mangaId)();
 		let enabled = $derived.by(_enabled);
+		let id = $derived.by(mangaId);
 		$effect.pre(() => {
 			if (enabled) {
-				let id = mangaId();
 				return subOpManga(id).subscribe((res) => {
 					_state.value = res ?? null;
 				});

@@ -348,9 +348,9 @@ export default class CoverDownload {
 		this.__state = () => _state;
 		this._downloadState = downloadStateQuery(coverId)();
 		let enabled = $derived.by(_enabled);
+		let id = $derived.by(coverId);
 		$effect.pre(() => {
 			if (enabled) {
-				let id = coverId();
 				return subOPCover(id).subscribe((res) => {
 					_state.value = res ?? null;
 				});

@@ -258,9 +258,9 @@ export default class ChapterDownload {
 		let _removeMutation = removeMutation();
 		this._remove_mutation = _removeMutation;
 		let enable = $derived.by(_enable);
+		let id = $derived.by(chapterId);
 		$effect.pre(() => {
 			if (enable) {
-				let id = chapterId();
 				let unsub = chapterDownloadStateRaw({ id }).subscribe((rawState) => {
 					toSet.value = rawState ?? null;
 				});
