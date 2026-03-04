@@ -6,5 +6,5 @@ authors.workspace = true
 license-file.workspace = true
 
 [dependencies]
-diesel = { workspace = true }
+diesel = { workspace = true, features = ["sqlite"] }
 diesel_migrations.workspace = true
