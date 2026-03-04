@@ -17,7 +17,6 @@ import {
 	type MutateOptions
 } from "@tanstack/svelte-query";
 import { type OperationResult } from "@urql/svelte";
-import { untrack } from "svelte";
 import { derived, readable, type Readable } from "svelte/store";
 import { mangadexQueryClient } from "..";
 
@@ -263,11 +262,7 @@ export default class ChapterDownload {
 			if (enable) {
 				let id = chapterId();
 				let unsub = chapterDownloadStateRaw({ id }).subscribe((rawState) => {
-					if (untrack(() => toSet)) {
-						toSet.value = rawState ?? null;
-					} else if (dev) {
-						console.log("toSet is nulllllll");
-					}
+					toSet.value = rawState ?? null;
 				});
 				return () => {
 					if (dev) console.log("chapter unsub");
