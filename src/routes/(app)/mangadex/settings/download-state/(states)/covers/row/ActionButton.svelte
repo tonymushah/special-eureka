@@ -7,8 +7,7 @@
 		downloadMutationQuery as downloadMutationQueryLoader,
 		removeMutation as removeMutationLoader
 	} from "@mangadex/download/cover.svelte";
-	import { IsInViewport } from "runed";
-	import { derived as storeDerived } from "svelte/store";
+	import { Debounced, IsInViewport } from "runed";
 
 	interface Props {
 		id: string;
@@ -16,6 +15,7 @@
 	let { id }: Props = $props();
 	let layout = $state<HTMLElement | undefined>();
 	let isInViewport = new IsInViewport(() => layout);
+	let isInViewportDebounced = new Debounced(() => isInViewport.current, 500);
 	let downloadInstance = new CoverDownload(
 		() => id,
 		() => isInViewport.current
