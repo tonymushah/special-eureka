@@ -1,36 +1,36 @@
 <script lang="ts">
-	import chapterDownloadState, {
-		ChapterDownloadState,
-		chapterDownloadStateImages
-	} from "@mangadex/download/chapter";
+	import ChapterDownload, { ChapterDownloadState } from "@mangadex/download/chapter.svelte";
 	import { startCase } from "lodash";
 	import type { TableData } from "../Chapters.svelte";
 	import ActionButton from "./row/ActionButton.svelte";
+	import { Debounced, IsInViewport } from "runed";
 
 	interface Props extends TableData {}
 	let { id, title: title_store }: Props = $props();
-	const donwload_state = chapterDownloadState({
-		id,
-		deferred: true
-	});
+	let layout = $state<HTMLElement | undefined>();
+	let isInViewport = new IsInViewport(() => layout);
+	let isInViewportDebounced = new Debounced(() => isInViewport.current, 500);
+	let downloadInstance = new ChapterDownload(
+		() => id,
+		() => isInViewportDebounced.current
+	);
+	let donwload_state = $derived(downloadInstance.state);
 	let title: string | undefined = $state();
 	$effect(() =>
 		title_store.subscribe((e) => {
 			title = e;
 		})
 	);
-	const download_state_images = chapterDownloadStateImages({
-		id,
-		deferred: true
-	});
+	let download_state_images = $derived(downloadInstance.chapterDownloadStateImages);
 </script>
 
 <tr
-	class:hasImages={$download_state_images.hasImages}
-	style="--status-left: {$download_state_images.left}; --status-right: {$download_state_images.right};"
+	bind:this={layout}
+	class:hasImages={download_state_images.hasImages}
+	style="--status-left: {download_state_images.left}; --status-right: {download_state_images.right};"
 >
 	<td>{id}</td>
-	<td>{startCase(ChapterDownloadState[$donwload_state])}</td>
+	<td>{startCase(ChapterDownloadState[donwload_state])}</td>
 	<td>
 		{#if title}
 			{title}

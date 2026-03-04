@@ -112,6 +112,7 @@
 		"mizuki-graphiql-fetcher": "^1.1.0",
 		"mizuki-urql-adapter": "^1.1.0",
 		"panzoom": "^9.4.3",
+		"runed": "^0.37.1",
 		"swiper": "^12.1.2",
 		"timeago.js": "^4.0.2",
 		"uuid": "^13.0.0"

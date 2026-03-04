@@ -76,12 +76,7 @@
 	import TrashIcon from "@mangadex/componnents/manga/page/top-info/buttons/download/TrashIcon.svelte";
 	import Link from "@mangadex/componnents/theme/links/Link.svelte";
 	import UserRolesComp from "@mangadex/componnents/user/UserRolesComp.svelte";
-	import {
-		hasChapterDownloadingFailed,
-		isChapterDownloaded,
-		isChapterDownloading,
-		removeMutation as removeMutationLoader
-	} from "@mangadex/download/chapter";
+	import ChapterDownload from "@mangadex/download/chapter.svelte";
 	import type { Language, UserRole } from "@mangadex/gql/graphql";
 	import { getContextReadChapterMarker } from "@mangadex/stores/read-markers/context";
 	import { readMarkers as readMarkersLoader } from "@mangadex/stores/read-markers/mutations";
@@ -96,6 +91,7 @@
 	import Layout from "./Layout.svelte";
 	import { cancelChapterDownload, downloadChapter } from "./utils";
 	import IndicationBadge from "@mangadex/componnents/theme/tag/IndicationBadge.svelte";
+	import { Debounced, IsInViewport } from "runed";
 
 	let {
 		id,
@@ -118,26 +114,25 @@
 	}: Props = $props();
 
 	let readMarkers = readMarkersLoader();
-	let removeMutation = removeMutationLoader();
+	let layoutElement = $state<HTMLElement | undefined>();
+	let isInViewport = new IsInViewport(() => layoutElement);
+	let isInViewportDebounced = new Debounced(() => isInViewport.current, 500);
+	let downloadInstance = new ChapterDownload(
+		() => id,
+		() => isInViewportDebounced.current
+	);
 
-	const downloading_ = isChapterDownloading({
-		id
-	});
-	const failed_ = hasChapterDownloadingFailed({
-		id
-	});
-	const downloaded_ = isChapterDownloaded({
-		id
-	});
 	const handle_download_event = debounce(async function () {
-		if ($downloading_) {
+		if (downloadInstance.isDownloading) {
 			await cancelChapterDownload(id);
 		} else {
 			await downloadChapter(id);
 		}
 	});
-	let [failed, downloaded, downloading] = $derived([$failed_, $downloaded_, $downloading_]);
-	let showTrashButton = $derived((failed || downloaded) && !downloading);
+	let showTrashButton = $derived(
+		(downloadInstance.hasChapterDownloadingFailed || downloadInstance.isChapterDownloaded) &&
+			!downloadInstance.isDownloading
+	);
 	setContextMenuContext(() => {
 		return chapterElementContextMenuItems({
 			id,
@@ -150,6 +145,7 @@
 				: undefined
 		});
 	}, true);
+	// TODO make a reaction read marker system
 	const hasBeenRead = getContextReadChapterMarker(id);
 	const handleRead = debounce(() => {
 		if ($isLogged) {
@@ -175,6 +171,7 @@
 	oncontextmenu={registerContextMenuEvent({
 		preventDefault: true
 	})}
+	bind:this={layoutElement}
 >
 	<Layout haveBeenRead={$hasBeenRead} {id}>
 		{#snippet state()}
@@ -201,18 +198,18 @@
 			{#if showTrashButton}
 				<div
 					class="buttons remove"
-					aria-disabled={removeMutation.isPending}
+					aria-disabled={downloadInstance.isRemoving}
 					onclick={async (e) => {
 						onremove?.({
 							...e,
 							id
 						});
-						await removeMutation.mutateAsync(id);
+						downloadInstance.remove();
 					}}
 					onkeypress={async (e) => {
 						onremoveKeyPress?.({ ...e, id });
 						if (e.key == "Enter") {
-							await removeMutation.mutateAsync(id);
+							downloadInstance.remove();
 						}
 					}}
 					tabindex={0}

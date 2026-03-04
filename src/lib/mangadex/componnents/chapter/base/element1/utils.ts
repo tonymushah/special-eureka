@@ -1,5 +1,5 @@
 import { extractFromAccessor } from "$lib/index.svelte";
-import { cancelDownloadMutation, downloadMutation } from "@mangadex/download/chapter";
+import { cancelDownloadMutation, downloadMutation } from "@mangadex/download/chapter.svelte";
 
 export async function downloadChapter(id: string) {
 	using mut = extractFromAccessor(downloadMutation);

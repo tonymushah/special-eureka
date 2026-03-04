@@ -1,6 +1,7 @@
 <script lang="ts">
-	import { chapterDownloadStateImages } from "@mangadex/download/chapter";
+	import ChapterDownload from "@mangadex/download/chapter.svelte";
 	import { isLogged } from "@mangadex/utils/auth";
+	import { Debounced, IsInViewport } from "runed";
 	import type { Snippet } from "svelte";
 
 	interface Props {
@@ -14,7 +15,7 @@
 	}
 	let {
 		haveBeenRead = $bindable(),
-		state,
+		state: _state,
 		flagReadingState,
 		titleGroups,
 		dateUploader,
@@ -22,21 +23,29 @@
 		id
 	}: Props = $props();
 
-	const download_state_images = chapterDownloadStateImages({ id });
+	let layout = $state<HTMLElement | undefined>();
+	let isInViewport = new IsInViewport(() => layout);
+	let isInViewportDebounced = new Debounced(() => isInViewport.current, 500);
+	let downloadInstance = new ChapterDownload(
+		() => id,
+		() => isInViewportDebounced.current
+	);
+	let download_state_images = $derived(downloadInstance.chapterDownloadStateImages);
 </script>
 
 <div
+	bind:this={layout}
 	class="layout chapter-element"
 	class:isNotLogged={!$isLogged}
 	class:haveBeenRead
 	class:haveNotBeenRead={!haveBeenRead && $isLogged}
-	class:hasImages={$download_state_images.hasImages}
+	class:hasImages={download_state_images.hasImages}
 	data-chapter-id={id}
-	style="--status-left: {$download_state_images.left}; --status-right: {$download_state_images.right};"
+	style="--status-left: {download_state_images.left}; --status-right: {download_state_images.right};"
 >
 	<div class="state">
-		{#if state}
-			{@render state()}
+		{#if _state}
+			{@render _state()}
 		{/if}
 	</div>
 	<div class="flag-reading-state">

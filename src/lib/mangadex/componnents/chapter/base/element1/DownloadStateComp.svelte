@@ -1,34 +1,32 @@
 <script lang="ts">
-	import {
-		hasChapterDownloadingFailed,
-		isChapterDownloaded,
-		isChapterDownloading
-	} from "@mangadex/download/chapter";
-	import { CheckIcon, DownloadCloudIcon, DownloadIcon, XIcon } from "@lucide/svelte";
+	import ChapterDownload from "@mangadex/download/chapter.svelte";
+	import { CheckIcon, CloudDownload, DownloadIcon, XIcon } from "@lucide/svelte";
+	import { Debounced, IsInViewport } from "runed";
 	interface Props {
 		id: string;
 	}
 
 	let { id }: Props = $props();
-
-	const downloading_ = isChapterDownloading({
-		id
-	});
-	const failed_ = hasChapterDownloadingFailed({
-		id
-	});
-	const downloaded_ = isChapterDownloaded({
-		id
-	});
-	let [downloaded, downloading, failed] = $derived([$downloaded_, $downloading_, $failed_]);
+	let spanElement = $state<HTMLElement | undefined>();
+	let isInViewport = new IsInViewport(() => spanElement);
+	let isInViewportDebounced = new Debounced(() => isInViewport.current, 500);
+	let downloadInstance = new ChapterDownload(
+		() => id,
+		() => isInViewportDebounced.current
+	);
 </script>
 
-<span class:downloaded class:downloading class:failed>
-	{#if downloading}
-		<DownloadCloudIcon />
-	{:else if failed}
+<span
+	class:downloaded={downloadInstance.isChapterDownloaded}
+	class:downloading={downloadInstance.isDownloading}
+	class:failed={downloadInstance.hasChapterDownloadingFailed}
+	bind:this={spanElement}
+>
+	{#if downloadInstance.isDownloading}
+		<CloudDownload />
+	{:else if downloadInstance.hasChapterDownloadingFailed}
 		<XIcon />
-	{:else if downloaded}
+	{:else if downloadInstance.isChapterDownloaded}
 		<CheckIcon />
 	{:else}
 		<DownloadIcon />

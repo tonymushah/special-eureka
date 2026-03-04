@@ -1,12 +1,9 @@
+<!-- TODO make the popup follow the layout on scroll -->
 <script lang="ts">
 	import { arrow, computePosition, flip, offset, shift } from "@floating-ui/dom";
 	import MangaDexFlagIcon from "@mangadex/componnents/FlagIcon.svelte";
 	import TimeAgo from "@mangadex/componnents/TimeAgo.svelte";
-	import {
-		hasChapterDownloadingFailed,
-		isChapterDownloaded,
-		isChapterDownloading
-	} from "@mangadex/download/chapter";
+	import ChapterDownload from "@mangadex/download/chapter.svelte";
 	import type { Language, UserRole } from "@mangadex/gql/graphql";
 	import chapterElementContextMenuItems from "@mangadex/utils/context-menu/chapter";
 	import registerContextMenuEvent, {
@@ -23,6 +20,7 @@
 	} from "@lucide/svelte";
 	import { cancelChapterDownload, downloadChapter } from "./utils";
 	import IndicationBadge from "@mangadex/componnents/theme/tag/IndicationBadge.svelte";
+	import { Debounced, IsInViewport } from "runed";
 
 	type Group = {
 		id: string;
@@ -111,6 +109,7 @@
 					top: arrowY != null ? `${arrowY}px` : "",
 					right: "",
 					bottom: "",
+					// @ts-ignore
 					[staticSide]: "-4px"
 				});
 			}
@@ -129,27 +128,15 @@
 		}
 	}
 
-	/// TODO implement quality
-
-	const isDownloading_ = isChapterDownloading({
-		id
-	});
-
-	const hasFailed_ = hasChapterDownloadingFailed({
-		id
-	});
-
-	const is_downloaded_ = isChapterDownloaded({
-		id
-	});
-	let [isDownloading, hasFailed, is_downloaded] = $derived([
-		$isDownloading_,
-		$hasFailed_,
-		$is_downloaded_
-	]);
+	let isInViewport = new IsInViewport(() => layout);
+	let isInViewportDebounced = new Debounced(() => isInViewport.current, 500);
+	let downloadInstance = new ChapterDownload(
+		() => id,
+		() => isInViewportDebounced.current
+	);
 
 	const handle_download_event = debounce(async function () {
-		if (isDownloading) {
+		if (downloadInstance.isRemoving) {
 			await cancelChapterDownload(id);
 		} else {
 			await downloadChapter(id);
@@ -189,11 +176,11 @@
 		}}
 		tabindex={0}
 	>
-		{#if is_downloaded}
+		{#if downloadInstance.isChapterDownloaded}
 			<CheckIcon />
-		{:else if isDownloading}
+		{:else if downloadInstance.isDownloading}
 			<DownloadCloudIcon />
-		{:else if hasFailed}
+		{:else if downloadInstance.hasChapterDownloadingFailed}
 			<XIcon />
 		{:else}
 			<DownloadIcon />

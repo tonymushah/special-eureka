@@ -2,41 +2,35 @@
 	import ButtonAccentOnlyLabel from "@mangadex/componnents/theme/buttons/ButtonAccentOnlyLabel.svelte";
 	import DangerButtonOnlyLabel from "@mangadex/componnents/theme/buttons/DangerButtonOnlyLabel.svelte";
 	import PrimaryButtonOnlyLabel from "@mangadex/componnents/theme/buttons/PrimaryButtonOnlyLabel.svelte";
-	import {
+	import CoverDownload, {
 		cancelDonwloadMutation as cancelDonwloadMutationLoader,
 		downloadMutationQuery as downloadMutationQueryLoader,
-		hasCoverDownloadingFailed,
-		isCoverDownloaded,
-		isCoverDownloading,
 		removeMutation as removeMutationLoader
-	} from "@mangadex/download/cover";
-	import { derived as storeDerived } from "svelte/store";
+	} from "@mangadex/download/cover.svelte";
+	import { Debounced, IsInViewport } from "runed";
 
 	interface Props {
 		id: string;
 	}
 	let { id }: Props = $props();
-	const is_downloading = isCoverDownloading({ id, deferred: true });
-	const is_downloaded = storeDerived(
-		[
-			isCoverDownloaded({
-				id,
-				deferred: true
-			}),
-			hasCoverDownloadingFailed({
-				id,
-				deferred: true
-			})
-		],
-		([downloaded, failed]) => downloaded || failed
+	let layout = $state<HTMLElement | undefined>();
+	let isInViewport = new IsInViewport(() => layout);
+	let isInViewportDebounced = new Debounced(() => isInViewport.current, 500);
+	let downloadInstance = new CoverDownload(
+		() => id,
+		() => isInViewportDebounced.current
+	);
+	let is_downloading = $derived(downloadInstance.isCoverDownloading);
+	const is_downloaded = $derived(
+		downloadInstance.isCoverDownloaded || downloadInstance.hasCoverDownloadingFailed
 	);
 	let cancelMutation = cancelDonwloadMutationLoader();
 	let downloadMutationQuery = downloadMutationQueryLoader();
 	let removeMutation = removeMutationLoader();
 </script>
 
-<div>
-	{#if $is_downloaded}
+<div bind:this={layout}>
+	{#if is_downloaded}
 		<DangerButtonOnlyLabel
 			label="Delete"
 			onclick={() => {
@@ -49,7 +43,7 @@
 				downloadMutationQuery.mutateAsync(id);
 			}}
 		/>
-	{:else if $is_downloading}
+	{:else if is_downloading}
 		<ButtonAccentOnlyLabel
 			label="Cancel"
 			variant="5"

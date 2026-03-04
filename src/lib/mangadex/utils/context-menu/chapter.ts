@@ -7,7 +7,7 @@ import {
 	isChapterDownloaded,
 	isChapterDownloading,
 	removeMutation
-} from "@mangadex/download/chapter";
+} from "@mangadex/download/chapter.svelte";
 import { isMounted } from "@mangadex/stores/offlineIsMounted";
 import {
 	ContextMenuItemProvider,
@@ -83,7 +83,7 @@ export default function chapterElementContextMenuItems({
 	} else {
 		items.push(
 			ContextMenuItemProvider.menuItem({
-				text: derived(isDownloaded, (isDownloaded) => isDownloaded ? "Re-download" : "Download"),
+				text: derived(isDownloaded, (isDownloaded) => (isDownloaded ? "Re-download" : "Download")),
 				action() {
 					using mut = extractFromAccessor(downloadMutation);
 					mut.value.mutateAsync({

@@ -7,7 +7,12 @@ import type {
 } from "@mangadex/gql/graphql";
 import { client as gqlClient } from "@mangadex/gql/urql";
 import { isMounted } from "@mangadex/stores/offlineIsMounted";
-import { createMutation, createQuery, type QueryClient } from "@tanstack/svelte-query";
+import {
+	createMutation,
+	createQuery,
+	type Accessor,
+	type QueryClient
+} from "@tanstack/svelte-query";
 import type { OperationResult } from "@urql/svelte";
 import { derived, readable, type Readable } from "svelte/store";
 import { mangadexQueryClient } from "..";
@@ -172,11 +177,13 @@ export const cancelMutation = () =>
 		() => mangadexQueryClient
 	);
 
-const downloadStateQuery = (id: string, _client?: QueryClient) => {
-	const client = _client ?? mangadexQueryClient;
-	const queryKey = offlinePresenceQueryKey(id);
-	return () =>
-		createQuery(
+const downloadStateQuery = (_id: () => string, _client?: () => QueryClient) => {
+	const client = _client ?? (() => mangadexQueryClient);
+
+	return () => {
+		let id = $derived.by(_id);
+		let queryKey = $derived.by(() => offlinePresenceQueryKey(id));
+		return createQuery(
 			() => ({
 				queryKey,
 				async queryFn() {
@@ -187,8 +194,9 @@ const downloadStateQuery = (id: string, _client?: QueryClient) => {
 						.toPromise();
 				}
 			}),
-			() => client
+			client
 		);
+	};
 };
 
 export enum MangaDownloadState {
@@ -237,14 +245,14 @@ function subOpManga(id: string, deferred = false) {
 	});
 }
 
-export default function mangaDownloadState({
+export function mangaDownloadState({
 	id,
 	deferred
 }: {
 	id: string;
 	deferred?: boolean;
 }): Readable<MangaDownloadState> {
-	const dState = downloadStateQuery(id);
+	const dState = downloadStateQuery(() => id);
 	return derived(
 		[subOpManga(id, deferred), internalToStore(dState)],
 		([$sub, $initState], set) => {
@@ -345,178 +353,95 @@ export function hasMangaDownloadingFailed(param: { id: string; deferred?: boolea
 	);
 }
 
-/*
-export class MangaDownload {
-	private mangaId: string;
-	protected isPresentInner: Readable<boolean>;
-	private reexecute: () => void;
-	protected hasFailedInner: Readable<boolean>;
-	private isRemoving_: Writable<boolean>;
-	protected sub_op: Readable<MangaSubOpType | undefined>;
-
-	constructor(id: string) {
-		this.mangaId = id;
-		const query = downloadStateQuery(id);
-		const is_present = derived(query, (res) => res.data);
-		this.isPresentInner = derived(is_present, (result) => {
-			return result?.data?.downloadState.manga.isDownloaded == true;
-		});
-		this.reexecute = () => {
-			invalidateMangaOfflinePresence(id);
-		};
-		this.hasFailedInner = derived(is_present, (result) => {
-			return result?.data?.downloadState.manga.hasFailed == true;
-		});
-		this.isRemoving_ = writable(false);
-		this.sub_op = subOpManga(id);
-	}
-
-	public static deferred(id: string) {
-		const _this = new MangaDownload(id);
-		_this.sub_op = subOpManga(id);
-		return _this;
-	}
-
-	public get id(): string {
-		return this.mangaId;
-	}
-
-	public static downloadMutation() {
-		return downloadMutation;
-	}
-
-	public static cancelDonwloadMuation() {
-		return cancelDonwloadMuation;
-	}
-
-	public static mangaDownloadStateQuery() {
-		return mangaDownloadStateQuery;
-	}
-
-	public static mangaDownloadStateSub() {
-		return mangaDownloadStateSub;
-	}
-
-	public static mangaRemoveMutation() {
-		return mangaRemoveMutation;
-	}
-
-	public get sub_raw_state(): Readable<MangaSubOpType | undefined> {
-		return this.sub_op;
-	}
-
-	public get isRemoving(): Readable<boolean> {
-		return readonly(this.isRemoving_);
-	}
-
-	private get isPresent(): Readable<boolean> {
-		return this.isPresentInner;
-	}
-
-	private get hasFailed(): Readable<boolean> {
-		return this.hasFailedInner;
-	}
-
-	public state(): Readable<MangaDownloadState> {
-		const stores: [
-			Readable<MangaSubOpType | undefined>,
-			Readable<boolean>,
-			Readable<boolean>,
-			Readable<boolean>
-		] = [this.sub_raw_state, this.hasFailed, this.isPresent, this.isRemoving];
-		return derived(stores, ([result, hasFailed, isPresent, removing]) => {
-			const res = (() => {
-				if (removing) {
-					return MangaDownloadState.Removing;
-				}
-				if (result?.data) {
-					const data = result.data.watchMangaDownloadState;
-					if (data.downloading) {
-						return MangaDownloadState.Downloading;
-					} else if (data.error) {
-						return MangaDownloadState.Error;
-					} else if (data.isCanceled) {
-						return MangaDownloadState.Canceled;
-					} else if (data.isDone) {
-						return MangaDownloadState.Done;
-					} else if (data.isOfflineAppStateNotLoaded) {
-						return MangaDownloadState.OfflineAppStateNotLoaded;
-					} else if (data.isPending) {
-						if (hasFailed) {
-							return MangaDownloadState.Error;
-						} else if (isPresent) {
-							return MangaDownloadState.Done;
-						} else {
-							return MangaDownloadState.Pending;
-						}
-					}
-				} else if (result?.error) {
-					return MangaDownloadState.Error;
-				}
-				if (hasFailed) {
-					return MangaDownloadState.Error;
-				} else if (isPresent) {
-					return MangaDownloadState.Done;
-				} else {
-					return MangaDownloadState.Pending;
-				}
-			})();
-			return res;
-		});
-	}
-	public is_downloading() {
-		return derived(this.state(), (result) => {
-			switch (result) {
-				case MangaDownloadState.Downloading:
-					return true;
-				default:
-					return false;
-					break;
+export default class MangaDownload {
+	private __state: () => { value: MangaSubOpType | null };
+	private _mangaId: Accessor<string>;
+	private _download_state: ReturnType<ReturnType<typeof downloadStateQuery>>;
+	public constructor(mangaId: () => string, _enabled: Accessor<boolean> = () => true) {
+		let _state = $state<{ value: MangaSubOpType | null }>({ value: null });
+		this._mangaId = mangaId;
+		this.__state = () => _state;
+		this._download_state = downloadStateQuery(mangaId)();
+		let enabled = $derived.by(_enabled);
+		let id = $derived.by(mangaId);
+		$effect.pre(() => {
+			if (enabled) {
+				return subOpManga(id).subscribe((res) => {
+					_state.value = res ?? null;
+				});
 			}
 		});
 	}
-	public error() {
-		return derived(this.sub_raw_state, (result) => {
-			if (result?.error) {
-				return result?.error;
-			} else if (result?.data?.watchMangaDownloadState.error) {
-				return new Error(result?.data.watchMangaDownloadState.error);
+	private get _state(): ReturnType<typeof this.__state> {
+		return this.__state();
+	}
+	public get mangaId(): string {
+		return this._mangaId();
+	}
+	public get mangaDownloadState(): MangaDownloadState {
+		if (this._state?.value?.data) {
+			const data = this._state.value?.data.watchMangaDownloadState;
+			if (data.downloading) {
+				return MangaDownloadState.Downloading;
+			} else if (data.error) {
+				return MangaDownloadState.Error;
+			} else if (data.isCanceled) {
+				return MangaDownloadState.Canceled;
+			} else if (data.isDone) {
+				return MangaDownloadState.Done;
+			} else if (data.isOfflineAppStateNotLoaded) {
+				return MangaDownloadState.OfflineAppStateNotLoaded;
 			}
-		});
+		} else if (this._state?.value?.error) {
+			return MangaDownloadState.Error;
+		}
+		if (
+			this._download_state?.data?.error != undefined ||
+			this._download_state?.error != null ||
+			this._download_state?.data?.data?.downloadState.manga.hasFailed == true
+		) {
+			return MangaDownloadState.Error;
+		} else if (this._download_state?.data?.data?.downloadState.manga.isDownloaded == true) {
+			return MangaDownloadState.Done;
+		} else {
+			return MangaDownloadState.Pending;
+		}
 	}
-	public async download() {
-		const id = this.id;
-		const data = await download(id);
-		return data;
+	public get isMangaDownloading(): boolean {
+		switch (this.mangaDownloadState) {
+			case MangaDownloadState.Downloading:
+				return true;
+			default:
+				return false;
+				break;
+		}
 	}
-	public async remove() {
-		return await remove(this.id);
+	public get mangaDownloadingError(): Error | null {
+		if (this._state?.value?.error) {
+			return this._state?.value.error;
+		} else if (this._state?.value?.data?.watchMangaDownloadState.error) {
+			return new Error(this._state?.value?.data.watchMangaDownloadState.error);
+		} else {
+			return null;
+		}
 	}
-	public has_failed() {
-		return derived(this.state(), (result) => {
-			switch (result) {
-				case MangaDownloadState.Error:
-					return true;
-				case MangaDownloadState.Canceled:
-					return true;
-				default:
-					return false;
-			}
-		});
-	}
-	public async cancel() {
-		return await cancel(this.id);
-	}
-	public is_downloaded() {
-		return derived(this.state(), (result) => {
-			switch (result) {
-				case MangaDownloadState.Done:
-					return true;
+	public get isMangaDownloaded(): boolean {
+		switch (this.mangaDownloadState) {
+			case MangaDownloadState.Done:
+				return true;
 
-				default:
-					return false;
-			}
-		});
+			default:
+				return false;
+		}
+	}
+	public get hasMangaDownloadingFailed(): boolean {
+		switch (this.mangaDownloadState) {
+			case MangaDownloadState.Error:
+				return true;
+			case MangaDownloadState.Canceled:
+				return true;
+			default:
+				return false;
+		}
 	}
 }
-*/

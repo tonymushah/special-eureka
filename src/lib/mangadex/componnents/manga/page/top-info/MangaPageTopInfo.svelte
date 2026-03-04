@@ -1,7 +1,7 @@
 <script lang="ts">
 	import ContentRatingTag from "@mangadex/componnents/content-rating/ContentRatingTag.svelte";
 	import TagComponnentsFlex from "@mangadex/componnents/tag/TagComponnentsFlex.svelte";
-	import { MangaDownloadState } from "@mangadex/download/manga";
+	import { MangaDownloadState } from "@mangadex/download/manga.svelte";
 	import { ContentRating, type MangaStatus, type ReadingStatus } from "@mangadex/gql/graphql";
 	import type { Tag } from "@mangadex/utils/types/Tag";
 	import { readable, type Readable } from "svelte/store";
