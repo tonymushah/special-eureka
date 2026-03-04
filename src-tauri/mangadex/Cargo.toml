@@ -68,6 +68,7 @@ zstd.workspace = true
 bzip2.workspace = true
 diesel = { workspace = true, features = ["sqlite", "returning_clauses_for_sqlite_3_35"] }
 mangadex-blacklist-raw = { workspace = true }
+diesel_migrations.workspace = true
 
 [dependencies.eureka-mmanager]
 version = "0.4"

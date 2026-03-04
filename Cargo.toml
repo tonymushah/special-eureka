@@ -48,6 +48,7 @@ bzip2 = "0.6"
 diesel = "2"
 libsqlite3-sys = { version = "0" }
 mangadex-blacklist-raw = { path = "./src-tauri/mangadex-blacklist" }
+diesel_migrations = "2"
 
 # Temporary fix before upgrading reqwest to v0.13.x
 [patch.crates-io]

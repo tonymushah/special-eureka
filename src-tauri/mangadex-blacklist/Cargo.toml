@@ -7,3 +7,4 @@ license-file.workspace = true
 
 [dependencies]
 diesel = { workspace = true }
+diesel_migrations.workspace = true
