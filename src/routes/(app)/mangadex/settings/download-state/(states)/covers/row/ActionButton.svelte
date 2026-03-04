@@ -18,7 +18,7 @@
 	let isInViewportDebounced = new Debounced(() => isInViewport.current, 500);
 	let downloadInstance = new CoverDownload(
 		() => id,
-		() => isInViewport.current
+		() => isInViewportDebounced.current
 	);
 	let is_downloading = $derived(downloadInstance.isCoverDownloading);
 	const is_downloaded = $derived(
