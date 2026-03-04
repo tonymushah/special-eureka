@@ -66,7 +66,7 @@
 	import statsGQLQuery from "./(layout)/statsQuery";
 	import { getCurrentWebview } from "@tauri-apps/api/webview";
 	import { waitAsync } from "$lib/utils";
-	import { IsInViewport } from "runed";
+	import { Debounced, IsInViewport } from "runed";
 
 	type TopMangaStatisticsStoreData = TopMangaStatistics & {
 		threadUrl?: string;
@@ -81,7 +81,8 @@
 	});
 
 	let isInViewPortTrigger = $state<HTMLElement | undefined>();
-	let isInViewport = new IsInViewport(() => isInViewPortTrigger);
+	let _isInViewport = new IsInViewport(() => isInViewPortTrigger);
+	let isInViewport = new Debounced(() => _isInViewport.current, 500);
 	// NOTE: this is completely intentional
 	// svelte-ignore state_referenced_locally
 	let statsQuery = createQuery(() => ({
