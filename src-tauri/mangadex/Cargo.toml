@@ -1,12 +1,13 @@
 [package]
 name = "tauri-plugin-speu-mangadex"
-version = "0.3.0"
-authors = ["You"]
+version.workspace = true
+authors.workspace = true
 description = "The tauri plugin behind the Mangadex Part of special-eureka"
-edition = "2024"
-rust-version = "1.91"
+edition.workspace = true
+rust-version.workspace = true
 exclude = ["/examples", "/webview-dist", "/webview-src", "node_modules"]
 links = "mangadex-desktop-api"
+repository.workspace = true
 
 [build-dependencies]
 mizuki-build.workspace = true
@@ -65,6 +66,9 @@ tar.workspace = true
 flate2.workspace = true
 zstd.workspace = true
 bzip2.workspace = true
+diesel = { workspace = true, features = ["sqlite", "returning_clauses_for_sqlite_3_35", "r2d2", "time"] }
+mangadex-blacklist-raw = { workspace = true }
+diesel_migrations.workspace = true
 
 [dependencies.eureka-mmanager]
 version = "0.4"

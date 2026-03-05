@@ -1,0 +1,10 @@
+[package]
+name = "mangadex-blacklist-raw"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license-file.workspace = true
+
+[dependencies]
+diesel = { workspace = true, features = ["sqlite"] }
+diesel_migrations.workspace = true
