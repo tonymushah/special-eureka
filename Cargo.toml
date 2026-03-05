@@ -1,5 +1,5 @@
 [workspace]
-members = ["./src-tauri/core", "./src-tauri/mangadex", "src-tauri/mangadex-blacklist"]
+members = ["./src-tauri/core", "./src-tauri/mangadex", "crates/mangadex-blacklist"]
 default-members = ["./src-tauri/core"]
 resolver = "3"
 
@@ -47,7 +47,7 @@ flate2 = "1"
 bzip2 = "0.6"
 diesel = "2"
 libsqlite3-sys = { version = "0" }
-mangadex-blacklist-raw = { path = "./src-tauri/mangadex-blacklist" }
+mangadex-blacklist-raw = { path = "./crates/mangadex-blacklist" }
 diesel_migrations = "2"
 
 # Temporary fix before upgrading reqwest to v0.13.x
