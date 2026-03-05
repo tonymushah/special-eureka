@@ -9,7 +9,7 @@ use mizuki::MizukiPlugin;
 use subscription::Subscriptions;
 
 pub mod app_state;
-pub mod black_list;
+pub mod blacklist;
 pub mod cache;
 pub mod constants;
 pub mod error;
