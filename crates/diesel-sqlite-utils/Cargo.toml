@@ -8,4 +8,4 @@ repository.workspace = true
 version.workspace = true
 
 [dependencies]
-diesel = { workspace = true, features = ["sqlite"] }
+diesel = { workspace = true, features = ["sqlite", "r2d2"] }
