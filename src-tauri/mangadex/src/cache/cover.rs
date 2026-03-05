@@ -211,6 +211,21 @@ impl CoverImageCache {
         writer.flush()?;
         Ok(buf.into_inner())
     }
+    pub fn seed_from_dynamic_image_as_entry(
+        &self,
+        img: DynamicImage,
+        primary_cover: bool,
+    ) -> Result<Vec<u8>> {
+        let d = self.seed_from_dynamic_image(img)?;
+        CoverImageCacheEntry {
+            cover_id: self.cover_id,
+            manga_id: self.manga_id,
+            primary_cover,
+            filename: self.filename.clone(),
+        }
+        .append_entry()?;
+        Ok(d)
+    }
     pub fn seed(&self, bytes: &[u8]) -> Result<()> {
         let mut writer = self.get_temp_buf_writer()?;
         writer.write_all(bytes)?;

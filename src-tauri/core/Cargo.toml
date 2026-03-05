@@ -42,6 +42,7 @@ thiserror.workspace = true
 tauri-plugin-single-instance.workspace = true
 hotpath = { workspace = true, optional = true }
 # csv = { workspace = true, optional = true }
+mimalloc = { version = "0.1", optional = true }
 
 [target.'cfg(windows)'.dependencies]
 libsqlite3-sys = { workspace = true, features = ["bundled"] }
@@ -70,3 +71,4 @@ hotpath-off = ["hotpath/hotpath-off"]
 single-runtime = []
 actix-multi-threaded = []
 jemalloc = ["tikv-jemallocator"]
+mimalloc = ["dep:mimalloc"]
