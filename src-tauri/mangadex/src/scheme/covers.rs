@@ -167,9 +167,10 @@ impl<'a, R: Runtime> CoverImagesOfflineHandler<'a, R> {
                         filename,
                         mode: Some(quality),
                     }
-                    .seed_from_dynamic_image(
+                    .seed_from_dynamic_image_as_entry(
                         image::ImageReader::with_format(BufReader::new(raw_file), img_format)
                             .decode()?,
+                        matches!(self.param.id, CoverHandlingId::Manga(_)),
                     )?;
                 } else {
                     io::copy(&mut BufReader::new(raw_file), &mut buf)?;
