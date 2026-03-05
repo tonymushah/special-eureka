@@ -1,5 +1,5 @@
 [workspace]
-members = ["./src-tauri/core", "./src-tauri/mangadex", "crates/mangadex-blacklist"]
+members = ["./src-tauri/core", "./src-tauri/mangadex", "crates/diesel-sqlite-utils", "crates/mangadex-blacklist"]
 default-members = ["./src-tauri/core"]
 resolver = "3"
 
@@ -49,6 +49,7 @@ diesel = "2"
 libsqlite3-sys = { version = "0" }
 mangadex-blacklist-raw = { path = "./crates/mangadex-blacklist" }
 diesel_migrations = "2"
+diesel-sqlite-utils = { path = "./crates/diesel-sqlite-utils" }
 
 # Temporary fix before upgrading reqwest to v0.13.x
 [patch.crates-io]
