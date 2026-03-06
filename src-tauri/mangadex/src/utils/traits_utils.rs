@@ -9,6 +9,7 @@ use std::future::Future;
 
 use crate::{
     app_state::{LastTimeTokenWhenFecthed, OfflineAppState, inner::AppStateInner},
+    blacklist::BlacklistDatabasePool,
     cache::chapter::ChapterPagesStore,
     rate_limit::SpecificRateLimits,
     upload::UploadManager,
@@ -121,6 +122,16 @@ where
         } else {
             self.manage(UploadManager::new(self.app_handle().clone()));
             self.state()
+        }
+    }
+    fn blacklist_database_pool(&self) -> crate::Result<State<'_, BlacklistDatabasePool>> {
+        if let Some(d) = self.try_state() {
+            Ok(d)
+        } else {
+            self.manage(BlacklistDatabasePool::new(
+                &self.path().app_local_data_dir()?.join("blacklist.db"),
+            )?);
+            Ok(self.state())
         }
     }
 }
