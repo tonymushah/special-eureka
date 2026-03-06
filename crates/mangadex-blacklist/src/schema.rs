@@ -51,9 +51,20 @@ diesel::table! {
     }
 }
 
+diesel::table! {
+    users_labels (user, label) {
+        user -> Binary,
+        label -> Binary,
+        create_date -> Nullable<Timestamp>,
+        notes -> Nullable<Text>,
+    }
+}
+
 diesel::joinable!(authors_labels -> labels (label));
 diesel::joinable!(scanlation_groups_labels -> labels (label));
 diesel::joinable!(scanlation_groups_labels -> scanlation_groups (scanlation_group));
+diesel::joinable!(users_labels -> labels (label));
+diesel::joinable!(users_labels -> users (user));
 
 diesel::allow_tables_to_appear_in_same_query!(
     authors_artists,
@@ -62,4 +73,5 @@ diesel::allow_tables_to_appear_in_same_query!(
     scanlation_groups,
     scanlation_groups_labels,
     users,
+    users_labels,
 );
