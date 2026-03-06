@@ -124,6 +124,7 @@ where
             self.state()
         }
     }
+    #[cfg_attr(feature = "hotpath", hotpath::measure)]
     fn blacklist_database_pool(&self) -> crate::Result<State<'_, BlacklistDatabasePool>> {
         if let Some(d) = self.try_state() {
             Ok(d)
