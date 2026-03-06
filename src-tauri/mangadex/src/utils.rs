@@ -135,3 +135,9 @@ pub fn print_instant(instant: Instant) {
             })
     );
 }
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, async_graphql::Enum)]
+pub enum SortDirection {
+    Ascending,
+    Descending,
+}

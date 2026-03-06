@@ -6,6 +6,7 @@ use uuid::Uuid;
 pub mod api_client;
 pub mod auth;
 pub mod author;
+pub mod blacklist;
 pub mod chapter;
 pub mod cover;
 pub mod custom_list;
