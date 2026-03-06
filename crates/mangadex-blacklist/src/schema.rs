@@ -9,6 +9,15 @@ diesel::table! {
 }
 
 diesel::table! {
+    authors_labels (author, label) {
+        author -> Binary,
+        label -> Binary,
+        create_date -> Nullable<Timestamp>,
+        notes -> Nullable<Text>,
+    }
+}
+
+diesel::table! {
     labels (label_id) {
         label_id -> Binary,
         name -> Text,
@@ -33,4 +42,12 @@ diesel::table! {
     }
 }
 
-diesel::allow_tables_to_appear_in_same_query!(authors_artists, labels, scanlation_groups, users,);
+diesel::joinable!(authors_labels -> labels (label));
+
+diesel::allow_tables_to_appear_in_same_query!(
+    authors_artists,
+    authors_labels,
+    labels,
+    scanlation_groups,
+    users,
+);
