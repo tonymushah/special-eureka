@@ -1,5 +1,6 @@
 pub mod api_client;
 pub mod author;
+pub mod blacklist;
 pub mod captcha;
 pub mod chapter;
 pub mod cover;
@@ -94,5 +95,8 @@ impl Mutation {
     }
     pub async fn export(&self) -> export::ExportMutations {
         export::ExportMutations
+    }
+    pub async fn blacklist(&self) -> Option<bool> {
+        None
     }
 }
