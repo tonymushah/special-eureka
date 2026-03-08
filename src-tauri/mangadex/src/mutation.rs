@@ -96,7 +96,7 @@ impl Mutation {
     pub async fn export(&self) -> export::ExportMutations {
         export::ExportMutations
     }
-    pub async fn blacklist(&self) -> Option<bool> {
-        None
+    pub async fn blacklist(&self) -> blacklist::BlacklistMutations {
+        blacklist::BlacklistMutations
     }
 }
