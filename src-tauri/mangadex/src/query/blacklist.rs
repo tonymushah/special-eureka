@@ -1,5 +1,6 @@
 pub mod authors;
 pub mod scanlation_groups;
+pub mod users;
 
 use async_graphql::Object;
 
@@ -14,7 +15,7 @@ impl BlacklistQueries {
     pub async fn scanlation_groups(&self) -> scanlation_groups::BlacklistScanlationGroupsQueries {
         scanlation_groups::BlacklistScanlationGroupsQueries
     }
-    pub async fn users(&self) -> Option<bool> {
-        None
+    pub async fn users(&self) -> users::BlacklistUsersQueries {
+        users::BlacklistUsersQueries
     }
 }
