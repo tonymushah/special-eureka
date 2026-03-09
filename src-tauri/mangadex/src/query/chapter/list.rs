@@ -239,7 +239,7 @@ impl ChapterListQueries {
             ._default(ctx, offline_params)
             .await
             .map(|res| res.into())?;
-        if self.exclude_blacklisted_scanlation_groups || self.exclude_blacklisted_users {
+        if !self.exclude_blacklisted_scanlation_groups || !self.exclude_blacklisted_users {
             loop {
                 if self.exclude_blacklisted_scanlation_groups {
                     *list = crate::blacklist::filters::filter_scanlation_groups_chapters::<
