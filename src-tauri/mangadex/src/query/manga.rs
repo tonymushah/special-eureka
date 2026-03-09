@@ -65,6 +65,7 @@ impl MangaQueries {
         params: Option<MangaListParams>,
         exclude_content_profile: Option<bool>,
         only_unread: Option<bool>,
+        exclude_author_artists_blacklist: Option<bool>,
     ) -> Result<MangaResults> {
         let mut params = params.unwrap_or_default();
         params.includes = <MangaResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
@@ -77,6 +78,7 @@ impl MangaQueries {
             ctx.get_app_handle::<tauri::Wry>()?,
         )
         .only_unreads(only_unread.unwrap_or_default())
+        .exclude_author_artists_blacklist(exclude_author_artists_blacklist.unwrap_or_default())
         .list_with_inner_filter(ctx)
         .await?)
     }
