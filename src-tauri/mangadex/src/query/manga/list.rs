@@ -1,4 +1,5 @@
 use std::{
+    collections::HashSet,
     ops::{Deref, DerefMut},
     pin::Pin,
 };
@@ -8,8 +9,9 @@ use crate::{
     objects::GetId,
     store::types::structs::content::ContentFeeder,
     utils::{
-        read_marker::has_title_read, splittable_param::SendSplitted,
-        traits_utils::MangadexAsyncGraphQLContextExt,
+        read_marker::has_title_read,
+        splittable_param::SendSplitted,
+        traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
     },
 };
 
@@ -19,7 +21,10 @@ use eureka_mmanager::prelude::{
 };
 use mangadex_api_input_types::manga::list::MangaListParams;
 use mangadex_api_schema_rust::v5::{MangaCollection, MangaObject};
+use mangadex_api_types_rust::RelationshipType;
+use tokio::task::spawn_blocking;
 use tokio_stream::Stream;
+use uuid::Uuid;
 
 use crate::{
     objects::manga::lists::MangaResults,
@@ -33,6 +38,7 @@ use crate::{
 pub struct MangaListQueries {
     params: MangaListParams,
     only_unread: bool,
+    exclude_author_artists_blacklist: bool,
 }
 
 impl Deref for MangaListQueries {
@@ -53,6 +59,7 @@ impl From<MangaListParams> for MangaListQueries {
         Self {
             params,
             only_unread: false,
+            exclude_author_artists_blacklist: false,
         }
     }
 }
@@ -71,6 +78,13 @@ impl From<&MangaListQueries> for MangaListParams {
 
 #[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl MangaListQueries {
+    pub fn exclude_author_artists_blacklist(
+        mut self,
+        exclude_author_artists_blacklist: bool,
+    ) -> Self {
+        self.exclude_author_artists_blacklist = exclude_author_artists_blacklist;
+        self
+    }
     pub fn only_unreads(mut self, only_unreads: bool) -> Self {
         self.only_unread = only_unreads;
         self
@@ -100,7 +114,7 @@ impl MangaListQueries {
             .ok_or(Error::OfflineAppStateNotLoaded)?;
 
         let params = self.deref().clone();
-        Ok({
+        {
             let res: MangaResults = {
                 let res: MangaCollection = Collection::from_async_stream(
                     {
@@ -137,8 +151,8 @@ impl MangaListQueries {
                     let _ = watches.manga.send_offline(data);
                 }
             });
-            res
-        })
+            Ok(res)
+        }
     }
     // [x] use [`crate::utils::splittable_param`]
     pub async fn list_online(&self, ctx: &Context<'_>) -> Result<MangaResults> {
@@ -176,15 +190,71 @@ impl MangaListQueries {
     // TODO implement high-level query
     pub async fn list_with_inner_filter(mut self, ctx: &Context<'_>) -> Result<MangaResults> {
         let mut list = self.list(ctx).await?;
-        if self.only_unread {
+        if self.only_unread || self.exclude_author_artists_blacklist {
             loop {
-                let read_markers = has_title_read(
-                    ctx.get_app_handle::<tauri::Wry>()?,
-                    list.iter().map(|t| t.get_id()).collect(),
-                )
-                .await
-                .unwrap_or_default();
-                list.retain(|t| !read_markers.contains(&t.get_id()));
+                if self.only_unread {
+                    let read_markers = has_title_read(
+                        ctx.get_app_handle::<tauri::Wry>()?,
+                        list.iter().map(|t| t.get_id()).collect(),
+                    )
+                    .await
+                    .unwrap_or_default();
+                    list.retain(|t| !read_markers.contains(&t.get_id()));
+                }
+                // NOTE: Idk if this works well or not??
+                if self.exclude_author_artists_blacklist {
+                    let black_listed: HashSet<Uuid> = {
+                        let author_ids = list
+                            .iter()
+                            .flat_map(|t| match t {
+                                crate::objects::manga::MangaObject::WithRel(api_object) => Some(
+                                    api_object
+                                        .relationships
+                                        .iter()
+                                        .filter(|t| {
+                                            matches!(
+                                                t.type_,
+                                                RelationshipType::Artist | RelationshipType::Author
+                                            )
+                                        })
+                                        .map(|d| d.id.as_bytes().to_vec()),
+                                ),
+                                crate::objects::manga::MangaObject::WithoutRel(_) => None,
+                            })
+                            .flatten()
+                            .collect::<Vec<_>>();
+                        let app = ctx.get_app_handle::<tauri::Wry>()?.clone();
+                        spawn_blocking(move || -> crate::Result<_> {
+                            use diesel::prelude::*;
+                            use mangadex_blacklist_raw::schema::authors_artists::dsl::*;
+
+                            let mut connection = app.blacklist_database_pool()?.get_connection()?;
+                            authors_artists
+                                .select(author_id)
+                                .filter(author_id.eq_any(author_ids))
+                                .load_iter::<Vec<u8>, diesel::connection::DefaultLoadingMode>(
+                                    &mut connection,
+                                )?
+                                .map(|bin| -> crate::Result<_> {
+                                    let bin = bin?;
+                                    Ok(Uuid::from_slice(&bin)?)
+                                })
+                                .collect::<Result<_, crate::Error>>()
+                        })
+                        .await??
+                    };
+                    list.retain(|t| match t {
+                        crate::objects::manga::MangaObject::WithRel(api_object) => {
+                            !api_object.relationships.iter().any(|t| {
+                                matches!(
+                                    t.type_,
+                                    RelationshipType::Author | RelationshipType::Artist
+                                ) && black_listed.contains(&t.id)
+                            })
+                        }
+                        crate::objects::manga::MangaObject::WithoutRel(_) => false,
+                    });
+                }
                 if list.is_empty() {
                     let next_offset = list.info.offset + list.info.limit;
                     if next_offset > list.info.total {
