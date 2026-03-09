@@ -12,7 +12,7 @@ use crate::{
         Collection, splittable_param::SendSplitted, traits_utils::MangadexAsyncGraphQLContextExt,
     },
 };
-use async_graphql::{Context, InputObject, Object};
+use async_graphql::{Context, InputObject};
 use eureka_mmanager::prelude::{
     AsyncIntoSorted, AsyncIsIn, ChapterDataPullAsyncTrait, GetManagerStateData,
     IntoParamedFilteredStream,
@@ -228,11 +228,10 @@ impl ChapterListQueries {
     }
 }
 
-#[Object]
 #[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl ChapterListQueries {
     pub async fn default(
-        &self,
+        mut self,
         ctx: &Context<'_>,
         offline_params: Option<GetAllChapterParams>,
     ) -> crate::error::wrapped::Result<ChapterResults> {
