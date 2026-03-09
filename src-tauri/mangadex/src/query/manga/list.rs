@@ -187,9 +187,18 @@ impl MangaListQueries {
     // We might have complex filters in the future so yeah??
     /// Inner filter such as :
     /// - [`Self::only_unreads`]
+    /// - [`Self::exclude_author_artists_blacklist`]
     // TODO implement high-level query
-    pub async fn list_with_inner_filter(mut self, ctx: &Context<'_>) -> Result<MangaResults> {
-        let mut list = self.list(ctx).await?;
+    pub async fn list_with_inner_filter(
+        mut self,
+        ctx: &Context<'_>,
+        offline_only: bool,
+    ) -> Result<MangaResults> {
+        let mut list = if offline_only {
+            self.list_offline(ctx).await?
+        } else {
+            self.list(ctx).await?
+        };
         if self.only_unread || self.exclude_author_artists_blacklist {
             loop {
                 if self.only_unread {
@@ -261,7 +270,11 @@ impl MangaListQueries {
                         break;
                     } else {
                         self.offset = Some(next_offset);
-                        list = self.list(ctx).await?;
+                        list = if offline_only {
+                            self.list_offline(ctx).await?
+                        } else {
+                            self.list(ctx).await?
+                        };
                     }
                 } else {
                     break;
