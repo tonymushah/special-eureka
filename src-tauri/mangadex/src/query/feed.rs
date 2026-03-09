@@ -48,7 +48,8 @@ impl FeedQueries {
             .clone();
         param.includes = <ChapterResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
 
-        let res: ChapterResults = param.send_splitted_default(&client).await?.into();
+        let mut res: ChapterResults = param.send_splitted_default(&client).await?.into();
+        // TODO filter
         Ok({
             let _res = res.clone();
             tauri::async_runtime::spawn(async move {
@@ -78,6 +79,7 @@ impl FeedQueries {
             MangaChapterGroup::get_chapter_references_expansions_from_context(ctx);
         manga_list_params.includes =
             MangaChapterGroup::get_manga_references_expansions_from_context(ctx);
+        // TODO filter
         Ok(group_results(
             {
                 let res = feed_params.send_splitted_default(&client).await?;
@@ -117,6 +119,7 @@ impl FeedQueries {
         } else {
             param.send_splitted_default(&client).await?.into()
         };
+        // TODO Filter
         Ok({
             let _res = res.clone();
             tauri::async_runtime::spawn(async move {
@@ -152,6 +155,7 @@ impl FeedQueries {
             MangaChapterGroup::get_chapter_references_expansions_from_context(ctx);
         manga_list_params.includes =
             MangaChapterGroup::get_manga_references_expansions_from_context(ctx);
+        // TODO filter
         Ok(groups_results_with_extras(
             {
                 let res = if private.unwrap_or_default() {
