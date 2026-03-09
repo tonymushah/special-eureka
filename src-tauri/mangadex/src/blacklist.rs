@@ -3,6 +3,7 @@ use std::path::Path;
 use diesel_sqlite_utils::r2d2::{DbPool, DbPoolConnection};
 
 pub mod connection;
+pub mod filters;
 
 #[derive(Debug)]
 pub struct BlacklistDatabasePool {
