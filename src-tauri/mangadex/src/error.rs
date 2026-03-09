@@ -183,6 +183,8 @@ pub enum Error {
     DieselR2D2(#[from] diesel::r2d2::Error),
     #[error(transparent)]
     DieselMigration(DieselMigrationError),
+    #[error(transparent)]
+    Uuid(#[from] uuid::Error),
 }
 
 impl Error {
