@@ -194,7 +194,7 @@ impl MangaListQueries {
         } else {
             self.list(ctx).await?
         };
-        if self.only_unread || self.exclude_author_artists_blacklist {
+        if self.only_unread || !self.exclude_author_artists_blacklist {
             loop {
                 if self.only_unread {
                     let read_markers = has_title_read(
@@ -206,7 +206,7 @@ impl MangaListQueries {
                     list.retain(|t| !read_markers.contains(&t.get_id()));
                 }
                 // NOTE: Idk if this works well or not??
-                if self.exclude_author_artists_blacklist {
+                if !self.exclude_author_artists_blacklist {
                     *list = crate::blacklist::filters::filter_author_artists_titles::<tauri::Wry>(
                         ctx.get_app_handle()?.clone(),
                         std::mem::take(&mut *list),
