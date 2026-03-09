@@ -40,6 +40,8 @@ impl ChapterQueries {
         params: Option<ChapterListParams>,
         offline_params: Option<GetAllChapterParams>,
         feed_content: Option<bool>,
+        exclude_blacklisted_scanlation_groups: Option<bool>,
+        exclude_blacklisted_users: Option<bool>,
     ) -> crate::error::wrapped::Result<ChapterResults> {
         let feed_content = feed_content.unwrap_or(true);
         let mut params = params.unwrap_or_default();
@@ -48,6 +50,10 @@ impl ChapterQueries {
         }
         params.includes = <ChapterResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
         ChapterListQueries::no_feed(params)
+            .exclude_blacklisted_scanlation_groups(
+                exclude_blacklisted_scanlation_groups.unwrap_or_default(),
+            )
+            .exclude_blacklisted_users(exclude_blacklisted_users.unwrap_or_default())
             .default(ctx, offline_params)
             .await
     }
