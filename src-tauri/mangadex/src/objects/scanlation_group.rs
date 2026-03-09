@@ -79,6 +79,9 @@ impl ScanlationGroup {
     pub async fn attributes(&self) -> ScanlationGroupAttributes {
         self.get_attributes()
     }
+
+    // TODO add is_blocked
+
     pub async fn relationships(
         &self,
         ctx: &Context<'_>,

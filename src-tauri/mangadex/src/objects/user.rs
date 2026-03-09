@@ -91,6 +91,9 @@ impl User {
     pub async fn attributes(&self) -> UserAttributes {
         self.get_attributes()
     }
+
+    // TODO add is_blocked
+
     pub async fn relationships<'ctx>(
         &'ctx self,
         ctx: &'ctx Context<'ctx>,

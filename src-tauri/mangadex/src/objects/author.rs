@@ -79,6 +79,9 @@ impl Author {
     pub async fn attributes(&self) -> AuthorAttributes {
         self.get_attributes()
     }
+
+    // TODO add is_blocked field
+
     pub async fn relationships(
         &self,
         ctx: &Context<'_>,
