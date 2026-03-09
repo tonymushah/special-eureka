@@ -8,7 +8,9 @@ use crate::{
     error::Error,
     store::types::structs::content::ContentFeeder,
     subscription::utils::{OptionFlattenStream, ResultFlattenStream},
-    utils::{Collection, splittable_param::SendSplitted},
+    utils::{
+        Collection, splittable_param::SendSplitted, traits_utils::MangadexAsyncGraphQLContextExt,
+    },
 };
 use async_graphql::{Context, InputObject, Object};
 use eureka_mmanager::prelude::{
@@ -89,6 +91,17 @@ impl From<&ChapterListQueries> for Param {
 }
 
 impl ChapterListQueries {
+    pub fn exclude_blacklisted_scanlation_groups(
+        mut self,
+        exclude_blacklisted_scanlation_groups: bool,
+    ) -> Self {
+        self.exclude_blacklisted_scanlation_groups = exclude_blacklisted_scanlation_groups;
+        self
+    }
+    pub fn exclude_blacklisted_users(mut self, exclude_blacklisted_users: bool) -> Self {
+        self.exclude_blacklisted_users = exclude_blacklisted_users;
+        self
+    }
     pub fn new<CF: ContentFeeder<ChapterListParams>>(
         params: ChapterListParams,
         feeder: &CF,
@@ -223,9 +236,43 @@ impl ChapterListQueries {
         ctx: &Context<'_>,
         offline_params: Option<GetAllChapterParams>,
     ) -> crate::error::wrapped::Result<ChapterResults> {
-        Ok(self
+        let mut list: ChapterResults = self
             ._default(ctx, offline_params)
             .await
-            .map(|res| res.into())?)
+            .map(|res| res.into())?;
+        if self.exclude_blacklisted_scanlation_groups || self.exclude_blacklisted_users {
+            loop {
+                if self.exclude_blacklisted_scanlation_groups {
+                    *list = crate::blacklist::filters::filter_scanlation_groups_chapters::<
+                        tauri::Wry,
+                    >(
+                        ctx.get_app_handle()?.clone(), std::mem::take(&mut *list)
+                    )
+                    .await?;
+                }
+                if self.exclude_blacklisted_users {
+                    *list = crate::blacklist::filters::filter_users_chapters::<tauri::Wry>(
+                        ctx.get_app_handle()?.clone(),
+                        std::mem::take(&mut *list),
+                    )
+                    .await?;
+                }
+                if list.is_empty() {
+                    let next_offset = list.info.offset + list.info.limit;
+                    if next_offset > list.info.total {
+                        break;
+                    } else {
+                        self.offset = Some(next_offset);
+                        list = self
+                            ._default(ctx, offline_params)
+                            .await
+                            .map(|res| res.into())?;
+                    }
+                } else {
+                    break;
+                }
+            }
+        }
+        Ok(list)
     }
 }
