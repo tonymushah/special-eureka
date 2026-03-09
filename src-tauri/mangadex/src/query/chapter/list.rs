@@ -47,37 +47,44 @@ use crate::objects::chapter::lists::ChapterResults;
 
 type Param = ChapterListParams;
 
-#[derive(Debug, Clone)]
-pub struct ChapterListQueries(Param);
+#[derive(Debug, Clone, Default)]
+pub struct ChapterListQueries {
+    param: Param,
+    exclude_blacklisted_scanlation_groups: bool,
+    exclude_blacklisted_users: bool,
+}
 
 impl Deref for ChapterListQueries {
     type Target = Param;
     fn deref(&self) -> &Self::Target {
-        &self.0
+        &self.param
     }
 }
 
 impl DerefMut for ChapterListQueries {
     fn deref_mut(&mut self) -> &mut Self::Target {
-        &mut self.0
+        &mut self.param
     }
 }
 
 impl From<Param> for ChapterListQueries {
     fn from(value: Param) -> Self {
-        Self(value)
+        Self {
+            param: value,
+            ..Default::default()
+        }
     }
 }
 
 impl From<ChapterListQueries> for Param {
     fn from(value: ChapterListQueries) -> Self {
-        value.0
+        value.param
     }
 }
 
 impl From<&ChapterListQueries> for Param {
     fn from(value: &ChapterListQueries) -> Self {
-        value.0.clone()
+        value.param.clone()
     }
 }
 
@@ -86,10 +93,16 @@ impl ChapterListQueries {
         params: ChapterListParams,
         feeder: &CF,
     ) -> Self {
-        Self(feeder.feed(params))
+        Self {
+            param: feeder.feed(params),
+            ..Default::default()
+        }
     }
-    pub fn no_feed(params: ChapterListParams) -> Self {
-        Self(params)
+    pub fn no_feed(param: ChapterListParams) -> Self {
+        Self {
+            param,
+            ..Default::default()
+        }
     }
 }
 
@@ -150,7 +163,7 @@ impl ChapterListQueries {
         .result_flatten()
         .option_flatten();
         let res: ChapterCollection = Collection::from_async_stream(
-            IntoParamedFilteredStream::to_filtered_into(stream, self.0.clone()),
+            IntoParamedFilteredStream::to_filtered_into(stream, self.param.clone()),
             self.limit.map(|l| l as usize).unwrap_or_else(|| {
                 if self.chapter_ids.is_empty() {
                     10
@@ -177,7 +190,7 @@ impl ChapterListQueries {
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?
             .deref()
             .clone();
-        let res = self.0.clone().send_splitted_default(&client).await?;
+        let res = self.param.clone().send_splitted_default(&client).await?;
         let _res = res.clone();
         tauri::async_runtime::spawn(async move {
             for data in _res.data {
