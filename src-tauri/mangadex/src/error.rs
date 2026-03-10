@@ -185,6 +185,8 @@ pub enum Error {
     DieselMigration(DieselMigrationError),
     #[error(transparent)]
     Uuid(#[from] uuid::Error),
+    #[error("Need to get the first value of an array but got nothing")]
+    FirstValueExpected,
 }
 
 impl Error {
