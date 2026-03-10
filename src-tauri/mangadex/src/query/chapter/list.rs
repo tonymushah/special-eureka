@@ -234,7 +234,7 @@ impl ChapterListQueries {
         mut self,
         ctx: &Context<'_>,
         offline_params: Option<GetAllChapterParams>,
-    ) -> crate::error::wrapped::Result<ChapterResults> {
+    ) -> crate::Result<ChapterResults> {
         let mut list: ChapterResults = self
             ._default(ctx, offline_params)
             .await
