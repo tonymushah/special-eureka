@@ -8,7 +8,7 @@ use crate::{
     store::types::structs::content::feed_from_gql_ctx,
     utils::{get_mangadex_client_from_graphql_context, splittable_param::SendSplitted},
 };
-use async_graphql::{Context, Object};
+use async_graphql::{Context, InputObject, Object};
 use mangadex_api_input_types::{
     feed::{
         custom_list_feed::CustomListMangaFeedParams, followed_manga_feed::FollowedMangaFeedParams,
@@ -201,13 +201,16 @@ impl FeedQueries {
     pub async fn custom_list_feed_grouped(
         &self,
         ctx: &Context<'_>,
-        feed_params: CustomListMangaFeedParams,
-        manga_list_params: Option<MangaListParams>,
-        private: Option<bool>,
-        only_unread_titles: Option<bool>,
-        exclude_blacklisted_scans_groups: Option<bool>,
-        exclude_blacklisted_users: Option<bool>,
+        param: FeedCustomListFeedGroupParam,
     ) -> Result<MangaChapterGroup> {
+        let FeedCustomListFeedGroupParam {
+            feed_params,
+            manga_list_params,
+            private,
+            only_unread_titles,
+            exclude_blacklisted_scans_groups,
+            exclude_blacklisted_users,
+        } = param;
         let mut feed_params: CustomListMangaFeedParams =
             feed_from_gql_ctx::<tauri::Wry, _>(ctx, feed_params);
         let mut manga_list_params: MangaListParams =
@@ -253,4 +256,14 @@ impl FeedQueries {
         )
         .await?)
     }
+}
+
+#[derive(Debug, Clone, InputObject)]
+pub struct FeedCustomListFeedGroupParam {
+    feed_params: CustomListMangaFeedParams,
+    manga_list_params: Option<MangaListParams>,
+    private: Option<bool>,
+    only_unread_titles: Option<bool>,
+    exclude_blacklisted_scans_groups: Option<bool>,
+    exclude_blacklisted_users: Option<bool>,
 }
