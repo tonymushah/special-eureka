@@ -1,4 +1,5 @@
 use async_graphql::{Context, SelectionField, SimpleObject};
+use futures_util::{StreamExt, TryStreamExt};
 use mangadex_api_input_types::manga::list::MangaListParams;
 use mangadex_api_schema_rust::v5::{ChapterObject, Results};
 use mangadex_api_types_rust::{ReferenceExpansionResource, RelationshipType};
@@ -6,7 +7,7 @@ use uuid::Uuid;
 
 use crate::{
     Result, objects::GetId, query::manga::list::MangaListQueries,
-    utils::traits_utils::MangadexAsyncGraphQLContextExt,
+    subscription::utils::OptionFlattenStream, utils::traits_utils::MangadexAsyncGraphQLContextExt,
 };
 
 use self::item::MangaChapterItem;
@@ -71,6 +72,9 @@ impl MangaChapterGroup {
 #[derive(Debug, Default, Clone)]
 pub struct GroupsResultsExtras {
     pub only_unread_titles: bool,
+    pub exclude_blacklisted_scans_groups: bool,
+    pub exclude_blacklisted_users: bool,
+    pub exclude_blacklisted_author_artists: bool,
 }
 
 #[cfg_attr(feature = "hotpath", hotpath::measure)]
@@ -114,12 +118,13 @@ pub async fn groups_results_with_extras(
         ctx.get_app_handle::<tauri::Wry>()?,
     )
     .only_unreads(extras.only_unread_titles)
-    .list(ctx)
+    .exclude_author_artists_blacklist(extras.exclude_blacklisted_author_artists)
+    .list_with_inner_filter(ctx, false)
     .await?;
+    let app_handle = ctx.get_app_handle::<tauri::Wry>()?.clone();
     Ok(MangaChapterGroup {
-        data: manga_ids_chapter_group
-            .into_iter()
-            .flat_map(|(id, obj)| -> Option<MangaChapterItem> {
+        data: futures_util::stream::iter(manga_ids_chapter_group)
+            .map(|(id, obj)| -> Option<MangaChapterItem> {
                 Some(MangaChapterItem {
                     manga: mangas.iter().find(|manga| manga.get_id() == id).cloned()?,
                     chapters: obj
@@ -128,7 +133,30 @@ pub async fn groups_results_with_extras(
                         .collect(),
                 })
             })
-            .collect(),
+            .option_flatten()
+            .then(|mut item| {
+                let app_handle = app_handle.clone();
+                async move {
+                    if extras.exclude_blacklisted_scans_groups {
+                        item.chapters =
+                            crate::blacklist::filters::filter_scanlation_groups_chapters(
+                                app_handle.clone(),
+                                item.chapters,
+                            )
+                            .await?;
+                    }
+                    if extras.exclude_blacklisted_users {
+                        item.chapters = crate::blacklist::filters::filter_users_chapters(
+                            app_handle.clone(),
+                            item.chapters,
+                        )
+                        .await?;
+                    }
+                    Ok::<_, crate::Error>(item)
+                }
+            })
+            .try_collect()
+            .await?,
         info,
     })
 }
