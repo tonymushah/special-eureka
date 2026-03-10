@@ -7,7 +7,7 @@ use crate::{
     store::types::structs::content::feed_from_gql_ctx,
     utils::traits_utils::MangadexAsyncGraphQLContextExt,
 };
-use async_graphql::{Context, Object};
+use async_graphql::{Context, InputObject, Object};
 use mangadex_api_input_types::{chapter::list::ChapterListParams, manga::list::MangaListParams};
 use mangadex_api_types_rust::ReferenceExpansionResource;
 use uuid::Uuid;
@@ -85,14 +85,17 @@ impl ChapterQueries {
     pub async fn list_with_group_by_manga(
         &self,
         ctx: &Context<'_>,
-        chapter_list_params: Option<ChapterListParams>,
-        manga_list_params: Option<MangaListParams>,
-        feed_content: Option<bool>,
-        only_unread_titles: Option<bool>,
-        exclude_blacklisted_scans_groups: Option<bool>,
-        exclude_blacklisted_users: Option<bool>,
-        exclude_blacklisted_author_artists: Option<bool>,
+        param: Option<ChapterListWithGroupByMangaParam>,
     ) -> crate::error::wrapped::Result<MangaChapterGroup> {
+        let ChapterListWithGroupByMangaParam {
+            chapter_list_params,
+            manga_list_params,
+            feed_content,
+            only_unread_titles,
+            exclude_blacklisted_scans_groups,
+            exclude_blacklisted_users,
+            exclude_blacklisted_author_artists,
+        } = param.unwrap_or_default();
         let feed_content = feed_content.unwrap_or_default();
         let mut chapter_list_params: ChapterListParams = chapter_list_params.unwrap_or_default();
         if feed_content {
@@ -128,4 +131,15 @@ impl ChapterQueries {
     ) -> crate::error::wrapped::Result<DownloadState> {
         DownloadStateQueries.chapter(ctx, id).await
     }
+}
+
+#[derive(Debug, Clone, InputObject, Default)]
+pub struct ChapterListWithGroupByMangaParam {
+    chapter_list_params: Option<ChapterListParams>,
+    manga_list_params: Option<MangaListParams>,
+    feed_content: Option<bool>,
+    only_unread_titles: Option<bool>,
+    exclude_blacklisted_scans_groups: Option<bool>,
+    exclude_blacklisted_users: Option<bool>,
+    exclude_blacklisted_author_artists: Option<bool>,
 }
