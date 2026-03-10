@@ -18,9 +18,8 @@ use mangadex_api_input_types::{
 
 use crate::{
     objects::{
-        ExtractReferenceExpansionFromContext,
-        chapter::lists::ChapterResults,
-        manga_chapter_group::{MangaChapterGroup, group_results},
+        ExtractReferenceExpansionFromContext, chapter::lists::ChapterResults,
+        manga_chapter_group::MangaChapterGroup,
     },
     utils::{
         get_mangadex_client_from_graphql_context_with_auth_refresh,
@@ -206,6 +205,8 @@ impl FeedQueries {
         manga_list_params: Option<MangaListParams>,
         private: Option<bool>,
         only_unread_titles: Option<bool>,
+        exclude_blacklisted_scans_groups: Option<bool>,
+        exclude_blacklisted_users: Option<bool>,
     ) -> Result<MangaChapterGroup> {
         let mut feed_params: CustomListMangaFeedParams =
             feed_from_gql_ctx::<tauri::Wry, _>(ctx, feed_params);
@@ -244,6 +245,10 @@ impl FeedQueries {
             manga_list_params,
             GroupsResultsExtras {
                 only_unread_titles: only_unread_titles.unwrap_or_default(),
+                exclude_blacklisted_scans_groups: exclude_blacklisted_scans_groups
+                    .unwrap_or_default(),
+                exclude_blacklisted_users: exclude_blacklisted_users.unwrap_or_default(),
+                ..Default::default()
             },
         )
         .await?)
