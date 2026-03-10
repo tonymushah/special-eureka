@@ -22,8 +22,8 @@ pub struct BlacklistedUserObject {
 
 #[derive(Clone, SimpleObject)]
 pub struct BlacklistedUserResults {
-	pub offset: u32,
-	pub limit: u32,
-	pub data: Vec<BlacklistedUserObject>,
-	pub total: u64
+    pub offset: u32,
+    pub limit: u32,
+    pub data: Vec<BlacklistedUserObject>,
+    pub total: u64,
 }
