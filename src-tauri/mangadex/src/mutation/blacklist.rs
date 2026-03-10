@@ -1,4 +1,5 @@
 pub mod author_artists;
+pub mod labels;
 pub mod scanlation_groups;
 pub mod users;
 
@@ -16,5 +17,8 @@ impl BlacklistMutations {
     }
     pub async fn users(&self) -> users::BlacklistedUsersMutations {
         users::BlacklistedUsersMutations
+    }
+    pub async fn labels(&self) -> labels::BlacklistLabelsMutations {
+        labels::BlacklistLabelsMutations
     }
 }
