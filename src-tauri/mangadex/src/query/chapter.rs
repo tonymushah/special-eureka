@@ -49,13 +49,13 @@ impl ChapterQueries {
             params = feed_from_gql_ctx::<tauri::Wry, _>(ctx, params);
         }
         params.includes = <ChapterResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
-        ChapterListQueries::no_feed(params)
+        Ok(ChapterListQueries::no_feed(params)
             .exclude_blacklisted_scanlation_groups(
                 exclude_blacklisted_scanlation_groups.unwrap_or_default(),
             )
             .exclude_blacklisted_users(exclude_blacklisted_users.unwrap_or_default())
             .default(ctx, offline_params)
-            .await
+            .await?)
     }
 
     pub async fn get(&self, ctx: &Context<'_>, id: Uuid) -> crate::error::wrapped::Result<Chapter> {
@@ -89,6 +89,9 @@ impl ChapterQueries {
         manga_list_params: Option<MangaListParams>,
         feed_content: Option<bool>,
         only_unread_titles: Option<bool>,
+        exclude_blacklisted_scans_groups: Option<bool>,
+        exclude_blacklisted_users: Option<bool>,
+        exclude_blacklisted_author_artists: Option<bool>,
     ) -> crate::error::wrapped::Result<MangaChapterGroup> {
         let feed_content = feed_content.unwrap_or_default();
         let mut chapter_list_params: ChapterListParams = chapter_list_params.unwrap_or_default();
@@ -109,6 +112,11 @@ impl ChapterQueries {
             manga_list_params,
             GroupsResultsExtras {
                 only_unread_titles: only_unread_titles.unwrap_or_default(),
+                exclude_blacklisted_scans_groups: exclude_blacklisted_scans_groups
+                    .unwrap_or_default(),
+                exclude_blacklisted_users: exclude_blacklisted_users.unwrap_or_default(),
+                exclude_blacklisted_author_artists: exclude_blacklisted_author_artists
+                    .unwrap_or_default(),
             },
         )
         .await?)
