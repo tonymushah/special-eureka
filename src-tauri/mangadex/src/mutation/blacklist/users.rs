@@ -14,7 +14,7 @@ pub struct BlacklistedUsersMutations;
 
 #[derive(Debug, Insertable)]
 #[diesel(
-	table_name = mangadex_blacklist_raw::schema::users, 
+	table_name = mangadex_blacklist_raw::schema::users,
 	check_for_backend(diesel::sqlite::Sqlite)
 )]
 struct InsertUser<'a> {

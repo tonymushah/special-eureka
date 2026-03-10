@@ -5,12 +5,12 @@ use uuid::Uuid;
 
 #[derive(Clone, Debug, SimpleObject, Queryable, Selectable)]
 #[diesel(
-	table_name = mangadex_blacklist_raw::schema::authors_artists, 
+	table_name = mangadex_blacklist_raw::schema::authors_artists,
 	check_for_backend(diesel::sqlite::Sqlite)
 )]
 pub struct BlacklistedAuthorObject {
     #[diesel(
-    	deserialize_as = Vec<u8>, 
+    	deserialize_as = Vec<u8>,
      	column_name = "author_id"
     )]
     pub id: Uuid,

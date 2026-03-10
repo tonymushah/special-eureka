@@ -12,7 +12,7 @@ use crate::{
 
 #[derive(Debug, Insertable)]
 #[diesel(
-	table_name = mangadex_blacklist_raw::schema::scanlation_groups, 
+	table_name = mangadex_blacklist_raw::schema::scanlation_groups,
 	check_for_backend(diesel::sqlite::Sqlite)
 )]
 struct InsertScanlationGroup<'a> {

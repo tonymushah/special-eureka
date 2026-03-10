@@ -12,7 +12,7 @@ use crate::{
 
 #[derive(Debug, Insertable)]
 #[diesel(
-	table_name = mangadex_blacklist_raw::schema::authors_artists, 
+	table_name = mangadex_blacklist_raw::schema::authors_artists,
 	check_for_backend(diesel::sqlite::Sqlite)
 )]
 struct InsertAuthor<'a> {

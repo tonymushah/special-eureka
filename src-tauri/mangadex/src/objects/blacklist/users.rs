@@ -5,12 +5,12 @@ use uuid::Uuid;
 
 #[derive(Clone, Debug, SimpleObject, Queryable, Selectable)]
 #[diesel(
-	table_name = mangadex_blacklist_raw::schema::users, 
+	table_name = mangadex_blacklist_raw::schema::users,
 	check_for_backend(diesel::sqlite::Sqlite)
 )]
 pub struct BlacklistedUserObject {
     #[diesel(
-    	deserialize_as = Vec<u8>, 
+    	deserialize_as = Vec<u8>,
      	column_name = "user_id"
     )]
     pub id: Uuid,
