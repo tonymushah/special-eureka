@@ -18,3 +18,11 @@ pub struct BlacklistLabel {
     pub create_date: Option<PrimitiveDateTime>,
     pub description: Option<String>,
 }
+
+#[derive(Clone, SimpleObject)]
+pub struct BlacklistedLabelResults {
+    pub offset: u32,
+    pub limit: u32,
+    pub data: Vec<BlacklistedLabelResults>,
+    pub total: u64,
+}
