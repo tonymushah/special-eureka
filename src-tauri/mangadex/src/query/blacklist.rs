@@ -1,4 +1,5 @@
 pub mod authors;
+pub mod labels;
 pub mod scanlation_groups;
 pub mod users;
 
@@ -17,5 +18,8 @@ impl BlacklistQueries {
     }
     pub async fn users(&self) -> users::BlacklistUsersQueries {
         users::BlacklistUsersQueries
+    }
+    pub async fn labels(&self) -> labels::BlacklistLabelsQueries {
+        labels::BlacklistLabelsQueries
     }
 }
