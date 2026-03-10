@@ -19,25 +19,9 @@ struct InsertUser<'a> {
 	username: Cow<'a, str>
 }
 
-#[Object]
 impl BlacklistedUsersMutations {
-	pub async fn block_one(&self, ctx: &Context<'_>, user_id: Uuid) -> crate::Result<BlacklistedUserObject> {
-		let app_handle = ctx.get_app_handle::<tauri::Wry>()?.clone();
-		let id = user_id;
-		spawn_blocking(move|| -> crate::Result<_> {
-			use mangadex_blacklist_raw::schema::users::dsl::*;
-			
-			let mut connection = app_handle.blacklist_database_pool()?.get_connection()?;
-			Ok(diesel::insert_into(users)
-				.values(InsertUser {
-							user_id: id.as_bytes(),
-							username: todo!()
-						})
-				.returning(BlacklistedUserObject::as_returning())
-				.get_result(&mut connection)?)
-		}).await?
-	}
-	pub async fn block_many(&self, ctx: &Context<'_>, #[graphql(validator(min_items = 1))] user_ids: Vec<Uuid>) -> crate::Result<Vec<BlacklistedUserObject>> {
+    
+	pub async fn inner_block_many(&self, ctx: &Context<'_>, user_ids: Vec<Uuid>) -> crate::Result<Vec<BlacklistedUserObject>> {
 		let app_handle = ctx.get_app_handle::<tauri::Wry>()?.clone();
 		spawn_blocking(move|| -> crate::Result<_> {
 			use mangadex_blacklist_raw::schema::users::dsl::*;
@@ -56,19 +40,8 @@ impl BlacklistedUsersMutations {
 			})
 		}).await?
 	}
-	pub async fn unblock_one(&self, ctx: &Context<'_>, user_id: Uuid) -> crate::Result<BlacklistedUserObject> {
-		let app_handle = ctx.get_app_handle::<tauri::Wry>()?.clone();
-		let id = user_id;
-		spawn_blocking(move|| -> crate::Result<_> {
-			use mangadex_blacklist_raw::schema::users::dsl::*;
-			
-			let mut connection = app_handle.blacklist_database_pool()?.get_connection()?;
-			Ok(diesel::delete(users.filter(user_id.eq(id.as_bytes())))
-				.returning(BlacklistedUserObject::as_returning())
-				.get_result(&mut connection)?)
-		}).await?
-	}
-	pub async fn unblock_many(&self, ctx: &Context<'_>, #[graphql(validator(min_items = 1))] user_ids: Vec<Uuid>) -> crate::Result<Vec<BlacklistedUserObject>> {
+	
+	pub async fn inner_unblock_many(&self, ctx: &Context<'_>,  user_ids: Vec<Uuid>) -> crate::Result<Vec<BlacklistedUserObject>> {
 		let app_handle = ctx.get_app_handle::<tauri::Wry>()?.clone();
 		spawn_blocking(move|| -> crate::Result<_> {
 			use mangadex_blacklist_raw::schema::users::dsl::*;
@@ -87,6 +60,22 @@ impl BlacklistedUsersMutations {
 				.returning(BlacklistedUserObject::as_returning())
 				.get_results(&mut connection)?)
 		}).await?
+	}
+}
+
+#[Object]
+impl BlacklistedUsersMutations {
+	pub async fn block_one(&self, ctx: &Context<'_>, user_id: Uuid) -> crate::error::wrapped::Result<BlacklistedUserObject> {
+		Ok(self.inner_block_many(ctx, vec![user_id]).await?.into_iter().next().ok_or(crate::Error::FirstValueExpected)?)
+	}
+	pub async fn block_many(&self, ctx: &Context<'_>, #[graphql(validator(min_items = 1))] user_ids: Vec<Uuid>) -> crate::error::wrapped::Result<Vec<BlacklistedUserObject>> {
+		Ok(self.inner_block_many(ctx, user_ids).await?)
+	}
+	pub async fn unblock_one(&self, ctx: &Context<'_>, user_id: Uuid) -> crate::error::wrapped::Result<BlacklistedUserObject> {
+		Ok(self.inner_unblock_many(ctx, vec![user_id]).await?.into_iter().next().ok_or(crate::Error::FirstValueExpected)?)
+	}
+	pub async fn unblock_many(&self, ctx: &Context<'_>, #[graphql(validator(min_items = 1))] user_ids: Vec<Uuid>) -> crate::error::wrapped::Result<Vec<BlacklistedUserObject>> {
+		Ok(self.inner_unblock_many(ctx, user_ids).await?)
 	}
 
 }
