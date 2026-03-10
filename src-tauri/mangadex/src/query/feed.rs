@@ -3,6 +3,7 @@ use std::ops::Deref;
 use crate::error::wrapped::Result;
 
 use crate::objects::manga_chapter_group::{GroupsResultsExtras, groups_results_with_extras};
+use crate::utils::traits_utils::MangadexAsyncGraphQLContextExt;
 use crate::{
     store::types::structs::content::feed_from_gql_ctx,
     utils::{get_mangadex_client_from_graphql_context, splittable_param::SendSplitted},
@@ -31,7 +32,6 @@ use crate::{
 #[derive(Debug, Clone, Copy)]
 pub struct FeedQueries;
 
-// TODO Implement
 #[Object]
 #[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl FeedQueries {
@@ -39,6 +39,8 @@ impl FeedQueries {
         &self,
         ctx: &Context<'_>,
         params: Option<FollowedMangaFeedParams>,
+        exclude_blacklisted_scans_groups: Option<bool>,
+        exclude_blacklisted_users: Option<bool>,
     ) -> Result<ChapterResults> {
         let mut param = feed_from_gql_ctx::<tauri::Wry, _>(ctx, params.unwrap_or_default());
         let client =
@@ -48,17 +50,44 @@ impl FeedQueries {
             .clone();
         param.includes = <ChapterResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
 
-        let mut res: ChapterResults = param.send_splitted_default(&client).await?.into();
-        // TODO filter
-        Ok({
-            let _res = res.clone();
-            tauri::async_runtime::spawn(async move {
-                for data in _res {
-                    let _ = watches.chapter.send_online(data);
+        let app = ctx.get_app_handle::<tauri::Wry>()?;
+
+        loop {
+            let mut res: ChapterResults =
+                param.clone().send_splitted_default(&client).await?.into();
+
+            if exclude_blacklisted_scans_groups.unwrap_or_default() {
+                *res = crate::blacklist::filters::filter_scanlation_groups_chapters(
+                    app.clone(),
+                    std::mem::take(&mut *res),
+                )
+                .await?;
+            }
+            if exclude_blacklisted_users.unwrap_or_default() {
+                *res = crate::blacklist::filters::filter_users_chapters(
+                    app.clone(),
+                    std::mem::take(&mut *res),
+                )
+                .await?;
+            }
+
+            if res.is_empty() {
+                let next_offset = res.info.offset + res.info.limit;
+                if next_offset > res.info.total {
+                    param.offset = Some(next_offset);
+                    continue;
                 }
+            }
+            break Ok({
+                let _res = res.clone();
+                tauri::async_runtime::spawn(async move {
+                    for data in _res {
+                        let _ = watches.chapter.send_online(data);
+                    }
+                });
+                res
             });
-            res
-        })
+        }
     }
     pub async fn user_logged_manga_feed_grouped(
         &self,
@@ -79,7 +108,6 @@ impl FeedQueries {
             MangaChapterGroup::get_chapter_references_expansions_from_context(ctx);
         manga_list_params.includes =
             MangaChapterGroup::get_manga_references_expansions_from_context(ctx);
-        // TODO filter
         Ok(group_results(
             {
                 let res = feed_params.send_splitted_default(&client).await?;
