@@ -107,7 +107,29 @@ impl BlacklistLabelsMutations {
         #[graphql(validator(min_items = 1))] scanlation_groups_ids: Vec<Uuid>,
         notes: Option<String>,
     ) -> crate::Result<Option<bool>> {
-        todo!()
+        let app_handle = ctx.get_app_handle::<tauri::Wry>()?.clone();
+        let _notes = notes;
+        spawn_blocking(move || -> crate::Result<_> {
+            use mangadex_blacklist_raw::schema::scanlation_groups_labels::dsl::*;
+            let mut connection = app_handle.blacklist_database_pool()?.get_connection()?;
+            connection.transaction::<(), crate::Error, _>(|connection| {
+                for label_ in &label_ids {
+                    for group_id in &scanlation_groups_ids {
+                        diesel::insert_into(scanlation_groups_labels)
+                            .values(InsertLabelLinkScanlationGroup {
+                                scanlation_group: Cow::Borrowed(group_id.as_bytes()),
+                                label: Cow::Borrowed(label_.as_bytes()),
+                                notes: _notes.as_ref().map(|n| n.as_str().into()),
+                            })
+                            .execute(connection)?;
+                    }
+                }
+                Ok(())
+            })?;
+            Ok(())
+        })
+        .await??;
+        Ok(None)
     }
     pub async fn link_users(
         &self,
