@@ -10,6 +10,7 @@ pub mod abort;
 pub mod collection;
 pub mod download;
 pub mod download_state;
+pub mod get_attributes;
 pub mod guards;
 pub mod math;
 pub mod read_marker;
