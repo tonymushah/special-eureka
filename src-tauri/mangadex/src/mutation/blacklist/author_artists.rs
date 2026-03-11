@@ -7,7 +7,10 @@ use uuid::Uuid;
 
 use crate::{
     objects::blacklist::authors::BlacklistedAuthorObject,
-    utils::traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
+    utils::{
+        get_attributes::author_artists::get_author_artist_id_attributes,
+        traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
+    },
 };
 
 #[derive(Debug, Insertable)]
@@ -38,10 +41,18 @@ impl BlacklistAuthorArtistsMutations {
                 author_ids
                     .into_iter()
                     .map(|id| -> crate::Result<_> {
+                        let app_handle = app_handle.clone();
                         Ok(diesel::insert_into(authors_artists)
                             .values(InsertAuthor {
                                 author_id: id.as_bytes(),
-                                author_name: todo!(),
+                                author_name: crate::utils::try_block_on(async move {
+                                    Ok::<_, crate::Error>(
+                                        get_author_artist_id_attributes(app_handle, id)
+                                            .await?
+                                            .name
+                                            .into(),
+                                    )
+                                })??,
                             })
                             .returning(BlacklistedAuthorObject::as_returning())
                             .get_result(connection)?)
