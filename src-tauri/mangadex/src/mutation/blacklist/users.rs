@@ -1,4 +1,4 @@
-use std::borrow::Cow;
+use std::{borrow::Cow, collections::HashSet};
 
 use async_graphql::{Context, Object};
 use diesel::prelude::*;
@@ -28,7 +28,14 @@ impl BlacklistedUsersMutations {
         ctx: &Context<'_>,
         user_ids: Vec<Uuid>,
     ) -> crate::Result<Vec<BlacklistedUserObject>> {
+        let user_ids = user_ids.into_iter().collect::<HashSet<_>>();
         let app_handle = ctx.get_app_handle::<tauri::Wry>()?.clone();
+        let maybe_users = {
+            let app_handle = app_handle.clone();
+            crate::utils::get_attributes::users::get_user_ids_attributes(app_handle, &user_ids)
+                .await
+                .ok()
+        };
         spawn_blocking(move || -> crate::Result<_> {
             use mangadex_blacklist_raw::schema::users::dsl::*;
 
@@ -37,10 +44,27 @@ impl BlacklistedUsersMutations {
                 user_ids
                     .into_iter()
                     .map(|id| -> crate::Result<_> {
+                        let app = app_handle.clone();
                         Ok(diesel::insert_into(users)
                             .values(InsertUser {
                                 user_id: id.as_bytes(),
-                                username: todo!(),
+                                username: if let Some(map) = maybe_users.as_ref() {
+                                    map.get(&id)
+                                        .ok_or(crate::Error::UserNotFound(id))?
+                                        .username
+                                        .as_str()
+                                        .into()
+                                } else {
+                                    let _id = id;
+                                    crate::utils::try_block_on(async move {
+                                        crate::utils::get_attributes::users::get_user_id_attributes(
+                                            app, _id,
+                                        )
+                                        .await
+                                    })??
+                                    .username
+                                    .into()
+                                },
                             })
                             .returning(BlacklistedUserObject::as_returning())
                             .get_result(connection)?)

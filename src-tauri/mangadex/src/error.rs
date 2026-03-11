@@ -195,6 +195,10 @@ pub enum Error {
     ScanlationGroupNotFound(uuid::Uuid),
     #[error("Cannot fetch scanlation groups attributes")]
     FetchScanlationGroupsAttributes,
+    #[error("This user {0} cannot be found")]
+    UserNotFound(uuid::Uuid),
+    #[error("Cannot fetch user attributes")]
+    FetchUserAttributes,
 }
 
 impl Error {
