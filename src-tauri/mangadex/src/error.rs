@@ -187,6 +187,10 @@ pub enum Error {
     Uuid(#[from] uuid::Error),
     #[error("Need to get the first value of an array but got nothing")]
     FirstValueExpected,
+    #[error("This author {0} cannot be found")]
+    AuthorNotFound(uuid::Uuid),
+    #[error("Cannot fetch author attributes")]
+    FetchAuthorAttributes,
 }
 
 impl Error {

@@ -1,4 +1,4 @@
-use std::borrow::Cow;
+use std::{borrow::Cow, collections::HashSet};
 
 use async_graphql::{Context, Object};
 use diesel::prelude::*;
@@ -31,7 +31,13 @@ impl BlacklistAuthorArtistsMutations {
         ctx: &Context<'_>,
         author_ids: Vec<Uuid>,
     ) -> crate::Result<Vec<BlacklistedAuthorObject>> {
+        let author_ids: HashSet<_> = author_ids.into_iter().collect();
         let app_handle = ctx.get_app_handle::<tauri::Wry>()?.clone();
+
+        let attrs = {
+            let app_handle = app_handle.clone();
+            get_author_artist_id_attributes(app_handle, &author_ids).await?
+        };
 
         spawn_blocking(move || -> crate::Result<_> {
             use mangadex_blacklist_raw::schema::authors_artists::dsl::*;
@@ -41,18 +47,15 @@ impl BlacklistAuthorArtistsMutations {
                 author_ids
                     .into_iter()
                     .map(|id| -> crate::Result<_> {
-                        let app_handle = app_handle.clone();
                         Ok(diesel::insert_into(authors_artists)
                             .values(InsertAuthor {
                                 author_id: id.as_bytes(),
-                                author_name: crate::utils::try_block_on(async move {
-                                    Ok::<_, crate::Error>(
-                                        get_author_artist_id_attributes(app_handle, id)
-                                            .await?
-                                            .name
-                                            .into(),
-                                    )
-                                })??,
+                                author_name: attrs
+                                    .get(&id)
+                                    .ok_or(crate::Error::AuthorNotFound(id))?
+                                    .name
+                                    .as_str()
+                                    .into(),
                             })
                             .returning(BlacklistedAuthorObject::as_returning())
                             .get_result(connection)?)
