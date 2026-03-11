@@ -44,6 +44,28 @@ struct InsertLabelLinkAuthors<'a> {
     notes: Option<Cow<'a, str>>,
 }
 
+#[derive(Debug, Insertable)]
+#[diesel(
+	check_for_backend(diesel::sqlite::Sqlite),
+	table_name = mangadex_blacklist_raw::schema::scanlation_groups_labels
+)]
+struct InsertLabelLinkScanlationGroup<'a> {
+    scanlation_group: Cow<'a, uuid::Bytes>,
+    label: Cow<'a, uuid::Bytes>,
+    notes: Option<Cow<'a, str>>,
+}
+
+#[derive(Debug, Insertable)]
+#[diesel(
+	check_for_backend(diesel::sqlite::Sqlite),
+	table_name = mangadex_blacklist_raw::schema::users_labels
+)]
+struct InsertLabelLinkUser<'a> {
+    user: Cow<'a, uuid::Bytes>,
+    label: Cow<'a, uuid::Bytes>,
+    notes: Option<Cow<'a, str>>,
+}
+
 #[Object]
 impl BlacklistLabelsMutations {
     pub async fn create_label(
@@ -86,8 +108,8 @@ impl BlacklistLabelsMutations {
                     for author_id in &author_ids {
                         diesel::insert_into(authors_labels)
                             .values(InsertLabelLinkAuthors {
-                                author: Cow::Borrowed(label_.as_bytes()),
-                                label: Cow::Borrowed(author_id.as_bytes()),
+                                author: Cow::Borrowed(author_id.as_bytes()),
+                                label: Cow::Borrowed(label_.as_bytes()),
                                 notes: _notes.as_ref().map(|n| n.as_str().into()),
                             })
                             .execute(connection)?;
@@ -136,7 +158,30 @@ impl BlacklistLabelsMutations {
         ctx: &Context<'_>,
         #[graphql(validator(min_items = 1))] label_ids: Vec<Uuid>,
         #[graphql(validator(min_items = 1))] user_ids: Vec<Uuid>,
+        notes: Option<String>,
     ) -> crate::Result<Option<bool>> {
-        todo!()
+        let app_handle = ctx.get_app_handle::<tauri::Wry>()?.clone();
+        let _notes = notes;
+        spawn_blocking(move || -> crate::Result<_> {
+            use mangadex_blacklist_raw::schema::users_labels::dsl::*;
+            let mut connection = app_handle.blacklist_database_pool()?.get_connection()?;
+            connection.transaction::<(), crate::Error, _>(|connection| {
+                for label_ in &label_ids {
+                    for user_id in &user_ids {
+                        diesel::insert_into(users_labels)
+                            .values(InsertLabelLinkUser {
+                                user: Cow::Borrowed(user_id.as_bytes()),
+                                label: Cow::Borrowed(label_.as_bytes()),
+                                notes: _notes.as_ref().map(|n| n.as_str().into()),
+                            })
+                            .execute(connection)?;
+                    }
+                }
+                Ok(())
+            })?;
+            Ok(())
+        })
+        .await??;
+        Ok(None)
     }
 }
