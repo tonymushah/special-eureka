@@ -1,4 +1,4 @@
-use std::borrow::Cow;
+use std::{borrow::Cow, collections::HashSet};
 
 use async_graphql::{Context, Object};
 use diesel::prelude::*;
@@ -7,7 +7,10 @@ use uuid::Uuid;
 
 use crate::{
     objects::blacklist::scanlation_groups::BlacklistedScanlationGroupObject,
-    utils::traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
+    utils::{
+        get_attributes::scanlation_groups::get_scanlation_group_id_attributes,
+        traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
+    },
 };
 
 #[derive(Debug, Insertable)]
@@ -27,7 +30,13 @@ impl BlacklistScanlationGroupsMutations {
         ctx: &Context<'_>,
         scanlation_group_ids: Vec<Uuid>,
     ) -> crate::Result<Vec<BlacklistedScanlationGroupObject>> {
+        let scanlation_group_ids: HashSet<_> = scanlation_group_ids.into_iter().collect();
         let app_handle = ctx.get_app_handle::<tauri::Wry>()?.clone();
+
+        let attrs = {
+            let app_handle = app_handle.clone();
+            get_scanlation_group_id_attributes(app_handle, &scanlation_group_ids).await?
+        };
 
         spawn_blocking(move || -> crate::Result<_> {
             use mangadex_blacklist_raw::schema::scanlation_groups::dsl::*;
@@ -35,12 +44,19 @@ impl BlacklistScanlationGroupsMutations {
             let mut connection = app_handle.blacklist_database_pool()?.get_connection()?;
             connection.transaction::<Vec<_>, crate::Error, _>(|connection| {
                 scanlation_group_ids
-                    .iter()
+                    .into_iter()
                     .map(|scanlation_group_id| -> crate::Result<_> {
                         Ok(diesel::insert_into(scanlation_groups)
                             .values(InsertScanlationGroup {
                                 group_id: scanlation_group_id.as_bytes(),
-                                group_name: todo!(),
+                                group_name: attrs
+                                    .get(&scanlation_group_id)
+                                    .ok_or(crate::Error::ScanlationGroupNotFound(
+                                        scanlation_group_id,
+                                    ))?
+                                    .name
+                                    .as_str()
+                                    .into(),
                             })
                             .returning(BlacklistedScanlationGroupObject::as_returning())
                             .get_result(connection)?)

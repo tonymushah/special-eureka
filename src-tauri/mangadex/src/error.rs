@@ -191,6 +191,10 @@ pub enum Error {
     AuthorNotFound(uuid::Uuid),
     #[error("Cannot fetch author attributes")]
     FetchAuthorAttributes,
+    #[error("This scanlation group {0} cannot be found")]
+    ScanlationGroupNotFound(uuid::Uuid),
+    #[error("Cannot fetch scanlation groups attributes")]
+    FetchScanlationGroupsAttributes,
 }
 
 impl Error {
