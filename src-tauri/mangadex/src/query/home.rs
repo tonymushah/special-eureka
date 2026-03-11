@@ -118,6 +118,8 @@ impl HomeQueries {
         &self,
         ctx: &Context<'_>,
         params: Option<MangaListParams>,
+        exclude_author_artists_blacklist: Option<bool>,
+        only_unread: Option<bool>,
     ) -> crate::error::wrapped::Result<MangaResults> {
         let mut params = params.unwrap_or_default();
         params.includes = <MangaResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
@@ -127,7 +129,11 @@ impl HomeQueries {
         loop {
             let mut res: MangaResults =
                 MangaListQueries::new(params.clone(), ctx.get_app_handle::<tauri::Wry>()?)
-                    .list(ctx)
+                    .exclude_author_artists_blacklist(
+                        exclude_author_artists_blacklist.unwrap_or_default(),
+                    )
+                    .only_unreads(only_unread.unwrap_or_default())
+                    .list_with_inner_filter(ctx, false)
                     .await?;
             let read_marker = has_title_read(
                 ctx.get_app_handle::<tauri::Wry>()?,
@@ -150,6 +156,8 @@ impl HomeQueries {
         &self,
         ctx: &Context<'_>,
         params: Option<MangaListParams>,
+        exclude_author_artists_blacklist: Option<bool>,
+        only_unread: Option<bool>,
     ) -> crate::error::wrapped::Result<MangaResults> {
         let mut params = params.unwrap_or_default();
         params.includes = <MangaResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
@@ -164,7 +172,11 @@ impl HomeQueries {
         Ok({
             let res: MangaResults =
                 MangaListQueries::new(params, ctx.get_app_handle::<tauri::Wry>()?)
-                    .list(ctx)
+                    .only_unreads(only_unread.unwrap_or_default())
+                    .exclude_author_artists_blacklist(
+                        exclude_author_artists_blacklist.unwrap_or_default(),
+                    )
+                    .list_with_inner_filter(ctx, false)
                     .await?;
             res
         })
