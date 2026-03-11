@@ -135,13 +135,6 @@ impl HomeQueries {
                     .only_unreads(only_unread.unwrap_or_default())
                     .list_with_inner_filter(ctx, false)
                     .await?;
-            let read_marker = has_title_read(
-                ctx.get_app_handle::<tauri::Wry>()?,
-                res.iter().map(|d| d.get_id()).collect(),
-            )
-            .await
-            .unwrap_or_default();
-            res.retain(|d| !read_marker.contains(&d.get_id()));
             if res.is_empty() {
                 let next_offset = res.info.limit + res.info.limit;
                 if next_offset <= res.info.total {
