@@ -30,7 +30,7 @@
 	},
 	"devDependencies": {
 		"@chromatic-com/storybook": "^5.0.1",
-		"@eslint/css": "^0.14.1",
+		"@eslint/css": "^1.0.0",
 		"@eslint/js": "^10.0.1",
 		"@graphql-codegen/cli": "^6.1.2",
 		"@graphql-codegen/client-preset": "^5.2.3",
