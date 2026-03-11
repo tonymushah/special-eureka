@@ -1,9 +1,6 @@
 use crate::{
     objects::GetId,
-    utils::{
-        read_marker::{has_chapters_read, has_title_read},
-        traits_utils::MangadexAsyncGraphQLContextExt,
-    },
+    utils::{read_marker::has_chapters_read, traits_utils::MangadexAsyncGraphQLContextExt},
 };
 
 use async_graphql::{Context, Object};
@@ -127,7 +124,7 @@ impl HomeQueries {
         params.has_available_chapters = Some(true);
         params.manga_ids.clear();
         loop {
-            let mut res: MangaResults =
+            let res: MangaResults =
                 MangaListQueries::new(params.clone(), ctx.get_app_handle::<tauri::Wry>()?)
                     .exclude_author_artists_blacklist(
                         exclude_author_artists_blacklist.unwrap_or_default(),
