@@ -13,15 +13,17 @@ const query = graphql(`
 	) {
 		chapter {
 			listWithGroupByManga(
-				chapterListParams: {
-					offset: $offset
-					limit: $limit
-					translatedLanguages: $translatedLanguages
-					groups: [$group]
-					order: $order
+				param: {
+					chapterListParams: {
+						offset: $offset
+						limit: $limit
+						translatedLanguages: $translatedLanguages
+						groups: [$group]
+						order: $order
+					}
+					mangaListParams: $mangaListParams
+					onlyUnreadTitles: $onlyUnreadTitles
 				}
-				mangaListParams: $mangaListParams
-				onlyUnreadTitles: $onlyUnreadTitles
 			) {
 				limit
 				offset
