@@ -72,9 +72,9 @@ impl MangaChapterGroup {
 #[derive(Debug, Default, Clone)]
 pub struct GroupsResultsExtras {
     pub only_unread_titles: bool,
-    pub exclude_blacklisted_scans_groups: bool,
-    pub exclude_blacklisted_users: bool,
-    pub exclude_blacklisted_author_artists: bool,
+    pub disable_scans_groups_blacklist: bool,
+    pub disable_users_blacklist: bool,
+    pub disable_author_artists_blacklist: bool,
 }
 
 #[cfg_attr(feature = "hotpath", hotpath::measure)]
@@ -118,7 +118,7 @@ pub async fn groups_results_with_extras(
         ctx.get_app_handle::<tauri::Wry>()?,
     )
     .only_unreads(extras.only_unread_titles)
-    .exclude_author_artists_blacklist(extras.exclude_blacklisted_author_artists)
+    .disable_author_artists_blacklist(extras.disable_author_artists_blacklist)
     .list_with_inner_filter(ctx, false)
     .await?;
     let app_handle = ctx.get_app_handle::<tauri::Wry>()?.clone();
@@ -137,7 +137,7 @@ pub async fn groups_results_with_extras(
             .then(|mut item| {
                 let app_handle = app_handle.clone();
                 async move {
-                    if extras.exclude_blacklisted_scans_groups {
+                    if !extras.disable_scans_groups_blacklist {
                         item.chapters =
                             crate::blacklist::filters::filter_scanlation_groups_chapters(
                                 app_handle.clone(),
@@ -145,7 +145,7 @@ pub async fn groups_results_with_extras(
                             )
                             .await?;
                     }
-                    if extras.exclude_blacklisted_users {
+                    if !extras.disable_users_blacklist {
                         item.chapters = crate::blacklist::filters::filter_users_chapters(
                             app_handle.clone(),
                             item.chapters,

@@ -50,10 +50,10 @@ impl ChapterQueries {
         }
         params.includes = <ChapterResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
         Ok(ChapterListQueries::no_feed(params)
-            .exclude_blacklisted_scanlation_groups(
+            .disable_scanlation_groups_blacklist(
                 exclude_blacklisted_scanlation_groups.unwrap_or_default(),
             )
-            .exclude_blacklisted_users(exclude_blacklisted_users.unwrap_or_default())
+            .disable_users_blacklist(exclude_blacklisted_users.unwrap_or_default())
             .default(ctx, offline_params)
             .await?)
     }
@@ -115,10 +115,10 @@ impl ChapterQueries {
             manga_list_params,
             GroupsResultsExtras {
                 only_unread_titles: only_unread_titles.unwrap_or_default(),
-                exclude_blacklisted_scans_groups: exclude_blacklisted_scans_groups
+                disable_scans_groups_blacklist: exclude_blacklisted_scans_groups
                     .unwrap_or_default(),
-                exclude_blacklisted_users: exclude_blacklisted_users.unwrap_or_default(),
-                exclude_blacklisted_author_artists: exclude_blacklisted_author_artists
+                disable_users_blacklist: exclude_blacklisted_users.unwrap_or_default(),
+                disable_author_artists_blacklist: exclude_blacklisted_author_artists
                     .unwrap_or_default(),
             },
         )

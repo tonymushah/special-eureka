@@ -33,7 +33,7 @@ use crate::{
 pub struct MangaListQueries {
     params: MangaListParams,
     only_unread: bool,
-    exclude_author_artists_blacklist: bool,
+    disable_author_artists_blacklist: bool,
 }
 
 impl Deref for MangaListQueries {
@@ -54,7 +54,7 @@ impl From<MangaListParams> for MangaListQueries {
         Self {
             params,
             only_unread: false,
-            exclude_author_artists_blacklist: false,
+            disable_author_artists_blacklist: false,
         }
     }
 }
@@ -73,11 +73,11 @@ impl From<&MangaListQueries> for MangaListParams {
 
 #[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl MangaListQueries {
-    pub fn exclude_author_artists_blacklist(
+    pub fn disable_author_artists_blacklist(
         mut self,
         exclude_author_artists_blacklist: bool,
     ) -> Self {
-        self.exclude_author_artists_blacklist = exclude_author_artists_blacklist;
+        self.disable_author_artists_blacklist = exclude_author_artists_blacklist;
         self
     }
     pub fn only_unreads(mut self, only_unreads: bool) -> Self {
@@ -194,7 +194,7 @@ impl MangaListQueries {
         } else {
             self.list(ctx).await?
         };
-        if self.only_unread || !self.exclude_author_artists_blacklist {
+        if self.only_unread || !self.disable_author_artists_blacklist {
             loop {
                 if self.only_unread {
                     let read_markers = has_title_read(
@@ -206,7 +206,7 @@ impl MangaListQueries {
                     list.retain(|t| !read_markers.contains(&t.get_id()));
                 }
                 // NOTE: Idk if this works well or not??
-                if !self.exclude_author_artists_blacklist {
+                if !self.disable_author_artists_blacklist {
                     *list = crate::blacklist::filters::filter_author_artists_titles::<tauri::Wry>(
                         ctx.get_app_handle()?.clone(),
                         std::mem::take(&mut *list),

@@ -38,8 +38,8 @@ impl FeedQueries {
         &self,
         ctx: &Context<'_>,
         params: Option<FollowedMangaFeedParams>,
-        exclude_blacklisted_scans_groups: Option<bool>,
-        exclude_blacklisted_users: Option<bool>,
+        disable_scans_groups_blacklist: Option<bool>,
+        disable_users_blacklist: Option<bool>,
     ) -> Result<ChapterResults> {
         let mut param = feed_from_gql_ctx::<tauri::Wry, _>(ctx, params.unwrap_or_default());
         let client =
@@ -56,14 +56,14 @@ impl FeedQueries {
             let mut res: ChapterResults =
                 param.clone().send_splitted_default(&client).await?.into();
 
-            if exclude_blacklisted_scans_groups.unwrap_or_default() {
+            if !disable_scans_groups_blacklist.unwrap_or_default() {
                 *res = crate::blacklist::filters::filter_scanlation_groups_chapters(
                     app.clone(),
                     std::mem::take(&mut *res),
                 )
                 .await?;
             }
-            if exclude_blacklisted_users.unwrap_or_default() {
+            if !disable_users_blacklist.unwrap_or_default() {
                 *res = crate::blacklist::filters::filter_users_chapters(
                     app.clone(),
                     std::mem::take(&mut *res),
@@ -96,8 +96,8 @@ impl FeedQueries {
         feed_params: Option<FollowedMangaFeedParams>,
         manga_list_params: Option<MangaListParams>,
         only_unread_titles: Option<bool>,
-        exclude_blacklisted_scans_groups: Option<bool>,
-        exclude_blacklisted_users: Option<bool>,
+        disable_scans_groups_blacklist: Option<bool>,
+        disable_users_blacklist: Option<bool>,
     ) -> Result<MangaChapterGroup> {
         let mut feed_params: FollowedMangaFeedParams =
             feed_from_gql_ctx::<tauri::Wry, _>(ctx, feed_params.unwrap_or_default());
@@ -127,9 +127,8 @@ impl FeedQueries {
             manga_list_params,
             GroupsResultsExtras {
                 only_unread_titles: only_unread_titles.unwrap_or_default(),
-                exclude_blacklisted_scans_groups: exclude_blacklisted_scans_groups
-                    .unwrap_or_default(),
-                exclude_blacklisted_users: exclude_blacklisted_users.unwrap_or_default(),
+                disable_scans_groups_blacklist: disable_scans_groups_blacklist.unwrap_or_default(),
+                disable_users_blacklist: disable_users_blacklist.unwrap_or_default(),
                 ..Default::default()
             },
         )
@@ -140,8 +139,8 @@ impl FeedQueries {
         ctx: &Context<'_>,
         params: CustomListMangaFeedParams,
         private: Option<bool>,
-        exclude_blacklisted_scans_groups: Option<bool>,
-        exclude_blacklisted_users: Option<bool>,
+        disable_scans_groups_blacklist: Option<bool>,
+        disable_users_blacklist: Option<bool>,
     ) -> Result<ChapterResults> {
         let mut param: CustomListMangaFeedParams = feed_from_gql_ctx::<tauri::Wry, _>(ctx, params);
 
@@ -166,14 +165,14 @@ impl FeedQueries {
             } else {
                 param.clone().send_splitted_default(&client).await?.into()
             };
-            if exclude_blacklisted_scans_groups.unwrap_or_default() {
+            if !disable_scans_groups_blacklist.unwrap_or_default() {
                 *res = crate::blacklist::filters::filter_scanlation_groups_chapters(
                     app.clone(),
                     std::mem::take(&mut *res),
                 )
                 .await?;
             }
-            if exclude_blacklisted_users.unwrap_or_default() {
+            if !disable_users_blacklist.unwrap_or_default() {
                 *res = crate::blacklist::filters::filter_users_chapters(
                     app.clone(),
                     std::mem::take(&mut *res),
@@ -208,8 +207,9 @@ impl FeedQueries {
             manga_list_params,
             private,
             only_unread_titles,
-            exclude_blacklisted_scans_groups,
-            exclude_blacklisted_users,
+            disable_scans_groups_blacklist,
+            disable_users_blacklist,
+            disable_author_artists_blacklist,
         } = param;
         let mut feed_params: CustomListMangaFeedParams =
             feed_from_gql_ctx::<tauri::Wry, _>(ctx, feed_params);
@@ -248,10 +248,10 @@ impl FeedQueries {
             manga_list_params,
             GroupsResultsExtras {
                 only_unread_titles: only_unread_titles.unwrap_or_default(),
-                exclude_blacklisted_scans_groups: exclude_blacklisted_scans_groups
+                disable_scans_groups_blacklist: disable_scans_groups_blacklist.unwrap_or_default(),
+                disable_users_blacklist: disable_users_blacklist.unwrap_or_default(),
+                disable_author_artists_blacklist: disable_author_artists_blacklist
                     .unwrap_or_default(),
-                exclude_blacklisted_users: exclude_blacklisted_users.unwrap_or_default(),
-                ..Default::default()
             },
         )
         .await?)
@@ -264,6 +264,7 @@ pub struct FeedCustomListFeedGroupParam {
     manga_list_params: Option<MangaListParams>,
     private: Option<bool>,
     only_unread_titles: Option<bool>,
-    exclude_blacklisted_scans_groups: Option<bool>,
-    exclude_blacklisted_users: Option<bool>,
+    disable_scans_groups_blacklist: Option<bool>,
+    disable_users_blacklist: Option<bool>,
+    disable_author_artists_blacklist: Option<bool>,
 }

@@ -52,8 +52,8 @@ type Param = ChapterListParams;
 #[derive(Debug, Clone, Default)]
 pub struct ChapterListQueries {
     param: Param,
-    exclude_blacklisted_scanlation_groups: bool,
-    exclude_blacklisted_users: bool,
+    disable_scanlation_groups_blacklist: bool,
+    disable_users_blacklist: bool,
 }
 
 impl Deref for ChapterListQueries {
@@ -91,15 +91,15 @@ impl From<&ChapterListQueries> for Param {
 }
 
 impl ChapterListQueries {
-    pub fn exclude_blacklisted_scanlation_groups(
+    pub fn disable_scanlation_groups_blacklist(
         mut self,
         exclude_blacklisted_scanlation_groups: bool,
     ) -> Self {
-        self.exclude_blacklisted_scanlation_groups = exclude_blacklisted_scanlation_groups;
+        self.disable_scanlation_groups_blacklist = exclude_blacklisted_scanlation_groups;
         self
     }
-    pub fn exclude_blacklisted_users(mut self, exclude_blacklisted_users: bool) -> Self {
-        self.exclude_blacklisted_users = exclude_blacklisted_users;
+    pub fn disable_users_blacklist(mut self, exclude_blacklisted_users: bool) -> Self {
+        self.disable_users_blacklist = exclude_blacklisted_users;
         self
     }
     pub fn new<CF: ContentFeeder<ChapterListParams>>(
@@ -239,9 +239,9 @@ impl ChapterListQueries {
             ._default(ctx, offline_params)
             .await
             .map(|res| res.into())?;
-        if !self.exclude_blacklisted_scanlation_groups || !self.exclude_blacklisted_users {
+        if !self.disable_scanlation_groups_blacklist || !self.disable_users_blacklist {
             loop {
-                if self.exclude_blacklisted_scanlation_groups {
+                if !self.disable_scanlation_groups_blacklist {
                     *list = crate::blacklist::filters::filter_scanlation_groups_chapters::<
                         tauri::Wry,
                     >(
@@ -249,7 +249,7 @@ impl ChapterListQueries {
                     )
                     .await?;
                 }
-                if self.exclude_blacklisted_users {
+                if !self.disable_users_blacklist {
                     *list = crate::blacklist::filters::filter_users_chapters::<tauri::Wry>(
                         ctx.get_app_handle()?.clone(),
                         std::mem::take(&mut *list),
