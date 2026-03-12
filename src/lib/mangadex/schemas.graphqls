@@ -129,6 +129,7 @@ type AuthQuery {
 type Author {
 	id: UUID!
 	attributes: AuthorAttributes!
+	isBlocked: Boolean!
 	relationships: AuthorRelationships!
 }
 
@@ -236,6 +237,161 @@ input BeginEditUploadSessionParam {
 input BeginUploadSessionParam {
 	groups: [UUID!]! = []
 	mangaId: UUID!
+}
+
+type BlacklistAuthorArtistsMutations {
+	blockOne(authorId: UUID!): BlacklistedAuthorObject!
+	blockMany(authorIds: [UUID!]!): [BlacklistedAuthorObject!]!
+	unblockOne(authorId: UUID!): BlacklistedAuthorObject!
+	unblockMany(authorIds: [UUID!]!): [BlacklistedAuthorObject!]!
+}
+
+input BlacklistAuthorsArtistsListParam {
+	offset: Int
+	limit: Int
+	authorName: String
+	insertedSince: LocalDateTime
+	insertedBefore: LocalDateTime
+	order: SortDirection
+}
+
+type BlacklistAuthorsArtistsQueries {
+	list(params: BlacklistAuthorsArtistsListParam): BlacklistedAuthorResults!
+	get(id: UUID!): BlacklistedAuthorObject!
+	getByIds(ids: [UUID!]!): [BlacklistedAuthorObject!]!
+}
+
+type BlacklistLabel {
+	id: UUID!
+	name: String!
+	createDate: LocalDateTime
+	description: String
+}
+
+input BlacklistLabelsListParam {
+	offset: Int
+	limit: Int
+	labelName: String
+	insertedSince: LocalDateTime
+	insertedBefore: LocalDateTime
+	order: SortDirection
+}
+
+type BlacklistLabelsMutations {
+	createLabel(param: CreateBlacklistLabelParam!): BlacklistLabel!
+	linkAuthorsArtists(labelIds: [UUID!]!, authorIds: [UUID!]!, notes: String): Boolean
+	linkScanlationGroups(labelIds: [UUID!]!, scanlationGroupsIds: [UUID!]!, notes: String): Boolean
+	linkUsers(labelIds: [UUID!]!, userIds: [UUID!]!, notes: String): Boolean
+}
+
+type BlacklistLabelsQueries {
+	list(params: BlacklistLabelsListParam): BlacklistedLabelResults!
+	get(id: UUID!): BlacklistLabel!
+	getByIds(ids: [UUID!]!): [BlacklistLabel!]!
+}
+
+type BlacklistMutations {
+	authorArtists: BlacklistAuthorArtistsMutations!
+	scanlationGroups: BlacklistScanlationGroupsMutations!
+	users: BlacklistedUsersMutations!
+	labels: BlacklistLabelsMutations!
+}
+
+type BlacklistQueries {
+	authorsArtists: BlacklistAuthorsArtistsQueries!
+	scanlationGroups: BlacklistScanlationGroupsQueries!
+	users: BlacklistUsersQueries!
+	labels: BlacklistLabelsQueries!
+}
+
+input BlacklistScanlationGroupsListParam {
+	offset: Int
+	limit: Int
+	scanlationGroupsName: String
+	insertedSince: LocalDateTime
+	insertedBefore: LocalDateTime
+	order: SortDirection
+}
+
+type BlacklistScanlationGroupsMutations {
+	blockOne(scanlationGroupId: UUID!): BlacklistedScanlationGroupObject!
+	blockMany(scanlationGroupIds: [UUID!]!): [BlacklistedScanlationGroupObject!]!
+	unblockOne(scanlationGroupId: UUID!): BlacklistedScanlationGroupObject!
+	unblockMany(scanlationGroupIds: [UUID!]!): [BlacklistedScanlationGroupObject!]!
+}
+
+type BlacklistScanlationGroupsQueries {
+	list(params: BlacklistScanlationGroupsListParam): BlacklistedScanlationGroupResults!
+	get(id: UUID!): BlacklistedScanlationGroupObject!
+	getByIds(ids: [UUID!]!): [BlacklistedScanlationGroupObject!]!
+}
+
+input BlacklistUserListParam {
+	offset: Int
+	limit: Int
+	username: String
+	insertedSince: LocalDateTime
+	insertedBefore: LocalDateTime
+	order: SortDirection
+}
+
+type BlacklistUsersQueries {
+	list(params: BlacklistUserListParam): BlacklistedUserResults!
+	get(id: UUID!): BlacklistedUserObject!
+	getByIds(ids: [UUID!]!): [BlacklistedUserObject!]!
+}
+
+type BlacklistedAuthorObject {
+	id: UUID!
+	name: String!
+	insertDate: LocalDateTime
+}
+
+type BlacklistedAuthorResults {
+	offset: Int!
+	limit: Int!
+	data: [BlacklistedAuthorObject!]!
+	total: Int!
+}
+
+type BlacklistedLabelResults {
+	offset: Int!
+	limit: Int!
+	data: [BlacklistLabel!]!
+	total: Int!
+}
+
+type BlacklistedScanlationGroupObject {
+	id: UUID!
+	name: String!
+	insertDate: LocalDateTime
+}
+
+type BlacklistedScanlationGroupResults {
+	offset: Int!
+	limit: Int!
+	data: [BlacklistedScanlationGroupObject!]!
+	total: Int!
+}
+
+type BlacklistedUserObject {
+	id: UUID!
+	name: String!
+	insertDate: LocalDateTime
+}
+
+type BlacklistedUserResults {
+	offset: Int!
+	limit: Int!
+	data: [BlacklistedUserObject!]!
+	total: Int!
+}
+
+type BlacklistedUsersMutations {
+	blockOne(userId: UUID!): BlacklistedUserObject!
+	blockMany(userIds: [UUID!]!): [BlacklistedUserObject!]!
+	unblockOne(userId: UUID!): BlacklistedUserObject!
+	unblockMany(userIds: [UUID!]!): [BlacklistedUserObject!]!
 }
 
 type ButtonAccentColor {
@@ -379,6 +535,16 @@ input ChapterListParams {
 	order: ChapterSortOrder
 }
 
+input ChapterListWithGroupByMangaParam {
+	chapterListParams: ChapterListParams
+	mangaListParams: MangaListParams
+	feedContent: Boolean
+	onlyUnreadTitles: Boolean
+	excludeBlacklistedScansGroups: Boolean
+	excludeBlacklistedUsers: Boolean
+	excludeBlacklistedAuthorArtists: Boolean
+}
+
 type ChapterMutations {
 	update(params: ChapterUpdateParams!): Chapter!
 	delete(id: UUID!): Boolean!
@@ -429,10 +595,10 @@ type ChapterPagesStoreMutation {
 }
 
 type ChapterQueries {
-	list(params: ChapterListParams, offlineParams: GetAllChapterParams, feedContent: Boolean): ChapterResults!
+	list(params: ChapterListParams, offlineParams: GetAllChapterParams, feedContent: Boolean, excludeBlacklistedScanlationGroups: Boolean, excludeBlacklistedUsers: Boolean): ChapterResults!
 	get(id: UUID!): Chapter!
 	pages(id: UUID!): ChapterPages!
-	listWithGroupByManga(chapterListParams: ChapterListParams, mangaListParams: MangaListParams, feedContent: Boolean, onlyUnreadTitles: Boolean): MangaChapterGroup!
+	listWithGroupByManga(param: ChapterListWithGroupByMangaParam): MangaChapterGroup!
 	isDownloaded(id: UUID!): DownloadState!
 }
 
@@ -730,6 +896,11 @@ input CoverUploadParam {
 	volume: String = null
 	description: String! = ""
 	locale: Language!
+}
+
+input CreateBlacklistLabelParam {
+	labelName: String!
+	description: String
 }
 
 type CreateForumTheardResponse {
@@ -1156,11 +1327,20 @@ type ExportMutations {
 	uuidsToAsTxt(uuids: [UUID!]!, file: String!): String!
 }
 
+input FeedCustomListFeedGroupParam {
+	feedParams: CustomListMangaFeedParams!
+	mangaListParams: MangaListParams
+	private: Boolean
+	onlyUnreadTitles: Boolean
+	excludeBlacklistedScansGroups: Boolean
+	excludeBlacklistedUsers: Boolean
+}
+
 type FeedQueries {
-	userLoggedMangaFeed(params: FollowedMangaFeedParams): ChapterResults!
-	userLoggedMangaFeedGrouped(feedParams: FollowedMangaFeedParams, mangaListParams: MangaListParams): MangaChapterGroup!
-	customListFeed(params: CustomListMangaFeedParams!, private: Boolean): ChapterResults!
-	customListFeedGrouped(feedParams: CustomListMangaFeedParams!, mangaListParams: MangaListParams, private: Boolean, onlyUnreadTitles: Boolean): MangaChapterGroup!
+	userLoggedMangaFeed(params: FollowedMangaFeedParams, excludeBlacklistedScansGroups: Boolean, excludeBlacklistedUsers: Boolean): ChapterResults!
+	userLoggedMangaFeedGrouped(feedParams: FollowedMangaFeedParams, mangaListParams: MangaListParams, onlyUnreadTitles: Boolean, excludeBlacklistedScansGroups: Boolean, excludeBlacklistedUsers: Boolean): MangaChapterGroup!
+	customListFeed(params: CustomListMangaFeedParams!, private: Boolean, excludeBlacklistedScansGroups: Boolean, excludeBlacklistedUsers: Boolean): ChapterResults!
+	customListFeedGrouped(param: FeedCustomListFeedGroupParam!): MangaChapterGroup!
 }
 
 input FollowedMangaFeedParams {
@@ -1277,8 +1457,8 @@ type HomeQueries {
 	seasonal: CustomList!
 	staffPicks: CustomList!
 	recentlyUploaded(params: ChapterListParams): ChapterResults!
-	recentlyAdded(params: MangaListParams): MangaResults!
-	popularTitles(params: MangaListParams): MangaResults!
+	recentlyAdded(params: MangaListParams, excludeAuthorArtistsBlacklist: Boolean, onlyUnread: Boolean): MangaResults!
+	popularTitles(params: MangaListParams, excludeAuthorArtistsBlacklist: Boolean, onlyUnread: Boolean): MangaResults!
 }
 
 enum ImageFit {
@@ -1515,6 +1695,14 @@ input ListReportParams {
 	status: ReportStatus
 	order: ReportSortOrder
 }
+
+"""
+A local datetime without timezone offset.
+
+The input/output is a string in ISO 8601 format without timezone, including
+subseconds. E.g. "2022-01-12T07:30:19.12345".
+"""
+scalar LocalDateTime
 
 enum MaltitlePriority {
 	LOW
@@ -1822,8 +2010,8 @@ type MangaObject {
 type MangaQueries {
 	isDownloaded(id: UUID!): DownloadState!
 	get(id: UUID!): MangaObject!
-	list(params: MangaListParams, excludeContentProfile: Boolean, onlyUnread: Boolean): MangaResults!
-	listOffline(params: MangaListParams, excludeContentProfile: Boolean): MangaResults!
+	list(params: MangaListParams, excludeContentProfile: Boolean, onlyUnread: Boolean, excludeAuthorArtistsBlacklist: Boolean): MangaResults!
+	listOffline(params: MangaListParams, excludeContentProfile: Boolean, excludeAuthorArtistsBlacklist: Boolean): MangaResults!
 	random(params: MangaRandomParams): MangaObject!
 	feed(params: MangaFeedParams!): ChapterResults!
 	getMangaStatus(status: ReadingStatus): [MangaReadingStatusItem!]!
@@ -2093,6 +2281,7 @@ type Mutation {
 	cover: CoverMutations!
 	library: LibraryMutations!
 	export: ExportMutations!
+	blacklist: BlacklistMutations!
 }
 
 type OauthMutations {
@@ -2201,6 +2390,7 @@ type Query {
 	userOption: UserOptionQueries!
 	auth: AuthQuery!
 	library: CurrentUserLibrary!
+	blacklist: BlacklistQueries!
 }
 
 type RatingItem {
@@ -2410,6 +2600,7 @@ enum ReportStatus {
 type ScanlationGroup {
 	id: UUID!
 	attributes: ScanlationGroupAttributes!
+	isBlocked: Boolean!
 	relationships: ScanlationGroupRelationships!
 }
 
@@ -2489,6 +2680,11 @@ enum SidebarMode {
 	DEFAULT
 	FLOATING
 	HIDDEN
+}
+
+enum SortDirection {
+	ASCENDING
+	DESCENDING
 }
 
 type Statistics {
@@ -2768,6 +2964,7 @@ scalar Url
 type User {
 	id: UUID!
 	attributes: UserAttributes!
+	isBlocked: Boolean!
 	relationships: UserRelationships!
 }
 
