@@ -1332,14 +1332,15 @@ input FeedCustomListFeedGroupParam {
 	mangaListParams: MangaListParams
 	private: Boolean
 	onlyUnreadTitles: Boolean
-	excludeBlacklistedScansGroups: Boolean
-	excludeBlacklistedUsers: Boolean
+	disableScansGroupsBlacklist: Boolean
+	disableUsersBlacklist: Boolean
+	disableAuthorArtistsBlacklist: Boolean
 }
 
 type FeedQueries {
-	userLoggedMangaFeed(params: FollowedMangaFeedParams, excludeBlacklistedScansGroups: Boolean, excludeBlacklistedUsers: Boolean): ChapterResults!
-	userLoggedMangaFeedGrouped(feedParams: FollowedMangaFeedParams, mangaListParams: MangaListParams, onlyUnreadTitles: Boolean, excludeBlacklistedScansGroups: Boolean, excludeBlacklistedUsers: Boolean): MangaChapterGroup!
-	customListFeed(params: CustomListMangaFeedParams!, private: Boolean, excludeBlacklistedScansGroups: Boolean, excludeBlacklistedUsers: Boolean): ChapterResults!
+	userLoggedMangaFeed(params: FollowedMangaFeedParams, disableScansGroupsBlacklist: Boolean, disableUsersBlacklist: Boolean): ChapterResults!
+	userLoggedMangaFeedGrouped(feedParams: FollowedMangaFeedParams, mangaListParams: MangaListParams, onlyUnreadTitles: Boolean, disableScansGroupsBlacklist: Boolean, disableUsersBlacklist: Boolean): MangaChapterGroup!
+	customListFeed(params: CustomListMangaFeedParams!, private: Boolean, disableScansGroupsBlacklist: Boolean, disableUsersBlacklist: Boolean): ChapterResults!
 	customListFeedGrouped(param: FeedCustomListFeedGroupParam!): MangaChapterGroup!
 }
 
@@ -1457,8 +1458,8 @@ type HomeQueries {
 	seasonal: CustomList!
 	staffPicks: CustomList!
 	recentlyUploaded(params: ChapterListParams): ChapterResults!
-	recentlyAdded(params: MangaListParams, excludeAuthorArtistsBlacklist: Boolean, onlyUnread: Boolean): MangaResults!
-	popularTitles(params: MangaListParams, excludeAuthorArtistsBlacklist: Boolean, onlyUnread: Boolean): MangaResults!
+	recentlyAdded(params: MangaListParams, disableAuthorArtistsBlacklist: Boolean, onlyUnread: Boolean): MangaResults!
+	popularTitles(params: MangaListParams, disableAuthorArtistsBlacklist: Boolean, onlyUnread: Boolean): MangaResults!
 }
 
 enum ImageFit {
@@ -2010,8 +2011,8 @@ type MangaObject {
 type MangaQueries {
 	isDownloaded(id: UUID!): DownloadState!
 	get(id: UUID!): MangaObject!
-	list(params: MangaListParams, excludeContentProfile: Boolean, onlyUnread: Boolean, excludeAuthorArtistsBlacklist: Boolean): MangaResults!
-	listOffline(params: MangaListParams, excludeContentProfile: Boolean, excludeAuthorArtistsBlacklist: Boolean): MangaResults!
+	list(params: MangaListParams, excludeContentProfile: Boolean, onlyUnread: Boolean, disableAuthorArtistsBlacklist: Boolean): MangaResults!
+	listOffline(params: MangaListParams, excludeContentProfile: Boolean, disableAuthorArtistsBlacklist: Boolean): MangaResults!
 	random(params: MangaRandomParams): MangaObject!
 	feed(params: MangaFeedParams!): ChapterResults!
 	getMangaStatus(status: ReadingStatus): [MangaReadingStatusItem!]!

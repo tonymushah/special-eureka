@@ -20,6 +20,13 @@ export type Scalars = {
 	Float: { input: number; output: number };
 	/** A scalar that can represent any JSON Object value. */
 	JSONObject: { input: any; output: any };
+	/**
+	 * A local datetime without timezone offset.
+	 *
+	 * The input/output is a string in ISO 8601 format without timezone, including
+	 * subseconds. E.g. "2022-01-12T07:30:19.12345".
+	 */
+	LocalDateTime: { input: any; output: any };
 	MangaDexDateTime: { input: any; output: any };
 	MangaDexDuration: { input: any; output: any };
 	Password: { input: any; output: any };
@@ -204,6 +211,7 @@ export type Author = {
 	__typename?: "Author";
 	attributes: AuthorAttributes;
 	id: Scalars["UUID"]["output"];
+	isBlocked: Scalars["Boolean"]["output"];
 	relationships: AuthorRelationships;
 };
 
@@ -338,6 +346,297 @@ export type BeginEditUploadSessionParam = {
 export type BeginUploadSessionParam = {
 	groups?: Array<Scalars["UUID"]["input"]>;
 	mangaId: Scalars["UUID"]["input"];
+};
+
+export type BlacklistAuthorArtistsMutations = {
+	__typename?: "BlacklistAuthorArtistsMutations";
+	blockMany: Array<BlacklistedAuthorObject>;
+	blockOne: BlacklistedAuthorObject;
+	unblockMany: Array<BlacklistedAuthorObject>;
+	unblockOne: BlacklistedAuthorObject;
+};
+
+export type BlacklistAuthorArtistsMutationsBlockManyArgs = {
+	authorIds: Array<Scalars["UUID"]["input"]>;
+};
+
+export type BlacklistAuthorArtistsMutationsBlockOneArgs = {
+	authorId: Scalars["UUID"]["input"];
+};
+
+export type BlacklistAuthorArtistsMutationsUnblockManyArgs = {
+	authorIds: Array<Scalars["UUID"]["input"]>;
+};
+
+export type BlacklistAuthorArtistsMutationsUnblockOneArgs = {
+	authorId: Scalars["UUID"]["input"];
+};
+
+export type BlacklistAuthorsArtistsListParam = {
+	authorName?: InputMaybe<Scalars["String"]["input"]>;
+	insertedBefore?: InputMaybe<Scalars["LocalDateTime"]["input"]>;
+	insertedSince?: InputMaybe<Scalars["LocalDateTime"]["input"]>;
+	limit?: InputMaybe<Scalars["Int"]["input"]>;
+	offset?: InputMaybe<Scalars["Int"]["input"]>;
+	order?: InputMaybe<SortDirection>;
+};
+
+export type BlacklistAuthorsArtistsQueries = {
+	__typename?: "BlacklistAuthorsArtistsQueries";
+	get: BlacklistedAuthorObject;
+	getByIds: Array<BlacklistedAuthorObject>;
+	list: BlacklistedAuthorResults;
+};
+
+export type BlacklistAuthorsArtistsQueriesGetArgs = {
+	id: Scalars["UUID"]["input"];
+};
+
+export type BlacklistAuthorsArtistsQueriesGetByIdsArgs = {
+	ids: Array<Scalars["UUID"]["input"]>;
+};
+
+export type BlacklistAuthorsArtistsQueriesListArgs = {
+	params?: InputMaybe<BlacklistAuthorsArtistsListParam>;
+};
+
+export type BlacklistLabel = {
+	__typename?: "BlacklistLabel";
+	createDate?: Maybe<Scalars["LocalDateTime"]["output"]>;
+	description?: Maybe<Scalars["String"]["output"]>;
+	id: Scalars["UUID"]["output"];
+	name: Scalars["String"]["output"];
+};
+
+export type BlacklistLabelsListParam = {
+	insertedBefore?: InputMaybe<Scalars["LocalDateTime"]["input"]>;
+	insertedSince?: InputMaybe<Scalars["LocalDateTime"]["input"]>;
+	labelName?: InputMaybe<Scalars["String"]["input"]>;
+	limit?: InputMaybe<Scalars["Int"]["input"]>;
+	offset?: InputMaybe<Scalars["Int"]["input"]>;
+	order?: InputMaybe<SortDirection>;
+};
+
+export type BlacklistLabelsMutations = {
+	__typename?: "BlacklistLabelsMutations";
+	createLabel: BlacklistLabel;
+	linkAuthorsArtists?: Maybe<Scalars["Boolean"]["output"]>;
+	linkScanlationGroups?: Maybe<Scalars["Boolean"]["output"]>;
+	linkUsers?: Maybe<Scalars["Boolean"]["output"]>;
+};
+
+export type BlacklistLabelsMutationsCreateLabelArgs = {
+	param: CreateBlacklistLabelParam;
+};
+
+export type BlacklistLabelsMutationsLinkAuthorsArtistsArgs = {
+	authorIds: Array<Scalars["UUID"]["input"]>;
+	labelIds: Array<Scalars["UUID"]["input"]>;
+	notes?: InputMaybe<Scalars["String"]["input"]>;
+};
+
+export type BlacklistLabelsMutationsLinkScanlationGroupsArgs = {
+	labelIds: Array<Scalars["UUID"]["input"]>;
+	notes?: InputMaybe<Scalars["String"]["input"]>;
+	scanlationGroupsIds: Array<Scalars["UUID"]["input"]>;
+};
+
+export type BlacklistLabelsMutationsLinkUsersArgs = {
+	labelIds: Array<Scalars["UUID"]["input"]>;
+	notes?: InputMaybe<Scalars["String"]["input"]>;
+	userIds: Array<Scalars["UUID"]["input"]>;
+};
+
+export type BlacklistLabelsQueries = {
+	__typename?: "BlacklistLabelsQueries";
+	get: BlacklistLabel;
+	getByIds: Array<BlacklistLabel>;
+	list: BlacklistedLabelResults;
+};
+
+export type BlacklistLabelsQueriesGetArgs = {
+	id: Scalars["UUID"]["input"];
+};
+
+export type BlacklistLabelsQueriesGetByIdsArgs = {
+	ids: Array<Scalars["UUID"]["input"]>;
+};
+
+export type BlacklistLabelsQueriesListArgs = {
+	params?: InputMaybe<BlacklistLabelsListParam>;
+};
+
+export type BlacklistMutations = {
+	__typename?: "BlacklistMutations";
+	authorArtists: BlacklistAuthorArtistsMutations;
+	labels: BlacklistLabelsMutations;
+	scanlationGroups: BlacklistScanlationGroupsMutations;
+	users: BlacklistedUsersMutations;
+};
+
+export type BlacklistQueries = {
+	__typename?: "BlacklistQueries";
+	authorsArtists: BlacklistAuthorsArtistsQueries;
+	labels: BlacklistLabelsQueries;
+	scanlationGroups: BlacklistScanlationGroupsQueries;
+	users: BlacklistUsersQueries;
+};
+
+export type BlacklistScanlationGroupsListParam = {
+	insertedBefore?: InputMaybe<Scalars["LocalDateTime"]["input"]>;
+	insertedSince?: InputMaybe<Scalars["LocalDateTime"]["input"]>;
+	limit?: InputMaybe<Scalars["Int"]["input"]>;
+	offset?: InputMaybe<Scalars["Int"]["input"]>;
+	order?: InputMaybe<SortDirection>;
+	scanlationGroupsName?: InputMaybe<Scalars["String"]["input"]>;
+};
+
+export type BlacklistScanlationGroupsMutations = {
+	__typename?: "BlacklistScanlationGroupsMutations";
+	blockMany: Array<BlacklistedScanlationGroupObject>;
+	blockOne: BlacklistedScanlationGroupObject;
+	unblockMany: Array<BlacklistedScanlationGroupObject>;
+	unblockOne: BlacklistedScanlationGroupObject;
+};
+
+export type BlacklistScanlationGroupsMutationsBlockManyArgs = {
+	scanlationGroupIds: Array<Scalars["UUID"]["input"]>;
+};
+
+export type BlacklistScanlationGroupsMutationsBlockOneArgs = {
+	scanlationGroupId: Scalars["UUID"]["input"];
+};
+
+export type BlacklistScanlationGroupsMutationsUnblockManyArgs = {
+	scanlationGroupIds: Array<Scalars["UUID"]["input"]>;
+};
+
+export type BlacklistScanlationGroupsMutationsUnblockOneArgs = {
+	scanlationGroupId: Scalars["UUID"]["input"];
+};
+
+export type BlacklistScanlationGroupsQueries = {
+	__typename?: "BlacklistScanlationGroupsQueries";
+	get: BlacklistedScanlationGroupObject;
+	getByIds: Array<BlacklistedScanlationGroupObject>;
+	list: BlacklistedScanlationGroupResults;
+};
+
+export type BlacklistScanlationGroupsQueriesGetArgs = {
+	id: Scalars["UUID"]["input"];
+};
+
+export type BlacklistScanlationGroupsQueriesGetByIdsArgs = {
+	ids: Array<Scalars["UUID"]["input"]>;
+};
+
+export type BlacklistScanlationGroupsQueriesListArgs = {
+	params?: InputMaybe<BlacklistScanlationGroupsListParam>;
+};
+
+export type BlacklistUserListParam = {
+	insertedBefore?: InputMaybe<Scalars["LocalDateTime"]["input"]>;
+	insertedSince?: InputMaybe<Scalars["LocalDateTime"]["input"]>;
+	limit?: InputMaybe<Scalars["Int"]["input"]>;
+	offset?: InputMaybe<Scalars["Int"]["input"]>;
+	order?: InputMaybe<SortDirection>;
+	username?: InputMaybe<Scalars["String"]["input"]>;
+};
+
+export type BlacklistUsersQueries = {
+	__typename?: "BlacklistUsersQueries";
+	get: BlacklistedUserObject;
+	getByIds: Array<BlacklistedUserObject>;
+	list: BlacklistedUserResults;
+};
+
+export type BlacklistUsersQueriesGetArgs = {
+	id: Scalars["UUID"]["input"];
+};
+
+export type BlacklistUsersQueriesGetByIdsArgs = {
+	ids: Array<Scalars["UUID"]["input"]>;
+};
+
+export type BlacklistUsersQueriesListArgs = {
+	params?: InputMaybe<BlacklistUserListParam>;
+};
+
+export type BlacklistedAuthorObject = {
+	__typename?: "BlacklistedAuthorObject";
+	id: Scalars["UUID"]["output"];
+	insertDate?: Maybe<Scalars["LocalDateTime"]["output"]>;
+	name: Scalars["String"]["output"];
+};
+
+export type BlacklistedAuthorResults = {
+	__typename?: "BlacklistedAuthorResults";
+	data: Array<BlacklistedAuthorObject>;
+	limit: Scalars["Int"]["output"];
+	offset: Scalars["Int"]["output"];
+	total: Scalars["Int"]["output"];
+};
+
+export type BlacklistedLabelResults = {
+	__typename?: "BlacklistedLabelResults";
+	data: Array<BlacklistLabel>;
+	limit: Scalars["Int"]["output"];
+	offset: Scalars["Int"]["output"];
+	total: Scalars["Int"]["output"];
+};
+
+export type BlacklistedScanlationGroupObject = {
+	__typename?: "BlacklistedScanlationGroupObject";
+	id: Scalars["UUID"]["output"];
+	insertDate?: Maybe<Scalars["LocalDateTime"]["output"]>;
+	name: Scalars["String"]["output"];
+};
+
+export type BlacklistedScanlationGroupResults = {
+	__typename?: "BlacklistedScanlationGroupResults";
+	data: Array<BlacklistedScanlationGroupObject>;
+	limit: Scalars["Int"]["output"];
+	offset: Scalars["Int"]["output"];
+	total: Scalars["Int"]["output"];
+};
+
+export type BlacklistedUserObject = {
+	__typename?: "BlacklistedUserObject";
+	id: Scalars["UUID"]["output"];
+	insertDate?: Maybe<Scalars["LocalDateTime"]["output"]>;
+	name: Scalars["String"]["output"];
+};
+
+export type BlacklistedUserResults = {
+	__typename?: "BlacklistedUserResults";
+	data: Array<BlacklistedUserObject>;
+	limit: Scalars["Int"]["output"];
+	offset: Scalars["Int"]["output"];
+	total: Scalars["Int"]["output"];
+};
+
+export type BlacklistedUsersMutations = {
+	__typename?: "BlacklistedUsersMutations";
+	blockMany: Array<BlacklistedUserObject>;
+	blockOne: BlacklistedUserObject;
+	unblockMany: Array<BlacklistedUserObject>;
+	unblockOne: BlacklistedUserObject;
+};
+
+export type BlacklistedUsersMutationsBlockManyArgs = {
+	userIds: Array<Scalars["UUID"]["input"]>;
+};
+
+export type BlacklistedUsersMutationsBlockOneArgs = {
+	userId: Scalars["UUID"]["input"];
+};
+
+export type BlacklistedUsersMutationsUnblockManyArgs = {
+	userIds: Array<Scalars["UUID"]["input"]>;
+};
+
+export type BlacklistedUsersMutationsUnblockOneArgs = {
+	userId: Scalars["UUID"]["input"];
 };
 
 export type ButtonAccentColor = {
@@ -477,6 +776,16 @@ export type ChapterListParams = {
 	volumes?: Array<Scalars["String"]["input"]>;
 };
 
+export type ChapterListWithGroupByMangaParam = {
+	chapterListParams?: InputMaybe<ChapterListParams>;
+	excludeBlacklistedAuthorArtists?: InputMaybe<Scalars["Boolean"]["input"]>;
+	excludeBlacklistedScansGroups?: InputMaybe<Scalars["Boolean"]["input"]>;
+	excludeBlacklistedUsers?: InputMaybe<Scalars["Boolean"]["input"]>;
+	feedContent?: InputMaybe<Scalars["Boolean"]["input"]>;
+	mangaListParams?: InputMaybe<MangaListParams>;
+	onlyUnreadTitles?: InputMaybe<Scalars["Boolean"]["input"]>;
+};
+
 export type ChapterMutations = {
 	__typename?: "ChapterMutations";
 	cancelDownload: Scalars["Boolean"]["output"];
@@ -576,16 +885,15 @@ export type ChapterQueriesIsDownloadedArgs = {
 };
 
 export type ChapterQueriesListArgs = {
+	excludeBlacklistedScanlationGroups?: InputMaybe<Scalars["Boolean"]["input"]>;
+	excludeBlacklistedUsers?: InputMaybe<Scalars["Boolean"]["input"]>;
 	feedContent?: InputMaybe<Scalars["Boolean"]["input"]>;
 	offlineParams?: InputMaybe<GetAllChapterParams>;
 	params?: InputMaybe<ChapterListParams>;
 };
 
 export type ChapterQueriesListWithGroupByMangaArgs = {
-	chapterListParams?: InputMaybe<ChapterListParams>;
-	feedContent?: InputMaybe<Scalars["Boolean"]["input"]>;
-	mangaListParams?: InputMaybe<MangaListParams>;
-	onlyUnreadTitles?: InputMaybe<Scalars["Boolean"]["input"]>;
+	param?: InputMaybe<ChapterListWithGroupByMangaParam>;
 };
 
 export type ChapterQueriesPagesArgs = {
@@ -982,6 +1290,11 @@ export type CoverUploadParam = {
 	 * * Pattern: `^(0|[1-9]\\d*)((\\.\\d+){1,2})?[a-z]?$`
 	 */
 	volume?: InputMaybe<Scalars["String"]["input"]>;
+};
+
+export type CreateBlacklistLabelParam = {
+	description?: InputMaybe<Scalars["String"]["input"]>;
+	labelName: Scalars["String"]["input"];
 };
 
 export type CreateForumTheardResponse = {
@@ -1513,6 +1826,16 @@ export type ExportMutationsUuidsToAsTxtArgs = {
 	uuids: Array<Scalars["UUID"]["input"]>;
 };
 
+export type FeedCustomListFeedGroupParam = {
+	disableAuthorArtistsBlacklist?: InputMaybe<Scalars["Boolean"]["input"]>;
+	disableScansGroupsBlacklist?: InputMaybe<Scalars["Boolean"]["input"]>;
+	disableUsersBlacklist?: InputMaybe<Scalars["Boolean"]["input"]>;
+	feedParams: CustomListMangaFeedParams;
+	mangaListParams?: InputMaybe<MangaListParams>;
+	onlyUnreadTitles?: InputMaybe<Scalars["Boolean"]["input"]>;
+	private?: InputMaybe<Scalars["Boolean"]["input"]>;
+};
+
 export type FeedQueries = {
 	__typename?: "FeedQueries";
 	customListFeed: ChapterResults;
@@ -1522,24 +1845,28 @@ export type FeedQueries = {
 };
 
 export type FeedQueriesCustomListFeedArgs = {
+	disableScansGroupsBlacklist?: InputMaybe<Scalars["Boolean"]["input"]>;
+	disableUsersBlacklist?: InputMaybe<Scalars["Boolean"]["input"]>;
 	params: CustomListMangaFeedParams;
 	private?: InputMaybe<Scalars["Boolean"]["input"]>;
 };
 
 export type FeedQueriesCustomListFeedGroupedArgs = {
-	feedParams: CustomListMangaFeedParams;
-	mangaListParams?: InputMaybe<MangaListParams>;
-	onlyUnreadTitles?: InputMaybe<Scalars["Boolean"]["input"]>;
-	private?: InputMaybe<Scalars["Boolean"]["input"]>;
+	param: FeedCustomListFeedGroupParam;
 };
 
 export type FeedQueriesUserLoggedMangaFeedArgs = {
+	disableScansGroupsBlacklist?: InputMaybe<Scalars["Boolean"]["input"]>;
+	disableUsersBlacklist?: InputMaybe<Scalars["Boolean"]["input"]>;
 	params?: InputMaybe<FollowedMangaFeedParams>;
 };
 
 export type FeedQueriesUserLoggedMangaFeedGroupedArgs = {
+	disableScansGroupsBlacklist?: InputMaybe<Scalars["Boolean"]["input"]>;
+	disableUsersBlacklist?: InputMaybe<Scalars["Boolean"]["input"]>;
 	feedParams?: InputMaybe<FollowedMangaFeedParams>;
 	mangaListParams?: InputMaybe<MangaListParams>;
+	onlyUnreadTitles?: InputMaybe<Scalars["Boolean"]["input"]>;
 };
 
 export type FollowedMangaFeedParams = {
@@ -1739,10 +2066,14 @@ export type HomeQueries = {
 };
 
 export type HomeQueriesPopularTitlesArgs = {
+	disableAuthorArtistsBlacklist?: InputMaybe<Scalars["Boolean"]["input"]>;
+	onlyUnread?: InputMaybe<Scalars["Boolean"]["input"]>;
 	params?: InputMaybe<MangaListParams>;
 };
 
 export type HomeQueriesRecentlyAddedArgs = {
+	disableAuthorArtistsBlacklist?: InputMaybe<Scalars["Boolean"]["input"]>;
+	onlyUnread?: InputMaybe<Scalars["Boolean"]["input"]>;
 	params?: InputMaybe<MangaListParams>;
 };
 
@@ -2506,12 +2837,14 @@ export type MangaQueriesIsInLibraryArgs = {
 };
 
 export type MangaQueriesListArgs = {
+	disableAuthorArtistsBlacklist?: InputMaybe<Scalars["Boolean"]["input"]>;
 	excludeContentProfile?: InputMaybe<Scalars["Boolean"]["input"]>;
 	onlyUnread?: InputMaybe<Scalars["Boolean"]["input"]>;
 	params?: InputMaybe<MangaListParams>;
 };
 
 export type MangaQueriesListOfflineArgs = {
+	disableAuthorArtistsBlacklist?: InputMaybe<Scalars["Boolean"]["input"]>;
 	excludeContentProfile?: InputMaybe<Scalars["Boolean"]["input"]>;
 	params?: InputMaybe<MangaListParams>;
 };
@@ -2804,6 +3137,7 @@ export type Mutation = {
 	__typename?: "Mutation";
 	apiClient: ApiClientMutation;
 	author: AuthorMutations;
+	blacklist: BlacklistMutations;
 	captcha: CaptchaMutations;
 	chapter: ChapterMutations;
 	cover: CoverMutations;
@@ -2911,6 +3245,7 @@ export type Query = {
 	apiClient: ApiClientQueries;
 	auth: AuthQuery;
 	author: AuthorQueries;
+	blacklist: BlacklistQueries;
 	chapter: ChapterQueries;
 	cover: CoverQueries;
 	customList: CustomListQueries;
@@ -3177,6 +3512,7 @@ export type ScanlationGroup = {
 	__typename?: "ScanlationGroup";
 	attributes: ScanlationGroupAttributes;
 	id: Scalars["UUID"]["output"];
+	isBlocked: Scalars["Boolean"]["output"];
 	relationships: ScanlationGroupRelationships;
 };
 
@@ -3296,6 +3632,11 @@ export enum SidebarMode {
 	Default = "DEFAULT",
 	Floating = "FLOATING",
 	Hidden = "HIDDEN"
+}
+
+export enum SortDirection {
+	Ascending = "ASCENDING",
+	Descending = "DESCENDING"
 }
 
 export type Statistics = {
@@ -3718,6 +4059,7 @@ export type User = {
 	__typename?: "User";
 	attributes: UserAttributes;
 	id: Scalars["UUID"]["output"];
+	isBlocked: Scalars["Boolean"]["output"];
 	relationships: UserRelationships;
 };
 
@@ -4662,38 +5004,6 @@ export type RemoveMultipleChapterMutationBaseMutation = {
 	chapter: { __typename?: "ChapterMutations"; remove: boolean };
 };
 
-export type GetChaptersIDsAsFeedQueryVariables = Exact<{
-	ids: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
-}>;
-
-export type GetChaptersIDsAsFeedQuery = {
-	__typename?: "Query";
-	chapter: {
-		__typename?: "ChapterQueries";
-		listWithGroupByManga: {
-			__typename?: "MangaChapterGroup";
-			data: Array<{
-				__typename?: "MangaChapterItem";
-				manga: {
-					__typename?: "MangaObject";
-					id: any;
-					attributes: { __typename?: "GraphQLMangaAttributes"; title: any };
-				};
-				chapters: Array<{
-					__typename?: "Chapter";
-					id: any;
-					attributes: {
-						__typename?: "ChapterAttributes";
-						chapter?: string | null;
-						title?: string | null;
-						volume?: string | null;
-					};
-				}>;
-			}>;
-		};
-	};
-};
-
 export type JustDownloadingTitleMutationVariables = Exact<{
 	id: Scalars["UUID"]["input"];
 }>;
@@ -5221,6 +5531,38 @@ export type AuthorsSearchQuery = {
 	};
 };
 
+export type GetChaptersIDsAsFeedQueryVariables = Exact<{
+	ids: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
+}>;
+
+export type GetChaptersIDsAsFeedQuery = {
+	__typename?: "Query";
+	chapter: {
+		__typename?: "ChapterQueries";
+		listWithGroupByManga: {
+			__typename?: "MangaChapterGroup";
+			data: Array<{
+				__typename?: "MangaChapterItem";
+				manga: {
+					__typename?: "MangaObject";
+					id: any;
+					attributes: { __typename?: "GraphQLMangaAttributes"; title: any };
+				};
+				chapters: Array<{
+					__typename?: "Chapter";
+					id: any;
+					attributes: {
+						__typename?: "ChapterAttributes";
+						chapter?: string | null;
+						title?: string | null;
+						volume?: string | null;
+					};
+				}>;
+			}>;
+		};
+	};
+};
+
 export type SubToChapterImageFitSubscriptionVariables = Exact<{ [key: string]: never }>;
 
 export type SubToChapterImageFitSubscription = {
@@ -5700,6 +6042,9 @@ export type ScanlationUploadsFeedQueryVariables = Exact<{
 	order?: ChapterSortOrder;
 	mangaListParams?: InputMaybe<MangaListParams>;
 	onlyUnreadTitles?: InputMaybe<Scalars["Boolean"]["input"]>;
+	disableScanlationGroupBlacklist?: InputMaybe<Scalars["Boolean"]["input"]>;
+	disableUserBlacklist?: InputMaybe<Scalars["Boolean"]["input"]>;
+	disableAuthorArtistBlacklist?: InputMaybe<Scalars["Boolean"]["input"]>;
 }>;
 
 export type ScanlationUploadsFeedQuery = {
@@ -6443,6 +6788,9 @@ export type CustomListChapterFeedQueryVariables = Exact<{
 	mangaParam?: InputMaybe<MangaListParams>;
 	private?: InputMaybe<Scalars["Boolean"]["input"]>;
 	onlyUnreadTitles?: InputMaybe<Scalars["Boolean"]["input"]>;
+	disableScanlationGroupBlacklist?: InputMaybe<Scalars["Boolean"]["input"]>;
+	disableUserBlacklist?: InputMaybe<Scalars["Boolean"]["input"]>;
+	disableAuthorArtistBlacklist?: InputMaybe<Scalars["Boolean"]["input"]>;
 }>;
 
 export type CustomListChapterFeedQuery = {
@@ -7237,6 +7585,9 @@ export type GetMangaTitleOnlyQueryQuery = {
 export type LatestUploadsPageQueryQueryVariables = Exact<{
 	offset?: InputMaybe<Scalars["Int"]["input"]>;
 	limit?: InputMaybe<Scalars["Int"]["input"]>;
+	disableScanlationGroupBlacklist?: InputMaybe<Scalars["Boolean"]["input"]>;
+	disableUserBlacklist?: InputMaybe<Scalars["Boolean"]["input"]>;
+	disableAuthorArtistBlacklist?: InputMaybe<Scalars["Boolean"]["input"]>;
 }>;
 
 export type LatestUploadsPageQueryQuery = {
@@ -7862,6 +8213,9 @@ export type UserUploadsFeedQueryVariables = Exact<{
 	limit?: InputMaybe<Scalars["Int"]["input"]>;
 	order?: ChapterSortOrder;
 	mangaListParams?: InputMaybe<MangaListParams>;
+	disableScanlationGroupBlacklist?: InputMaybe<Scalars["Boolean"]["input"]>;
+	disableUserBlacklist?: InputMaybe<Scalars["Boolean"]["input"]>;
+	disableAuthorArtistBlacklist?: InputMaybe<Scalars["Boolean"]["input"]>;
 }>;
 
 export type UserUploadsFeedQuery = {
@@ -11671,175 +12025,6 @@ export const RemoveMultipleChapterMutationBaseDocument = {
 	RemoveMultipleChapterMutationBaseMutation,
 	RemoveMultipleChapterMutationBaseMutationVariables
 >;
-export const GetChaptersIDsAsFeedDocument = {
-	kind: "Document",
-	definitions: [
-		{
-			kind: "OperationDefinition",
-			operation: "query",
-			name: { kind: "Name", value: "getChaptersIDsAsFeed" },
-			variableDefinitions: [
-				{
-					kind: "VariableDefinition",
-					variable: { kind: "Variable", name: { kind: "Name", value: "ids" } },
-					type: {
-						kind: "NonNullType",
-						type: {
-							kind: "ListType",
-							type: {
-								kind: "NonNullType",
-								type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
-							}
-						}
-					}
-				}
-			],
-			selectionSet: {
-				kind: "SelectionSet",
-				selections: [
-					{
-						kind: "Field",
-						name: { kind: "Name", value: "chapter" },
-						selectionSet: {
-							kind: "SelectionSet",
-							selections: [
-								{
-									kind: "Field",
-									name: { kind: "Name", value: "listWithGroupByManga" },
-									arguments: [
-										{
-											kind: "Argument",
-											name: { kind: "Name", value: "feedContent" },
-											value: { kind: "BooleanValue", value: false }
-										},
-										{
-											kind: "Argument",
-											name: { kind: "Name", value: "chapterListParams" },
-											value: {
-												kind: "ObjectValue",
-												fields: [
-													{
-														kind: "ObjectField",
-														name: { kind: "Name", value: "chapterIds" },
-														value: {
-															kind: "Variable",
-															name: { kind: "Name", value: "ids" }
-														}
-													}
-												]
-											}
-										}
-									],
-									selectionSet: {
-										kind: "SelectionSet",
-										selections: [
-											{
-												kind: "Field",
-												name: { kind: "Name", value: "data" },
-												selectionSet: {
-													kind: "SelectionSet",
-													selections: [
-														{
-															kind: "Field",
-															name: { kind: "Name", value: "manga" },
-															selectionSet: {
-																kind: "SelectionSet",
-																selections: [
-																	{
-																		kind: "Field",
-																		name: {
-																			kind: "Name",
-																			value: "id"
-																		}
-																	},
-																	{
-																		kind: "Field",
-																		name: {
-																			kind: "Name",
-																			value: "attributes"
-																		},
-																		selectionSet: {
-																			kind: "SelectionSet",
-																			selections: [
-																				{
-																					kind: "Field",
-																					name: {
-																						kind: "Name",
-																						value: "title"
-																					}
-																				}
-																			]
-																		}
-																	}
-																]
-															}
-														},
-														{
-															kind: "Field",
-															name: {
-																kind: "Name",
-																value: "chapters"
-															},
-															selectionSet: {
-																kind: "SelectionSet",
-																selections: [
-																	{
-																		kind: "Field",
-																		name: {
-																			kind: "Name",
-																			value: "id"
-																		}
-																	},
-																	{
-																		kind: "Field",
-																		name: {
-																			kind: "Name",
-																			value: "attributes"
-																		},
-																		selectionSet: {
-																			kind: "SelectionSet",
-																			selections: [
-																				{
-																					kind: "Field",
-																					name: {
-																						kind: "Name",
-																						value: "chapter"
-																					}
-																				},
-																				{
-																					kind: "Field",
-																					name: {
-																						kind: "Name",
-																						value: "title"
-																					}
-																				},
-																				{
-																					kind: "Field",
-																					name: {
-																						kind: "Name",
-																						value: "volume"
-																					}
-																				}
-																			]
-																		}
-																	}
-																]
-															}
-														}
-													]
-												}
-											}
-										]
-									}
-								}
-							]
-						}
-					}
-				]
-			}
-		}
-	]
-} as unknown as DocumentNode<GetChaptersIDsAsFeedQuery, GetChaptersIDsAsFeedQueryVariables>;
 export const JustDownloadingTitleDocument = {
 	kind: "Document",
 	definitions: [
@@ -14342,6 +14527,199 @@ export const AuthorsSearchDocument = {
 		}
 	]
 } as unknown as DocumentNode<AuthorsSearchQuery, AuthorsSearchQueryVariables>;
+export const GetChaptersIDsAsFeedDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "getChaptersIDsAsFeed" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "ids" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "ListType",
+							type: {
+								kind: "NonNullType",
+								type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+							}
+						}
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "chapter" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "listWithGroupByManga" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "param" },
+											value: {
+												kind: "ObjectValue",
+												fields: [
+													{
+														kind: "ObjectField",
+														name: {
+															kind: "Name",
+															value: "feedContent"
+														},
+														value: {
+															kind: "BooleanValue",
+															value: false
+														}
+													},
+													{
+														kind: "ObjectField",
+														name: {
+															kind: "Name",
+															value: "chapterListParams"
+														},
+														value: {
+															kind: "ObjectValue",
+															fields: [
+																{
+																	kind: "ObjectField",
+																	name: {
+																		kind: "Name",
+																		value: "chapterIds"
+																	},
+																	value: {
+																		kind: "Variable",
+																		name: {
+																			kind: "Name",
+																			value: "ids"
+																		}
+																	}
+																}
+															]
+														}
+													}
+												]
+											}
+										}
+									],
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "data" },
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "manga" },
+															selectionSet: {
+																kind: "SelectionSet",
+																selections: [
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "id"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "attributes"
+																		},
+																		selectionSet: {
+																			kind: "SelectionSet",
+																			selections: [
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "title"
+																					}
+																				}
+																			]
+																		}
+																	}
+																]
+															}
+														},
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "chapters"
+															},
+															selectionSet: {
+																kind: "SelectionSet",
+																selections: [
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "id"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "attributes"
+																		},
+																		selectionSet: {
+																			kind: "SelectionSet",
+																			selections: [
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "chapter"
+																					}
+																				},
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "title"
+																					}
+																				},
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "volume"
+																					}
+																				}
+																			]
+																		}
+																	}
+																]
+															}
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<GetChaptersIDsAsFeedQuery, GetChaptersIDsAsFeedQueryVariables>;
 export const SubToChapterImageFitDocument = {
 	kind: "Document",
 	definitions: [
@@ -16843,6 +17221,30 @@ export const ScanlationUploadsFeedDocument = {
 						name: { kind: "Name", value: "onlyUnreadTitles" }
 					},
 					type: { kind: "NamedType", name: { kind: "Name", value: "Boolean" } }
+				},
+				{
+					kind: "VariableDefinition",
+					variable: {
+						kind: "Variable",
+						name: { kind: "Name", value: "disableScanlationGroupBlacklist" }
+					},
+					type: { kind: "NamedType", name: { kind: "Name", value: "Boolean" } }
+				},
+				{
+					kind: "VariableDefinition",
+					variable: {
+						kind: "Variable",
+						name: { kind: "Name", value: "disableUserBlacklist" }
+					},
+					type: { kind: "NamedType", name: { kind: "Name", value: "Boolean" } }
+				},
+				{
+					kind: "VariableDefinition",
+					variable: {
+						kind: "Variable",
+						name: { kind: "Name", value: "disableAuthorArtistBlacklist" }
+					},
+					type: { kind: "NamedType", name: { kind: "Name", value: "Boolean" } }
 				}
 			],
 			selectionSet: {
@@ -16860,51 +17262,92 @@ export const ScanlationUploadsFeedDocument = {
 									arguments: [
 										{
 											kind: "Argument",
-											name: { kind: "Name", value: "chapterListParams" },
+											name: { kind: "Name", value: "param" },
 											value: {
 												kind: "ObjectValue",
 												fields: [
 													{
 														kind: "ObjectField",
-														name: { kind: "Name", value: "offset" },
-														value: {
-															kind: "Variable",
-															name: { kind: "Name", value: "offset" }
-														}
-													},
-													{
-														kind: "ObjectField",
-														name: { kind: "Name", value: "limit" },
-														value: {
-															kind: "Variable",
-															name: { kind: "Name", value: "limit" }
-														}
-													},
-													{
-														kind: "ObjectField",
 														name: {
 															kind: "Name",
-															value: "translatedLanguages"
+															value: "chapterListParams"
 														},
 														value: {
-															kind: "Variable",
-															name: {
-																kind: "Name",
-																value: "translatedLanguages"
-															}
-														}
-													},
-													{
-														kind: "ObjectField",
-														name: { kind: "Name", value: "groups" },
-														value: {
-															kind: "ListValue",
-															values: [
+															kind: "ObjectValue",
+															fields: [
 																{
-																	kind: "Variable",
+																	kind: "ObjectField",
 																	name: {
 																		kind: "Name",
-																		value: "group"
+																		value: "offset"
+																	},
+																	value: {
+																		kind: "Variable",
+																		name: {
+																			kind: "Name",
+																			value: "offset"
+																		}
+																	}
+																},
+																{
+																	kind: "ObjectField",
+																	name: {
+																		kind: "Name",
+																		value: "limit"
+																	},
+																	value: {
+																		kind: "Variable",
+																		name: {
+																			kind: "Name",
+																			value: "limit"
+																		}
+																	}
+																},
+																{
+																	kind: "ObjectField",
+																	name: {
+																		kind: "Name",
+																		value: "translatedLanguages"
+																	},
+																	value: {
+																		kind: "Variable",
+																		name: {
+																			kind: "Name",
+																			value: "translatedLanguages"
+																		}
+																	}
+																},
+																{
+																	kind: "ObjectField",
+																	name: {
+																		kind: "Name",
+																		value: "groups"
+																	},
+																	value: {
+																		kind: "ListValue",
+																		values: [
+																			{
+																				kind: "Variable",
+																				name: {
+																					kind: "Name",
+																					value: "group"
+																				}
+																			}
+																		]
+																	}
+																},
+																{
+																	kind: "ObjectField",
+																	name: {
+																		kind: "Name",
+																		value: "order"
+																	},
+																	value: {
+																		kind: "Variable",
+																		name: {
+																			kind: "Name",
+																			value: "order"
+																		}
 																	}
 																}
 															]
@@ -16912,29 +17355,75 @@ export const ScanlationUploadsFeedDocument = {
 													},
 													{
 														kind: "ObjectField",
-														name: { kind: "Name", value: "order" },
+														name: {
+															kind: "Name",
+															value: "mangaListParams"
+														},
 														value: {
 															kind: "Variable",
-															name: { kind: "Name", value: "order" }
+															name: {
+																kind: "Name",
+																value: "mangaListParams"
+															}
+														}
+													},
+													{
+														kind: "ObjectField",
+														name: {
+															kind: "Name",
+															value: "onlyUnreadTitles"
+														},
+														value: {
+															kind: "Variable",
+															name: {
+																kind: "Name",
+																value: "onlyUnreadTitles"
+															}
+														}
+													},
+													{
+														kind: "ObjectField",
+														name: {
+															kind: "Name",
+															value: "excludeBlacklistedAuthorArtists"
+														},
+														value: {
+															kind: "Variable",
+															name: {
+																kind: "Name",
+																value: "disableAuthorArtistBlacklist"
+															}
+														}
+													},
+													{
+														kind: "ObjectField",
+														name: {
+															kind: "Name",
+															value: "excludeBlacklistedScansGroups"
+														},
+														value: {
+															kind: "Variable",
+															name: {
+																kind: "Name",
+																value: "disableScanlationGroupBlacklist"
+															}
+														}
+													},
+													{
+														kind: "ObjectField",
+														name: {
+															kind: "Name",
+															value: "excludeBlacklistedUsers"
+														},
+														value: {
+															kind: "Variable",
+															name: {
+																kind: "Name",
+																value: "disableUserBlacklist"
+															}
 														}
 													}
 												]
-											}
-										},
-										{
-											kind: "Argument",
-											name: { kind: "Name", value: "mangaListParams" },
-											value: {
-												kind: "Variable",
-												name: { kind: "Name", value: "mangaListParams" }
-											}
-										},
-										{
-											kind: "Argument",
-											name: { kind: "Name", value: "onlyUnreadTitles" },
-											value: {
-												kind: "Variable",
-												name: { kind: "Name", value: "onlyUnreadTitles" }
 											}
 										}
 									],
@@ -20703,6 +21192,30 @@ export const CustomListChapterFeedDocument = {
 						name: { kind: "Name", value: "onlyUnreadTitles" }
 					},
 					type: { kind: "NamedType", name: { kind: "Name", value: "Boolean" } }
+				},
+				{
+					kind: "VariableDefinition",
+					variable: {
+						kind: "Variable",
+						name: { kind: "Name", value: "disableScanlationGroupBlacklist" }
+					},
+					type: { kind: "NamedType", name: { kind: "Name", value: "Boolean" } }
+				},
+				{
+					kind: "VariableDefinition",
+					variable: {
+						kind: "Variable",
+						name: { kind: "Name", value: "disableUserBlacklist" }
+					},
+					type: { kind: "NamedType", name: { kind: "Name", value: "Boolean" } }
+				},
+				{
+					kind: "VariableDefinition",
+					variable: {
+						kind: "Variable",
+						name: { kind: "Name", value: "disableAuthorArtistBlacklist" }
+					},
+					type: { kind: "NamedType", name: { kind: "Name", value: "Boolean" } }
 				}
 			],
 			selectionSet: {
@@ -20720,34 +21233,100 @@ export const CustomListChapterFeedDocument = {
 									arguments: [
 										{
 											kind: "Argument",
-											name: { kind: "Name", value: "feedParams" },
+											name: { kind: "Name", value: "param" },
 											value: {
-												kind: "Variable",
-												name: { kind: "Name", value: "feedParam" }
-											}
-										},
-										{
-											kind: "Argument",
-											name: { kind: "Name", value: "mangaListParams" },
-											value: {
-												kind: "Variable",
-												name: { kind: "Name", value: "mangaParam" }
-											}
-										},
-										{
-											kind: "Argument",
-											name: { kind: "Name", value: "private" },
-											value: {
-												kind: "Variable",
-												name: { kind: "Name", value: "private" }
-											}
-										},
-										{
-											kind: "Argument",
-											name: { kind: "Name", value: "onlyUnreadTitles" },
-											value: {
-												kind: "Variable",
-												name: { kind: "Name", value: "onlyUnreadTitles" }
+												kind: "ObjectValue",
+												fields: [
+													{
+														kind: "ObjectField",
+														name: { kind: "Name", value: "feedParams" },
+														value: {
+															kind: "Variable",
+															name: {
+																kind: "Name",
+																value: "feedParam"
+															}
+														}
+													},
+													{
+														kind: "ObjectField",
+														name: {
+															kind: "Name",
+															value: "mangaListParams"
+														},
+														value: {
+															kind: "Variable",
+															name: {
+																kind: "Name",
+																value: "mangaParam"
+															}
+														}
+													},
+													{
+														kind: "ObjectField",
+														name: { kind: "Name", value: "private" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "private" }
+														}
+													},
+													{
+														kind: "ObjectField",
+														name: {
+															kind: "Name",
+															value: "onlyUnreadTitles"
+														},
+														value: {
+															kind: "Variable",
+															name: {
+																kind: "Name",
+																value: "onlyUnreadTitles"
+															}
+														}
+													},
+													{
+														kind: "ObjectField",
+														name: {
+															kind: "Name",
+															value: "disableScansGroupsBlacklist"
+														},
+														value: {
+															kind: "Variable",
+															name: {
+																kind: "Name",
+																value: "disableScanlationGroupBlacklist"
+															}
+														}
+													},
+													{
+														kind: "ObjectField",
+														name: {
+															kind: "Name",
+															value: "disableUsersBlacklist"
+														},
+														value: {
+															kind: "Variable",
+															name: {
+																kind: "Name",
+																value: "disableUserBlacklist"
+															}
+														}
+													},
+													{
+														kind: "ObjectField",
+														name: {
+															kind: "Name",
+															value: "disableAuthorArtistsBlacklist"
+														},
+														value: {
+															kind: "Variable",
+															name: {
+																kind: "Name",
+																value: "disableAuthorArtistBlacklist"
+															}
+														}
+													}
+												]
 											}
 										}
 									],
@@ -24983,6 +25562,30 @@ export const LatestUploadsPageQueryDocument = {
 					kind: "VariableDefinition",
 					variable: { kind: "Variable", name: { kind: "Name", value: "limit" } },
 					type: { kind: "NamedType", name: { kind: "Name", value: "Int" } }
+				},
+				{
+					kind: "VariableDefinition",
+					variable: {
+						kind: "Variable",
+						name: { kind: "Name", value: "disableScanlationGroupBlacklist" }
+					},
+					type: { kind: "NamedType", name: { kind: "Name", value: "Boolean" } }
+				},
+				{
+					kind: "VariableDefinition",
+					variable: {
+						kind: "Variable",
+						name: { kind: "Name", value: "disableUserBlacklist" }
+					},
+					type: { kind: "NamedType", name: { kind: "Name", value: "Boolean" } }
+				},
+				{
+					kind: "VariableDefinition",
+					variable: {
+						kind: "Variable",
+						name: { kind: "Name", value: "disableAuthorArtistBlacklist" }
+					},
+					type: { kind: "NamedType", name: { kind: "Name", value: "Boolean" } }
 				}
 			],
 			selectionSet: {
@@ -25000,7 +25603,7 @@ export const LatestUploadsPageQueryDocument = {
 									arguments: [
 										{
 											kind: "Argument",
-											name: { kind: "Name", value: "chapterListParams" },
+											name: { kind: "Name", value: "param" },
 											value: {
 												kind: "ObjectValue",
 												fields: [
@@ -25008,49 +25611,8 @@ export const LatestUploadsPageQueryDocument = {
 														kind: "ObjectField",
 														name: {
 															kind: "Name",
-															value: "includeEmptyPages"
+															value: "chapterListParams"
 														},
-														value: {
-															kind: "EnumValue",
-															value: "EXCLUDE"
-														}
-													},
-													{
-														kind: "ObjectField",
-														name: {
-															kind: "Name",
-															value: "includeExternalUrl"
-														},
-														value: {
-															kind: "EnumValue",
-															value: "EXCLUDE"
-														}
-													},
-													{
-														kind: "ObjectField",
-														name: {
-															kind: "Name",
-															value: "includeFutureUpdates"
-														},
-														value: {
-															kind: "EnumValue",
-															value: "EXCLUDE"
-														}
-													},
-													{
-														kind: "ObjectField",
-														name: {
-															kind: "Name",
-															value: "includeFuturePublishAt"
-														},
-														value: {
-															kind: "EnumValue",
-															value: "EXCLUDE"
-														}
-													},
-													{
-														kind: "ObjectField",
-														name: { kind: "Name", value: "order" },
 														value: {
 															kind: "ObjectValue",
 															fields: [
@@ -25058,11 +25620,95 @@ export const LatestUploadsPageQueryDocument = {
 																	kind: "ObjectField",
 																	name: {
 																		kind: "Name",
-																		value: "readableAt"
+																		value: "includeEmptyPages"
 																	},
 																	value: {
 																		kind: "EnumValue",
-																		value: "DESCENDING"
+																		value: "EXCLUDE"
+																	}
+																},
+																{
+																	kind: "ObjectField",
+																	name: {
+																		kind: "Name",
+																		value: "includeExternalUrl"
+																	},
+																	value: {
+																		kind: "EnumValue",
+																		value: "EXCLUDE"
+																	}
+																},
+																{
+																	kind: "ObjectField",
+																	name: {
+																		kind: "Name",
+																		value: "includeFutureUpdates"
+																	},
+																	value: {
+																		kind: "EnumValue",
+																		value: "EXCLUDE"
+																	}
+																},
+																{
+																	kind: "ObjectField",
+																	name: {
+																		kind: "Name",
+																		value: "includeFuturePublishAt"
+																	},
+																	value: {
+																		kind: "EnumValue",
+																		value: "EXCLUDE"
+																	}
+																},
+																{
+																	kind: "ObjectField",
+																	name: {
+																		kind: "Name",
+																		value: "order"
+																	},
+																	value: {
+																		kind: "ObjectValue",
+																		fields: [
+																			{
+																				kind: "ObjectField",
+																				name: {
+																					kind: "Name",
+																					value: "readableAt"
+																				},
+																				value: {
+																					kind: "EnumValue",
+																					value: "DESCENDING"
+																				}
+																			}
+																		]
+																	}
+																},
+																{
+																	kind: "ObjectField",
+																	name: {
+																		kind: "Name",
+																		value: "offset"
+																	},
+																	value: {
+																		kind: "Variable",
+																		name: {
+																			kind: "Name",
+																			value: "offset"
+																		}
+																	}
+																},
+																{
+																	kind: "ObjectField",
+																	name: {
+																		kind: "Name",
+																		value: "limit"
+																	},
+																	value: {
+																		kind: "Variable",
+																		name: {
+																			kind: "Name",
+																			value: "limit"
+																		}
 																	}
 																}
 															]
@@ -25070,27 +25716,56 @@ export const LatestUploadsPageQueryDocument = {
 													},
 													{
 														kind: "ObjectField",
-														name: { kind: "Name", value: "offset" },
+														name: {
+															kind: "Name",
+															value: "feedContent"
+														},
+														value: { kind: "BooleanValue", value: true }
+													},
+													{
+														kind: "ObjectField",
+														name: {
+															kind: "Name",
+															value: "excludeBlacklistedAuthorArtists"
+														},
 														value: {
 															kind: "Variable",
-															name: { kind: "Name", value: "offset" }
+															name: {
+																kind: "Name",
+																value: "disableAuthorArtistBlacklist"
+															}
 														}
 													},
 													{
 														kind: "ObjectField",
-														name: { kind: "Name", value: "limit" },
+														name: {
+															kind: "Name",
+															value: "excludeBlacklistedScansGroups"
+														},
 														value: {
 															kind: "Variable",
-															name: { kind: "Name", value: "limit" }
+															name: {
+																kind: "Name",
+																value: "disableScanlationGroupBlacklist"
+															}
+														}
+													},
+													{
+														kind: "ObjectField",
+														name: {
+															kind: "Name",
+															value: "excludeBlacklistedUsers"
+														},
+														value: {
+															kind: "Variable",
+															name: {
+																kind: "Name",
+																value: "disableUserBlacklist"
+															}
 														}
 													}
 												]
 											}
-										},
-										{
-											kind: "Argument",
-											name: { kind: "Name", value: "feedContent" },
-											value: { kind: "BooleanValue", value: true }
 										}
 									],
 									selectionSet: {
@@ -28469,6 +29144,30 @@ export const UserUploadsFeedDocument = {
 					},
 					type: { kind: "NamedType", name: { kind: "Name", value: "MangaListParams" } },
 					defaultValue: { kind: "ObjectValue", fields: [] }
+				},
+				{
+					kind: "VariableDefinition",
+					variable: {
+						kind: "Variable",
+						name: { kind: "Name", value: "disableScanlationGroupBlacklist" }
+					},
+					type: { kind: "NamedType", name: { kind: "Name", value: "Boolean" } }
+				},
+				{
+					kind: "VariableDefinition",
+					variable: {
+						kind: "Variable",
+						name: { kind: "Name", value: "disableUserBlacklist" }
+					},
+					type: { kind: "NamedType", name: { kind: "Name", value: "Boolean" } }
+				},
+				{
+					kind: "VariableDefinition",
+					variable: {
+						kind: "Variable",
+						name: { kind: "Name", value: "disableAuthorArtistBlacklist" }
+					},
+					type: { kind: "NamedType", name: { kind: "Name", value: "Boolean" } }
 				}
 			],
 			selectionSet: {
@@ -28486,51 +29185,92 @@ export const UserUploadsFeedDocument = {
 									arguments: [
 										{
 											kind: "Argument",
-											name: { kind: "Name", value: "chapterListParams" },
+											name: { kind: "Name", value: "param" },
 											value: {
 												kind: "ObjectValue",
 												fields: [
 													{
 														kind: "ObjectField",
-														name: { kind: "Name", value: "offset" },
-														value: {
-															kind: "Variable",
-															name: { kind: "Name", value: "offset" }
-														}
-													},
-													{
-														kind: "ObjectField",
-														name: { kind: "Name", value: "limit" },
-														value: {
-															kind: "Variable",
-															name: { kind: "Name", value: "limit" }
-														}
-													},
-													{
-														kind: "ObjectField",
 														name: {
 															kind: "Name",
-															value: "translatedLanguages"
+															value: "chapterListParams"
 														},
 														value: {
-															kind: "Variable",
-															name: {
-																kind: "Name",
-																value: "translatedLanguages"
-															}
-														}
-													},
-													{
-														kind: "ObjectField",
-														name: { kind: "Name", value: "uploaders" },
-														value: {
-															kind: "ListValue",
-															values: [
+															kind: "ObjectValue",
+															fields: [
 																{
-																	kind: "Variable",
+																	kind: "ObjectField",
 																	name: {
 																		kind: "Name",
-																		value: "user"
+																		value: "offset"
+																	},
+																	value: {
+																		kind: "Variable",
+																		name: {
+																			kind: "Name",
+																			value: "offset"
+																		}
+																	}
+																},
+																{
+																	kind: "ObjectField",
+																	name: {
+																		kind: "Name",
+																		value: "limit"
+																	},
+																	value: {
+																		kind: "Variable",
+																		name: {
+																			kind: "Name",
+																			value: "limit"
+																		}
+																	}
+																},
+																{
+																	kind: "ObjectField",
+																	name: {
+																		kind: "Name",
+																		value: "translatedLanguages"
+																	},
+																	value: {
+																		kind: "Variable",
+																		name: {
+																			kind: "Name",
+																			value: "translatedLanguages"
+																		}
+																	}
+																},
+																{
+																	kind: "ObjectField",
+																	name: {
+																		kind: "Name",
+																		value: "uploaders"
+																	},
+																	value: {
+																		kind: "ListValue",
+																		values: [
+																			{
+																				kind: "Variable",
+																				name: {
+																					kind: "Name",
+																					value: "user"
+																				}
+																			}
+																		]
+																	}
+																},
+																{
+																	kind: "ObjectField",
+																	name: {
+																		kind: "Name",
+																		value: "order"
+																	},
+																	value: {
+																		kind: "Variable",
+																		name: {
+																			kind: "Name",
+																			value: "order"
+																		}
 																	}
 																}
 															]
@@ -28538,21 +29278,61 @@ export const UserUploadsFeedDocument = {
 													},
 													{
 														kind: "ObjectField",
-														name: { kind: "Name", value: "order" },
+														name: {
+															kind: "Name",
+															value: "mangaListParams"
+														},
 														value: {
 															kind: "Variable",
-															name: { kind: "Name", value: "order" }
+															name: {
+																kind: "Name",
+																value: "mangaListParams"
+															}
+														}
+													},
+													{
+														kind: "ObjectField",
+														name: {
+															kind: "Name",
+															value: "excludeBlacklistedAuthorArtists"
+														},
+														value: {
+															kind: "Variable",
+															name: {
+																kind: "Name",
+																value: "disableAuthorArtistBlacklist"
+															}
+														}
+													},
+													{
+														kind: "ObjectField",
+														name: {
+															kind: "Name",
+															value: "excludeBlacklistedScansGroups"
+														},
+														value: {
+															kind: "Variable",
+															name: {
+																kind: "Name",
+																value: "disableScanlationGroupBlacklist"
+															}
+														}
+													},
+													{
+														kind: "ObjectField",
+														name: {
+															kind: "Name",
+															value: "excludeBlacklistedUsers"
+														},
+														value: {
+															kind: "Variable",
+															name: {
+																kind: "Name",
+																value: "disableUserBlacklist"
+															}
 														}
 													}
 												]
-											}
-										},
-										{
-											kind: "Argument",
-											name: { kind: "Name", value: "mangaListParams" },
-											value: {
-												kind: "Variable",
-												name: { kind: "Name", value: "mangaListParams" }
 											}
 										}
 									],

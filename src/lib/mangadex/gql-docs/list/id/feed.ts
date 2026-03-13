@@ -8,8 +8,8 @@ const query = graphql(`
 		$onlyUnreadTitles: Boolean
 		$disableScanlationGroupBlacklist: Boolean
 		$disableUserBlacklist: Boolean
-	) # $disableAuthorArtistBlacklist: Boolean
-	{
+		$disableAuthorArtistBlacklist: Boolean
+	) {
 		feed {
 			customListFeedGrouped(
 				param: {
@@ -17,9 +17,9 @@ const query = graphql(`
 					mangaListParams: $mangaParam
 					private: $private
 					onlyUnreadTitles: $onlyUnreadTitles
-					excludeBlacklistedScansGroups: $disableScanlationGroupBlacklist
-					excludeBlacklistedUsers: $disableUserBlacklist
-					# excludeBlacklistedAuthorArtists: $disableAuthorArtistBlacklist
+					disableScansGroupsBlacklist: $disableScanlationGroupBlacklist
+					disableUsersBlacklist: $disableUserBlacklist
+					disableAuthorArtistsBlacklist: $disableAuthorArtistBlacklist
 				}
 			) {
 				limit
