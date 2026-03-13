@@ -1,5 +1,5 @@
 <script lang="ts">
-	import millify from "millify";
+	import { millify } from "$lib/utils";
 	import CommentsIcon from "./comments/CommentsIcon.svelte";
 
 	interface Events {
