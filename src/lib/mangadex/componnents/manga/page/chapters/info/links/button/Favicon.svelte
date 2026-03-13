@@ -14,6 +14,7 @@
 <style lang="scss">
 	.ico {
 		width: 20px;
+		height: 20px;
 		border-radius: 0.25em;
 	}
 </style>

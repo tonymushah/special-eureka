@@ -2,7 +2,6 @@
 	import type { AltTitleItem } from "@mangadex/componnents/manga/page/chapters/info/alt-titles/MangaAltTitles.svelte";
 	import Info, { type SimpleItems } from "@mangadex/componnents/manga/page/chapters/Info.svelte";
 	import manga_altTitle_to_lang_map from "@mangadex/utils/lang/record-to-map/manga-altTitle-to-lang-map";
-	import { getContextClient } from "@urql/svelte";
 	import { TagGroup, type MangaLinks } from "@mangadex/gql/graphql";
 	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
 	import getDemographicName from "@mangadex/utils/demographic/getDemographicName";
@@ -13,8 +12,7 @@
 	import { addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 
 	const __res = getTitleLayoutData();
-	const data = __res.queryResult;
-	const client = getContextClient();
+	let data = $derived.by(() => __res.queryResult);
 	function buildAtlTitles(altTitle: Record<string, string>[]): AltTitleItem[] {
 		let map = manga_altTitle_to_lang_map(altTitle);
 		let output: AltTitleItem[] = [];
@@ -90,7 +88,6 @@
 	}
 	function getLinks(d: typeof data): MangaLinks | undefined {
 		const links = d?.attributes.links;
-		console.log(links);
 		if (links == null) {
 			return undefined;
 		} else {
