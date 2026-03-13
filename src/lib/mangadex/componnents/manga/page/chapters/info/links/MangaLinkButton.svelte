@@ -3,14 +3,16 @@
 	import { openUrl as open } from "@tauri-apps/plugin-opener";
 	import type { Readable } from "svelte/store";
 	import Favicon from "./button/Favicon.svelte";
+	import { getFaviconSrcQuery } from "@mangadex/utils/favicons/getFaviconSrc";
 
 	interface Props {
 		href: string;
 		title: string;
-		icon: Readable<string | undefined>;
+		icon?: string;
 	}
 
 	let { href, title, icon }: Props = $props();
+	let query = getFaviconSrcQuery(() => href);
 </script>
 
 <ButtonBase
@@ -22,7 +24,7 @@
 	with_hover
 >
 	<div>
-		<Favicon icon={$icon} alt={href} />
+		<Favicon icon={icon ?? query.data} alt={href} />
 		<span class="title">
 			{title}
 		</span>

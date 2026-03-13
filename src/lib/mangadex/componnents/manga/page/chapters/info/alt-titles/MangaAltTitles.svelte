@@ -1,15 +1,12 @@
 <script lang="ts" module>
-	import type { Language } from "@mangadex/gql/graphql";
-
 	export type AltTitleItem = {
-		locale: Readable<Language | undefined>;
+		lang: string;
 		title: string;
 	};
 </script>
 
 <script lang="ts">
 	import AltTitle from "./AltTitle.svelte";
-	import type { Readable } from "svelte/store";
 
 	interface Props {
 		titles: AltTitleItem[];
@@ -19,8 +16,8 @@
 </script>
 
 <div class="alt-titles">
-	{#each titles as { title, locale }}
-		<AltTitle {title} {locale} />
+	{#each titles as { title, lang }}
+		<AltTitle {title} {lang} />
 	{/each}
 </div>
 

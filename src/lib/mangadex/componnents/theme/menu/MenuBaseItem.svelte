@@ -45,6 +45,8 @@
 		gap: 5px;
 		padding: var(--menu-item-padding);
 		cursor: pointer;
+		border: none;
+		font-family: var(--fonts);
 	}
 	.menu-item.isDisabled {
 		cursor: not-allowed;

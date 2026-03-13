@@ -144,6 +144,7 @@
 		() => data.layoutData.id,
 		() => isInViewport.current
 	);
+	// TODO transform these into class based reactivit
 	// svelte-ignore state_referenced_locally
 	const _state = toStore(() => mangaDownload.mangaDownloadState);
 	const reading_status = der(
@@ -157,6 +158,8 @@
 	const isFollowing = manga_following_status(data.layoutData.id, {
 		getOnMount: false
 	});
+	// svelte-ignore state_referenced_locally
+	const ratingStore = der(manga_rating(data.layoutData.id), (d) => d ?? undefined);
 
 	let followingStatusQuery = createQuery(() => ({
 		queryKey: ["title", data.layoutData.id, "following", "status"],
@@ -434,7 +437,7 @@
 			);
 		}}
 		disableAddToLibrary={disableAddToLibrary || !$isLogged}
-		rating={der(manga_rating(data.layoutData.id), (d) => d ?? undefined)}
+		rating={ratingStore}
 		{onrating}
 		disableRating={disableRating || !$isLogged}
 		disableRead={!$hasChaptToRead}
