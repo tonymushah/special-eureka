@@ -68,10 +68,11 @@
 		overflow-y: auto;
 		max-height: var(--menu-height);
 		z-index: 1;
+		border-color: var(--mid-tone);
+		border-style: solid;
+		border-width: 1px;
 		.inner {
-			border-color: var(--mid-tone);
-			border-style: solid;
-			border-width: 1px;
+			display: grid;
 		}
 	}
 	div.menu.fitContent {

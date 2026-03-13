@@ -1,8 +1,6 @@
 <script lang="ts" generics="T">
 	import SomeDiv from "../SomeDiv.svelte";
 
-	import type { Item } from "../context-menu/base";
-
 	import Menu from "./Menu.svelte";
 	import type { MenuItem } from "./index";
 
@@ -12,7 +10,7 @@
 		items?: MenuItem<T>[];
 		onSelect?: (
 			ev: MouseEvent & {
-				currentTarget: EventTarget & HTMLDivElement;
+				currentTarget: EventTarget & HTMLElement;
 				value: T;
 			}
 		) => any;
@@ -30,8 +28,12 @@
 	}: Props = $props();
 
 	let menuItems = $derived(
-		items.map<Item>((i) => ({
-			onClick(e) {
+		items.map((i) => ({
+			onClick(
+				e: MouseEvent & {
+					currentTarget: EventTarget & HTMLElement;
+				}
+			) {
 				onSelect?.({
 					...e,
 					value: i.key
@@ -39,7 +41,8 @@
 				isOpen = false;
 			},
 			icon: i.icon ?? SomeDiv,
-			label: i.label
+			label: i.label,
+			tabindex: 0
 		}))
 	);
 </script>
