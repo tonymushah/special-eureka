@@ -2,7 +2,6 @@
 	import type { AltTitleItem } from "@mangadex/componnents/manga/page/chapters/info/alt-titles/MangaAltTitles.svelte";
 	import Info, { type SimpleItems } from "@mangadex/componnents/manga/page/chapters/Info.svelte";
 	import manga_altTitle_to_lang_map from "@mangadex/utils/lang/record-to-map/manga-altTitle-to-lang-map";
-	import getLanguageFromStr from "@mangadex/utils/lang/getLanguageFromStr";
 	import { getContextClient } from "@urql/svelte";
 	import { TagGroup, type MangaLinks } from "@mangadex/gql/graphql";
 	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
@@ -22,10 +21,7 @@
 		map.forEach((title, lang) => {
 			output.push({
 				title,
-				locale: getLanguageFromStr({
-					lang,
-					client
-				})
+				lang
 			});
 		});
 		return output;

@@ -15,11 +15,11 @@
 		stats: TopMangaStatistics;
 	}
 
-	let { stats = $bindable(), oncommentClick }: Props = $props();
+	let { stats, oncommentClick }: Props = $props();
 </script>
 
 <div class="stats">
-	<Note average={stats.average} bind:inner={stats.inner} />
+	<Note average={stats.average} inner={stats.inner} />
 	<BookmarkButton bookmarks={stats.follows} />
 	{#if stats.comments}
 		<CommentsButton
