@@ -1,5 +1,5 @@
 <script lang="ts">
-	import millify from "millify";
+	// import {millify} from "millify";
 	import BookMarkIcon from "./bookmark/BookMarkIcon.svelte";
 	interface Props {
 		bookmarks: number;
@@ -8,7 +8,15 @@
 	let { bookmarks }: Props = $props();
 	let shouldSuspend = $state(false);
 	let isMillify = $state(true);
-	let bookmarks_ = $derived(isMillify ? millify(bookmarks) : bookmarks);
+	let bookmarks_ = $derived.by(() => {
+		if (isMillify) {
+			return new Intl.NumberFormat("en-US", {
+				notation: "compact"
+			}).format(bookmarks);
+		} else {
+			return bookmarks;
+		}
+	});
 </script>
 
 <button
