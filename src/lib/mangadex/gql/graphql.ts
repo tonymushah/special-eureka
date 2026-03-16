@@ -5657,6 +5657,132 @@ export type UnblockBatchAuthorArtistMutation = {
 	};
 };
 
+export type ListBlacklistLabelsQueryVariables = Exact<{
+	params?: InputMaybe<BlacklistLabelsListParam>;
+}>;
+
+export type ListBlacklistLabelsQuery = {
+	__typename?: "Query";
+	blacklist: {
+		__typename?: "BlacklistQueries";
+		labels: {
+			__typename?: "BlacklistLabelsQueries";
+			list: {
+				__typename?: "BlacklistedLabelResults";
+				offset: number;
+				limit: number;
+				total: number;
+				data: Array<{
+					__typename?: "BlacklistLabel";
+					id: any;
+					name: string;
+					createDate?: any | null;
+					description?: string | null;
+				}>;
+			};
+		};
+	};
+};
+
+export type GetBlacklistLabelQueryVariables = Exact<{
+	id: Scalars["UUID"]["input"];
+}>;
+
+export type GetBlacklistLabelQuery = {
+	__typename?: "Query";
+	blacklist: {
+		__typename?: "BlacklistQueries";
+		labels: {
+			__typename?: "BlacklistLabelsQueries";
+			get: {
+				__typename?: "BlacklistLabel";
+				id: any;
+				name: string;
+				createDate?: any | null;
+				description?: string | null;
+			};
+		};
+	};
+};
+
+export type GetBlacklistLabelsByIdsQueryVariables = Exact<{
+	ids: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
+}>;
+
+export type GetBlacklistLabelsByIdsQuery = {
+	__typename?: "Query";
+	blacklist: {
+		__typename?: "BlacklistQueries";
+		labels: {
+			__typename?: "BlacklistLabelsQueries";
+			getByIds: Array<{
+				__typename?: "BlacklistLabel";
+				id: any;
+				name: string;
+				createDate?: any | null;
+				description?: string | null;
+			}>;
+		};
+	};
+};
+
+export type CreateBlacklistLabelMutationVariables = Exact<{
+	param: CreateBlacklistLabelParam;
+}>;
+
+export type CreateBlacklistLabelMutation = {
+	__typename?: "Mutation";
+	blacklist: {
+		__typename?: "BlacklistMutations";
+		labels: {
+			__typename?: "BlacklistLabelsMutations";
+			createLabel: { __typename?: "BlacklistLabel"; id: any };
+		};
+	};
+};
+
+export type LinkBlacklistLabelsAuthorsArtistsMutationVariables = Exact<{
+	labelIds: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
+	authorIds: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
+	notes?: InputMaybe<Scalars["String"]["input"]>;
+}>;
+
+export type LinkBlacklistLabelsAuthorsArtistsMutation = {
+	__typename?: "Mutation";
+	blacklist: {
+		__typename?: "BlacklistMutations";
+		labels: { __typename?: "BlacklistLabelsMutations"; linkAuthorsArtists?: boolean | null };
+	};
+};
+
+export type LinkBlacklistLabelsScanlationGroupsMutationVariables = Exact<{
+	scanlationGroupIds: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
+	labelIds: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
+	notes?: InputMaybe<Scalars["String"]["input"]>;
+}>;
+
+export type LinkBlacklistLabelsScanlationGroupsMutation = {
+	__typename?: "Mutation";
+	blacklist: {
+		__typename?: "BlacklistMutations";
+		labels: { __typename?: "BlacklistLabelsMutations"; linkScanlationGroups?: boolean | null };
+	};
+};
+
+export type LinkBlacklistLabelsUsersMutationVariables = Exact<{
+	labelIds: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
+	userIds: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
+	notes?: InputMaybe<Scalars["String"]["input"]>;
+}>;
+
+export type LinkBlacklistLabelsUsersMutation = {
+	__typename?: "Mutation";
+	blacklist: {
+		__typename?: "BlacklistMutations";
+		labels: { __typename?: "BlacklistLabelsMutations"; linkUsers?: boolean | null };
+	};
+};
+
 export type ListBlacklistedScanlationGroupsQueryVariables = Exact<{
 	params?: InputMaybe<BlacklistScanlationGroupsListParam>;
 }>;
@@ -15459,6 +15585,687 @@ export const UnblockBatchAuthorArtistDocument = {
 } as unknown as DocumentNode<
 	UnblockBatchAuthorArtistMutation,
 	UnblockBatchAuthorArtistMutationVariables
+>;
+export const ListBlacklistLabelsDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "listBlacklistLabels" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "params" } },
+					type: {
+						kind: "NamedType",
+						name: { kind: "Name", value: "BlacklistLabelsListParam" }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "blacklist" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "labels" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "list" },
+												arguments: [
+													{
+														kind: "Argument",
+														name: { kind: "Name", value: "params" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "params" }
+														}
+													}
+												],
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "offset" }
+														},
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "limit" }
+														},
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "total" }
+														},
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "data" },
+															selectionSet: {
+																kind: "SelectionSet",
+																selections: [
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "id"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "name"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "createDate"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "description"
+																		}
+																	}
+																]
+															}
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<ListBlacklistLabelsQuery, ListBlacklistLabelsQueryVariables>;
+export const GetBlacklistLabelDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "getBlacklistLabel" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "blacklist" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "labels" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "get" },
+												arguments: [
+													{
+														kind: "Argument",
+														name: { kind: "Name", value: "id" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "id" }
+														}
+													}
+												],
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "id" }
+														},
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "name" }
+														},
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "createDate"
+															}
+														},
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "description"
+															}
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<GetBlacklistLabelQuery, GetBlacklistLabelQueryVariables>;
+export const GetBlacklistLabelsByIdsDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "getBlacklistLabelsByIds" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "ids" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "ListType",
+							type: {
+								kind: "NonNullType",
+								type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+							}
+						}
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "blacklist" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "labels" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "getByIds" },
+												arguments: [
+													{
+														kind: "Argument",
+														name: { kind: "Name", value: "ids" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "ids" }
+														}
+													}
+												],
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "id" }
+														},
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "name" }
+														},
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "createDate"
+															}
+														},
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "description"
+															}
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<GetBlacklistLabelsByIdsQuery, GetBlacklistLabelsByIdsQueryVariables>;
+export const CreateBlacklistLabelDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "createBlacklistLabel" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "param" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "NamedType",
+							name: { kind: "Name", value: "CreateBlacklistLabelParam" }
+						}
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "blacklist" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "labels" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "createLabel" },
+												arguments: [
+													{
+														kind: "Argument",
+														name: { kind: "Name", value: "param" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "param" }
+														}
+													}
+												],
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "id" }
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<CreateBlacklistLabelMutation, CreateBlacklistLabelMutationVariables>;
+export const LinkBlacklistLabelsAuthorsArtistsDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "linkBlacklistLabelsAuthorsArtists" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "labelIds" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "ListType",
+							type: {
+								kind: "NonNullType",
+								type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+							}
+						}
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "authorIds" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "ListType",
+							type: {
+								kind: "NonNullType",
+								type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+							}
+						}
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "notes" } },
+					type: { kind: "NamedType", name: { kind: "Name", value: "String" } }
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "blacklist" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "labels" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "linkAuthorsArtists" },
+												arguments: [
+													{
+														kind: "Argument",
+														name: { kind: "Name", value: "authorIds" },
+														value: {
+															kind: "Variable",
+															name: {
+																kind: "Name",
+																value: "authorIds"
+															}
+														}
+													},
+													{
+														kind: "Argument",
+														name: { kind: "Name", value: "labelIds" },
+														value: {
+															kind: "Variable",
+															name: {
+																kind: "Name",
+																value: "labelIds"
+															}
+														}
+													},
+													{
+														kind: "Argument",
+														name: { kind: "Name", value: "notes" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "notes" }
+														}
+													}
+												]
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	LinkBlacklistLabelsAuthorsArtistsMutation,
+	LinkBlacklistLabelsAuthorsArtistsMutationVariables
+>;
+export const LinkBlacklistLabelsScanlationGroupsDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "linkBlacklistLabelsScanlationGroups" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: {
+						kind: "Variable",
+						name: { kind: "Name", value: "scanlationGroupIds" }
+					},
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "ListType",
+							type: {
+								kind: "NonNullType",
+								type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+							}
+						}
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "labelIds" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "ListType",
+							type: {
+								kind: "NonNullType",
+								type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+							}
+						}
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "notes" } },
+					type: { kind: "NamedType", name: { kind: "Name", value: "String" } }
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "blacklist" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "labels" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: {
+													kind: "Name",
+													value: "linkScanlationGroups"
+												},
+												arguments: [
+													{
+														kind: "Argument",
+														name: { kind: "Name", value: "labelIds" },
+														value: {
+															kind: "Variable",
+															name: {
+																kind: "Name",
+																value: "labelIds"
+															}
+														}
+													},
+													{
+														kind: "Argument",
+														name: {
+															kind: "Name",
+															value: "scanlationGroupsIds"
+														},
+														value: {
+															kind: "Variable",
+															name: {
+																kind: "Name",
+																value: "scanlationGroupIds"
+															}
+														}
+													},
+													{
+														kind: "Argument",
+														name: { kind: "Name", value: "notes" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "notes" }
+														}
+													}
+												]
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	LinkBlacklistLabelsScanlationGroupsMutation,
+	LinkBlacklistLabelsScanlationGroupsMutationVariables
+>;
+export const LinkBlacklistLabelsUsersDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "linkBlacklistLabelsUsers" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "labelIds" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "ListType",
+							type: {
+								kind: "NonNullType",
+								type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+							}
+						}
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "userIds" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "ListType",
+							type: {
+								kind: "NonNullType",
+								type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+							}
+						}
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "notes" } },
+					type: { kind: "NamedType", name: { kind: "Name", value: "String" } }
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "blacklist" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "labels" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "linkUsers" },
+												arguments: [
+													{
+														kind: "Argument",
+														name: { kind: "Name", value: "labelIds" },
+														value: {
+															kind: "Variable",
+															name: {
+																kind: "Name",
+																value: "labelIds"
+															}
+														}
+													},
+													{
+														kind: "Argument",
+														name: { kind: "Name", value: "userIds" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "userIds" }
+														}
+													},
+													{
+														kind: "Argument",
+														name: { kind: "Name", value: "notes" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "notes" }
+														}
+													}
+												]
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	LinkBlacklistLabelsUsersMutation,
+	LinkBlacklistLabelsUsersMutationVariables
 >;
 export const ListBlacklistedScanlationGroupsDocument = {
 	kind: "Document",
