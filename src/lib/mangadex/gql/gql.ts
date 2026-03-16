@@ -74,6 +74,13 @@ type Documents = {
 	"\n\tmutation logoutMutation {\n\t\toauth {\n\t\t\tlogout\n\t\t}\n\t}\n": typeof types.LogoutMutationDocument;
 	"\n\tquery authorPageQuery($id: UUID!) {\n\t\tauthor {\n\t\t\tget(id: $id) {\n\t\t\t\tid\n\t\t\t\tattributes {\n\t\t\t\t\tname\n\t\t\t\t\timageUrl\n\t\t\t\t\tbiography\n\t\t\t\t\ttwitter\n\t\t\t\t\tpixiv\n\t\t\t\t\tmelonBook\n\t\t\t\t\tfanBox\n\t\t\t\t\tbooth\n\t\t\t\t\tnicoVideo\n\t\t\t\t\tskeb\n\t\t\t\t\tfantia\n\t\t\t\t\ttumblr\n\t\t\t\t\tyoutube\n\t\t\t\t\tweibo\n\t\t\t\t\tnaver\n\t\t\t\t\twebsite\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\tmanga {\n\t\t\tlist(params: { authorOrArtist: $id }) {\n\t\t\t\ttotal\n\t\t\t}\n\t\t}\n\t}\n": typeof types.AuthorPageQueryDocument;
 	"\n\tquery authorsSearch($params: AuthorListParams!) {\n\t\tauthor {\n\t\t\tlist(params: $params) {\n\t\t\t\tlimit\n\t\t\t\toffset\n\t\t\t\ttotal\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\tname\n\t\t\t\t\t}\n\t\t\t\t\trelationships {\n\t\t\t\t\t\tworks {\n\t\t\t\t\t\t\tid\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.AuthorsSearchDocument;
+	"\n\tquery listBlacklistedAuthorArtists($params: BlacklistAuthorsArtistsListParam) {\n\t\tblacklist {\n\t\t\tauthorsArtists {\n\t\t\t\tlist(params: $params) {\n\t\t\t\t\tlimit\n\t\t\t\t\ttotal\n\t\t\t\t\toffset\n\t\t\t\t\tdata {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tname\n\t\t\t\t\t\tinsertDate\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.ListBlacklistedAuthorArtistsDocument;
+	"\n\tquery getAuthorArtistsBlacklistedByIds($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tauthorsArtists {\n\t\t\t\tgetByIds(ids: $ids) {\n\t\t\t\t\tid\n\t\t\t\t\tname\n\t\t\t\t\tinsertDate\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.GetAuthorArtistsBlacklistedByIdsDocument;
+	"\n\tquery getAuthorArtistsBlacklistedById($id: UUID!) {\n\t\tblacklist {\n\t\t\tauthorsArtists {\n\t\t\t\tget(id: $id) {\n\t\t\t\t\tid\n\t\t\t\t\tname\n\t\t\t\t\tinsertDate\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.GetAuthorArtistsBlacklistedByIdDocument;
+	"\n\tmutation blockAuthorArtistGQLDoc($id: UUID!) {\n\t\tblacklist {\n\t\t\tauthorArtists {\n\t\t\t\tblockOne(authorId: $id) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.BlockAuthorArtistGqlDocDocument;
+	"\n\tmutation blockBatchAuthorArtistGQLDoc($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tauthorArtists {\n\t\t\t\tblockMany(authorIds: $ids) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.BlockBatchAuthorArtistGqlDocDocument;
+	"\n\tmutation unblockAuthorArtistGQLDoc($id: UUID!) {\n\t\tblacklist {\n\t\t\tauthorArtists {\n\t\t\t\tunblockOne(authorId: $id) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.UnblockAuthorArtistGqlDocDocument;
+	"\n\tmutation unblockBatchAuthorArtistGQLDoc($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tauthorArtists {\n\t\t\t\tunblockMany(authorIds: $ids) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.UnblockBatchAuthorArtistGqlDocDocument;
 	"\n\tquery getChaptersIDsAsFeed($ids: [UUID!]!) {\n\t\tchapter {\n\t\t\tlistWithGroupByManga(param: { feedContent: false, chapterListParams: { chapterIds: $ids } }) {\n\t\t\t\tdata {\n\t\t\t\t\tmanga {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\ttitle\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\tchapters {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\tchapter\n\t\t\t\t\t\t\ttitle\n\t\t\t\t\t\t\tvolume\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.GetChaptersIDsAsFeedDocument;
 	"\n\tsubscription subToChapterImageFit {\n\t\twatchImageFit\n\t}\n": typeof types.SubToChapterImageFitDocument;
 	"\n\tmutation updateChapterImageFit($imageFit: ImageFit!) {\n\t\tuserOption {\n\t\t\tsetImageFit(imageFit: $imageFit)\n\t\t}\n\t}\n": typeof types.UpdateChapterImageFitDocument;
@@ -380,6 +387,20 @@ const documents: Documents = {
 		types.AuthorPageQueryDocument,
 	"\n\tquery authorsSearch($params: AuthorListParams!) {\n\t\tauthor {\n\t\t\tlist(params: $params) {\n\t\t\t\tlimit\n\t\t\t\toffset\n\t\t\t\ttotal\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\tname\n\t\t\t\t\t}\n\t\t\t\t\trelationships {\n\t\t\t\t\t\tworks {\n\t\t\t\t\t\t\tid\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
 		types.AuthorsSearchDocument,
+	"\n\tquery listBlacklistedAuthorArtists($params: BlacklistAuthorsArtistsListParam) {\n\t\tblacklist {\n\t\t\tauthorsArtists {\n\t\t\t\tlist(params: $params) {\n\t\t\t\t\tlimit\n\t\t\t\t\ttotal\n\t\t\t\t\toffset\n\t\t\t\t\tdata {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tname\n\t\t\t\t\t\tinsertDate\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
+		types.ListBlacklistedAuthorArtistsDocument,
+	"\n\tquery getAuthorArtistsBlacklistedByIds($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tauthorsArtists {\n\t\t\t\tgetByIds(ids: $ids) {\n\t\t\t\t\tid\n\t\t\t\t\tname\n\t\t\t\t\tinsertDate\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
+		types.GetAuthorArtistsBlacklistedByIdsDocument,
+	"\n\tquery getAuthorArtistsBlacklistedById($id: UUID!) {\n\t\tblacklist {\n\t\t\tauthorsArtists {\n\t\t\t\tget(id: $id) {\n\t\t\t\t\tid\n\t\t\t\t\tname\n\t\t\t\t\tinsertDate\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
+		types.GetAuthorArtistsBlacklistedByIdDocument,
+	"\n\tmutation blockAuthorArtistGQLDoc($id: UUID!) {\n\t\tblacklist {\n\t\t\tauthorArtists {\n\t\t\t\tblockOne(authorId: $id) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
+		types.BlockAuthorArtistGqlDocDocument,
+	"\n\tmutation blockBatchAuthorArtistGQLDoc($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tauthorArtists {\n\t\t\t\tblockMany(authorIds: $ids) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
+		types.BlockBatchAuthorArtistGqlDocDocument,
+	"\n\tmutation unblockAuthorArtistGQLDoc($id: UUID!) {\n\t\tblacklist {\n\t\t\tauthorArtists {\n\t\t\t\tunblockOne(authorId: $id) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
+		types.UnblockAuthorArtistGqlDocDocument,
+	"\n\tmutation unblockBatchAuthorArtistGQLDoc($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tauthorArtists {\n\t\t\t\tunblockMany(authorIds: $ids) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
+		types.UnblockBatchAuthorArtistGqlDocDocument,
 	"\n\tquery getChaptersIDsAsFeed($ids: [UUID!]!) {\n\t\tchapter {\n\t\t\tlistWithGroupByManga(param: { feedContent: false, chapterListParams: { chapterIds: $ids } }) {\n\t\t\t\tdata {\n\t\t\t\t\tmanga {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\ttitle\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\tchapters {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\tchapter\n\t\t\t\t\t\t\ttitle\n\t\t\t\t\t\t\tvolume\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
 		types.GetChaptersIDsAsFeedDocument,
 	"\n\tsubscription subToChapterImageFit {\n\t\twatchImageFit\n\t}\n":
@@ -1122,6 +1143,48 @@ export function graphql(
 export function graphql(
 	source: "\n\tquery authorsSearch($params: AuthorListParams!) {\n\t\tauthor {\n\t\t\tlist(params: $params) {\n\t\t\t\tlimit\n\t\t\t\toffset\n\t\t\t\ttotal\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\tname\n\t\t\t\t\t}\n\t\t\t\t\trelationships {\n\t\t\t\t\t\tworks {\n\t\t\t\t\t\t\tid\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"
 ): (typeof documents)["\n\tquery authorsSearch($params: AuthorListParams!) {\n\t\tauthor {\n\t\t\tlist(params: $params) {\n\t\t\t\tlimit\n\t\t\t\toffset\n\t\t\t\ttotal\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\tname\n\t\t\t\t\t}\n\t\t\t\t\trelationships {\n\t\t\t\t\t\tworks {\n\t\t\t\t\t\t\tid\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tquery listBlacklistedAuthorArtists($params: BlacklistAuthorsArtistsListParam) {\n\t\tblacklist {\n\t\t\tauthorsArtists {\n\t\t\t\tlist(params: $params) {\n\t\t\t\t\tlimit\n\t\t\t\t\ttotal\n\t\t\t\t\toffset\n\t\t\t\t\tdata {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tname\n\t\t\t\t\t\tinsertDate\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tquery listBlacklistedAuthorArtists($params: BlacklistAuthorsArtistsListParam) {\n\t\tblacklist {\n\t\t\tauthorsArtists {\n\t\t\t\tlist(params: $params) {\n\t\t\t\t\tlimit\n\t\t\t\t\ttotal\n\t\t\t\t\toffset\n\t\t\t\t\tdata {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tname\n\t\t\t\t\t\tinsertDate\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tquery getAuthorArtistsBlacklistedByIds($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tauthorsArtists {\n\t\t\t\tgetByIds(ids: $ids) {\n\t\t\t\t\tid\n\t\t\t\t\tname\n\t\t\t\t\tinsertDate\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tquery getAuthorArtistsBlacklistedByIds($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tauthorsArtists {\n\t\t\t\tgetByIds(ids: $ids) {\n\t\t\t\t\tid\n\t\t\t\t\tname\n\t\t\t\t\tinsertDate\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tquery getAuthorArtistsBlacklistedById($id: UUID!) {\n\t\tblacklist {\n\t\t\tauthorsArtists {\n\t\t\t\tget(id: $id) {\n\t\t\t\t\tid\n\t\t\t\t\tname\n\t\t\t\t\tinsertDate\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tquery getAuthorArtistsBlacklistedById($id: UUID!) {\n\t\tblacklist {\n\t\t\tauthorsArtists {\n\t\t\t\tget(id: $id) {\n\t\t\t\t\tid\n\t\t\t\t\tname\n\t\t\t\t\tinsertDate\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tmutation blockAuthorArtistGQLDoc($id: UUID!) {\n\t\tblacklist {\n\t\t\tauthorArtists {\n\t\t\t\tblockOne(authorId: $id) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tmutation blockAuthorArtistGQLDoc($id: UUID!) {\n\t\tblacklist {\n\t\t\tauthorArtists {\n\t\t\t\tblockOne(authorId: $id) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tmutation blockBatchAuthorArtistGQLDoc($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tauthorArtists {\n\t\t\t\tblockMany(authorIds: $ids) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tmutation blockBatchAuthorArtistGQLDoc($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tauthorArtists {\n\t\t\t\tblockMany(authorIds: $ids) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tmutation unblockAuthorArtistGQLDoc($id: UUID!) {\n\t\tblacklist {\n\t\t\tauthorArtists {\n\t\t\t\tunblockOne(authorId: $id) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tmutation unblockAuthorArtistGQLDoc($id: UUID!) {\n\t\tblacklist {\n\t\t\tauthorArtists {\n\t\t\t\tunblockOne(authorId: $id) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tmutation unblockBatchAuthorArtistGQLDoc($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tauthorArtists {\n\t\t\t\tunblockMany(authorIds: $ids) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tmutation unblockBatchAuthorArtistGQLDoc($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tauthorArtists {\n\t\t\t\tunblockMany(authorIds: $ids) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

@@ -5531,6 +5531,132 @@ export type AuthorsSearchQuery = {
 	};
 };
 
+export type ListBlacklistedAuthorArtistsQueryVariables = Exact<{
+	params?: InputMaybe<BlacklistAuthorsArtistsListParam>;
+}>;
+
+export type ListBlacklistedAuthorArtistsQuery = {
+	__typename?: "Query";
+	blacklist: {
+		__typename?: "BlacklistQueries";
+		authorsArtists: {
+			__typename?: "BlacklistAuthorsArtistsQueries";
+			list: {
+				__typename?: "BlacklistedAuthorResults";
+				limit: number;
+				total: number;
+				offset: number;
+				data: Array<{
+					__typename?: "BlacklistedAuthorObject";
+					id: any;
+					name: string;
+					insertDate?: any | null;
+				}>;
+			};
+		};
+	};
+};
+
+export type GetAuthorArtistsBlacklistedByIdsQueryVariables = Exact<{
+	ids: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
+}>;
+
+export type GetAuthorArtistsBlacklistedByIdsQuery = {
+	__typename?: "Query";
+	blacklist: {
+		__typename?: "BlacklistQueries";
+		authorsArtists: {
+			__typename?: "BlacklistAuthorsArtistsQueries";
+			getByIds: Array<{
+				__typename?: "BlacklistedAuthorObject";
+				id: any;
+				name: string;
+				insertDate?: any | null;
+			}>;
+		};
+	};
+};
+
+export type GetAuthorArtistsBlacklistedByIdQueryVariables = Exact<{
+	id: Scalars["UUID"]["input"];
+}>;
+
+export type GetAuthorArtistsBlacklistedByIdQuery = {
+	__typename?: "Query";
+	blacklist: {
+		__typename?: "BlacklistQueries";
+		authorsArtists: {
+			__typename?: "BlacklistAuthorsArtistsQueries";
+			get: {
+				__typename?: "BlacklistedAuthorObject";
+				id: any;
+				name: string;
+				insertDate?: any | null;
+			};
+		};
+	};
+};
+
+export type BlockAuthorArtistGqlDocMutationVariables = Exact<{
+	id: Scalars["UUID"]["input"];
+}>;
+
+export type BlockAuthorArtistGqlDocMutation = {
+	__typename?: "Mutation";
+	blacklist: {
+		__typename?: "BlacklistMutations";
+		authorArtists: {
+			__typename?: "BlacklistAuthorArtistsMutations";
+			blockOne: { __typename?: "BlacklistedAuthorObject"; id: any };
+		};
+	};
+};
+
+export type BlockBatchAuthorArtistGqlDocMutationVariables = Exact<{
+	ids: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
+}>;
+
+export type BlockBatchAuthorArtistGqlDocMutation = {
+	__typename?: "Mutation";
+	blacklist: {
+		__typename?: "BlacklistMutations";
+		authorArtists: {
+			__typename?: "BlacklistAuthorArtistsMutations";
+			blockMany: Array<{ __typename?: "BlacklistedAuthorObject"; id: any }>;
+		};
+	};
+};
+
+export type UnblockAuthorArtistGqlDocMutationVariables = Exact<{
+	id: Scalars["UUID"]["input"];
+}>;
+
+export type UnblockAuthorArtistGqlDocMutation = {
+	__typename?: "Mutation";
+	blacklist: {
+		__typename?: "BlacklistMutations";
+		authorArtists: {
+			__typename?: "BlacklistAuthorArtistsMutations";
+			unblockOne: { __typename?: "BlacklistedAuthorObject"; id: any };
+		};
+	};
+};
+
+export type UnblockBatchAuthorArtistGqlDocMutationVariables = Exact<{
+	ids: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
+}>;
+
+export type UnblockBatchAuthorArtistGqlDocMutation = {
+	__typename?: "Mutation";
+	blacklist: {
+		__typename?: "BlacklistMutations";
+		authorArtists: {
+			__typename?: "BlacklistAuthorArtistsMutations";
+			unblockMany: Array<{ __typename?: "BlacklistedAuthorObject"; id: any }>;
+		};
+	};
+};
+
 export type GetChaptersIDsAsFeedQueryVariables = Exact<{
 	ids: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
 }>;
@@ -14527,6 +14653,567 @@ export const AuthorsSearchDocument = {
 		}
 	]
 } as unknown as DocumentNode<AuthorsSearchQuery, AuthorsSearchQueryVariables>;
+export const ListBlacklistedAuthorArtistsDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "listBlacklistedAuthorArtists" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "params" } },
+					type: {
+						kind: "NamedType",
+						name: { kind: "Name", value: "BlacklistAuthorsArtistsListParam" }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "blacklist" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "authorsArtists" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "list" },
+												arguments: [
+													{
+														kind: "Argument",
+														name: { kind: "Name", value: "params" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "params" }
+														}
+													}
+												],
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "limit" }
+														},
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "total" }
+														},
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "offset" }
+														},
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "data" },
+															selectionSet: {
+																kind: "SelectionSet",
+																selections: [
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "id"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "name"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "insertDate"
+																		}
+																	}
+																]
+															}
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	ListBlacklistedAuthorArtistsQuery,
+	ListBlacklistedAuthorArtistsQueryVariables
+>;
+export const GetAuthorArtistsBlacklistedByIdsDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "getAuthorArtistsBlacklistedByIds" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "ids" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "ListType",
+							type: {
+								kind: "NonNullType",
+								type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+							}
+						}
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "blacklist" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "authorsArtists" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "getByIds" },
+												arguments: [
+													{
+														kind: "Argument",
+														name: { kind: "Name", value: "ids" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "ids" }
+														}
+													}
+												],
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "id" }
+														},
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "name" }
+														},
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "insertDate"
+															}
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	GetAuthorArtistsBlacklistedByIdsQuery,
+	GetAuthorArtistsBlacklistedByIdsQueryVariables
+>;
+export const GetAuthorArtistsBlacklistedByIdDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "getAuthorArtistsBlacklistedById" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "blacklist" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "authorsArtists" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "get" },
+												arguments: [
+													{
+														kind: "Argument",
+														name: { kind: "Name", value: "id" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "id" }
+														}
+													}
+												],
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "id" }
+														},
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "name" }
+														},
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "insertDate"
+															}
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	GetAuthorArtistsBlacklistedByIdQuery,
+	GetAuthorArtistsBlacklistedByIdQueryVariables
+>;
+export const BlockAuthorArtistGqlDocDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "blockAuthorArtistGQLDoc" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "blacklist" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "authorArtists" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "blockOne" },
+												arguments: [
+													{
+														kind: "Argument",
+														name: { kind: "Name", value: "authorId" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "id" }
+														}
+													}
+												],
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "id" }
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	BlockAuthorArtistGqlDocMutation,
+	BlockAuthorArtistGqlDocMutationVariables
+>;
+export const BlockBatchAuthorArtistGqlDocDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "blockBatchAuthorArtistGQLDoc" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "ids" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "ListType",
+							type: {
+								kind: "NonNullType",
+								type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+							}
+						}
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "blacklist" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "authorArtists" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "blockMany" },
+												arguments: [
+													{
+														kind: "Argument",
+														name: { kind: "Name", value: "authorIds" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "ids" }
+														}
+													}
+												],
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "id" }
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	BlockBatchAuthorArtistGqlDocMutation,
+	BlockBatchAuthorArtistGqlDocMutationVariables
+>;
+export const UnblockAuthorArtistGqlDocDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "unblockAuthorArtistGQLDoc" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "blacklist" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "authorArtists" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "unblockOne" },
+												arguments: [
+													{
+														kind: "Argument",
+														name: { kind: "Name", value: "authorId" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "id" }
+														}
+													}
+												],
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "id" }
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	UnblockAuthorArtistGqlDocMutation,
+	UnblockAuthorArtistGqlDocMutationVariables
+>;
+export const UnblockBatchAuthorArtistGqlDocDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "unblockBatchAuthorArtistGQLDoc" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "ids" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "ListType",
+							type: {
+								kind: "NonNullType",
+								type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+							}
+						}
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "blacklist" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "authorArtists" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "unblockMany" },
+												arguments: [
+													{
+														kind: "Argument",
+														name: { kind: "Name", value: "authorIds" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "ids" }
+														}
+													}
+												],
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "id" }
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	UnblockBatchAuthorArtistGqlDocMutation,
+	UnblockBatchAuthorArtistGqlDocMutationVariables
+>;
 export const GetChaptersIDsAsFeedDocument = {
 	kind: "Document",
 	definitions: [
