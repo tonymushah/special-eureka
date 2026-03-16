@@ -106,3 +106,48 @@ export const linkBlacklistLabelsUsersMutationGQLDocs = graphql(`
 		}
 	}
 `);
+
+export const deleteBlacklistLabelMutationGQLDocs = graphql(`
+	mutation deleteBlacklistLabel($ids: [UUID!]!) {
+		blacklist {
+			labels {
+				deleteLabels(labelIds: $ids) {
+					name
+				}
+			}
+		}
+	}
+`);
+
+export const unlinkBlacklistLabelsAuthorsArtistsMutationGQLDocs = graphql(`
+	mutation unlinkBlacklistLabelsAuthorsArtists($labelIds: [UUID!]!, $authorIds: [UUID!]!) {
+		blacklist {
+			labels {
+				unlinkAuthorsArtists(authorIds: $authorIds, labelIds: $labelIds)
+			}
+		}
+	}
+`);
+
+export const unlinkBlacklistLabelsScanlationGroupsMutationGQLDocs = graphql(`
+	mutation unlinkBlacklistLabelsScanlationGroups(
+		$scanlationGroupIds: [UUID!]!
+		$labelIds: [UUID!]!
+	) {
+		blacklist {
+			labels {
+				unlinkScanlationGroups(labelIds: $labelIds, scanlationGroupsIds: $scanlationGroupIds)
+			}
+		}
+	}
+`);
+
+export const unlinkBlacklistLabelsUsersMutationGQLDocs = graphql(`
+	mutation unlinkBlacklistLabelsUsers($labelIds: [UUID!]!, $userIds: [UUID!]!) {
+		blacklist {
+			labels {
+				unlinkUsers(labelIds: $labelIds, userIds: $userIds)
+			}
+		}
+	}
+`);

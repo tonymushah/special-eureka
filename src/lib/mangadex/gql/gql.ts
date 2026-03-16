@@ -88,6 +88,10 @@ type Documents = {
 	"\n\tmutation linkBlacklistLabelsAuthorsArtists(\n\t\t$labelIds: [UUID!]!\n\t\t$authorIds: [UUID!]!\n\t\t$notes: String\n\t) {\n\t\tblacklist {\n\t\t\tlabels {\n\t\t\t\tlinkAuthorsArtists(authorIds: $authorIds, labelIds: $labelIds, notes: $notes)\n\t\t\t}\n\t\t}\n\t}\n": typeof types.LinkBlacklistLabelsAuthorsArtistsDocument;
 	"\n\tmutation linkBlacklistLabelsScanlationGroups(\n\t\t$scanlationGroupIds: [UUID!]!\n\t\t$labelIds: [UUID!]!\n\t\t$notes: String\n\t) {\n\t\tblacklist {\n\t\t\tlabels {\n\t\t\t\tlinkScanlationGroups(\n\t\t\t\t\tlabelIds: $labelIds\n\t\t\t\t\tscanlationGroupsIds: $scanlationGroupIds\n\t\t\t\t\tnotes: $notes\n\t\t\t\t)\n\t\t\t}\n\t\t}\n\t}\n": typeof types.LinkBlacklistLabelsScanlationGroupsDocument;
 	"\n\tmutation linkBlacklistLabelsUsers($labelIds: [UUID!]!, $userIds: [UUID!]!, $notes: String) {\n\t\tblacklist {\n\t\t\tlabels {\n\t\t\t\tlinkUsers(labelIds: $labelIds, userIds: $userIds, notes: $notes)\n\t\t\t}\n\t\t}\n\t}\n": typeof types.LinkBlacklistLabelsUsersDocument;
+	"\n\tmutation deleteBlacklistLabel($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tlabels {\n\t\t\t\tdeleteLabels(labelIds: $ids) {\n\t\t\t\t\tname\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.DeleteBlacklistLabelDocument;
+	"\n\tmutation unlinkBlacklistLabelsAuthorsArtists($labelIds: [UUID!]!, $authorIds: [UUID!]!) {\n\t\tblacklist {\n\t\t\tlabels {\n\t\t\t\tunlinkAuthorsArtists(authorIds: $authorIds, labelIds: $labelIds)\n\t\t\t}\n\t\t}\n\t}\n": typeof types.UnlinkBlacklistLabelsAuthorsArtistsDocument;
+	"\n\tmutation unlinkBlacklistLabelsScanlationGroups(\n\t\t$scanlationGroupIds: [UUID!]!\n\t\t$labelIds: [UUID!]!\n\t) {\n\t\tblacklist {\n\t\t\tlabels {\n\t\t\t\tunlinkScanlationGroups(labelIds: $labelIds, scanlationGroupsIds: $scanlationGroupIds)\n\t\t\t}\n\t\t}\n\t}\n": typeof types.UnlinkBlacklistLabelsScanlationGroupsDocument;
+	"\n\tmutation unlinkBlacklistLabelsUsers($labelIds: [UUID!]!, $userIds: [UUID!]!) {\n\t\tblacklist {\n\t\t\tlabels {\n\t\t\t\tunlinkUsers(labelIds: $labelIds, userIds: $userIds)\n\t\t\t}\n\t\t}\n\t}\n": typeof types.UnlinkBlacklistLabelsUsersDocument;
 	"\n\tquery listBlacklistedScanlationGroups($params: BlacklistScanlationGroupsListParam) {\n\t\tblacklist {\n\t\t\tscanlationGroups {\n\t\t\t\tlist(params: $params) {\n\t\t\t\t\tlimit\n\t\t\t\t\ttotal\n\t\t\t\t\toffset\n\t\t\t\t\tdata {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tname\n\t\t\t\t\t\tinsertDate\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.ListBlacklistedScanlationGroupsDocument;
 	"\n\tquery getScanlationGroupBlacklistedByIds($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tscanlationGroups {\n\t\t\t\tgetByIds(ids: $ids) {\n\t\t\t\t\tid\n\t\t\t\t\tname\n\t\t\t\t\tinsertDate\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.GetScanlationGroupBlacklistedByIdsDocument;
 	"\n\tquery getScanlationGroupBlacklistedById($id: UUID!) {\n\t\tblacklist {\n\t\t\tscanlationGroups {\n\t\t\t\tget(id: $id) {\n\t\t\t\t\tid\n\t\t\t\t\tname\n\t\t\t\t\tinsertDate\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.GetScanlationGroupBlacklistedByIdDocument;
@@ -436,6 +440,14 @@ const documents: Documents = {
 		types.LinkBlacklistLabelsScanlationGroupsDocument,
 	"\n\tmutation linkBlacklistLabelsUsers($labelIds: [UUID!]!, $userIds: [UUID!]!, $notes: String) {\n\t\tblacklist {\n\t\t\tlabels {\n\t\t\t\tlinkUsers(labelIds: $labelIds, userIds: $userIds, notes: $notes)\n\t\t\t}\n\t\t}\n\t}\n":
 		types.LinkBlacklistLabelsUsersDocument,
+	"\n\tmutation deleteBlacklistLabel($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tlabels {\n\t\t\t\tdeleteLabels(labelIds: $ids) {\n\t\t\t\t\tname\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
+		types.DeleteBlacklistLabelDocument,
+	"\n\tmutation unlinkBlacklistLabelsAuthorsArtists($labelIds: [UUID!]!, $authorIds: [UUID!]!) {\n\t\tblacklist {\n\t\t\tlabels {\n\t\t\t\tunlinkAuthorsArtists(authorIds: $authorIds, labelIds: $labelIds)\n\t\t\t}\n\t\t}\n\t}\n":
+		types.UnlinkBlacklistLabelsAuthorsArtistsDocument,
+	"\n\tmutation unlinkBlacklistLabelsScanlationGroups(\n\t\t$scanlationGroupIds: [UUID!]!\n\t\t$labelIds: [UUID!]!\n\t) {\n\t\tblacklist {\n\t\t\tlabels {\n\t\t\t\tunlinkScanlationGroups(labelIds: $labelIds, scanlationGroupsIds: $scanlationGroupIds)\n\t\t\t}\n\t\t}\n\t}\n":
+		types.UnlinkBlacklistLabelsScanlationGroupsDocument,
+	"\n\tmutation unlinkBlacklistLabelsUsers($labelIds: [UUID!]!, $userIds: [UUID!]!) {\n\t\tblacklist {\n\t\t\tlabels {\n\t\t\t\tunlinkUsers(labelIds: $labelIds, userIds: $userIds)\n\t\t\t}\n\t\t}\n\t}\n":
+		types.UnlinkBlacklistLabelsUsersDocument,
 	"\n\tquery listBlacklistedScanlationGroups($params: BlacklistScanlationGroupsListParam) {\n\t\tblacklist {\n\t\t\tscanlationGroups {\n\t\t\t\tlist(params: $params) {\n\t\t\t\t\tlimit\n\t\t\t\t\ttotal\n\t\t\t\t\toffset\n\t\t\t\t\tdata {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tname\n\t\t\t\t\t\tinsertDate\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
 		types.ListBlacklistedScanlationGroupsDocument,
 	"\n\tquery getScanlationGroupBlacklistedByIds($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tscanlationGroups {\n\t\t\t\tgetByIds(ids: $ids) {\n\t\t\t\t\tid\n\t\t\t\t\tname\n\t\t\t\t\tinsertDate\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
@@ -1290,6 +1302,30 @@ export function graphql(
 export function graphql(
 	source: "\n\tmutation linkBlacklistLabelsUsers($labelIds: [UUID!]!, $userIds: [UUID!]!, $notes: String) {\n\t\tblacklist {\n\t\t\tlabels {\n\t\t\t\tlinkUsers(labelIds: $labelIds, userIds: $userIds, notes: $notes)\n\t\t\t}\n\t\t}\n\t}\n"
 ): (typeof documents)["\n\tmutation linkBlacklistLabelsUsers($labelIds: [UUID!]!, $userIds: [UUID!]!, $notes: String) {\n\t\tblacklist {\n\t\t\tlabels {\n\t\t\t\tlinkUsers(labelIds: $labelIds, userIds: $userIds, notes: $notes)\n\t\t\t}\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tmutation deleteBlacklistLabel($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tlabels {\n\t\t\t\tdeleteLabels(labelIds: $ids) {\n\t\t\t\t\tname\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tmutation deleteBlacklistLabel($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tlabels {\n\t\t\t\tdeleteLabels(labelIds: $ids) {\n\t\t\t\t\tname\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tmutation unlinkBlacklistLabelsAuthorsArtists($labelIds: [UUID!]!, $authorIds: [UUID!]!) {\n\t\tblacklist {\n\t\t\tlabels {\n\t\t\t\tunlinkAuthorsArtists(authorIds: $authorIds, labelIds: $labelIds)\n\t\t\t}\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tmutation unlinkBlacklistLabelsAuthorsArtists($labelIds: [UUID!]!, $authorIds: [UUID!]!) {\n\t\tblacklist {\n\t\t\tlabels {\n\t\t\t\tunlinkAuthorsArtists(authorIds: $authorIds, labelIds: $labelIds)\n\t\t\t}\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tmutation unlinkBlacklistLabelsScanlationGroups(\n\t\t$scanlationGroupIds: [UUID!]!\n\t\t$labelIds: [UUID!]!\n\t) {\n\t\tblacklist {\n\t\t\tlabels {\n\t\t\t\tunlinkScanlationGroups(labelIds: $labelIds, scanlationGroupsIds: $scanlationGroupIds)\n\t\t\t}\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tmutation unlinkBlacklistLabelsScanlationGroups(\n\t\t$scanlationGroupIds: [UUID!]!\n\t\t$labelIds: [UUID!]!\n\t) {\n\t\tblacklist {\n\t\t\tlabels {\n\t\t\t\tunlinkScanlationGroups(labelIds: $labelIds, scanlationGroupsIds: $scanlationGroupIds)\n\t\t\t}\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tmutation unlinkBlacklistLabelsUsers($labelIds: [UUID!]!, $userIds: [UUID!]!) {\n\t\tblacklist {\n\t\t\tlabels {\n\t\t\t\tunlinkUsers(labelIds: $labelIds, userIds: $userIds)\n\t\t\t}\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tmutation unlinkBlacklistLabelsUsers($labelIds: [UUID!]!, $userIds: [UUID!]!) {\n\t\tblacklist {\n\t\t\tlabels {\n\t\t\t\tunlinkUsers(labelIds: $labelIds, userIds: $userIds)\n\t\t\t}\n\t\t}\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

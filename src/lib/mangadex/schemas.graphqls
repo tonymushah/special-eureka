@@ -279,9 +279,13 @@ input BlacklistLabelsListParam {
 
 type BlacklistLabelsMutations {
 	createLabel(param: CreateBlacklistLabelParam!): BlacklistLabel!
+	deleteLabels(labelIds: [UUID!]!): [BlacklistLabel!]!
 	linkAuthorsArtists(labelIds: [UUID!]!, authorIds: [UUID!]!, notes: String): Boolean
 	linkScanlationGroups(labelIds: [UUID!]!, scanlationGroupsIds: [UUID!]!, notes: String): Boolean
 	linkUsers(labelIds: [UUID!]!, userIds: [UUID!]!, notes: String): Boolean
+	unlinkAuthorsArtists(labelIds: [UUID!]!, authorIds: [UUID!]!): Boolean
+	unlinkScanlationGroups(labelIds: [UUID!]!, scanlationGroupsIds: [UUID!]!): Boolean
+	unlinkUsers(labelIds: [UUID!]!, userIds: [UUID!]!): Boolean
 }
 
 type BlacklistLabelsQueries {
