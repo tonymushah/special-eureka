@@ -73,7 +73,7 @@ export function floatingUImenu({
 			};
 			menu.addEventListener("click", menuEvClick);
 			return () => {
-				menu.removeEventListener("click", menuEvClick);
+				menu?.removeEventListener("click", menuEvClick);
 			};
 		}
 	});
@@ -88,7 +88,7 @@ export function floatingUImenu({
 			};
 			window.addEventListener("click", menuEvClick);
 			return () => {
-				window.removeEventListener("click", menuEvClick);
+				window?.removeEventListener("click", menuEvClick);
 			};
 		}
 	});
