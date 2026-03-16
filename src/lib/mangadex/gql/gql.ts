@@ -88,6 +88,13 @@ type Documents = {
 	"\n\tmutation blockBatchScanlationGroup($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tscanlationGroups {\n\t\t\t\tblockMany(scanlationGroupIds: $ids) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.BlockBatchScanlationGroupDocument;
 	"\n\tmutation unblockScanlationGroup($id: UUID!) {\n\t\tblacklist {\n\t\t\tscanlationGroups {\n\t\t\t\tunblockOne(scanlationGroupId: $id) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.UnblockScanlationGroupDocument;
 	"\n\tmutation unblockBatchScanlationGroup($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tscanlationGroups {\n\t\t\t\tunblockMany(scanlationGroupIds: $ids) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.UnblockBatchScanlationGroupDocument;
+	"\n\tquery listBlacklistedUsers($params: BlacklistUserListParam) {\n\t\tblacklist {\n\t\t\tusers {\n\t\t\t\tlist(params: $params) {\n\t\t\t\t\tlimit\n\t\t\t\t\ttotal\n\t\t\t\t\toffset\n\t\t\t\t\tdata {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tname\n\t\t\t\t\t\tinsertDate\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.ListBlacklistedUsersDocument;
+	"\n\tquery getUserBlacklistedByIds($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tusers {\n\t\t\t\tgetByIds(ids: $ids) {\n\t\t\t\t\tid\n\t\t\t\t\tname\n\t\t\t\t\tinsertDate\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.GetUserBlacklistedByIdsDocument;
+	"\n\tquery getUserBlacklistedById($id: UUID!) {\n\t\tblacklist {\n\t\t\tusers {\n\t\t\t\tget(id: $id) {\n\t\t\t\t\tid\n\t\t\t\t\tname\n\t\t\t\t\tinsertDate\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.GetUserBlacklistedByIdDocument;
+	"\n\tmutation blockUser($id: UUID!) {\n\t\tblacklist {\n\t\t\tusers {\n\t\t\t\tblockOne(userId: $id) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.BlockUserDocument;
+	"\n\tmutation blockBatchUser($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tusers {\n\t\t\t\tblockMany(userIds: $ids) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.BlockBatchUserDocument;
+	"\n\tmutation unblockUsers($id: UUID!) {\n\t\tblacklist {\n\t\t\tusers {\n\t\t\t\tunblockOne(userId: $id) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.UnblockUsersDocument;
+	"\n\tmutation unblockBatchUser($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tusers {\n\t\t\t\tunblockMany(userIds: $ids) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.UnblockBatchUserDocument;
 	"\n\tquery getChaptersIDsAsFeed($ids: [UUID!]!) {\n\t\tchapter {\n\t\t\tlistWithGroupByManga(param: { feedContent: false, chapterListParams: { chapterIds: $ids } }) {\n\t\t\t\tdata {\n\t\t\t\t\tmanga {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\ttitle\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\tchapters {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\tchapter\n\t\t\t\t\t\t\ttitle\n\t\t\t\t\t\t\tvolume\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.GetChaptersIDsAsFeedDocument;
 	"\n\tsubscription subToChapterImageFit {\n\t\twatchImageFit\n\t}\n": typeof types.SubToChapterImageFitDocument;
 	"\n\tmutation updateChapterImageFit($imageFit: ImageFit!) {\n\t\tuserOption {\n\t\t\tsetImageFit(imageFit: $imageFit)\n\t\t}\n\t}\n": typeof types.UpdateChapterImageFitDocument;
@@ -422,6 +429,20 @@ const documents: Documents = {
 		types.UnblockScanlationGroupDocument,
 	"\n\tmutation unblockBatchScanlationGroup($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tscanlationGroups {\n\t\t\t\tunblockMany(scanlationGroupIds: $ids) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
 		types.UnblockBatchScanlationGroupDocument,
+	"\n\tquery listBlacklistedUsers($params: BlacklistUserListParam) {\n\t\tblacklist {\n\t\t\tusers {\n\t\t\t\tlist(params: $params) {\n\t\t\t\t\tlimit\n\t\t\t\t\ttotal\n\t\t\t\t\toffset\n\t\t\t\t\tdata {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tname\n\t\t\t\t\t\tinsertDate\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
+		types.ListBlacklistedUsersDocument,
+	"\n\tquery getUserBlacklistedByIds($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tusers {\n\t\t\t\tgetByIds(ids: $ids) {\n\t\t\t\t\tid\n\t\t\t\t\tname\n\t\t\t\t\tinsertDate\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
+		types.GetUserBlacklistedByIdsDocument,
+	"\n\tquery getUserBlacklistedById($id: UUID!) {\n\t\tblacklist {\n\t\t\tusers {\n\t\t\t\tget(id: $id) {\n\t\t\t\t\tid\n\t\t\t\t\tname\n\t\t\t\t\tinsertDate\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
+		types.GetUserBlacklistedByIdDocument,
+	"\n\tmutation blockUser($id: UUID!) {\n\t\tblacklist {\n\t\t\tusers {\n\t\t\t\tblockOne(userId: $id) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
+		types.BlockUserDocument,
+	"\n\tmutation blockBatchUser($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tusers {\n\t\t\t\tblockMany(userIds: $ids) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
+		types.BlockBatchUserDocument,
+	"\n\tmutation unblockUsers($id: UUID!) {\n\t\tblacklist {\n\t\t\tusers {\n\t\t\t\tunblockOne(userId: $id) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
+		types.UnblockUsersDocument,
+	"\n\tmutation unblockBatchUser($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tusers {\n\t\t\t\tunblockMany(userIds: $ids) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
+		types.UnblockBatchUserDocument,
 	"\n\tquery getChaptersIDsAsFeed($ids: [UUID!]!) {\n\t\tchapter {\n\t\t\tlistWithGroupByManga(param: { feedContent: false, chapterListParams: { chapterIds: $ids } }) {\n\t\t\t\tdata {\n\t\t\t\t\tmanga {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\ttitle\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\tchapters {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\tchapter\n\t\t\t\t\t\t\ttitle\n\t\t\t\t\t\t\tvolume\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
 		types.GetChaptersIDsAsFeedDocument,
 	"\n\tsubscription subToChapterImageFit {\n\t\twatchImageFit\n\t}\n":
@@ -1248,6 +1269,48 @@ export function graphql(
 export function graphql(
 	source: "\n\tmutation unblockBatchScanlationGroup($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tscanlationGroups {\n\t\t\t\tunblockMany(scanlationGroupIds: $ids) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"
 ): (typeof documents)["\n\tmutation unblockBatchScanlationGroup($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tscanlationGroups {\n\t\t\t\tunblockMany(scanlationGroupIds: $ids) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tquery listBlacklistedUsers($params: BlacklistUserListParam) {\n\t\tblacklist {\n\t\t\tusers {\n\t\t\t\tlist(params: $params) {\n\t\t\t\t\tlimit\n\t\t\t\t\ttotal\n\t\t\t\t\toffset\n\t\t\t\t\tdata {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tname\n\t\t\t\t\t\tinsertDate\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tquery listBlacklistedUsers($params: BlacklistUserListParam) {\n\t\tblacklist {\n\t\t\tusers {\n\t\t\t\tlist(params: $params) {\n\t\t\t\t\tlimit\n\t\t\t\t\ttotal\n\t\t\t\t\toffset\n\t\t\t\t\tdata {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tname\n\t\t\t\t\t\tinsertDate\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tquery getUserBlacklistedByIds($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tusers {\n\t\t\t\tgetByIds(ids: $ids) {\n\t\t\t\t\tid\n\t\t\t\t\tname\n\t\t\t\t\tinsertDate\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tquery getUserBlacklistedByIds($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tusers {\n\t\t\t\tgetByIds(ids: $ids) {\n\t\t\t\t\tid\n\t\t\t\t\tname\n\t\t\t\t\tinsertDate\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tquery getUserBlacklistedById($id: UUID!) {\n\t\tblacklist {\n\t\t\tusers {\n\t\t\t\tget(id: $id) {\n\t\t\t\t\tid\n\t\t\t\t\tname\n\t\t\t\t\tinsertDate\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tquery getUserBlacklistedById($id: UUID!) {\n\t\tblacklist {\n\t\t\tusers {\n\t\t\t\tget(id: $id) {\n\t\t\t\t\tid\n\t\t\t\t\tname\n\t\t\t\t\tinsertDate\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tmutation blockUser($id: UUID!) {\n\t\tblacklist {\n\t\t\tusers {\n\t\t\t\tblockOne(userId: $id) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tmutation blockUser($id: UUID!) {\n\t\tblacklist {\n\t\t\tusers {\n\t\t\t\tblockOne(userId: $id) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tmutation blockBatchUser($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tusers {\n\t\t\t\tblockMany(userIds: $ids) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tmutation blockBatchUser($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tusers {\n\t\t\t\tblockMany(userIds: $ids) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tmutation unblockUsers($id: UUID!) {\n\t\tblacklist {\n\t\t\tusers {\n\t\t\t\tunblockOne(userId: $id) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tmutation unblockUsers($id: UUID!) {\n\t\tblacklist {\n\t\t\tusers {\n\t\t\t\tunblockOne(userId: $id) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tmutation unblockBatchUser($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tusers {\n\t\t\t\tunblockMany(userIds: $ids) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tmutation unblockBatchUser($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tusers {\n\t\t\t\tunblockMany(userIds: $ids) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

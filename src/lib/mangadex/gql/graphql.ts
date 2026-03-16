@@ -5783,6 +5783,132 @@ export type UnblockBatchScanlationGroupMutation = {
 	};
 };
 
+export type ListBlacklistedUsersQueryVariables = Exact<{
+	params?: InputMaybe<BlacklistUserListParam>;
+}>;
+
+export type ListBlacklistedUsersQuery = {
+	__typename?: "Query";
+	blacklist: {
+		__typename?: "BlacklistQueries";
+		users: {
+			__typename?: "BlacklistUsersQueries";
+			list: {
+				__typename?: "BlacklistedUserResults";
+				limit: number;
+				total: number;
+				offset: number;
+				data: Array<{
+					__typename?: "BlacklistedUserObject";
+					id: any;
+					name: string;
+					insertDate?: any | null;
+				}>;
+			};
+		};
+	};
+};
+
+export type GetUserBlacklistedByIdsQueryVariables = Exact<{
+	ids: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
+}>;
+
+export type GetUserBlacklistedByIdsQuery = {
+	__typename?: "Query";
+	blacklist: {
+		__typename?: "BlacklistQueries";
+		users: {
+			__typename?: "BlacklistUsersQueries";
+			getByIds: Array<{
+				__typename?: "BlacklistedUserObject";
+				id: any;
+				name: string;
+				insertDate?: any | null;
+			}>;
+		};
+	};
+};
+
+export type GetUserBlacklistedByIdQueryVariables = Exact<{
+	id: Scalars["UUID"]["input"];
+}>;
+
+export type GetUserBlacklistedByIdQuery = {
+	__typename?: "Query";
+	blacklist: {
+		__typename?: "BlacklistQueries";
+		users: {
+			__typename?: "BlacklistUsersQueries";
+			get: {
+				__typename?: "BlacklistedUserObject";
+				id: any;
+				name: string;
+				insertDate?: any | null;
+			};
+		};
+	};
+};
+
+export type BlockUserMutationVariables = Exact<{
+	id: Scalars["UUID"]["input"];
+}>;
+
+export type BlockUserMutation = {
+	__typename?: "Mutation";
+	blacklist: {
+		__typename?: "BlacklistMutations";
+		users: {
+			__typename?: "BlacklistedUsersMutations";
+			blockOne: { __typename?: "BlacklistedUserObject"; id: any };
+		};
+	};
+};
+
+export type BlockBatchUserMutationVariables = Exact<{
+	ids: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
+}>;
+
+export type BlockBatchUserMutation = {
+	__typename?: "Mutation";
+	blacklist: {
+		__typename?: "BlacklistMutations";
+		users: {
+			__typename?: "BlacklistedUsersMutations";
+			blockMany: Array<{ __typename?: "BlacklistedUserObject"; id: any }>;
+		};
+	};
+};
+
+export type UnblockUsersMutationVariables = Exact<{
+	id: Scalars["UUID"]["input"];
+}>;
+
+export type UnblockUsersMutation = {
+	__typename?: "Mutation";
+	blacklist: {
+		__typename?: "BlacklistMutations";
+		users: {
+			__typename?: "BlacklistedUsersMutations";
+			unblockOne: { __typename?: "BlacklistedUserObject"; id: any };
+		};
+	};
+};
+
+export type UnblockBatchUserMutationVariables = Exact<{
+	ids: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
+}>;
+
+export type UnblockBatchUserMutation = {
+	__typename?: "Mutation";
+	blacklist: {
+		__typename?: "BlacklistMutations";
+		users: {
+			__typename?: "BlacklistedUsersMutations";
+			unblockMany: Array<{ __typename?: "BlacklistedUserObject"; id: any }>;
+		};
+	};
+};
+
 export type GetChaptersIDsAsFeedQueryVariables = Exact<{
 	ids: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
 }>;
@@ -15904,6 +16030,546 @@ export const UnblockBatchScanlationGroupDocument = {
 	UnblockBatchScanlationGroupMutation,
 	UnblockBatchScanlationGroupMutationVariables
 >;
+export const ListBlacklistedUsersDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "listBlacklistedUsers" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "params" } },
+					type: {
+						kind: "NamedType",
+						name: { kind: "Name", value: "BlacklistUserListParam" }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "blacklist" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "users" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "list" },
+												arguments: [
+													{
+														kind: "Argument",
+														name: { kind: "Name", value: "params" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "params" }
+														}
+													}
+												],
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "limit" }
+														},
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "total" }
+														},
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "offset" }
+														},
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "data" },
+															selectionSet: {
+																kind: "SelectionSet",
+																selections: [
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "id"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "name"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "insertDate"
+																		}
+																	}
+																]
+															}
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<ListBlacklistedUsersQuery, ListBlacklistedUsersQueryVariables>;
+export const GetUserBlacklistedByIdsDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "getUserBlacklistedByIds" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "ids" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "ListType",
+							type: {
+								kind: "NonNullType",
+								type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+							}
+						}
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "blacklist" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "users" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "getByIds" },
+												arguments: [
+													{
+														kind: "Argument",
+														name: { kind: "Name", value: "ids" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "ids" }
+														}
+													}
+												],
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "id" }
+														},
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "name" }
+														},
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "insertDate"
+															}
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<GetUserBlacklistedByIdsQuery, GetUserBlacklistedByIdsQueryVariables>;
+export const GetUserBlacklistedByIdDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "getUserBlacklistedById" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "blacklist" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "users" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "get" },
+												arguments: [
+													{
+														kind: "Argument",
+														name: { kind: "Name", value: "id" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "id" }
+														}
+													}
+												],
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "id" }
+														},
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "name" }
+														},
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "insertDate"
+															}
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<GetUserBlacklistedByIdQuery, GetUserBlacklistedByIdQueryVariables>;
+export const BlockUserDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "blockUser" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "blacklist" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "users" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "blockOne" },
+												arguments: [
+													{
+														kind: "Argument",
+														name: { kind: "Name", value: "userId" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "id" }
+														}
+													}
+												],
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "id" }
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<BlockUserMutation, BlockUserMutationVariables>;
+export const BlockBatchUserDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "blockBatchUser" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "ids" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "ListType",
+							type: {
+								kind: "NonNullType",
+								type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+							}
+						}
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "blacklist" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "users" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "blockMany" },
+												arguments: [
+													{
+														kind: "Argument",
+														name: { kind: "Name", value: "userIds" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "ids" }
+														}
+													}
+												],
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "id" }
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<BlockBatchUserMutation, BlockBatchUserMutationVariables>;
+export const UnblockUsersDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "unblockUsers" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "blacklist" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "users" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "unblockOne" },
+												arguments: [
+													{
+														kind: "Argument",
+														name: { kind: "Name", value: "userId" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "id" }
+														}
+													}
+												],
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "id" }
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<UnblockUsersMutation, UnblockUsersMutationVariables>;
+export const UnblockBatchUserDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "unblockBatchUser" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "ids" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "ListType",
+							type: {
+								kind: "NonNullType",
+								type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+							}
+						}
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "blacklist" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "users" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "unblockMany" },
+												arguments: [
+													{
+														kind: "Argument",
+														name: { kind: "Name", value: "userIds" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "ids" }
+														}
+													}
+												],
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "id" }
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<UnblockBatchUserMutation, UnblockBatchUserMutationVariables>;
 export const GetChaptersIDsAsFeedDocument = {
 	kind: "Document",
 	definitions: [
