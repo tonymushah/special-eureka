@@ -104,7 +104,6 @@ impl BlacklistLabelsMutations {
         let label = spawn_blocking(move || -> crate::Result<_> {
             use mangadex_blacklist_raw::schema::labels::dsl::*;
             let mut connection = app_handle.blacklist_database_pool()?.get_connection()?;
-            let _label_id = Uuid::now_v7();
             Ok(diesel::delete(labels.filter(label_id.eq_any(label_ids)))
                 .returning(BlacklistLabel::as_returning())
                 .get_results(&mut connection)?)
@@ -112,6 +111,7 @@ impl BlacklistLabelsMutations {
         .await??;
         Ok(label)
     }
+
     pub async fn link_authors_artists(
         &self,
         ctx: &Context<'_>,
@@ -195,6 +195,85 @@ impl BlacklistLabelsMutations {
                                 label: Cow::Borrowed(label_.as_bytes()),
                                 notes: _notes.as_ref().map(|n| n.as_str().into()),
                             })
+                            .execute(connection)?;
+                    }
+                }
+                Ok(())
+            })?;
+            Ok(())
+        })
+        .await??;
+        Ok(None)
+    }
+
+    pub async fn unlink_authors_artists(
+        &self,
+        ctx: &Context<'_>,
+        #[graphql(validator(min_items = 1))] label_ids: Vec<Uuid>,
+        #[graphql(validator(min_items = 1))] author_ids: Vec<Uuid>,
+    ) -> crate::error::wrapped::Result<Option<bool>> {
+        let app_handle = ctx.get_app_handle::<tauri::Wry>()?.clone();
+        spawn_blocking(move || -> crate::Result<_> {
+            use mangadex_blacklist_raw::schema::authors_labels::dsl::*;
+            let mut connection = app_handle.blacklist_database_pool()?.get_connection()?;
+            connection.transaction::<(), crate::Error, _>(|connection| {
+                for label_ in &label_ids {
+                    for author_id in &author_ids {
+                        diesel::delete(authors_labels)
+                            .filter(author.eq(author_id.as_bytes()))
+                            .filter(label.eq(label_.as_bytes()))
+                            .execute(connection)?;
+                    }
+                }
+                Ok(())
+            })?;
+            Ok(())
+        })
+        .await??;
+        Ok(None)
+    }
+    pub async fn unlink_scanlation_groups(
+        &self,
+        ctx: &Context<'_>,
+        #[graphql(validator(min_items = 1))] label_ids: Vec<Uuid>,
+        #[graphql(validator(min_items = 1))] scanlation_groups_ids: Vec<Uuid>,
+    ) -> crate::Result<Option<bool>> {
+        let app_handle = ctx.get_app_handle::<tauri::Wry>()?.clone();
+        spawn_blocking(move || -> crate::Result<_> {
+            use mangadex_blacklist_raw::schema::scanlation_groups_labels::dsl::*;
+            let mut connection = app_handle.blacklist_database_pool()?.get_connection()?;
+            connection.transaction::<(), crate::Error, _>(|connection| {
+                for label_ in &label_ids {
+                    for group_id in &scanlation_groups_ids {
+                        diesel::delete(scanlation_groups_labels)
+                            .filter(label.eq(label_.as_bytes()))
+                            .filter(scanlation_group.eq(group_id.as_bytes()))
+                            .execute(connection)?;
+                    }
+                }
+                Ok(())
+            })?;
+            Ok(())
+        })
+        .await??;
+        Ok(None)
+    }
+    pub async fn unlink_users(
+        &self,
+        ctx: &Context<'_>,
+        #[graphql(validator(min_items = 1))] label_ids: Vec<Uuid>,
+        #[graphql(validator(min_items = 1))] user_ids: Vec<Uuid>,
+    ) -> crate::Result<Option<bool>> {
+        let app_handle = ctx.get_app_handle::<tauri::Wry>()?.clone();
+        spawn_blocking(move || -> crate::Result<_> {
+            use mangadex_blacklist_raw::schema::users_labels::dsl::*;
+            let mut connection = app_handle.blacklist_database_pool()?.get_connection()?;
+            connection.transaction::<(), crate::Error, _>(|connection| {
+                for label_ in &label_ids {
+                    for user_id in &user_ids {
+                        diesel::delete(users_labels)
+                            .filter(user.eq(user_id.as_bytes()))
+                            .filter(label.eq(label_.as_bytes()))
                             .execute(connection)?;
                     }
                 }
