@@ -91,6 +91,27 @@ impl BlacklistLabelsMutations {
         .await??;
         Ok(label)
     }
+    pub async fn delete_labels(
+        &self,
+        ctx: &Context<'_>,
+        #[graphql(validator(min_items = 1))] label_ids: Vec<Uuid>,
+    ) -> crate::error::wrapped::Result<Vec<BlacklistLabel>> {
+        let app_handle = ctx.get_app_handle::<tauri::Wry>()?.clone();
+        let label_ids: Vec<Vec<u8>> = label_ids
+            .into_iter()
+            .map(|d| d.as_bytes().to_vec())
+            .collect();
+        let label = spawn_blocking(move || -> crate::Result<_> {
+            use mangadex_blacklist_raw::schema::labels::dsl::*;
+            let mut connection = app_handle.blacklist_database_pool()?.get_connection()?;
+            let _label_id = Uuid::now_v7();
+            Ok(diesel::delete(labels.filter(label_id.eq_any(label_ids)))
+                .returning(BlacklistLabel::as_returning())
+                .get_results(&mut connection)?)
+        })
+        .await??;
+        Ok(label)
+    }
     pub async fn link_authors_artists(
         &self,
         ctx: &Context<'_>,
