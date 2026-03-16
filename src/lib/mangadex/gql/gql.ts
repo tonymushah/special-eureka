@@ -77,10 +77,17 @@ type Documents = {
 	"\n\tquery listBlacklistedAuthorArtists($params: BlacklistAuthorsArtistsListParam) {\n\t\tblacklist {\n\t\t\tauthorsArtists {\n\t\t\t\tlist(params: $params) {\n\t\t\t\t\tlimit\n\t\t\t\t\ttotal\n\t\t\t\t\toffset\n\t\t\t\t\tdata {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tname\n\t\t\t\t\t\tinsertDate\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.ListBlacklistedAuthorArtistsDocument;
 	"\n\tquery getAuthorArtistsBlacklistedByIds($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tauthorsArtists {\n\t\t\t\tgetByIds(ids: $ids) {\n\t\t\t\t\tid\n\t\t\t\t\tname\n\t\t\t\t\tinsertDate\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.GetAuthorArtistsBlacklistedByIdsDocument;
 	"\n\tquery getAuthorArtistsBlacklistedById($id: UUID!) {\n\t\tblacklist {\n\t\t\tauthorsArtists {\n\t\t\t\tget(id: $id) {\n\t\t\t\t\tid\n\t\t\t\t\tname\n\t\t\t\t\tinsertDate\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.GetAuthorArtistsBlacklistedByIdDocument;
-	"\n\tmutation blockAuthorArtistGQLDoc($id: UUID!) {\n\t\tblacklist {\n\t\t\tauthorArtists {\n\t\t\t\tblockOne(authorId: $id) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.BlockAuthorArtistGqlDocDocument;
-	"\n\tmutation blockBatchAuthorArtistGQLDoc($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tauthorArtists {\n\t\t\t\tblockMany(authorIds: $ids) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.BlockBatchAuthorArtistGqlDocDocument;
-	"\n\tmutation unblockAuthorArtistGQLDoc($id: UUID!) {\n\t\tblacklist {\n\t\t\tauthorArtists {\n\t\t\t\tunblockOne(authorId: $id) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.UnblockAuthorArtistGqlDocDocument;
-	"\n\tmutation unblockBatchAuthorArtistGQLDoc($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tauthorArtists {\n\t\t\t\tunblockMany(authorIds: $ids) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.UnblockBatchAuthorArtistGqlDocDocument;
+	"\n\tmutation blockAuthorArtist($id: UUID!) {\n\t\tblacklist {\n\t\t\tauthorArtists {\n\t\t\t\tblockOne(authorId: $id) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.BlockAuthorArtistDocument;
+	"\n\tmutation blockBatchAuthorArtist($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tauthorArtists {\n\t\t\t\tblockMany(authorIds: $ids) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.BlockBatchAuthorArtistDocument;
+	"\n\tmutation unblockAuthorArtist($id: UUID!) {\n\t\tblacklist {\n\t\t\tauthorArtists {\n\t\t\t\tunblockOne(authorId: $id) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.UnblockAuthorArtistDocument;
+	"\n\tmutation unblockBatchAuthorArtist($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tauthorArtists {\n\t\t\t\tunblockMany(authorIds: $ids) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.UnblockBatchAuthorArtistDocument;
+	"\n\tquery listBlacklistedScanlationGroups($params: BlacklistScanlationGroupsListParam) {\n\t\tblacklist {\n\t\t\tscanlationGroups {\n\t\t\t\tlist(params: $params) {\n\t\t\t\t\tlimit\n\t\t\t\t\ttotal\n\t\t\t\t\toffset\n\t\t\t\t\tdata {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tname\n\t\t\t\t\t\tinsertDate\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.ListBlacklistedScanlationGroupsDocument;
+	"\n\tquery getScanlationGroupBlacklistedByIds($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tscanlationGroups {\n\t\t\t\tgetByIds(ids: $ids) {\n\t\t\t\t\tid\n\t\t\t\t\tname\n\t\t\t\t\tinsertDate\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.GetScanlationGroupBlacklistedByIdsDocument;
+	"\n\tquery getScanlationGroupBlacklistedById($id: UUID!) {\n\t\tblacklist {\n\t\t\tscanlationGroups {\n\t\t\t\tget(id: $id) {\n\t\t\t\t\tid\n\t\t\t\t\tname\n\t\t\t\t\tinsertDate\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.GetScanlationGroupBlacklistedByIdDocument;
+	"\n\tmutation blockScanlationGroup($id: UUID!) {\n\t\tblacklist {\n\t\t\tscanlationGroups {\n\t\t\t\tblockOne(scanlationGroupId: $id) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.BlockScanlationGroupDocument;
+	"\n\tmutation blockBatchScanlationGroup($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tscanlationGroups {\n\t\t\t\tblockMany(scanlationGroupIds: $ids) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.BlockBatchScanlationGroupDocument;
+	"\n\tmutation unblockScanlationGroup($id: UUID!) {\n\t\tblacklist {\n\t\t\tscanlationGroups {\n\t\t\t\tunblockOne(scanlationGroupId: $id) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.UnblockScanlationGroupDocument;
+	"\n\tmutation unblockBatchScanlationGroup($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tscanlationGroups {\n\t\t\t\tunblockMany(scanlationGroupIds: $ids) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.UnblockBatchScanlationGroupDocument;
 	"\n\tquery getChaptersIDsAsFeed($ids: [UUID!]!) {\n\t\tchapter {\n\t\t\tlistWithGroupByManga(param: { feedContent: false, chapterListParams: { chapterIds: $ids } }) {\n\t\t\t\tdata {\n\t\t\t\t\tmanga {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\ttitle\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\tchapters {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\tchapter\n\t\t\t\t\t\t\ttitle\n\t\t\t\t\t\t\tvolume\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.GetChaptersIDsAsFeedDocument;
 	"\n\tsubscription subToChapterImageFit {\n\t\twatchImageFit\n\t}\n": typeof types.SubToChapterImageFitDocument;
 	"\n\tmutation updateChapterImageFit($imageFit: ImageFit!) {\n\t\tuserOption {\n\t\t\tsetImageFit(imageFit: $imageFit)\n\t\t}\n\t}\n": typeof types.UpdateChapterImageFitDocument;
@@ -393,14 +400,28 @@ const documents: Documents = {
 		types.GetAuthorArtistsBlacklistedByIdsDocument,
 	"\n\tquery getAuthorArtistsBlacklistedById($id: UUID!) {\n\t\tblacklist {\n\t\t\tauthorsArtists {\n\t\t\t\tget(id: $id) {\n\t\t\t\t\tid\n\t\t\t\t\tname\n\t\t\t\t\tinsertDate\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
 		types.GetAuthorArtistsBlacklistedByIdDocument,
-	"\n\tmutation blockAuthorArtistGQLDoc($id: UUID!) {\n\t\tblacklist {\n\t\t\tauthorArtists {\n\t\t\t\tblockOne(authorId: $id) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
-		types.BlockAuthorArtistGqlDocDocument,
-	"\n\tmutation blockBatchAuthorArtistGQLDoc($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tauthorArtists {\n\t\t\t\tblockMany(authorIds: $ids) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
-		types.BlockBatchAuthorArtistGqlDocDocument,
-	"\n\tmutation unblockAuthorArtistGQLDoc($id: UUID!) {\n\t\tblacklist {\n\t\t\tauthorArtists {\n\t\t\t\tunblockOne(authorId: $id) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
-		types.UnblockAuthorArtistGqlDocDocument,
-	"\n\tmutation unblockBatchAuthorArtistGQLDoc($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tauthorArtists {\n\t\t\t\tunblockMany(authorIds: $ids) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
-		types.UnblockBatchAuthorArtistGqlDocDocument,
+	"\n\tmutation blockAuthorArtist($id: UUID!) {\n\t\tblacklist {\n\t\t\tauthorArtists {\n\t\t\t\tblockOne(authorId: $id) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
+		types.BlockAuthorArtistDocument,
+	"\n\tmutation blockBatchAuthorArtist($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tauthorArtists {\n\t\t\t\tblockMany(authorIds: $ids) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
+		types.BlockBatchAuthorArtistDocument,
+	"\n\tmutation unblockAuthorArtist($id: UUID!) {\n\t\tblacklist {\n\t\t\tauthorArtists {\n\t\t\t\tunblockOne(authorId: $id) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
+		types.UnblockAuthorArtistDocument,
+	"\n\tmutation unblockBatchAuthorArtist($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tauthorArtists {\n\t\t\t\tunblockMany(authorIds: $ids) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
+		types.UnblockBatchAuthorArtistDocument,
+	"\n\tquery listBlacklistedScanlationGroups($params: BlacklistScanlationGroupsListParam) {\n\t\tblacklist {\n\t\t\tscanlationGroups {\n\t\t\t\tlist(params: $params) {\n\t\t\t\t\tlimit\n\t\t\t\t\ttotal\n\t\t\t\t\toffset\n\t\t\t\t\tdata {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tname\n\t\t\t\t\t\tinsertDate\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
+		types.ListBlacklistedScanlationGroupsDocument,
+	"\n\tquery getScanlationGroupBlacklistedByIds($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tscanlationGroups {\n\t\t\t\tgetByIds(ids: $ids) {\n\t\t\t\t\tid\n\t\t\t\t\tname\n\t\t\t\t\tinsertDate\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
+		types.GetScanlationGroupBlacklistedByIdsDocument,
+	"\n\tquery getScanlationGroupBlacklistedById($id: UUID!) {\n\t\tblacklist {\n\t\t\tscanlationGroups {\n\t\t\t\tget(id: $id) {\n\t\t\t\t\tid\n\t\t\t\t\tname\n\t\t\t\t\tinsertDate\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
+		types.GetScanlationGroupBlacklistedByIdDocument,
+	"\n\tmutation blockScanlationGroup($id: UUID!) {\n\t\tblacklist {\n\t\t\tscanlationGroups {\n\t\t\t\tblockOne(scanlationGroupId: $id) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
+		types.BlockScanlationGroupDocument,
+	"\n\tmutation blockBatchScanlationGroup($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tscanlationGroups {\n\t\t\t\tblockMany(scanlationGroupIds: $ids) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
+		types.BlockBatchScanlationGroupDocument,
+	"\n\tmutation unblockScanlationGroup($id: UUID!) {\n\t\tblacklist {\n\t\t\tscanlationGroups {\n\t\t\t\tunblockOne(scanlationGroupId: $id) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
+		types.UnblockScanlationGroupDocument,
+	"\n\tmutation unblockBatchScanlationGroup($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tscanlationGroups {\n\t\t\t\tunblockMany(scanlationGroupIds: $ids) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
+		types.UnblockBatchScanlationGroupDocument,
 	"\n\tquery getChaptersIDsAsFeed($ids: [UUID!]!) {\n\t\tchapter {\n\t\t\tlistWithGroupByManga(param: { feedContent: false, chapterListParams: { chapterIds: $ids } }) {\n\t\t\t\tdata {\n\t\t\t\t\tmanga {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\ttitle\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\tchapters {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\tchapter\n\t\t\t\t\t\t\ttitle\n\t\t\t\t\t\t\tvolume\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
 		types.GetChaptersIDsAsFeedDocument,
 	"\n\tsubscription subToChapterImageFit {\n\t\twatchImageFit\n\t}\n":
@@ -1165,26 +1186,68 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-	source: "\n\tmutation blockAuthorArtistGQLDoc($id: UUID!) {\n\t\tblacklist {\n\t\t\tauthorArtists {\n\t\t\t\tblockOne(authorId: $id) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"
-): (typeof documents)["\n\tmutation blockAuthorArtistGQLDoc($id: UUID!) {\n\t\tblacklist {\n\t\t\tauthorArtists {\n\t\t\t\tblockOne(authorId: $id) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"];
+	source: "\n\tmutation blockAuthorArtist($id: UUID!) {\n\t\tblacklist {\n\t\t\tauthorArtists {\n\t\t\t\tblockOne(authorId: $id) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tmutation blockAuthorArtist($id: UUID!) {\n\t\tblacklist {\n\t\t\tauthorArtists {\n\t\t\t\tblockOne(authorId: $id) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-	source: "\n\tmutation blockBatchAuthorArtistGQLDoc($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tauthorArtists {\n\t\t\t\tblockMany(authorIds: $ids) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"
-): (typeof documents)["\n\tmutation blockBatchAuthorArtistGQLDoc($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tauthorArtists {\n\t\t\t\tblockMany(authorIds: $ids) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"];
+	source: "\n\tmutation blockBatchAuthorArtist($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tauthorArtists {\n\t\t\t\tblockMany(authorIds: $ids) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tmutation blockBatchAuthorArtist($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tauthorArtists {\n\t\t\t\tblockMany(authorIds: $ids) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-	source: "\n\tmutation unblockAuthorArtistGQLDoc($id: UUID!) {\n\t\tblacklist {\n\t\t\tauthorArtists {\n\t\t\t\tunblockOne(authorId: $id) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"
-): (typeof documents)["\n\tmutation unblockAuthorArtistGQLDoc($id: UUID!) {\n\t\tblacklist {\n\t\t\tauthorArtists {\n\t\t\t\tunblockOne(authorId: $id) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"];
+	source: "\n\tmutation unblockAuthorArtist($id: UUID!) {\n\t\tblacklist {\n\t\t\tauthorArtists {\n\t\t\t\tunblockOne(authorId: $id) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tmutation unblockAuthorArtist($id: UUID!) {\n\t\tblacklist {\n\t\t\tauthorArtists {\n\t\t\t\tunblockOne(authorId: $id) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-	source: "\n\tmutation unblockBatchAuthorArtistGQLDoc($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tauthorArtists {\n\t\t\t\tunblockMany(authorIds: $ids) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"
-): (typeof documents)["\n\tmutation unblockBatchAuthorArtistGQLDoc($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tauthorArtists {\n\t\t\t\tunblockMany(authorIds: $ids) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"];
+	source: "\n\tmutation unblockBatchAuthorArtist($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tauthorArtists {\n\t\t\t\tunblockMany(authorIds: $ids) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tmutation unblockBatchAuthorArtist($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tauthorArtists {\n\t\t\t\tunblockMany(authorIds: $ids) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tquery listBlacklistedScanlationGroups($params: BlacklistScanlationGroupsListParam) {\n\t\tblacklist {\n\t\t\tscanlationGroups {\n\t\t\t\tlist(params: $params) {\n\t\t\t\t\tlimit\n\t\t\t\t\ttotal\n\t\t\t\t\toffset\n\t\t\t\t\tdata {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tname\n\t\t\t\t\t\tinsertDate\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tquery listBlacklistedScanlationGroups($params: BlacklistScanlationGroupsListParam) {\n\t\tblacklist {\n\t\t\tscanlationGroups {\n\t\t\t\tlist(params: $params) {\n\t\t\t\t\tlimit\n\t\t\t\t\ttotal\n\t\t\t\t\toffset\n\t\t\t\t\tdata {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tname\n\t\t\t\t\t\tinsertDate\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tquery getScanlationGroupBlacklistedByIds($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tscanlationGroups {\n\t\t\t\tgetByIds(ids: $ids) {\n\t\t\t\t\tid\n\t\t\t\t\tname\n\t\t\t\t\tinsertDate\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tquery getScanlationGroupBlacklistedByIds($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tscanlationGroups {\n\t\t\t\tgetByIds(ids: $ids) {\n\t\t\t\t\tid\n\t\t\t\t\tname\n\t\t\t\t\tinsertDate\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tquery getScanlationGroupBlacklistedById($id: UUID!) {\n\t\tblacklist {\n\t\t\tscanlationGroups {\n\t\t\t\tget(id: $id) {\n\t\t\t\t\tid\n\t\t\t\t\tname\n\t\t\t\t\tinsertDate\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tquery getScanlationGroupBlacklistedById($id: UUID!) {\n\t\tblacklist {\n\t\t\tscanlationGroups {\n\t\t\t\tget(id: $id) {\n\t\t\t\t\tid\n\t\t\t\t\tname\n\t\t\t\t\tinsertDate\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tmutation blockScanlationGroup($id: UUID!) {\n\t\tblacklist {\n\t\t\tscanlationGroups {\n\t\t\t\tblockOne(scanlationGroupId: $id) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tmutation blockScanlationGroup($id: UUID!) {\n\t\tblacklist {\n\t\t\tscanlationGroups {\n\t\t\t\tblockOne(scanlationGroupId: $id) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tmutation blockBatchScanlationGroup($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tscanlationGroups {\n\t\t\t\tblockMany(scanlationGroupIds: $ids) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tmutation blockBatchScanlationGroup($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tscanlationGroups {\n\t\t\t\tblockMany(scanlationGroupIds: $ids) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tmutation unblockScanlationGroup($id: UUID!) {\n\t\tblacklist {\n\t\t\tscanlationGroups {\n\t\t\t\tunblockOne(scanlationGroupId: $id) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tmutation unblockScanlationGroup($id: UUID!) {\n\t\tblacklist {\n\t\t\tscanlationGroups {\n\t\t\t\tunblockOne(scanlationGroupId: $id) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tmutation unblockBatchScanlationGroup($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tscanlationGroups {\n\t\t\t\tunblockMany(scanlationGroupIds: $ids) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tmutation unblockBatchScanlationGroup($ids: [UUID!]!) {\n\t\tblacklist {\n\t\t\tscanlationGroups {\n\t\t\t\tunblockMany(scanlationGroupIds: $ids) {\n\t\t\t\t\tid\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

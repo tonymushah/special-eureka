@@ -48,7 +48,7 @@ export const getAuthorArtistsBlacklistedByIdGQLDoc = graphql(`
 `);
 
 export const blockAuthorArtistGQLDoc = graphql(`
-	mutation blockAuthorArtistGQLDoc($id: UUID!) {
+	mutation blockAuthorArtist($id: UUID!) {
 		blacklist {
 			authorArtists {
 				blockOne(authorId: $id) {
@@ -60,7 +60,7 @@ export const blockAuthorArtistGQLDoc = graphql(`
 `);
 
 export const blockBatchAuthorArtistGQLDoc = graphql(`
-	mutation blockBatchAuthorArtistGQLDoc($ids: [UUID!]!) {
+	mutation blockBatchAuthorArtist($ids: [UUID!]!) {
 		blacklist {
 			authorArtists {
 				blockMany(authorIds: $ids) {
@@ -72,7 +72,7 @@ export const blockBatchAuthorArtistGQLDoc = graphql(`
 `);
 
 export const unblockAuthorArtistGQLDoc = graphql(`
-	mutation unblockAuthorArtistGQLDoc($id: UUID!) {
+	mutation unblockAuthorArtist($id: UUID!) {
 		blacklist {
 			authorArtists {
 				unblockOne(authorId: $id) {
@@ -84,7 +84,7 @@ export const unblockAuthorArtistGQLDoc = graphql(`
 `);
 
 export const unblockBatchAuthorArtistGQLDoc = graphql(`
-	mutation unblockBatchAuthorArtistGQLDoc($ids: [UUID!]!) {
+	mutation unblockBatchAuthorArtist($ids: [UUID!]!) {
 		blacklist {
 			authorArtists {
 				unblockMany(authorIds: $ids) {

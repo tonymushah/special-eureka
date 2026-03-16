@@ -5597,11 +5597,11 @@ export type GetAuthorArtistsBlacklistedByIdQuery = {
 	};
 };
 
-export type BlockAuthorArtistGqlDocMutationVariables = Exact<{
+export type BlockAuthorArtistMutationVariables = Exact<{
 	id: Scalars["UUID"]["input"];
 }>;
 
-export type BlockAuthorArtistGqlDocMutation = {
+export type BlockAuthorArtistMutation = {
 	__typename?: "Mutation";
 	blacklist: {
 		__typename?: "BlacklistMutations";
@@ -5612,11 +5612,11 @@ export type BlockAuthorArtistGqlDocMutation = {
 	};
 };
 
-export type BlockBatchAuthorArtistGqlDocMutationVariables = Exact<{
+export type BlockBatchAuthorArtistMutationVariables = Exact<{
 	ids: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
 }>;
 
-export type BlockBatchAuthorArtistGqlDocMutation = {
+export type BlockBatchAuthorArtistMutation = {
 	__typename?: "Mutation";
 	blacklist: {
 		__typename?: "BlacklistMutations";
@@ -5627,11 +5627,11 @@ export type BlockBatchAuthorArtistGqlDocMutation = {
 	};
 };
 
-export type UnblockAuthorArtistGqlDocMutationVariables = Exact<{
+export type UnblockAuthorArtistMutationVariables = Exact<{
 	id: Scalars["UUID"]["input"];
 }>;
 
-export type UnblockAuthorArtistGqlDocMutation = {
+export type UnblockAuthorArtistMutation = {
 	__typename?: "Mutation";
 	blacklist: {
 		__typename?: "BlacklistMutations";
@@ -5642,17 +5642,143 @@ export type UnblockAuthorArtistGqlDocMutation = {
 	};
 };
 
-export type UnblockBatchAuthorArtistGqlDocMutationVariables = Exact<{
+export type UnblockBatchAuthorArtistMutationVariables = Exact<{
 	ids: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
 }>;
 
-export type UnblockBatchAuthorArtistGqlDocMutation = {
+export type UnblockBatchAuthorArtistMutation = {
 	__typename?: "Mutation";
 	blacklist: {
 		__typename?: "BlacklistMutations";
 		authorArtists: {
 			__typename?: "BlacklistAuthorArtistsMutations";
 			unblockMany: Array<{ __typename?: "BlacklistedAuthorObject"; id: any }>;
+		};
+	};
+};
+
+export type ListBlacklistedScanlationGroupsQueryVariables = Exact<{
+	params?: InputMaybe<BlacklistScanlationGroupsListParam>;
+}>;
+
+export type ListBlacklistedScanlationGroupsQuery = {
+	__typename?: "Query";
+	blacklist: {
+		__typename?: "BlacklistQueries";
+		scanlationGroups: {
+			__typename?: "BlacklistScanlationGroupsQueries";
+			list: {
+				__typename?: "BlacklistedScanlationGroupResults";
+				limit: number;
+				total: number;
+				offset: number;
+				data: Array<{
+					__typename?: "BlacklistedScanlationGroupObject";
+					id: any;
+					name: string;
+					insertDate?: any | null;
+				}>;
+			};
+		};
+	};
+};
+
+export type GetScanlationGroupBlacklistedByIdsQueryVariables = Exact<{
+	ids: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
+}>;
+
+export type GetScanlationGroupBlacklistedByIdsQuery = {
+	__typename?: "Query";
+	blacklist: {
+		__typename?: "BlacklistQueries";
+		scanlationGroups: {
+			__typename?: "BlacklistScanlationGroupsQueries";
+			getByIds: Array<{
+				__typename?: "BlacklistedScanlationGroupObject";
+				id: any;
+				name: string;
+				insertDate?: any | null;
+			}>;
+		};
+	};
+};
+
+export type GetScanlationGroupBlacklistedByIdQueryVariables = Exact<{
+	id: Scalars["UUID"]["input"];
+}>;
+
+export type GetScanlationGroupBlacklistedByIdQuery = {
+	__typename?: "Query";
+	blacklist: {
+		__typename?: "BlacklistQueries";
+		scanlationGroups: {
+			__typename?: "BlacklistScanlationGroupsQueries";
+			get: {
+				__typename?: "BlacklistedScanlationGroupObject";
+				id: any;
+				name: string;
+				insertDate?: any | null;
+			};
+		};
+	};
+};
+
+export type BlockScanlationGroupMutationVariables = Exact<{
+	id: Scalars["UUID"]["input"];
+}>;
+
+export type BlockScanlationGroupMutation = {
+	__typename?: "Mutation";
+	blacklist: {
+		__typename?: "BlacklistMutations";
+		scanlationGroups: {
+			__typename?: "BlacklistScanlationGroupsMutations";
+			blockOne: { __typename?: "BlacklistedScanlationGroupObject"; id: any };
+		};
+	};
+};
+
+export type BlockBatchScanlationGroupMutationVariables = Exact<{
+	ids: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
+}>;
+
+export type BlockBatchScanlationGroupMutation = {
+	__typename?: "Mutation";
+	blacklist: {
+		__typename?: "BlacklistMutations";
+		scanlationGroups: {
+			__typename?: "BlacklistScanlationGroupsMutations";
+			blockMany: Array<{ __typename?: "BlacklistedScanlationGroupObject"; id: any }>;
+		};
+	};
+};
+
+export type UnblockScanlationGroupMutationVariables = Exact<{
+	id: Scalars["UUID"]["input"];
+}>;
+
+export type UnblockScanlationGroupMutation = {
+	__typename?: "Mutation";
+	blacklist: {
+		__typename?: "BlacklistMutations";
+		scanlationGroups: {
+			__typename?: "BlacklistScanlationGroupsMutations";
+			unblockOne: { __typename?: "BlacklistedScanlationGroupObject"; id: any };
+		};
+	};
+};
+
+export type UnblockBatchScanlationGroupMutationVariables = Exact<{
+	ids: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
+}>;
+
+export type UnblockBatchScanlationGroupMutation = {
+	__typename?: "Mutation";
+	blacklist: {
+		__typename?: "BlacklistMutations";
+		scanlationGroups: {
+			__typename?: "BlacklistScanlationGroupsMutations";
+			unblockMany: Array<{ __typename?: "BlacklistedScanlationGroupObject"; id: any }>;
 		};
 	};
 };
@@ -14926,13 +15052,13 @@ export const GetAuthorArtistsBlacklistedByIdDocument = {
 	GetAuthorArtistsBlacklistedByIdQuery,
 	GetAuthorArtistsBlacklistedByIdQueryVariables
 >;
-export const BlockAuthorArtistGqlDocDocument = {
+export const BlockAuthorArtistDocument = {
 	kind: "Document",
 	definitions: [
 		{
 			kind: "OperationDefinition",
 			operation: "mutation",
-			name: { kind: "Name", value: "blockAuthorArtistGQLDoc" },
+			name: { kind: "Name", value: "blockAuthorArtist" },
 			variableDefinitions: [
 				{
 					kind: "VariableDefinition",
@@ -14991,17 +15117,14 @@ export const BlockAuthorArtistGqlDocDocument = {
 			}
 		}
 	]
-} as unknown as DocumentNode<
-	BlockAuthorArtistGqlDocMutation,
-	BlockAuthorArtistGqlDocMutationVariables
->;
-export const BlockBatchAuthorArtistGqlDocDocument = {
+} as unknown as DocumentNode<BlockAuthorArtistMutation, BlockAuthorArtistMutationVariables>;
+export const BlockBatchAuthorArtistDocument = {
 	kind: "Document",
 	definitions: [
 		{
 			kind: "OperationDefinition",
 			operation: "mutation",
-			name: { kind: "Name", value: "blockBatchAuthorArtistGQLDoc" },
+			name: { kind: "Name", value: "blockBatchAuthorArtist" },
 			variableDefinitions: [
 				{
 					kind: "VariableDefinition",
@@ -15067,16 +15190,16 @@ export const BlockBatchAuthorArtistGqlDocDocument = {
 		}
 	]
 } as unknown as DocumentNode<
-	BlockBatchAuthorArtistGqlDocMutation,
-	BlockBatchAuthorArtistGqlDocMutationVariables
+	BlockBatchAuthorArtistMutation,
+	BlockBatchAuthorArtistMutationVariables
 >;
-export const UnblockAuthorArtistGqlDocDocument = {
+export const UnblockAuthorArtistDocument = {
 	kind: "Document",
 	definitions: [
 		{
 			kind: "OperationDefinition",
 			operation: "mutation",
-			name: { kind: "Name", value: "unblockAuthorArtistGQLDoc" },
+			name: { kind: "Name", value: "unblockAuthorArtist" },
 			variableDefinitions: [
 				{
 					kind: "VariableDefinition",
@@ -15135,17 +15258,14 @@ export const UnblockAuthorArtistGqlDocDocument = {
 			}
 		}
 	]
-} as unknown as DocumentNode<
-	UnblockAuthorArtistGqlDocMutation,
-	UnblockAuthorArtistGqlDocMutationVariables
->;
-export const UnblockBatchAuthorArtistGqlDocDocument = {
+} as unknown as DocumentNode<UnblockAuthorArtistMutation, UnblockAuthorArtistMutationVariables>;
+export const UnblockBatchAuthorArtistDocument = {
 	kind: "Document",
 	definitions: [
 		{
 			kind: "OperationDefinition",
 			operation: "mutation",
-			name: { kind: "Name", value: "unblockBatchAuthorArtistGQLDoc" },
+			name: { kind: "Name", value: "unblockBatchAuthorArtist" },
 			variableDefinitions: [
 				{
 					kind: "VariableDefinition",
@@ -15211,8 +15331,578 @@ export const UnblockBatchAuthorArtistGqlDocDocument = {
 		}
 	]
 } as unknown as DocumentNode<
-	UnblockBatchAuthorArtistGqlDocMutation,
-	UnblockBatchAuthorArtistGqlDocMutationVariables
+	UnblockBatchAuthorArtistMutation,
+	UnblockBatchAuthorArtistMutationVariables
+>;
+export const ListBlacklistedScanlationGroupsDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "listBlacklistedScanlationGroups" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "params" } },
+					type: {
+						kind: "NamedType",
+						name: { kind: "Name", value: "BlacklistScanlationGroupsListParam" }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "blacklist" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "scanlationGroups" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "list" },
+												arguments: [
+													{
+														kind: "Argument",
+														name: { kind: "Name", value: "params" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "params" }
+														}
+													}
+												],
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "limit" }
+														},
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "total" }
+														},
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "offset" }
+														},
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "data" },
+															selectionSet: {
+																kind: "SelectionSet",
+																selections: [
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "id"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "name"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "insertDate"
+																		}
+																	}
+																]
+															}
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	ListBlacklistedScanlationGroupsQuery,
+	ListBlacklistedScanlationGroupsQueryVariables
+>;
+export const GetScanlationGroupBlacklistedByIdsDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "getScanlationGroupBlacklistedByIds" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "ids" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "ListType",
+							type: {
+								kind: "NonNullType",
+								type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+							}
+						}
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "blacklist" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "scanlationGroups" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "getByIds" },
+												arguments: [
+													{
+														kind: "Argument",
+														name: { kind: "Name", value: "ids" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "ids" }
+														}
+													}
+												],
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "id" }
+														},
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "name" }
+														},
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "insertDate"
+															}
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	GetScanlationGroupBlacklistedByIdsQuery,
+	GetScanlationGroupBlacklistedByIdsQueryVariables
+>;
+export const GetScanlationGroupBlacklistedByIdDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "getScanlationGroupBlacklistedById" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "blacklist" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "scanlationGroups" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "get" },
+												arguments: [
+													{
+														kind: "Argument",
+														name: { kind: "Name", value: "id" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "id" }
+														}
+													}
+												],
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "id" }
+														},
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "name" }
+														},
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "insertDate"
+															}
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	GetScanlationGroupBlacklistedByIdQuery,
+	GetScanlationGroupBlacklistedByIdQueryVariables
+>;
+export const BlockScanlationGroupDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "blockScanlationGroup" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "blacklist" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "scanlationGroups" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "blockOne" },
+												arguments: [
+													{
+														kind: "Argument",
+														name: {
+															kind: "Name",
+															value: "scanlationGroupId"
+														},
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "id" }
+														}
+													}
+												],
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "id" }
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<BlockScanlationGroupMutation, BlockScanlationGroupMutationVariables>;
+export const BlockBatchScanlationGroupDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "blockBatchScanlationGroup" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "ids" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "ListType",
+							type: {
+								kind: "NonNullType",
+								type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+							}
+						}
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "blacklist" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "scanlationGroups" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "blockMany" },
+												arguments: [
+													{
+														kind: "Argument",
+														name: {
+															kind: "Name",
+															value: "scanlationGroupIds"
+														},
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "ids" }
+														}
+													}
+												],
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "id" }
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	BlockBatchScanlationGroupMutation,
+	BlockBatchScanlationGroupMutationVariables
+>;
+export const UnblockScanlationGroupDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "unblockScanlationGroup" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "blacklist" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "scanlationGroups" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "unblockOne" },
+												arguments: [
+													{
+														kind: "Argument",
+														name: {
+															kind: "Name",
+															value: "scanlationGroupId"
+														},
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "id" }
+														}
+													}
+												],
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "id" }
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	UnblockScanlationGroupMutation,
+	UnblockScanlationGroupMutationVariables
+>;
+export const UnblockBatchScanlationGroupDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "unblockBatchScanlationGroup" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "ids" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "ListType",
+							type: {
+								kind: "NonNullType",
+								type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+							}
+						}
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "blacklist" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "scanlationGroups" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "unblockMany" },
+												arguments: [
+													{
+														kind: "Argument",
+														name: {
+															kind: "Name",
+															value: "scanlationGroupIds"
+														},
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "ids" }
+														}
+													}
+												],
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "id" }
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	UnblockBatchScanlationGroupMutation,
+	UnblockBatchScanlationGroupMutationVariables
 >;
 export const GetChaptersIDsAsFeedDocument = {
 	kind: "Document",
