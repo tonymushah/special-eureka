@@ -8,7 +8,7 @@ export function root_effect(effect: () => void | VoidFunction): VoidFunction {
 
 export function extractFromAccessor<T>(_access: Accessor<T>): ExtractedAccessor<T> {
 	let val: T;
-	const d = $effect.root(() => {
+	const d = root_effect(() => {
 		val = _access();
 	});
 	const to_ret = {
