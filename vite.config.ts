@@ -10,7 +10,7 @@ export default defineConfig({
 	},
 	// prevent vite from obscuring rust errors
 	clearScreen: false,
-	esbuild: {
+	oxc: {
 		// We need this or else the ts code that uses `using` will not work on linux ;(
 		target: process.env.TAURI_PLATFORM == "windows" ? "chrome105" : "safari13"
 	},
