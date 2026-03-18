@@ -1,13 +1,10 @@
 import { sveltekit } from "@sveltejs/kit/vite";
 import { defineConfig, searchForWorkspaceRoot } from "vite";
+import { ViteImageOptimizer } from "vite-plugin-image-optimizer";
 import { kitRoutes } from "vite-plugin-kit-routes";
-import { ViteImageOptimizer } from 'vite-plugin-image-optimizer';
 
 export default defineConfig({
 	plugins: [sveltekit(), kitRoutes(), ViteImageOptimizer()],
-	test: {
-		include: ["src/**/*.{test,spec}.{js,ts}", "apps/**/*.{test,spec}.{js,ts}"]
-	},
 	optimizeDeps: {
 		exclude: ["@urql/svelte", "@urql/core"]
 	},
@@ -15,26 +12,22 @@ export default defineConfig({
 	clearScreen: false,
 	esbuild: {
 		// We need this or else the ts code that uses `using` will not work on linux ;(
-		target: process.env.TAURI_PLATFORM == "windows" ? "chrome105" : "safari13",
+		target: process.env.TAURI_PLATFORM == "windows" ? "chrome105" : "safari13"
 	},
 	// Tauri expects a fixed port, fail if that port is not available
 	server: {
 		port: 9305,
 		strictPort: true,
 		fs: {
-			deny: [
-				"./src-tauri",
-				".env",
-				".env.*",
-				"*.crt",
-				"*.pem",
-				"./target",
-				"./data"
-			]
+			deny: ["./src-tauri", ".env", ".env.*", "*.crt", "*.pem", "./target", "./data"]
 		},
 		watch: {
-			ignored: [`${searchForWorkspaceRoot(process.cwd())}/src-tauri`, `${searchForWorkspaceRoot(process.cwd())}/target`, `${searchForWorkspaceRoot(process.cwd())}/data`]
-		},
+			ignored: [
+				`${searchForWorkspaceRoot(process.cwd())}/src-tauri`,
+				`${searchForWorkspaceRoot(process.cwd())}/target`,
+				`${searchForWorkspaceRoot(process.cwd())}/data`
+			]
+		}
 	},
 	// to access the Tauri environment variables set by the CLI with information about the current target
 	envPrefix: [
@@ -53,6 +46,6 @@ export default defineConfig({
 		minify: !process.env.TAURI_DEBUG ? "esbuild" : false,
 		// produce sourcemaps for debug builds
 		sourcemap: !!process.env.TAURI_DEBUG,
-		cssMinify: "lightningcss",
+		cssMinify: "lightningcss"
 	}
 });
