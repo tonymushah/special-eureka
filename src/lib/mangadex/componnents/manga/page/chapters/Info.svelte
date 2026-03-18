@@ -5,22 +5,18 @@
 	};
 
 	function amazonLink({ amazon }: MangaLinks): LinkItem | undefined {
-		const client = getContextClient();
 		if (amazon) {
 			return {
 				title: "Amazon",
-				href: amazon,
-				icon: getFaviconSrc({ url: amazon, client })
+				href: amazon
 			};
 		}
 	}
 	function anilistLink({ anilist }: MangaLinks): LinkItem | undefined {
-		const client = getContextClient();
 		if (anilist) {
 			return {
 				title: "AniList",
-				href: anilist,
-				icon: getFaviconSrc({ url: anilist, client })
+				href: anilist
 			};
 		}
 	}
@@ -29,28 +25,23 @@
 		if (url) {
 			return {
 				title: "Anime-Planet",
-				href: url,
-				icon: getFaviconSrc({ url, client })
+				href: url
 			};
 		}
 	}
 	function bookWalkerLink({ bookWalker: url }: MangaLinks): LinkItem | undefined {
-		const client = getContextClient();
 		if (url) {
 			return {
 				title: "Book☆Walker",
-				href: url,
-				icon: getFaviconSrc({ url, client })
+				href: url
 			};
 		}
 	}
 	function cdJapanLink({ cdJapan: url }: MangaLinks): LinkItem | undefined {
-		const client = getContextClient();
 		if (url) {
 			return {
 				title: "CDJapan",
-				href: url,
-				icon: getFaviconSrc({ url, client })
+				href: url
 			};
 		}
 	}
@@ -59,8 +50,7 @@
 		if (url) {
 			return {
 				title: "eBookJapan",
-				href: url,
-				icon: getFaviconSrc({ url, client })
+				href: url
 			};
 		}
 	}
@@ -69,8 +59,7 @@
 		if (url) {
 			return {
 				title: "Official English",
-				href: url,
-				icon: getFaviconSrc({ url, client })
+				href: url
 			};
 		}
 	}
@@ -79,8 +68,7 @@
 		if (url) {
 			return {
 				title: "Kitsu",
-				href: url,
-				icon: getFaviconSrc({ url, client })
+				href: url
 			};
 		}
 	}
@@ -89,8 +77,7 @@
 		if (url) {
 			return {
 				title: "MangaUpdates",
-				href: url,
-				icon: getFaviconSrc({ url, client })
+				href: url
 			};
 		}
 	}
@@ -99,8 +86,7 @@
 		if (url) {
 			return {
 				title: "myAnimeList",
-				href: url,
-				icon: getFaviconSrc({ url, client })
+				href: url
 			};
 		}
 	}
@@ -109,8 +95,7 @@
 		if (url) {
 			return {
 				title: "NovelUpdates",
-				href: url,
-				icon: getFaviconSrc({ url, client })
+				href: url
 			};
 		}
 	}
@@ -119,8 +104,7 @@
 		if (url) {
 			return {
 				title: "Official Raw",
-				href: url,
-				icon: getFaviconSrc({ url, client })
+				href: url
 			};
 		}
 	}
@@ -206,7 +190,6 @@
 
 <script lang="ts">
 	import { type MangaLinks } from "@mangadex/gql/graphql";
-	import { getFaviconSrc } from "@mangadex/utils/favicons/getFaviconSrc";
 	import { getContextClient } from "@urql/svelte";
 	import MangaPageChaptersInfo, { type MangaLinksItem } from "./MangaPageChaptersInfo.svelte";
 	import type { AltTitleItem } from "./info/alt-titles/MangaAltTitles.svelte";

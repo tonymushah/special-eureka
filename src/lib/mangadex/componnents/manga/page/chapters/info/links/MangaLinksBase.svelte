@@ -4,7 +4,6 @@
 	export type LinkItem = {
 		title: string;
 		href: string;
-		icon: Readable<string | undefined>;
 	};
 </script>
 
@@ -22,8 +21,8 @@
 <div class="outer">
 	<h4>{title}</h4>
 	<div class="inner">
-		{#each items as { title, href, icon } (href)}
-			<MangaLinkButton {title} {href} {icon} />
+		{#each items as { title, href } (href)}
+			<MangaLinkButton {title} {href} />
 		{/each}
 	</div>
 </div>
