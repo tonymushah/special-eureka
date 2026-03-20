@@ -3,6 +3,7 @@
 	import MangaDexTabs from "@mangadex/componnents/theme/tabs/MangaDexTabs.svelte";
 	import { TabContent } from "@ark-ui/svelte";
 	import BlacklistedAuthorArtistsList from "@mangadex/componnents/blacklist/list/author-artists/BlacklistedAuthorArtistsList.svelte";
+	import BlacklistedScanlationGroupList from "@mangadex/componnents/blacklist/list/scanlation-groups/BlacklistedScanlationGroupList.svelte";
 </script>
 
 <PageTitle title="Blacklist" titleType={1} withReturn />
@@ -34,7 +35,9 @@
 	<TabContent value="author-artists">
 		<BlacklistedAuthorArtistsList />
 	</TabContent>
-	<TabContent value="scanlation-groups"></TabContent>
+	<TabContent value="scanlation-groups">
+		<BlacklistedScanlationGroupList />
+	</TabContent>
 	<TabContent value="users"></TabContent>
 	<TabContent value="labels"></TabContent>
 </MangaDexTabs>
