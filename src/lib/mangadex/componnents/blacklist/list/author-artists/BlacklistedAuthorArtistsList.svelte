@@ -62,7 +62,7 @@
 				<tr>
 					<th>Author Id</th>
 					<th>Name</th>
-					<th>BlacklistDate</th>
+					<th>Blacklist Date</th>
 				</tr>
 			</thead>
 			<tbody>
