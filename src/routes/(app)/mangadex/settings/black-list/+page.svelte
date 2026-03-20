@@ -7,6 +7,7 @@
 <PageTitle title="Blacklist" titleType={1} withReturn />
 
 <MangaDexTabs
+	noLine
 	triggers={[
 		{
 			id: "author-artists",
