@@ -15,7 +15,7 @@
 		async queryFn({ pageParam }) {
 			const res = await client
 				.query(listBlackListedAuthorArtistsGQLDoc, {
-					params
+					params: pageParam
 				})
 				.toPromise();
 			if (res.error) {
