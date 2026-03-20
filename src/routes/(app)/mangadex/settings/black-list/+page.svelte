@@ -19,6 +19,10 @@
 		{
 			id: "users",
 			title: "Users (aka Uploaders)"
+		},
+		{
+			id: "labels",
+			title: "Labels"
 		}
 	]}
 	lazyMount
@@ -28,4 +32,5 @@
 	<TabContent value="author-artists"></TabContent>
 	<TabContent value="scanlation-groups"></TabContent>
 	<TabContent value="users"></TabContent>
+	<TabContent value="labels"></TabContent>
 </MangaDexTabs>
