@@ -71,7 +71,7 @@ export const blockBatchUserGQLDoc = graphql(`
 	}
 `);
 
-export const unblockUsersGQLDoc = graphql(`
+export const unblockUserGQLDoc = graphql(`
 	mutation unblockUsers($id: UUID!) {
 		blacklist {
 			users {
