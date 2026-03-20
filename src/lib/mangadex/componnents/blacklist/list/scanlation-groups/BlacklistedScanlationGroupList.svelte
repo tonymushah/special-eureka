@@ -66,11 +66,11 @@
 				</tr>
 			</thead>
 			<tbody>
-				{#each scanlationGroups as authorArtist (`baa-${authorArtist.id}`)}
+				{#each scanlationGroups as group (`baa-${group.id}`)}
 					<tr>
-						<td>{authorArtist.id}</td>
-						<td>{authorArtist.name}</td>
-						<td>{authorArtist.insertDate}</td>
+						<td>{group.id}</td>
+						<td>{group.name}</td>
+						<td>{group.insertDate}</td>
 					</tr>
 				{/each}
 			</tbody>
