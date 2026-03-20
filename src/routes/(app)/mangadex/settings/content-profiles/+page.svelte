@@ -5,6 +5,7 @@
 	import { readonly, writable } from "svelte/store";
 	import type { TagGroup } from "@mangadex/gql/graphql";
 	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
+	import PageTitle from "@mangadex/componnents/pages/PageTitle.svelte";
 	interface Props {
 		data: PageData;
 	}
@@ -25,6 +26,8 @@
 </script>
 
 <AppTitle title="Content Profiles - MangaDex" />
+
+<PageTitle titleType={1} title={"Content Profiles"} withReturn />
 
 <section class="selector">
 	<ContentProfileSelector />

@@ -166,7 +166,7 @@
 	}
 	.progress {
 		transition: translate ease-in-out var(--progress-transition-duration);
-		width: 100%;
+		/* width: 100%; */
 		padding: 12px 8px;
 		background-color: var(--accent-l1);
 		display: flex;

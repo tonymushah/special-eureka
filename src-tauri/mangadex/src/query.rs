@@ -1,6 +1,7 @@
 pub mod api_client;
 pub mod auth;
 pub mod author;
+pub mod blacklist;
 pub mod chapter;
 pub mod cover;
 pub mod custom_list;
@@ -127,5 +128,8 @@ impl Query {
         let app = ctx.get_app_handle::<tauri::Wry>()?;
         let client = app.get_mangadex_client_with_auth_refresh().await?;
         Ok(library::CurrentUserLibrary::new(&client).await?)
+    }
+    pub async fn blacklist(&self) -> blacklist::BlacklistQueries {
+        blacklist::BlacklistQueries
     }
 }

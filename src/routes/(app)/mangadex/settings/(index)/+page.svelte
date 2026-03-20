@@ -11,6 +11,7 @@
 	import ThemeIcon from "./(icons)/ThemeIcon.svelte";
 	import SettingsItem from "./SettingsItem.svelte";
 	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
+	import BlacklistIcon from "./(icons)/BlacklistIcon.svelte";
 
 	let settings: ComponentProps<typeof SettingsItem>[] = [
 		{
@@ -48,6 +49,12 @@
 			description: "Check any download status",
 			href: route("/mangadex/settings/download-state"),
 			icon: DownloadStateIcon
+		},
+		{
+			title: "Blacklist",
+			description: "Hides authors, artists, scanlation groups, users contents",
+			href: route("/mangadex/settings/black-list"),
+			icon: BlacklistIcon
 		}
 	];
 	if (dev) {

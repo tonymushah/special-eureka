@@ -10,6 +10,7 @@ pub mod abort;
 pub mod collection;
 pub mod download;
 pub mod download_state;
+pub mod get_attributes;
 pub mod guards;
 pub mod math;
 pub mod read_marker;
@@ -104,6 +105,23 @@ pub(crate) fn get_store<'ctx, R: Runtime>(
 }
 
 #[cfg_attr(feature = "hotpath", hotpath::measure)]
+pub fn try_block_on<F>(fut: F) -> crate::Result<F::Output>
+where
+    F: Future + Send + 'static,
+    F::Output: Send + 'static,
+{
+    std::thread::spawn(move || tauri::async_runtime::block_on(fut))
+        .join()
+        .map_err(|err| {
+            crate::Error::Unknown(if let Some(s) = err.downcast_ref::<String>() {
+                s.clone()
+            } else {
+                String::from("thread join panic")
+            })
+        })
+}
+
+#[cfg_attr(feature = "hotpath", hotpath::measure)]
 pub fn block_on<F>(fut: F) -> F::Output
 where
     F: Future + Send + 'static,
@@ -134,4 +152,10 @@ pub fn print_instant(instant: Instant) {
                 )
             })
     );
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, async_graphql::Enum)]
+pub enum SortDirection {
+    Ascending,
+    Descending,
 }

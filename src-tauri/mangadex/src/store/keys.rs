@@ -1,51 +1,35 @@
-// TODO please make a macro for this. I am tired of copy pasting the definition above.
+macro_rules! keys {
+	($($key:ident = $val:literal,)*) => {
+		$(
+			pub const $key: &str = $val;
+		)*
+    };
+}
 
-pub const CLIENT_INFO: &str = "client_info";
-
-pub const PATH: &str = "mangadex.store";
-
-pub const REFRESH_TOKEN: &str = "refresh_token";
-
-pub const PAGE_DIRECTION: &str = "page_direction";
-
-pub const SIDEBAR_DIRECTION: &str = "sidebar_direction";
-
-pub const READING_MODE: &str = "reading_mode";
-
-pub const IMAGE_FIT: &str = "image_fit";
-
-pub const LONGSTRIP_IMAGE_WIDTH: &str = "longstrip_image_width";
-
-pub const MANGA_LIST_STYLE: &str = "manga-list-style";
-
-pub const THEME_PROFILE: &str = "theme_profile";
-
-pub const THEME_PROFILE_KEY: &str = "theme_profile_key";
-
-pub const CHAPTER_FEED_STYLE: &str = "chapter_feed_style";
-
-pub const PAGINATION_STYLE: &str = "pagination_style";
-
-pub const CONTENT_PROFILE: &str = "content_profile";
-
-pub const CONTENT_PROFILE_KEY: &str = "content_profile_key";
-
-pub const OFFLINE_CONFIG: &str = "offline_config";
-
-pub const CHAPTERS_QUALITY: &str = "chapters_quality";
-
-pub const PAGE_LIMIT: &str = "page_limit";
-
-pub const CHAPTER_LAYOUT: &str = "chapter_layout";
-
-pub const FORCE_443: &str = "force_443";
-
-pub const CONTENT_PROFILE_WARNING_MODE: &str = "content_profile_warning_mode";
-
-pub const CONTENT_PROFILE_BLUR: &str = "content_profile_blur";
-
-pub const TOAST_NOTIFY: &str = "toast_notify";
-
-pub const MANGA_INFOS_POSITIONS: &str = "manga_infos_positions";
-
-pub const HIDE_READ_TITLES: &str = "hide_read_titles";
+keys! {
+    CLIENT_INFO = "client_info",
+    PATH = "mangadex.store",
+    REFRESH_TOKEN = "refresh_token",
+    PAGE_DIRECTION  = "page_direction",
+    SIDEBAR_DIRECTION = "sidebar_direction",
+    READING_MODE = "reading_mode",
+    IMAGE_FIT = "image_fit",
+    LONGSTRIP_IMAGE_WIDTH = "longstrip_image_width",
+    MANGA_LIST_STYLE = "manga-list-style",
+    THEME_PROFILE = "theme_profile",
+    THEME_PROFILE_KEY = "theme_profile_key",
+    CHAPTER_FEED_STYLE = "chapter_feed_style",
+    PAGINATION_STYLE = "pagination_style",
+    CONTENT_PROFILE = "content_profile",
+    CONTENT_PROFILE_KEY = "content_profile_key",
+    OFFLINE_CONFIG = "offline_config",
+    CHAPTERS_QUALITY = "chapters_quality",
+    PAGE_LIMIT = "page_limit",
+    CHAPTER_LAYOUT = "chapter_layout",
+    FORCE_443 = "force_443",
+    CONTENT_PROFILE_WARNING_MODE = "content_profile_warning_mode",
+    CONTENT_PROFILE_BLUR = "content_profile_blur",
+    TOAST_NOTIFY = "toast_notify",
+    MANGA_INFOS_POSITIONS = "manga_infos_positions",
+    HIDE_READ_TITLES = "hide_read_titles",
+}

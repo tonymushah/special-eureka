@@ -1,0 +1,11 @@
+[package]
+name = "diesel-sqlite-utils"
+rust-version.workspace = true
+license-file.workspace = true
+authors.workspace = true
+edition.workspace = true
+repository.workspace = true
+version.workspace = true
+
+[dependencies]
+diesel = { workspace = true, features = ["sqlite", "r2d2"] }

@@ -100,13 +100,13 @@ impl AppStateInner {
                                 })
                                 .await
                                 .unwrap_or_default()
-                            {
-                                let data: ApiObjectNoRelationships<ChapterAttributes> = data.into();
-                                // let id = data.id;
-                                let _ = app_state1
-                                    .verify_and_push(Into::<ChapterObject>::into(data))
-                                    .await;
-                            }
+                        {
+                            let data: ApiObjectNoRelationships<ChapterAttributes> = data.into();
+                            // let id = data.id;
+                            let _ = app_state1
+                                .verify_and_push(Into::<ChapterObject>::into(data))
+                                .await;
+                        }
                     } else {
                         break;
                     }
@@ -133,12 +133,12 @@ impl AppStateInner {
                                 })
                                 .await
                                 .unwrap_or_default()
-                            {
-                                let data: ApiObjectNoRelationships<MangaAttributes> = data.into();
-                                let _ = app_state2
-                                    .verify_and_push(Into::<MangaObject>::into(data))
-                                    .await;
-                            }
+                        {
+                            let data: ApiObjectNoRelationships<MangaAttributes> = data.into();
+                            let _ = app_state2
+                                .verify_and_push(Into::<MangaObject>::into(data))
+                                .await;
+                        }
                     } else {
                         break;
                     }
@@ -164,12 +164,12 @@ impl AppStateInner {
                                 })
                                 .await
                                 .unwrap_or_default()
-                            {
-                                let data: ApiObjectNoRelationships<CoverAttributes> = data.into();
-                                let _ = app_state3
-                                    .verify_and_push(Into::<CoverObject>::into(data))
-                                    .await;
-                            }
+                        {
+                            let data: ApiObjectNoRelationships<CoverAttributes> = data.into();
+                            let _ = app_state3
+                                .verify_and_push(Into::<CoverObject>::into(data))
+                                .await;
+                        }
                     } else {
                         break;
                     }

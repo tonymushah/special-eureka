@@ -1,4 +1,5 @@
 <script lang="ts">
+	import PageTitle from "@mangadex/componnents/pages/PageTitle.svelte";
 	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
 	import type { Snippet } from "svelte";
 
@@ -8,14 +9,8 @@
 	let { children }: Props = $props();
 </script>
 
-<h2>General Settings</h2>
+<PageTitle title="General Settings" titleType={1} withReturn />
 
 <AppTitle title="General Settings - MangaDex" />
 
 {@render children?.()}
-
-<style lang="scss">
-	h2 {
-		text-decoration: underline;
-	}
-</style>

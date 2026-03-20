@@ -1,8 +1,9 @@
-use std::backtrace::Backtrace;
-
 use async_graphql::ErrorExtensions;
 use mangadex_api_schema_rust::v5::error::MangaDexError_;
+use std::error::Error as StdErrorTrait;
 use uuid::Uuid;
+
+type DieselMigrationError = Box<dyn StdErrorTrait + Send + Sync>;
 
 #[derive(Debug, thiserror::Error, enum_kinds::EnumKind)]
 #[enum_kind(
@@ -172,6 +173,32 @@ pub enum Error {
     UnsupportedCoverArchiveFormat(#[from] crate::mutation::cover::UnsupportedCoverArchiveFormat),
     #[error(transparent)]
     Zip(#[from] zip::result::ZipError),
+    #[error("Cannot create blacklist database pool")]
+    MakingBlacklistPool { error: diesel::r2d2::PoolError },
+    #[error(transparent)]
+    Diesel(#[from] diesel::result::Error),
+    #[error(transparent)]
+    R2D2Pool(#[from] diesel::r2d2::PoolError),
+    #[error(transparent)]
+    DieselR2D2(#[from] diesel::r2d2::Error),
+    #[error(transparent)]
+    DieselMigration(DieselMigrationError),
+    #[error(transparent)]
+    Uuid(#[from] uuid::Error),
+    #[error("Need to get the first value of an array but got nothing")]
+    FirstValueExpected,
+    #[error("This author {0} cannot be found")]
+    AuthorNotFound(uuid::Uuid),
+    #[error("Cannot fetch author attributes")]
+    FetchAuthorAttributes,
+    #[error("This scanlation group {0} cannot be found")]
+    ScanlationGroupNotFound(uuid::Uuid),
+    #[error("Cannot fetch scanlation groups attributes")]
+    FetchScanlationGroupsAttributes,
+    #[error("This user {0} cannot be found")]
+    UserNotFound(uuid::Uuid),
+    #[error("Cannot fetch user attributes")]
+    FetchUserAttributes,
 }
 
 impl Error {
@@ -192,7 +219,10 @@ impl ErrorExtensions for Error {
         async_graphql::Error::new(format!("{self}")).extend_with(|_err, exts| {
             exts.set("code", ErrorKind::from(self).repr());
             #[cfg(debug_assertions)]
-            exts.set("backtrace", Backtrace::capture().to_string());
+            exts.set(
+                "backtrace",
+                std::backtrace::Backtrace::capture().to_string(),
+            );
             match self {
                 Self::Reqwest(err)
                 | Self::MangadexApi(mangadex_api_types_rust::error::Error::RequestError(err)) => {
@@ -253,6 +283,9 @@ impl ErrorExtensions for Error {
                 }
                 Self::UploadCommitDataMissing(err) => {
                     exts.set("internal_session_id", err.to_string());
+                }
+                Self::MakingBlacklistPool { error } => {
+                    exts.set("pool_error", error.to_string());
                 }
                 _ => {}
             }

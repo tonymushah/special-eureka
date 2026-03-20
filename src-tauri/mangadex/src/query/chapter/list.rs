@@ -8,9 +8,11 @@ use crate::{
     error::Error,
     store::types::structs::content::ContentFeeder,
     subscription::utils::{OptionFlattenStream, ResultFlattenStream},
-    utils::{Collection, splittable_param::SendSplitted},
+    utils::{
+        Collection, splittable_param::SendSplitted, traits_utils::MangadexAsyncGraphQLContextExt,
+    },
 };
-use async_graphql::{Context, InputObject, Object};
+use async_graphql::{Context, InputObject};
 use eureka_mmanager::prelude::{
     AsyncIntoSorted, AsyncIsIn, ChapterDataPullAsyncTrait, GetManagerStateData,
     IntoParamedFilteredStream,
@@ -47,49 +49,73 @@ use crate::objects::chapter::lists::ChapterResults;
 
 type Param = ChapterListParams;
 
-#[derive(Debug, Clone)]
-pub struct ChapterListQueries(Param);
+#[derive(Debug, Clone, Default)]
+pub struct ChapterListQueries {
+    param: Param,
+    disable_scanlation_groups_blacklist: bool,
+    disable_users_blacklist: bool,
+}
 
 impl Deref for ChapterListQueries {
     type Target = Param;
     fn deref(&self) -> &Self::Target {
-        &self.0
+        &self.param
     }
 }
 
 impl DerefMut for ChapterListQueries {
     fn deref_mut(&mut self) -> &mut Self::Target {
-        &mut self.0
+        &mut self.param
     }
 }
 
 impl From<Param> for ChapterListQueries {
     fn from(value: Param) -> Self {
-        Self(value)
+        Self {
+            param: value,
+            ..Default::default()
+        }
     }
 }
 
 impl From<ChapterListQueries> for Param {
     fn from(value: ChapterListQueries) -> Self {
-        value.0
+        value.param
     }
 }
 
 impl From<&ChapterListQueries> for Param {
     fn from(value: &ChapterListQueries) -> Self {
-        value.0.clone()
+        value.param.clone()
     }
 }
 
 impl ChapterListQueries {
+    pub fn disable_scanlation_groups_blacklist(
+        mut self,
+        exclude_blacklisted_scanlation_groups: bool,
+    ) -> Self {
+        self.disable_scanlation_groups_blacklist = exclude_blacklisted_scanlation_groups;
+        self
+    }
+    pub fn disable_users_blacklist(mut self, exclude_blacklisted_users: bool) -> Self {
+        self.disable_users_blacklist = exclude_blacklisted_users;
+        self
+    }
     pub fn new<CF: ContentFeeder<ChapterListParams>>(
         params: ChapterListParams,
         feeder: &CF,
     ) -> Self {
-        Self(feeder.feed(params))
+        Self {
+            param: feeder.feed(params),
+            ..Default::default()
+        }
     }
-    pub fn no_feed(params: ChapterListParams) -> Self {
-        Self(params)
+    pub fn no_feed(param: ChapterListParams) -> Self {
+        Self {
+            param,
+            ..Default::default()
+        }
     }
 }
 
@@ -150,7 +176,7 @@ impl ChapterListQueries {
         .result_flatten()
         .option_flatten();
         let res: ChapterCollection = Collection::from_async_stream(
-            IntoParamedFilteredStream::to_filtered_into(stream, self.0.clone()),
+            IntoParamedFilteredStream::to_filtered_into(stream, self.param.clone()),
             self.limit.map(|l| l as usize).unwrap_or_else(|| {
                 if self.chapter_ids.is_empty() {
                     10
@@ -177,7 +203,7 @@ impl ChapterListQueries {
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?
             .deref()
             .clone();
-        let res = self.0.clone().send_splitted_default(&client).await?;
+        let res = self.param.clone().send_splitted_default(&client).await?;
         let _res = res.clone();
         tauri::async_runtime::spawn(async move {
             for data in _res.data {
@@ -202,17 +228,50 @@ impl ChapterListQueries {
     }
 }
 
-#[Object]
 #[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl ChapterListQueries {
     pub async fn default(
-        &self,
+        mut self,
         ctx: &Context<'_>,
         offline_params: Option<GetAllChapterParams>,
-    ) -> crate::error::wrapped::Result<ChapterResults> {
-        Ok(self
+    ) -> crate::Result<ChapterResults> {
+        let mut list: ChapterResults = self
             ._default(ctx, offline_params)
             .await
-            .map(|res| res.into())?)
+            .map(|res| res.into())?;
+        if !self.disable_scanlation_groups_blacklist || !self.disable_users_blacklist {
+            loop {
+                if !self.disable_scanlation_groups_blacklist {
+                    *list = crate::blacklist::filters::filter_scanlation_groups_chapters::<
+                        tauri::Wry,
+                    >(
+                        ctx.get_app_handle()?.clone(), std::mem::take(&mut *list)
+                    )
+                    .await?;
+                }
+                if !self.disable_users_blacklist {
+                    *list = crate::blacklist::filters::filter_users_chapters::<tauri::Wry>(
+                        ctx.get_app_handle()?.clone(),
+                        std::mem::take(&mut *list),
+                    )
+                    .await?;
+                }
+                if list.is_empty() {
+                    let next_offset = list.info.offset + list.info.limit;
+                    if next_offset > list.info.total {
+                        break;
+                    } else {
+                        self.offset = Some(next_offset);
+                        list = self
+                            ._default(ctx, offline_params)
+                            .await
+                            .map(|res| res.into())?;
+                    }
+                } else {
+                    break;
+                }
+            }
+        }
+        Ok(list)
     }
 }

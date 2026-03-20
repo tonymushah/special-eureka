@@ -6,13 +6,21 @@ const query = graphql(`
 		$mangaParam: MangaListParams
 		$private: Boolean
 		$onlyUnreadTitles: Boolean
+		$disableScanlationGroupBlacklist: Boolean
+		$disableUserBlacklist: Boolean
+		$disableAuthorArtistBlacklist: Boolean
 	) {
 		feed {
 			customListFeedGrouped(
-				feedParams: $feedParam
-				mangaListParams: $mangaParam
-				private: $private
-				onlyUnreadTitles: $onlyUnreadTitles
+				param: {
+					feedParams: $feedParam
+					mangaListParams: $mangaParam
+					private: $private
+					onlyUnreadTitles: $onlyUnreadTitles
+					disableScansGroupsBlacklist: $disableScanlationGroupBlacklist
+					disableUsersBlacklist: $disableUserBlacklist
+					disableAuthorArtistsBlacklist: $disableAuthorArtistBlacklist
+				}
 			) {
 				limit
 				offset
