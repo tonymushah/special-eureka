@@ -5,6 +5,7 @@
 	import BlacklistedAuthorArtistsList from "@mangadex/componnents/blacklist/list/author-artists/BlacklistedAuthorArtistsList.svelte";
 	import BlacklistedScanlationGroupList from "@mangadex/componnents/blacklist/list/scanlation-groups/BlacklistedScanlationGroupList.svelte";
 	import BlacklistedUsersList from "@mangadex/componnents/blacklist/list/users/BlacklistedUsersList.svelte";
+	import BlacklistedLabelsList from "@mangadex/componnents/blacklist/list/labels/BlacklistedLabelsList.svelte";
 </script>
 
 <PageTitle title="Blacklist" titleType={1} withReturn />
@@ -42,5 +43,7 @@
 	<TabContent value="users">
 		<BlacklistedUsersList />
 	</TabContent>
-	<TabContent value="labels"></TabContent>
+	<TabContent value="labels">
+		<BlacklistedLabelsList />
+	</TabContent>
 </MangaDexTabs>
