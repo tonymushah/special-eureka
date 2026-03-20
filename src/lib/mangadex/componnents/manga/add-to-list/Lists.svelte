@@ -14,6 +14,7 @@
 	import type { CurrentUserCustomListItemData } from "./content";
 	import executeSearchQuery from "./content";
 	import MakeANewList from "./MakeANewList.svelte";
+	import ErrorComponent from "@mangadex/componnents/ErrorComponent.svelte";
 
 	const client = getContextClient();
 
@@ -131,6 +132,14 @@
 					<label for={`select-list-${customList.id}`}>{customList.name}</label>
 				</div>
 			{/each}
+		{:else if query.isError}
+			<ErrorComponent
+				label="Cannot load MD list list"
+				error={query.error}
+				retry={() => {
+					query.refetch();
+				}}
+			/>
 		{/if}
 		<div class="observer-trigger" bind:this={to_obserce_bind}>
 			{#if isFetching}
