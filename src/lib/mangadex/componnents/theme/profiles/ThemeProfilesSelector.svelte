@@ -11,6 +11,12 @@
 	import FormInput from "../form/input/FormInput.svelte";
 	import Title from "../texts/title/Title.svelte";
 
+	interface Props {
+		withTitle?: boolean;
+	}
+
+	let { withTitle }: Props = $props();
+
 	const client = getContextClient();
 	const list = derived(themes, ($ths) =>
 		Array.from($ths.entries()).map(([name, value]) => ({ name, value }))
@@ -29,7 +35,9 @@
 	}
 </script>
 
-<Title type={2}>Theme Profiles</Title>
+{#if withTitle}
+	<Title type={2}>Theme Profiles</Title>
+{/if}
 
 <div class="profiles">
 	{#each $list as profile}

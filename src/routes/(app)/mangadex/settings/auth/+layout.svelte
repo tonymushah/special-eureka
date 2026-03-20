@@ -1,13 +1,13 @@
 <script lang="ts">
 	import PageTitle from "@mangadex/componnents/pages/PageTitle.svelte";
-	import type { Snippet } from "svelte";
 
 	interface Props {
-		children?: Snippet;
+		children?: import("svelte").Snippet;
 	}
+
 	let { children }: Props = $props();
 </script>
 
-<PageTitle withReturn title="Download states" titleType={1} />
+<PageTitle titleType={1} title={"Authentification"} withReturn />
 
 {@render children?.()}
