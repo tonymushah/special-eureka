@@ -4,6 +4,7 @@
 	import { TabContent } from "@ark-ui/svelte";
 	import BlacklistedAuthorArtistsList from "@mangadex/componnents/blacklist/list/author-artists/BlacklistedAuthorArtistsList.svelte";
 	import BlacklistedScanlationGroupList from "@mangadex/componnents/blacklist/list/scanlation-groups/BlacklistedScanlationGroupList.svelte";
+	import BlacklistedUsersList from "@mangadex/componnents/blacklist/list/users/BlacklistedUsersList.svelte";
 </script>
 
 <PageTitle title="Blacklist" titleType={1} withReturn />
@@ -38,6 +39,8 @@
 	<TabContent value="scanlation-groups">
 		<BlacklistedScanlationGroupList />
 	</TabContent>
-	<TabContent value="users"></TabContent>
+	<TabContent value="users">
+		<BlacklistedUsersList />
+	</TabContent>
 	<TabContent value="labels"></TabContent>
 </MangaDexTabs>
