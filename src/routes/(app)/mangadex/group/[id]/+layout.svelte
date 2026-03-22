@@ -7,13 +7,19 @@
 	import { isLogged } from "@mangadex/utils/auth";
 	import { writeText } from "@tauri-apps/plugin-clipboard-manager";
 	import { openUrl as shellOpen } from "@tauri-apps/plugin-opener";
-	import { BookmarkIcon, ExternalLinkIcon, FlagIcon } from "@lucide/svelte";
+	import { BookmarkIcon, BookmarkX, ExternalLinkIcon, FlagIcon } from "@lucide/svelte";
 	import type { LayoutData } from "./$types";
 	import NavTab from "./NavTab.svelte";
 	import ScanalationGroupLinkButtons from "./ScanalationGroupLinkButtons.svelte";
 	import { ReportCategory } from "@mangadex/gql/graphql";
 	import ReportDialog from "@mangadex/componnents/report/dialog/ReportDialog.svelte";
 	import { dev } from "$app/environment";
+	import DangerButton from "@mangadex/componnents/theme/buttons/DangerButton.svelte";
+	import { createBlockScanlationGroupMutation } from "@mangadex/mutations/blacklist/scanlation-groups/block";
+	import { createUnblockScanlationGroupMutation } from "@mangadex/mutations/blacklist/scanlation-groups/unblock";
+	import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
+	import { invalidate, invalidateAll } from "$app/navigation";
+	import { route } from "$lib/ROUTES";
 
 	interface Props {
 		data: LayoutData;
@@ -29,6 +35,8 @@
 	let isFollowing = $derived($isFollowed);
 	let openReportDialog = $state(false);
 	let isBlocked = $derived(data.isBlocked);
+	let blockMutation = createBlockScanlationGroupMutation();
+	let unblockMutation = createUnblockScanlationGroupMutation();
 </script>
 
 <ReportDialog
@@ -72,6 +80,61 @@
 			>
 				<p><FlagIcon />Report</p>
 			</ButtonAccent>
+			<DangerButton
+				isBase
+				variant={isBlocked ? "2" : "default"}
+				onclick={() => {
+					if (isBlocked) {
+						unblockMutation.mutate(data.id, {
+							onSuccess() {
+								addToast({
+									type: "warning",
+									title: "Succefully unblocked scanlation group",
+									description: `${data.name}`
+								});
+								invalidate(
+									route("/mangadex/group/[id]", {
+										id: data.id
+									})
+								);
+							},
+							onError(error) {
+								addErrorToast("Error on changing blocking status", error);
+							}
+						});
+					} else {
+						blockMutation.mutate(data.id, {
+							onSuccess() {
+								addToast({
+									type: "success",
+									title: "Succefully blocked scanlation group",
+									description: `${data.name}`
+								});
+								invalidate(
+									route("/mangadex/group/[id]", {
+										id: data.id
+									})
+								);
+							},
+							onError(error) {
+								addErrorToast("Error on changing blocking status", error);
+							}
+						});
+					}
+				}}
+				disabled={blockMutation.isPending || unblockMutation.isPending}
+			>
+				<p>
+					{#if isBlocked}
+						<BookmarkX />
+					{/if}
+					{#if isBlocked}
+						Unblock
+					{:else}
+						Block
+					{/if}
+				</p>
+			</DangerButton>
 			<ScanalationGroupLinkButtons
 				website={data.website ?? undefined}
 				twitter={data.twitter ?? undefined}
