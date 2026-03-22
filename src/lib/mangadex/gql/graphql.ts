@@ -6475,6 +6475,15 @@ export type SubForce443SubscriptionVariables = Exact<{ [key: string]: never }>;
 
 export type SubForce443Subscription = { __typename?: "Subscriptions"; watchForcePort443: boolean };
 
+export type GetLanguageFromStrQueryVariables = Exact<{
+	lang: Scalars["String"]["input"];
+}>;
+
+export type GetLanguageFromStrQuery = {
+	__typename?: "Query";
+	utils: { __typename?: "UtilsQuery"; strToLanguage: Language };
+};
+
 export type FollowScanlationGroupBatchMutationVariables = Exact<{
 	ids: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
 }>;
@@ -6504,6 +6513,7 @@ export type GroupPageQueryQuery = {
 		getUnique: {
 			__typename?: "ScanlationGroup";
 			id: any;
+			isBlocked: boolean;
 			attributes: {
 				__typename?: "ScanlationGroupAttributes";
 				website?: any | null;
@@ -9558,15 +9568,6 @@ export type FaviconQueryVariables = Exact<{
 export type FaviconQuery = {
 	__typename?: "Query";
 	utils: { __typename?: "UtilsQuery"; favicon: any };
-};
-
-export type GetLanguageFromStrQueryVariables = Exact<{
-	lang: Scalars["String"]["input"];
-}>;
-
-export type GetLanguageFromStrQuery = {
-	__typename?: "Query";
-	utils: { __typename?: "UtilsQuery"; strToLanguage: Language };
 };
 
 export type GetAuthExpirationQueryVariables = Exact<{ [key: string]: never }>;
@@ -19652,6 +19653,54 @@ export const SubForce443Document = {
 		}
 	]
 } as unknown as DocumentNode<SubForce443Subscription, SubForce443SubscriptionVariables>;
+export const GetLanguageFromStrDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "getLanguageFromStr" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "lang" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "String" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "utils" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "strToLanguage" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "input" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "lang" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<GetLanguageFromStrQuery, GetLanguageFromStrQueryVariables>;
 export const FollowScanlationGroupBatchDocument = {
 	kind: "Document",
 	definitions: [
@@ -19809,6 +19858,10 @@ export const GroupPageQueryDocument = {
 										kind: "SelectionSet",
 										selections: [
 											{ kind: "Field", name: { kind: "Name", value: "id" } },
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "isBlocked" }
+											},
 											{
 												kind: "Field",
 												name: { kind: "Name", value: "attributes" },
@@ -36879,54 +36932,6 @@ export const FaviconDocument = {
 		}
 	]
 } as unknown as DocumentNode<FaviconQuery, FaviconQueryVariables>;
-export const GetLanguageFromStrDocument = {
-	kind: "Document",
-	definitions: [
-		{
-			kind: "OperationDefinition",
-			operation: "query",
-			name: { kind: "Name", value: "getLanguageFromStr" },
-			variableDefinitions: [
-				{
-					kind: "VariableDefinition",
-					variable: { kind: "Variable", name: { kind: "Name", value: "lang" } },
-					type: {
-						kind: "NonNullType",
-						type: { kind: "NamedType", name: { kind: "Name", value: "String" } }
-					}
-				}
-			],
-			selectionSet: {
-				kind: "SelectionSet",
-				selections: [
-					{
-						kind: "Field",
-						name: { kind: "Name", value: "utils" },
-						selectionSet: {
-							kind: "SelectionSet",
-							selections: [
-								{
-									kind: "Field",
-									name: { kind: "Name", value: "strToLanguage" },
-									arguments: [
-										{
-											kind: "Argument",
-											name: { kind: "Name", value: "input" },
-											value: {
-												kind: "Variable",
-												name: { kind: "Name", value: "lang" }
-											}
-										}
-									]
-								}
-							]
-						}
-					}
-				]
-			}
-		}
-	]
-} as unknown as DocumentNode<GetLanguageFromStrQuery, GetLanguageFromStrQueryVariables>;
 export const GetAuthExpirationDocument = {
 	kind: "Document",
 	definitions: [
