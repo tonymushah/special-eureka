@@ -66,7 +66,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				{#each scanlationGroups as group (`baa-${group.id}`)}
+				{#each scanlationGroups as group (`group-${group.id}`)}
 					<tr>
 						<td>{group.id}</td>
 						<td>{group.name}</td>
