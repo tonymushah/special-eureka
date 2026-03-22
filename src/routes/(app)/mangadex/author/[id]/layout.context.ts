@@ -1,5 +1,5 @@
-import type { Client } from "@urql/svelte";
 import query from "@mangadex/gql-docs/author/id";
+import type { Client } from "@urql/svelte";
 
 export type AuthorLinks = {
 	twitter?: string;
@@ -25,6 +25,7 @@ export type LayoutLoadReturnData = {
 	banner?: string;
 	name: string;
 	links: AuthorLinks;
+	isBlocked: boolean;
 };
 
 export async function load({ id, client }: { id: string; client: Client }) {
@@ -59,7 +60,8 @@ export async function load({ id, client }: { id: string; client: Client }) {
 				weibo: authorData.attributes.weibo,
 				naver: authorData.attributes.naver,
 				website: authorData.attributes.website
-			}
+			},
+			isBlocked: authorData.isBlocked
 		} satisfies LayoutLoadReturnData;
 	}
 	throw new Error("Cannot find author/artist");
