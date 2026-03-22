@@ -66,7 +66,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				{#each authorArtists as authorArtist (`baa-${authorArtist.id}`)}
+				{#each authorArtists as authorArtist (`ararts-${authorArtist.id}`)}
 					<tr>
 						<td>{authorArtist.id}</td>
 						<td>{authorArtist.name}</td>
