@@ -37,6 +37,45 @@
 	let isBlocked = $derived(data.isBlocked);
 	let blockMutation = createBlockScanlationGroupMutation();
 	let unblockMutation = createUnblockScanlationGroupMutation();
+	function blockBtnRun() {
+		if (isBlocked) {
+			unblockMutation.mutate(data.id, {
+				onSuccess() {
+					addToast({
+						type: "warning",
+						title: "Succefully unblocked scanlation group",
+						description: `${data.name}`
+					});
+					invalidate(
+						route("/mangadex/group/[id]", {
+							id: data.id
+						})
+					);
+				},
+				onError(error) {
+					addErrorToast("Error on changing blocking status", error);
+				}
+			});
+		} else {
+			blockMutation.mutate(data.id, {
+				onSuccess() {
+					addToast({
+						type: "success",
+						title: "Succefully blocked scanlation group",
+						description: `${data.name}`
+					});
+					invalidate(
+						route("/mangadex/group/[id]", {
+							id: data.id
+						})
+					);
+				},
+				onError(error) {
+					addErrorToast("Error on changing blocking status", error);
+				}
+			});
+		}
+	}
 </script>
 
 <ReportDialog
@@ -84,43 +123,7 @@
 				isBase
 				variant={isBlocked ? "2" : "default"}
 				onclick={() => {
-					if (isBlocked) {
-						unblockMutation.mutate(data.id, {
-							onSuccess() {
-								addToast({
-									type: "warning",
-									title: "Succefully unblocked scanlation group",
-									description: `${data.name}`
-								});
-								invalidate(
-									route("/mangadex/group/[id]", {
-										id: data.id
-									})
-								);
-							},
-							onError(error) {
-								addErrorToast("Error on changing blocking status", error);
-							}
-						});
-					} else {
-						blockMutation.mutate(data.id, {
-							onSuccess() {
-								addToast({
-									type: "success",
-									title: "Succefully blocked scanlation group",
-									description: `${data.name}`
-								});
-								invalidate(
-									route("/mangadex/group/[id]", {
-										id: data.id
-									})
-								);
-							},
-							onError(error) {
-								addErrorToast("Error on changing blocking status", error);
-							}
-						});
-					}
+					blockBtnRun();
 				}}
 				disabled={blockMutation.isPending || unblockMutation.isPending}
 			>
