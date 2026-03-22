@@ -5504,6 +5504,7 @@ export type AuthorPageQueryQuery = {
 		get: {
 			__typename?: "Author";
 			id: any;
+			isBlocked: boolean;
 			attributes: {
 				__typename?: "AuthorAttributes";
 				name: string;
@@ -14842,6 +14843,10 @@ export const AuthorPageQueryDocument = {
 										kind: "SelectionSet",
 										selections: [
 											{ kind: "Field", name: { kind: "Name", value: "id" } },
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "isBlocked" }
+											},
 											{
 												kind: "Field",
 												name: { kind: "Name", value: "attributes" },
