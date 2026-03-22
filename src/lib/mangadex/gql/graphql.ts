@@ -8725,6 +8725,7 @@ export type UserPageQueryQuery = {
 		get: {
 			__typename?: "User";
 			id: any;
+			isBlocked: boolean;
 			attributes: { __typename?: "UserAttributes"; username: string; roles: Array<UserRole> };
 			relationships: {
 				__typename?: "UserRelationships";
@@ -31988,6 +31989,10 @@ export const UserPageQueryDocument = {
 										kind: "SelectionSet",
 										selections: [
 											{ kind: "Field", name: { kind: "Name", value: "id" } },
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "isBlocked" }
+											},
 											{
 												kind: "Field",
 												name: { kind: "Name", value: "attributes" },

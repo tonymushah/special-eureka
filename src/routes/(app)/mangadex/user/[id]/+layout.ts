@@ -27,7 +27,8 @@ export const load: LayoutLoad = async function ({ params }) {
 				id: group.id,
 				name: group.attributes.name,
 				isLeader: group.relationships.leader?.id == id
-			}))
+			})),
+			isBlocked: data.user.get.isBlocked
 		};
 	}
 	error(500, {
