@@ -22,14 +22,14 @@
 </script>
 
 {#if query.isLoading}
-	<AppTitle title="Loading author" />
+	<AppTitle title="Loading author... | Mangadex" />
 	<LoadingPage />
 {:else if query.isSuccess}
 	<AfterLoadingLayout data={query.data}>
 		{@render children()}
 	</AfterLoadingLayout>
 {:else if query.isError}
-	<AppTitle title="Error on loading error" />
+	<AppTitle title="Error on loading author | Mangadex" />
 	<PageError
 		message={query.error.message}
 		extensions={query.error instanceof CombinedError
