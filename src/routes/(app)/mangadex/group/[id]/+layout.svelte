@@ -28,6 +28,7 @@
 	const isFollowed = isFollowingGroup(data.id);
 	let isFollowing = $derived($isFollowed);
 	let openReportDialog = $state(false);
+	let isBlocked = $derived(data.isBlocked);
 </script>
 
 <ReportDialog
@@ -125,6 +126,9 @@
 				<p class="created">
 					Created: <TimeAgo date={createdSince} />
 				</p>
+				{#if isBlocked}
+					<p class="blocked">This group is blacklisted</p>
+				{/if}
 			</section>
 		</div>
 	{/snippet}
@@ -174,5 +178,8 @@
 		display: flex;
 		align-items: center;
 		gap: 8px;
+	}
+	.blocked {
+		color: var(--danger-l1);
 	}
 </style>
