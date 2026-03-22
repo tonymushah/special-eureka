@@ -66,6 +66,7 @@
 				</tr>
 			</thead>
 			<tbody>
+				<!-- TODO add edit -->
 				{#each labels as label (`label-${label.id}`)}
 					<tr>
 						<td>{label.name}</td>
