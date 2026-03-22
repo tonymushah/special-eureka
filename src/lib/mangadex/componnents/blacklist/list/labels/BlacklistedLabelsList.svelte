@@ -66,7 +66,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				{#each labels as label (`baa-${label.id}`)}
+				{#each labels as label (`label-${label.id}`)}
 					<tr>
 						<td>{label.name}</td>
 						<td>{label.description}</td>
