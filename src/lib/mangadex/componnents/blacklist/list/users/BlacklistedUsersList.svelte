@@ -66,7 +66,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				{#each users as user (`baa-${user.id}`)}
+				{#each users as user (`user-${user.id}`)}
 					<tr>
 						<td>{user.id}</td>
 						<td>{user.name}</td>
