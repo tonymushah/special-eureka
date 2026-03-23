@@ -1,6 +1,7 @@
 import { goto } from "$app/navigation";
 import { extractFromAccessor } from "$lib/index.svelte";
 import { route } from "$lib/ROUTES";
+import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 import {
 	cancelDownloadMutation,
 	downloadMutation,
@@ -8,6 +9,8 @@ import {
 	isChapterDownloading,
 	removeMutation
 } from "@mangadex/download/chapter.svelte";
+import { blockOneScanlationGroups } from "@mangadex/mutations/blacklist/scanlation-groups/block";
+import { unblockOneScanlationGroup } from "@mangadex/mutations/blacklist/scanlation-groups/unblock";
 import { isMounted } from "@mangadex/stores/offlineIsMounted";
 import {
 	ContextMenuItemProvider,
@@ -141,6 +144,37 @@ export default function chapterElementContextMenuItems({
 								text: "Open in the broswer",
 								action() {
 									openUrl(`https://mangadex.org/group/${group.id}`);
+								}
+							}),
+							ContextMenuItemProvider.seperator(),
+							ContextMenuItemProvider.menuItem({
+								text: "Block",
+								action() {
+									blockOneScanlationGroups(group.id)
+										.then(() => {
+											addToast({
+												title: `Successfully added ${group.name} to the blacklist`,
+												type: "success"
+											});
+										})
+										.catch((e) => {
+											addErrorToast(`Cannot add group ${group.name} to the blacklist`, e);
+										});
+								}
+							}),
+							ContextMenuItemProvider.menuItem({
+								text: "Unblock",
+								action() {
+									unblockOneScanlationGroup(group.id)
+										.then(() => {
+											addToast({
+												title: `Successfully removed ${group.name} to the blacklist`,
+												type: "warning"
+											});
+										})
+										.catch((e) => {
+											addErrorToast(`Cannot removed group ${group.name} to the blacklist`, e);
+										});
 								}
 							}),
 							ContextMenuItemProvider.seperator(),
