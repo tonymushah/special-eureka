@@ -13,6 +13,8 @@ import {
 import { downloadTitleWithExtra } from "@mangadex/gql-docs/title/id/download-with-extras";
 import isFollowingTitle, { isChangingTitleFollowing } from "@mangadex/gql-docs/title/id/follow";
 import { MangaDownloadExtras, ReadingStatus } from "@mangadex/gql/graphql";
+import { blockOneAuthorArtist } from "@mangadex/mutations/blacklist/authors-artists/block";
+import { unblockOneAuthorArtist } from "@mangadex/mutations/blacklist/authors-artists/unblock";
 import { set_manga_rating } from "@mangadex/stores/manga/manga_rating";
 import { set_manga_reading_status } from "@mangadex/stores/manga/manga_reading_status";
 import { isMounted } from "@mangadex/stores/offlineIsMounted";
@@ -396,6 +398,44 @@ export default function mangaElementContextMenu({
 									text: "Open info in the browser",
 									action() {
 										openUrl(`https://mangadex.org/author/${author.id}`);
+									}
+								}),
+								ContextMenuItemProvider.seperator(),
+								ContextMenuItemProvider.menuItem({
+									text: `Block`,
+									action() {
+										blockOneAuthorArtist(author.id)
+											.then(() => {
+												addToast({
+													title: `Successfully added ${author.name} to the blacklist`,
+													type: "success"
+												});
+											})
+											.catch((e) => {
+												addErrorToast(`Cannot add author ${author.name} to the blacklist`, e);
+											});
+									}
+								}),
+								ContextMenuItemProvider.menuItem({
+									text: `Unblock`,
+									action() {
+										unblockOneAuthorArtist(author.id)
+											.then(() => {
+												addToast({
+													title: `Successfully removed ${author.name} to the blacklist`,
+													type: "success"
+												});
+											})
+											.catch((e) => {
+												addErrorToast(`Cannot remove author ${author.name} to the blacklist`, e);
+											});
+									}
+								}),
+								ContextMenuItemProvider.seperator(),
+								ContextMenuItemProvider.menuItem({
+									text: `Copy author id`,
+									action() {
+										writeText(author.id);
 									}
 								})
 							]
