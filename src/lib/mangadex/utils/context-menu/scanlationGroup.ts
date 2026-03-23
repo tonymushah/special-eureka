@@ -4,12 +4,15 @@ import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toast
 import isFollowingGroup, { isChangingGroupFollowing } from "@mangadex/gql-docs/group/id/follow";
 import { blockOneScanlationGroups } from "@mangadex/mutations/blacklist/scanlation-groups/block";
 import { unblockOneScanlationGroup } from "@mangadex/mutations/blacklist/scanlation-groups/unblock";
+import { blockOneUser } from "@mangadex/mutations/blacklist/users/block";
+import { unblockOneUser } from "@mangadex/mutations/blacklist/users/unblock";
 import {
 	ContextMenuItemProvider,
 	type ContextMenuItem
 } from "@special-eureka/core/commands/contextMenu";
 import openNewWindow from "@special-eureka/core/commands/openNewWindow";
 import { currentLocationWithNewPath } from "@special-eureka/core/utils/url";
+import { writeText } from "@tauri-apps/plugin-clipboard-manager";
 import { openUrl } from "@tauri-apps/plugin-opener";
 import { derived } from "svelte/store";
 import { isLogged } from "../auth";
@@ -170,6 +173,44 @@ export default function scanlationGroupElementContextMenu({
 						text: `Open ${leader.name} in the broswer`,
 						action() {
 							openUrl(`https://mangadex.org/user/${leader.id}`);
+						}
+					}),
+					ContextMenuItemProvider.seperator(),
+					ContextMenuItemProvider.menuItem({
+						text: `Block ${leader.name}`,
+						action() {
+							blockOneUser(leader.id)
+								.then(() => {
+									addToast({
+										title: `Successfully added ${leader.name} to the blacklist`,
+										type: "success"
+									});
+								})
+								.catch((e) => {
+									addErrorToast(`Cannot add user ${leader.name} to the blacklist`, e);
+								});
+						}
+					}),
+					ContextMenuItemProvider.menuItem({
+						text: `Unblock ${leader.name}`,
+						action() {
+							unblockOneUser(leader.id)
+								.then(() => {
+									addToast({
+										title: `Successfully removed ${leader.name} to the blacklist`,
+										type: "warning"
+									});
+								})
+								.catch((e) => {
+									addErrorToast(`Cannot remove user ${leader.name} to the blacklist`, e);
+								});
+						}
+					}),
+					ContextMenuItemProvider.seperator(),
+					ContextMenuItemProvider.menuItem({
+						text: `Copy leader id`,
+						action() {
+							writeText(leader.id);
 						}
 					})
 				]
