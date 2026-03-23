@@ -21,6 +21,7 @@
 	import { cancelChapterDownload, downloadChapter } from "./utils";
 	import IndicationBadge from "@mangadex/componnents/theme/tag/IndicationBadge.svelte";
 	import { Debounced, IsInViewport } from "runed";
+	import { autoUpdate } from "@floating-ui/dom";
 
 	type Group = {
 		id: string;
@@ -127,6 +128,17 @@
 			tooltip.style.display = "";
 		}
 	}
+	let hasTooltip = $state(false);
+	$effect(() => {
+		if (hasTooltip && layout && tooltip && arrowElement) {
+			showTooltip();
+			const u = autoUpdate(layout, tooltip, update);
+			return () => {
+				u();
+				hideTooltip();
+			};
+		}
+	});
 
 	let isInViewport = new IsInViewport(() => layout);
 	let isInViewportDebounced = new Debounced(() => isInViewport.current, 500);
@@ -155,10 +167,18 @@
 	role="article"
 	class="layout chapter-element"
 	bind:this={layout}
-	onmouseenter={showTooltip}
-	onmouseleave={hideTooltip}
-	onfocus={showTooltip}
-	onblur={hideTooltip}
+	onmouseenter={() => {
+		hasTooltip = true;
+	}}
+	onmouseleave={() => {
+		hasTooltip = false;
+	}}
+	onfocus={() => {
+		hasTooltip = true;
+	}}
+	onblur={() => {
+		hasTooltip = false;
+	}}
 	data-chapter-id={id}
 >
 	<div
