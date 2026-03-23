@@ -2,7 +2,7 @@
 create table users_labels(
 	user BLOB NOT NULL references users(user_id) on delete cascade,
 	label BLOB NOT NULL references labels(label_id) on delete cascade,
-	create_date DATETIME default datetime,
+	create_date DATETIME default 'now',
 	notes TEXT,
 	PRIMARY KEY (user, label)
 );
