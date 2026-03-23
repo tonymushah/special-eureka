@@ -10,6 +10,8 @@
 	import { revealItemInDir } from "@tauri-apps/plugin-opener";
 	import { dev } from "$app/environment";
 	import Selections from "./users/Selections.svelte";
+	import { createBlockUserBatchMutation } from "@mangadex/mutations/blacklist/users/block";
+	import { createUnblockUserBatchMutation } from "@mangadex/mutations/blacklist/users/unblock";
 	interface Props {
 		users: string[];
 	}
@@ -19,6 +21,8 @@
 	let currentAction = $state<"selection">("selection");
 	let unfollow = unfollowUserBatchMutation();
 	let follow = followUserBatchMutation();
+	let block = createBlockUserBatchMutation();
+	let unblock = createUnblockUserBatchMutation();
 </script>
 
 <SectionBase>
@@ -93,9 +97,41 @@
 				});
 			}}
 		/>
-		{#if dev}
-			<ButtonAccentOnlyLabel variant="3" disabled label="Block" />
-			<ButtonAccentOnlyLabel variant="3" disabled label="Unblock" />
-		{/if}
+		<ButtonAccentOnlyLabel
+			variant="3"
+			disabled={block.isPending || unblock.isPending}
+			label="Block"
+			onclick={() => {
+				block.mutate(users, {
+					onSuccess() {
+						addToast({
+							title: `Successfully added ${users.length} users to blacklist`,
+							type: "success"
+						});
+					},
+					onError(e) {
+						addErrorToast("Error on changing blocking status", e);
+					}
+				});
+			}}
+		/>
+		<ButtonAccentOnlyLabel
+			variant="3"
+			disabled={block.isPending || unblock.isPending}
+			label="Unblock"
+			onclick={() => {
+				unblock.mutate(users, {
+					onSuccess() {
+						addToast({
+							title: `Successfully removed ${users.length} users to blacklist`,
+							type: "warning"
+						});
+					},
+					onError(e) {
+						addErrorToast("Error on changing blocking status", e);
+					}
+				});
+			}}
+		/>
 	{/snippet}
 </SectionBase>
