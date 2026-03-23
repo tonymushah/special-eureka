@@ -2,7 +2,7 @@
 create table authors_labels(
 	author BLOB NOT NULL references authors(author_id) on delete cascade,
 	label BLOB NOT NULL references labels(label_id) on delete cascade,
-	create_date DATETIME default datetime,
+	create_date DATETIME default 'now',
 	notes TEXT,
 	PRIMARY KEY (author, label)
 );
