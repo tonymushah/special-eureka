@@ -479,6 +479,44 @@ export default function mangaElementContextMenu({
 									action() {
 										openUrl(`https://mangadex.org/author/${author.id}`);
 									}
+								}),
+								ContextMenuItemProvider.seperator(),
+								ContextMenuItemProvider.menuItem({
+									text: `Block`,
+									action() {
+										blockOneAuthorArtist(author.id)
+											.then(() => {
+												addToast({
+													title: `Successfully added ${author.name} to the blacklist`,
+													type: "success"
+												});
+											})
+											.catch((e) => {
+												addErrorToast(`Cannot add artist ${author.name} to the blacklist`, e);
+											});
+									}
+								}),
+								ContextMenuItemProvider.menuItem({
+									text: `Unblock`,
+									action() {
+										unblockOneAuthorArtist(author.id)
+											.then(() => {
+												addToast({
+													title: `Successfully removed ${author.name} to the blacklist`,
+													type: "success"
+												});
+											})
+											.catch((e) => {
+												addErrorToast(`Cannot remove artist ${author.name} to the blacklist`, e);
+											});
+									}
+								}),
+								ContextMenuItemProvider.seperator(),
+								ContextMenuItemProvider.menuItem({
+									text: `Copy artist id`,
+									action() {
+										writeText(author.id);
+									}
 								})
 							]
 						})
