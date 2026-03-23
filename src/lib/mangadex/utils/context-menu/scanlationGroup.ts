@@ -1,6 +1,9 @@
 import { goto } from "$app/navigation";
 import { route } from "$lib/ROUTES";
+import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 import isFollowingGroup, { isChangingGroupFollowing } from "@mangadex/gql-docs/group/id/follow";
+import { blockOneScanlationGroups } from "@mangadex/mutations/blacklist/scanlation-groups/block";
+import { unblockOneScanlationGroup } from "@mangadex/mutations/blacklist/scanlation-groups/unblock";
 import {
 	ContextMenuItemProvider,
 	type ContextMenuItem
@@ -8,7 +11,7 @@ import {
 import openNewWindow from "@special-eureka/core/commands/openNewWindow";
 import { currentLocationWithNewPath } from "@special-eureka/core/utils/url";
 import { openUrl } from "@tauri-apps/plugin-opener";
-import { derived, get } from "svelte/store";
+import { derived } from "svelte/store";
 import { isLogged } from "../auth";
 
 type ScanlationGroupElementContextMenuOptions = {
@@ -68,11 +71,51 @@ export default function scanlationGroupElementContextMenu({
 	const isFollowed = isFollowingGroup(id);
 	items.push(
 		ContextMenuItemProvider.menuItem({
-			text: derived(isFollowed, (isFollowed) => isFollowed ? "Unfollow" : "Follow"),
+			text: derived(isFollowed, (isFollowed) => (isFollowed ? "Unfollow" : "Follow")),
 			action() {
 				isFollowed.update((value) => !value);
 			},
-			enabled: derived([isLogged, isChangingGroupFollowing], ([logged, following]) => logged && !following)
+			enabled: derived(
+				[isLogged, isChangingGroupFollowing],
+				([logged, following]) => logged && !following
+			)
+		})
+	);
+	items.push(
+		ContextMenuItemProvider.subMenu({
+			text: "Block/Unblock",
+			items: [
+				ContextMenuItemProvider.menuItem({
+					text: "Block",
+					action() {
+						blockOneScanlationGroups(id)
+							.then(() => {
+								addToast({
+									title: `Successfully added ${name ?? id} to the blacklist`,
+									type: "success"
+								});
+							})
+							.catch((e) => {
+								addErrorToast(`Cannot add group ${name ?? id} to the blacklist`, e);
+							});
+					}
+				}),
+				ContextMenuItemProvider.menuItem({
+					text: "Unblock",
+					action() {
+						unblockOneScanlationGroup(id)
+							.then(() => {
+								addToast({
+									title: `Successfully removed ${name ?? id} to the blacklist`,
+									type: "warning"
+								});
+							})
+							.catch((e) => {
+								addErrorToast(`Cannot removed group ${name ?? id} to the blacklist`, e);
+							});
+					}
+				})
+			]
 		})
 	);
 	if (website) {
