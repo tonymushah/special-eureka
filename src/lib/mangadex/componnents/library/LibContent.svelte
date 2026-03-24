@@ -15,6 +15,7 @@
 	import LibContentFilter from "./LibContentFilter.svelte";
 	import defaultContentProfile from "@mangadex/content-profile/graphql/defaultProfile";
 	import pageLimit from "@mangadex/stores/page-limit";
+	import { listenToBlacklistChange } from "@mangadex/utils/blacklist/listen";
 
 	const client = getContextClient();
 	const debounce_wait = 450;
@@ -88,6 +89,7 @@
 		>;
 	});
 	let infiniteQuery = createInfiniteQuery(() => $infiniteQueryOptions);
+	$effect(() => listenToBlacklistChange(() => infiniteQuery.refetch()));
 	onMount(() =>
 		defaultContentProfile.subscribe(() => {
 			infiniteQuery.refetch();
