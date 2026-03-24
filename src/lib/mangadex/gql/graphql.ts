@@ -8054,6 +8054,7 @@ export type GetMangaHihiQuery = {
 				authorArtists: Array<{
 					__typename?: "Author";
 					id: any;
+					isBlocked: boolean;
 					attributes: { __typename?: "AuthorAttributes"; name: string };
 				}>;
 				authors: Array<{
@@ -28250,6 +28251,13 @@ export const GetMangaHihiDocument = {
 																					}
 																				}
 																			]
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "isBlocked"
 																		}
 																	}
 																]
