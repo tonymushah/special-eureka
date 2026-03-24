@@ -24,6 +24,7 @@ export type ContentProfileConflicts = {
 	status: MangaStatus | undefined;
 	publicationDemographic: Demographic | undefined;
 	contentRating: ContentRating | undefined;
+	authorArtists?: Tag[];
 };
 
 type GetTitleConflictsParams = {
@@ -95,8 +96,7 @@ export default async function getTitleConflicts({
 		tags: excludedTags,
 		originalLanguage:
 			($profile.originalLanguages.some((value) => originalLanguage == value) == false ||
-				$profile.excludedOriginalLanguage.some((value) => originalLanguage == value) ==
-					true) &&
+				$profile.excludedOriginalLanguage.some((value) => originalLanguage == value) == true) &&
 			$profile.originalLanguages.length != 0 &&
 			$profile.excludedOriginalLanguage.length != 0
 				? originalLanguage
@@ -106,15 +106,16 @@ export default async function getTitleConflicts({
 				? status
 				: undefined,
 		publicationDemographic:
-			$profile.publicationDemographic.some((value) => value == publicationDemographic) ==
-				false && $profile.publicationDemographic.length != 0
+			$profile.publicationDemographic.some((value) => value == publicationDemographic) == false &&
+			$profile.publicationDemographic.length != 0
 				? publicationDemographic
 				: undefined,
 		contentRating:
 			$profile.contentRating.some((value) => value == contentRating) == false &&
 			$profile.contentRating.length != 0
 				? contentRating
-				: undefined
+				: undefined,
+		authorArtists: title.authorArtists?.filter((a) => a.isBlocked)
 	};
 }
 
@@ -155,6 +156,11 @@ export type MaybeConflictedTitle = {
 			};
 		}>;
 	};
+	authorArtists?: Array<{
+		id: string;
+		name: string;
+		isBlocked: boolean;
+	}>;
 };
 
 type GetTitleConflictsSyncParams = {
@@ -207,8 +213,7 @@ export function getTitleConflictsSync({
 		tags: excludedTags,
 		originalLanguage:
 			($profile.originalLanguages.some((value) => originalLanguage == value) == false ||
-				$profile.excludedOriginalLanguage.some((value) => originalLanguage == value) ==
-					true) &&
+				$profile.excludedOriginalLanguage.some((value) => originalLanguage == value) == true) &&
 			$profile.originalLanguages.length != 0 &&
 			$profile.excludedOriginalLanguage.length != 0
 				? originalLanguage
@@ -218,14 +223,15 @@ export function getTitleConflictsSync({
 				? status
 				: undefined,
 		publicationDemographic:
-			$profile.publicationDemographic.some((value) => value == publicationDemographic) ==
-				false && $profile.publicationDemographic.length != 0
+			$profile.publicationDemographic.some((value) => value == publicationDemographic) == false &&
+			$profile.publicationDemographic.length != 0
 				? publicationDemographic
 				: undefined,
 		contentRating:
 			$profile.contentRating.some((value) => value == contentRating) == false &&
 			$profile.contentRating.length != 0
 				? contentRating
-				: undefined
+				: undefined,
+		authorArtists: title.authorArtists?.filter((a) => a.isBlocked)
 	};
 }
