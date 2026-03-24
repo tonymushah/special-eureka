@@ -6,6 +6,7 @@ use tokio::task::spawn_blocking;
 use uuid::Uuid;
 
 use crate::{
+    blacklist::emit_blacklist_change,
     objects::blacklist::users::BlacklistedUserObject,
     utils::traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
 };
@@ -36,27 +37,29 @@ impl BlacklistedUsersMutations {
                 .await
                 .ok()
         };
-        spawn_blocking(move || -> crate::Result<_> {
-            use mangadex_blacklist_raw::schema::users::dsl::*;
+        let res = {
+            let app_handle = app_handle.clone();
+            spawn_blocking(move || -> crate::Result<_> {
+                use mangadex_blacklist_raw::schema::users::dsl::*;
 
-            let mut connection = app_handle.blacklist_database_pool()?.get_connection()?;
-            connection.transaction::<Vec<_>, crate::Error, _>(|connection| {
-                user_ids
-                    .into_iter()
-                    .map(|id| -> crate::Result<_> {
-                        let app = app_handle.clone();
-                        Ok(diesel::insert_into(users)
-                            .values(InsertUser {
-                                user_id: id.as_bytes(),
-                                username: if let Some(map) = maybe_users.as_ref() {
-                                    map.get(&id)
-                                        .ok_or(crate::Error::UserNotFound(id))?
-                                        .username
-                                        .as_str()
-                                        .into()
-                                } else {
-                                    let _id = id;
-                                    crate::utils::try_block_on(async move {
+                let mut connection = app_handle.blacklist_database_pool()?.get_connection()?;
+                connection.transaction::<Vec<_>, crate::Error, _>(|connection| {
+                    user_ids
+                        .into_iter()
+                        .map(|id| -> crate::Result<_> {
+                            let app = app_handle.clone();
+                            Ok(diesel::insert_into(users)
+                                .values(InsertUser {
+                                    user_id: id.as_bytes(),
+                                    username: if let Some(map) = maybe_users.as_ref() {
+                                        map.get(&id)
+                                            .ok_or(crate::Error::UserNotFound(id))?
+                                            .username
+                                            .as_str()
+                                            .into()
+                                    } else {
+                                        let _id = id;
+                                        crate::utils::try_block_on(async move {
                                         crate::utils::get_attributes::users::get_user_id_attributes(
                                             app, _id,
                                         )
@@ -64,15 +67,18 @@ impl BlacklistedUsersMutations {
                                     })??
                                     .username
                                     .into()
-                                },
-                            })
-                            .returning(BlacklistedUserObject::as_returning())
-                            .get_result(connection)?)
-                    })
-                    .collect()
+                                    },
+                                })
+                                .returning(BlacklistedUserObject::as_returning())
+                                .get_result(connection)?)
+                        })
+                        .collect()
+                })
             })
-        })
-        .await?
+            .await??
+        };
+        emit_blacklist_change(&app_handle)?;
+        Ok(res)
     }
 
     pub async fn inner_unblock_many(
@@ -81,17 +87,22 @@ impl BlacklistedUsersMutations {
         user_ids: Vec<Uuid>,
     ) -> crate::Result<Vec<BlacklistedUserObject>> {
         let app_handle = ctx.get_app_handle::<tauri::Wry>()?.clone();
-        spawn_blocking(move || -> crate::Result<_> {
-            use mangadex_blacklist_raw::schema::users::dsl::*;
+        let res = {
+            let app_handle = app_handle.clone();
+            spawn_blocking(move || -> crate::Result<_> {
+                use mangadex_blacklist_raw::schema::users::dsl::*;
 
-            let mut connection = app_handle.blacklist_database_pool()?.get_connection()?;
-            Ok(diesel::delete(users.filter(
-                user_id.eq_any(user_ids.iter().map(|id| id.as_bytes()).collect::<Vec<_>>()),
-            ))
-            .returning(BlacklistedUserObject::as_returning())
-            .get_results(&mut connection)?)
-        })
-        .await?
+                let mut connection = app_handle.blacklist_database_pool()?.get_connection()?;
+                Ok(diesel::delete(users.filter(
+                    user_id.eq_any(user_ids.iter().map(|id| id.as_bytes()).collect::<Vec<_>>()),
+                ))
+                .returning(BlacklistedUserObject::as_returning())
+                .get_results(&mut connection)?)
+            })
+            .await??
+        };
+        emit_blacklist_change(&app_handle)?;
+        Ok(res)
     }
 }
 
