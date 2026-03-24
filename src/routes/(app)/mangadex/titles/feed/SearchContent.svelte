@@ -6,11 +6,7 @@
 	import Fetching from "@mangadex/componnents/search/content/Fetching.svelte";
 	import HasNext from "@mangadex/componnents/search/content/HasNext.svelte";
 	import NothingToShow from "@mangadex/componnents/search/content/NothingToShow.svelte";
-	import {
-		ForumThreadType,
-		OrderDirection,
-		type MangaFeedSortOrder
-	} from "@mangadex/gql/graphql";
+	import { ForumThreadType, OrderDirection, type MangaFeedSortOrder } from "@mangadex/gql/graphql";
 	import type { ChapterFeedListItemExt } from "@mangadex/routes/user/[id]/uploads/search";
 	import chapterFeedStyle from "@mangadex/stores/chapterFeedStyle";
 	import pageLimit from "@mangadex/stores/page-limit";
@@ -31,6 +27,7 @@
 	import defaultContentProfile from "@mangadex/content-profile/graphql/defaultProfile";
 	import chapterThreadsFromChapterFeedQuery from "@mangadex/utils/threads/feed";
 	import { createForumThread } from "@mangadex/stores/create-forum-thread";
+	import { listenToBlacklistChange } from "@mangadex/utils/blacklist/listen";
 
 	const client = getContextClient();
 	const order = writable<MangaFeedSortOrder | undefined>({
@@ -38,13 +35,7 @@
 	});
 	const queryOptions = derived([pageLimit, order], ([$limit, $order]) => {
 		return {
-			queryKey: [
-				"user-logged",
-				"manga",
-				"feed",
-				`limit:${$limit}`,
-				`${JSON.stringify($order)}`
-			],
+			queryKey: ["user-logged", "manga", "feed", `limit:${$limit}`, `${JSON.stringify($order)}`],
 			async queryFn({ pageParam }) {
 				return await executeSearchQuery(client, pageParam);
 			},
@@ -74,6 +65,7 @@
 		>;
 	});
 	let query = createInfiniteQuery(() => $queryOptions);
+	$effect(() => listenToBlacklistChange(() => query.refetch()));
 	let hasNext = $derived(query.hasNextPage);
 	let isFetching = $derived(query.isFetching);
 	let feed = $derived(query.data?.pages.flatMap((e) => e.data) ?? []);
@@ -158,7 +150,7 @@
 			<div class="additional-content">
 				<section>
 					<p>Sort by:</p>
-					<MangaFeedSortOrderSelection sort={order} addMinWidth />
+					<MangaFeedSortOrderSelection sort={order} />
 				</section>
 			</div>
 		{/snippet}
