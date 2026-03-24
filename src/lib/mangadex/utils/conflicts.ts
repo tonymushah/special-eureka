@@ -128,7 +128,8 @@ export function hasConflicts(conflicts: ContentProfileConflicts | null): boolean
 		conflicts.originalLanguage != undefined ||
 		conflicts.publicationDemographic != undefined ||
 		conflicts.status != undefined ||
-		conflicts.tags.length != 0
+		conflicts.tags.length != 0 ||
+		(conflicts.authorArtists ?? []).length != 0
 	) {
 		return true;
 	} else {
