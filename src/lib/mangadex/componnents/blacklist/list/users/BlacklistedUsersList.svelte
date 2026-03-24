@@ -8,6 +8,9 @@
 	import type { BlacklistUserListParam } from "@mangadex/gql/graphql";
 	import { client } from "@mangadex/gql/urql";
 	import { createInfiniteQuery } from "@tanstack/svelte-query";
+	import Row from "./Row.svelte";
+	import { createUnblockUserMutation } from "@mangadex/mutations/blacklist/users/unblock";
+	import { addErrorToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 
 	let params = $state<BlacklistUserListParam>({});
 	let query = createInfiniteQuery(() => ({
@@ -45,6 +48,7 @@
 			.values()
 			.toArray()
 	);
+	let unblock = createUnblockUserMutation();
 </script>
 
 {#if query.isLoading}
@@ -67,11 +71,20 @@
 			</thead>
 			<tbody>
 				{#each users as user (`user-${user.id}`)}
-					<tr>
-						<td>{user.id}</td>
-						<td>{user.name}</td>
-						<td>{user.insertDate}</td>
-					</tr>
+					<Row
+						{...user}
+						disabled={unblock.isPending}
+						remove={() => {
+							unblock.mutate(user.id, {
+								onSuccess() {
+									query.refetch();
+								},
+								onError(e) {
+									addErrorToast("Cannot remove user to the blacklist", e);
+								}
+							});
+						}}
+					/>
 				{/each}
 			</tbody>
 		</table>
@@ -130,11 +143,6 @@
 				text-align: center;
 				transform: translateY(-3px);
 				padding-top: 3px;
-			}
-		}
-		tbody {
-			td {
-				border-bottom: 3px solid var(--midtone);
 			}
 		}
 	}
