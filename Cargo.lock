@@ -1777,9 +1777,9 @@ checksum = "48c757948c5ede0e46177b7add2e67155f70e33c07fea8284df6576da70b3719"
 
 [[package]]
 name = "embed-resource"
-version = "3.0.7"
+version = "3.0.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "47ec73ddcf6b7f23173d5c3c5a32b5507dc0a734de7730aa14abc5d5e296bb5f"
+checksum = "63a1d0de4f2249aa0ff5884d7080814f446bb241a559af6c170a41e878ed2d45"
 dependencies = [
  "cc",
  "memchr",
@@ -3546,9 +3546,9 @@ dependencies = [
 
 [[package]]
 name = "libredox"
-version = "0.1.14"
+version = "0.1.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1744e39d1d6a9948f4f388969627434e31128196de472883b39f148769bfe30a"
+checksum = "7ddbf48fd451246b1f8c2610bd3b4ac0cc6e149d89832867093ab69a17194f08"
 dependencies = [
  "bitflags 2.11.0",
  "libc",
@@ -4909,7 +4909,7 @@ version = "3.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e67ba7e9b2b56446f1d419b1d807906278ffa1a658a8a5d8a39dcb1f5a78614f"
 dependencies = [
- "toml_edit 0.25.7+spec-1.1.0",
+ "toml_edit 0.25.8+spec-1.1.0",
 ]
 
 [[package]]
@@ -6668,7 +6668,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-clipboard-manager"
 version = "2.3.2"
-source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#99c3e37b54c115e8712f67c2b53ed1f2f0b4aae6"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#4b95f5e079593d5b2b98220c332f420dc70d18d1"
 dependencies = [
  "arboard",
  "log",
@@ -6682,7 +6682,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-deep-link"
 version = "2.4.7"
-source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#99c3e37b54c115e8712f67c2b53ed1f2f0b4aae6"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#4b95f5e079593d5b2b98220c332f420dc70d18d1"
 dependencies = [
  "dunce",
  "plist",
@@ -6702,7 +6702,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-dialog"
 version = "2.6.0"
-source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#99c3e37b54c115e8712f67c2b53ed1f2f0b4aae6"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#4b95f5e079593d5b2b98220c332f420dc70d18d1"
 dependencies = [
  "log",
  "raw-window-handle",
@@ -6719,7 +6719,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-fs"
 version = "2.4.5"
-source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#99c3e37b54c115e8712f67c2b53ed1f2f0b4aae6"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#4b95f5e079593d5b2b98220c332f420dc70d18d1"
 dependencies = [
  "anyhow",
  "dunce",
@@ -6742,7 +6742,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-notification"
 version = "2.3.3"
-source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#99c3e37b54c115e8712f67c2b53ed1f2f0b4aae6"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#4b95f5e079593d5b2b98220c332f420dc70d18d1"
 dependencies = [
  "log",
  "notify-rust",
@@ -6760,7 +6760,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-opener"
 version = "2.5.3"
-source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#99c3e37b54c115e8712f67c2b53ed1f2f0b4aae6"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#4b95f5e079593d5b2b98220c332f420dc70d18d1"
 dependencies = [
  "dunce",
  "glob",
@@ -6781,7 +6781,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-single-instance"
 version = "2.4.0"
-source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#99c3e37b54c115e8712f67c2b53ed1f2f0b4aae6"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#4b95f5e079593d5b2b98220c332f420dc70d18d1"
 dependencies = [
  "serde",
  "serde_json",
@@ -6859,7 +6859,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-store"
 version = "2.4.2"
-source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#99c3e37b54c115e8712f67c2b53ed1f2f0b4aae6"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#4b95f5e079593d5b2b98220c332f420dc70d18d1"
 dependencies = [
  "dunce",
  "serde",
@@ -6874,7 +6874,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-updater"
 version = "2.10.0"
-source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#99c3e37b54c115e8712f67c2b53ed1f2f0b4aae6"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#4b95f5e079593d5b2b98220c332f420dc70d18d1"
 dependencies = [
  "base64 0.22.1",
  "dirs",
@@ -7367,9 +7367,9 @@ dependencies = [
 
 [[package]]
 name = "toml_edit"
-version = "0.25.7+spec-1.1.0"
+version = "0.25.8+spec-1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d15b06e6c39068c203e7c1d0bc3944796d867449e7668ef7fa5ea43727cb846e"
+checksum = "16bff38f1d86c47f9ff0647e6838d7bb362522bdf44006c7068c2b1e606f1f3c"
 dependencies = [
  "indexmap 2.13.0",
  "toml_datetime 1.1.0+spec-1.1.0",
@@ -7599,9 +7599,9 @@ checksum = "e6e4313cd5fcd3dad5cafa179702e2b244f760991f45397d14d4ebf38247da75"
 
 [[package]]
 name = "unicode-segmentation"
-version = "1.12.0"
+version = "1.13.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f6ccf251212114b54433ec949fd6a7841275f9ada20dddd2f29e9ceea4501493"
+checksum = "da36089a805484bcccfffe0739803392c8298778a2d2f09febf76fac5ad9025b"
 
 [[package]]
 name = "unicode-width"
