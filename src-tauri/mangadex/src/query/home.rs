@@ -1,9 +1,6 @@
 use crate::{
     objects::GetId,
-    utils::{
-        read_marker::{has_chapters_read, has_title_read},
-        traits_utils::MangadexAsyncGraphQLContextExt,
-    },
+    utils::{read_marker::has_chapters_read, traits_utils::MangadexAsyncGraphQLContextExt},
 };
 
 use async_graphql::{Context, Object};
@@ -118,6 +115,8 @@ impl HomeQueries {
         &self,
         ctx: &Context<'_>,
         params: Option<MangaListParams>,
+        disable_author_artists_blacklist: Option<bool>,
+        only_unread: Option<bool>,
     ) -> crate::error::wrapped::Result<MangaResults> {
         let mut params = params.unwrap_or_default();
         params.includes = <MangaResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
@@ -125,17 +124,14 @@ impl HomeQueries {
         params.has_available_chapters = Some(true);
         params.manga_ids.clear();
         loop {
-            let mut res: MangaResults =
+            let res: MangaResults =
                 MangaListQueries::new(params.clone(), ctx.get_app_handle::<tauri::Wry>()?)
-                    .list(ctx)
+                    .disable_author_artists_blacklist(
+                        disable_author_artists_blacklist.unwrap_or_default(),
+                    )
+                    .only_unreads(only_unread.unwrap_or_default())
+                    .list_with_inner_filter(ctx, false)
                     .await?;
-            let read_marker = has_title_read(
-                ctx.get_app_handle::<tauri::Wry>()?,
-                res.iter().map(|d| d.get_id()).collect(),
-            )
-            .await
-            .unwrap_or_default();
-            res.retain(|d| !read_marker.contains(&d.get_id()));
             if res.is_empty() {
                 let next_offset = res.info.limit + res.info.limit;
                 if next_offset <= res.info.total {
@@ -150,6 +146,8 @@ impl HomeQueries {
         &self,
         ctx: &Context<'_>,
         params: Option<MangaListParams>,
+        disable_author_artists_blacklist: Option<bool>,
+        only_unread: Option<bool>,
     ) -> crate::error::wrapped::Result<MangaResults> {
         let mut params = params.unwrap_or_default();
         params.includes = <MangaResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
@@ -164,7 +162,11 @@ impl HomeQueries {
         Ok({
             let res: MangaResults =
                 MangaListQueries::new(params, ctx.get_app_handle::<tauri::Wry>()?)
-                    .list(ctx)
+                    .only_unreads(only_unread.unwrap_or_default())
+                    .disable_author_artists_blacklist(
+                        disable_author_artists_blacklist.unwrap_or_default(),
+                    )
+                    .list_with_inner_filter(ctx, false)
                     .await?;
             res
         })

@@ -1,5 +1,5 @@
 [workspace]
-members = ["./src-tauri/core", "./src-tauri/mangadex"]
+members = ["./src-tauri/core", "./src-tauri/mangadex", "crates/diesel-sqlite-utils", "crates/mangadex-blacklist"]
 default-members = ["./src-tauri/core"]
 resolver = "3"
 
@@ -45,6 +45,11 @@ tar = "0.4"
 zstd = "0.13"
 flate2 = "1"
 bzip2 = "0.6"
+diesel = "2"
+libsqlite3-sys = { version = "0" }
+mangadex-blacklist-raw = { path = "./crates/mangadex-blacklist" }
+diesel_migrations = "2"
+diesel-sqlite-utils = { path = "./crates/diesel-sqlite-utils" }
 
 # Temporary fix before upgrading reqwest to v0.13.x
 [patch.crates-io]
@@ -105,3 +110,11 @@ panic = "abort"
 
 [profile.release.package."*"]
 opt-level = "s"
+
+[workspace.package]
+rust-version = "1.93"
+license-file = "./LICENSE"
+authors = ["tonymushah tonymushahDev06@yahoo.com"]
+edition = "2024"
+repository = "https://github.com/tonymushah/special-eureka"
+version = "0.2.3-7"

@@ -13,6 +13,7 @@
 	import executeSearchQuery from "./execute";
 	import defaultContentProfile from "@mangadex/content-profile/graphql/defaultProfile";
 	import ErrorComponent from "@mangadex/componnents/ErrorComponent.svelte";
+	import { listenToBlacklistChange } from "@mangadex/utils/blacklist/listen";
 
 	const client = getContextClient();
 	const debounce_wait = 450;
@@ -22,6 +23,7 @@
 	}
 
 	let { params, refetch = $bindable() }: Props = $props();
+	// svelte-ignore state_referenced_locally
 	const p_p_offline = derived([params, defaultContentProfile], ([merged]) => [merged]);
 	interface InfiniteQueryData {
 		data: MangaListContentItemProps[];
@@ -77,6 +79,7 @@
 		>;
 	});
 	let infiniteQuery = createInfiniteQuery(() => $infiniteQueryOptions);
+	$effect(() => listenToBlacklistChange(() => infiniteQuery.refetch()));
 	refetch = debounce(() => {
 		infiniteQuery.refetch();
 	}, debounce_wait);

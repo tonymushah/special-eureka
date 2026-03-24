@@ -253,15 +253,16 @@ pub async fn context_menu<R: Runtime>(
         let callbacks = Arc::new(Mutex::new(Some(callbacks)));
         webview.window().on_menu_event(move |_, id| {
             if let Ok(mut callbacks) = callbacks.lock()
-                && let Some(callback) = callbacks.as_ref().and_then(|cs| cs.get(id.id())) {
-                    if let Err(err) = webview_1.eval(format!(
-                        "window.__TAURI_INTERNALS__.runCallback({})",
-                        callback.0
-                    )) {
-                        log::error!("{} => {}", id.id().0, err);
-                    }
-                    let _ = callbacks.take();
+                && let Some(callback) = callbacks.as_ref().and_then(|cs| cs.get(id.id()))
+            {
+                if let Err(err) = webview_1.eval(format!(
+                    "window.__TAURI_INTERNALS__.runCallback({})",
+                    callback.0
+                )) {
+                    log::error!("{} => {}", id.id().0, err);
                 }
+                let _ = callbacks.take();
+            }
         });
     }
     menu.popup_at(webview.window().clone(), position)?;

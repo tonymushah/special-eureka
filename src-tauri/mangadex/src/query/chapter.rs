@@ -7,7 +7,7 @@ use crate::{
     store::types::structs::content::feed_from_gql_ctx,
     utils::traits_utils::MangadexAsyncGraphQLContextExt,
 };
-use async_graphql::{Context, Object};
+use async_graphql::{Context, InputObject, Object};
 use mangadex_api_input_types::{chapter::list::ChapterListParams, manga::list::MangaListParams};
 use mangadex_api_types_rust::ReferenceExpansionResource;
 use uuid::Uuid;
@@ -40,6 +40,8 @@ impl ChapterQueries {
         params: Option<ChapterListParams>,
         offline_params: Option<GetAllChapterParams>,
         feed_content: Option<bool>,
+        exclude_blacklisted_scanlation_groups: Option<bool>,
+        exclude_blacklisted_users: Option<bool>,
     ) -> crate::error::wrapped::Result<ChapterResults> {
         let feed_content = feed_content.unwrap_or(true);
         let mut params = params.unwrap_or_default();
@@ -47,9 +49,13 @@ impl ChapterQueries {
             params = feed_from_gql_ctx::<tauri::Wry, _>(ctx, params);
         }
         params.includes = <ChapterResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
-        ChapterListQueries::no_feed(params)
+        Ok(ChapterListQueries::no_feed(params)
+            .disable_scanlation_groups_blacklist(
+                exclude_blacklisted_scanlation_groups.unwrap_or_default(),
+            )
+            .disable_users_blacklist(exclude_blacklisted_users.unwrap_or_default())
             .default(ctx, offline_params)
-            .await
+            .await?)
     }
 
     pub async fn get(&self, ctx: &Context<'_>, id: Uuid) -> crate::error::wrapped::Result<Chapter> {
@@ -79,11 +85,17 @@ impl ChapterQueries {
     pub async fn list_with_group_by_manga(
         &self,
         ctx: &Context<'_>,
-        chapter_list_params: Option<ChapterListParams>,
-        manga_list_params: Option<MangaListParams>,
-        feed_content: Option<bool>,
-        only_unread_titles: Option<bool>,
+        param: Option<ChapterListWithGroupByMangaParam>,
     ) -> crate::error::wrapped::Result<MangaChapterGroup> {
+        let ChapterListWithGroupByMangaParam {
+            chapter_list_params,
+            manga_list_params,
+            feed_content,
+            only_unread_titles,
+            exclude_blacklisted_scans_groups,
+            exclude_blacklisted_users,
+            exclude_blacklisted_author_artists,
+        } = param.unwrap_or_default();
         let feed_content = feed_content.unwrap_or_default();
         let mut chapter_list_params: ChapterListParams = chapter_list_params.unwrap_or_default();
         if feed_content {
@@ -103,6 +115,11 @@ impl ChapterQueries {
             manga_list_params,
             GroupsResultsExtras {
                 only_unread_titles: only_unread_titles.unwrap_or_default(),
+                disable_scans_groups_blacklist: exclude_blacklisted_scans_groups
+                    .unwrap_or_default(),
+                disable_users_blacklist: exclude_blacklisted_users.unwrap_or_default(),
+                disable_author_artists_blacklist: exclude_blacklisted_author_artists
+                    .unwrap_or_default(),
             },
         )
         .await?)
@@ -114,4 +131,15 @@ impl ChapterQueries {
     ) -> crate::error::wrapped::Result<DownloadState> {
         DownloadStateQueries.chapter(ctx, id).await
     }
+}
+
+#[derive(Debug, Clone, InputObject, Default)]
+pub struct ChapterListWithGroupByMangaParam {
+    chapter_list_params: Option<ChapterListParams>,
+    manga_list_params: Option<MangaListParams>,
+    feed_content: Option<bool>,
+    only_unread_titles: Option<bool>,
+    exclude_blacklisted_scans_groups: Option<bool>,
+    exclude_blacklisted_users: Option<bool>,
+    exclude_blacklisted_author_artists: Option<bool>,
 }

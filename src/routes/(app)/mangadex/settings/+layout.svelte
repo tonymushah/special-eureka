@@ -1,6 +1,4 @@
 <script lang="ts">
-	import PageTitle from "@mangadex/componnents/pages/PageTitle.svelte";
-
 	interface Props {
 		children?: import("svelte").Snippet;
 	}
@@ -9,8 +7,6 @@
 </script>
 
 <div class="layout">
-	<PageTitle titleType={1} title={"Settings"} withReturn />
-
 	{@render children?.()}
 </div>
 

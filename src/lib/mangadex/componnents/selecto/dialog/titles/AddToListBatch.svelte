@@ -50,6 +50,7 @@
 		align-items: center;
 		justify-content: center;
 		gap: 8px;
+		margin-bottom: 12px;
 	}
 	h3 {
 		margin: 0px;

@@ -24,6 +24,7 @@
 		unmountOnExit?: boolean;
 		lazyMount?: boolean;
 		manual?: boolean;
+		noLine?: boolean;
 	}
 	let {
 		triggers = $bindable([]),
@@ -36,7 +37,8 @@
 		defaultValue,
 		unmountOnExit,
 		lazyMount,
-		manual
+		manual,
+		noLine
 	}: Props = $props();
 </script>
 
@@ -68,7 +70,10 @@
 		{/each}
 		<Tabs.Indicator class={cssMod.indicator} style="width: var(--width)" />
 	</Tabs.List>
-	<hr />
+	{#if !noLine}
+		<hr />
+	{/if}
+
 	{@render children?.()}
 </Tabs.Root>
 

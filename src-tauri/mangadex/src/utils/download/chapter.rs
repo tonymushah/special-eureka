@@ -82,8 +82,8 @@ where
                 RelationshipType::Manga,
             )))
             .await?
-        {
-            super::manga::download_manga(app, manga).await?;
-        }
+    {
+        super::manga::download_manga(app, manga).await?;
+    }
     Ok(chapter)
 }

@@ -10,6 +10,8 @@
 		unfollowScanlationGroupBatchMutation
 	} from "@mangadex/mutations/group/follow-batch";
 	import { dev } from "$app/environment";
+	import { createBlockScanlationGroupBatchMutation } from "@mangadex/mutations/blacklist/scanlation-groups/block";
+	import { createUnblockScanlationGroupBatchMutation } from "@mangadex/mutations/blacklist/scanlation-groups/unblock";
 
 	interface Props {
 		scanlationGroups?: string[];
@@ -21,6 +23,8 @@
 	let currentAction = $state<"selection">("selection");
 	let unfollow = unfollowScanlationGroupBatchMutation();
 	let follow = followScanlationGroupBatchMutation();
+	let block = createBlockScanlationGroupBatchMutation();
+	let unblock = createUnblockScanlationGroupBatchMutation();
 </script>
 
 <SectionBase>
@@ -95,9 +99,41 @@
 				});
 			}}
 		/>
-		{#if dev}
-			<ButtonAccentOnlyLabel variant="3" disabled label="Block" />
-			<ButtonAccentOnlyLabel variant="3" disabled label="Unblock" />
-		{/if}
+		<ButtonAccentOnlyLabel
+			variant="3"
+			label="Block"
+			disabled={block.isPending || unblock.isPending}
+			onclick={() => {
+				block.mutate(scanlationGroups, {
+					onSuccess() {
+						addToast({
+							title: `Successfully added ${scanlationGroups.length} scanlation groups to blacklist`,
+							type: "success"
+						});
+					},
+					onError(e) {
+						addErrorToast("Error on changing blocking status", e);
+					}
+				});
+			}}
+		/>
+		<ButtonAccentOnlyLabel
+			variant="3"
+			disabled={unblock.isPending || block.isPending}
+			label="Unblock"
+			onclick={() => {
+				unblock.mutate(scanlationGroups, {
+					onSuccess() {
+						addToast({
+							title: `Successfully removed ${scanlationGroups.length} scanlation groups to blacklist`,
+							type: "warning"
+						});
+					},
+					onError(e) {
+						addErrorToast("Error on changing blocking status", e);
+					}
+				});
+			}}
+		/>
 	{/snippet}
 </SectionBase>

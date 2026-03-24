@@ -5,6 +5,7 @@ const query = graphql(`
 		user {
 			get(id: $id) {
 				id
+				isBlocked
 				attributes {
 					username
 					roles

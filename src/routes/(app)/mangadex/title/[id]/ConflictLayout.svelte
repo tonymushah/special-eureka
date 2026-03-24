@@ -16,6 +16,7 @@
 	}
 
 	let { conflicts, ingnoreConflict = $bindable() }: Props = $props();
+	let authorArtists = $derived(conflicts.authorArtists ?? []);
 </script>
 
 <div class="error">
@@ -61,6 +62,22 @@
 			<section>
 				<h3>Content Rating</h3>
 				<ContentRatingTag contentRating={conflicts.contentRating} />
+			</section>
+		{/if}
+		{#if authorArtists.length != 0}
+			<section>
+				<h3>Author or Artist</h3>
+				<TagComponnentsFlex
+					tags={authorArtists}
+					onclick={(e) => {
+						const { id } = e;
+						goto(
+							route("/mangadex/author/[id]", {
+								id
+							})
+						);
+					}}
+				/>
 			</section>
 		{/if}
 	</div>

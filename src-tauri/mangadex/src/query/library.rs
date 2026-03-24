@@ -52,6 +52,7 @@ impl CurrentUserLibrary {
             })
             .count() as u32
     }
+    // TODO implement author exclusion if needed
     async fn extract_result(
         &self,
         ctx: &Context<'_>,

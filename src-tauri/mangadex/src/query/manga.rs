@@ -65,6 +65,7 @@ impl MangaQueries {
         params: Option<MangaListParams>,
         exclude_content_profile: Option<bool>,
         only_unread: Option<bool>,
+        disable_author_artists_blacklist: Option<bool>,
     ) -> Result<MangaResults> {
         let mut params = params.unwrap_or_default();
         params.includes = <MangaResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
@@ -77,7 +78,8 @@ impl MangaQueries {
             ctx.get_app_handle::<tauri::Wry>()?,
         )
         .only_unreads(only_unread.unwrap_or_default())
-        .list_with_inner_filter(ctx)
+        .disable_author_artists_blacklist(disable_author_artists_blacklist.unwrap_or_default())
+        .list_with_inner_filter(ctx, false)
         .await?)
     }
     pub async fn list_offline(
@@ -85,6 +87,7 @@ impl MangaQueries {
         ctx: &Context<'_>,
         params: Option<MangaListParams>,
         exclude_content_profile: Option<bool>,
+        disable_author_artists_blacklist: Option<bool>,
     ) -> Result<MangaResults> {
         let mut params = params.unwrap_or_default();
         params.includes = <MangaResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
@@ -96,7 +99,9 @@ impl MangaQueries {
             exclude_content_profile.unwrap_or_default(),
             ctx.get_app_handle::<tauri::Wry>()?,
         )
-        .list_offline(ctx)
+        .only_unreads(false)
+        .disable_author_artists_blacklist(disable_author_artists_blacklist.unwrap_or_default())
+        .list_with_inner_filter(ctx, true)
         .await?)
     }
     pub async fn random(

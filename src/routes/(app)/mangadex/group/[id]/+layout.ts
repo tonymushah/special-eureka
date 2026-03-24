@@ -55,7 +55,8 @@ export const load: LayoutLoad = async function ({ params }) {
 			titles: mangaListData.total,
 			uploads: chapterListData.total,
 			comments: groupStatisticsData.comments,
-			discord: groupData.attributes.discord
+			discord: groupData.attributes.discord,
+			isBlocked: groupData.isBlocked
 		};
 	}
 	error(500, "No data??");

@@ -13,6 +13,7 @@
 	import { onDestroy } from "svelte";
 	import { derived, get, toStore, writable, type Readable, type Writable } from "svelte/store";
 	import executeSearchQuery from "./search";
+	import { listenToBlacklistChange } from "@mangadex/utils/blacklist/listen";
 
 	const client = getContextClient();
 	interface Props {
@@ -110,6 +111,11 @@
 		}
 		return result.data?.pages.map((d) => d.data) ?? [];
 	});
+	$effect(() =>
+		listenToBlacklistChange(() => {
+			infiniteQuery.refetch();
+		})
+	);
 	let isFetching = $derived(infiniteQuery.isFetching);
 	let hasNext = $derived(infiniteQuery.hasNextPage);
 	/// TODO implement this

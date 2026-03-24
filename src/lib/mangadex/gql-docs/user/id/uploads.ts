@@ -8,17 +8,25 @@ const query = graphql(`
 		$limit: Int
 		$order: ChapterSortOrder! = { publishAt: DESCENDING }
 		$mangaListParams: MangaListParams = {}
+		$disableScanlationGroupBlacklist: Boolean
+		$disableUserBlacklist: Boolean
+		$disableAuthorArtistBlacklist: Boolean
 	) {
 		chapter {
 			listWithGroupByManga(
-				chapterListParams: {
-					offset: $offset
-					limit: $limit
-					translatedLanguages: $translatedLanguages
-					uploaders: [$user]
-					order: $order
+				param: {
+					chapterListParams: {
+						offset: $offset
+						limit: $limit
+						translatedLanguages: $translatedLanguages
+						uploaders: [$user]
+						order: $order
+					}
+					mangaListParams: $mangaListParams
+					excludeBlacklistedAuthorArtists: $disableAuthorArtistBlacklist
+					excludeBlacklistedScansGroups: $disableScanlationGroupBlacklist
+					excludeBlacklistedUsers: $disableUserBlacklist
 				}
-				mangaListParams: $mangaListParams
 			) {
 				limit
 				offset

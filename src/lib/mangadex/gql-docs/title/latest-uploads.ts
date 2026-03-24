@@ -1,19 +1,30 @@
 import { graphql } from "@mangadex/gql";
 
 const latest_updates_query = graphql(/* GraphQL */ `
-	query latestUploadsPageQuery($offset: Int, $limit: Int) {
+	query latestUploadsPageQuery(
+		$offset: Int
+		$limit: Int
+		$disableScanlationGroupBlacklist: Boolean
+		$disableUserBlacklist: Boolean
+		$disableAuthorArtistBlacklist: Boolean
+	) {
 		chapter {
 			listWithGroupByManga(
-				chapterListParams: {
-					includeEmptyPages: EXCLUDE
-					includeExternalUrl: EXCLUDE
-					includeFutureUpdates: EXCLUDE
-					includeFuturePublishAt: EXCLUDE
-					order: { readableAt: DESCENDING }
-					offset: $offset
-					limit: $limit
+				param: {
+					chapterListParams: {
+						includeEmptyPages: EXCLUDE
+						includeExternalUrl: EXCLUDE
+						includeFutureUpdates: EXCLUDE
+						includeFuturePublishAt: EXCLUDE
+						order: { readableAt: DESCENDING }
+						offset: $offset
+						limit: $limit
+					}
+					feedContent: true
+					excludeBlacklistedAuthorArtists: $disableAuthorArtistBlacklist
+					excludeBlacklistedScansGroups: $disableScanlationGroupBlacklist
+					excludeBlacklistedUsers: $disableUserBlacklist
 				}
-				feedContent: true
 			) {
 				limit
 				offset

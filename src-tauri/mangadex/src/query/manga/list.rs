@@ -33,6 +33,7 @@ use crate::{
 pub struct MangaListQueries {
     params: MangaListParams,
     only_unread: bool,
+    disable_author_artists_blacklist: bool,
 }
 
 impl Deref for MangaListQueries {
@@ -53,6 +54,7 @@ impl From<MangaListParams> for MangaListQueries {
         Self {
             params,
             only_unread: false,
+            disable_author_artists_blacklist: false,
         }
     }
 }
@@ -71,6 +73,13 @@ impl From<&MangaListQueries> for MangaListParams {
 
 #[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl MangaListQueries {
+    pub fn disable_author_artists_blacklist(
+        mut self,
+        exclude_author_artists_blacklist: bool,
+    ) -> Self {
+        self.disable_author_artists_blacklist = exclude_author_artists_blacklist;
+        self
+    }
     pub fn only_unreads(mut self, only_unreads: bool) -> Self {
         self.only_unread = only_unreads;
         self
@@ -100,7 +109,7 @@ impl MangaListQueries {
             .ok_or(Error::OfflineAppStateNotLoaded)?;
 
         let params = self.deref().clone();
-        Ok({
+        {
             let res: MangaResults = {
                 let res: MangaCollection = Collection::from_async_stream(
                     {
@@ -137,8 +146,8 @@ impl MangaListQueries {
                     let _ = watches.manga.send_offline(data);
                 }
             });
-            res
-        })
+            Ok(res)
+        }
     }
     // [x] use [`crate::utils::splittable_param`]
     pub async fn list_online(&self, ctx: &Context<'_>) -> Result<MangaResults> {
@@ -173,25 +182,48 @@ impl MangaListQueries {
     // We might have complex filters in the future so yeah??
     /// Inner filter such as :
     /// - [`Self::only_unreads`]
+    /// - [`Self::exclude_author_artists_blacklist`]
     // TODO implement high-level query
-    pub async fn list_with_inner_filter(mut self, ctx: &Context<'_>) -> Result<MangaResults> {
-        let mut list = self.list(ctx).await?;
-        if self.only_unread {
+    pub async fn list_with_inner_filter(
+        mut self,
+        ctx: &Context<'_>,
+        offline_only: bool,
+    ) -> Result<MangaResults> {
+        let mut list = if offline_only {
+            self.list_offline(ctx).await?
+        } else {
+            self.list(ctx).await?
+        };
+        if self.only_unread || !self.disable_author_artists_blacklist {
             loop {
-                let read_markers = has_title_read(
-                    ctx.get_app_handle::<tauri::Wry>()?,
-                    list.iter().map(|t| t.get_id()).collect(),
-                )
-                .await
-                .unwrap_or_default();
-                list.retain(|t| !read_markers.contains(&t.get_id()));
+                if self.only_unread {
+                    let read_markers = has_title_read(
+                        ctx.get_app_handle::<tauri::Wry>()?,
+                        list.iter().map(|t| t.get_id()).collect(),
+                    )
+                    .await
+                    .unwrap_or_default();
+                    list.retain(|t| !read_markers.contains(&t.get_id()));
+                }
+                // NOTE: Idk if this works well or not??
+                if !self.disable_author_artists_blacklist {
+                    *list = crate::blacklist::filters::filter_author_artists_titles::<tauri::Wry>(
+                        ctx.get_app_handle()?.clone(),
+                        std::mem::take(&mut *list),
+                    )
+                    .await?;
+                }
                 if list.is_empty() {
                     let next_offset = list.info.offset + list.info.limit;
                     if next_offset > list.info.total {
                         break;
                     } else {
                         self.offset = Some(next_offset);
-                        list = self.list(ctx).await?;
+                        list = if offline_only {
+                            self.list_offline(ctx).await?
+                        } else {
+                            self.list(ctx).await?
+                        };
                     }
                 } else {
                     break;

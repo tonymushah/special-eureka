@@ -5,6 +5,7 @@ const query = graphql(`
 		author {
 			get(id: $id) {
 				id
+				isBlocked
 				attributes {
 					name
 					imageUrl

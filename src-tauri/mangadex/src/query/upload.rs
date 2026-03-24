@@ -37,9 +37,10 @@ impl UploadQueries {
             }
             Err(e) => {
                 if let MangaDexErrors::Api(ref error) = e
-                    && error.errors.iter().any(|error_| error_.status == 404) {
-                        return Ok(None);
-                    }
+                    && error.errors.iter().any(|error_| error_.status == 404)
+                {
+                    return Ok(None);
+                }
                 Err(Error::MangadexApi(e).into())
             }
         }

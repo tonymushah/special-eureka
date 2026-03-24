@@ -6,9 +6,13 @@ use mangadex_api_schema_rust::{
 };
 use mangadex_api_types_rust::ReferenceExpansionResource;
 use relationships::UserRelationships;
+use tokio::task::spawn_blocking;
 use uuid::Uuid;
 
-use crate::query::user::UserQueries;
+use crate::{
+    query::user::UserQueries,
+    utils::traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
+};
 
 use self::attributes::UserAttributes;
 
@@ -91,6 +95,24 @@ impl User {
     pub async fn attributes(&self) -> UserAttributes {
         self.get_attributes()
     }
+
+    pub async fn is_blocked(&self, ctx: &Context<'_>) -> crate::error::wrapped::Result<bool> {
+        let id = self.get_id();
+        let app_handle = ctx.get_app_handle::<tauri::Wry>()?.clone();
+        Ok(spawn_blocking(move || -> crate::Result<_> {
+            use diesel::prelude::*;
+            use mangadex_blacklist_raw::schema::users::dsl::*;
+
+            let mut connection = app_handle.blacklist_database_pool()?.get_connection()?;
+
+            Ok(
+                diesel::select(diesel::dsl::exists(users.filter(user_id.eq(id.as_bytes()))))
+                    .get_result(&mut connection)?,
+            )
+        })
+        .await??)
+    }
+
     pub async fn relationships<'ctx>(
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
