@@ -8,6 +8,9 @@
 	import type { BlacklistScanlationGroupsListParam } from "@mangadex/gql/graphql";
 	import { client } from "@mangadex/gql/urql";
 	import { createInfiniteQuery } from "@tanstack/svelte-query";
+	import Row from "./Row.svelte";
+	import { createUnblockScanlationGroupMutation } from "@mangadex/mutations/blacklist/scanlation-groups/unblock";
+	import { addErrorToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 
 	let params = $state<BlacklistScanlationGroupsListParam>({});
 	let query = createInfiniteQuery(() => ({
@@ -45,6 +48,7 @@
 			.values()
 			.toArray()
 	);
+	let unblockMutation = createUnblockScanlationGroupMutation();
 </script>
 
 {#if query.isLoading}
@@ -67,11 +71,20 @@
 			</thead>
 			<tbody>
 				{#each scanlationGroups as group (`group-${group.id}`)}
-					<tr>
-						<td>{group.id}</td>
-						<td>{group.name}</td>
-						<td>{group.insertDate}</td>
-					</tr>
+					<Row
+						{...group}
+						disabled={unblockMutation.isPending}
+						remove={() => {
+							unblockMutation.mutate(group.id, {
+								onSuccess() {
+									query.refetch();
+								},
+								onError(e) {
+									addErrorToast("Cannot remove scanlation groups to the blacklist", e);
+								}
+							});
+						}}
+					/>
 				{/each}
 			</tbody>
 		</table>
@@ -130,11 +143,6 @@
 				text-align: center;
 				transform: translateY(-3px);
 				padding-top: 3px;
-			}
-		}
-		tbody {
-			td {
-				border-bottom: 3px solid var(--midtone);
 			}
 		}
 	}
