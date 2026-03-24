@@ -6,6 +6,7 @@ use tokio::task::spawn_blocking;
 use uuid::Uuid;
 
 use crate::{
+    blacklist::emit_blacklist_change,
     objects::blacklist::authors::BlacklistedAuthorObject,
     utils::{
         get_attributes::author_artists::get_author_artist_id_attributes,
@@ -38,32 +39,36 @@ impl BlacklistAuthorArtistsMutations {
             let app_handle = app_handle.clone();
             get_author_artist_id_attributes(app_handle, &author_ids).await?
         };
+        let res = {
+            let app_handle = app_handle.clone();
+            spawn_blocking(move || -> crate::Result<_> {
+                use mangadex_blacklist_raw::schema::authors_artists::dsl::*;
 
-        spawn_blocking(move || -> crate::Result<_> {
-            use mangadex_blacklist_raw::schema::authors_artists::dsl::*;
-
-            let mut connection = app_handle.blacklist_database_pool()?.get_connection()?;
-            connection.transaction::<Vec<_>, crate::Error, _>(|connection| {
-                author_ids
-                    .into_iter()
-                    .map(|id| -> crate::Result<_> {
-                        Ok(diesel::insert_into(authors_artists)
-                            .values(InsertAuthor {
-                                author_id: id.as_bytes(),
-                                author_name: attrs
-                                    .get(&id)
-                                    .ok_or(crate::Error::AuthorNotFound(id))?
-                                    .name
-                                    .as_str()
-                                    .into(),
-                            })
-                            .returning(BlacklistedAuthorObject::as_returning())
-                            .get_result(connection)?)
-                    })
-                    .collect()
+                let mut connection = app_handle.blacklist_database_pool()?.get_connection()?;
+                connection.transaction::<Vec<_>, crate::Error, _>(|connection| {
+                    author_ids
+                        .into_iter()
+                        .map(|id| -> crate::Result<_> {
+                            Ok(diesel::insert_into(authors_artists)
+                                .values(InsertAuthor {
+                                    author_id: id.as_bytes(),
+                                    author_name: attrs
+                                        .get(&id)
+                                        .ok_or(crate::Error::AuthorNotFound(id))?
+                                        .name
+                                        .as_str()
+                                        .into(),
+                                })
+                                .returning(BlacklistedAuthorObject::as_returning())
+                                .get_result(connection)?)
+                        })
+                        .collect()
+                })
             })
-        })
-        .await?
+            .await??
+        };
+        emit_blacklist_change(&app_handle)?;
+        Ok(res)
     }
     pub async fn inner_unblock_many(
         &self,
@@ -71,24 +76,29 @@ impl BlacklistAuthorArtistsMutations {
         author_ids: Vec<Uuid>,
     ) -> crate::Result<Vec<BlacklistedAuthorObject>> {
         let app_handle = ctx.get_app_handle::<tauri::Wry>()?.clone();
-        spawn_blocking(move || -> crate::Result<_> {
-            use mangadex_blacklist_raw::schema::authors_artists::dsl::*;
+        let res = {
+            let app_handle = app_handle.clone();
+            spawn_blocking(move || -> crate::Result<_> {
+                use mangadex_blacklist_raw::schema::authors_artists::dsl::*;
 
-            let mut connection = app_handle.blacklist_database_pool()?.get_connection()?;
-            Ok(diesel::delete(
-                authors_artists.filter(
-                    author_id.eq_any(
-                        author_ids
-                            .iter()
-                            .map(|id| id.as_bytes())
-                            .collect::<Vec<_>>(),
+                let mut connection = app_handle.blacklist_database_pool()?.get_connection()?;
+                Ok(diesel::delete(
+                    authors_artists.filter(
+                        author_id.eq_any(
+                            author_ids
+                                .iter()
+                                .map(|id| id.as_bytes())
+                                .collect::<Vec<_>>(),
+                        ),
                     ),
-                ),
-            )
-            .returning(BlacklistedAuthorObject::as_returning())
-            .get_results(&mut connection)?)
-        })
-        .await?
+                )
+                .returning(BlacklistedAuthorObject::as_returning())
+                .get_results(&mut connection)?)
+            })
+            .await??
+        };
+        emit_blacklist_change(&app_handle)?;
+        Ok(res)
     }
 }
 
