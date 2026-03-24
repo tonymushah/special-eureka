@@ -21,6 +21,7 @@
 	import { createForumThread } from "@mangadex/stores/create-forum-thread";
 	import { ForumThreadType } from "@mangadex/gql/graphql";
 	import { addErrorToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
+	import { listenToBlacklistChange } from "@mangadex/utils/blacklist/listen";
 
 	const client = getContextClient();
 	const queryOptions = derived([pageLimit], ([$limit]) => {
@@ -54,6 +55,7 @@
 		>;
 	});
 	let query = createInfiniteQuery(() => $queryOptions);
+	$effect(() => listenToBlacklistChange(() => query.refetch()));
 	let hasNext = $derived(query.hasNextPage);
 	let isFetching = $derived(query.isFetching);
 	let feed = $derived(query.data?.pages.flatMap((e) => e.data) ?? []);
