@@ -6,6 +6,7 @@
 	import BlacklistedScanlationGroupList from "@mangadex/componnents/blacklist/list/scanlation-groups/BlacklistedScanlationGroupList.svelte";
 	import BlacklistedUsersList from "@mangadex/componnents/blacklist/list/users/BlacklistedUsersList.svelte";
 	import BlacklistedLabelsList from "@mangadex/componnents/blacklist/list/labels/BlacklistedLabelsList.svelte";
+	import { dev } from "$app/environment";
 </script>
 
 <PageTitle title="Blacklist" titleType={1} withReturn />
@@ -27,7 +28,8 @@
 		},
 		{
 			id: "labels",
-			title: "Labels"
+			title: "Labels",
+			disabled: !dev
 		}
 	]}
 	lazyMount
@@ -43,7 +45,9 @@
 	<TabContent value="users">
 		<BlacklistedUsersList />
 	</TabContent>
-	<TabContent value="labels">
-		<BlacklistedLabelsList />
-	</TabContent>
+	{#if dev}
+		<TabContent value="labels">
+			<BlacklistedLabelsList />
+		</TabContent>
+	{/if}
 </MangaDexTabs>
