@@ -8,6 +8,9 @@
 	import type { BlacklistAuthorsArtistsListParam } from "@mangadex/gql/graphql";
 	import { client } from "@mangadex/gql/urql";
 	import { createInfiniteQuery } from "@tanstack/svelte-query";
+	import Row from "./Row.svelte";
+	import { createUnblockAuthorArtistsMutation } from "@mangadex/mutations/blacklist/authors-artists/unblock";
+	import { addErrorToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 
 	let params = $state<BlacklistAuthorsArtistsListParam>({});
 	let query = createInfiniteQuery(() => ({
@@ -45,6 +48,7 @@
 			.values()
 			.toArray()
 	);
+	let unblockMutation = createUnblockAuthorArtistsMutation();
 </script>
 
 {#if query.isLoading}
@@ -62,16 +66,25 @@
 				<tr>
 					<th>Author Id</th>
 					<th>Name</th>
-					<th>Blacklist Date</th>
+					<th>Blacklist Since</th>
 				</tr>
 			</thead>
 			<tbody>
 				{#each authorArtists as authorArtist (`ararts-${authorArtist.id}`)}
-					<tr>
-						<td>{authorArtist.id}</td>
-						<td>{authorArtist.name}</td>
-						<td>{authorArtist.insertDate}</td>
-					</tr>
+					<Row
+						{...authorArtist}
+						remove={() => {
+							unblockMutation.mutate(authorArtist.id, {
+								onSuccess() {
+									query.refetch();
+								},
+								onError(e) {
+									addErrorToast("Cannot remove author/artist from blacklist", e);
+								}
+							});
+						}}
+						disabled={unblockMutation.isPending}
+					/>
 				{/each}
 			</tbody>
 		</table>
@@ -130,11 +143,6 @@
 				text-align: center;
 				transform: translateY(-3px);
 				padding-top: 3px;
-			}
-		}
-		tbody {
-			td {
-				border-bottom: 3px solid var(--midtone);
 			}
 		}
 	}
