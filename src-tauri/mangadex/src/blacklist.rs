@@ -1,6 +1,7 @@
 use std::path::Path;
 
 use diesel_sqlite_utils::r2d2::{DbPool, DbPoolConnection};
+use tauri::{AppHandle, Emitter, Runtime};
 
 pub mod connection;
 pub mod filters;
@@ -25,4 +26,9 @@ impl BlacklistDatabasePool {
     ) -> crate::Result<DbPoolConnection> {
         Ok(self.pool.get_timeout(timeout)?)
     }
+}
+
+pub fn emit_blacklist_change<R: Runtime>(app: &AppHandle<R>) -> crate::Result<()> {
+    app.emit("org.mangadex.blacklist.change", ())?;
+    Ok(())
 }
