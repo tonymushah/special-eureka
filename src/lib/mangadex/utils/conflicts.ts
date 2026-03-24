@@ -115,7 +115,12 @@ export default async function getTitleConflicts({
 			$profile.contentRating.length != 0
 				? contentRating
 				: undefined,
-		authorArtists: title.authorArtists?.filter((a) => a.isBlocked)
+		authorArtists: title.relationships?.authorArtists
+			?.filter((a) => a.isBlocked)
+			.map((a) => ({
+				id: a.id,
+				name: a.attributes.name
+			}))
 	};
 }
 
@@ -157,11 +162,15 @@ export type MaybeConflictedTitle = {
 			};
 		}>;
 	};
-	authorArtists?: Array<{
-		id: string;
-		name: string;
-		isBlocked: boolean;
-	}>;
+	relationships?: {
+		__typename?: "MangaRelationships";
+		authorArtists: Array<{
+			__typename?: "Author";
+			id: any;
+			isBlocked: boolean;
+			attributes: { __typename?: "AuthorAttributes"; name: string };
+		}>;
+	};
 };
 
 type GetTitleConflictsSyncParams = {
@@ -233,6 +242,11 @@ export function getTitleConflictsSync({
 			$profile.contentRating.length != 0
 				? contentRating
 				: undefined,
-		authorArtists: title.authorArtists?.filter((a) => a.isBlocked)
+		authorArtists: title.relationships?.authorArtists
+			?.filter((a) => a.isBlocked)
+			.map((a) => ({
+				id: a.id,
+				name: a.attributes.name
+			}))
 	};
 }
