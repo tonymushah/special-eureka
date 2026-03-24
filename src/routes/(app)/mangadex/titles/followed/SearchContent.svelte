@@ -13,6 +13,7 @@
 	import { onDestroy } from "svelte";
 	import { derived } from "svelte/store";
 	import executeSearchQuery from "./search";
+	import { listenToBlacklistChange } from "@mangadex/utils/blacklist/listen";
 
 	const client = getContextClient();
 
@@ -71,6 +72,7 @@
 		>;
 	});
 	let infiniteQuery = createInfiniteQuery(() => $infiniteQueryOptions);
+	$effect(() => listenToBlacklistChange(() => infiniteQuery.refetch()));
 	let titles = $derived.by(() => {
 		const result = infiniteQuery;
 		if (result.isLoading) {
