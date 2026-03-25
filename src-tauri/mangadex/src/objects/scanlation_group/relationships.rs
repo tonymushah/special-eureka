@@ -3,9 +3,11 @@ use std::ops::Deref;
 use async_graphql::Object;
 use mangadex_api_schema_rust::{
     ApiObjectNoRelationships,
+    error::RelationshipConversionError,
     v5::{RelatedAttributes, Relationship, UserAttributes},
 };
-use mangadex_api_types_rust::{RelationshipType, error::RelationshipConversionError};
+use mangadex_api_types_rust::RelationshipType;
+use non_exhaustive::non_exhaustive;
 
 use crate::objects::user::User;
 
@@ -39,11 +41,11 @@ impl ScanlationGroupRelationships {
                     RelationshipConversionError,
                 > {
                     if let Some(RelatedAttributes::User(ref attributes)) = value.attributes {
-                        Ok(ApiObjectNoRelationships {
+                        Ok(non_exhaustive!(ApiObjectNoRelationships<UserAttributes> {
                             id: value.id,
                             type_: RelationshipType::User,
                             attributes: attributes.clone(),
-                        })
+                        }))
                     } else {
                         Err(RelationshipConversionError::AttributesNotFound(
                             RelationshipType::User,
@@ -70,11 +72,11 @@ impl ScanlationGroupRelationships {
                     RelationshipConversionError,
                 > {
                     if let Some(RelatedAttributes::User(ref attributes)) = value.attributes {
-                        Ok(ApiObjectNoRelationships {
+                        Ok(non_exhaustive!(ApiObjectNoRelationships<UserAttributes> {
                             id: value.id,
                             type_: RelationshipType::User,
                             attributes: attributes.clone(),
-                        })
+                        }))
                     } else {
                         Err(RelationshipConversionError::AttributesNotFound(
                             RelationshipType::User,
