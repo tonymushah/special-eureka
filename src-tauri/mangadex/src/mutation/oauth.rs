@@ -111,10 +111,10 @@ impl OauthMutations {
     ) -> Result<bool> {
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
-        let client_info = ClientInfo {
-            client_id,
-            client_secret,
-        };
+        let client_info = non_exhaustive::non_exhaustive!(ClientInfo {
+            client_id: client_id,
+            client_secret: client_secret,
+        });
         client.set_client_info(&client_info).await?;
         let store = get_store::<tauri::Wry>(ctx)?;
         {
