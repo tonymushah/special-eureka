@@ -1,6 +1,5 @@
-use mangadex_api::MangaDexClient;
-use mangadex_api_schema_rust::v5::CustomListResponse;
-use mangadex_api_types_rust::error::Result;
+use mangadex_api::{MangaDexClient, Result};
+use mangadex_api_schema_rust::v5::CustomListData as CustomListResponse;
 use reqwest::Client;
 use serde::{Deserialize, Serialize};
 use url::Url;
