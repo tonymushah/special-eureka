@@ -16,7 +16,7 @@ impl SeasonalData {
     pub async fn get(client: &Client) -> Result<Self> {
         Ok(client.get(Url::parse("https://raw.githubusercontent.com/tonymushah/special-eureka/master/public/mangadex/json/seasonal.json")?).send().await?.json().await?)
     }
-    pub async fn get_result(&self, client: &MangaDexClient) -> CustomListData {
+    pub async fn get_result(&self, client: &MangaDexClient) -> Result<CustomListData> {
         client.custom_list().id(self.id).get().send().await
     }
 }
