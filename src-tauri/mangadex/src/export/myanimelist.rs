@@ -318,17 +318,17 @@ async fn export_core<R: Runtime>(options: ExportCoreOptions<'_, R>) -> crate::Re
                 }
                 let priority = if let Some(status) = status {
                     match status {
-                        ReadingStatus::Completed => priorities.completed,
-                        ReadingStatus::Dropped => priorities.dropped,
-                        ReadingStatus::OnHold => priorities.on_hold,
-                        ReadingStatus::PlanToRead => priorities.plan_to_read,
-                        ReadingStatus::Reading => priorities.reading,
-                        ReadingStatus::ReReading => priorities.re_reading,
+                        ReadingStatus::Completed => Some(priorities.completed),
+                        ReadingStatus::Dropped => Some(priorities.dropped),
+                        ReadingStatus::OnHold => Some(priorities.on_hold),
+                        ReadingStatus::PlanToRead => Some(priorities.plan_to_read),
+                        ReadingStatus::Reading => Some(priorities.reading),
+                        ReadingStatus::ReReading => Some(priorities.re_reading),
                         // TODO add if missing in the future
-                        _ => return None,
+                        _ => None,
                     }
                 } else {
-                    return None;
+                    None
                 };
                 let times_read: u32 = match status {
                     Some(ReadingStatus::Completed)
