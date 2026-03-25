@@ -11,6 +11,8 @@ use mangadex_api_schema_rust::{
 };
 use uuid::Uuid;
 
+type LMIAObj = ApiObject<LMIA>;
+
 use super::{GetAttributes, GetId};
 
 #[derive(Debug)]
@@ -23,7 +25,7 @@ impl Clone for LegacyIdMapping {
             legacy_id: self.attributes.legacy_id,
             new_id: self.attributes.new_id,
         });
-        Self(non_exhaustive::non_exhaustive!(ApiObject<LMIA> {
+        Self(non_exhaustive::non_exhaustive!(LMIAObj {
             type_: self.type_,
             id: self.id,
             attributes,
