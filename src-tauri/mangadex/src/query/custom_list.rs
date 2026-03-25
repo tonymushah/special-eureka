@@ -3,8 +3,10 @@ use std::ops::Deref;
 use async_graphql::{Context, InputObject, Object};
 use mangadex_api::MangaDexClient;
 use mangadex_api_input_types::custom_list::get_user_lists::UserCustomListParams;
-use mangadex_api_schema_rust::v5::CustomListData as CustomListListResponse;
+use mangadex_api_schema_rust::v5::CustomListCollection;
 use uuid::Uuid;
+
+type CustomListListResponse = mangadex_api::Result<CustomListCollection>;
 
 use crate::{
     objects::custom_list::{CustomList, lists::CustomListResults},
