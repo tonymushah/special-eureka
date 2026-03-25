@@ -16,11 +16,11 @@ impl From<LMIA> for LegacyMappingIdAttributes {
 
 impl From<&LMIA> for LegacyMappingIdAttributes {
     fn from(value: &LMIA) -> Self {
-        Self(LMIA {
+        Self(non_exhaustive::non_exhaustive!(LMIA {
             type_: value.type_,
             legacy_id: value.legacy_id,
             new_id: value.new_id,
-        })
+        }))
     }
 }
 
@@ -33,11 +33,11 @@ impl Deref for LegacyMappingIdAttributes {
 
 impl Clone for LegacyMappingIdAttributes {
     fn clone(&self) -> Self {
-        Self(LMIA {
+        Self(non_exhaustive::non_exhaustive!(LMIA {
             type_: self.type_,
             legacy_id: self.legacy_id,
             new_id: self.new_id,
-        })
+        }))
     }
 }
 
