@@ -18,17 +18,17 @@ pub struct LegacyIdMapping(pub IdMappingObject);
 
 impl Clone for LegacyIdMapping {
     fn clone(&self) -> Self {
-        let attributes = LMIA {
+        let attributes = non_exhaustive::non_exhaustive!(LMIA {
             type_: self.attributes.type_,
             legacy_id: self.attributes.legacy_id,
             new_id: self.attributes.new_id,
-        };
-        Self(ApiObject {
+        });
+        Self(non_exhaustive::non_exhaustive!(ApiObject<LMIA> {
             type_: self.type_,
             id: self.id,
             attributes,
             relationships: self.relationships.clone(),
-        })
+        }))
     }
 }
 
