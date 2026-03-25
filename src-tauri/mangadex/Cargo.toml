@@ -38,11 +38,9 @@ regex.workspace = true
 bytes.workspace = true
 async-stream = "0"
 favicon-picker.workspace = true
-tempfile = "3.10.1"
-tokio-util = "0.7.11"
-emdx = "0.1"
+tempfile.workspace = true
+tokio-util = "0.7"
 actix.workspace = true
-eureka-mmanager-core = "0.1"
 tauri-plugin-notification.workspace = true
 tower = { workspace = true, features = ["limit", "buffer"] }
 duration-string = { version = "0.5", features = ["serde"] }
@@ -74,6 +72,13 @@ non-exhaustive.workspace = true
 [dependencies.eureka-mmanager]
 git = "https://github.com/tonymushah/eureka-mmanager.git"
 
+[dependencies.eureka-mmanager-core]
+git = "https://github.com/tonymushah/eureka-mmanager.git"
+
+[dependencies.emdx]
+git = "https://github.com/tonymushah/eureka-mmanager.git"
+optional = true
+
 [dependencies.mangadex-api-input-types]
 version = "1"
 features = ["mangadex-api-resolver", "async-graphql"]
@@ -98,3 +103,4 @@ workspace = true
 
 [features]
 hotpath = ["dep:hotpath"]
+emdx = ["dep:emdx"]

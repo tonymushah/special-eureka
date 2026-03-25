@@ -51,6 +51,7 @@ mangadex-blacklist-raw = { path = "./crates/mangadex-blacklist" }
 diesel_migrations = "2"
 diesel-sqlite-utils = { path = "./crates/diesel-sqlite-utils" }
 non-exhaustive = "0.1"
+tempfile = "3"
 
 # Temporary fix before upgrading reqwest to v0.13.x
 # [patch.crates-io]
