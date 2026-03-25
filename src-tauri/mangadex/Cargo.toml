@@ -104,3 +104,4 @@ workspace = true
 [features]
 hotpath = ["dep:hotpath"]
 emdx = ["dep:emdx"]
+next = ["emdx"]

@@ -1585,7 +1585,7 @@ dependencies = [
 
 [[package]]
 name = "diesel-sqlite-utils"
-version = "0.2.3-8"
+version = "0.2.3-9"
 dependencies = [
  "diesel",
 ]
@@ -2900,12 +2900,11 @@ dependencies = [
 
 [[package]]
 name = "hotpath"
-version = "0.10.1"
+version = "0.14.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2dc168af8ef9f2f803292b6eca3bba81daca09df4f019f1d589d4392cc4a84e9"
+checksum = "2fde50be006a0fe95cc2fd6d25d884aa6932218e4055d7df2fa0d95c386acf8d"
 dependencies = [
  "arc-swap",
- "base64 0.22.1",
  "cfg-if",
  "clap",
  "colored",
@@ -2928,9 +2927,9 @@ dependencies = [
 
 [[package]]
 name = "hotpath-macros"
-version = "0.10.1"
+version = "0.14.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b2bcbc49dbb85d4226c95a61ab989247ceddb4901c679bcfcab39e586c3e26ad"
+checksum = "dd884cee056e269e41e1127549458e1c4e309f31897ebbc1416982a74d40a5b5"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -3796,7 +3795,7 @@ dependencies = [
 
 [[package]]
 name = "mangadex-blacklist-raw"
-version = "0.2.3-8"
+version = "0.2.3-9"
 dependencies = [
  "diesel",
  "diesel_migrations",
@@ -6209,7 +6208,7 @@ dependencies = [
 
 [[package]]
 name = "special-eureka"
-version = "0.2.3-8"
+version = "0.2.3-9"
 dependencies = [
  "actix",
  "anyhow",
@@ -6219,6 +6218,7 @@ dependencies = [
  "libsqlite3-sys",
  "log",
  "mimalloc",
+ "reqwest",
  "serde",
  "serde_json",
  "sys-locale",
@@ -6787,7 +6787,7 @@ dependencies = [
 
 [[package]]
 name = "tauri-plugin-speu-mangadex"
-version = "0.2.3-8"
+version = "0.2.3-9"
 dependencies = [
  "actix",
  "async-graphql",

@@ -12,7 +12,7 @@ anyhow = "1"
 uuid = "1"
 serde = "1.0"
 thiserror = "1"
-reqwest = { version = "0.13", default-features = false, features = ["gzip", "zstd", "http3", "http2", "brotli", "deflate", "rustls"]}
+reqwest = { version = "0.13", default-features = false, features = ["gzip", "zstd", "http2", "brotli", "deflate", "rustls"]}
 bytes = "1"
 async-graphql = "7"
 time = "0.3"
@@ -35,7 +35,7 @@ image = "0"
 serde-xml-rs = "0.8"
 clap = "4"
 csv = "1"
-hotpath = { version = "0.10" }
+hotpath = { version = "0.14" }
 shrink_fit_wrapper = "1"
 rand = "0.9"
 itertools = "0.14"
@@ -119,4 +119,4 @@ license-file = "./LICENSE"
 authors = ["tonymushah tonymushahDev06@yahoo.com"]
 edition = "2024"
 repository = "https://github.com/tonymushah/special-eureka"
-version = "0.2.3-8"
+version = "0.2.3-9"

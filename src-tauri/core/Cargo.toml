@@ -43,6 +43,7 @@ tauri-plugin-single-instance.workspace = true
 hotpath = { workspace = true, optional = true }
 # csv = { workspace = true, optional = true }
 mimalloc = { version = "0.1", optional = true }
+reqwest = { workspace = true, optional = true }
 
 [target.'cfg(windows)'.dependencies]
 libsqlite3-sys = { workspace = true, features = ["bundled"] }
@@ -64,12 +65,23 @@ default = ["custom-protocol", "updater"]
 # this feature is used used for production builds where `devPath` points to the filesystem
 # DO NOT remove this
 custom-protocol = ["tauri/custom-protocol"]
+
+# tauri updater
 updater = ["tauri-plugin-updater"]
+
+# HotPath
 hotpath = ["dep:hotpath", "hotpath/hotpath", "mangadex/hotpath"]
 hotpath-alloc = ["hotpath/hotpath-alloc", "hotpath"]
-hotpath-off = ["hotpath/hotpath-off"]
+
+# actix features?
 single-runtime = []
 actix-multi-threaded = []
+
+# Custom allocators
 jemalloc = ["tikv-jemallocator"]
 mimalloc = ["dep:mimalloc"]
-mangadex-emdx = ["mangadex/emdx"]
+
+# unreleased and unstable features
+mangadex-next = ["mangadex/next"]
+http3 = ["reqwest/http3"]
+next = ["http3", "mangadex/next"]
