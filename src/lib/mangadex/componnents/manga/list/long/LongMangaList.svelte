@@ -10,9 +10,7 @@
 	import { goto } from "$app/navigation";
 	import { route } from "$lib/ROUTES";
 	import { isArray } from "lodash";
-	import { flip } from "svelte/animate";
 	import MangaElementBase2 from "../../base/MangaElementBase2.svelte";
-	import { crossfade, fade } from "svelte/transition";
 
 	interface Props {
 		list?: LongMangaListItemProps[] | LongMangaListItemProps[][];
@@ -31,9 +29,6 @@
 			}
 		});
 		return map.values().toArray();
-	});
-	const [send, receive] = crossfade({
-		fallback: (node) => fade(node)
 	});
 </script>
 

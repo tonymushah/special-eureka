@@ -24,6 +24,7 @@ export type ContentProfileConflicts = {
 	status: MangaStatus | undefined;
 	publicationDemographic: Demographic | undefined;
 	contentRating: ContentRating | undefined;
+	authorArtists?: Tag[];
 };
 
 type GetTitleConflictsParams = {
@@ -95,8 +96,7 @@ export default async function getTitleConflicts({
 		tags: excludedTags,
 		originalLanguage:
 			($profile.originalLanguages.some((value) => originalLanguage == value) == false ||
-				$profile.excludedOriginalLanguage.some((value) => originalLanguage == value) ==
-					true) &&
+				$profile.excludedOriginalLanguage.some((value) => originalLanguage == value) == true) &&
 			$profile.originalLanguages.length != 0 &&
 			$profile.excludedOriginalLanguage.length != 0
 				? originalLanguage
@@ -106,15 +106,21 @@ export default async function getTitleConflicts({
 				? status
 				: undefined,
 		publicationDemographic:
-			$profile.publicationDemographic.some((value) => value == publicationDemographic) ==
-				false && $profile.publicationDemographic.length != 0
+			$profile.publicationDemographic.some((value) => value == publicationDemographic) == false &&
+			$profile.publicationDemographic.length != 0
 				? publicationDemographic
 				: undefined,
 		contentRating:
 			$profile.contentRating.some((value) => value == contentRating) == false &&
 			$profile.contentRating.length != 0
 				? contentRating
-				: undefined
+				: undefined,
+		authorArtists: title.relationships?.authorArtists
+			?.filter((a) => a.isBlocked)
+			.map((a) => ({
+				id: a.id,
+				name: a.attributes.name
+			}))
 	};
 }
 
@@ -127,7 +133,8 @@ export function hasConflicts(conflicts: ContentProfileConflicts | null): boolean
 		conflicts.originalLanguage != undefined ||
 		conflicts.publicationDemographic != undefined ||
 		conflicts.status != undefined ||
-		conflicts.tags.length != 0
+		conflicts.tags.length != 0 ||
+		(conflicts.authorArtists ?? []).length != 0
 	) {
 		return true;
 	} else {
@@ -153,6 +160,15 @@ export type MaybeConflictedTitle = {
 				__typename?: "TagAttributes";
 				name: any;
 			};
+		}>;
+	};
+	relationships?: {
+		__typename?: "MangaRelationships";
+		authorArtists: Array<{
+			__typename?: "Author";
+			id: any;
+			isBlocked: boolean;
+			attributes: { __typename?: "AuthorAttributes"; name: string };
 		}>;
 	};
 };
@@ -207,8 +223,7 @@ export function getTitleConflictsSync({
 		tags: excludedTags,
 		originalLanguage:
 			($profile.originalLanguages.some((value) => originalLanguage == value) == false ||
-				$profile.excludedOriginalLanguage.some((value) => originalLanguage == value) ==
-					true) &&
+				$profile.excludedOriginalLanguage.some((value) => originalLanguage == value) == true) &&
 			$profile.originalLanguages.length != 0 &&
 			$profile.excludedOriginalLanguage.length != 0
 				? originalLanguage
@@ -218,14 +233,20 @@ export function getTitleConflictsSync({
 				? status
 				: undefined,
 		publicationDemographic:
-			$profile.publicationDemographic.some((value) => value == publicationDemographic) ==
-				false && $profile.publicationDemographic.length != 0
+			$profile.publicationDemographic.some((value) => value == publicationDemographic) == false &&
+			$profile.publicationDemographic.length != 0
 				? publicationDemographic
 				: undefined,
 		contentRating:
 			$profile.contentRating.some((value) => value == contentRating) == false &&
 			$profile.contentRating.length != 0
 				? contentRating
-				: undefined
+				: undefined,
+		authorArtists: title.relationships?.authorArtists
+			?.filter((a) => a.isBlocked)
+			.map((a) => ({
+				id: a.id,
+				name: a.attributes.name
+			}))
 	};
 }

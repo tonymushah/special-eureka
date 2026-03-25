@@ -9,12 +9,17 @@
 	import { isLogged } from "@mangadex/utils/auth";
 	import { writeText } from "@tauri-apps/plugin-clipboard-manager";
 	import { openUrl as shellOpen } from "@tauri-apps/plugin-opener";
-	import { BookmarkIcon, ExternalLinkIcon, FlagIcon } from "@lucide/svelte";
+	import { BookmarkIcon, BookmarkX, ExternalLinkIcon, FlagIcon } from "@lucide/svelte";
 	import type { LayoutData } from "./$types";
 	import NavTab from "./NavTab.svelte";
 	import { dev } from "$app/environment";
 	import ReportDialog from "@mangadex/componnents/report/dialog/ReportDialog.svelte";
 	import { ReportCategory } from "@mangadex/gql/graphql";
+	import { createBlockUserMutation } from "@mangadex/mutations/blacklist/users/block";
+	import { createUnblockUserMutation } from "@mangadex/mutations/blacklist/users/unblock";
+	import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
+	import { invalidate } from "$app/navigation";
+	import { route } from "$lib/ROUTES";
 
 	interface Props {
 		data: LayoutData;
@@ -26,6 +31,48 @@
 	const isFollowed = isFollowingUser(data.id);
 	let isFollowing = $derived($isFollowed);
 	let openReportDialog = $state(false);
+	let isBlocked = $derived(data.isBlocked);
+	let blockMutation = createBlockUserMutation();
+	let unblockMutation = createUnblockUserMutation();
+	function blockBtnRun() {
+		if (isBlocked) {
+			unblockMutation.mutate(data.id, {
+				onSuccess() {
+					addToast({
+						type: "warning",
+						title: "Succefully unblocked user",
+						description: `${data.username}`
+					});
+					invalidate(
+						route("/mangadex/user/[id]", {
+							id: data.id
+						})
+					);
+				},
+				onError(error) {
+					addErrorToast("Error on changing blocking status", error);
+				}
+			});
+		} else {
+			blockMutation.mutate(data.id, {
+				onSuccess() {
+					addToast({
+						type: "success",
+						title: "Succefully blocked user",
+						description: `${data.username}`
+					});
+					invalidate(
+						route("/mangadex/user/[id]", {
+							id: data.id
+						})
+					);
+				},
+				onError(error) {
+					addErrorToast("Error on changing blocking status", error);
+				}
+			});
+		}
+	}
 </script>
 
 <ReportDialog bind:open={openReportDialog} objectId={data.id} category={ReportCategory.User} />
@@ -70,6 +117,25 @@
 			>
 				<p><FlagIcon />Report</p>
 			</ButtonAccent>
+			<ButtonAccent
+				isBase
+				disabled={blockMutation.isPending || unblockMutation.isPending}
+				variant={isBlocked ? "2" : "default"}
+				onclick={() => {
+					blockBtnRun();
+				}}
+			>
+				<p>
+					{#if isBlocked}
+						<BookmarkX />
+					{/if}
+					{#if isBlocked}
+						Unblock
+					{:else}
+						Block
+					{/if}
+				</p>
+			</ButtonAccent>
 		</div>
 	{/snippet}
 	{#snippet topRight()}
@@ -92,6 +158,9 @@
 						upload{#if data.uploads > 1}s{/if}
 					</span>
 				</p>
+				{#if isBlocked}
+					<p class="blocked">This user is blacklisted</p>
+				{/if}
 			</section>
 			<section class="roles">
 				{#each data.roles as role}
@@ -141,5 +210,8 @@
 	}
 	.content {
 		margin-top: 8px;
+	}
+	.blocked {
+		color: var(--danger-l2);
 	}
 </style>

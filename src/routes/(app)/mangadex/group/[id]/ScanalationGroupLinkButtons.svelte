@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { CopyIcon, ExternalLinkIcon, GlobeIcon, MailIcon, TwitterIcon } from "@lucide/svelte";
+	import { CopyIcon, ExternalLinkIcon, GlobeIcon, MailIcon } from "@lucide/svelte";
+	import { SiX as TwitterIcon } from "@icons-pack/svelte-simple-icons";
 	import { writeText } from "@tauri-apps/plugin-clipboard-manager";
 	import { openUrl as shellOpen } from "@tauri-apps/plugin-opener";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
@@ -68,7 +69,7 @@
 				{#if $twitterFavicon}
 					<img src={$twitterFavicon} alt={twitter} />
 				{:else}
-					<TwitterIcon size="20" />
+					<TwitterIcon size={20} />
 				{/if}
 			</div>
 			<h4>Twitter/X</h4>

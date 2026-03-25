@@ -13,6 +13,7 @@
 	import { onDestroy } from "svelte";
 	import { derived, get, toStore, writable, type Readable, type Writable } from "svelte/store";
 	import executeSearchQuery from "./search";
+	import { listenToBlacklistChange } from "@mangadex/utils/blacklist/listen";
 
 	const client = getContextClient();
 	interface Props {
@@ -20,19 +21,26 @@
 		offlineStore: Readable<boolean>;
 		excludeContentProfile?: boolean;
 		hideReadTitle?: boolean;
+		disableAuthorArtitsBlacklist?: boolean;
 	}
 
 	let {
 		params: initialParam,
 		offlineStore,
 		excludeContentProfile,
-		hideReadTitle = $bindable(false)
+		hideReadTitle = $bindable(false),
+		disableAuthorArtitsBlacklist
 	}: Props = $props();
 	// svelte-ignore state_referenced_locally
 	const params = writable(get(initialParam), (set) => initialParam.subscribe(set));
 	const p_p_offline = derived(
 		// svelte-ignore state_referenced_locally
-		[params, offlineStore, toStore(() => hideReadTitle)],
+		[
+			params,
+			offlineStore,
+			toStore(() => hideReadTitle),
+			toStore(() => disableAuthorArtitsBlacklist)
+		],
 		(merged) => merged
 	);
 	interface InfiniteQueryData {
@@ -41,67 +49,88 @@
 		limit: number;
 		total: number;
 	}
-	const infiniteQueryOptions = derived(p_p_offline, ([$params, isOffline, hideReadTitle]) => {
-		return {
-			queryKey: ["manga-search", $params, isOffline, hideReadTitle],
-			initialPageParam: [$params, isOffline, hideReadTitle],
-			getNextPageParam(lastPage, allPages, [lastPageParam, lastPageOffline, lastHideReadTitle]) {
-				const next_offset = lastPage.limit + lastPage.offset;
-				if (next_offset > lastPage.total) {
-					return null;
-				} else {
-					return [
-						{
-							...lastPageParam,
-							limit: lastPage.limit,
-							offset: next_offset
-						},
-						lastPageOffline,
-						lastHideReadTitle
-					];
+	const infiniteQueryOptions = derived(
+		p_p_offline,
+		([$params, isOffline, hideReadTitle, disableAuthorArtistsBlacklist]) => {
+			return {
+				queryKey: [
+					"manga-search",
+					$params,
+					isOffline,
+					hideReadTitle,
+					disableAuthorArtistsBlacklist ?? false
+				],
+				initialPageParam: [
+					{ ...$params },
+					isOffline,
+					hideReadTitle,
+					disableAuthorArtistsBlacklist ?? false
+				],
+				getNextPageParam(
+					lastPage,
+					allPages,
+					[lastPageParam, lastPageOffline, lastHideReadTitle, disableAuthorArtistsBlacklist]
+				) {
+					const next_offset = lastPage.limit + lastPage.offset;
+					if (next_offset > lastPage.total) {
+						return null;
+					} else {
+						return [
+							{
+								...lastPageParam,
+								limit: lastPage.limit,
+								offset: next_offset
+							},
+							lastPageOffline,
+							lastHideReadTitle,
+							disableAuthorArtistsBlacklist
+						];
+					}
+				},
+				async queryFn({ pageParam: [p, offline, hideReadTitle, disableAuthorArtistsBlacklist] }) {
+					const res = await executeSearchQuery(
+						client,
+						p,
+						offline,
+						excludeContentProfile,
+						hideReadTitle,
+						disableAuthorArtistsBlacklist
+					);
+					return {
+						data: res.data,
+						...res.paginationData
+					};
+				},
+				getPreviousPageParam(
+					firstPage,
+					allPages,
+					[firstPageParam, firstPageOffline, firstHideReadTitle, disableAuthorArtistsBlacklist]
+				) {
+					const next_offset = firstPage.limit - firstPage.offset;
+					if (next_offset < 0) {
+						return null;
+					} else {
+						return [
+							{
+								...firstPageParam,
+								limit: firstPage.limit,
+								offset: next_offset
+							},
+							firstPageOffline,
+							firstHideReadTitle,
+							disableAuthorArtistsBlacklist
+						];
+					}
 				}
-			},
-			async queryFn({ pageParam: [p, offline, hideReadTitle] }) {
-				const res = await executeSearchQuery(
-					client,
-					p,
-					offline,
-					excludeContentProfile,
-					hideReadTitle
-				);
-				return {
-					data: res.data,
-					...res.paginationData
-				};
-			},
-			getPreviousPageParam(
-				firstPage,
-				allPages,
-				[firstPageParam, firstPageOffline, firstHideReadTitle]
-			) {
-				const next_offset = firstPage.limit - firstPage.offset;
-				if (next_offset < 0) {
-					return null;
-				} else {
-					return [
-						{
-							...firstPageParam,
-							limit: firstPage.limit,
-							offset: next_offset
-						},
-						firstPageOffline,
-						firstHideReadTitle
-					];
-				}
-			}
-		} satisfies CreateInfiniteQueryOptions<
-			InfiniteQueryData,
-			Error,
-			InfiniteQueryData,
-			[string, MangaListParams, boolean, boolean],
-			[MangaListParams, boolean, boolean]
-		>;
-	});
+			} satisfies CreateInfiniteQueryOptions<
+				InfiniteQueryData,
+				Error,
+				InfiniteQueryData,
+				[string, MangaListParams, boolean, boolean, boolean],
+				[MangaListParams, boolean, boolean, boolean]
+			>;
+		}
+	);
 	let infiniteQuery = createInfiniteQuery(() => $infiniteQueryOptions);
 	let titles = $derived.by(() => {
 		const result = infiniteQuery;
@@ -110,6 +139,11 @@
 		}
 		return result.data?.pages.map((d) => d.data) ?? [];
 	});
+	$effect(() =>
+		listenToBlacklistChange(() => {
+			infiniteQuery.refetch();
+		})
+	);
 	let isFetching = $derived(infiniteQuery.isFetching);
 	let hasNext = $derived(infiniteQuery.hasNextPage);
 	/// TODO implement this

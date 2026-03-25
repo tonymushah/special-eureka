@@ -1,5 +1,6 @@
 <script lang="ts">
 	import ErrorComponent from "@mangadex/componnents/ErrorComponent.svelte";
+	import PageTitle from "@mangadex/componnents/pages/PageTitle.svelte";
 	import ButtonAccentOnlyLabel from "@mangadex/componnents/theme/buttons/ButtonAccentOnlyLabel.svelte";
 	import WarningComponent from "@mangadex/componnents/WarningComponent.svelte";
 	import {
@@ -56,7 +57,7 @@
 	let disabled = $derived(isMounted || mutationStore.isPending);
 </script>
 
-<h1>Offline Data Config</h1>
+<PageTitle title="Offline Data Config" titleType={1} withReturn />
 
 <AppTitle title="Offline Data Config - MangaDex" />
 

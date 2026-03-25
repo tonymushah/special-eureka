@@ -5,13 +5,18 @@
 	import { writeText } from "@tauri-apps/plugin-clipboard-manager";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import { openUrl as shellOpen } from "@tauri-apps/plugin-opener";
-	import { ExternalLinkIcon, FlagIcon } from "@lucide/svelte";
+	import { BookmarkX, ExternalLinkIcon, FlagIcon } from "@lucide/svelte";
 	import AuthorLinkButtons from "./AuthorLinkButtons.svelte";
 	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
 	import { isLogged } from "@mangadex/utils/auth";
 	import { dev } from "$app/environment";
 	import ReportDialog from "@mangadex/componnents/report/dialog/ReportDialog.svelte";
 	import { ReportCategory } from "@mangadex/gql/graphql";
+	import { createBlockAuthorArtistMutation } from "@mangadex/mutations/blacklist/authors-artists/block";
+	import { createUnblockAuthorArtistsMutation } from "@mangadex/mutations/blacklist/authors-artists/unblock";
+	import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
+	import { invalidate } from "$app/navigation";
+	import { route } from "$lib/ROUTES";
 
 	interface Props {
 		data: LayoutData;
@@ -21,6 +26,48 @@
 	let { data, children }: Props = $props();
 	let description = $derived(get_value_from_title_and_random_if_undefined(data.biography, "en"));
 	let openReportDialog = $state(false);
+	let isBlocked = $derived(data.isBlocked);
+	let blockMutation = createBlockAuthorArtistMutation();
+	let unblockMutation = createUnblockAuthorArtistsMutation();
+	function blockBtnRun() {
+		if (isBlocked) {
+			unblockMutation.mutate(data.id, {
+				onSuccess() {
+					addToast({
+						type: "warning",
+						title: "Succefully unblocked author/artist",
+						description: `${data.name}`
+					});
+					invalidate(
+						route("/mangadex/author/[id]", {
+							id: data.id
+						})
+					);
+				},
+				onError(error) {
+					addErrorToast("Error on changing blocking status", error);
+				}
+			});
+		} else {
+			blockMutation.mutate(data.id, {
+				onSuccess() {
+					addToast({
+						type: "success",
+						title: "Succefully blocked author/artist",
+						description: `${data.name}`
+					});
+					invalidate(
+						route("/mangadex/author/[id]", {
+							id: data.id
+						})
+					);
+				},
+				onError(error) {
+					addErrorToast("Error on changing blocking status", error);
+				}
+			});
+		}
+	}
 </script>
 
 <AppTitle title={`${data.name} | MangaDex`} />
@@ -46,6 +93,25 @@
 				}}
 			>
 				<p><FlagIcon /> Report</p>
+			</ButtonAccent>
+			<ButtonAccent
+				isBase
+				disabled={blockMutation.isPending || unblockMutation.isPending}
+				variant={isBlocked ? "2" : "default"}
+				onclick={() => {
+					blockBtnRun();
+				}}
+			>
+				<p>
+					{#if isBlocked}
+						<BookmarkX />
+					{/if}
+					{#if isBlocked}
+						Unblock
+					{:else}
+						Block
+					{/if}
+				</p>
 			</ButtonAccent>
 			<AuthorLinkButtons links={data.links} />
 		</div>

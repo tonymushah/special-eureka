@@ -3,7 +3,8 @@
 	import { getFaviconSrc } from "@mangadex/utils/favicons/getFaviconSrc";
 	import { getContextClient } from "@urql/svelte";
 	import { readable } from "svelte/store";
-	import { BoxIcon, ExternalLinkIcon, GlobeIcon, TwitterIcon, YoutubeIcon } from "@lucide/svelte";
+	import { BoxIcon, ExternalLinkIcon, GlobeIcon } from "@lucide/svelte";
+	import { SiX as TwitterIcon, SiYoutube as YoutubeIcon } from "@icons-pack/svelte-simple-icons";
 	import { openUrl as shellOpen } from "@tauri-apps/plugin-opener";
 	import type { AuthorLinks } from "./layout.context";
 	import Weibo from "@mangadex/componnents/icon/Weibo.svelte";
@@ -134,7 +135,7 @@
 				{#if $twitter}
 					<img src={$twitter} alt={links.twitter} />
 				{:else}
-					<TwitterIcon size="20" />
+					<TwitterIcon size={20} />
 				{/if}
 			</div>
 			<h4>Twitter/X</h4>
@@ -155,7 +156,7 @@
 				{#if $pixiv}
 					<img src={$pixiv} alt={links.pixiv} />
 				{:else}
-					<ExternalLinkIcon size="20" />
+					<ExternalLinkIcon size={20} />
 				{/if}
 			</div>
 			<h4>Pixiv</h4>
@@ -239,7 +240,7 @@
 				{#if $nicoVideo}
 					<img src={$nicoVideo} alt={links.nicoVideo} />
 				{:else}
-					<TwitterIcon size="20" />
+					<TwitterIcon size={20} />
 				{/if}
 			</div>
 			<h4>nicoVideo</h4>
@@ -323,7 +324,7 @@
 				{#if $youtube}
 					<img src={$youtube} alt={links.youtube} />
 				{:else}
-					<YoutubeIcon size="20" />
+					<YoutubeIcon size={20} />
 				{/if}
 			</div>
 			<h4>Youtube</h4>

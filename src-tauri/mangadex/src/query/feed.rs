@@ -3,11 +3,12 @@ use std::ops::Deref;
 use crate::error::wrapped::Result;
 
 use crate::objects::manga_chapter_group::{GroupsResultsExtras, groups_results_with_extras};
+use crate::utils::traits_utils::MangadexAsyncGraphQLContextExt;
 use crate::{
     store::types::structs::content::feed_from_gql_ctx,
     utils::{get_mangadex_client_from_graphql_context, splittable_param::SendSplitted},
 };
-use async_graphql::{Context, Object};
+use async_graphql::{Context, InputObject, Object};
 use mangadex_api_input_types::{
     feed::{
         custom_list_feed::CustomListMangaFeedParams, followed_manga_feed::FollowedMangaFeedParams,
@@ -17,9 +18,8 @@ use mangadex_api_input_types::{
 
 use crate::{
     objects::{
-        ExtractReferenceExpansionFromContext,
-        chapter::lists::ChapterResults,
-        manga_chapter_group::{MangaChapterGroup, group_results},
+        ExtractReferenceExpansionFromContext, chapter::lists::ChapterResults,
+        manga_chapter_group::MangaChapterGroup,
     },
     utils::{
         get_mangadex_client_from_graphql_context_with_auth_refresh,
@@ -31,7 +31,6 @@ use crate::{
 #[derive(Debug, Clone, Copy)]
 pub struct FeedQueries;
 
-// TODO Implement
 #[Object]
 #[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl FeedQueries {
@@ -39,6 +38,8 @@ impl FeedQueries {
         &self,
         ctx: &Context<'_>,
         params: Option<FollowedMangaFeedParams>,
+        disable_scans_groups_blacklist: Option<bool>,
+        disable_users_blacklist: Option<bool>,
     ) -> Result<ChapterResults> {
         let mut param = feed_from_gql_ctx::<tauri::Wry, _>(ctx, params.unwrap_or_default());
         let client =
@@ -48,22 +49,55 @@ impl FeedQueries {
             .clone();
         param.includes = <ChapterResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
 
-        let res: ChapterResults = param.send_splitted_default(&client).await?.into();
-        Ok({
-            let _res = res.clone();
-            tauri::async_runtime::spawn(async move {
-                for data in _res {
-                    let _ = watches.chapter.send_online(data);
+        let app = ctx.get_app_handle::<tauri::Wry>()?;
+
+        // TODO refactor this
+        loop {
+            let mut res: ChapterResults =
+                param.clone().send_splitted_default(&client).await?.into();
+
+            if !disable_scans_groups_blacklist.unwrap_or_default() {
+                *res = crate::blacklist::filters::filter_scanlation_groups_chapters(
+                    app.clone(),
+                    std::mem::take(&mut *res),
+                )
+                .await?;
+            }
+            if !disable_users_blacklist.unwrap_or_default() {
+                *res = crate::blacklist::filters::filter_users_chapters(
+                    app.clone(),
+                    std::mem::take(&mut *res),
+                )
+                .await?;
+            }
+
+            if res.is_empty() {
+                let next_offset = res.info.offset + res.info.limit;
+                if next_offset < res.info.total {
+                    param.offset = Some(next_offset);
+                    continue;
                 }
+            }
+            break Ok({
+                let _res = res.clone();
+                tauri::async_runtime::spawn(async move {
+                    for data in _res {
+                        let _ = watches.chapter.send_online(data);
+                    }
+                });
+                res
             });
-            res
-        })
+        }
     }
     pub async fn user_logged_manga_feed_grouped(
         &self,
         ctx: &Context<'_>,
+
         feed_params: Option<FollowedMangaFeedParams>,
         manga_list_params: Option<MangaListParams>,
+        only_unread_titles: Option<bool>,
+        disable_scans_groups_blacklist: Option<bool>,
+        disable_users_blacklist: Option<bool>,
     ) -> Result<MangaChapterGroup> {
         let mut feed_params: FollowedMangaFeedParams =
             feed_from_gql_ctx::<tauri::Wry, _>(ctx, feed_params.unwrap_or_default());
@@ -78,7 +112,7 @@ impl FeedQueries {
             MangaChapterGroup::get_chapter_references_expansions_from_context(ctx);
         manga_list_params.includes =
             MangaChapterGroup::get_manga_references_expansions_from_context(ctx);
-        Ok(group_results(
+        Ok(groups_results_with_extras(
             {
                 let res = feed_params.send_splitted_default(&client).await?;
                 let _res: ChapterResults = res.clone().into();
@@ -91,6 +125,12 @@ impl FeedQueries {
             },
             ctx,
             manga_list_params,
+            GroupsResultsExtras {
+                only_unread_titles: only_unread_titles.unwrap_or_default(),
+                disable_scans_groups_blacklist: disable_scans_groups_blacklist.unwrap_or_default(),
+                disable_users_blacklist: disable_users_blacklist.unwrap_or_default(),
+                ..Default::default()
+            },
         )
         .await?)
     }
@@ -99,42 +139,78 @@ impl FeedQueries {
         ctx: &Context<'_>,
         params: CustomListMangaFeedParams,
         private: Option<bool>,
+        disable_scans_groups_blacklist: Option<bool>,
+        disable_users_blacklist: Option<bool>,
     ) -> Result<ChapterResults> {
         let mut param: CustomListMangaFeedParams = feed_from_gql_ctx::<tauri::Wry, _>(ctx, params);
-        let client = if private.unwrap_or_default() {
-            get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?
-        } else {
-            get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?
-        };
 
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?
             .deref()
             .clone();
         param.includes = <ChapterResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
-
-        let res: ChapterResults = if private.unwrap_or_default() {
-            param.send_splitted_default_with_auth(&client).await?.into()
-        } else {
-            param.send_splitted_default(&client).await?.into()
-        };
-        Ok({
-            let _res = res.clone();
-            tauri::async_runtime::spawn(async move {
-                for data in _res {
-                    let _ = watches.chapter.send_online(data);
+        let app = ctx.get_app_handle::<tauri::Wry>()?;
+        loop {
+            let client = if private.unwrap_or_default() {
+                get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx)
+                    .await?
+            } else {
+                get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?
+            };
+            let mut res: ChapterResults = if private.unwrap_or_default() {
+                param
+                    .clone()
+                    .send_splitted_default_with_auth(&client)
+                    .await?
+                    .into()
+            } else {
+                param.clone().send_splitted_default(&client).await?.into()
+            };
+            if !disable_scans_groups_blacklist.unwrap_or_default() {
+                *res = crate::blacklist::filters::filter_scanlation_groups_chapters(
+                    app.clone(),
+                    std::mem::take(&mut *res),
+                )
+                .await?;
+            }
+            if !disable_users_blacklist.unwrap_or_default() {
+                *res = crate::blacklist::filters::filter_users_chapters(
+                    app.clone(),
+                    std::mem::take(&mut *res),
+                )
+                .await?;
+            }
+            if res.is_empty() {
+                let next_offset = res.info.offset + res.info.limit;
+                if next_offset < res.info.total {
+                    param.offset = Some(next_offset);
+                    continue;
                 }
+            }
+            break Ok({
+                let _res = res.clone();
+                tauri::async_runtime::spawn(async move {
+                    for data in _res {
+                        let _ = watches.chapter.send_online(data);
+                    }
+                });
+                res
             });
-            res
-        })
+        }
     }
     pub async fn custom_list_feed_grouped(
         &self,
         ctx: &Context<'_>,
-        feed_params: CustomListMangaFeedParams,
-        manga_list_params: Option<MangaListParams>,
-        private: Option<bool>,
-        only_unread_titles: Option<bool>,
+        param: FeedCustomListFeedGroupParam,
     ) -> Result<MangaChapterGroup> {
+        let FeedCustomListFeedGroupParam {
+            feed_params,
+            manga_list_params,
+            private,
+            only_unread_titles,
+            disable_scans_groups_blacklist,
+            disable_users_blacklist,
+            disable_author_artists_blacklist,
+        } = param;
         let mut feed_params: CustomListMangaFeedParams =
             feed_from_gql_ctx::<tauri::Wry, _>(ctx, feed_params);
         let mut manga_list_params: MangaListParams =
@@ -172,8 +248,23 @@ impl FeedQueries {
             manga_list_params,
             GroupsResultsExtras {
                 only_unread_titles: only_unread_titles.unwrap_or_default(),
+                disable_scans_groups_blacklist: disable_scans_groups_blacklist.unwrap_or_default(),
+                disable_users_blacklist: disable_users_blacklist.unwrap_or_default(),
+                disable_author_artists_blacklist: disable_author_artists_blacklist
+                    .unwrap_or_default(),
             },
         )
         .await?)
     }
+}
+
+#[derive(Debug, Clone, InputObject)]
+pub struct FeedCustomListFeedGroupParam {
+    feed_params: CustomListMangaFeedParams,
+    manga_list_params: Option<MangaListParams>,
+    private: Option<bool>,
+    only_unread_titles: Option<bool>,
+    disable_scans_groups_blacklist: Option<bool>,
+    disable_users_blacklist: Option<bool>,
+    disable_author_artists_blacklist: Option<bool>,
 }

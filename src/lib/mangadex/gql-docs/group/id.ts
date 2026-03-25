@@ -5,6 +5,7 @@ const query = graphql(`
 		scanlationGroup {
 			getUnique(id: $id) {
 				id
+				isBlocked
 				attributes {
 					website
 					twitter

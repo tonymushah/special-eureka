@@ -10,6 +10,11 @@
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import FormInput from "@mangadex/componnents/theme/form/input/FormInput.svelte";
 
+	interface Props {
+		withTitle?: boolean;
+	}
+	let { withTitle }: Props = $props();
+
 	const client = getContextClient();
 	const list = derived(themes, ($ths) =>
 		Array.from($ths.entries()).map(([name, value]) => ({ name, value }))
@@ -28,7 +33,9 @@
 	}
 </script>
 
-<Title type={2}>Content Profiles</Title>
+{#if withTitle}
+	<Title type={2}>Content Profiles</Title>
+{/if}
 
 <div class="profiles">
 	{#each $list as profile}

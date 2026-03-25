@@ -15,7 +15,6 @@ pub(crate) mod logging;
 pub(crate) mod runtime;
 pub(crate) mod states;
 
-
 pub fn run() {
     #[cfg(feature = "hotpath")]
     let _hot_guard = Arc::new(Mutex::new(Some(hot_path::init_hotpath())));
@@ -62,16 +61,18 @@ pub fn run() {
                         let last_focused_window_state =
                             app_handle.state::<LastFocusedWindow<Wry>>();
                         if let Ok(mut write) = last_focused_window_state.write()
-                            && let Some(window) = app_handle.get_window(&label) {
-                                write.replace(window);
-                            };
+                            && let Some(window) = app_handle.get_window(&label)
+                        {
+                            write.replace(window);
+                        };
                     }
                 }
                 tauri::RunEvent::Exit => {
                     if let Ok(mut lock) = runtime_guard.lock()
-                        && let Some(runtime) = lock.take() {
-                            runtime.cleanup().unwrap()
-                        }
+                        && let Some(runtime) = lock.take()
+                    {
+                        runtime.cleanup().unwrap()
+                    }
                     #[cfg(feature = "hotpath")]
                     {
                         if let Ok(mut lock) = _hot_guard.lock() {

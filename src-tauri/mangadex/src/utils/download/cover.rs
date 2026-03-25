@@ -50,8 +50,8 @@ where
                 RelationshipType::Manga,
             )))
             .await?
-        {
-            raw_manga_download(&manager, manga).await?;
-        }
+    {
+        raw_manga_download(&manager, manga).await?;
+    }
     Ok(cover)
 }

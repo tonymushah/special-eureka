@@ -4,9 +4,13 @@ use mangadex_api_schema_rust::{
     v5::{GroupObject, ScanlationGroupAttributes as Attributes},
 };
 use mangadex_api_types_rust::ReferenceExpansionResource;
+use tokio::task::spawn_blocking;
 use uuid::Uuid;
 
-use crate::utils::get_mangadex_client_from_graphql_context;
+use crate::utils::{
+    get_mangadex_client_from_graphql_context,
+    traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
+};
 
 use self::{attributes::ScanlationGroupAttributes, relationships::ScanlationGroupRelationships};
 
@@ -78,6 +82,23 @@ impl ScanlationGroup {
     }
     pub async fn attributes(&self) -> ScanlationGroupAttributes {
         self.get_attributes()
+    }
+
+    pub async fn is_blocked(&self, ctx: &Context<'_>) -> crate::error::wrapped::Result<bool> {
+        let id = self.get_id();
+        let app_handle = ctx.get_app_handle::<tauri::Wry>()?.clone();
+        Ok(spawn_blocking(move || -> crate::Result<_> {
+            use diesel::prelude::*;
+            use mangadex_blacklist_raw::schema::scanlation_groups::dsl::*;
+
+            let mut connection = app_handle.blacklist_database_pool()?.get_connection()?;
+
+            Ok(diesel::select(diesel::dsl::exists(
+                scanlation_groups.filter(group_id.eq(id.as_bytes())),
+            ))
+            .get_result(&mut connection)?)
+        })
+        .await??)
     }
     pub async fn relationships(
         &self,

@@ -22,7 +22,12 @@
 </script>
 
 <section class="content">
-	<SearchContent params={listParams} {offlineStore} hideReadTitle={$hideReadTitle} />
+	<SearchContent
+		params={listParams}
+		{offlineStore}
+		hideReadTitle={$hideReadTitle}
+		disableAuthorArtitsBlacklist
+	/>
 </section>
 
 <style lang="scss">

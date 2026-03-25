@@ -49,6 +49,7 @@ const query = graphql(/* GraphQL */ `
 						attributes {
 							name
 						}
+						isBlocked
 					}
 					authors {
 						id

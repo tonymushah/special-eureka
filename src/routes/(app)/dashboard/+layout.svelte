@@ -4,7 +4,7 @@
 	import { getVersion } from "@tauri-apps/api/app";
 	import { openUrl } from "@tauri-apps/plugin-opener";
 	import { onMount, type Snippet } from "svelte";
-	import { GithubIcon } from "@lucide/svelte";
+	import { SiGithub as GithubIcon } from "@icons-pack/svelte-simple-icons";
 	import haikeiREd from "@special-eureka/dashboard/haikei/animated-1.svg";
 	import { QueryClient, QueryClientProvider } from "@tanstack/svelte-query";
 	import { SvelteQueryDevtools } from "@tanstack/svelte-query-devtools";

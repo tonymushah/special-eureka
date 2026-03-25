@@ -64,6 +64,9 @@ export default async function executeSearchQuery(
 			...params
 		})
 		.toPromise();
+	if (result.error) {
+		throw result.error;
+	}
 	if (result.data) {
 		const data = result.data.customList.currentLoggedLists;
 		return new CurrentUserCustomListResult({
@@ -82,9 +85,6 @@ export default async function executeSearchQuery(
 				};
 			})
 		});
-	}
-	if (result.error) {
-		throw result.error;
 	}
 	throw new Error("No results??");
 }
