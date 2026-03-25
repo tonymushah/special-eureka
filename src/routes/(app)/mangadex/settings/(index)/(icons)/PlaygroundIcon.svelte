@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Codesandbox } from "@lucide/svelte";
+	import { Box } from "@lucide/svelte";
 </script>
 
-<Codesandbox size="50%" />
+<Box size="50%" />
