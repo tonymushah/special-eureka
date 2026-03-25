@@ -1,5 +1,5 @@
 use async_graphql::ErrorExtensions;
-use mangadex_api_schema_rust::error::MangaDexErrorResponse_ as MangaDexError_;
+use mangadex_api_schema_rust::error::MangaDexError as MangaDexError_;
 use std::error::Error as StdErrorTrait;
 use uuid::Uuid;
 
