@@ -12,7 +12,7 @@ anyhow = "1"
 uuid = "1"
 serde = "1.0"
 thiserror = "1"
-reqwest = "0.12"
+reqwest = { version = "0.13", default-features = false, features = ["gzip", "zstd", "http3", "http2", "brotli", "deflate", "rustls"]}
 bytes = "1"
 async-graphql = "7"
 time = "0.3"
@@ -50,10 +50,11 @@ libsqlite3-sys = { version = "0" }
 mangadex-blacklist-raw = { path = "./crates/mangadex-blacklist" }
 diesel_migrations = "2"
 diesel-sqlite-utils = { path = "./crates/diesel-sqlite-utils" }
+non-exhaustive = "0.1"
 
 # Temporary fix before upgrading reqwest to v0.13.x
-[patch.crates-io]
-reqwest = { git = "https://github.com/seanmonstar/reqwest.git", branch = "0.12.x" }
+# [patch.crates-io]
+# reqwest = { git = "https://github.com/seanmonstar/reqwest.git", branch = "0.12.x" }
 
 [workspace.dependencies.tauri-plugin-notification]
 git = "https://github.com/tauri-apps/plugins-workspace"

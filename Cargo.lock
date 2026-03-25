@@ -296,6 +296,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "async-compression"
+version = "0.4.41"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d0f9ee0f6e02ffd7ad5816e9464499fba7b3effd01123b515c41d1697c43dad1"
+dependencies = [
+ "compression-codecs",
+ "compression-core",
+ "pin-project-lite",
+ "tokio",
+]
+
+[[package]]
 name = "async-executor"
 version = "1.14.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -587,6 +599,28 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "375082f007bd67184fb9c0374614b29f9aaa604ec301635f72338bb65386a53d"
 dependencies = [
  "arrayvec",
+]
+
+[[package]]
+name = "aws-lc-rs"
+version = "1.16.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a054912289d18629dc78375ba2c3726a3afe3ff71b4edba9dedfca0e3446d1fc"
+dependencies = [
+ "aws-lc-sys",
+ "zeroize",
+]
+
+[[package]]
+name = "aws-lc-sys"
+version = "0.39.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1fa7e52a4c5c547c741610a2c6f123f3881e409b714cd27e6798ef020c514f0a"
+dependencies = [
+ "cc",
+ "cmake",
+ "dunce",
+ "fs_extra",
 ]
 
 [[package]]
@@ -980,6 +1014,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "cmake"
+version = "0.1.57"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "75443c44cd6b379beb8c5b45d85d0773baf31cce901fe7bb252f4eff3008ef7d"
+dependencies = [
+ "cc",
+]
+
+[[package]]
 name = "color_quant"
 version = "1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1009,6 +1052,26 @@ dependencies = [
  "bytes",
  "memchr",
 ]
+
+[[package]]
+name = "compression-codecs"
+version = "0.4.37"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "eb7b51a7d9c967fc26773061ba86150f19c50c0d65c887cb1fbe295fd16619b7"
+dependencies = [
+ "brotli",
+ "compression-core",
+ "flate2",
+ "memchr",
+ "zstd",
+ "zstd-safe",
+]
+
+[[package]]
+name = "compression-core"
+version = "0.4.31"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "75984efb6ed102a0d42db99afb6c1948f0380d1d91808d5529916e6c08b49d8d"
 
 [[package]]
 name = "concurrent-queue"
@@ -1802,10 +1865,10 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ab39b7c6583a9683bc932d5b032387da8ef30a0209d1edc5d27e8cf04cb315a2"
 dependencies = [
  "ciborium",
- "eureka-mmanager-core",
+ "eureka-mmanager-core 0.1.5",
  "image",
- "mangadex-api-schema-rust",
- "mangadex-api-types-rust",
+ "mangadex-api-schema-rust 0.10.2",
+ "mangadex-api-types-rust 0.10.1",
  "regex",
  "serde",
  "tar",
@@ -1934,25 +1997,23 @@ checksum = "dea2df4cf52843e0452895c455a1a2cfbb842a1e7329671acf418fdc53ed4c59"
 
 [[package]]
 name = "eureka-mmanager"
-version = "0.4.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fb1cd253402f32f00d0b5fda714e5e2df115bf0324013413b5a6e17a1cd3156f"
+version = "1.0.0"
+source = "git+https://github.com/tonymushah/eureka-mmanager.git#876b847b615341aa6c3657aed709911f383bf098"
 dependencies = [
  "actix",
  "bytes",
- "eureka-mmanager-core",
+ "eureka-mmanager-core 1.0.0",
  "futures-util",
  "itertools",
  "log",
- "mangadex-api",
- "mangadex-api-input-types",
- "mangadex-api-schema-rust",
- "mangadex-api-types-rust",
+ "mangadex-api 4.2.0",
+ "mangadex-api-input-types 1.0.1",
+ "mangadex-api-schema-rust 1.0.0",
+ "mangadex-api-types-rust 1.0.1",
  "parking_lot",
- "reqwest 0.12.28",
+ "reqwest 0.13.2",
  "serde",
  "serde_json",
- "shrink_fit_wrapper",
  "thiserror 2.0.18",
  "tokio",
  "tokio-stream",
@@ -1967,13 +2028,34 @@ version = "0.1.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f4eb3a08bc4b7f4c862fafe2ad45feb7f1d39e2422693070a14400395ef1d06a"
 dependencies = [
+ "bytes",
+ "ciborium",
+ "itertools",
+ "mangadex-api-input-types 0.6.1",
+ "mangadex-api-schema-rust 0.10.2",
+ "mangadex-api-types-rust 0.10.1",
+ "rand 0.10.0",
+ "regex",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.18",
+ "url",
+ "uuid",
+]
+
+[[package]]
+name = "eureka-mmanager-core"
+version = "1.0.0"
+source = "git+https://github.com/tonymushah/eureka-mmanager.git#876b847b615341aa6c3657aed709911f383bf098"
+dependencies = [
  "actix",
  "bytes",
  "ciborium",
  "itertools",
- "mangadex-api-input-types",
- "mangadex-api-schema-rust",
- "mangadex-api-types-rust",
+ "mangadex-api-input-types 1.0.1",
+ "mangadex-api-schema-rust 1.0.0",
+ "mangadex-api-types-rust 1.0.1",
+ "non-exhaustive",
  "rand 0.10.0",
  "regex",
  "serde",
@@ -2052,7 +2134,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "72071c90539e0d88dc1571b0ba33471ce4232ebb81385131347b84d1bd58380e"
 dependencies = [
  "bytes",
- "reqwest 0.12.28",
+ "reqwest 0.13.2",
  "scraper",
  "thiserror 1.0.69",
  "url",
@@ -2210,6 +2292,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "fs_extra"
+version = "1.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "42703706b716c37f96a77aea830392ad231f44c9e9a67872fa5548707e11b11c"
+
+[[package]]
 name = "futf"
 version = "0.1.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2220,12 +2308,28 @@ dependencies = [
 ]
 
 [[package]]
+name = "futures"
+version = "0.3.32"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8b147ee9d1f6d097cef9ce628cd2ee62288d963e16fb287bd9286455b241382d"
+dependencies = [
+ "futures-channel",
+ "futures-core",
+ "futures-executor",
+ "futures-io",
+ "futures-sink",
+ "futures-task",
+ "futures-util",
+]
+
+[[package]]
 name = "futures-channel"
 version = "0.3.32"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "07bbe89c50d7a535e539b8c17bc0b49bdb77747034daa8087407d655f3f7cc1d"
 dependencies = [
  "futures-core",
+ "futures-sink",
 ]
 
 [[package]]
@@ -2299,6 +2403,7 @@ version = "0.3.32"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "389ca41296e6190b48053de0321d02a77f32f8a5d2461dd38762c0593805c6d6"
 dependencies = [
+ "futures-channel",
  "futures-core",
  "futures-io",
  "futures-macro",
@@ -2698,6 +2803,34 @@ dependencies = [
  "tokio",
  "tokio-util",
  "tracing",
+]
+
+[[package]]
+name = "h3"
+version = "0.0.8"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "10872b55cfb02a821b69dc7cf8dc6a71d6af25eb9a79662bec4a9d016056b3be"
+dependencies = [
+ "bytes",
+ "fastrand",
+ "futures-util",
+ "http",
+ "pin-project-lite",
+ "tokio",
+]
+
+[[package]]
+name = "h3-quinn"
+version = "0.0.10"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8b2e732c8d91a74731663ac8479ab505042fbf547b9a207213ab7fbcbfc4f8b4"
+dependencies = [
+ "bytes",
+ "futures",
+ "h3",
+ "quinn",
+ "tokio",
+ "tokio-util",
 ]
 
 [[package]]
@@ -3654,15 +3787,35 @@ version = "3.4.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c6fb218b3db96dae9b1d1e249be5c4bb172c89e37bc46bc3cbdf5187aec38050"
 dependencies = [
- "async-stream",
- "bytes",
  "derive_builder",
- "mangadex-api-schema-rust",
- "mangadex-api-types-rust",
+ "mangadex-api-schema-rust 0.10.2",
+ "mangadex-api-types-rust 0.10.1",
  "reqwest 0.12.28",
  "serde",
  "serde_json",
- "serde_qs",
+ "serde_qs 0.13.0",
+ "thiserror 2.0.18",
+ "time",
+ "url",
+ "uuid",
+]
+
+[[package]]
+name = "mangadex-api"
+version = "4.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1ca9806f2fb48aa46d4a6f4ab4bef759c2ad0d133dd938611175aa89ed1427c7"
+dependencies = [
+ "async-stream",
+ "bytes",
+ "derive_builder",
+ "mangadex-api-schema-rust 1.0.0",
+ "mangadex-api-types-rust 1.0.1",
+ "non-exhaustive",
+ "reqwest 0.13.2",
+ "serde",
+ "serde_json",
+ "serde_qs 1.1.0",
  "thiserror 2.0.18",
  "time",
  "tokio",
@@ -3677,12 +3830,27 @@ version = "0.6.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "fa916f18ef5bfb2ab874c6cb66d9cd8a79da2d45f1340fdbe73b7bc3e619c643"
 dependencies = [
- "async-graphql",
- "mangadex-api",
- "mangadex-api-schema-rust",
- "mangadex-api-types-rust",
+ "mangadex-api 3.4.6",
+ "mangadex-api-schema-rust 0.10.2",
+ "mangadex-api-types-rust 0.10.1",
  "serde",
  "tokio",
+ "url",
+ "uuid",
+]
+
+[[package]]
+name = "mangadex-api-input-types"
+version = "1.0.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ce1ea675a2ba89ac2229a47e14923c2240a77dde8aef89febe0a680225ac0e56"
+dependencies = [
+ "async-graphql",
+ "mangadex-api 4.2.0",
+ "mangadex-api-schema-rust 1.0.0",
+ "mangadex-api-types-rust 1.0.1",
+ "non-exhaustive",
+ "serde",
  "url",
  "uuid",
 ]
@@ -3693,11 +3861,25 @@ version = "0.10.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8483e0669c60b767da72e6580e4be6d3fde5fa5a1c2541e3415ab88dea128ea9"
 dependencies = [
- "mangadex-api-types-rust",
+ "mangadex-api-types-rust 0.10.1",
  "reqwest 0.12.28",
  "serde",
  "serde_json",
- "serde_qs",
+ "serde_qs 0.13.0",
+ "thiserror 2.0.18",
+ "url",
+ "uuid",
+]
+
+[[package]]
+name = "mangadex-api-schema-rust"
+version = "1.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "015e13c17d2fd685b7af1be11c8c693e6549c2598da6b13827b10247f28a2360"
+dependencies = [
+ "mangadex-api-types-rust 1.0.1",
+ "serde",
+ "serde_json",
  "thiserror 2.0.18",
  "url",
  "uuid",
@@ -3709,13 +3891,25 @@ version = "0.10.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5fbaf75cc07fc33f5fd2df6388e779f406d597c9255e2d1485667aafea5bdc94"
 dependencies = [
- "async-graphql",
  "derive_builder",
  "reqwest 0.12.28",
  "serde",
  "thiserror 2.0.18",
  "time",
  "url",
+ "uuid",
+]
+
+[[package]]
+name = "mangadex-api-types-rust"
+version = "1.0.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "80f2ba4508c6ff18ad904530358587b58a3df4e8b6b234aaf96f93552ec6f68c"
+dependencies = [
+ "async-graphql",
+ "serde",
+ "thiserror 2.0.18",
+ "time",
  "uuid",
 ]
 
@@ -4017,6 +4211,12 @@ checksum = "df9761775871bdef83bee530e60050f7e54b1105350d6884eb0fb4f46c2f9405"
 dependencies = [
  "memchr",
 ]
+
+[[package]]
+name = "non-exhaustive"
+version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "daee4e13b993996fb01f271f3512b3d07f6bacbb64cf1edeb705d92c8a1881ff"
 
 [[package]]
 name = "nonzero_ext"
@@ -5057,6 +5257,7 @@ checksum = "b9e20a958963c291dc322d98411f541009df2ced7b5a4f2bd52337638cfccf20"
 dependencies = [
  "bytes",
  "cfg_aliases",
+ "futures-io",
  "pin-project-lite",
  "quinn-proto",
  "quinn-udp",
@@ -5075,6 +5276,7 @@ version = "0.11.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "434b42fec591c96ef50e21e886936e66d3cc3f737104fdb9b737c40ffb94c098"
 dependencies = [
+ "aws-lc-rs",
  "bytes",
  "getrandom 0.3.4",
  "lru-slab",
@@ -5440,7 +5642,8 @@ checksum = "dc897dd8d9e8bd1ed8cdad82b5966c3e0ecae09fb1907d58efaa013543185d0a"
 [[package]]
 name = "reqwest"
 version = "0.12.28"
-source = "git+https://github.com/seanmonstar/reqwest.git?branch=0.12.x#d97859910c357827ad5993d37ce750ad595f4fff"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "eddd3ca559203180a307f12d114c268abf583f59b03cb906fd0b3ff8646c1147"
 dependencies = [
  "base64 0.22.1",
  "bytes",
@@ -5474,14 +5677,12 @@ dependencies = [
  "tokio",
  "tokio-native-tls",
  "tokio-rustls",
- "tokio-util",
  "tower",
  "tower-http",
  "tower-service",
  "url",
  "wasm-bindgen",
  "wasm-bindgen-futures",
- "wasm-streams 0.4.2",
  "web-sys",
  "webpki-roots",
 ]
@@ -5494,8 +5695,14 @@ checksum = "ab3f43e3283ab1488b624b44b0e988d0acea0b3214e694730a055cb6b2efa801"
 dependencies = [
  "base64 0.22.1",
  "bytes",
+ "cookie",
+ "cookie_store",
+ "encoding_rs",
  "futures-core",
  "futures-util",
+ "h2",
+ "h3",
+ "h3-quinn",
  "http",
  "http-body",
  "http-body-util",
@@ -5504,13 +5711,17 @@ dependencies = [
  "hyper-util",
  "js-sys",
  "log",
+ "mime",
+ "mime_guess",
  "percent-encoding",
  "pin-project-lite",
+ "quinn",
  "rustls",
  "rustls-pki-types",
  "rustls-platform-verifier",
  "serde",
  "serde_json",
+ "serde_urlencoded",
  "sync_wrapper",
  "tokio",
  "tokio-rustls",
@@ -5521,7 +5732,7 @@ dependencies = [
  "url",
  "wasm-bindgen",
  "wasm-bindgen-futures",
- "wasm-streams 0.5.0",
+ "wasm-streams",
  "web-sys",
 ]
 
@@ -5623,6 +5834,7 @@ version = "0.23.37"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "758025cb5fccfd3bc2fd74708fd4682be41d99e5dff73c377c0646c6012c73a4"
 dependencies = [
+ "aws-lc-rs",
  "once_cell",
  "ring",
  "rustls-pki-types",
@@ -5686,6 +5898,7 @@ version = "0.103.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "df33b2b81ac578cabaf06b89b0631153a3f416b0a886e8a7a1707fb51abbd1ef"
 dependencies = [
+ "aws-lc-rs",
  "ring",
  "rustls-pki-types",
  "untrusted",
@@ -5959,6 +6172,18 @@ dependencies = [
  "percent-encoding",
  "serde",
  "thiserror 1.0.69",
+]
+
+[[package]]
+name = "serde_qs"
+version = "1.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3c742cd44662647326f86b514eadcc227fff4ce684dbbdaf1943f758d5ea058c"
+dependencies = [
+ "itoa",
+ "percent-encoding",
+ "ryu",
+ "serde",
 ]
 
 [[package]]
@@ -6813,7 +7038,7 @@ dependencies = [
  "enum-kinds",
  "enum-repr",
  "eureka-mmanager",
- "eureka-mmanager-core",
+ "eureka-mmanager-core 0.1.5",
  "favicon-picker",
  "flate2",
  "futures-util",
@@ -6823,17 +7048,17 @@ dependencies = [
  "impl-trait-for-tuples",
  "itertools",
  "log",
- "mangadex-api",
- "mangadex-api-input-types",
- "mangadex-api-schema-rust",
- "mangadex-api-types-rust",
+ "mangadex-api 4.2.0",
+ "mangadex-api-input-types 1.0.1",
+ "mangadex-api-schema-rust 1.0.0",
+ "mangadex-api-types-rust 1.0.1",
  "mangadex-blacklist-raw",
  "mizuki",
  "mizuki-build",
  "once_cell",
  "rand 0.9.2",
  "regex",
- "reqwest 0.12.28",
+ "reqwest 0.13.2",
  "serde",
  "serde-xml-rs",
  "serde_json",
@@ -7415,13 +7640,18 @@ version = "0.6.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d4e6559d53cc268e5031cd8429d05415bc4cb4aefc4aa5d6cc35fbf5b924a1f8"
 dependencies = [
+ "async-compression",
  "bitflags 2.11.0",
  "bytes",
+ "futures-core",
  "futures-util",
  "http",
  "http-body",
+ "http-body-util",
  "iri-string",
  "pin-project-lite",
+ "tokio",
+ "tokio-util",
  "tower",
  "tower-layer",
  "tower-service",
@@ -7859,19 +8089,6 @@ dependencies = [
  "indexmap 2.13.0",
  "wasm-encoder",
  "wasmparser",
-]
-
-[[package]]
-name = "wasm-streams"
-version = "0.4.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "15053d8d85c7eccdbefef60f06769760a563c7f0a9d6902a13d35c7800b0ad65"
-dependencies = [
- "futures-util",
- "js-sys",
- "wasm-bindgen",
- "wasm-bindgen-futures",
- "web-sys",
 ]
 
 [[package]]

@@ -21,15 +21,14 @@ reqwest.workspace = true
 log.workspace = true
 once_cell = "1"
 serde_json.workspace = true
-mangadex-api = { version = "3.4", default-features = false, features = [
-	"rw-multi-thread",
-	"serialize",
+mangadex-api = { version = "4.2", default-features = false, features = [
+	"oauth",
 	"utils",
 ] }
-mangadex-api-schema-rust = { version = "0.10", default-features = false, features = [
+mangadex-api-schema-rust = { version = "1", default-features = false, features = [
 	"serialize",
 ] }
-mangadex-api-types-rust = { version = "0.10", default-features = false, features = [
+mangadex-api-types-rust = { version = "1", default-features = false, features = [
 	"async-graphql",
 ] }
 async-graphql = {workspace = true, features = ["time"]}
@@ -70,13 +69,13 @@ diesel = { workspace = true, features = ["sqlite", "returning_clauses_for_sqlite
 mangadex-blacklist-raw = { workspace = true }
 diesel_migrations.workspace = true
 diesel-sqlite-utils.workspace = true
+non-exhaustive.workspace = true
 
 [dependencies.eureka-mmanager]
-version = "0.4"
-default-features = false
+git = "https://github.com/tonymushah/eureka-mmanager.git"
 
 [dependencies.mangadex-api-input-types]
-version = "0.6"
+version = "1"
 features = ["mangadex-api-resolver", "async-graphql"]
 
 [dependencies.mizuki]
