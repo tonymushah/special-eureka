@@ -153,7 +153,7 @@ pub enum Error {
     #[error("Related cover_art not found")]
     RelatedCoverArtNotFound,
     #[error(transparent)]
-    RelationshipConversion(mangadex_api_schema_rust::RelationshipConversionError),
+    RelationshipConversion(mangadex_api_schema_rust::error::RelationshipConversionError),
     #[error(transparent)]
     UploadQueue(#[from] crate::upload::UploadQueueError),
     #[error("Internal upload session {} not found", .0)]
