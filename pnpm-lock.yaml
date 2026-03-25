@@ -54,7 +54,7 @@ importers:
         version: 7.2.0(@sveltejs/kit@2.55.0(@sveltejs/vite-plugin-svelte@7.0.0(svelte@5.55.0)(vite@8.0.2(@types/node@25.5.0)(esbuild@0.27.4)(jiti@2.6.1)(less@4.6.4)(sass@1.98.0)(yaml@2.8.3)))(svelte@5.55.0)(typescript@6.0.2)(vite@8.0.2(@types/node@25.5.0)(esbuild@0.27.4)(jiti@2.6.1)(less@4.6.4)(sass@1.98.0)(yaml@2.8.3)))(svelte@5.55.0)
       '@lucide/svelte':
         specifier: ^1.6.0
-        version: 1.6.0(svelte@5.55.0)
+        version: 1.7.0(svelte@5.55.0)
       '@panzoom/panzoom':
         specifier: ^4.6.1
         version: 4.6.1
@@ -1254,8 +1254,8 @@ packages:
     resolution: {integrity: sha512-2v75bu2vJB0xf7+qSAu0xcUyCYqzc7KeRE1RcKSpOGQTV9UpCqCs/xCsFWLUGnZRWb1VU6XYf+l6GJsDUW9pRQ==}
     engines: {node: ^16.14 || >=18}
 
-  '@lucide/svelte@1.6.0':
-    resolution: {integrity: sha512-5pH6MHQTVy/IwO8YNN2Usj47p9D/dM/srAAO9Hr2r33/yEoh6y7R2N7eCE4WtiybXOQJO14KrtVK6PGUhVHJJw==}
+  '@lucide/svelte@1.7.0':
+    resolution: {integrity: sha512-YytBKOUBGox7yWcykZnYxOkn5WpR5G1qYXLYXV/j1B79SOTTEKzB+s5yF5Rq9l9OkweDStNH2b4yTqfvhEhV8g==}
     peerDependencies:
       svelte: ^5
 
@@ -5518,7 +5518,7 @@ snapshots:
       recast: 0.23.11
       svelte: 5.55.0
 
-  '@lucide/svelte@1.6.0(svelte@5.55.0)':
+  '@lucide/svelte@1.7.0(svelte@5.55.0)':
     dependencies:
       svelte: 5.55.0
 
