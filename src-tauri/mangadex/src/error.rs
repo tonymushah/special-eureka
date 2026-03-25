@@ -199,7 +199,7 @@ pub enum Error {
     UserNotFound(uuid::Uuid),
     #[error("Cannot fetch user attributes")]
     FetchUserAttributes,
-    #[error("Expect {} got none", .0)]
+    #[error("Expect {} got None", .0)]
     ShouldExpect(String),
 }
 
