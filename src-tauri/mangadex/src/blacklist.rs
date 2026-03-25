@@ -29,6 +29,6 @@ impl BlacklistDatabasePool {
 }
 
 pub fn emit_blacklist_change<R: Runtime>(app: &AppHandle<R>) -> crate::Result<()> {
-    app.emit("org.mangadex.blacklist.change", ())?;
+    app.emit("org_mangadex_blacklist_change", ())?;
     Ok(())
 }
