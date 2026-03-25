@@ -35,7 +35,7 @@ pub enum ChapterUploadError {
     #[error("No files has been uploaded")]
     NoFileUploaded,
     #[error("Got {} errors while uploading files", .0.len())]
-    UploadFiles(Vec<mangadex_api_schema_rust::v5::MangaDexErrorResponse>),
+    UploadFiles(Vec<mangadex_api_schema_rust::error::MangaDexError>),
 }
 
 #[derive(Debug, Clone, Copy)]
