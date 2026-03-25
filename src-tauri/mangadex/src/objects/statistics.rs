@@ -55,10 +55,10 @@ pub struct StatisticsComments {
 
 impl From<StatisticsComments> for Comments {
     fn from(value: StatisticsComments) -> Self {
-        Self {
+        non_exhaustive::non_exhaustive!(Self {
             thread_id: value.thread_id,
             replies_count: value.replies_count,
-        }
+        })
     }
 }
 
