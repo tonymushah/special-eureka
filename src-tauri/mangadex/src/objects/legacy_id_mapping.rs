@@ -28,7 +28,7 @@ impl Clone for LegacyIdMapping {
         Self(non_exhaustive::non_exhaustive!(LMIAObj {
             type_: self.type_,
             id: self.id,
-            attributes,
+            attributes: attributes,
             relationships: self.relationships.clone(),
         }))
     }
