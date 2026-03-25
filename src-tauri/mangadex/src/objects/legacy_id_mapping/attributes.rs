@@ -44,8 +44,9 @@ impl Clone for LegacyMappingIdAttributes {
 #[Object]
 #[cfg_attr(feature = "hotpath", hotpath::measure_all)]
 impl LegacyMappingIdAttributes {
-    pub async fn type_(&self) -> LegacyMappingType {
+    pub async fn type_(&self) -> crate::error::wrapped::Result<LegacyMappingType> {
         self.type_
+            .ok_or(crate::Error::ShouldExpect("LegacyMappingType".into()).into())
     }
     pub async fn legacy_id(&self) -> u32 {
         self.legacy_id
