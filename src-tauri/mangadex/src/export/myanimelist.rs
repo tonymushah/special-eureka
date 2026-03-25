@@ -203,6 +203,7 @@ where
             ReadingStatus::PlanToRead => serializer.serialize_str("Plan to Read"),
             ReadingStatus::Reading => serializer.serialize_str("Reading"),
             ReadingStatus::ReReading => serializer.serialize_str("Re-Reading"),
+            _ => serializer.serialize_none(),
         }
     } else {
         serializer.serialize_str("")
@@ -315,14 +316,20 @@ async fn export_core<R: Runtime>(options: ExportCoreOptions<'_, R>) -> crate::Re
                 if status.is_none() && !options.allow_none_status {
                     return None;
                 }
-                let priority = status.map(|status| match status {
-                    ReadingStatus::Completed => priorities.completed,
-                    ReadingStatus::Dropped => priorities.dropped,
-                    ReadingStatus::OnHold => priorities.on_hold,
-                    ReadingStatus::PlanToRead => priorities.plan_to_read,
-                    ReadingStatus::Reading => priorities.reading,
-                    ReadingStatus::ReReading => priorities.re_reading,
-                });
+                let priority = if let Some(status) = status {
+                    match status {
+                        ReadingStatus::Completed => priorities.completed,
+                        ReadingStatus::Dropped => priorities.dropped,
+                        ReadingStatus::OnHold => priorities.on_hold,
+                        ReadingStatus::PlanToRead => priorities.plan_to_read,
+                        ReadingStatus::Reading => priorities.reading,
+                        ReadingStatus::ReReading => priorities.re_reading,
+                        // TODO add if missing in the future
+                        _ => return None,
+                    }
+                } else {
+                    return None;
+                };
                 let times_read: u32 = match status {
                     Some(ReadingStatus::Completed)
                     | Some(ReadingStatus::Dropped)
