@@ -8314,6 +8314,7 @@ export type DefaultMangaSearchQueryQueryVariables = Exact<{
 	params: MangaListParams;
 	excludeContentProfile?: InputMaybe<Scalars["Boolean"]["input"]>;
 	hideReadTitle?: InputMaybe<Scalars["Boolean"]["input"]>;
+	disableAuthorArtistsBlacklist?: InputMaybe<Scalars["Boolean"]["input"]>;
 }>;
 
 export type DefaultMangaSearchQueryQuery = {
@@ -29775,6 +29776,14 @@ export const DefaultMangaSearchQueryDocument = {
 					kind: "VariableDefinition",
 					variable: { kind: "Variable", name: { kind: "Name", value: "hideReadTitle" } },
 					type: { kind: "NamedType", name: { kind: "Name", value: "Boolean" } }
+				},
+				{
+					kind: "VariableDefinition",
+					variable: {
+						kind: "Variable",
+						name: { kind: "Name", value: "disableAuthorArtistsBlacklist" }
+					},
+					type: { kind: "NamedType", name: { kind: "Name", value: "Boolean" } }
 				}
 			],
 			selectionSet: {
@@ -29815,6 +29824,20 @@ export const DefaultMangaSearchQueryDocument = {
 											value: {
 												kind: "Variable",
 												name: { kind: "Name", value: "hideReadTitle" }
+											}
+										},
+										{
+											kind: "Argument",
+											name: {
+												kind: "Name",
+												value: "disableAuthorArtistsBlacklist"
+											},
+											value: {
+												kind: "Variable",
+												name: {
+													kind: "Name",
+													value: "disableAuthorArtistsBlacklist"
+												}
 											}
 										}
 									],

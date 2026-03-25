@@ -15,6 +15,7 @@ type MangaSearchResultConstuctorParams = {
 	offset: number;
 	limit: number;
 	total: number;
+	disableAuthorArtistsBlacklist?: boolean;
 };
 
 export class MangaSearchResult extends AbstractSearchResult<MangaListContentItemProps> {
@@ -76,14 +77,16 @@ export default async function executeSearchQuery(
 	params: MangaListParams,
 	offline: boolean = false,
 	excludeContentProfile?: boolean,
-	hideReadTitle?: boolean
+	hideReadTitle?: boolean,
+	disableAuthorArtistsBlacklist?: boolean
 ): Promise<AbstractSearchResult<MangaListContentItemProps>> {
 	let res: SomeRes | undefined = undefined;
 	if (offline) {
 		const result = await client
 			.query(offlineQuery, {
 				params,
-				excludeContentProfile
+				excludeContentProfile,
+				disableAuthorArtistsBlacklist
 			})
 			.toPromise();
 		if (result.error) {
@@ -122,7 +125,8 @@ export default async function executeSearchQuery(
 			.query(defaultQuery, {
 				params,
 				excludeContentProfile,
-				hideReadTitle
+				hideReadTitle,
+				disableAuthorArtistsBlacklist
 			})
 			.toPromise();
 		if (result.error) {

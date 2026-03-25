@@ -5,12 +5,14 @@ export const defaultQuery = graphql(`
 		$params: MangaListParams!
 		$excludeContentProfile: Boolean
 		$hideReadTitle: Boolean
+		$disableAuthorArtistsBlacklist: Boolean
 	) {
 		manga {
 			list(
 				params: $params
 				excludeContentProfile: $excludeContentProfile
 				onlyUnread: $hideReadTitle
+				disableAuthorArtistsBlacklist: $disableAuthorArtistsBlacklist
 			) {
 				limit
 				offset
