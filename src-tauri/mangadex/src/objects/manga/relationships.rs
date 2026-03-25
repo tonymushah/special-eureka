@@ -1,15 +1,15 @@
 use async_graphql::Object;
 use mangadex_api_schema_rust::{
     ApiObjectNoRelationships,
+    error::RelationshipConversionError,
     v5::{
         AuthorAttributes, CoverAttributes, MangaAttributes as Attributes, RelatedAttributes,
         Relationship, UserAttributes,
     },
-    error::RelationshipConversionError
 };
-use mangadex_api_types_rust::{RelationshipType};
-use uuid::Uuid;
+use mangadex_api_types_rust::RelationshipType;
 use non_exhaustive::non_exhaustive;
+use uuid::Uuid;
 
 use crate::objects::{author::Author, cover::Cover, manga::MangaObject, user::User};
 
@@ -148,7 +148,7 @@ impl MangaRelationships {
                     RelationshipConversionError,
                 > {
                     if let Some(RelatedAttributes::User(ref attributes)) = value.attributes {
-                        Ok(non_exhaustive(ApiObjectNoRelationships<UserAttributes> {
+                        Ok(non_exhaustive!(ApiObjectNoRelationships<UserAttributes> {
                             id: value.id,
                             type_: RelationshipType::User,
                             attributes: attributes.clone(),
