@@ -105,14 +105,14 @@ pub trait SendSplitted: SendableParam + SplittableParam {
                     results.push(val.send(client).await?);
                 }
                 Ok(results.into_iter().fold(
-                    Results {
+                    non_exhaustive::non_exhaustive!(Results<<Self as SendableParam>::Item> {
                         response: mangadex_api_types_rust::ResponseType::Collection,
                         offset: self.offset(),
                         total: 0,
                         limit: 0,
                         data: Vec::new(),
                         result: mangadex_api_types_rust::ResultType::Ok,
-                    },
+                    }),
                     |mut agg, res| {
                         agg.total = res.total;
                         agg.limit += res.limit;
@@ -150,14 +150,14 @@ pub trait SendSplitted: SendableParam + SplittableParam {
                     results.push(val.send_with_auth(client).await?);
                 }
                 Ok(results.into_iter().fold(
-                    Results {
+                    non_exhaustive::non_exhaustive!(Results<<Self as SendableParam>::Item> {
                         response: mangadex_api_types_rust::ResponseType::Collection,
                         offset: self.offset(),
                         total: 0,
                         limit: 0,
                         data: Vec::new(),
                         result: mangadex_api_types_rust::ResultType::Ok,
-                    },
+                    }),
                     |mut agg, res| {
                         agg.total = res.total;
                         agg.limit += res.limit;
