@@ -108,7 +108,7 @@ where
 {
     type Error = TryFromIntError;
     fn try_from(value: Collection<T>) -> Result<Self, Self::Error> {
-        Ok(non_exhaustive::non_exhaustive!(Self<T> {
+        Ok(non_exhaustive::non_exhaustive!(Self {
             result: mangadex_api_types_rust::ResultType::Ok,
             response: mangadex_api_types_rust::ResponseType::Collection,
             data: value.data,
