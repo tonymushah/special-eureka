@@ -31,7 +31,7 @@ pub fn init_client_state<R: Runtime>(
     if let Some(info) = cis.as_ref().map(|i| -> Info { i.clone().into() }) {
         crate::utils::block_on(async move {
             _ci.set_client_info(&info).await?;
-            Ok::<(), mangadex_api_types_rust::error::Error>(())
+            Ok::<(), mangadex_api::error::Error>(())
         })?;
     }
     if let Some(auth_tokens) = r_token_store.as_ref().and_then(|i| -> Option<AuthTokens> {
@@ -61,7 +61,7 @@ pub fn init_client_state<R: Runtime>(
                     log::error!("{err}");
                 }
             }
-            Ok::<(), mangadex_api_types_rust::error::Error>(())
+            Ok::<(), mangadex_api::error::Error>(())
         });
     }
     app.manage(last_time_fetched);
