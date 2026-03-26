@@ -26,7 +26,7 @@
 		"cargo:clippy": "cargo clippy",
 		"cargo:build": "cargo build",
 		"build:no-bundle": "pnpm vite:build && cargo build -r --no-default-features -F custom-protocol",
-		"build:no-bundle:next": "RUSTFLAGS='--cfg reqwest_unstable' pnpm vite:build && cargo build -r --no-default-features -F custom-protocol,next",
+		"build:no-bundle:next": "pnpm vite:build &&RUSTFLAGS='--cfg reqwest_unstable' cargo build -r --no-default-features -F custom-protocol,next",
 		"clippy": "cargo clippy",
 		"clippy:next": "RUSTFLAGS='--cfg reqwest_unstable' cargo clippy -F next"
 	},
