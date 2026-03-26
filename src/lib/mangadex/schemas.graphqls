@@ -537,6 +537,7 @@ input ChapterListParams {
 	"""
 	includeFuturePublishAt: IncludeFuturePublishAt
 	order: ChapterSortOrder
+	includeUnavailable: IncludeUnvailable
 }
 
 input ChapterListWithGroupByMangaParam {
@@ -699,6 +700,10 @@ input CommitUploadSessionParam {
 	"""
 	externalUrl: Url = null
 	publishAt: MangaDexDateTime = null
+	"""
+	[`true`] if not set
+	"""
+	termAccepted: Boolean
 }
 
 type ContentProfile {
@@ -1114,6 +1119,7 @@ input CustomListMangaFeedParams {
 	publishAtSince: MangaDexDateTime = null
 	order: MangaFeedSortOrder = null
 	includes: [ReferenceExpansionResource!]! = []
+	includeUnavailable: IncludeUnvailable
 }
 
 type CustomListMutations {
@@ -1385,6 +1391,7 @@ input FollowedMangaFeedParams {
 	includeEmptyPages: IncludeFuturePages
 	includeFuturePublishAt: IncludeFuturePublishAt
 	includeExternalUrl: IncludeExternalUrl
+	includeUnavailable: IncludeUnvailable
 }
 
 type FollowsQueries {
@@ -1488,6 +1495,11 @@ enum IncludeFuturePublishAt {
 }
 
 enum IncludeFutureUpdates {
+	INCLUDE
+	EXCLUDE
+}
+
+enum IncludeUnvailable {
 	INCLUDE
 	EXCLUDE
 }
@@ -1902,6 +1914,7 @@ input MangaFeedParams {
 	includeEmptyPages: IncludeFuturePages = null
 	includeFuturePublishAt: IncludeFuturePublishAt = null
 	includeExternalUrl: IncludeExternalUrl = null
+	includeUnavailable: IncludeUnvailable
 }
 
 input MangaFeedSortOrder @oneOf {
@@ -1977,6 +1990,7 @@ input MangaListParams {
 	Scanlation group ID.
 	"""
 	group: UUID
+	hasUnavailableChapters: Boolean
 }
 
 enum MangaListStyle {
@@ -2174,6 +2188,7 @@ input MangaSortOrder @oneOf {
 	title: OrderDirection
 	updatedAt: OrderDirection
 	year: OrderDirection
+	rating: OrderDirection
 }
 
 """
@@ -2470,7 +2485,7 @@ input ReadingStatusPriorities {
 """
 Relationship types for reference expansion.
 
-<https://api.mangadex.org/docs/static-data/#relationship-types>
+<https://api.mangadex.org/docs/3-enumerations/#relationship-types>
 
 This should only be used with the `includes[]` query parameter.
 For response types, refer to the [`RelationshipType` enum](crate::RelationshipType).

@@ -21,15 +21,14 @@ reqwest.workspace = true
 log.workspace = true
 once_cell = "1"
 serde_json.workspace = true
-mangadex-api = { version = "3.4", default-features = false, features = [
-	"rw-multi-thread",
-	"serialize",
+mangadex-api = { version = "4.2", default-features = false, features = [
+	"oauth",
 	"utils",
 ] }
-mangadex-api-schema-rust = { version = "0.10", default-features = false, features = [
+mangadex-api-schema-rust = { version = "1", default-features = false, features = [
 	"serialize",
 ] }
-mangadex-api-types-rust = { version = "0.10", default-features = false, features = [
+mangadex-api-types-rust = { version = "1", default-features = false, features = [
 	"async-graphql",
 ] }
 async-graphql = {workspace = true, features = ["time"]}
@@ -39,11 +38,9 @@ regex.workspace = true
 bytes.workspace = true
 async-stream = "0"
 favicon-picker.workspace = true
-tempfile = "3.10.1"
-tokio-util = "0.7.11"
-emdx = "0.1"
+tempfile.workspace = true
+tokio-util = "0.7"
 actix.workspace = true
-eureka-mmanager-core = "0.1"
 tauri-plugin-notification.workspace = true
 tower = { workspace = true, features = ["limit", "buffer"] }
 duration-string = { version = "0.5", features = ["serde"] }
@@ -70,13 +67,20 @@ diesel = { workspace = true, features = ["sqlite", "returning_clauses_for_sqlite
 mangadex-blacklist-raw = { workspace = true }
 diesel_migrations.workspace = true
 diesel-sqlite-utils.workspace = true
+non-exhaustive.workspace = true
 
 [dependencies.eureka-mmanager]
-version = "0.4"
-default-features = false
+git = "https://github.com/tonymushah/eureka-mmanager.git"
+
+[dependencies.eureka-mmanager-core]
+git = "https://github.com/tonymushah/eureka-mmanager.git"
+
+[dependencies.emdx]
+git = "https://github.com/tonymushah/eureka-mmanager.git"
+optional = true
 
 [dependencies.mangadex-api-input-types]
-version = "0.6"
+version = "1"
 features = ["mangadex-api-resolver", "async-graphql"]
 
 [dependencies.mizuki]
@@ -99,3 +103,5 @@ workspace = true
 
 [features]
 hotpath = ["dep:hotpath"]
+emdx = ["dep:emdx"]
+next = ["emdx"]

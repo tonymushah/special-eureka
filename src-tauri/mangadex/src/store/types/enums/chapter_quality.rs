@@ -40,6 +40,7 @@ impl From<MDDownloadMode> for DownloadMode {
         match value {
             MDDownloadMode::Normal => Self::Normal,
             MDDownloadMode::DataSaver => Self::DataSaver,
+            _ => Self::DataSaver,
         }
     }
 }

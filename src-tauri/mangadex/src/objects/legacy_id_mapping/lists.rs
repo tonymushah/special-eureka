@@ -1,5 +1,5 @@
 use async_graphql::SimpleObject;
-use mangadex_api_schema_rust::v5::IdMappindCollection;
+use mangadex_api_schema_rust::v5::IdMappingCollection as IdMappindCollection;
 
 use crate::objects::ResultsInfo;
 

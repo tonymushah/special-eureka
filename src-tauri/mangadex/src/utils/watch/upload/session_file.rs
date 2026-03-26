@@ -3,7 +3,6 @@ use std::{ops::Deref, sync::Arc};
 use mangadex_api_schema_rust::{
     ApiObjectNoRelationships, v5::UploadSessionFileAttributes as Attributes,
 };
-use mangadex_api_types_rust::RelationshipType;
 use tokio::sync::watch::Sender;
 
 use crate::{
@@ -47,10 +46,9 @@ where
 
 impl From<InnerData> for AONRUploadSessionFile {
     fn from(value: InnerData) -> Self {
-        Self {
+        non_exhaustive::non_exhaustive!(Self {
             id: value.id,
-            type_: RelationshipType::UploadSessionFile,
             attributes: value.attributes.into(),
-        }
+        })
     }
 }

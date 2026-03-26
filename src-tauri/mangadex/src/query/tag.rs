@@ -53,15 +53,15 @@ impl TagQueries {
             .map(|tag| -> ApiObjectNoRelationships<TagAttributes> { tag.into() })
             .map(|o| o.with_relathionships(None))
             .collect();
-        let res: TagResults = Results {
-            response: ResponseType::Collection,
-            result: Default::default(),
-            limit: _data.len().try_into()?,
-            offset: 0,
-            total: _data.len().try_into()?,
-            data: _data,
-        }
-        .into();
+        let res: TagResults =
+            non_exhaustive::non_exhaustive!(Results<mangadex_api_schema_rust::v5::TagObject> {
+                response: ResponseType::Collection,
+                limit: _data.len().try_into()?,
+                offset: 0,
+                total: _data.len().try_into()?,
+                data: _data,
+            })
+            .into();
 
         let _res = res.clone();
         tauri::async_runtime::spawn(async move {

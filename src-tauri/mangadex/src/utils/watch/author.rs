@@ -1,7 +1,6 @@
 use std::{ops::Deref, sync::Arc};
 
 use mangadex_api_schema_rust::{ApiObjectNoRelationships, v5::AuthorAttributes as Attributes};
-use mangadex_api_types_rust::RelationshipType;
 use tokio::sync::watch::Sender;
 
 use crate::objects::author::attributes::AuthorAttributes;
@@ -43,10 +42,9 @@ where
 
 impl From<InnerData> for AONRAuthor {
     fn from(value: InnerData) -> Self {
-        Self {
+        non_exhaustive::non_exhaustive!(Self {
             id: value.id,
-            type_: RelationshipType::Author,
             attributes: value.attributes.into(),
-        }
+        })
     }
 }

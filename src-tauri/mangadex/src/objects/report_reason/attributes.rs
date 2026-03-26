@@ -41,8 +41,9 @@ impl ReportReasonAttributes {
     pub async fn details_required(&self) -> bool {
         self.details_required
     }
-    pub async fn category(&self) -> ReportCategory {
+    pub async fn category(&self) -> crate::error::wrapped::Result<ReportCategory> {
         self.category
+            .ok_or(crate::Error::ShouldExpect("ReportCategory".into()).into())
     }
     pub async fn version(&self) -> u32 {
         self.version

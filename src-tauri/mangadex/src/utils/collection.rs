@@ -108,13 +108,13 @@ where
 {
     type Error = TryFromIntError;
     fn try_from(value: Collection<T>) -> Result<Self, Self::Error> {
-        Ok(Self {
+        Ok(non_exhaustive::non_exhaustive!(Self {
             result: mangadex_api_types_rust::ResultType::Ok,
             response: mangadex_api_types_rust::ResponseType::Collection,
             data: value.data,
             limit: value.limit.try_into()?,
             offset: value.offset.try_into()?,
             total: value.total.try_into()?,
-        })
+        }))
     }
 }

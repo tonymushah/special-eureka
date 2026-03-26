@@ -1,12 +1,14 @@
 use async_graphql::Object;
 use mangadex_api_schema_rust::{
     ApiObjectNoRelationships,
+    error::RelationshipConversionError,
     v5::{
         AuthorAttributes, CoverAttributes, MangaAttributes as Attributes, RelatedAttributes,
         Relationship, UserAttributes,
     },
 };
-use mangadex_api_types_rust::{RelationshipType, error::RelationshipConversionError};
+use mangadex_api_types_rust::RelationshipType;
+use non_exhaustive::non_exhaustive;
 use uuid::Uuid;
 
 use crate::objects::{author::Author, cover::Cover, manga::MangaObject, user::User};
@@ -64,11 +66,11 @@ impl MangaRelationships {
             .filter(|rel| rel.type_ == RelationshipType::Author)
             .flat_map(|value| {
                 if let Some(RelatedAttributes::Author(attributes)) = &value.attributes {
-                    Ok(ApiObjectNoRelationships {
+                    Ok(non_exhaustive!(ApiObjectNoRelationships<AuthorAttributes> {
                         id: value.id,
                         type_: RelationshipType::Author,
                         attributes: attributes.clone(),
-                    })
+                    }))
                 } else {
                     Err(RelationshipConversionError::AttributesNotFound(
                         RelationshipType::Author,
@@ -88,11 +90,11 @@ impl MangaRelationships {
                     RelationshipConversionError,
                 > {
                     if let Some(RelatedAttributes::Author(attributes)) = &value.attributes {
-                        Ok(ApiObjectNoRelationships {
+                        Ok(non_exhaustive!(ApiObjectNoRelationships<AuthorAttributes> {
                             id: value.id,
                             type_: RelationshipType::Author,
                             attributes: attributes.clone(),
-                        })
+                        }))
                     } else {
                         Err(RelationshipConversionError::AttributesNotFound(
                             RelationshipType::Author,
@@ -116,11 +118,11 @@ impl MangaRelationships {
                     RelationshipConversionError,
                 > {
                     if let Some(RelatedAttributes::Author(attributes)) = &value.attributes {
-                        Ok(ApiObjectNoRelationships {
+                        Ok(non_exhaustive!(ApiObjectNoRelationships<AuthorAttributes> {
                             id: value.id,
                             type_: RelationshipType::Author,
                             attributes: attributes.clone(),
-                        })
+                        }))
                     } else {
                         Err(RelationshipConversionError::AttributesNotFound(
                             RelationshipType::Author,
@@ -146,11 +148,11 @@ impl MangaRelationships {
                     RelationshipConversionError,
                 > {
                     if let Some(RelatedAttributes::User(ref attributes)) = value.attributes {
-                        Ok(ApiObjectNoRelationships {
+                        Ok(non_exhaustive!(ApiObjectNoRelationships<UserAttributes> {
                             id: value.id,
                             type_: RelationshipType::User,
                             attributes: attributes.clone(),
-                        })
+                        }))
                     } else {
                         Err(RelationshipConversionError::AttributesNotFound(
                             RelationshipType::User,

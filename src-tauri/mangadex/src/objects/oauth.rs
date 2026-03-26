@@ -21,9 +21,9 @@ impl From<Info> for ClientInfo {
 
 impl From<ClientInfo> for Info {
     fn from(value: ClientInfo) -> Self {
-        Self {
+        non_exhaustive::non_exhaustive!(Self {
             client_id: value.client_id,
             client_secret: value.client_secret,
-        }
+        })
     }
 }

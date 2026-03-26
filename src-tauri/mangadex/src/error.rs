@@ -1,5 +1,5 @@
 use async_graphql::ErrorExtensions;
-use mangadex_api_schema_rust::v5::error::MangaDexError_;
+use mangadex_api_schema_rust::error::MangaDexError as MangaDexError_;
 use std::error::Error as StdErrorTrait;
 use uuid::Uuid;
 
@@ -13,7 +13,7 @@ type DieselMigrationError = Box<dyn StdErrorTrait + Send + Sync>;
 )]
 pub enum Error {
     #[error("Mangadex API SDK Error: {0}")]
-    MangadexApi(#[from] mangadex_api_types_rust::error::Error),
+    MangadexApi(#[from] mangadex_api::error::Error),
     #[error("Tauri Internal Error: {0}")]
     Tauri(#[from] tauri::Error),
     #[error("MangaDex Eureka Manager SDK Error: {0}")]
@@ -153,7 +153,7 @@ pub enum Error {
     #[error("Related cover_art not found")]
     RelatedCoverArtNotFound,
     #[error(transparent)]
-    RelationshipConversion(mangadex_api_types_rust::error::RelationshipConversionError),
+    RelationshipConversion(mangadex_api_schema_rust::error::RelationshipConversionError),
     #[error(transparent)]
     UploadQueue(#[from] crate::upload::UploadQueueError),
     #[error("Internal upload session {} not found", .0)]
@@ -199,6 +199,8 @@ pub enum Error {
     UserNotFound(uuid::Uuid),
     #[error("Cannot fetch user attributes")]
     FetchUserAttributes,
+    #[error("Expect {} got None", .0)]
+    ShouldExpect(String),
 }
 
 impl Error {
@@ -225,7 +227,7 @@ impl ErrorExtensions for Error {
             );
             match self {
                 Self::Reqwest(err)
-                | Self::MangadexApi(mangadex_api_types_rust::error::Error::RequestError(err)) => {
+                | Self::MangadexApi(mangadex_api::error::Error::RequestError(err)) => {
                     if let Some(url) = err.url() {
                         exts.set("url", url.to_string());
                     }
@@ -233,7 +235,7 @@ impl ErrorExtensions for Error {
                         exts.set("status", status.as_str());
                     }
                 }
-                Self::MangadexApi(mangadex_api_types_rust::error::Error::Api(api)) => {
+                Self::MangadexApi(mangadex_api::error::Error::Api(api)) => {
                     exts.set(
                         "status",
                         api.errors.iter().map(|d| d.status).collect::<Vec<_>>(),
@@ -260,10 +262,7 @@ impl ErrorExtensions for Error {
                             .collect::<Vec<_>>(),
                     );
                 }
-                Self::MangadexApi(mangadex_api_types_rust::error::Error::ServerError(
-                    status,
-                    detail,
-                )) => {
+                Self::MangadexApi(mangadex_api::error::Error::ServerError(status, detail)) => {
                     exts.set("status", *status);
                     exts.set("detail", detail.clone());
                 }

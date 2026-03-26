@@ -1,7 +1,6 @@
 use std::{ops::Deref, sync::Arc};
 
 use mangadex_api_schema_rust::{ApiObjectNoRelationships, v5::UserAttributes as Attributes};
-use mangadex_api_types_rust::RelationshipType;
 use tokio::sync::watch::Sender;
 
 use crate::objects::{GetAttributes, GetId, user::attributes::UserAttributes};
@@ -43,10 +42,9 @@ where
 
 impl From<InnerData> for AONRUser {
     fn from(value: InnerData) -> Self {
-        Self {
+        non_exhaustive::non_exhaustive!(Self {
             id: value.id,
-            type_: RelationshipType::User,
             attributes: value.attributes.into(),
-        }
+        })
     }
 }

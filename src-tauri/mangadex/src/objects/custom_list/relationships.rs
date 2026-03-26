@@ -130,6 +130,7 @@ impl CustomListRelationships {
                                 .iter()
                                 .filter(|t| content_profile.excluded_tags.contains(&t.id))
                                 .all(|t| content_profile.excluded_tags.contains(&t.id)),
+                            _ => true,
                         }
                     } else {
                         true
@@ -187,6 +188,7 @@ impl CustomListRelationships {
                                 .iter()
                                 .filter(|t| content_profile.included_tags.contains(&t.id))
                                 .all(|t| content_profile.included_tags.contains(&t.id)),
+                            _ => true,
                         }
                     } else {
                         true
