@@ -784,6 +784,7 @@ export type ChapterListParams = {
 	 * Default: `IncludeFutureUpdates::Include` (1)
 	 */
 	includeFutureUpdates?: InputMaybe<IncludeFutureUpdates>;
+	includeUnavailable?: InputMaybe<IncludeUnvailable>;
 	limit?: InputMaybe<Scalars["Int"]["input"]>;
 	mangaId?: InputMaybe<Scalars["UUID"]["input"]>;
 	offset?: InputMaybe<Scalars["Int"]["input"]>;
@@ -1055,6 +1056,8 @@ export type CommitUploadSessionParam = {
 	pageOrder: Array<Scalars["UUID"]["input"]>;
 	publishAt?: InputMaybe<Scalars["MangaDexDateTime"]["input"]>;
 	sessionId: Scalars["UUID"]["input"];
+	/** [`true`] if not set */
+	termAccepted?: InputMaybe<Scalars["Boolean"]["input"]>;
 	/** Nullable */
 	title?: InputMaybe<Scalars["String"]["input"]>;
 	translatedLanguage: Language;
@@ -1524,6 +1527,7 @@ export type CustomListMangaFeedParams = {
 	 * Default: `IncludeFutureUpdates::Include` (1)
 	 */
 	includeFutureUpdates?: InputMaybe<IncludeFutureUpdates>;
+	includeUnavailable?: InputMaybe<IncludeUnvailable>;
 	includes?: Array<ReferenceExpansionResource>;
 	limit?: InputMaybe<Scalars["Int"]["input"]>;
 	listId: Scalars["UUID"]["input"];
@@ -1910,6 +1914,7 @@ export type FollowedMangaFeedParams = {
 	 * Default: `IncludeFutureUpdates::Include` (1)
 	 */
 	includeFutureUpdates?: InputMaybe<IncludeFutureUpdates>;
+	includeUnavailable?: InputMaybe<IncludeUnvailable>;
 	limit?: InputMaybe<Scalars["Int"]["input"]>;
 	offset?: InputMaybe<Scalars["Int"]["input"]>;
 	order?: InputMaybe<MangaFeedSortOrder>;
@@ -2126,6 +2131,11 @@ export enum IncludeFuturePublishAt {
 }
 
 export enum IncludeFutureUpdates {
+	Exclude = "EXCLUDE",
+	Include = "INCLUDE"
+}
+
+export enum IncludeUnvailable {
 	Exclude = "EXCLUDE",
 	Include = "INCLUDE"
 }
@@ -2580,6 +2590,7 @@ export type MangaFeedParams = {
 	 * Default: `IncludeFutureUpdates::Include` (1)
 	 */
 	includeFutureUpdates?: InputMaybe<IncludeFutureUpdates>;
+	includeUnavailable?: InputMaybe<IncludeUnvailable>;
 	includes?: Array<ReferenceExpansionResource>;
 	limit?: InputMaybe<Scalars["Int"]["input"]>;
 	mangaId: Scalars["UUID"]["input"];
@@ -2682,6 +2693,7 @@ export type MangaListParams = {
 	/** Scanlation group ID. */
 	group?: InputMaybe<Scalars["UUID"]["input"]>;
 	hasAvailableChapters?: InputMaybe<Scalars["Boolean"]["input"]>;
+	hasUnavailableChapters?: InputMaybe<Scalars["Boolean"]["input"]>;
 	includedTags?: Array<Scalars["UUID"]["input"]>;
 	includedTagsMode?: InputMaybe<TagSearchMode>;
 	limit?: InputMaybe<Scalars["Int"]["input"]>;
@@ -3003,6 +3015,7 @@ export type MangaSortOrder =
 			createdAt: OrderDirection;
 			followedCount?: never;
 			latestUploadedChapter?: never;
+			rating?: never;
 			relevance?: never;
 			title?: never;
 			updatedAt?: never;
@@ -3012,6 +3025,7 @@ export type MangaSortOrder =
 			createdAt?: never;
 			followedCount: OrderDirection;
 			latestUploadedChapter?: never;
+			rating?: never;
 			relevance?: never;
 			title?: never;
 			updatedAt?: never;
@@ -3021,6 +3035,7 @@ export type MangaSortOrder =
 			createdAt?: never;
 			followedCount?: never;
 			latestUploadedChapter: OrderDirection;
+			rating?: never;
 			relevance?: never;
 			title?: never;
 			updatedAt?: never;
@@ -3030,6 +3045,17 @@ export type MangaSortOrder =
 			createdAt?: never;
 			followedCount?: never;
 			latestUploadedChapter?: never;
+			rating: OrderDirection;
+			relevance?: never;
+			title?: never;
+			updatedAt?: never;
+			year?: never;
+	  }
+	| {
+			createdAt?: never;
+			followedCount?: never;
+			latestUploadedChapter?: never;
+			rating?: never;
 			relevance: OrderDirection;
 			title?: never;
 			updatedAt?: never;
@@ -3039,6 +3065,7 @@ export type MangaSortOrder =
 			createdAt?: never;
 			followedCount?: never;
 			latestUploadedChapter?: never;
+			rating?: never;
 			relevance?: never;
 			title: OrderDirection;
 			updatedAt?: never;
@@ -3048,6 +3075,7 @@ export type MangaSortOrder =
 			createdAt?: never;
 			followedCount?: never;
 			latestUploadedChapter?: never;
+			rating?: never;
 			relevance?: never;
 			title?: never;
 			updatedAt: OrderDirection;
@@ -3057,6 +3085,7 @@ export type MangaSortOrder =
 			createdAt?: never;
 			followedCount?: never;
 			latestUploadedChapter?: never;
+			rating?: never;
 			relevance?: never;
 			title?: never;
 			updatedAt?: never;
@@ -3412,7 +3441,7 @@ export type ReadingStatusPriorities = {
 /**
  * Relationship types for reference expansion.
  *
- * <https://api.mangadex.org/docs/static-data/#relationship-types>
+ * <https://api.mangadex.org/docs/3-enumerations/#relationship-types>
  *
  * This should only be used with the `includes[]` query parameter.
  * For response types, refer to the [`RelationshipType` enum](crate::RelationshipType).
