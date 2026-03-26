@@ -4,7 +4,6 @@ use crate::objects::api_client::attributes::ApiClientAttributes;
 use mangadex_api_schema_rust::{
     ApiObjectNoRelationships as AONR, v5::ApiClientAttributes as Attributes,
 };
-use mangadex_api_types_rust::RelationshipType;
 use tokio::sync::watch::Sender;
 
 use super::{SendData, SendDataResult, WatcherInnerData};
@@ -44,10 +43,9 @@ where
 
 impl From<InnerData> for AONRApiClient {
     fn from(value: InnerData) -> Self {
-        Self {
+        non_exhaustive::non_exhaustive!(Self {
             id: value.id,
-            type_: RelationshipType::ApiClient,
             attributes: value.attributes.into(),
-        }
+        })
     }
 }

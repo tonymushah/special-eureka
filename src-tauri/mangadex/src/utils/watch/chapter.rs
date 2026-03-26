@@ -1,7 +1,6 @@
 use std::{ops::Deref, sync::Arc};
 
 use mangadex_api_schema_rust::{ApiObjectNoRelationships, v5::ChapterAttributes as Attributes};
-use mangadex_api_types_rust::RelationshipType;
 use tokio::sync::watch::Sender;
 
 use crate::{
@@ -69,10 +68,9 @@ impl SendData<InnerData> for ChapterWatch {
 
 impl From<InnerData> for AONRChapter {
     fn from(value: InnerData) -> Self {
-        Self {
+        non_exhaustive::non_exhaustive!(Self {
             id: value.id,
-            type_: RelationshipType::Chapter,
             attributes: value.attributes.inner_data().into(),
-        }
+        })
     }
 }
