@@ -19,19 +19,19 @@ pub struct RefreshTokenData {
 
 impl From<RefreshTokenData> for AuthTokens {
     fn from(value: RefreshTokenData) -> Self {
-        Self {
+        non_exhaustive::non_exhaustive!(Self {
             session: String::new(),
             refresh: value.refresh_token,
-        }
+        })
     }
 }
 
 impl From<&RefreshTokenData> for AuthTokens {
     fn from(value: &RefreshTokenData) -> Self {
-        Self {
+        non_exhaustive::non_exhaustive!(Self {
             session: String::new(),
             refresh: value.refresh_token.clone(),
-        }
+        })
     }
 }
 
