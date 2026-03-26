@@ -13,7 +13,7 @@ use crate::{
     },
 };
 
-use mangadex_api_types_rust::error::Error as MangaDexErrors;
+use mangadex_api::error::Error as MangaDexErrors;
 
 #[derive(Debug, Clone, Copy)]
 pub struct UploadQueries;
