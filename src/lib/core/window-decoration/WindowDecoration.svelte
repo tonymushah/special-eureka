@@ -1,8 +1,6 @@
 <script lang="ts" module>
 	import { derived, writable } from "svelte/store";
 	import defaultLogo from "./app-icon.png";
-	import "@fontsource-variable/lexend";
-	import "@fontsource/pacifico";
 	import { getCurrentWebviewWindow } from "@tauri-apps/api/webviewWindow";
 	const appWindow = getCurrentWebviewWindow();
 

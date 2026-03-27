@@ -1,7 +1,10 @@
 <script lang="ts">
 	import type { Snippet } from "svelte";
 	import "core-js/stable";
-
+	// @ts-ignore
+	import "@fontsource-variable/lexend";
+	// @ts-ignore
+	import "@fontsource/pacifico";
 	interface Props {
 		children?: Snippet;
 	}
