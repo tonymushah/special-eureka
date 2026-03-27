@@ -1,0 +1,9 @@
+[tasks.run]
+workspace = false
+command = "pnpm"
+args = ["dev"]
+
+[tasks.upx-release]
+workspace = false
+script_runner = "@duckscript"
+script = { file = "./scripts/upx-release.ds" }

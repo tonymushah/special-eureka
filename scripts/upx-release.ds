@@ -1,0 +1,12 @@
+if which upx	
+	if is_windows 
+		mv target/release/special-eureka.exe target/release/special-eureka.bin_backup
+		exec upx --best -o target/release/special-eureka.exe target/release/special-eureka.bin_backup
+	else 
+		mv target/release/special-eureka target/release/special-eureka.bin_backup
+		exec upx --best -o target/release/special-eureka target/release/special-eureka.bin_backup
+	end
+	echo "Finished upx"
+else 
+	echo "upx binary not found. Moving on..."
+end

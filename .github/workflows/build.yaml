@@ -1,67 +1,89 @@
 name: build-app
 on:
-    workflow_dispatch:
+  workflow_dispatch:
 permissions:
-    contents: write
+  contents: write
 
 jobs:
-    tauri-build:
-        strategy:
-            fail-fast: false
-            matrix:
-                include:
-                    - platform: 'macos-latest' # for Arm based macs (M1 and above).
-                      args: '--target aarch64-apple-darwin'
-                    - platform: 'macos-latest' # for Intel based macs.
-                      args: '--target x86_64-apple-darwin'
-                    - platform: 'ubuntu-24.04' # for Tauri v1 you could replace this with ubuntu-20.04.
-                      args: ''
-                    - platform: 'windows-latest'
-                      args: ''
-        runs-on: ${{ matrix.platform }}
-        steps:
-            - uses: actions/checkout@v6
-            - name: setup node
-              uses: actions/setup-node@v6
-              with:
-                  node-version: 24
-            - name: install pnpm
-              uses: pnpm/action-setup@v5
-              with:
-                  run_install: false
-            - name: install Rust stable
-              uses: dtolnay/rust-toolchain@stable
-            - name: install dependencies (ubuntu only)
-              if: matrix.platform == 'ubuntu-24.04'
-              run: |
-                  sudo apt update;
-                  sudo apt install -y \
-                    build-essential \
-                    curl \
-                    wget \
-                    file \
-                    libssl-dev \
-                    libgtk-3-dev \
-                    libappindicator3-dev \
-                    librsvg2-dev;
-                  sudo apt install -y \
-                    libwebkit2gtk-4.1-0=2.44.0-2 \
-                    libwebkit2gtk-4.1-dev=2.44.0-2 \
-                    libjavascriptcoregtk-4.1-0=2.44.0-2 \
-                    libjavascriptcoregtk-4.1-dev=2.44.0-2 \
-                    gir1.2-javascriptcoregtk-4.1=2.44.0-2 \
-                    gir1.2-webkit2-4.1=2.44.0-2;
-            - name: install app dependencies
-              run: pnpm install
-            - name: build the actual app with tauri action
-              uses: tauri-apps/tauri-action@v0
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                  TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
-                  TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_PASSWORD }}
-              with:
-                  tagName: v__VERSION__
-                  releaseName: "Special Eureka v__VERSION__"
-                  releaseBody: "See the assets to download this version and install."
-                  releaseDraft: true
-                  prerelease: false
+  tauri-build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: "macos-latest" # for Arm based macs (M1 and above).
+            args: "--target aarch64-apple-darwin"
+          - platform: "macos-latest" # for Intel based macs.
+            args: "--target x86_64-apple-darwin"
+          - platform: "ubuntu-24.04" # for Tauri v1 you could replace this with ubuntu-20.04.
+            args: ""
+          - platform: "windows-latest"
+            args: ""
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - uses: actions/checkout@v6
+      - name: setup node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+      - name: install pnpm
+        uses: pnpm/action-setup@v5
+        with:
+          run_install: false
+      - name: install Rust stable
+        uses: dtolnay/rust-toolchain@stable
+      - name: install dependencies (ubuntu only)
+        if: matrix.platform == 'ubuntu-24.04'
+        run: |
+          sudo apt update;
+          sudo apt install -y \
+            build-essential \
+            curl \
+            wget \
+            file \
+            libssl-dev \
+            libgtk-3-dev \
+            libappindicator3-dev \
+            librsvg2-dev;
+          sudo apt install -y \
+            libwebkit2gtk-4.1-0=2.44.0-2 \
+            libwebkit2gtk-4.1-dev=2.44.0-2 \
+            libjavascriptcoregtk-4.1-0=2.44.0-2 \
+            libjavascriptcoregtk-4.1-dev=2.44.0-2 \
+            gir1.2-javascriptcoregtk-4.1=2.44.0-2 \
+            gir1.2-webkit2-4.1=2.44.0-2;
+      - name: install app dependencies
+        run: pnpm install
+      - name: install mold linker
+        if: matrix.platform == 'macos-latest' || matrix.platform == 'ubuntu-24.04'
+        uses: rui314/setup-mold@v1
+        with:
+          make-default: false
+      - name: change project cargo config
+        if: matrix.platform == 'macos-latest' || matrix.platform == 'ubuntu-24.04'
+        run: mv .cargo/build.config.toml .cargo/config.toml
+      - name: install cargo-make
+        run: cargo install --force cargo-make
+      - name: install upx via crazy-max/ghaction-upx (windows and ubuntu only)
+        if: matrix.platform == 'windows-latest' || matrix.platform == 'ubuntu-24.04'
+        uses: crazy-max/ghaction-upx@v4
+        with:
+          install-only: true
+      # disabled upx for macos because it doesn't work
+      # - name: install brew (macos only)
+      #   if: matrix.platform == 'macos-latest'
+      #   run: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+      # - name: install upx upx via brew (macos only)
+      #   if: matrix.platform == 'macos-latest'
+      #   run: brew install upx
+      - name: build the actual app with tauri action
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_PASSWORD }}
+        with:
+          tagName: v__VERSION__
+          releaseName: "Special Eureka v__VERSION__"
+          releaseBody: "See the assets to download this version and install."
+          releaseDraft: true
+          prerelease: false
