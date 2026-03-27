@@ -322,34 +322,38 @@ where
             }
         };
         for id in chap_ids {
-            let rate_limit = app.get_specific_rate_limit()?;
-            let (offline_app_state, _) = tokio::join!(
-                (**app.get_offline_app_state()?).clone().read_owned(),
-                rate_limit.at_home(&id)
-            );
-            let Some(manager) = (*offline_app_state).as_ref().map(|d| d.app_state.clone()) else {
-                return Err(crate::Error::OfflineAppStateNotLoaded);
+            let wait = {
+                let rate_limit = app.get_specific_rate_limit()?;
+                let (offline_app_state, _) = tokio::join!(
+                    (**app.get_offline_app_state()?).clone().read_owned(),
+                    rate_limit.at_home(&id)
+                );
+                let Some(manager) = (*offline_app_state).as_ref().map(|d| d.app_state.clone())
+                else {
+                    return Err(crate::Error::OfflineAppStateNotLoaded);
+                };
+                drop(offline_app_state);
+                super::chapter::raw_chapter_download_no_wait(
+                    &manager,
+                    id,
+                    (*app
+                        .extract::<ChapterQualityStore>()
+                        .await
+                        .unwrap_or_default())
+                    .into(),
+                    *app.extract::<ForcePort443Store>().await.unwrap_or_default(),
+                )
+                .await?
+                .wait()
+                .await?
             };
-
-            let wait = super::chapter::raw_chapter_download_no_wait(
-                &manager,
-                id,
-                (*app
-                    .extract::<ChapterQualityStore>()
-                    .await
-                    .unwrap_or_default())
-                .into(),
-                *app.extract::<ForcePort443Store>().await.unwrap_or_default(),
-            )
-            .await?
-            .wait()
-            .await?;
             {
                 ins_handle::add_in_queue(app.app_handle(), id)?;
                 let app = app.app_handle().clone();
 
                 tokio::spawn(async move {
-                    match wait.await {
+                    use futures_util::FutureExt;
+                    match wait.fuse().await {
                         Ok(res) => {
                             if let Err(err) = ins_handle::add_in_success(&app, id) {
                                 log::error!("{err}");
