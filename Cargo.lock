@@ -849,9 +849,9 @@ dependencies = [
 
 [[package]]
 name = "cc"
-version = "1.2.57"
+version = "1.2.58"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7a0dd1ca384932ff3641c8718a02769f1698e7563dc6974ffd03346116310423"
+checksum = "e1e928d4b69e3077709075a938a05ffbedfa53a84c8f766efbf8220bb1ff60e1"
 dependencies = [
  "find-msvc-tools",
  "jobserver",
@@ -1861,7 +1861,7 @@ checksum = "4ef6b89e5b37196644d8796de5268852ff179b44e96276cf4290264843743bb7"
 [[package]]
 name = "emdx"
 version = "1.0.0"
-source = "git+https://github.com/tonymushah/eureka-mmanager.git#876b847b615341aa6c3657aed709911f383bf098"
+source = "git+https://github.com/tonymushah/eureka-mmanager.git#819d80443b4dc19747408780e4d60d91f0b9a048"
 dependencies = [
  "ciborium",
  "eureka-mmanager-core",
@@ -1997,7 +1997,7 @@ checksum = "dea2df4cf52843e0452895c455a1a2cfbb842a1e7329671acf418fdc53ed4c59"
 [[package]]
 name = "eureka-mmanager"
 version = "1.0.0"
-source = "git+https://github.com/tonymushah/eureka-mmanager.git#876b847b615341aa6c3657aed709911f383bf098"
+source = "git+https://github.com/tonymushah/eureka-mmanager.git#819d80443b4dc19747408780e4d60d91f0b9a048"
 dependencies = [
  "actix",
  "bytes",
@@ -2024,7 +2024,7 @@ dependencies = [
 [[package]]
 name = "eureka-mmanager-core"
 version = "1.0.0"
-source = "git+https://github.com/tonymushah/eureka-mmanager.git#876b847b615341aa6c3657aed709911f383bf098"
+source = "git+https://github.com/tonymushah/eureka-mmanager.git#819d80443b4dc19747408780e4d60d91f0b9a048"
 dependencies = [
  "actix",
  "bytes",
@@ -3768,9 +3768,9 @@ dependencies = [
 
 [[package]]
 name = "mangadex-api-schema-rust"
-version = "1.0.0"
+version = "1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "015e13c17d2fd685b7af1be11c8c693e6549c2598da6b13827b10247f28a2360"
+checksum = "d3e5567ebdafc0c3c28b60bbabc2b0b9f30e5ef7fe271f57d9bdaac14bc07d03"
 dependencies = [
  "mangadex-api-types-rust",
  "serde",
@@ -7015,7 +7015,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "32497e9a4c7b38532efcdebeef879707aa9f794296a4f0244f6f69e9bc8574bd"
 dependencies = [
  "fastrand",
- "getrandom 0.3.4",
+ "getrandom 0.4.2",
  "once_cell",
  "rustix",
  "windows-sys 0.61.2",
