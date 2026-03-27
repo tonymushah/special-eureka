@@ -347,12 +347,14 @@ where
                 .wait()
                 .await?
             };
+            log::debug!("got wait!!");
             {
                 ins_handle::add_in_queue(app.app_handle(), id)?;
                 let app = app.app_handle().clone();
 
                 tokio::spawn(async move {
                     use futures_util::FutureExt;
+                    log::debug!("waiting...");
                     match wait.fuse().await {
                         Ok(res) => {
                             if let Err(err) = ins_handle::add_in_success(&app, id) {
