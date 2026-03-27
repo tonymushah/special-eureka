@@ -68,12 +68,12 @@ jobs:
         uses: crazy-max/ghaction-upx@v4
         with:
           install-only: true
-      - name: install brew (macos only)
-        if: matrix.platform == 'macos-latest'
-        run: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-      - name: install upx upx via brew (macos only)
-        if: matrix.platform == 'macos-latest'
-        run: brew install upx
+      # - name: install brew (macos only)
+      #   if: matrix.platform == 'macos-latest'
+      #   run: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+      # - name: install upx upx via brew (macos only)
+      #   if: matrix.platform == 'macos-latest'
+      #   run: brew install upx
       - name: build the actual app with tauri action
         uses: tauri-apps/tauri-action@v0
         env:
