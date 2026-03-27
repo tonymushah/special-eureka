@@ -68,6 +68,7 @@ jobs:
         uses: crazy-max/ghaction-upx@v4
         with:
           install-only: true
+      # disabled upx for macos because it doesn't work
       # - name: install brew (macos only)
       #   if: matrix.platform == 'macos-latest'
       #   run: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
