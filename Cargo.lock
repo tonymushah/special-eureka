@@ -1015,9 +1015,9 @@ dependencies = [
 
 [[package]]
 name = "cmake"
-version = "0.1.57"
+version = "0.1.58"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "75443c44cd6b379beb8c5b45d85d0773baf31cce901fe7bb252f4eff3008ef7d"
+checksum = "c0f78a02292a74a88ac736019ab962ece0bc380e3f977bf72e376c5d78ff0678"
 dependencies = [
  "cc",
 ]
@@ -1585,7 +1585,7 @@ dependencies = [
 
 [[package]]
 name = "diesel-sqlite-utils"
-version = "0.2.3-9"
+version = "0.2.3-10"
 dependencies = [
  "diesel",
 ]
@@ -3795,7 +3795,7 @@ dependencies = [
 
 [[package]]
 name = "mangadex-blacklist-raw"
-version = "0.2.3-9"
+version = "0.2.3-10"
 dependencies = [
  "diesel",
  "diesel_migrations",
@@ -4119,9 +4119,9 @@ dependencies = [
 
 [[package]]
 name = "num-conv"
-version = "0.2.0"
+version = "0.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cf97ec579c3c42f953ef76dbf8d55ac91fb219dde70e49aa4a6b7d74e9919050"
+checksum = "c6673768db2d862beb9b39a78fdcb1a69439615d5794a1be50caa9bc92c81967"
 
 [[package]]
 name = "num-derive"
@@ -6111,9 +6111,9 @@ dependencies = [
 
 [[package]]
 name = "simd-adler32"
-version = "0.3.8"
+version = "0.3.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e320a6c5ad31d271ad523dcf3ad13e2767ad8b1cb8f047f75a8aeaf8da139da2"
+checksum = "703d5c7ef118737c72f1af64ad2f6f8c5e1921f818cdcb97b8fe6fc69bf66214"
 
 [[package]]
 name = "simd_helpers"
@@ -6208,7 +6208,7 @@ dependencies = [
 
 [[package]]
 name = "special-eureka"
-version = "0.2.3-9"
+version = "0.2.3-10"
 dependencies = [
  "actix",
  "anyhow",
@@ -6660,7 +6660,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-clipboard-manager"
 version = "2.3.2"
-source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#4b95f5e079593d5b2b98220c332f420dc70d18d1"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#f75d21db3351d6f12adf585c2c797c20ece94f7f"
 dependencies = [
  "arboard",
  "log",
@@ -6674,7 +6674,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-deep-link"
 version = "2.4.7"
-source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#4b95f5e079593d5b2b98220c332f420dc70d18d1"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#f75d21db3351d6f12adf585c2c797c20ece94f7f"
 dependencies = [
  "dunce",
  "plist",
@@ -6694,7 +6694,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-dialog"
 version = "2.6.0"
-source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#4b95f5e079593d5b2b98220c332f420dc70d18d1"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#f75d21db3351d6f12adf585c2c797c20ece94f7f"
 dependencies = [
  "log",
  "raw-window-handle",
@@ -6711,7 +6711,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-fs"
 version = "2.4.5"
-source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#4b95f5e079593d5b2b98220c332f420dc70d18d1"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#f75d21db3351d6f12adf585c2c797c20ece94f7f"
 dependencies = [
  "anyhow",
  "dunce",
@@ -6734,7 +6734,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-notification"
 version = "2.3.3"
-source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#4b95f5e079593d5b2b98220c332f420dc70d18d1"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#f75d21db3351d6f12adf585c2c797c20ece94f7f"
 dependencies = [
  "log",
  "notify-rust",
@@ -6752,7 +6752,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-opener"
 version = "2.5.3"
-source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#4b95f5e079593d5b2b98220c332f420dc70d18d1"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#f75d21db3351d6f12adf585c2c797c20ece94f7f"
 dependencies = [
  "dunce",
  "glob",
@@ -6773,7 +6773,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-single-instance"
 version = "2.4.0"
-source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#4b95f5e079593d5b2b98220c332f420dc70d18d1"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#f75d21db3351d6f12adf585c2c797c20ece94f7f"
 dependencies = [
  "serde",
  "serde_json",
@@ -6787,7 +6787,7 @@ dependencies = [
 
 [[package]]
 name = "tauri-plugin-speu-mangadex"
-version = "0.2.3-9"
+version = "0.2.3-10"
 dependencies = [
  "actix",
  "async-graphql",
@@ -6852,7 +6852,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-store"
 version = "2.4.2"
-source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#4b95f5e079593d5b2b98220c332f420dc70d18d1"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#f75d21db3351d6f12adf585c2c797c20ece94f7f"
 dependencies = [
  "dunce",
  "serde",
@@ -6867,7 +6867,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-updater"
 version = "2.10.0"
-source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#4b95f5e079593d5b2b98220c332f420dc70d18d1"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#f75d21db3351d6f12adf585c2c797c20ece94f7f"
 dependencies = [
  "base64 0.22.1",
  "dirs",
@@ -7587,9 +7587,9 @@ checksum = "e6e4313cd5fcd3dad5cafa179702e2b244f760991f45397d14d4ebf38247da75"
 
 [[package]]
 name = "unicode-segmentation"
-version = "1.13.1"
+version = "1.13.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "da36089a805484bcccfffe0739803392c8298778a2d2f09febf76fac5ad9025b"
+checksum = "9629274872b2bfaf8d66f5f15725007f635594914870f65218920345aa11aa8c"
 
 [[package]]
 name = "unicode-width"
@@ -7660,9 +7660,9 @@ checksum = "06abde3611657adf66d383f00b093d7faecc7fa57071cce2578660c9f1010821"
 
 [[package]]
 name = "uuid"
-version = "1.22.0"
+version = "1.23.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a68d3c8f01c0cfa54a75291d83601161799e4a89a39e0929f4b0354d88757a37"
+checksum = "5ac8b6f42ead25368cf5b098aeb3dc8a1a2c05a3eee8a9a1a68c640edbfc79d9"
 dependencies = [
  "getrandom 0.4.2",
  "js-sys",
@@ -9052,9 +9052,9 @@ dependencies = [
 
 [[package]]
 name = "zune-jpeg"
-version = "0.5.14"
+version = "0.5.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0b7a1c0af6e5d8d1363f4994b7a091ccf963d8b694f7da5b0b9cceb82da2c0a6"
+checksum = "27bc9d5b815bc103f142aa054f561d9187d191692ec7c2d1e2b4737f8dbd7296"
 dependencies = [
  "zune-core",
 ]
