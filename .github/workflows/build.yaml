@@ -63,7 +63,7 @@ jobs:
         run: mv .cargo/build.config.toml .cargo/config.toml
       - name: install cargo-make
         run: cargo install --force cargo-make
-      - name: install upx (windows and ubuntu only)
+      - name: install upx via crazy-max/ghaction-upx (windows and ubuntu only)
         if: matrix.platform == 'windows-latest' || matrix.platform == 'ubuntu-24.04'
         uses: crazy-max/ghaction-upx@v4
         with:
