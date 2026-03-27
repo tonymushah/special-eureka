@@ -22,6 +22,8 @@ jobs:
           run_install: false
       - name: install Rust stable
         uses: dtolnay/rust-toolchain@stable
+      - name: install Cargo make
+        run: cargo install --force cargo-make
       - name: install dependencies (ubuntu only)
         if: matrix.platform == 'ubuntu-latest'
         run: |
