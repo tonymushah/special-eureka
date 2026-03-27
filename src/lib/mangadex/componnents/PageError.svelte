@@ -3,6 +3,8 @@
 	import PrimaryButton from "./theme/buttons/PrimaryButton.svelte";
 	import { ArrowLeftIcon, RefreshCcwIcon } from "@lucide/svelte";
 	import ButtonAccent from "./theme/buttons/ButtonAccent.svelte";
+	import { onMount } from "svelte";
+	import { playMDFahh } from "@mangadex/stores/fahh.svelte";
 	let isTitleHovered = $state(false);
 	interface Props {
 		message?: string | undefined;
@@ -14,6 +16,9 @@
 
 	let { message = undefined, retry, extensions: exts }: Props = $props();
 	let extensions = $derived(exts?.flatMap((o) => Object.entries(o)));
+	onMount(() => {
+		playMDFahh();
+	});
 </script>
 
 <div class="error">

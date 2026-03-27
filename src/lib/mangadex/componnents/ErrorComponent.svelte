@@ -3,6 +3,8 @@
 	import ButtonAccent from "./theme/buttons/ButtonAccent.svelte";
 	import PrimaryButtonOnlyLabel from "./theme/buttons/PrimaryButtonOnlyLabel.svelte";
 	import { CombinedError } from "@urql/svelte";
+	import { onMount } from "svelte";
+	import { playMDFahh } from "@mangadex/stores/fahh.svelte";
 
 	interface Props {
 		error: Error;
@@ -16,6 +18,9 @@
 		if (error instanceof CombinedError) {
 			return error.graphQLErrors.flatMap((e) => Object.entries(e.extensions));
 		}
+	});
+	onMount(() => {
+		playMDFahh();
 	});
 </script>
 
