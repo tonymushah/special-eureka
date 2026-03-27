@@ -61,6 +61,19 @@ jobs:
       - name: change project cargo config
         if: matrix.platform == 'macos-latest' || matrix.platform == 'ubuntu-24.04'
         run: mv .cargo/build.config.toml .cargo/config.toml
+      - name: install cargo-make
+        run: cargo install --force cargo-make
+      - name: install upx (windows and ubuntu only)
+        if: matrix.platform == 'windows-latest' || matrix.platform == 'ubuntu-24.04'
+        uses: crazy-max/ghaction-upx@v4
+        with:
+          install-only: true
+      - name: install brew (macos only)
+        if: matrix.platform == 'macos-latest'
+        run: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+      - name: install upx upx via brew (macos only)
+        if: matrix.platform == 'macos-latest'
+        run: brew install upx
       - name: build the actual app with tauri action
         uses: tauri-apps/tauri-action@v0
         env:
