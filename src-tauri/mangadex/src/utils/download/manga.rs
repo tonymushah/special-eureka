@@ -333,7 +333,7 @@ where
                     return Err(crate::Error::OfflineAppStateNotLoaded);
                 };
                 drop(offline_app_state);
-                super::chapter::raw_chapter_download_no_wait(
+                let mut task = super::chapter::raw_chapter_download_no_wait(
                     &manager,
                     id,
                     (*app
@@ -343,9 +343,9 @@ where
                     .into(),
                     *app.extract::<ForcePort443Store>().await.unwrap_or_default(),
                 )
-                .await?
-                .wait()
-                .await?
+                .await?;
+                drop(manager);
+                task.wait().await?
             };
             log::debug!("got wait!!");
             {
