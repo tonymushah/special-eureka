@@ -1,7 +1,8 @@
 <script lang="ts">
-	import "./selecto.css";
+	import cssSelecto from "./selecto.module.css";
 	import contextMenu, { ContextMenuItemProvider } from "@special-eureka/core/commands/contextMenu";
 	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
+	import { playFahh } from "@special-eureka/core/fahh/play";
 	import SelectionArea from "@viselect/vanilla";
 	import { IsInViewport } from "runed";
 	let content: HTMLElement | undefined = undefined;
@@ -13,7 +14,7 @@
 			const selecto = new SelectionArea({
 				selectables: ["p"],
 				boundaries: [content],
-				selectionAreaClass: "grid-test-selection"
+				selectionAreaClass: cssSelecto.gridTestSelection
 			})
 				.on("start", (ev) => {
 					if (!ev.event?.ctrlKey && !ev.event?.metaKey) {
@@ -64,8 +65,12 @@
 	>
 		<h1>Header {isInViewport.current}</h1>
 	</header>
+
 	<div class="content" bind:this={content}>
 		<div class="inner">
+			<section>
+				<button class="fahh" onclick={playFahh}>Faaaaaaa</button>
+			</section>
 			<section>
 				<p>
 					Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed, alias doloremque? Eveniet
@@ -219,5 +224,9 @@
 	p:global([data-selected]) {
 		text-decoration: wavy;
 		font-style: italic;
+	}
+	.fahh {
+		border: 2px dashed green;
+		color: green;
 	}
 </style>
