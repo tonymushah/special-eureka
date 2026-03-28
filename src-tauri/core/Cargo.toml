@@ -44,7 +44,6 @@ hotpath = { workspace = true, optional = true }
 # csv = { workspace = true, optional = true }
 mimalloc = { version = "0.1", optional = true }
 reqwest = { workspace = true, optional = true }
-env_logger = { version = "0.11", optional = true }
 
 [target.'cfg(windows)'.dependencies]
 libsqlite3-sys = { workspace = true, features = ["bundled"] }
@@ -75,9 +74,6 @@ updater = ["tauri-plugin-updater"]
 # HotPath
 hotpath = ["dep:hotpath", "hotpath/hotpath", "mangadex/hotpath"]
 hotpath-alloc = ["hotpath/hotpath-alloc", "hotpath"]
-
-# debug only 
-env_log = ["dep:env_logger"]
 
 # actix features?
 actix-single-runtime = []

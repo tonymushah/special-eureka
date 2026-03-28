@@ -8,7 +8,7 @@
 		"vite:build_preview": "pnpm vite:build && pnpm vite:preview",
 		"vite:build": "vite build --emptyOutDir",
 		"vite:preview": "vite preview --port 9305",
-		"dev": "tauri dev -f env_log",
+		"dev": "tauri dev",
 		"dev:next": "RUSTFLAGS='--cfg reqwest_unstable' tauri dev --features next",
 		"dev:hotpath": "tauri dev -f hotpath",
 		"dev:hotpath:alloc": "tauri dev -f hotpath-alloc",
