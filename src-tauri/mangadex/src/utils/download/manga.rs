@@ -11,7 +11,7 @@ use eureka_mmanager::{
         MangaDownloadManager, TaskManagerAddr,
     },
 };
-use log::{debug, error, info, trace, warn};
+use log::{debug, info, warn};
 use mangadex_api_input_types::manga::aggregate::MangaAggregateParam;
 use mangadex_api_schema_rust::v5::MangaObject;
 use mangadex_api_types_rust::RelationshipType;
