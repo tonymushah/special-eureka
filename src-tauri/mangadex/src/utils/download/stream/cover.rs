@@ -95,7 +95,9 @@ impl Stream for CoverDownloadStream {
                 match msg {
                     SharedState::Task(msg) => match *msg {
                         TaskSubscriberMessages::State(state) => {
-                            return dbg!(Poll::Ready(Some(state.into())));
+                            let ret = Poll::Ready(Some(state.into()));
+                            log::trace!("{:#?}", ret);
+                            return ret;
                         }
                         _ => continue,
                     },

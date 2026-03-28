@@ -305,8 +305,11 @@ where
     R: Runtime,
     M: Manager<R> + Sync,
 {
+    log::debug!("downloading {title_id}...");
     let mg_obj = download_manga(app, title_id).await?;
+    log::debug!("downloaded {title_id}!");
     if let Some(extras) = extras {
+        log::debug!("Retrieving chapters...");
         let chap_ids = match extras {
             MangaDownloadExtras::AllChapters => get_title_chapter_ids(app, title_id).await?,
             MangaDownloadExtras::UnDownloadeds => {
@@ -321,13 +324,16 @@ where
                 get_title_failed_unread_chapters(app, title_id).await?
             }
         };
+        log::debug!("{:?}", chap_ids);
         for id in chap_ids {
             let wait = {
+                log::debug!("getting wait!");
                 let rate_limit = app.get_specific_rate_limit()?;
                 let (offline_app_state, _) = tokio::join!(
                     (**app.get_offline_app_state()?).clone().read_owned(),
                     rate_limit.at_home(&id)
                 );
+                log::debug!("Got rate_limit with app_state");
                 let Some(manager) = (*offline_app_state).as_ref().map(|d| d.app_state.clone())
                 else {
                     return Err(crate::Error::OfflineAppStateNotLoaded);
@@ -344,7 +350,9 @@ where
                     *app.extract::<ForcePort443Store>().await.unwrap_or_default(),
                 )
                 .await?;
+                log::debug!("got task");
                 drop(manager);
+                log::debug!("waiting...");
                 task.wait().await?
             };
             log::debug!("got wait!!");
