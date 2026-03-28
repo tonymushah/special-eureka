@@ -39,13 +39,10 @@ pub fn setup_logger<R: Runtime>(app: &App<R>) -> anyhow::Result<()> {
     #[allow(unused_must_use)]
     let mut dispacher = Dispatch::new();
 
-    #[cfg(debug_assertions)]
+    #[cfg(all(debug_assertions, feature = "env_log"))]
     {
-        dispacher = dispacher.chain(
-            Dispatch::new()
-                .level(log::LevelFilter::Debug)
-                .chain(std::io::stdout()),
-        );
+        let env_log: Box<dyn log::Log> = Box::new(env_logger::Builder::default().build());
+        dispacher = dispacher.chain(env_log);
     }
 
     dispacher = dispacher.chain(file_dispatch);
