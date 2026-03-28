@@ -43,6 +43,7 @@ pub fn setup_logger<R: Runtime>(app: &App<R>) -> anyhow::Result<()> {
     {
         dispacher = dispacher.chain(
             Dispatch::new()
+                .level(log::LevelFilter::Debug)
                 .format(|out, msg, record| {
                     out.finish(format_args!(
                         "[{} {}] {}",
