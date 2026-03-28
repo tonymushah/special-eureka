@@ -39,7 +39,7 @@ pub fn run() {
     let context = tauri::tauri_build_context!();
     System::set_current(runtime_guard.sys().clone());
 
-    #[cfg(feature = "single-runtime")]
+    #[cfg(feature = "actix-single-runtime")]
     {
         tauri::async_runtime::set(runtime_guard.handle().clone());
     }

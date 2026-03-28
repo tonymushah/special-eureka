@@ -62,10 +62,12 @@ workspace = true
 [features]
 # by default Tauri runs in production mode
 # when `tauri dev` runs it is executed with `cargo run --no-default-features` if `devPath` is an URL
-default = ["custom-protocol", "updater"]
+default = ["custom-protocol", "updater", "actix-single-runtime", "actix-multi-threaded"]
 # this feature is used used for production builds where `devPath` points to the filesystem
 # DO NOT remove this
 custom-protocol = ["tauri/custom-protocol"]
+
+no_bundle = ["custom-protocol", "actix-single-runtime", "actix-multi-threaded"]
 
 # tauri updater
 updater = ["tauri-plugin-updater"]
@@ -78,7 +80,7 @@ hotpath-alloc = ["hotpath/hotpath-alloc", "hotpath"]
 env_log = ["dep:env_logger"]
 
 # actix features?
-single-runtime = []
+actix-single-runtime = []
 actix-multi-threaded = []
 
 # Custom allocators
