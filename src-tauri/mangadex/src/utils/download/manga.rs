@@ -11,6 +11,7 @@ use eureka_mmanager::{
         MangaDownloadManager, TaskManagerAddr,
     },
 };
+use log::{debug, error, info, trace, warn};
 use mangadex_api_input_types::manga::aggregate::MangaAggregateParam;
 use mangadex_api_schema_rust::v5::MangaObject;
 use mangadex_api_types_rust::RelationshipType;
@@ -36,11 +37,31 @@ pub async fn raw_manga_download(
     manager: &Addr<DownloadManager>,
     id: Uuid,
 ) -> crate::Result<MangaObject> {
+    info!("downloading {id}");
+    debug!("getting manager...");
     let manga_manager = GetManager::<MangaDownloadManager>::get(manager).await?;
+    debug!("got manager");
+    debug!("getting task...");
     let mut task = manga_manager
         .new_task(MangaDownloadMessage::new(id).state(DownloadMessageState::Downloading))
         .await?;
-    Ok(task.wait().await?.await?)
+    debug!("got task");
+    debug!("getting wait...");
+    let wait = task.wait().await?;
+    debug!("got wait");
+    debug!("waiting...");
+    let res = wait.await?;
+    debug!("Finished!!");
+    info!(
+        "Finished download of {}!!",
+        res.attributes
+            .title
+            .values()
+            .next()
+            .cloned()
+            .unwrap_or_else(|| id.to_string())
+    );
+    Ok(res)
 }
 
 #[cfg_attr(feature = "hotpath", hotpath::measure)]
@@ -49,39 +70,60 @@ where
     R: Runtime,
     M: Manager<R> + Sync,
 {
+    debug!("getting appstate");
     let offline_app_state = (**app.get_offline_app_state()?).clone().read_owned().await;
+    debug!("getting manager");
     let Some(manager) = (*offline_app_state).as_ref().map(|d| d.app_state.clone()) else {
         return Err(crate::Error::OfflineAppStateNotLoaded);
     };
-    let dirs = manager.get_dir_options().await?;
+
     let manga = raw_manga_download(&manager, id).await?;
-    if let Some(cover) = manga
-        .find_first_relationships(RelationshipType::CoverArt)
-        .map(|r| r.id)
     {
-        if !dirs
-            .send(IsInMessage(HistoryEntry::new(
-                cover,
-                RelationshipType::CoverArt,
-            )))
-            .await?
+        debug!("getting dirs");
+        let dirs = manager.get_dir_options().await?;
+        if let Some(cover) = manga
+            .find_first_relationships(RelationshipType::CoverArt)
+            .map(|r| r.id)
         {
-            let _ = raw_cover_download(&manager, cover).await?;
-        } else {
-            match manager.get_cover_image(id).await {
-                Err(eureka_mmanager::Error::Io(io))
-                | Err(eureka_mmanager::Error::ApiCore(eureka_mmanager_core::Error::Io(io)))
-                    if io.kind() == std::io::ErrorKind::NotFound =>
-                {
-                    let _ = raw_cover_download(&manager, cover).await?;
-                }
-                _d => {
-                    if let Err(err) = &_d {
-                        dbg!(err);
+            debug!("checking if the cover art is there...");
+            if !dirs
+                .send(IsInMessage(HistoryEntry::new(
+                    cover,
+                    RelationshipType::CoverArt,
+                )))
+                .await?
+            {
+                debug!("Downloading title primary cover art ...");
+                let _ = raw_cover_download(&manager, cover).await?;
+            } else {
+                debug!("Checking if the cover art is really there");
+                match manager.get_cover_image(id).await {
+                    Err(eureka_mmanager::Error::Io(io))
+                    | Err(eureka_mmanager::Error::ApiCore(eureka_mmanager_core::Error::Io(io)))
+                        if io.kind() == std::io::ErrorKind::NotFound =>
+                    {
+                        debug!("Downloading title primary cover art ...");
+                        let _ = raw_cover_download(&manager, cover).await?;
                     }
-                    let _ = _d?;
+                    _d => {
+                        if let Err(err) = &_d {
+                            log::warn!("{err}");
+                        }
+                        let _ = _d?;
+                    }
                 }
             }
+        } else {
+            warn!(
+                "The title {} has no cover art",
+                manga
+                    .attributes
+                    .title
+                    .values()
+                    .next()
+                    .cloned()
+                    .unwrap_or_else(|| manga.id.to_string())
+            )
         }
     }
     Ok(manga)
