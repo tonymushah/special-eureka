@@ -48,9 +48,9 @@ pub async fn filter_author_artists_titles<R: Runtime>(
     };
     titles.retain(|t| match t {
         crate::objects::manga::MangaObject::WithRel(api_object) => {
-            !api_object.relationships.iter().any(|t| {
+            api_object.relationships.iter().any(|t| {
                 matches!(t.type_, RelationshipType::Author | RelationshipType::Artist)
-                    && black_listed.contains(&t.id)
+                    && !black_listed.contains(&t.id)
             })
         }
         // TODO make this works
@@ -99,8 +99,9 @@ pub async fn filter_scanlation_groups_chapters<R: Runtime>(
     };
     chapters.retain(|c| match c {
         crate::objects::chapter::Chapter::WithRelationship(api_object) => {
-            !api_object.relationships.iter().any(|o| {
-                matches!(o.type_, RelationshipType::ScanlationGroup) && black_listed.contains(&o.id)
+            api_object.relationships.iter().any(|o| {
+                matches!(o.type_, RelationshipType::ScanlationGroup)
+                    && !black_listed.contains(&o.id)
             })
         }
         // TODO make this works
@@ -151,7 +152,7 @@ pub async fn filter_users_chapters<R: Runtime>(
         crate::objects::chapter::Chapter::WithRelationship(api_object) => !api_object
             .relationships
             .iter()
-            .any(|o| matches!(o.type_, RelationshipType::User) && black_listed.contains(&o.id)),
+            .any(|o| matches!(o.type_, RelationshipType::User) && !black_listed.contains(&o.id)),
         // TODO make this works
         crate::objects::chapter::Chapter::WithoutRelationship(_) => false,
     });
