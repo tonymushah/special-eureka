@@ -166,21 +166,21 @@
 		queryFn() {
 			return get_manga_following_status(data.layoutData.id);
 		},
-		enabled: $isLogged && isInViewport.current
+		enabled: $isLogged
 	}));
 	let readingStatusQuery = createQuery(() => ({
 		queryKey: ["title", data.layoutData.id, "reading", "status"],
 		queryFn() {
 			return get_manga_reading_status(data.layoutData.id);
 		},
-		enabled: $isLogged && isInViewport.current
+		enabled: $isLogged
 	}));
 	let title_rating = createQuery(() => ({
 		queryKey: ["title", data.layoutData.id, "user-defined", "rating"],
 		queryFn() {
 			return get_manga_rating(data.layoutData.id);
 		},
-		enabled: $isLogged && isInViewport.current
+		enabled: $isLogged
 	}));
 	function refetchReadingFollowingStatus() {
 		Promise.all([

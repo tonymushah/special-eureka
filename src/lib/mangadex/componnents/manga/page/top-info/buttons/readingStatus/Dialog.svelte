@@ -65,7 +65,7 @@
 				<h4>Reading Status</h4>
 				<div class="form">
 					<StatusSelect {disabled} readingStatus={selectedStatus} />
-					<IsFollowingButton isFollowing={selectedIsFollowing} />
+					<IsFollowingButton isFollowing={selectedIsFollowing} {disabled} />
 				</div>
 			</div>
 			<div class="bottom">
