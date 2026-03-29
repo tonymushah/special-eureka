@@ -66,7 +66,7 @@ pub fn setup_logger<R: Runtime>(app: &App<R>) -> anyhow::Result<()> {
     #[cfg(debug_assertions)]
     {
         dispacher = dispacher.chain({
-            let e_f = env_filter::Builder::from_env("RUST_LOG").build();
+            let e_f = env_filter::Builder::from_env("RUST_ENV_LOG").build();
             let color = fern::colors::ColoredLevelConfig::new()
                 .debug(fern::colors::Color::BrightCyan)
                 .info(fern::colors::Color::Green)
