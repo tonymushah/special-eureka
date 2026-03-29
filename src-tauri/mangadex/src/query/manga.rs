@@ -10,6 +10,7 @@ use crate::{
     utils::traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
 };
 use async_graphql::{Context, Object};
+use log::trace;
 use mangadex_api_input_types::manga::{
     aggregate::MangaAggregateParam, feed::MangaFeedParams, get_draft::GetMangaDraftParams,
     get_drafts::MangaDraftsParams, get_relation_list::MangaRelationParam, list::MangaListParams,
@@ -68,11 +69,12 @@ impl MangaQueries {
         disable_author_artists_blacklist: Option<bool>,
     ) -> Result<MangaResults> {
         let mut params = params.unwrap_or_default();
+        trace!("{:#?}", params);
         params.includes = <MangaResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
         if !params.manga_ids.is_empty() {
             params.limit.replace(params.manga_ids.len().try_into()?);
         }
-        Ok(MangaListQueries::new_with_exclude_feed(
+        let res = MangaListQueries::new_with_exclude_feed(
             params,
             exclude_content_profile.unwrap_or_default(),
             ctx.get_app_handle::<tauri::Wry>()?,
@@ -80,7 +82,9 @@ impl MangaQueries {
         .only_unreads(only_unread.unwrap_or_default())
         .disable_author_artists_blacklist(disable_author_artists_blacklist.unwrap_or_default())
         .list_with_inner_filter(ctx, false)
-        .await?)
+        .await?;
+        trace!("{:#?}", res);
+        Ok(res)
     }
     pub async fn list_offline(
         &self,
