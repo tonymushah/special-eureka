@@ -17,6 +17,7 @@ use async_graphql::Context;
 use eureka_mmanager::prelude::{
     AsyncIntoSorted, IntoParamedFilteredStream, MangaDataPullAsyncTrait,
 };
+use log::debug;
 use mangadex_api_input_types::manga::list::MangaListParams;
 use mangadex_api_schema_rust::v5::{MangaCollection, MangaObject};
 use tokio_stream::Stream;
@@ -173,10 +174,20 @@ impl MangaListQueries {
         })
     }
     pub async fn list(&self, ctx: &Context<'_>) -> Result<MangaResults> {
-        if let Ok(res) = self.list_online(ctx).await {
-            Ok(res)
-        } else {
-            self.list_offline(ctx).await
+        match self.list_online(ctx).await {
+            Ok(res) => Ok(res),
+            Err(err) => {
+                log::warn!("Cannot fetch list online: {err}");
+                log::trace!("Using offline...");
+                match self.list_offline(ctx).await {
+                    Err(Error::OfflineAppStateNotLoaded) => {
+                        log::trace!("Cannot use offline...");
+                        Err(err)
+                    }
+                    Ok(res) => Ok(res),
+                    Err(err) => Err(err),
+                }
+            }
         }
     }
     // We might have complex filters in the future so yeah??
@@ -194,8 +205,11 @@ impl MangaListQueries {
         } else {
             self.list(ctx).await?
         };
+
         if self.only_unread || !self.disable_author_artists_blacklist {
             loop {
+                log::trace!("got list {:#?}", list);
+                log::trace!("starting processing {}", list.len());
                 if self.only_unread {
                     let read_markers = has_title_read(
                         ctx.get_app_handle::<tauri::Wry>()?,
@@ -204,7 +218,9 @@ impl MangaListQueries {
                     .await
                     .unwrap_or_default();
                     list.retain(|t| !read_markers.contains(&t.get_id()));
+                    log::trace!("after only unread {}", list.len());
                 }
+
                 // NOTE: Idk if this works well or not??
                 if !self.disable_author_artists_blacklist {
                     *list = crate::blacklist::filters::filter_author_artists_titles::<tauri::Wry>(
@@ -212,6 +228,7 @@ impl MangaListQueries {
                         std::mem::take(&mut *list),
                     )
                     .await?;
+                    log::trace!("after author artist cleanup {}", list.len());
                 }
                 if list.is_empty() {
                     let next_offset = list.info.offset + list.info.limit;
@@ -229,6 +246,8 @@ impl MangaListQueries {
                     break;
                 }
             }
+        } else {
+            debug!("Nothing to filter about... Skip...");
         }
         Ok(list)
     }

@@ -1,4 +1,5 @@
 use std::{
+    env,
     fs::{create_dir_all, read_dir, remove_file},
     time::SystemTime,
 };
@@ -17,9 +18,22 @@ pub fn setup_logger<R: Runtime>(app: &App<R>) -> anyhow::Result<()> {
             remove_file(e.path())?;
         }
     }
-    let file_dispatch = Dispatch::new()
-        .level(log::LevelFilter::Info)
-        .format(|out, msg, record| {
+    let mut file_dispatch = {
+        let mut dis = Dispatch::new();
+        let maybe_env = env::var("RUST_LOG_FILE")
+            .ok()
+            .filter(|s| !s.is_empty())
+            .map(|s| env_filter::Builder::from_env(&s).build());
+        if let Some(env) = maybe_env {
+            dis = dis.filter(move |metadata| env.enabled(metadata));
+        } else {
+            dis = dis.level(log::LevelFilter::Info);
+        }
+
+        dis
+    };
+    file_dispatch = file_dispatch
+        .format(move |out, msg, record| {
             out.finish(format_args!(
                 "[{} {} {}] {}",
                 humantime::format_rfc3339_seconds(SystemTime::now()),
@@ -42,19 +56,21 @@ pub fn setup_logger<R: Runtime>(app: &App<R>) -> anyhow::Result<()> {
     #[cfg(debug_assertions)]
     {
         dispacher = dispacher.chain({
+            let e_f = env_filter::Builder::from_env("RUST_ENV_LOG").build();
             let color = fern::colors::ColoredLevelConfig::new()
                 .debug(fern::colors::Color::BrightCyan)
                 .info(fern::colors::Color::Green)
                 .trace(fern::colors::Color::Magenta);
+
             Dispatch::new()
-                .level(log::LevelFilter::Debug)
+                .filter(move |metadata| e_f.enabled(metadata))
                 .format(move |out, msg, record| {
                     out.finish(format_args!(
                         "[{} {}] {}",
                         color.color(record.level()),
                         record.target(),
                         msg
-                    ))
+                    ));
                 })
                 .chain(std::io::stderr())
         });
