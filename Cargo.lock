@@ -1952,6 +1952,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "env_filter"
+version = "1.0.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "32e90c2accc4b07a8456ea0debdc2e7587bdd890680d71173a15d4ae604f6eef"
+dependencies = [
+ "log",
+ "regex",
+]
+
+[[package]]
 name = "equator"
 version = "0.4.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -6225,6 +6235,7 @@ version = "0.2.3-10"
 dependencies = [
  "actix",
  "anyhow",
+ "env_filter",
  "fern",
  "hotpath",
  "humantime",
