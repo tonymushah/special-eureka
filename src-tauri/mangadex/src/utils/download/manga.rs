@@ -11,6 +11,7 @@ use eureka_mmanager::{
         MangaDownloadManager, TaskManagerAddr,
     },
 };
+use log::{debug, info, warn};
 use mangadex_api_input_types::manga::aggregate::MangaAggregateParam;
 use mangadex_api_schema_rust::v5::MangaObject;
 use mangadex_api_types_rust::RelationshipType;
@@ -36,11 +37,31 @@ pub async fn raw_manga_download(
     manager: &Addr<DownloadManager>,
     id: Uuid,
 ) -> crate::Result<MangaObject> {
+    info!("downloading {id}");
+    debug!("getting manager...");
     let manga_manager = GetManager::<MangaDownloadManager>::get(manager).await?;
+    debug!("got manager");
+    debug!("getting task...");
     let mut task = manga_manager
         .new_task(MangaDownloadMessage::new(id).state(DownloadMessageState::Downloading))
         .await?;
-    Ok(task.wait().await?.await?)
+    debug!("got task");
+    debug!("getting wait...");
+    let wait = task.wait().await?;
+    debug!("got wait");
+    debug!("waiting...");
+    let res = wait.await?;
+    debug!("Finished!!");
+    info!(
+        "Finished download of {}!!",
+        res.attributes
+            .title
+            .values()
+            .next()
+            .cloned()
+            .unwrap_or_else(|| id.to_string())
+    );
+    Ok(res)
 }
 
 #[cfg_attr(feature = "hotpath", hotpath::measure)]
@@ -49,39 +70,60 @@ where
     R: Runtime,
     M: Manager<R> + Sync,
 {
+    debug!("getting appstate");
     let offline_app_state = (**app.get_offline_app_state()?).clone().read_owned().await;
+    debug!("getting manager");
     let Some(manager) = (*offline_app_state).as_ref().map(|d| d.app_state.clone()) else {
         return Err(crate::Error::OfflineAppStateNotLoaded);
     };
-    let dirs = manager.get_dir_options().await?;
+
     let manga = raw_manga_download(&manager, id).await?;
-    if let Some(cover) = manga
-        .find_first_relationships(RelationshipType::CoverArt)
-        .map(|r| r.id)
     {
-        if !dirs
-            .send(IsInMessage(HistoryEntry::new(
-                cover,
-                RelationshipType::CoverArt,
-            )))
-            .await?
+        debug!("getting dirs");
+        let dirs = manager.get_dir_options().await?;
+        if let Some(cover) = manga
+            .find_first_relationships(RelationshipType::CoverArt)
+            .map(|r| r.id)
         {
-            let _ = raw_cover_download(&manager, cover).await?;
-        } else {
-            match manager.get_cover_image(id).await {
-                Err(eureka_mmanager::Error::Io(io))
-                | Err(eureka_mmanager::Error::ApiCore(eureka_mmanager_core::Error::Io(io)))
-                    if io.kind() == std::io::ErrorKind::NotFound =>
-                {
-                    let _ = raw_cover_download(&manager, cover).await?;
-                }
-                _d => {
-                    if let Err(err) = &_d {
-                        dbg!(err);
+            debug!("checking if the cover art is there...");
+            if !dirs
+                .send(IsInMessage(HistoryEntry::new(
+                    cover,
+                    RelationshipType::CoverArt,
+                )))
+                .await?
+            {
+                debug!("Downloading title primary cover art ...");
+                let _ = raw_cover_download(&manager, cover).await?;
+            } else {
+                debug!("Checking if the cover art is really there");
+                match manager.get_cover_image(id).await {
+                    Err(eureka_mmanager::Error::Io(io))
+                    | Err(eureka_mmanager::Error::ApiCore(eureka_mmanager_core::Error::Io(io)))
+                        if io.kind() == std::io::ErrorKind::NotFound =>
+                    {
+                        debug!("Downloading title primary cover art ...");
+                        let _ = raw_cover_download(&manager, cover).await?;
                     }
-                    let _ = _d?;
+                    _d => {
+                        if let Err(err) = &_d {
+                            log::warn!("{err}");
+                        }
+                        let _ = _d?;
+                    }
                 }
             }
+        } else {
+            warn!(
+                "The title {} has no cover art",
+                manga
+                    .attributes
+                    .title
+                    .values()
+                    .next()
+                    .cloned()
+                    .unwrap_or_else(|| manga.id.to_string())
+            )
         }
     }
     Ok(manga)
@@ -305,8 +347,11 @@ where
     R: Runtime,
     M: Manager<R> + Sync,
 {
+    log::debug!("downloading {title_id}...");
     let mg_obj = download_manga(app, title_id).await?;
+    log::debug!("downloaded {title_id}!");
     if let Some(extras) = extras {
+        log::debug!("Retrieving chapters...");
         let chap_ids = match extras {
             MangaDownloadExtras::AllChapters => get_title_chapter_ids(app, title_id).await?,
             MangaDownloadExtras::UnDownloadeds => {
@@ -321,35 +366,46 @@ where
                 get_title_failed_unread_chapters(app, title_id).await?
             }
         };
+        log::debug!("{:?}", chap_ids);
         for id in chap_ids {
-            let rate_limit = app.get_specific_rate_limit()?;
-            let (offline_app_state, _) = tokio::join!(
-                (**app.get_offline_app_state()?).clone().read_owned(),
-                rate_limit.at_home(&id)
-            );
-            let Some(manager) = (*offline_app_state).as_ref().map(|d| d.app_state.clone()) else {
-                return Err(crate::Error::OfflineAppStateNotLoaded);
+            let wait = {
+                log::debug!("getting wait!");
+                let rate_limit = app.get_specific_rate_limit()?;
+                let (offline_app_state, _) = tokio::join!(
+                    (**app.get_offline_app_state()?).clone().read_owned(),
+                    rate_limit.at_home(&id)
+                );
+                log::debug!("Got rate_limit with app_state");
+                let Some(manager) = (*offline_app_state).as_ref().map(|d| d.app_state.clone())
+                else {
+                    return Err(crate::Error::OfflineAppStateNotLoaded);
+                };
+                drop(offline_app_state);
+                let mut task = super::chapter::raw_chapter_download_no_wait(
+                    &manager,
+                    id,
+                    (*app
+                        .extract::<ChapterQualityStore>()
+                        .await
+                        .unwrap_or_default())
+                    .into(),
+                    *app.extract::<ForcePort443Store>().await.unwrap_or_default(),
+                )
+                .await?;
+                log::debug!("got task");
+                drop(manager);
+                log::debug!("waiting...");
+                task.wait().await?
             };
-
-            let wait = super::chapter::raw_chapter_download_no_wait(
-                &manager,
-                id,
-                (*app
-                    .extract::<ChapterQualityStore>()
-                    .await
-                    .unwrap_or_default())
-                .into(),
-                *app.extract::<ForcePort443Store>().await.unwrap_or_default(),
-            )
-            .await?
-            .wait()
-            .await?;
+            log::debug!("got wait!!");
             {
                 ins_handle::add_in_queue(app.app_handle(), id)?;
                 let app = app.app_handle().clone();
 
                 tokio::spawn(async move {
-                    match wait.await {
+                    use futures_util::FutureExt;
+                    log::debug!("waiting...");
+                    match wait.fuse().await {
                         Ok(res) => {
                             if let Err(err) = ins_handle::add_in_success(&app, id) {
                                 log::error!("{err}");

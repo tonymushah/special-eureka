@@ -48,7 +48,6 @@
 				rowLayout
 				titleAsParagraph
 				title="Translated language:"
-				placement="bottom"
 				selecteds={toStore(
 					() => {
 						const lang = commitData?.translatedLanguage;

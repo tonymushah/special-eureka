@@ -39,7 +39,7 @@ pub fn run() {
     let context = tauri::tauri_build_context!();
     System::set_current(runtime_guard.sys().clone());
 
-    #[cfg(feature = "single-runtime")]
+    #[cfg(feature = "actix-single-runtime")]
     {
         tauri::async_runtime::set(runtime_guard.handle().clone());
     }
@@ -48,8 +48,15 @@ pub fn run() {
 
     match get_builder().build(context) {
         Ok(app) => {
-            if let Err(err) = logging::setup_logger(&app) {
-                eprintln!("{err}")
+            if let Err(_e) = logging::setup_logger(&app) {
+                #[cfg(debug_assertions)]
+                {
+                    panic!("Cannot setup logger: {_e}");
+                }
+                #[cfg(not(debug_assertions))]
+                {
+                    eprintln!("cannot setup logger!!");
+                }
             }
             app.run(move |app_handle, e| match e {
                 tauri::RunEvent::WindowEvent {

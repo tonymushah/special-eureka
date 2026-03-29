@@ -8,6 +8,7 @@ use eureka_mmanager::{
         TaskManagerAddr,
     },
 };
+use log::{debug, info};
 use mangadex_api_schema_rust::v5::CoverObject;
 use mangadex_api_types_rust::RelationshipType;
 use tauri::{Manager, Runtime};
@@ -22,11 +23,22 @@ pub async fn raw_cover_download(
     manager: &Addr<DownloadManager>,
     id: Uuid,
 ) -> crate::Result<CoverObject> {
+    debug!("Getting cover art {id}");
+    debug!("Getting cover manager...");
     let cover_manager = GetManager::<CoverDownloadManager>::get(manager).await?;
+    debug!("Got manager");
+    debug!("Getting task...");
     let mut task = cover_manager
         .new_task(CoverDownloadMessage::new(id).state(DownloadMessageState::Downloading))
         .await?;
-    Ok(task.wait().await?.await?)
+    debug!("Got task");
+    debug!("Getting wait...");
+    let wait = task.wait().await?;
+    debug!("Got wait");
+    debug!("Waiting...");
+    let res = wait.await?;
+    info!("Finished downloading cover {}", res.attributes.file_name);
+    Ok(res)
 }
 
 #[cfg_attr(feature = "hotpath", hotpath::measure)]

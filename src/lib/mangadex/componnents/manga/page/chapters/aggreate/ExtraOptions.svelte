@@ -7,6 +7,8 @@
 	import { isLogged } from "@mangadex/utils/auth";
 	import { ListIcon } from "@lucide/svelte";
 	import { dev } from "$app/environment";
+	import { createMutation } from "@tanstack/svelte-query";
+	import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 
 	let layout: HTMLElement | undefined = $state();
 	let popover: HTMLDivElement | undefined = $state(undefined);
@@ -52,12 +54,13 @@
 			const arrow_ = middlewareData.arrow;
 			if (arrow_) {
 				const { x: arrowX, y: arrowY } = arrow_;
-				const staticSide = {
-					top: "bottom",
-					right: "left",
-					bottom: "top",
-					left: "right"
-				}[placement.split("-")[0]];
+				const staticSide: string =
+					{
+						top: "bottom",
+						right: "left",
+						bottom: "top",
+						left: "right"
+					}[placement.split("-")[0]] ?? "bottom";
 
 				Object.assign(arrowElement.style, {
 					left: arrowX != null ? `${arrowX}px` : "",
@@ -92,6 +95,15 @@
 			hidePopover();
 		}
 	});
+	let downloadOptionsMutation = createMutation(() => ({
+		mutationKey: ["download-titles-extra", id],
+		async mutationFn(extra: MangaDownloadExtras) {
+			await downloadTitleWithExtra(id, extra);
+		},
+		onError(err) {
+			addErrorToast("Cannot download title with extra chapters", err);
+		}
+	}));
 </script>
 
 <span bind:this={layout}>
@@ -132,54 +144,54 @@
 	<button
 		onclick={() => {
 			open = false;
-			downloadTitleWithExtra(id, MangaDownloadExtras.AllChapters);
+			downloadOptionsMutation.mutate(MangaDownloadExtras.AllChapters);
 		}}
-		disabled={disableDownloads}
+		disabled={disableDownloads || downloadOptionsMutation.isPending}
 	>
 		Download all chapters
 	</button>
 	<button
 		onclick={() => {
 			open = false;
-			downloadTitleWithExtra(id, MangaDownloadExtras.Unreads);
+			downloadOptionsMutation.mutate(MangaDownloadExtras.Unreads);
 		}}
-		disabled={disableDownloads}
+		disabled={disableDownloads || downloadOptionsMutation.isPending}
 	>
 		Download all unread chapters
 	</button>
 	<button
 		onclick={() => {
 			open = false;
-			downloadTitleWithExtra(id, MangaDownloadExtras.UnDownloadeds);
+			downloadOptionsMutation.mutate(MangaDownloadExtras.UnDownloadeds);
 		}}
-		disabled={disableDownloads}
+		disabled={disableDownloads || downloadOptionsMutation.isPending}
 	>
 		Download all un-downloaded chapters
 	</button>
 	<button
 		onclick={() => {
 			open = false;
-			downloadTitleWithExtra(id, MangaDownloadExtras.UnReadUnDownloadeds);
+			downloadOptionsMutation.mutate(MangaDownloadExtras.UnReadUnDownloadeds);
 		}}
-		disabled={disableDownloads}
+		disabled={disableDownloads || downloadOptionsMutation.isPending}
 	>
 		Download all un-read un-downloaded chapters
 	</button>
 	<button
 		onclick={() => {
 			open = false;
-			downloadTitleWithExtra(id, MangaDownloadExtras.Failed);
+			downloadOptionsMutation.mutate(MangaDownloadExtras.Failed);
 		}}
-		disabled={disableDownloads}
+		disabled={disableDownloads || downloadOptionsMutation.isPending}
 	>
 		(Re)Download all title failed chapters
 	</button>
 	<button
 		onclick={() => {
 			open = false;
-			downloadTitleWithExtra(id, MangaDownloadExtras.UnReadFailed);
+			downloadOptionsMutation.mutate(MangaDownloadExtras.UnReadFailed);
 		}}
-		disabled={disableDownloads}
+		disabled={disableDownloads || downloadOptionsMutation.isPending}
 	>
 		(Re)Download all title unread failed chapters
 	</button>

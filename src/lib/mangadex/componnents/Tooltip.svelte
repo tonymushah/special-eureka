@@ -46,12 +46,13 @@
 			const arrow_ = middlewareData.arrow;
 			if (arrow_) {
 				const { x: arrowX, y: arrowY } = arrow_;
-				const staticSide = {
-					top: "bottom",
-					right: "left",
-					bottom: "top",
-					left: "right"
-				}[placement.split("-")[0]];
+				const staticSide =
+					{
+						top: "bottom",
+						right: "left",
+						bottom: "top",
+						left: "right"
+					}[placement.split("-")[0]] ?? "bottom";
 
 				Object.assign(arrowElement.style, {
 					left: arrowX != null ? `${arrowX}px` : "",

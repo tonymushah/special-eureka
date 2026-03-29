@@ -1,6 +1,7 @@
 <script lang="ts">
 	import ContentWarning from "./ContentWarning.svelte";
 	import CoverBlur from "./CoverBlur.svelte";
+	import Fahh from "./Fahh.svelte";
 	import ForcePort443 from "./ForcePort443.svelte";
 	import HideReadTitle from "./HideReadTitle.svelte";
 	import IsDataSaver from "./IsDataSaver.svelte";
@@ -44,6 +45,9 @@
 	</section>
 	<section>
 		<HideReadTitle />
+	</section>
+	<section>
+		<Fahh />
 	</section>
 </div>
 

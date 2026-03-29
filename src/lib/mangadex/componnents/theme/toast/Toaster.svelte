@@ -11,6 +11,9 @@
 		const unsub = toastNotify.subscribe((d) => {
 			notify = d;
 		});
+		if (param.type == "error") {
+			playMDFahh();
+		}
 		try {
 			if (notify) {
 				Promise.resolve()
@@ -78,6 +81,7 @@
 	import { X } from "@lucide/svelte";
 	import toastStyles from "./toaster.module.scss";
 	import { isLinuxStore } from "@special-eureka/core/commands/isLinux";
+	import { playMDFahh } from "@mangadex/stores/fahh.svelte";
 </script>
 
 <div>

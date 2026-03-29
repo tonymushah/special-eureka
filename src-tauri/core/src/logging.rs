@@ -41,11 +41,23 @@ pub fn setup_logger<R: Runtime>(app: &App<R>) -> anyhow::Result<()> {
 
     #[cfg(debug_assertions)]
     {
-        dispacher = dispacher.chain(
+        dispacher = dispacher.chain({
+            let color = fern::colors::ColoredLevelConfig::new()
+                .debug(fern::colors::Color::BrightCyan)
+                .info(fern::colors::Color::Green)
+                .trace(fern::colors::Color::Magenta);
             Dispatch::new()
                 .level(log::LevelFilter::Debug)
-                .chain(std::io::stdout()),
-        );
+                .format(move |out, msg, record| {
+                    out.finish(format_args!(
+                        "[{} {}] {}",
+                        color.color(record.level()),
+                        record.target(),
+                        msg
+                    ))
+                })
+                .chain(std::io::stderr())
+        });
     }
 
     dispacher = dispacher.chain(file_dispatch);

@@ -1,5 +1,7 @@
 <script lang="ts">
+	import { playMDFahh } from "@mangadex/stores/fahh.svelte";
 	import { CombinedError } from "@urql/svelte";
+	import { onMount } from "svelte";
 
 	interface Props {
 		error: Error;
@@ -7,6 +9,9 @@
 	}
 
 	let { error, label }: Props = $props();
+	onMount(() => {
+		playMDFahh();
+	});
 </script>
 
 <div class="error with-margin">

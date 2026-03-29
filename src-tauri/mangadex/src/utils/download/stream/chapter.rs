@@ -95,7 +95,9 @@ impl Stream for ChapterDownloadStream {
                 match msg {
                     SharedState::Task(msg) => match *msg {
                         TaskSubscriberMessages::State(state) => {
-                            return dbg!(Poll::Ready(Some(state.into())));
+                            let ret = Poll::Ready(Some(state.into()));
+                            log::trace!("to send {:#?}", ret);
+                            return ret;
                         }
                         _ => continue,
                     },
