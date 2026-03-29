@@ -174,10 +174,20 @@ impl MangaListQueries {
         })
     }
     pub async fn list(&self, ctx: &Context<'_>) -> Result<MangaResults> {
-        if let Ok(res) = self.list_online(ctx).await {
-            Ok(res)
-        } else {
-            self.list_offline(ctx).await
+        match self.list_online(ctx).await {
+            Ok(res) => Ok(res),
+            Err(err) => {
+                log::warn!("Cannot fetch list online: {err}");
+                log::trace!("Using offline...");
+                match self.list_offline(ctx).await {
+                    Err(Error::OfflineAppStateNotLoaded) => {
+                        log::trace!("Cannot use offline...");
+                        Err(err)
+                    }
+                    Ok(res) => Ok(res),
+                    Err(err) => Err(err),
+                }
+            }
         }
     }
     // We might have complex filters in the future so yeah??
