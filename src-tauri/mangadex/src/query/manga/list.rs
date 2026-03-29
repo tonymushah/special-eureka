@@ -17,6 +17,7 @@ use async_graphql::Context;
 use eureka_mmanager::prelude::{
     AsyncIntoSorted, IntoParamedFilteredStream, MangaDataPullAsyncTrait,
 };
+use log::debug;
 use mangadex_api_input_types::manga::list::MangaListParams;
 use mangadex_api_schema_rust::v5::{MangaCollection, MangaObject};
 use tokio_stream::Stream;
@@ -235,6 +236,8 @@ impl MangaListQueries {
                     break;
                 }
             }
+        } else {
+            debug!("Nothing to filter about... Skip...");
         }
         Ok(list)
     }
