@@ -15,7 +15,7 @@
 	const selectedTitles = createQuery(() => {
 		return {
 			queryKey: ["selecto", "titles", "fetch"],
-
+			staleTime: 0,
 			async queryFn(): Promise<{ id: string; title: string }[]> {
 				const res = await client
 					.query(query, {
@@ -33,8 +33,7 @@
 					throw new Error("No data");
 				}
 			},
-			enabled: titles.length > 0,
-			staleTime: 0
+			enabled: titles.length > 0
 		} satisfies CreateQueryOptions<
 			{
 				id: string;
