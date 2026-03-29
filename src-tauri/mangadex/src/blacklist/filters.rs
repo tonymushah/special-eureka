@@ -48,10 +48,18 @@ pub async fn filter_author_artists_titles<R: Runtime>(
     };
     titles.retain(|t| match t {
         crate::objects::manga::MangaObject::WithRel(api_object) => {
-            !api_object.relationships.iter().any(|t| {
-                matches!(t.type_, RelationshipType::Author | RelationshipType::Artist)
-                    && black_listed.contains(&t.id)
-            })
+            let authors = api_object
+                .relationships
+                .iter()
+                .filter_map(|t| {
+                    if matches!(t.type_, RelationshipType::Author | RelationshipType::Artist) {
+                        Some(t.id)
+                    } else {
+                        None
+                    }
+                })
+                .collect::<HashSet<_>>();
+            (&black_listed & &authors).is_empty()
         }
         // TODO make this works
         crate::objects::manga::MangaObject::WithoutRel(_) => false,
@@ -99,9 +107,19 @@ pub async fn filter_scanlation_groups_chapters<R: Runtime>(
     };
     chapters.retain(|c| match c {
         crate::objects::chapter::Chapter::WithRelationship(api_object) => {
-            !api_object.relationships.iter().any(|o| {
-                matches!(o.type_, RelationshipType::ScanlationGroup) && black_listed.contains(&o.id)
-            })
+            let groups = api_object
+                .relationships
+                .iter()
+                .filter_map(|o| {
+                    if matches!(o.type_, RelationshipType::ScanlationGroup) {
+                        Some(o.id)
+                    } else {
+                        None
+                    }
+                })
+                .collect::<HashSet<_>>();
+
+            (&black_listed & &groups).is_empty()
         }
         // TODO make this works
         crate::objects::chapter::Chapter::WithoutRelationship(_) => false,
@@ -148,10 +166,20 @@ pub async fn filter_users_chapters<R: Runtime>(
         .await??
     };
     chapters.retain(|c| match c {
-        crate::objects::chapter::Chapter::WithRelationship(api_object) => !api_object
-            .relationships
-            .iter()
-            .any(|o| matches!(o.type_, RelationshipType::User) && black_listed.contains(&o.id)),
+        crate::objects::chapter::Chapter::WithRelationship(api_object) => {
+            let users = api_object
+                .relationships
+                .iter()
+                .filter_map(|o| {
+                    if matches!(o.type_, RelationshipType::User) {
+                        Some(o.id)
+                    } else {
+                        None
+                    }
+                })
+                .collect::<HashSet<_>>();
+            (&black_listed & &users).is_empty()
+        }
         // TODO make this works
         crate::objects::chapter::Chapter::WithoutRelationship(_) => false,
     });
