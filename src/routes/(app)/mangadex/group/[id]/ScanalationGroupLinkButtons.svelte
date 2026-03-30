@@ -5,9 +5,9 @@
 	import { openUrl as shellOpen } from "@tauri-apps/plugin-opener";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import { getContextClient } from "@urql/svelte";
-	import { getFaviconSrc } from "@mangadex/utils/favicons/getFaviconSrc";
 	import { readable } from "svelte/store";
 	import Discord from "@mangadex/componnents/icon/Discord.svelte";
+	import { getFaviconSrcQuery } from "@mangadex/utils/favicons/getFaviconSrc";
 
 	interface Props {
 		website?: string | undefined;
@@ -30,29 +30,17 @@
 	}: Props = $props();
 
 	const client = getContextClient();
-	let websiteFavicon = $derived(
-		website
-			? getFaviconSrc({
-					client,
-					url: website
-				})
-			: readable(undefined)
+	let websiteFavicon = getFaviconSrcQuery(
+		() => website ?? "",
+		() => website != undefined
 	);
-	let twitterFavicon = $derived(
-		twitter
-			? getFaviconSrc({
-					client,
-					url: twitter
-				})
-			: readable(undefined)
+	let twitterFavicon = getFaviconSrcQuery(
+		() => twitter ?? "",
+		() => twitter != undefined
 	);
-	let mangaUpdatesFavicon = $derived(
-		mangaUpdates
-			? getFaviconSrc({
-					client,
-					url: mangaUpdates
-				})
-			: readable(undefined)
+	let mangaUpdatesFavicon = getFaviconSrcQuery(
+		() => mangaUpdates ?? "",
+		() => mangaUpdates != undefined
 	);
 </script>
 
@@ -66,8 +54,8 @@
 	>
 		<div class="button-inner">
 			<div class="icon">
-				{#if $twitterFavicon}
-					<img src={$twitterFavicon} alt={twitter} />
+				{#if twitterFavicon.isSuccess}
+					<img src={twitterFavicon.data} alt={twitter} />
 				{:else}
 					<TwitterIcon size={20} />
 				{/if}
@@ -87,8 +75,8 @@
 	>
 		<div class="button-inner">
 			<div class="icon">
-				{#if $websiteFavicon}
-					<img src={$websiteFavicon} alt={website} />
+				{#if websiteFavicon.isSuccess}
+					<img src={websiteFavicon.data} alt={website} />
 				{:else}
 					<GlobeIcon size="20" />
 				{/if}
@@ -108,8 +96,8 @@
 	>
 		<div class="button-inner">
 			<div class="icon">
-				{#if $mangaUpdatesFavicon}
-					<img src={$mangaUpdatesFavicon} alt={mangaUpdates} />
+				{#if mangaUpdatesFavicon.isSuccess}
+					<img src={mangaUpdatesFavicon.data} alt={mangaUpdates} />
 				{:else}
 					<ExternalLinkIcon size="20" />
 				{/if}
