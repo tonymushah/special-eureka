@@ -1,6 +1,6 @@
 <script lang="ts">
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
-	import { getFaviconSrc } from "@mangadex/utils/favicons/getFaviconSrc";
+	import { getFaviconSrcQuery } from "@mangadex/utils/favicons/getFaviconSrc";
 	import { getContextClient } from "@urql/svelte";
 	import { readable } from "svelte/store";
 	import { BoxIcon, ExternalLinkIcon, GlobeIcon } from "@lucide/svelte";
@@ -16,109 +16,57 @@
 	}
 
 	let { links }: Props = $props();
-	let twitter = $derived(
-		links.twitter
-			? getFaviconSrc({
-					client,
-					url: links.twitter
-				})
-			: readable(undefined)
+	let twitter = getFaviconSrcQuery(
+		() => links.twitter ?? "",
+		() => links.twitter != undefined
 	);
-	let pixiv = $derived(
-		links.pixiv
-			? getFaviconSrc({
-					client,
-					url: links.pixiv
-				})
-			: readable(undefined)
+	let pixiv = getFaviconSrcQuery(
+		() => links.pixiv ?? "",
+		() => links.pixiv != undefined
 	);
-	let melonBook = $derived(
-		links.melonBook
-			? getFaviconSrc({
-					client,
-					url: links.melonBook
-				})
-			: readable(undefined)
+	let melonBook = getFaviconSrcQuery(
+		() => links.melonBook ?? "",
+		() => links.melonBook != undefined
 	);
-	let fanbox = $derived(
-		links.fanBox
-			? getFaviconSrc({
-					client,
-					url: links.fanBox
-				})
-			: readable(undefined)
+	let fanbox = getFaviconSrcQuery(
+		() => links.fanBox ?? "",
+		() => links.fanBox != undefined
 	);
-	let booth = $derived(
-		links.booth
-			? getFaviconSrc({
-					client,
-					url: links.booth
-				})
-			: readable(undefined)
+	let booth = getFaviconSrcQuery(
+		() => links.booth ?? "",
+		() => links.booth != undefined
 	);
-	let nicoVideo = $derived(
-		links.nicoVideo
-			? getFaviconSrc({
-					client,
-					url: links.nicoVideo
-				})
-			: readable(undefined)
+	let nicoVideo = getFaviconSrcQuery(
+		() => links.nicoVideo ?? "",
+		() => links.nicoVideo != undefined
 	);
-	let skeb = $derived(
-		links.skeb
-			? getFaviconSrc({
-					client,
-					url: links.skeb
-				})
-			: readable(undefined)
+	let skeb = getFaviconSrcQuery(
+		() => links.skeb ?? "",
+		() => links.skeb != undefined
 	);
-	let fantia = $derived(
-		links.fantia
-			? getFaviconSrc({
-					client,
-					url: links.fantia
-				})
-			: readable(undefined)
+	let fantia = getFaviconSrcQuery(
+		() => links.fantia ?? "",
+		() => links.fantia != undefined
 	);
-	let tumblr = $derived(
-		links.tumblr
-			? getFaviconSrc({
-					client,
-					url: links.tumblr
-				})
-			: readable(undefined)
+	let tumblr = getFaviconSrcQuery(
+		() => links.tumblr ?? "",
+		() => links.tumblr != undefined
 	);
-	let youtube = $derived(
-		links.youtube
-			? getFaviconSrc({
-					client,
-					url: links.youtube
-				})
-			: readable(undefined)
+	let youtube = getFaviconSrcQuery(
+		() => links.youtube ?? "",
+		() => links.youtube != undefined
 	);
-	let weibo = $derived(
-		links.weibo
-			? getFaviconSrc({
-					client,
-					url: links.weibo
-				})
-			: readable(undefined)
+	let weibo = getFaviconSrcQuery(
+		() => links.weibo ?? "",
+		() => links.weibo != undefined
 	);
-	let naver = $derived(
-		links.naver
-			? getFaviconSrc({
-					client,
-					url: links.naver
-				})
-			: readable(undefined)
+	let naver = getFaviconSrcQuery(
+		() => links.naver ?? "",
+		() => links.naver != undefined
 	);
-	let website = $derived(
-		links.website
-			? getFaviconSrc({
-					client,
-					url: links.website
-				})
-			: readable(undefined)
+	let website = getFaviconSrcQuery(
+		() => links.website ?? "",
+		() => links.website != undefined
 	);
 </script>
 
@@ -132,8 +80,8 @@
 	>
 		<div class="button-inner">
 			<div class="icon">
-				{#if $twitter}
-					<img src={$twitter} alt={links.twitter} />
+				{#if twitter.isSuccess}
+					<img src={twitter.data} alt={links.twitter} />
 				{:else}
 					<TwitterIcon size={20} />
 				{/if}
@@ -153,8 +101,8 @@
 	>
 		<div class="button-inner">
 			<div class="icon">
-				{#if $pixiv}
-					<img src={$pixiv} alt={links.pixiv} />
+				{#if pixiv.isSuccess}
+					<img src={pixiv.data} alt={links.pixiv} />
 				{:else}
 					<ExternalLinkIcon size={20} />
 				{/if}
@@ -174,8 +122,8 @@
 	>
 		<div class="button-inner">
 			<div class="icon">
-				{#if $melonBook}
-					<img src={$melonBook} alt={links.melonBook} />
+				{#if melonBook.isSuccess}
+					<img src={melonBook.data} alt={links.melonBook} />
 				{:else}
 					<ExternalLinkIcon size="20" />
 				{/if}
@@ -195,8 +143,8 @@
 	>
 		<div class="button-inner">
 			<div class="icon">
-				{#if $fanbox}
-					<img src={$fanbox} alt={links.fanBox} />
+				{#if fanbox.isSuccess}
+					<img src={fanbox.data} alt={links.fanBox} />
 				{:else}
 					<BoxIcon size="20" />
 				{/if}
@@ -216,8 +164,8 @@
 	>
 		<div class="button-inner">
 			<div class="icon">
-				{#if $booth}
-					<img src={$booth} alt={links.booth} />
+				{#if booth.isSuccess}
+					<img src={booth.data} alt={links.booth} />
 				{:else}
 					<ExternalLinkIcon size="20" />
 				{/if}
@@ -237,8 +185,8 @@
 	>
 		<div class="button-inner">
 			<div class="icon">
-				{#if $nicoVideo}
-					<img src={$nicoVideo} alt={links.nicoVideo} />
+				{#if nicoVideo.isSuccess}
+					<img src={nicoVideo.data} alt={links.nicoVideo} />
 				{:else}
 					<TwitterIcon size={20} />
 				{/if}
@@ -258,8 +206,8 @@
 	>
 		<div class="button-inner">
 			<div class="icon">
-				{#if $skeb}
-					<img src={$skeb} alt={links.skeb} />
+				{#if skeb.isSuccess}
+					<img src={skeb.data} alt={links.skeb} />
 				{:else}
 					<ExternalLinkIcon size="20" />
 				{/if}
@@ -279,8 +227,8 @@
 	>
 		<div class="button-inner">
 			<div class="icon">
-				{#if $fantia}
-					<img src={$fantia} alt={links.fantia} />
+				{#if fantia.isSuccess}
+					<img src={fantia.data} alt={links.fantia} />
 				{:else}
 					<ExternalLinkIcon size="20" />
 				{/if}
@@ -300,8 +248,8 @@
 	>
 		<div class="button-inner">
 			<div class="icon">
-				{#if $tumblr}
-					<img src={$tumblr} alt={links.tumblr} />
+				{#if tumblr.isSuccess}
+					<img src={tumblr.data} alt={links.tumblr} />
 				{:else}
 					<Tumblr size="20" />
 				{/if}
@@ -321,8 +269,8 @@
 	>
 		<div class="button-inner">
 			<div class="icon">
-				{#if $youtube}
-					<img src={$youtube} alt={links.youtube} />
+				{#if youtube.isSuccess}
+					<img src={youtube.data} alt={links.youtube} />
 				{:else}
 					<YoutubeIcon size={20} />
 				{/if}
@@ -342,8 +290,8 @@
 	>
 		<div class="button-inner">
 			<div class="icon">
-				{#if $weibo}
-					<img src={$weibo} alt={links.weibo} />
+				{#if weibo.isSuccess}
+					<img src={weibo.data} alt={links.weibo} />
 				{:else}
 					<Weibo size="20" />
 				{/if}
@@ -363,8 +311,8 @@
 	>
 		<div class="button-inner">
 			<div class="icon">
-				{#if $naver}
-					<img src={$naver} alt={links.naver} />
+				{#if naver.isSuccess}
+					<img src={naver.data} alt={links.naver} />
 				{:else}
 					<ExternalLinkIcon size="20" />
 				{/if}
@@ -384,8 +332,8 @@
 	>
 		<div class="button-inner">
 			<div class="icon">
-				{#if $website}
-					<img src={$website} alt={links.website} />
+				{#if website.isSuccess}
+					<img src={website.data} alt={links.website} />
 				{:else}
 					<GlobeIcon size="20" />
 				{/if}
