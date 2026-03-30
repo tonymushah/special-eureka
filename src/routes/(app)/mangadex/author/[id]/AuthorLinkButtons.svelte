@@ -2,7 +2,6 @@
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import { getFaviconSrcQuery } from "@mangadex/utils/favicons/getFaviconSrc";
 	import { getContextClient } from "@urql/svelte";
-	import { readable } from "svelte/store";
 	import { BoxIcon, ExternalLinkIcon, GlobeIcon } from "@lucide/svelte";
 	import { SiX as TwitterIcon, SiYoutube as YoutubeIcon } from "@icons-pack/svelte-simple-icons";
 	import { openUrl as shellOpen } from "@tauri-apps/plugin-opener";
