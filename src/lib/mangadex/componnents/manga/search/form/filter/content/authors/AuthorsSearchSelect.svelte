@@ -1,7 +1,7 @@
 <script lang="ts">
 	import FormInput from "@mangadex/componnents/theme/form/input/FormInput.svelte";
 	import type { Tag } from "@mangadex/utils/legacy/melt-ui-tag.ts";
-	import { debounce } from "lodash";
+	import { debounce, delay } from "lodash";
 	import { onDestroy } from "svelte";
 	import { XIcon } from "@lucide/svelte";
 	import { type Writable } from "svelte/store";
@@ -26,10 +26,10 @@
 		menuElement: () => menu,
 		triggerElement: () => trigger,
 		open: () => shouldOpen,
-		closeOnClick: true,
 		sameWidth: true,
 		setOpen: (o) => (shouldOpen = o),
-		showMenuDisplay: "flex"
+		showMenuDisplay: "flex",
+		closeOnClick: true
 	});
 	const client = getContextClient();
 	let authorSearchQuery = createInfiniteQuery(() => ({
@@ -115,7 +115,13 @@
 		{#each $tags as t}
 			<div class="tag">
 				<span>{t.value}</span>
-				<button>
+				<button
+					onclick={() => {
+						tags.update((tags) => {
+							return tags.filter((t2) => t.id != t2.id);
+						});
+					}}
+				>
 					<XIcon size={"24"} />
 				</button>
 			</div>
@@ -127,7 +133,9 @@
 					touchedInput = true;
 				},
 				onblur() {
-					touchedInput = false;
+					delay(() => {
+						touchedInput = false;
+					}, 200);
 				}
 			}}
 		/>
