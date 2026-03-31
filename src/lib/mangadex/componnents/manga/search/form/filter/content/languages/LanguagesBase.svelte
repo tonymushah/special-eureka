@@ -25,7 +25,8 @@
 		setOpen: (o) => (open = o),
 		sameWidth: true,
 		showMenuDisplay: "flex",
-		closeOnClick: true
+		closeOnClick: true,
+		closeOnOutClick: true
 	});
 </script>
 
