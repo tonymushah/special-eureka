@@ -4,7 +4,6 @@
 	import type { Language } from "@mangadex/gql/graphql";
 	import { language_list } from "@mangadex/utils/lang/list";
 	import { startCase } from "lodash";
-	import { slide } from "svelte/transition";
 	interface Props {
 		menu?: HTMLElement;
 		open: boolean;
@@ -23,7 +22,11 @@
 					<button
 						class="mi"
 						onclick={() => {
-							selectedLanguages = new Set([...selectedLanguages, value]).values().toArray();
+							if (selectedLanguages.includes(value)) {
+								selectedLanguages = selectedLanguages.filter((t) => t != value);
+							} else {
+								selectedLanguages = new Set([...selectedLanguages, value]).values().toArray();
+							}
 						}}
 						class:isSelected={selectedLanguages.includes(value)}
 					>
