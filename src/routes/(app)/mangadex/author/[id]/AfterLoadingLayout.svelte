@@ -21,9 +21,10 @@
 	interface Props {
 		data: LayoutData;
 		children?: import("svelte").Snippet;
+		refetch?: () => void;
 	}
 
-	let { data, children }: Props = $props();
+	let { data, children, refetch }: Props = $props();
 	let description = $derived(get_value_from_title_and_random_if_undefined(data.biography, "en"));
 	let openReportDialog = $state(false);
 	let isBlocked = $derived(data.isBlocked);
@@ -43,6 +44,7 @@
 							id: data.id
 						})
 					);
+					refetch?.();
 				},
 				onError(error) {
 					addErrorToast("Error on changing blocking status", error);
@@ -61,6 +63,7 @@
 							id: data.id
 						})
 					);
+					refetch?.();
 				},
 				onError(error) {
 					addErrorToast("Error on changing blocking status", error);
