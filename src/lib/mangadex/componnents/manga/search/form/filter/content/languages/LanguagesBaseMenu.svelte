@@ -4,7 +4,6 @@
 	import type { Language } from "@mangadex/gql/graphql";
 	import { language_list } from "@mangadex/utils/lang/list";
 	import { startCase } from "lodash";
-	import { slide } from "svelte/transition";
 	interface Props {
 		menu?: HTMLElement;
 		open: boolean;
@@ -16,14 +15,18 @@
 {#if open == true}
 	<div class="menu-outer" bind:this={menu}>
 		<MangaDexVarThemeProvider>
-			<menu transition:slide={{ duration: 150, axis: "y" }}>
+			<menu>
 				{#each language_list.map((e) => {
 					return { value: e, label: startCase(e) };
 				}) as { value, label } (value)}
 					<button
 						class="mi"
 						onclick={() => {
-							selectedLanguages = new Set([...selectedLanguages, value]).values().toArray();
+							if (selectedLanguages.includes(value)) {
+								selectedLanguages = selectedLanguages.filter((t) => t != value);
+							} else {
+								selectedLanguages = new Set([...selectedLanguages, value]).values().toArray();
+							}
 						}}
 						class:isSelected={selectedLanguages.includes(value)}
 					>
@@ -43,6 +46,7 @@
 		display: none;
 		flex-direction: column;
 		max-height: 200px;
+		position: absolute;
 	}
 
 	menu {
@@ -52,6 +56,7 @@
 		background-color: var(--accent);
 		z-index: 10;
 		overflow-y: scroll;
+		overflow-x: hidden;
 		color: var(--text-color);
 		padding-left: 0em;
 		max-height: 300px;
@@ -64,6 +69,8 @@
 			color: var(--text-color);
 			border: 0px;
 			box-shadow: none;
+			width: 100%;
+			font-family: var(--fonts);
 			h4 {
 				margin: 0px;
 				overflow: hidden;

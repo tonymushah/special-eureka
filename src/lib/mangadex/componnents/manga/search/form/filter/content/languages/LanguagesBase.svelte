@@ -25,7 +25,8 @@
 		setOpen: (o) => (open = o),
 		sameWidth: true,
 		showMenuDisplay: "flex",
-		closeOnClick: true
+		closeOnClick: true,
+		closeOnOutClick: true
 	});
 </script>
 
@@ -45,6 +46,7 @@
 				selecteds.set([]);
 			}}
 			aria-label={title}
+			bind:this={trigger}
 		>
 			{#if $selecteds.length > 0}
 				{#each $selecteds as s}
@@ -68,9 +70,8 @@
 			{/if}
 		</button>
 	</div>
+	<LanguagesBaseMenu {open} bind:selectedLanguages={$selecteds} bind:menu />
 </section>
-
-<LanguagesBaseMenu {open} bind:selectedLanguages={$selecteds} bind:menu />
 
 <style lang="scss">
 	button {
@@ -83,6 +84,7 @@
 	.layout {
 		display: grid;
 		gap: 5px;
+		position: relative;
 	}
 	.layout.rowLayout {
 		display: flex;
