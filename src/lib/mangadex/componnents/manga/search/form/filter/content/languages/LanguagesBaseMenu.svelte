@@ -16,7 +16,7 @@
 {#if open == true}
 	<div class="menu-outer" bind:this={menu}>
 		<MangaDexVarThemeProvider>
-			<menu transition:slide={{ duration: 150, axis: "y" }}>
+			<menu>
 				{#each language_list.map((e) => {
 					return { value: e, label: startCase(e) };
 				}) as { value, label } (value)}
@@ -43,6 +43,7 @@
 		display: none;
 		flex-direction: column;
 		max-height: 200px;
+		position: absolute;
 	}
 
 	menu {
@@ -52,6 +53,7 @@
 		background-color: var(--accent);
 		z-index: 10;
 		overflow-y: scroll;
+		overflow-x: hidden;
 		color: var(--text-color);
 		padding-left: 0em;
 		max-height: 300px;
@@ -64,6 +66,8 @@
 			color: var(--text-color);
 			border: 0px;
 			box-shadow: none;
+			width: 100%;
+			font-family: var(--fonts);
 			h4 {
 				margin: 0px;
 				overflow: hidden;
