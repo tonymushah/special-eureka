@@ -25,7 +25,12 @@
 	<AppTitle title="Loading author... | Mangadex" />
 	<LoadingPage />
 {:else if query.isSuccess}
-	<AfterLoadingLayout data={query.data}>
+	<AfterLoadingLayout
+		data={query.data}
+		refetch={() => {
+			query.refetch();
+		}}
+	>
 		{@render children()}
 	</AfterLoadingLayout>
 {:else if query.isError}
