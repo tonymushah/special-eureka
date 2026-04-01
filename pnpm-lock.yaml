@@ -97,7 +97,7 @@ importers:
         version: 5.2.2(@emotion/is-prop-valid@0.8.8)(@types/node@25.5.0)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(graphql-ws@6.0.7(graphql@16.13.2)(ws@8.20.0))(graphql@16.13.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(use-sync-external-store@1.6.0(react@19.2.4))
       hotkeys-js:
         specifier: ^4.0.2
-        version: 4.0.2
+        version: 4.0.3
       lodash:
         specifier: ^4.17.23
         version: 4.17.23
@@ -3199,8 +3199,8 @@ packages:
   header-case@2.0.4:
     resolution: {integrity: sha512-H/vuk5TEEVZwrR0lp2zed9OCo1uAILMlx0JEMgC26rzyJJ3N1v6XkwHHXJQdR2doSjcGPM6OKPYoJgf0plJ11Q==}
 
-  hotkeys-js@4.0.2:
-    resolution: {integrity: sha512-fJNEO88zWwoXEGJuvjSbunKSexaT1VbC1S9wIzMA2BfOZ5KPiQj2wTqxDeXd110/4akiAuQIsE3TSbNvGgCyQg==}
+  hotkeys-js@4.0.3:
+    resolution: {integrity: sha512-adK3E0KGXiIm8rcRhn2JHEvCVzgg54UtHtufxHVWM0I95hakyxn80aX6ez0nxVEdbzzgrb9g2lMJIThFSyTSFQ==}
 
   htmlparser2@12.0.0:
     resolution: {integrity: sha512-Tz7u1i95/g2x2jz81+x0FBVhBhY5aRTvD3tXXdFaljuNdzDLJ8UGNRrTcj2cgQvAg3iW/h77Fz15nLW0L0CrZw==}
@@ -7815,7 +7815,7 @@ snapshots:
       capital-case: 1.0.4
       tslib: 2.8.1
 
-  hotkeys-js@4.0.2: {}
+  hotkeys-js@4.0.3: {}
 
   htmlparser2@12.0.0:
     dependencies:
