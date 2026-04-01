@@ -40,12 +40,18 @@
 {#snippet updateButton()}
 	<button
 		class="update-button"
-		disabled={updateMutation.isPending}
+		disabled={updateMutation.isPending || query.isFetching}
 		onclick={() => {
 			updateMutation.mutate();
 		}}
 	>
-		Update
+		{#if updateMutation.isPending}
+			Updating...
+		{:else if query.isFetching}
+			Checking...
+		{:else}
+			Update
+		{/if}
 	</button>
 {/snippet}
 
@@ -141,7 +147,7 @@
 	.update-button:disabled {
 		box-shadow: none;
 		background-color: #ddaead;
-		transform: none;
+		transform: translateY(3px);
 		cursor: not-allowed;
 	}
 	.update-button-container {
