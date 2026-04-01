@@ -55,12 +55,12 @@
 		>
 			Tony <i>Mushah</i>
 		</a>
-		<i>again</i>. It was been a long time isn't it? Well, it was been two years already since
-		the last release. <i>Kind of...</i>
+		<i>again</i>. It was been a long time isn't it? Well, it was been two years already since the
+		last release. <i>Kind of...</i>
 	</p>
 	<p>
-		Anyway, after all that time, I am pround (and finally ready to be shitstormed if it failed)
-		to present this new 0.2.0 version.<br /> A lot of code rewrite, improvements, features,
+		Anyway, after all that time, I am pround (and finally ready to be shitstormed if it failed) to
+		present this new 0.2.0 version.<br /> A lot of code rewrite, improvements, features,
 		<i>bugs...</i>
 	</p>
 	<div>
@@ -98,6 +98,8 @@
 			<li>Support for chapter read markers (for online only)</li>
 			<li>Export chapters/title ids list as txt<i>?</i></li>
 			<li>
+				<!-- svelte-ignore a11y_click_events_have_key_events -->
+				<!-- svelte-ignore a11y_no_static_element_interactions -->
 				<b
 					onclick={() => {
 						openNewWindow();
@@ -129,8 +131,7 @@
 					</blockquote>
 				</li>
 				<li>
-					On MangaDex chapter page on single/double page mode, you can zoom by using your <b
-					>
+					On MangaDex chapter page on single/double page mode, you can zoom by using your <b>
 						mousewheel
 					</b>, navigate between pages by using
 					<blockquote>
