@@ -91,7 +91,9 @@
 	const ctxMarkers = derived(
 		[toStore(() => list)],
 		([$list], set, update) => {
-			const chapterIds = new Set($list.flatMap((item) => item.chapters.map((c) => c.chapterId)));
+			const chapterIds = new Set(
+				$list.flatMap((item) => item.chapters.map((c) => c.chapterId))
+			);
 			const mangaIds = new Set($list.map((item) => item.mangaId));
 
 			const sub = client

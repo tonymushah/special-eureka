@@ -3,7 +3,9 @@ import { graphql } from "@mangadex/gql";
 export const query = graphql(`
 	query getChaptersIDsAsFeed($ids: [UUID!]!) {
 		chapter {
-			listWithGroupByManga(param: { feedContent: false, chapterListParams: { chapterIds: $ids } }) {
+			listWithGroupByManga(
+				param: { feedContent: false, chapterListParams: { chapterIds: $ids } }
+			) {
 				data {
 					manga {
 						id

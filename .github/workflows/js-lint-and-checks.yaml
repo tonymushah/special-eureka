@@ -1,0 +1,48 @@
+name: "Javascript lint and tests"
+permissions:
+  contents: read
+on:
+  pull_request:
+    paths:
+      - "src/**"
+      - "package.json"
+      - "pnpm-lock.yaml"
+
+jobs:
+  check-fmt:
+    strategy:
+      fail-fast: false
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: setup node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+      - name: install pnpm
+        uses: pnpm/action-setup@v5
+        with:
+          run_install: false
+      - name: install deps
+        run: pnpm install
+      - name: svelte checkes
+        run: pnpm prettier --check ./src
+  check-svelte:
+    needs: check-fmt
+    strategy:
+      fail-fast: false
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: setup node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+      - name: install pnpm
+        uses: pnpm/action-setup@v5
+        with:
+          run_install: false
+      - name: install deps
+        run: pnpm install
+      - name: svelte checkes
+        run: pnpm check

@@ -4,8 +4,8 @@ import { mangadexQueryClient } from "@mangadex/index";
 import { createQuery } from "@tanstack/svelte-query";
 
 export default function getCurrentUserLibrarySize() {
-	return createQuery(() => (
-		{
+	return createQuery(
+		() => ({
 			queryKey: ["current", "user", "library", "size"],
 			async queryFn() {
 				const res = await client.query(librarySizeQuery, {}).toPromise();

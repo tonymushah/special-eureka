@@ -30,7 +30,8 @@
 			if (v.attributes.group == TagGroup.Genre) {
 				returns.push({
 					id: v.id,
-					name: get_value_from_title_and_random_if_undefined(v.attributes.name, "en") ?? ""
+					name:
+						get_value_from_title_and_random_if_undefined(v.attributes.name, "en") ?? ""
 				});
 			}
 		});
@@ -42,7 +43,8 @@
 			if (v.attributes.group == TagGroup.Theme) {
 				returns.push({
 					id: v.id,
-					name: get_value_from_title_and_random_if_undefined(v.attributes.name, "en") ?? ""
+					name:
+						get_value_from_title_and_random_if_undefined(v.attributes.name, "en") ?? ""
 				});
 			}
 		});
@@ -68,7 +70,8 @@
 			if (v.attributes.group == TagGroup.Format) {
 				returns.push({
 					id: v.id,
-					name: get_value_from_title_and_random_if_undefined(v.attributes.name, "en") ?? ""
+					name:
+						get_value_from_title_and_random_if_undefined(v.attributes.name, "en") ?? ""
 				});
 			}
 		});
@@ -80,7 +83,8 @@
 			if (v.attributes.group == TagGroup.Content) {
 				returns.push({
 					id: v.id,
-					name: get_value_from_title_and_random_if_undefined(v.attributes.name, "en") ?? ""
+					name:
+						get_value_from_title_and_random_if_undefined(v.attributes.name, "en") ?? ""
 				});
 			}
 		});

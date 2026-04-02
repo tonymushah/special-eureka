@@ -3,10 +3,7 @@ import { graphql } from "@mangadex/gql/gql";
 export const userFollowedTitlesGQL = graphql(`
 	query userFollowedTitles($limit: Int, $offset: Int) {
 		follows {
-			mangas(params:  {
-			   limit: $limit
-			   offset: $offset
-			}) {
+			mangas(params: { limit: $limit, offset: $offset }) {
 				limit
 				offset
 				total

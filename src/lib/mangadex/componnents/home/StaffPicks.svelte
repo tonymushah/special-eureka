@@ -29,7 +29,8 @@
 		return staff_picks.data?.home.staffPicks.relationships.titles.map<StaffPicksTitle>((t) => {
 			const manga_id: string = t.id;
 			const cover_id: string = t.relationships.coverArt.id;
-			const title = get_value_from_title_and_random_if_undefined(t.attributes.title, "en") ?? "";
+			const title =
+				get_value_from_title_and_random_if_undefined(t.attributes.title, "en") ?? "";
 			const description =
 				get_value_from_title_and_random_if_undefined(t.attributes.description, "en") ?? "";
 			return {

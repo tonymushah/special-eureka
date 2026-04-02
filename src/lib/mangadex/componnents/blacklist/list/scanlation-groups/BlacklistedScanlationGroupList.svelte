@@ -80,7 +80,10 @@
 									query.refetch();
 								},
 								onError(e) {
-									addErrorToast("Cannot remove scanlation groups to the blacklist", e);
+									addErrorToast(
+										"Cannot remove scanlation groups to the blacklist",
+										e
+									);
 								}
 							});
 						}}

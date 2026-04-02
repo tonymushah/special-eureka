@@ -39,13 +39,17 @@ export default async function isInLibrary(
 	}
 }
 
-export const titleStatusMapQuery = () => createQuery(() => ({
-	networkMode: "online",
-	queryKey: ["title", "status", "map", "query"],
-	async queryFn() {
-		return await titleStatusMap()
-	}
-}), () => mangadexQueryClient);
+export const titleStatusMapQuery = () =>
+	createQuery(
+		() => ({
+			networkMode: "online",
+			queryKey: ["title", "status", "map", "query"],
+			async queryFn() {
+				return await titleStatusMap();
+			}
+		}),
+		() => mangadexQueryClient
+	);
 
 export function isInLibrarySync(titleId: string, library: Map<string, ReadingStatus>): boolean {
 	const status = library.get(titleId);

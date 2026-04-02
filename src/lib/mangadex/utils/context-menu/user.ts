@@ -63,7 +63,11 @@ export default function userElementContextMenu({
 	const isFollowed = isFollowingUser(id);
 	items.push(
 		ContextMenuItemProvider.menuItem({
-			text: derived(isFollowed, (isFollowed) => (isFollowed ? "Unfollow" : "Follow"), "Follow"),
+			text: derived(
+				isFollowed,
+				(isFollowed) => (isFollowed ? "Unfollow" : "Follow"),
+				"Follow"
+			),
 			action() {
 				isFollowed.update((value) => !value);
 			},

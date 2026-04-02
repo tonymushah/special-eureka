@@ -5,7 +5,13 @@ import { createMutation } from "@tanstack/svelte-query";
 export function removeTitlesFromCustomListMutation() {
 	return createMutation(() => ({
 		mutationKey: ["remove", "titles", "from", "custom-list"],
-		async mutationFn({ titlesIds, customListId }: { titlesIds: string[]; customListId: string }) {
+		async mutationFn({
+			titlesIds,
+			customListId
+		}: {
+			titlesIds: string[];
+			customListId: string;
+		}) {
 			const res = await client
 				.mutation(removeTitlesFromCustomListMutationGQLDoc, {
 					titlesIds,

@@ -246,44 +246,47 @@ export function coverDownloadState({
 	deferred?: boolean;
 }): Readable<CoverDownloadState> {
 	const dState = downloadStateQuery(() => id);
-	return derived([internalToStore(dState), subOPCover(id, deferred)], ([$query, $state], _set) => {
-		const res = (() => {
-			if ($state?.data) {
-				const data = $state.data.watchCoverDownloadState;
-				if (data.downloading) {
-					const downloading = data.downloading;
-					switch (downloading) {
-						case CoverDownloadingState.FetchingData:
-							return CoverDownloadState.FetchingData;
-						case CoverDownloadingState.FetchingImage:
-							return CoverDownloadState.FetchingImage;
-						case CoverDownloadingState.Preloading:
-							return CoverDownloadState.Preloading;
-						default:
-							break;
+	return derived(
+		[internalToStore(dState), subOPCover(id, deferred)],
+		([$query, $state], _set) => {
+			const res = (() => {
+				if ($state?.data) {
+					const data = $state.data.watchCoverDownloadState;
+					if (data.downloading) {
+						const downloading = data.downloading;
+						switch (downloading) {
+							case CoverDownloadingState.FetchingData:
+								return CoverDownloadState.FetchingData;
+							case CoverDownloadingState.FetchingImage:
+								return CoverDownloadState.FetchingImage;
+							case CoverDownloadingState.Preloading:
+								return CoverDownloadState.Preloading;
+							default:
+								break;
+						}
+					} else if (data.error) {
+						return CoverDownloadState.Error;
+					} else if (data.isCanceled) {
+						return CoverDownloadState.Canceled;
+					} else if (data.isDone) {
+						return CoverDownloadState.Done;
+					} else if (data.isOfflineAppStateNotLoaded) {
+						return CoverDownloadState.OfflineAppStateNotLoaded;
 					}
-				} else if (data.error) {
+				} else if ($state?.error) {
 					return CoverDownloadState.Error;
-				} else if (data.isCanceled) {
-					return CoverDownloadState.Canceled;
-				} else if (data.isDone) {
-					return CoverDownloadState.Done;
-				} else if (data.isOfflineAppStateNotLoaded) {
-					return CoverDownloadState.OfflineAppStateNotLoaded;
 				}
-			} else if ($state?.error) {
-				return CoverDownloadState.Error;
-			}
-			if ($query.data?.data?.downloadState.cover.hasFailed == true) {
-				return CoverDownloadState.Error;
-			} else if ($query.data?.data?.downloadState.cover.isDownloaded == true) {
-				return CoverDownloadState.Done;
-			} else {
-				return CoverDownloadState.Pending;
-			}
-		})();
-		_set(res);
-	});
+				if ($query.data?.data?.downloadState.cover.hasFailed == true) {
+					return CoverDownloadState.Error;
+				} else if ($query.data?.data?.downloadState.cover.isDownloaded == true) {
+					return CoverDownloadState.Done;
+				} else {
+					return CoverDownloadState.Pending;
+				}
+			})();
+			_set(res);
+		}
+	);
 }
 
 export function isCoverDownloading(param: { id: string; deferred?: boolean }) {

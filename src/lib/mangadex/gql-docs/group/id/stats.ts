@@ -3,7 +3,7 @@ import { graphql } from "@mangadex/gql/gql";
 export const groupStatisticsQuery = graphql(`
 	query groupStatisticsQuery($id: UUID!) {
 		statistics {
-			group{
+			group {
 				get(id: $id) {
 					comments {
 						threadId

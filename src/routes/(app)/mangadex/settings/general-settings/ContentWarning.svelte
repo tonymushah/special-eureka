@@ -35,8 +35,8 @@
 			<strong>Never</strong> - Never show a warning when a title matches your global filters.
 		</li>
 		<li>
-			<strong>Always unless the title is in the library</strong> - Show a warning when a title
-			matches your global filters, unless the title is in your library.
+			<strong>Always unless the title is in the library</strong> - Show a warning when a title matches
+			your global filters, unless the title is in your library.
 		</li>
 		<li>
 			<strong>Always unless the title is in the library and not dropped</strong> - Show a warning
