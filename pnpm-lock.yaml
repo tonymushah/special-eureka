@@ -11,6 +11,8 @@ overrides:
   immutable@<4.3.8: '>=4.3.8'
   immutable@>=5.0.0 <5.1.5: '>=5.1.5'
   js-yaml@>=4.0.0 <4.1.1: '>=4.1.1'
+  lodash@<=4.17.23: '>=4.18.0'
+  lodash@>=4.0.0 <=4.17.23: '>=4.18.0'
   markdown-it@>=13.0.0 <14.1.1: '>=14.1.1'
   minimatch@<10.2.1: '>=10.2.1'
   minimatch@>=10.0.0 <10.2.3: '>=10.2.3'
@@ -99,7 +101,7 @@ importers:
         specifier: ^4.0.2
         version: 4.0.3
       lodash:
-        specifier: ^4.17.23
+        specifier: '>=4.18.0'
         version: 4.18.1
       medium-zoom:
         specifier: ^1.1.0
@@ -3483,9 +3485,6 @@ packages:
   lodash.sortby@4.7.0:
     resolution: {integrity: sha512-HDWXG8isMntAyRF5vZ7xKuEvOhT4AhlRt/3czTSjvGUxjYCBVRQY48ViDHyfYz9VIoBkW4TMGQNapx+l3RUwdA==}
 
-  lodash@4.17.23:
-    resolution: {integrity: sha512-LgVTMpQtIopCi79SJeDiP0TfWi5CNEc/L/aRdTh3yIvmZXTnheWpKjSZhnvMl8iXbC1tFg9gdHHDMLoV7CnG+w==}
-
   lodash@4.18.1:
     resolution: {integrity: sha512-dMInicTPVE8d1e5otfwmmjlxkZoUpiVLwyeTdUsi/Caj/gfzzblBcCE5sRHV/AsjuCmxWrte2TNGSYuCeCq+0Q==}
 
@@ -5070,7 +5069,7 @@ snapshots:
       common-tags: 1.8.2
       graphql: 16.13.2
       import-from: 4.0.0
-      lodash: 4.17.23
+      lodash: 4.18.1
       tslib: 2.6.3
 
   '@graphql-codegen/schema-ast@5.0.1(graphql@16.13.2)':
@@ -8049,8 +8048,6 @@ snapshots:
       p-locate: 5.0.0
 
   lodash.sortby@4.7.0: {}
-
-  lodash@4.17.23: {}
 
   lodash@4.18.1: {}
 
