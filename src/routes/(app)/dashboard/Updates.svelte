@@ -6,6 +6,7 @@
 	} from "@special-eureka/core/commands/updater";
 	import { createMutation, createQuery } from "@tanstack/svelte-query";
 	import Markdown from "@humanspeak/svelte-markdown";
+	import UpdateProgress from "@special-eureka/dashboard/components/UpdateProgress.svelte";
 
 	let query = createQuery(() => ({
 		queryKey: ["updates"],
@@ -58,7 +59,9 @@
 <h2>Updates</h2>
 
 <section>
-	{#if query.isLoading}
+	{#if query.isPending || dev}
+		<UpdateProgress />
+	{:else if query.isLoading}
 		<p class="loading">Loading...</p>
 	{:else if query.isError}
 		<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
