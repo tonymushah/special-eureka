@@ -25,7 +25,9 @@
 					<div class="content">
 						<div class="top">
 							<div class="title-desc">
-								<Dialog.Title class={cssDialogMod.title}>Create an upload session</Dialog.Title>
+								<Dialog.Title class={cssDialogMod.title}
+									>Create an upload session</Dialog.Title
+								>
 								{#if propsTitle}
 									<Dialog.Description class={cssDialogMod.description}
 										>for `{propsTitle}`</Dialog.Description

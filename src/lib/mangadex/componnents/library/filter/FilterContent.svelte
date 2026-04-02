@@ -112,8 +112,8 @@
 	</p>
 	<p>
 		<span class="lazy-af">
-			Tony Mushah: To honest, I could do it (really). It just that it doesn't make sense to me to
-			add those complex filter thingy here.
+			Tony Mushah: To honest, I could do it (really). It just that it doesn't make sense to me
+			to add those complex filter thingy here.
 		</span>
 	</p>
 	<p class="lazy-af">

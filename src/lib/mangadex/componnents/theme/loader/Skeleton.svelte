@@ -43,7 +43,11 @@
 		animation-iteration-count: infinite;
 		border-radius: var(--border-radius);
 		div {
-			background-color: color-mix(in srgb, var(--main-background) 70%, var(--skeleton-color) 5%);
+			background-color: color-mix(
+				in srgb,
+				var(--main-background) 70%,
+				var(--skeleton-color) 5%
+			);
 			width: var(--width);
 			height: var(--height);
 			border-radius: var(--border-radius);

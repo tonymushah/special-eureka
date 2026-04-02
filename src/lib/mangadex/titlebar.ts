@@ -12,9 +12,8 @@ const TOGGLE_SIDEBAR_HANDLER: MouseEventHandler<HTMLButtonElement> = () => {
 };
 
 export async function mangadexTitleBar() {
-	const { defaultBehavior, titleBarButtons } = await import(
-		"$lib/core/window-decoration/stores/decorations.svelte"
-	);
+	const { defaultBehavior, titleBarButtons } =
+		await import("$lib/core/window-decoration/stores/decorations.svelte");
 	defaultBehavior();
 	titleBarButtons.set(TOGGLE_SIDEBAR_KEY, {
 		title: "Sidebar Direction",

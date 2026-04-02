@@ -34,7 +34,8 @@
 			} else {
 				return {
 					list: res.data.cover.list.data.map<CoverInput>((v) => {
-						const locale = v.attributes.locale == null ? undefined : v.attributes.locale;
+						const locale =
+							v.attributes.locale == null ? undefined : v.attributes.locale;
 						const title =
 							v.attributes.volume == null || v.attributes.volume == undefined
 								? v.id

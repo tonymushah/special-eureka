@@ -3,10 +3,7 @@ import { graphql } from "@mangadex/gql/gql";
 export const userFollowedUsersGQL = graphql(`
 	query userFollowedUsers($offset: Int, $limit: Int) {
 		follows {
-			users(param:  {
-			   limit: $limit
-			   offset: $offset
-			}) {
+			users(param: { limit: $limit, offset: $offset }) {
 				data {
 					id
 					attributes {

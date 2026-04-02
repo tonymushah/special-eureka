@@ -24,11 +24,17 @@
 				<h4>{name}</h4>
 				<div>
 					{#if typeof errorCode == "string" || typeof errorCode == "number"}
-						<span><span class="status-description">Internal Error Code:</span> {errorCode}</span>
+						<span
+							><span class="status-description">Internal Error Code:</span>
+							{errorCode}</span
+						>
 						<br />
 					{/if}
 					{#if typeof statusCode == "string" || typeof statusCode == "number"}
-						<span><span class="status-description">Status code Code:</span> {statusCode}</span>
+						<span
+							><span class="status-description">Status code Code:</span>
+							{statusCode}</span
+						>
 						<br />
 					{/if}
 					<span>{message}</span>

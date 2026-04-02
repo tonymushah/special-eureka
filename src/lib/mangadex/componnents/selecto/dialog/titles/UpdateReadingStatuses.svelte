@@ -108,7 +108,10 @@
 								});
 								break;
 							case "rejected":
-								addErrorToast("Error on updateing titles following statuses", following.reason);
+								addErrorToast(
+									"Error on updateing titles following statuses",
+									following.reason
+								);
 								break;
 							default:
 								break;

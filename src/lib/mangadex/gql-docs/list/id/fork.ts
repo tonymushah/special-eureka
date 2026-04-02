@@ -37,7 +37,12 @@ export const forkCustomListMutation = () =>
 	createMutation(
 		() => ({
 			mutationKey: ["customList", "fork"],
-			async mutationFn({ toFork, visibility, filter, name }: ForkCustomListMutationVariables) {
+			async mutationFn({
+				toFork,
+				visibility,
+				filter,
+				name
+			}: ForkCustomListMutationVariables) {
 				const res = await client
 					.mutation(forkMGQLMutation, {
 						toFork,

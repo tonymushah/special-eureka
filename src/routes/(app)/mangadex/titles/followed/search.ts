@@ -22,7 +22,14 @@ export class UserFollowedTitlesSearchResult extends AbstractSearchResult<MangaLi
 	offset: number;
 	limit: number;
 	total: number;
-	constructor({ data, client, params, offset, limit, total }: RecentlyAddedResultConstuctorParams) {
+	constructor({
+		data,
+		client,
+		params,
+		offset,
+		limit,
+		total
+	}: RecentlyAddedResultConstuctorParams) {
 		super(data);
 		this.client = client;
 		this.params = params;
@@ -80,13 +87,22 @@ export default async function executeSearchQuery(
 					status: v.attributes.status,
 					contentRating: contentRating != null ? contentRating : undefined,
 					description:
-						get_value_from_title_and_random_if_undefined(v.attributes.description, "en") ?? "",
-					title: get_value_from_title_and_random_if_undefined(v.attributes.title, "en") ?? "",
+						get_value_from_title_and_random_if_undefined(
+							v.attributes.description,
+							"en"
+						) ?? "",
+					title:
+						get_value_from_title_and_random_if_undefined(v.attributes.title, "en") ??
+						"",
 					coverImageAlt: v.relationships.coverArt.id,
 					withFull: true,
 					tags: v.attributes.tags.map((tag) => ({
 						id: tag.id,
-						name: get_value_from_title_and_random_if_undefined(tag.attributes.name, "en") ?? ""
+						name:
+							get_value_from_title_and_random_if_undefined(
+								tag.attributes.name,
+								"en"
+							) ?? ""
 					})),
 					language: v.attributes.originalLanguage,
 					publicationDemographic: v.attributes.publicationDemographic ?? undefined

@@ -36,7 +36,9 @@
 			const res = await client
 				.mutation(makeListMutation, {
 					mangaId: manga_id,
-					visibility: isPrivate ? CustomListVisibility.Private : CustomListVisibility.Public,
+					visibility: isPrivate
+						? CustomListVisibility.Private
+						: CustomListVisibility.Public,
 					name
 				})
 				.toPromise();

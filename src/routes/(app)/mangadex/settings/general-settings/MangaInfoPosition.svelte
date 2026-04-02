@@ -15,8 +15,8 @@
 <section>
 	<p>
 		<i>
-			You know, that title section with the authors, artists, links, and alt-titles that is always
-			on the left side
+			You know, that title section with the authors, artists, links, and alt-titles that is
+			always on the left side
 		</i>, <br />
 		This option allows you to move it. <br />
 		<i>

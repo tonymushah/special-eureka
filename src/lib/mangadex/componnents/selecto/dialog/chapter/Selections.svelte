@@ -54,8 +54,10 @@
 						title: {
 							id: data.manga.id,
 							title:
-								get_value_from_title_and_random_if_undefined(data.manga.attributes.title, "en") ??
-								data.manga.id
+								get_value_from_title_and_random_if_undefined(
+									data.manga.attributes.title,
+									"en"
+								) ?? data.manga.id
 						},
 						chapters: data.chapters
 							.filter((data) => chapters.includes(data.id))

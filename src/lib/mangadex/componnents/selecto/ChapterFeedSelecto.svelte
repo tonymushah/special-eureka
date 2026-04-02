@@ -158,8 +158,12 @@
 					}
 				})
 				.on("move", (ev) => {
-					ev.store.changed.added.forEach((item) => item.setAttribute("data-selecto-selected", ""));
-					ev.store.changed.removed.forEach((item) => item.removeAttribute("data-selecto-selected"));
+					ev.store.changed.added.forEach((item) =>
+						item.setAttribute("data-selecto-selected", "")
+					);
+					ev.store.changed.removed.forEach((item) =>
+						item.removeAttribute("data-selecto-selected")
+					);
 				});
 			return () => {
 				dragselect.getSelection().forEach((item) => {

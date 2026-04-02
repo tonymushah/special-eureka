@@ -37,7 +37,9 @@
 			>
 				<option value={null}>None</option>
 				<option value={MangaDownloadExtras.AllChapters}>Download all chapters</option>
-				<option value={MangaDownloadExtras.Failed}>Download only the failed download ones</option>
+				<option value={MangaDownloadExtras.Failed}
+					>Download only the failed download ones</option
+				>
 				<option value={MangaDownloadExtras.UnDownloadeds}
 					>Download only the non-downloaded chapters</option
 				>
@@ -47,7 +49,9 @@
 				<option value={MangaDownloadExtras.UnReadUnDownloadeds}
 					>Download only the un-read and non-downloaded chapters</option
 				>
-				<option value={MangaDownloadExtras.Unreads}>Download only the un-read chapter</option>
+				<option value={MangaDownloadExtras.Unreads}
+					>Download only the un-read chapter</option
+				>
 			</select>
 		</div>
 	</div>
