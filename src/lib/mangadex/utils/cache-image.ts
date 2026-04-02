@@ -3,8 +3,8 @@ import { createQueries, createQuery, type QueryFunctionContext } from "@tanstack
 import { fromStore, type Readable } from "svelte/store";
 
 export function cacheImage(url: string) {
-	return createQuery(() => (
-		{
+	return createQuery(
+		() => ({
 			queryKey: ["image", url],
 			staleTime: Infinity,
 			async queryFn(ctx) {
@@ -20,23 +20,24 @@ export function cacheImage(url: string) {
 
 export function cacheImageFromReadable(url_read: Readable<string>) {
 	const url = fromStore(url_read);
-	return createQuery(() => ({
-		queryKey: ["image", url],
-		staleTime: Infinity,
-		async queryFn(ctx: QueryFunctionContext) {
-			const blob = await fetch(url.current, {
-				signal: ctx.signal
-			}).then((e) => e.blob());
-			return URL.createObjectURL(blob);
-		}
-	}),
+	return createQuery(
+		() => ({
+			queryKey: ["image", url],
+			staleTime: Infinity,
+			async queryFn(ctx: QueryFunctionContext) {
+				const blob = await fetch(url.current, {
+					signal: ctx.signal
+				}).then((e) => e.blob());
+				return URL.createObjectURL(blob);
+			}
+		}),
 		() => mangadexQueryClient
 	);
 }
 
 export function cacheImages(urls: string[]) {
-	return createQueries(() => (
-		{
+	return createQueries(
+		() => ({
 			queries: urls.map((url) => ({
 				queryKey: ["image", url],
 				staleTime: Infinity,
@@ -56,18 +57,16 @@ export function cacheImagesFromReadable(urls_readable: Readable<string[]>) {
 	const urls = fromStore(urls_readable);
 	return createQueries(
 		() => ({
-			queries:
-				urls.current.map((url) => ({
-					queryKey: ["image", url],
-					staleTime: Infinity,
-					async queryFn({ signal }: QueryFunctionContext) {
-						const blob = await fetch(url, {
-							signal
-						}).then((e) => e.blob());
-						return URL.createObjectURL(blob);
-					}
-				})
-				)
+			queries: urls.current.map((url) => ({
+				queryKey: ["image", url],
+				staleTime: Infinity,
+				async queryFn({ signal }: QueryFunctionContext) {
+					const blob = await fetch(url, {
+						signal
+					}).then((e) => e.blob());
+					return URL.createObjectURL(blob);
+				}
+			}))
 		}),
 		() => mangadexQueryClient
 	);

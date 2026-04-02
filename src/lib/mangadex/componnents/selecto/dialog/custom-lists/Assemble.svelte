@@ -34,7 +34,12 @@
 			/>
 		</div>
 		<div class="option">
-			<input class="checkbox" type="checkbox" bind:checked={isPublic} id="is-public-checkbox" />
+			<input
+				class="checkbox"
+				type="checkbox"
+				bind:checked={isPublic}
+				id="is-public-checkbox"
+			/>
 			<label for="is-public-checkbox">Make public</label>
 		</div>
 		<div class="option">
@@ -57,7 +62,9 @@
 					{
 						ids: customLists,
 						newListName,
-						visibility: isPublic ? CustomListVisibility.Public : CustomListVisibility.Private,
+						visibility: isPublic
+							? CustomListVisibility.Public
+							: CustomListVisibility.Private,
 						filterContent
 					},
 					{

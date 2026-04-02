@@ -7,31 +7,34 @@ import { getCurrentWebview } from "@tauri-apps/api/webview";
 import { get, type Readable } from "svelte/store";
 import { v4 } from "uuid";
 
-type MaybeEventStreamData<T> = T | {
-	eventName: string,
-	initData: T
-}
+type MaybeEventStreamData<T> =
+	| T
+	| {
+			eventName: string;
+			initData: T;
+	  };
 
-export type ContextMenuItem =
-	(| {
-		type: "Seperator";
-	}
-		| {
+export type ContextMenuItem = (
+	| {
+			type: "Seperator";
+	  }
+	| {
 			type: "MenuItem";
 			text: MaybeEventStreamData<string>;
 			accelerator?: string | null;
 			enabled?: MaybeEventStreamData<boolean | null>;
 			action: number;
 			icon?: string | null;
-		}
-		| {
+	  }
+	| {
 			type: "Submenu";
 			text: MaybeEventStreamData<string>;
 			items: ContextMenuItem[];
-			enabled?: MaybeEventStreamData<boolean | null>
-		}) & {
-			unlisteners?: UnlistenFn[]
-		};
+			enabled?: MaybeEventStreamData<boolean | null>;
+	  }
+) & {
+	unlisteners?: UnlistenFn[];
+};
 
 export type MenuItemParams = {
 	text: string | Readable<string> | Accessor<string>;
@@ -53,7 +56,7 @@ export type SubmenuParams = {
 export class ContextMenuItemProvider {
 	public static seperator(): ContextMenuItem {
 		return {
-			type: "Seperator",
+			type: "Seperator"
 		};
 	}
 	public static menuItem(params: string | MenuItemParams): ContextMenuItem {
@@ -61,7 +64,7 @@ export class ContextMenuItemProvider {
 			return {
 				type: "MenuItem",
 				text: params,
-				action: transformCallback(() => { }, true),
+				action: transformCallback(() => {}, true)
 			};
 		} else {
 			let unlisteners: UnlistenFn[] = [];
@@ -79,16 +82,22 @@ export class ContextMenuItemProvider {
 				} else {
 					t_store = p_text;
 				}
-				unlisteners.push(t_store.subscribe((e) => {
-					webview.emitTo({
-						kind: "Webview",
-						label: webview.label
-					}, eventName, e);
-				}));
+				unlisteners.push(
+					t_store.subscribe((e) => {
+						webview.emitTo(
+							{
+								kind: "Webview",
+								label: webview.label
+							},
+							eventName,
+							e
+						);
+					})
+				);
 				text = {
 					eventName,
 					initData: get(t_store)
-				}
+				};
 			}
 
 			let enabled: MaybeEventStreamData<boolean | null> | undefined = undefined;
@@ -104,16 +113,22 @@ export class ContextMenuItemProvider {
 				} else {
 					t_store = p_enable;
 				}
-				unlisteners.push(t_store.subscribe((e) => {
-					webview.emitTo({
-						kind: "Webview",
-						label: webview.label
-					}, eventName, e);
-				}));
+				unlisteners.push(
+					t_store.subscribe((e) => {
+						webview.emitTo(
+							{
+								kind: "Webview",
+								label: webview.label
+							},
+							eventName,
+							e
+						);
+					})
+				);
 				enabled = {
 					eventName,
 					initData: get(t_store)
-				}
+				};
 			}
 			return {
 				type: "MenuItem",
@@ -140,16 +155,22 @@ export class ContextMenuItemProvider {
 			} else {
 				t_store = p_text;
 			}
-			unlisteners.push(t_store.subscribe((e) => {
-				webview.emitTo({
-					kind: "Webview",
-					label: webview.label
-				}, eventName, e);
-			}));
+			unlisteners.push(
+				t_store.subscribe((e) => {
+					webview.emitTo(
+						{
+							kind: "Webview",
+							label: webview.label
+						},
+						eventName,
+						e
+					);
+				})
+			);
 			text = {
 				eventName,
 				initData: get(t_store)
-			}
+			};
 		}
 
 		let enabled: MaybeEventStreamData<boolean | null> | undefined = undefined;
@@ -165,16 +186,22 @@ export class ContextMenuItemProvider {
 			} else {
 				t_store = p_enable;
 			}
-			unlisteners.push(t_store.subscribe((e) => {
-				webview.emitTo({
-					kind: "Webview",
-					label: webview.label
-				}, eventName, e);
-			}));
+			unlisteners.push(
+				t_store.subscribe((e) => {
+					webview.emitTo(
+						{
+							kind: "Webview",
+							label: webview.label
+						},
+						eventName,
+						e
+					);
+				})
+			);
 			enabled = {
 				eventName,
 				initData: get(t_store)
-			}
+			};
 		}
 		return {
 			type: "Submenu",
@@ -198,7 +225,7 @@ export default async function contextMenu(
 		}
 		if (item.type == "Submenu") {
 			item.items.forEach((i) => {
-				pushItemUnlisteners(i)
+				pushItemUnlisteners(i);
 			});
 		}
 	}

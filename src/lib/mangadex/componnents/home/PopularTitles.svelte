@@ -53,7 +53,8 @@
 			id: manga.id,
 			title: get_value_from_title_and_random_if_undefined(manga.attributes.title, "en") ?? "",
 			description:
-				get_value_from_title_and_random_if_undefined(manga.attributes.description, "en") ?? "",
+				get_value_from_title_and_random_if_undefined(manga.attributes.description, "en") ??
+				"",
 			coverImage: get_cover_image_url({
 				id: manga.relationships.coverArt.id,
 				quality: "512"

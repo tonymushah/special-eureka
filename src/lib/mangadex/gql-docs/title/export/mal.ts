@@ -14,25 +14,26 @@ const export_mutation = graphql(`
 	}
 `);
 
-const exportTitlesToMAL = () => createMutation(() => (
-	{
-		mutationKey: ["export", "titles", "to", "MAL"],
-		async mutationFn(options: MdidsToMyAnimeListExportOption): Promise<string> {
-			const res = await client
-				.mutation(export_mutation, {
-					options
-				})
-				.toPromise();
-			if (res.data) {
-				return res.data.manga.export.idsAsMyAnimeList;
-			} else if (res.error) {
-				throw res.error;
-			} else {
-				throw new Error("No data??");
+const exportTitlesToMAL = () =>
+	createMutation(
+		() => ({
+			mutationKey: ["export", "titles", "to", "MAL"],
+			async mutationFn(options: MdidsToMyAnimeListExportOption): Promise<string> {
+				const res = await client
+					.mutation(export_mutation, {
+						options
+					})
+					.toPromise();
+				if (res.data) {
+					return res.data.manga.export.idsAsMyAnimeList;
+				} else if (res.error) {
+					throw res.error;
+				} else {
+					throw new Error("No data??");
+				}
 			}
-		}
-	}),
-	() => mangadexQueryClient
-);
+		}),
+		() => mangadexQueryClient
+	);
 
 export default exportTitlesToMAL;

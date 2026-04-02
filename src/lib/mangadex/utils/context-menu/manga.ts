@@ -118,7 +118,9 @@ export default function mangaElementContextMenu({
 	};
 	items.push(
 		ContextMenuItemProvider.menuItem({
-			text: derived(isFollowed, (isFollowed) => (isFollowed ? "Unfollow title" : "Follow title")),
+			text: derived(isFollowed, (isFollowed) =>
+				isFollowed ? "Unfollow title" : "Follow title"
+			),
 			action() {
 				isFollowed.update((v) => !v);
 			},
@@ -257,41 +259,52 @@ export default function mangaElementContextMenu({
 					ContextMenuItemProvider.menuItem({
 						text: "Download all chapters",
 						action() {
-							downloadTitleWithExtra(id, MangaDownloadExtras.AllChapters).catch(console.error);
+							downloadTitleWithExtra(id, MangaDownloadExtras.AllChapters).catch(
+								console.error
+							);
 						}
 					}),
 					ContextMenuItemProvider.menuItem({
 						text: "Download all unread",
 						action() {
-							downloadTitleWithExtra(id, MangaDownloadExtras.Unreads).catch(console.error);
-						},
-						enabled: isLogged
-					}),
-					ContextMenuItemProvider.menuItem({
-						text: "Download all undownloaded",
-						action() {
-							downloadTitleWithExtra(id, MangaDownloadExtras.UnDownloadeds).catch(console.error);
-						}
-					}),
-					ContextMenuItemProvider.menuItem({
-						text: "Download all undownloaded unread",
-						action() {
-							downloadTitleWithExtra(id, MangaDownloadExtras.UnReadUnDownloadeds).catch(
+							downloadTitleWithExtra(id, MangaDownloadExtras.Unreads).catch(
 								console.error
 							);
 						},
 						enabled: isLogged
 					}),
 					ContextMenuItemProvider.menuItem({
+						text: "Download all undownloaded",
+						action() {
+							downloadTitleWithExtra(id, MangaDownloadExtras.UnDownloadeds).catch(
+								console.error
+							);
+						}
+					}),
+					ContextMenuItemProvider.menuItem({
+						text: "Download all undownloaded unread",
+						action() {
+							downloadTitleWithExtra(
+								id,
+								MangaDownloadExtras.UnReadUnDownloadeds
+							).catch(console.error);
+						},
+						enabled: isLogged
+					}),
+					ContextMenuItemProvider.menuItem({
 						text: "Re-download all failed chapters",
 						action() {
-							downloadTitleWithExtra(id, MangaDownloadExtras.Failed).catch(console.error);
+							downloadTitleWithExtra(id, MangaDownloadExtras.Failed).catch(
+								console.error
+							);
 						}
 					}),
 					ContextMenuItemProvider.menuItem({
 						text: "Re-download all failed unread chapters",
 						action() {
-							downloadTitleWithExtra(id, MangaDownloadExtras.UnReadFailed).catch(console.error);
+							downloadTitleWithExtra(id, MangaDownloadExtras.UnReadFailed).catch(
+								console.error
+							);
 						}
 					})
 				]
@@ -412,7 +425,10 @@ export default function mangaElementContextMenu({
 												});
 											})
 											.catch((e) => {
-												addErrorToast(`Cannot add author ${author.name} to the blacklist`, e);
+												addErrorToast(
+													`Cannot add author ${author.name} to the blacklist`,
+													e
+												);
 											});
 									}
 								}),
@@ -427,7 +443,10 @@ export default function mangaElementContextMenu({
 												});
 											})
 											.catch((e) => {
-												addErrorToast(`Cannot remove author ${author.name} to the blacklist`, e);
+												addErrorToast(
+													`Cannot remove author ${author.name} to the blacklist`,
+													e
+												);
 											});
 									}
 								}),
@@ -492,7 +511,10 @@ export default function mangaElementContextMenu({
 												});
 											})
 											.catch((e) => {
-												addErrorToast(`Cannot add artist ${author.name} to the blacklist`, e);
+												addErrorToast(
+													`Cannot add artist ${author.name} to the blacklist`,
+													e
+												);
 											});
 									}
 								}),
@@ -507,7 +529,10 @@ export default function mangaElementContextMenu({
 												});
 											})
 											.catch((e) => {
-												addErrorToast(`Cannot remove artist ${author.name} to the blacklist`, e);
+												addErrorToast(
+													`Cannot remove artist ${author.name} to the blacklist`,
+													e
+												);
 											});
 									}
 								}),

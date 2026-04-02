@@ -4,8 +4,8 @@ import type { ReportAttributes } from "@mangadex/gql/graphql";
 export enum ReportStatusMode {
 	Table,
 	Card
-};
+}
 
 export type ReportData = {
-	id: string,
-} & ReportAttributes
+	id: string;
+} & ReportAttributes;

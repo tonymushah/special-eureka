@@ -97,7 +97,10 @@
 								<PrimaryButton
 									onclick={() => {
 										if (name.trim().length == 0) {
-											addErrorToast("Invalid name input", "Please insert a valid name");
+											addErrorToast(
+												"Invalid name input",
+												"Please insert a valid name"
+											);
 											return;
 										}
 										forkCustomListMutation.mutate(
@@ -118,7 +121,8 @@
 														goto(
 															route("/mangadex/list/[id]", {
 																id:
-																	data.visibility == CustomListVisibility.Private
+																	data.visibility ==
+																	CustomListVisibility.Private
 																		? `private:${data.id}`
 																		: data.id
 															})

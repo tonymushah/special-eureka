@@ -25,9 +25,8 @@
 		return defaultProfile.subscribe(() => {});
 	});
 	onDestroy(async () => {
-		const { defaultBehavior } = await import(
-			"$lib/core/window-decoration/stores/decorations.svelte"
-		);
+		const { defaultBehavior } =
+			await import("$lib/core/window-decoration/stores/decorations.svelte");
 		defaultBehavior();
 	});
 	setContextClient(client);

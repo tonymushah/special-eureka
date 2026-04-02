@@ -33,7 +33,9 @@
 		async mutationFn({ isPrivate, name }) {
 			const res = await client
 				.mutation(makeEmptyListMutation, {
-					visibility: isPrivate ? CustomListVisibility.Private : CustomListVisibility.Public,
+					visibility: isPrivate
+						? CustomListVisibility.Private
+						: CustomListVisibility.Public,
 					name
 				})
 				.toPromise();

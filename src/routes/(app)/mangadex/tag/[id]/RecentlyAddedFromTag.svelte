@@ -93,7 +93,10 @@
 			{#each query.data as title (title.id)}
 				<swiper-slide>
 					<MangaElementBase4
-						title={get_value_from_title_and_random_if_undefined(title.attributes.title, "en") ?? ""}
+						title={get_value_from_title_and_random_if_undefined(
+							title.attributes.title,
+							"en"
+						) ?? ""}
 						coverImageAlt={title.relationships.coverArt.attributes.description}
 						mangaId={title.id}
 					/>

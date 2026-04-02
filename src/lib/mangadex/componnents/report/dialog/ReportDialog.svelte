@@ -1,7 +1,10 @@
 <script lang="ts">
 	import { ReportCategory, type InputMaybe } from "@mangadex/gql/graphql";
 	import { XIcon as CloseIcon } from "@lucide/svelte";
-	import { createReportReasonListQuery, createSendReportMutation } from "@mangadex/gql-docs/report";
+	import {
+		createReportReasonListQuery,
+		createSendReportMutation
+	} from "@mangadex/gql-docs/report";
 	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
 	import PrimaryButton from "@mangadex/componnents/theme/buttons/PrimaryButton.svelte";
 	import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
@@ -72,7 +75,8 @@
 											<option
 												value={{
 													id: reason.id,
-													detailRequired: reason.attributes.detailsRequired
+													detailRequired:
+														reason.attributes.detailsRequired
 												} as ReasonState}
 												>{get_value_from_title_and_random_if_undefined(
 													reason.attributes.reason,

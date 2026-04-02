@@ -227,15 +227,15 @@ export type IndexedDoublePageState = [IndexedPageState, IndexedPageState] | Inde
 
 export type PageStateInner =
 	| {
-		page: ChapterImage;
-		error?: never;
-		num: number
-	}
+			page: ChapterImage;
+			error?: never;
+			num: number;
+	  }
 	| {
-		page?: never;
-		error: Error;
-		num: number
-	};
+			page?: never;
+			error: Error;
+			num: number;
+	  };
 
 export type PageState = PageStateInner | null;
 

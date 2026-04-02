@@ -4,9 +4,9 @@ import { getCurrentWebview } from "@tauri-apps/api/webview";
 import { get, readable, type Readable, type Writable } from "svelte/store";
 
 type ChapterSyncPayload = {
-	page: number,
-	emitter?: string
-}
+	page: number;
+	emitter?: string;
+};
 
 function getChapterSyncReadable(chapterId: string): Readable<number | null> {
 	return readable<number | null>(null, (set) => {
@@ -15,10 +15,10 @@ function getChapterSyncReadable(chapterId: string): Readable<number | null> {
 			if (payload.emitter !== getCurrentWebview().label) {
 				set(payload.page);
 			}
-		})
+		});
 		return () => {
 			ev_.then((d) => d());
-		}
+		};
 	});
 }
 
@@ -27,7 +27,10 @@ function eventName(chapterId: string) {
 }
 
 function emitChapterSync(chapterId: string, page: number) {
-	return emit<ChapterSyncPayload>(eventName(chapterId), { page, emitter: getCurrentWebview().label });
+	return emit<ChapterSyncPayload>(eventName(chapterId), {
+		page,
+		emitter: getCurrentWebview().label
+	});
 }
 
 export function getChapterPageSync(chapterId: string): Writable<number | null> {
@@ -40,7 +43,7 @@ export function getChapterPageSync(chapterId: string): Writable<number | null> {
 			if (typeof value == "number") {
 				const prom = emitChapterSync(chapterId, value);
 				if (dev) {
-					prom.catch(console.error)
+					prom.catch(console.error);
 				}
 			}
 		},
@@ -49,9 +52,9 @@ export function getChapterPageSync(chapterId: string): Writable<number | null> {
 			if (typeof value == "number") {
 				const prom = emitChapterSync(chapterId, value);
 				if (dev) {
-					prom.catch(console.error)
+					prom.catch(console.error);
 				}
 			}
-		},
-	}
+		}
+	};
 }
