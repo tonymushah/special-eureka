@@ -5505,6 +5505,21 @@ export type AllTagsQuery = {
 	};
 };
 
+export type AuthCheckQueryVariables = Exact<{ [key: string]: never }>;
+
+export type AuthCheckQuery = {
+	__typename?: "Query";
+	auth: {
+		__typename?: "AuthQuery";
+		check: {
+			__typename?: "AuthCheck";
+			isAuthenticated: boolean;
+			roles: Array<UserRole>;
+			permissions: Array<string>;
+		};
+	};
+};
+
 export type LoginMutationMutationVariables = Exact<{
 	username: Scalars["Username"]["input"];
 	password: Scalars["Password"]["input"];
@@ -8978,21 +8993,6 @@ export type UserMeSubscription = {
 export type IsLoggedSubscriptionVariables = Exact<{ [key: string]: never }>;
 
 export type IsLoggedSubscription = { __typename?: "Subscriptions"; watchIsLogged: boolean };
-
-export type AuthCheckQueryVariables = Exact<{ [key: string]: never }>;
-
-export type AuthCheckQuery = {
-	__typename?: "Query";
-	auth: {
-		__typename?: "AuthQuery";
-		check: {
-			__typename?: "AuthCheck";
-			isAuthenticated: boolean;
-			roles: Array<UserRole>;
-			permissions: Array<string>;
-		};
-	};
-};
 
 export type ChapterPagesSubscriptionSubscriptionVariables = Exact<{
 	chapter: Scalars["UUID"]["input"];
@@ -14744,6 +14744,51 @@ export const AllTagsDocument = {
 		}
 	]
 } as unknown as DocumentNode<AllTagsQuery, AllTagsQueryVariables>;
+export const AuthCheckDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "authCheck" },
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "auth" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "check" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "isAuthenticated" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "roles" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "permissions" }
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<AuthCheckQuery, AuthCheckQueryVariables>;
 export const LoginMutationDocument = {
 	kind: "Document",
 	definitions: [
@@ -33375,51 +33420,6 @@ export const IsLoggedDocument = {
 		}
 	]
 } as unknown as DocumentNode<IsLoggedSubscription, IsLoggedSubscriptionVariables>;
-export const AuthCheckDocument = {
-	kind: "Document",
-	definitions: [
-		{
-			kind: "OperationDefinition",
-			operation: "query",
-			name: { kind: "Name", value: "authCheck" },
-			selectionSet: {
-				kind: "SelectionSet",
-				selections: [
-					{
-						kind: "Field",
-						name: { kind: "Name", value: "auth" },
-						selectionSet: {
-							kind: "SelectionSet",
-							selections: [
-								{
-									kind: "Field",
-									name: { kind: "Name", value: "check" },
-									selectionSet: {
-										kind: "SelectionSet",
-										selections: [
-											{
-												kind: "Field",
-												name: { kind: "Name", value: "isAuthenticated" }
-											},
-											{
-												kind: "Field",
-												name: { kind: "Name", value: "roles" }
-											},
-											{
-												kind: "Field",
-												name: { kind: "Name", value: "permissions" }
-											}
-										]
-									}
-								}
-							]
-						}
-					}
-				]
-			}
-		}
-	]
-} as unknown as DocumentNode<AuthCheckQuery, AuthCheckQueryVariables>;
 export const ChapterPagesSubscriptionDocument = {
 	kind: "Document",
 	definitions: [
