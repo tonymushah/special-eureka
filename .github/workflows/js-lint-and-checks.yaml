@@ -1,4 +1,6 @@
 name: "Javascript lint and tests"
+permissions:
+  contents: read
 on:
   pull_request:
     paths:
