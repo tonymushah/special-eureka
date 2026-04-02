@@ -98,6 +98,8 @@
 			<li>Support for chapter read markers (for online only)</li>
 			<li>Export chapters/title ids list as txt<i>?</i></li>
 			<li>
+				<!-- svelte-ignore a11y_click_events_have_key_events -->
+				<!-- svelte-ignore a11y_no_static_element_interactions -->
 				<b
 					onclick={() => {
 						openNewWindow();

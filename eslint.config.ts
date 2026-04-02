@@ -1,10 +1,10 @@
+import css from "@eslint/css";
 import js from "@eslint/js";
+import svelte from "eslint-plugin-svelte";
+import { defineConfig } from "eslint/config";
 import globals from "globals";
 import tseslint from "typescript-eslint";
-import css from "@eslint/css";
-import { defineConfig } from "eslint/config";
 import svelteConfig from "./svelte.config.js";
-import svelte from "eslint-plugin-svelte";
 
 export default defineConfig([
 	{ files: ["**/*.{js,mjs,cjs,ts}"], plugins: { js }, extends: ["js/recommended"] },
@@ -17,7 +17,7 @@ export default defineConfig([
 		languageOptions: {
 			parserOptions: {
 				projectService: true,
-				extraFileExtensions: [".svelte"], 
+				extraFileExtensions: [".svelte"],
 				parser: tseslint.parser,
 				svelteConfig
 			}
@@ -37,7 +37,8 @@ export default defineConfig([
 			"package-lock.json",
 			"yarn.lock",
 			"src-tauri",
-			"target"
+			"target",
+			"**/*.json"
 		]
 	}
 ]);

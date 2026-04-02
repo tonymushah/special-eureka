@@ -156,7 +156,11 @@
 		transform: scale(1.05);
 	}
 	.card:focus {
-		outline: 3px solid rgb(128 128 128 / 0.8);
+		outline: 3px dashed rgb(128 128 128 / 0.8);
+	}
+	.card:active {
+		outline: none;
+		transform: scale(1.025);
 	}
 	.blob {
 		filter: blur(40px);

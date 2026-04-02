@@ -6,6 +6,7 @@
 	} from "@special-eureka/core/commands/updater";
 	import { createMutation, createQuery } from "@tanstack/svelte-query";
 	import Markdown from "@humanspeak/svelte-markdown";
+	import UpdateProgress from "@special-eureka/dashboard/components/UpdateProgress.svelte";
 
 	let query = createQuery(() => ({
 		queryKey: ["updates"],
@@ -40,21 +41,33 @@
 {#snippet updateButton()}
 	<button
 		class="update-button"
-		disabled={updateMutation.isPending}
+		disabled={updateMutation.isPending || query.isFetching}
 		onclick={() => {
 			updateMutation.mutate();
 		}}
 	>
-		Update
+		{#if updateMutation.isPending}
+			Updating...
+		{:else if query.isFetching}
+			Checking...
+		{:else}
+			Update
+		{/if}
 	</button>
 {/snippet}
 
 <h2>Updates</h2>
 
 <section>
-	{#if query.isLoading}
+	{#if query.isPending || dev}
+		<UpdateProgress />
+	{:else if query.isLoading}
 		<p class="loading">Loading...</p>
 	{:else if query.isError}
+		<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+		<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+		<!-- svelte-ignore a11y_click_events_have_key_events -->
+		<!-- svelte-ignore a11y_click_events_have_key_events -->
 		<h3
 			class="error"
 			onclick={() => {
@@ -133,6 +146,12 @@
 	.update-button:active {
 		transform: translateY(3px);
 		box-shadow: none;
+	}
+	.update-button:disabled {
+		box-shadow: none;
+		background-color: #ddaead;
+		transform: translateY(3px);
+		cursor: not-allowed;
 	}
 	.update-button-container {
 		display: flex;

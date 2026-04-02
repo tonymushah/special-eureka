@@ -1595,7 +1595,7 @@ dependencies = [
 
 [[package]]
 name = "diesel-sqlite-utils"
-version = "0.2.3"
+version = "0.2.4-1"
 dependencies = [
  "diesel",
 ]
@@ -3818,7 +3818,7 @@ dependencies = [
 
 [[package]]
 name = "mangadex-blacklist-raw"
-version = "0.2.3"
+version = "0.2.4-1"
 dependencies = [
  "diesel",
  "diesel_migrations",
@@ -6231,7 +6231,7 @@ dependencies = [
 
 [[package]]
 name = "special-eureka"
-version = "0.2.3"
+version = "0.2.4-1"
 dependencies = [
  "actix",
  "anyhow",
@@ -6811,7 +6811,7 @@ dependencies = [
 
 [[package]]
 name = "tauri-plugin-speu-mangadex"
-version = "0.2.3"
+version = "0.2.4-1"
 dependencies = [
  "actix",
  "async-graphql",
