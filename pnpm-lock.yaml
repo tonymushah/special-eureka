@@ -223,7 +223,7 @@ importers:
         version: 5.55.1
       svelte-awesome-color-picker:
         specifier: ^4.1.1
-        version: 4.1.1(svelte@5.55.1)
+        version: 4.1.2(svelte@5.55.1)
       svelte-check:
         specifier: ^4.4.5
         version: 4.4.6(picomatch@4.0.4)(svelte@5.55.1)(typescript@6.0.2)
@@ -4088,8 +4088,8 @@ packages:
     resolution: {integrity: sha512-qpCAvRl9stuOHveKsn7HncJRvv501qIacKzQlO/+Lwxc9+0q2wLyv4Dfvt80/DPn2pqOBsJdDiogXGR9+OvwRw==}
     engines: {node: '>=8'}
 
-  svelte-awesome-color-picker@4.1.1:
-    resolution: {integrity: sha512-k4APFGBFN8EpvUS0UJfdlqj8xDekMbqGBwnDYBK1QCY8kcTXSO8c7SitEk70MkiYOIByOgXlHcjaipy6H7dpAw==}
+  svelte-awesome-color-picker@4.1.2:
+    resolution: {integrity: sha512-t6IQUIXXu4UhlqKGQoPrmNZvVcESQupF/6JWsup/OCsRliJnYPRHTrahtWdO/MWplnpLfkbQd+3e5g5cgu/rEw==}
     engines: {node: '>=24'}
     peerDependencies:
       svelte: ^5.0.0
@@ -8667,7 +8667,7 @@ snapshots:
     dependencies:
       has-flag: 4.0.0
 
-  svelte-awesome-color-picker@4.1.1(svelte@5.55.1):
+  svelte-awesome-color-picker@4.1.2(svelte@5.55.1):
     dependencies:
       colord: 2.9.3
       svelte: 5.55.1
