@@ -23,6 +23,17 @@ It's build in [Tauri](https://tauri.app) and [Svelte](https://svelte.dev)
 - Authentification
 - Export MD library or MDList to CSV or MyAnimeList XML.
 
+## Download
+
+For Archlinux users it already on the AUR :
+
+```shell
+yay -S special-eureka-bin
+# paru -S special-eureka-bin
+```
+
+For other distros/OS you can look at the [release](https://github.com/tonymushah/special-eureka/releases) page
+
 ## Why I Created this project??
 
 I love reading manga.
