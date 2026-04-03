@@ -109,11 +109,11 @@ incremental = true
 [profile.dev.package."*"]
 opt-level = 3
 
-[profile.clippy]
+[profile.clippy-fast]
 inherits = "dev"
 opt-level = 1
 
-[profile.clippy.package."*"]
+[profile.clippy-fast.package."*"]
 opt-level = 1
 
 [profile.release]
