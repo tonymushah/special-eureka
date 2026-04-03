@@ -1,6 +1,11 @@
 [workspace]
-members = ["./src-tauri/core", "./src-tauri/mangadex", "crates/diesel-sqlite-utils", "crates/mangadex-blacklist"]
-default-members = ["./src-tauri/core"]
+members = [
+	"./src-tauri/special-eureka", 
+	"./src-tauri/mangadex", 
+	"crates/diesel-sqlite-utils", 
+	"crates/mangadex-blacklist"
+]
+default-members = ["./src-tauri/special-eureka"]
 resolver = "3"
 
 [workspace.dependencies]
