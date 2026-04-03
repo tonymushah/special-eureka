@@ -8,11 +8,11 @@ workspace = false
 script_runner = "@duckscript"
 script = { file = "./scripts/upx-release.ds" }
 
-[tasks.clippy]
+[tasks.clippy-fast]
 workspace = false
 command = "cargo"
 args = [
 	"clippy", 
 	"--profile",
-	"clippy"
+	"clippy-fast"
 ]
