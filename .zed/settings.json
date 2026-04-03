@@ -3,7 +3,10 @@
 		"rust-analyzer": {
 			"initialization_options": {
 				"check": {
-					"command": "clippy" // rust-analyzer.check.command (default: "check")
+					"command": "clippy", // rust-analyzer.check.command (default: "check")
+					"extraEnv": {
+						"OPT_LEVEL": "1"
+					}
 				}
 			}
 		}
