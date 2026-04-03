@@ -7,3 +7,12 @@ args = ["dev"]
 workspace = false
 script_runner = "@duckscript"
 script = { file = "./scripts/upx-release.ds" }
+
+[tasks.clippy]
+workspace = false
+command = "cargo"
+args = [
+	"clippy", 
+	"--profile",
+	"clippy"
+]
