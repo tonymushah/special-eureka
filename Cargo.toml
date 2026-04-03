@@ -104,6 +104,13 @@ incremental = true
 [profile.dev.package."*"]
 opt-level = 3
 
+[profile.clippy]
+inherits = "dev"
+
+[profile.clippy.package."*"]
+inherits = "dev"
+opt-level = 1
+
 [profile.release]
 opt-level = 3
 lto = true
