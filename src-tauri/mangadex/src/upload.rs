@@ -41,6 +41,9 @@ type ArcRwLock<T> = Arc<RwLock<T>>;
 
 const UPLOAD_MANAGER_EVENT_KEY: &str = "special-eureka://upload-manager-event";
 
+const UPLOAD_MANAGER_MIGHT_REQUIRE_SOME_STAFF_APPROVALS: &str =
+    "special-eureka://uploads-might-requires-some-staff-approvals";
+
 #[derive(Clone, Debug)]
 pub struct UploadManager<R>
 where
@@ -331,12 +334,45 @@ where
     }
 }
 
+async fn check_if_chapter_require_approvals<R: Runtime>(
+    app: &AppHandle<R>,
+    chapter: &ChapterObject,
+) -> Result<bool, crate::Error> {
+    let client = app.get_mangadex_client_with_auth_refresh().await?;
+    Ok(client
+        .upload()
+        .check_approval_required()
+        .post()
+        .manga_id(
+            chapter
+                .find_first_relationships(mangadex_api_types_rust::RelationshipType::Manga)
+                .ok_or(crate::Error::RelatedMangaNotFound)?
+                .id,
+        )
+        .locale(chapter.attributes.translated_language)
+        .send()
+        .await?
+        .requires_approval
+        .unwrap_or_default())
+}
+
+fn emit_require_approvals<R: Runtime>(app: &AppHandle<R>) {
+    if let Err(error) = app.emit(UPLOAD_MANAGER_MIGHT_REQUIRE_SOME_STAFF_APPROVALS, true) {
+        log::warn!(
+            "Cannot emit {} => {}",
+            UPLOAD_MANAGER_MIGHT_REQUIRE_SOME_STAFF_APPROVALS,
+            error
+        );
+    }
+}
+
 #[cfg_attr(feature = "hotpath", hotpath::measure)]
 async fn inner_runner<R>(queue: UploadQueue, sessions: UploadSessions, app: AppHandle<R>)
 where
     R: Runtime,
 {
     let mut index = 0_usize;
+    let require_approvals = false;
     while let Some((session_id, _)) = queue.get_at_index(index).await {
         let Ok(_) = queue
             .set_state(session_id, UploadSessionState::Uploading)
@@ -365,7 +401,24 @@ where
                 );
                 index += 1;
             }
-            Ok(_chapter) => {
+            Ok(chapter) => {
+                if !require_approvals {
+                    match check_if_chapter_require_approvals(&app, &chapter).await {
+                        Ok(true) => {
+                            emit_require_approvals(&app);
+                        }
+                        Err(err) => {
+                            log::error!(
+                                "Cannot check if chapter {} require approvals => {}",
+                                chapter.id,
+                                err
+                            );
+                        }
+                        _ => {}
+                    }
+                } else {
+                    emit_require_approvals(&app);
+                }
                 queue.remove_at_index(index).await;
                 let _ = app.emit(
                     UPLOAD_MANAGER_EVENT_KEY,
