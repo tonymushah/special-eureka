@@ -166,7 +166,7 @@
 		display: flex;
 		flex-direction: column;
 		max-height: 75%;
-		overflow-y: scroll;
+		overflow-y: auto;
 		overflow-x: hidden;
 	}
 	.body::-webkit-scrollbar {
