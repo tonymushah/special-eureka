@@ -67,8 +67,10 @@
 	}
 	img.blur {
 		filter: blur(10px);
+		-webkit-filter: blur(10px);
 	}
 	img.blur:hover {
 		filter: blur(5px);
+		-webkit-filter: blur(10px);
 	}
 </style>
