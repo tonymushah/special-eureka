@@ -70,7 +70,7 @@
 
 	.inner {
 		//scroll-behavior: smooth;
-		overflow-y: scroll;
+		overflow-y: auto;
 		// NOTE it added a lot of unecessary space that made appear a lot unecessary scrollbar
 		// on Linux.
 		// padding-bottom: 10px;
