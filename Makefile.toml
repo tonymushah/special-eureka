@@ -16,3 +16,25 @@ args = [
 	"--profile",
 	"clippy-fast"
 ]
+
+[tasks.clippy-fast-ci]
+workspace = false
+command = "cargo"
+args = [
+	"clippy", 
+	"--profile",
+	"clippy-fast",
+	"-D",
+	"clippy::perf",
+	"-D",
+	"clippy::style"
+]
+
+[tasks.run-workspace-tests]
+workspace = false
+command = "cargo"
+args = [
+	"test", 
+	"--workspace", 
+	"--tests"
+]
