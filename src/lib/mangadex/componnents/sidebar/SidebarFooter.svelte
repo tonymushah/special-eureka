@@ -36,7 +36,7 @@
 		await loadUserMe();
 	});
 
-	let label = $derived($userMe?.name ?? "Guest");
+	let label = $derived($userMe?.name ?? initial_user_name ?? "Guest");
 </script>
 
 <Menu
