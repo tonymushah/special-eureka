@@ -164,6 +164,7 @@
 	}
 	.blob {
 		filter: blur(40px);
+		-webkit-filter: blur(40px);
 		position: absolute;
 		top: -100px;
 		left: -100px;
