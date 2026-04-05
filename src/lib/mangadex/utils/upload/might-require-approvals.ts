@@ -3,7 +3,7 @@ import { getCurrentWebview } from "@tauri-apps/api/webview";
 
 const EVENT = "special-eureka://uploads-might-requires-some-staff-approvals";
 
-export function listenToUploadsMightRequiresSomeStaffApprovals(fun: () => {}): UnlistenFn {
+export function listenToUploadsMightRequiresSomeStaffApprovals(fun: () => void): UnlistenFn {
 	const maybeUnlisten = getCurrentWebview().listen<boolean>(EVENT, (_ev) => {
 		fun();
 	});
