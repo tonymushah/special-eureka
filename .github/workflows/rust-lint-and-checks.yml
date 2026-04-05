@@ -1,0 +1,72 @@
+name: "rust lint and tests"
+permissions:
+  contents: read
+on:
+  pull_request:
+    paths:
+      - "src-tauri/**"
+      - "crates/**"
+      - "Cargo.lock"
+      - "Cargo.toml"
+
+jobs:
+  check-fmt:
+    strategy:
+      fail-fast: false
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: install Rust stable
+        uses: dtolnay/rust-toolchain@stable
+      - name: run Rust format
+        run: cargo fmt --check
+  run-clippy:
+    needs: check-fmt
+    strategy:
+      fail-fast: false
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: install Rust stable
+        uses: dtolnay/rust-toolchain@stable
+      - name: make build dir
+        run: mkdir build
+      - name: install mold linker
+        uses: rui314/setup-mold@v1
+        with:
+          make-default: false
+      - name: install dependencies (ubuntu only)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
+      - name: change project cargo config
+        run: mv .cargo/build.config.toml .cargo/config.toml
+      - name: install cargo-make
+        run: cargo install --force cargo-make
+      - name: Run clippy fast
+        run: cargo make clippy-fast-ci
+  run-tests:
+    needs: run-clippy
+    strategy:
+      fail-fast: false
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: install Rust stable
+        uses: dtolnay/rust-toolchain@stable
+      - name: make build dir
+        run: mkdir build
+      - name: install mold linker
+        uses: rui314/setup-mold@v1
+        with:
+          make-default: false
+      - name: install dependencies (ubuntu only)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
+      - name: change project cargo config
+        run: mv .cargo/build.config.toml .cargo/config.toml
+      - name: install cargo-make
+        run: cargo install --force cargo-make
+      - name: Run tests
+        run: cargo make run-workspace-tests
