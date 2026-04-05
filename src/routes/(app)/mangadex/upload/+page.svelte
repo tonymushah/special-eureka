@@ -9,7 +9,9 @@
 	import { createSwapQueueOrderMutation } from "@mangadex/gql-docs/upload/mutations/swap-queue-order";
 	import { queueOrderIDs } from "@mangadex/stores/upload/queue";
 	import { sessionsIDs } from "@mangadex/stores/upload/sessions";
+	import { listenToUploadsMightRequiresSomeStaffApprovals } from "@mangadex/utils/upload/might-require-approvals";
 	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
+	import { onDestroy, onMount } from "svelte";
 	import { flip } from "svelte/animate";
 
 	let hiSource: "sessions" | "queue" | undefined = $state();
@@ -17,6 +19,15 @@
 	let selectedQueue = $state<string | undefined>();
 	let swapMutation = createSwapQueueOrderMutation();
 	let startRunnerMutation = startQueueRunnerMutation();
+	let requireStaffApproval = $state(false);
+	onMount(() =>
+		listenToUploadsMightRequiresSomeStaffApprovals(() => {
+			requireStaffApproval = true;
+		})
+	);
+	onDestroy(() => {
+		requireStaffApproval = false;
+	});
 </script>
 
 <AppTitle title="Upload Sessions | MangaDex" />
@@ -33,6 +44,11 @@
 			Start upload!
 		</PrimaryButton>
 	</div>
+	{#if requireStaffApproval}
+		<p class="require-approval">
+			Some chapters might require staff approvals. (and <i>yes</i>... we don't know which :>) )
+		</p>
+	{/if}
 	<div class="content">
 		<div class="sessions">
 			<h2>Sessions</h2>
@@ -133,5 +149,8 @@
 	}
 	.list-item {
 		display: grid;
+	}
+	p.require-approval {
+		color: var(--danger-l2);
 	}
 </style>
