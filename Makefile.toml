@@ -24,6 +24,7 @@ args = [
 	"clippy", 
 	"--profile",
 	"clippy-fast",
+	"--",
 	"-D",
 	"clippy::perf",
 	"-D",
