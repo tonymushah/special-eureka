@@ -46,7 +46,8 @@
 	</div>
 	{#if requireStaffApproval}
 		<p class="require-approval">
-			Some chapters might require staff approvals. (and <i>yes</i>... we don't know which :>) )
+			Some chapters might require staff approvals. (and <i>yes</i>... we don't know which :>)
+			)
 		</p>
 	{/if}
 	<div class="content">
