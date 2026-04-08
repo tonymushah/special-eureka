@@ -31,12 +31,15 @@
 <div class="show-dialog" class:fetching={coverImage.value == undefined}>
 	{#if coverImage.value}
 		<img {alt} src={coverImage.value} bind:this={coverImageInstance} />
+		<div class="flag">
+			<FlagIcon lang={originalLanguage} />
+		</div>
 	{:else}
-		<Fetching />
+		<div class="fetching-text">
+			<FlagIcon lang={originalLanguage} />
+			<Fetching />
+		</div>
 	{/if}
-	<div class="flag">
-		<FlagIcon lang={originalLanguage} />
-	</div>
 </div>
 
 <style lang="scss">
@@ -48,6 +51,7 @@
 		img {
 			border-radius: 0.5em;
 			width: 100%;
+			transition: filter 50ms ease-in-out;
 		}
 		img:hover {
 			filter: brightness(75%);
@@ -63,5 +67,10 @@
 	}
 	.flag:hover {
 		filter: none;
+	}
+	.fetching-text {
+		display: flex;
+		gap: 4px;
+		align-items: center;
 	}
 </style>
