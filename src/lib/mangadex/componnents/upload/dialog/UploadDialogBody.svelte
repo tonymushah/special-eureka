@@ -82,7 +82,9 @@
 	}));
 	let groupSearchData = $derived.by(() => {
 		const map = new Map(
-			groupSearchQuery.data?.pages.flatMap((d) => d.data).map((d) => [d.id, d.attributes.name])
+			groupSearchQuery.data?.pages
+				.flatMap((d) => d.data)
+				.map((d) => [d.id, d.attributes.name])
 		);
 		return map
 			.entries()

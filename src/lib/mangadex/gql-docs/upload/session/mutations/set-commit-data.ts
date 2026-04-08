@@ -18,7 +18,10 @@ export function setInternalSessionCommitDataMutation() {
 				startRunner?: boolean;
 			}) {
 				let externalUrl: InputMaybe<string>;
-				if (typeof commitData.externalUrl == "string" && commitData.externalUrl.length != 0) {
+				if (
+					typeof commitData.externalUrl == "string" &&
+					commitData.externalUrl.length != 0
+				) {
 					externalUrl = commitData.externalUrl;
 				} else {
 					externalUrl = null;
