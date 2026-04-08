@@ -39,3 +39,18 @@ args = [
 	"--workspace", 
 	"--tests"
 ]
+
+[tasks.fmt-rust]
+command = "cargo"
+args = [
+	"fmt"
+]
+
+[tasks.fmt-js-svelte]
+workspace = false
+command = "pnpm"
+args = ["format"]
+
+[tasks.format]
+workspace = false
+dependencies = ["fmt-rust", "fmt-js-svelte"]
