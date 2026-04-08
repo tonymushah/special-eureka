@@ -103,5 +103,6 @@
 	}
 	.err-msg {
 		max-width: 300px;
+		text-wrap: balance;
 	}
 </style>
