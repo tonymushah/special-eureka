@@ -220,10 +220,29 @@ impl ChapterListQueries {
     ) -> Result<ChapterCollection> {
         if let Some(params) = offline_params {
             self.get_offline(ctx, params).await
-        } else if let Ok(res) = self.get_online(ctx).await {
-            Ok(res)
         } else {
-            self.get_offline(ctx, Default::default()).await
+            match self.get_online(ctx).await {
+                Ok(res) => Ok(res),
+                Err(online_err) => {
+                    log::debug!("Cannot fetch these chapter params online : {:#?}", self);
+                    log::error!("Cannot fetch chapters online: {}", online_err);
+                    log::trace!("Relying on offline instead");
+                    match self.get_offline(ctx, Default::default()).await {
+                        Ok(res) => {
+                            if res.total == 0 {
+                                log::warn!("No chapters fetched offline for {:?} ...", self);
+                                log::trace!("Returning nothing anyway...");
+                            }
+                            Ok(res)
+                        }
+                        Err(crate::Error::OfflineAppStateNotLoaded) => {
+                            log::trace!("Offline app state not loaded, returning on");
+                            Err(online_err)
+                        }
+                        Err(err) => Err(err),
+                    }
+                }
+            }
         }
     }
 }
