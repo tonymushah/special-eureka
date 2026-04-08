@@ -1,3 +1,6 @@
+#![warn(clippy::perf)]
+#![warn(clippy::style)]
+
 use async_graphql::Schema;
 use mutation::Mutation;
 use plugin_setup::setup;

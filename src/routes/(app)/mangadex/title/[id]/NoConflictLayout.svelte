@@ -461,6 +461,7 @@
 		onupload={() => {
 			openUploadDialog = true;
 		}}
+		originalLanguage={data.queryResult.attributes.originalLanguage}
 	/>
 </div>
 

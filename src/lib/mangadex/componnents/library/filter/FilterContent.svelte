@@ -22,6 +22,7 @@
 	}
 
 	let { params }: Props = $props();
+	// svelte-ignore state_referenced_locally
 	const publicationStatus = derived(params, (params) => params.publicationStatus ?? []);
 	initMangaSearchPublicationStatusContextStore({
 		subscribe: publicationStatus.subscribe,
@@ -38,6 +39,7 @@
 			});
 		}
 	});
+	// svelte-ignore state_referenced_locally
 	const year = derived(params, (params) => params.year ?? null);
 	initMangaSearchYearContextStore({
 		subscribe: year.subscribe,

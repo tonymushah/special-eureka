@@ -12,6 +12,7 @@
 	}
 
 	let { queueId, highlighted, selected, index, ...restProps }: Props = $props();
+	// svelte-ignore state_referenced_locally
 	const _queueState = queueEntryState(queueId);
 	let queueState = $derived($_queueState);
 </script>
@@ -103,5 +104,6 @@
 	}
 	.err-msg {
 		max-width: 300px;
+		text-wrap: balance;
 	}
 </style>

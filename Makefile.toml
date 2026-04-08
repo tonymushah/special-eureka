@@ -8,11 +8,49 @@ workspace = false
 script_runner = "@duckscript"
 script = { file = "./scripts/upx-release.ds" }
 
-[tasks.clippy]
+[tasks.clippy-fast]
 workspace = false
 command = "cargo"
 args = [
 	"clippy", 
 	"--profile",
-	"clippy"
+	"clippy-fast"
 ]
+
+[tasks.clippy-fast-ci]
+workspace = false
+command = "cargo"
+args = [
+	"clippy", 
+	"--profile",
+	"clippy-fast",
+	"--",
+	"-D",
+	"clippy::perf",
+	"-D",
+	"clippy::style"
+]
+
+[tasks.run-workspace-tests]
+workspace = false
+command = "cargo"
+args = [
+	"test", 
+	"--workspace", 
+	"--tests"
+]
+
+[tasks.fmt-rust]
+command = "cargo"
+args = [
+	"fmt"
+]
+
+[tasks.fmt-js-svelte]
+workspace = false
+command = "pnpm"
+args = ["format"]
+
+[tasks.format]
+workspace = false
+dependencies = ["fmt-rust", "fmt-js-svelte"]

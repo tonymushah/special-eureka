@@ -3,8 +3,7 @@
 		"rust-analyzer": {
 			"initialization_options": {
 				"check": {
-					"command": "clippy", // rust-analyzer.check.command (default: "check")
-					"extraArgs": ["--profile", "clippy"]
+					"command": "clippy" // rust-analyzer.check.command (default: "check")
 				}
 			}
 		}

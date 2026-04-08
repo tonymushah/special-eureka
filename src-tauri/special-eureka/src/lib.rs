@@ -1,3 +1,6 @@
+#![warn(clippy::perf)]
+#![warn(clippy::style)]
+
 use actix::System;
 use builder::get_builder;
 use runtime::RuntimeGuard;
