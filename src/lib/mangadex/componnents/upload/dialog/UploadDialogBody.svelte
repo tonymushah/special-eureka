@@ -16,6 +16,8 @@
 	import { addErrorToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 	import { titleOnlyQuery } from "@mangadex/stores/title/title-only-query";
 	import { floatingUImenu } from "@mangadex/utils/floating-ui/menu.svelte";
+	import { SvelteMap } from "svelte/reactivity";
+	import { delay } from "lodash";
 
 	interface Props {
 		mangaId: string;
@@ -80,9 +82,7 @@
 	}));
 	let groupSearchData = $derived.by(() => {
 		const map = new Map(
-			groupSearchQuery.data?.pages
-				.flatMap((d) => d.data)
-				.map((d) => [d.id, d.attributes.name])
+			groupSearchQuery.data?.pages.flatMap((d) => d.data).map((d) => [d.id, d.attributes.name])
 		);
 		return map
 			.entries()
@@ -121,15 +121,14 @@
 			return get_value_from_title_and_random_if_undefined(mangaTitleQuery.data, "en");
 		}
 	});
-	let groups = $state(new Map<string, string>());
+	let groups = new SvelteMap<string, string>();
 	let menu = $state<HTMLElement | undefined>(undefined);
-	let trigger = $state<HTMLElement | undefined>(undefined);
+	let trigger = $state<HTMLInputElement | undefined>(undefined);
 	let shouldOpen = $derived(touchedInput && !mutation.isPending);
 	floatingUImenu({
 		open: () => shouldOpen,
 		triggerElement: () => trigger,
 		menuElement: () => menu,
-		showMenuDisplay: "flex",
 		closeOnClick: true,
 		setOpen(o) {
 			shouldOpen = o;
@@ -158,7 +157,7 @@
 			</Tooltip>
 		</p>
 	</div>
-	<div class="groups" bind:this={trigger}>
+	<div class="groups">
 		<p>Scanlation Groups:</p>
 		{#each groups as [groupId, groupName]}
 			<div class="group">
@@ -174,13 +173,16 @@
 		{/each}
 		<FormInput
 			bind:value={inputValue}
+			bind:self={trigger}
 			inputProps={{
 				disabled: mutation.isPending,
 				onfocus() {
 					touchedInput = true;
 				},
 				onblur() {
-					touchedInput = false;
+					delay(() => {
+						touchedInput = false;
+					}, 200);
 				}
 			}}
 		/>
@@ -209,24 +211,38 @@
 			}}
 		/>
 	</div>
-</div>
-
-<div class="menu-outer" bind:this={menu}>
-	<MangaDexVarThemeProvider>
-		<menu transition:slide={{ duration: 150, axis: "y" }}>
-			{#each groupSearchData as group (group.id)}
-				<button class="mi" onclick={() => {}} class:isSelected={groups.has(group.id)}>
-					<h4>{group.value}</h4>
-				</button>
-			{/each}
-			{#if !groupSearchQuery.isFetching && groupSearchQuery.hasNextPage}
-				<div bind:this={toObserve}></div>
-			{/if}
-		</menu>
-	</MangaDexVarThemeProvider>
+	{#if shouldOpen}
+		<div class="menu-outer" bind:this={menu}>
+			<MangaDexVarThemeProvider>
+				<menu transition:slide={{ duration: 150, axis: "y" }}>
+					{#each groupSearchData as group (group.id)}
+						<button
+							class="mi"
+							onclick={() => {
+								if (groups.has(group.id)) {
+									groups.delete(group.id);
+								} else {
+									groups.set(group.id, group.value);
+								}
+							}}
+							class:isSelected={groups.has(group.id)}
+						>
+							<h4>{group.value}</h4>
+						</button>
+					{/each}
+					{#if !groupSearchQuery.isFetching && groupSearchQuery.hasNextPage}
+						<div bind:this={toObserve}></div>
+					{/if}
+				</menu>
+			</MangaDexVarThemeProvider>
+		</div>
+	{/if}
 </div>
 
 <style lang="scss">
+	.body {
+		position: relative;
+	}
 	.groups {
 		display: flex;
 		flex-direction: row;
@@ -285,26 +301,30 @@
 		background-color: var(--accent-l1-active);
 	}
 	.menu-outer {
-		display: none;
 		flex-direction: column;
-		height: 200px;
+		max-height: 200px;
 		z-index: 100;
+		position: absolute;
+		overflow-y: scroll;
 	}
 	menu {
 		margin: 0px;
 		border-radius: 0.25em;
 		list-style: none;
 		background-color: var(--accent);
-		overflow-y: scroll;
 		color: var(--text-color);
 		padding-left: 0em;
+		display: flex;
+		flex-direction: column;
+		height: 100%;
 		.mi {
+			width: 100%;
 			padding-left: 1em;
 			transition: background-color 50ms ease-in-out;
 			background-color: transparent;
 			color: var(--text-color);
 			border: 0px;
-			align-items: center;
+			text-align: start;
 			h4 {
 				margin: 0px;
 			}
