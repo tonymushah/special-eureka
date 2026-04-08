@@ -22,6 +22,7 @@
 	}
 
 	let { params }: Props = $props();
+	// svelte-ignore state_referenced_locally
 	const publicationStatus = derived(params, (params) => params.publicationStatus ?? []);
 	initMangaSearchPublicationStatusContextStore({
 		subscribe: publicationStatus.subscribe,
@@ -38,6 +39,7 @@
 			});
 		}
 	});
+	// svelte-ignore state_referenced_locally
 	const year = derived(params, (params) => params.year ?? null);
 	initMangaSearchYearContextStore({
 		subscribe: year.subscribe,
@@ -112,8 +114,8 @@
 	</p>
 	<p>
 		<span class="lazy-af">
-			Tony Mushah: To honest, I could do it (really). It just that it doesn't make sense to me
-			to add those complex filter thingy here.
+			Tony Mushah: To honest, I could do it (really). It just that it doesn't make sense to me to
+			add those complex filter thingy here.
 		</span>
 	</p>
 	<p class="lazy-af">
