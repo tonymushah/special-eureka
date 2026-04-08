@@ -525,7 +525,7 @@ where
             .post();
         endpoint = endpoint
             .chapter(commit_data.chapter)
-            .volume(commit_data.volume)
+            .volume(commit_data.volume.filter(|v| !v.is_empty()))
             .translated_language(commit_data.translated_language)
             .external_url(commit_data.external_url);
         if let Some(publish_date) = commit_data.publish_at {
