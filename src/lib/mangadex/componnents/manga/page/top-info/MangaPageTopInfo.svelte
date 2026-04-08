@@ -2,7 +2,12 @@
 	import ContentRatingTag from "@mangadex/componnents/content-rating/ContentRatingTag.svelte";
 	import TagComponnentsFlex from "@mangadex/componnents/tag/TagComponnentsFlex.svelte";
 	import { MangaDownloadState } from "@mangadex/download/manga.svelte";
-	import { ContentRating, type MangaStatus, type ReadingStatus } from "@mangadex/gql/graphql";
+	import {
+		ContentRating,
+		Language,
+		type MangaStatus,
+		type ReadingStatus
+	} from "@mangadex/gql/graphql";
 	import type { Tag } from "@mangadex/utils/types/Tag";
 	import { readable, type Readable } from "svelte/store";
 	import type { ReadingStatusEventDetail } from "./buttons/readingStatus";
@@ -26,6 +31,7 @@
 	import registerContextMenuEvent from "@special-eureka/core/utils/contextMenuContext";
 	import { ContextMenuItemProvider } from "@special-eureka/core/commands/contextMenu";
 	import { writeText } from "@tauri-apps/plugin-clipboard-manager";
+	import { setTopMangaOriginalLanguageContextStore } from "./context/original-language";
 
 	type ClickEventHandler<A = object> = (
 		ev: MouseEvent & {
@@ -68,6 +74,7 @@
 		disableUpload?: boolean;
 		disableAddToLibrary?: boolean;
 		disableRating?: boolean;
+		originalLanguage: Language;
 	}
 
 	let {
@@ -102,7 +109,8 @@
 		disableReport,
 		disableUpload,
 		disableAddToLibrary,
-		disableRating
+		disableRating,
+		originalLanguage
 	}: Props = $props();
 
 	setTopMangaIdContextStore(id);
@@ -118,6 +126,8 @@
 	setTopMangaRatingContextStore(rating);
 	// svelte-ignore state_referenced_locally
 	setTopMangaDownloadContextStore(downloadState);
+	// svelte-ignore state_referenced_locally
+	setTopMangaOriginalLanguageContextStore(originalLanguage);
 </script>
 
 <TopInfoLayout>
