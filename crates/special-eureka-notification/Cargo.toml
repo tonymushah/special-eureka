@@ -1,0 +1,12 @@
+[package]
+name = "special-eureka-notification"
+rust-version.workspace = true
+license-file.workspace = true
+authors.workspace = true
+edition.workspace = true
+repository.workspace = true
+version.workspace = true
+
+[dependencies]
+notify-rust.workspace = true
+tauri = { workspace = true }

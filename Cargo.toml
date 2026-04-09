@@ -4,7 +4,7 @@ members = [
 	"./src-tauri/mangadex", 
 	"crates/diesel-sqlite-utils", 
 	"crates/mangadex-blacklist"
-]
+, "crates/special-eureka-notification"]
 default-members = ["./src-tauri/special-eureka"]
 resolver = "3"
 
@@ -57,6 +57,7 @@ diesel_migrations = "2"
 diesel-sqlite-utils = { path = "./crates/diesel-sqlite-utils" }
 non-exhaustive = "0.1"
 tempfile = "3"
+notify-rust = "4"
 
 # Temporary fix before upgrading reqwest to v0.13.x
 # [patch.crates-io]
@@ -131,4 +132,4 @@ license-file = "./LICENSE"
 authors = ["tonymushah tonymushahDev06@yahoo.com"]
 edition = "2024"
 repository = "https://github.com/tonymushah/special-eureka"
-version = "0.2.4-2"
+version = "0.2.4-3"
