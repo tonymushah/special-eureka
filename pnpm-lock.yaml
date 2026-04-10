@@ -51,7 +51,7 @@ importers:
         version: 3.2.0(graphql@16.13.2)
       '@humanspeak/svelte-markdown':
         specifier: ^1.4.0
-        version: 1.4.0(svelte@5.55.2)
+        version: 1.4.1(svelte@5.55.2)
       '@icons-pack/svelte-simple-icons':
         specifier: ^7.2.0
         version: 7.2.0(@sveltejs/kit@2.57.1(@sveltejs/vite-plugin-svelte@7.0.0(svelte@5.55.2)(vite@8.0.8(@types/node@25.5.2)(esbuild@0.27.4)(jiti@2.6.1)(less@4.6.4)(sass@1.99.0)(yaml@2.8.3)))(svelte@5.55.2)(typescript@6.0.2)(vite@8.0.8(@types/node@25.5.2)(esbuild@0.27.4)(jiti@2.6.1)(less@4.6.4)(sass@1.99.0)(yaml@2.8.3)))(svelte@5.55.2)
@@ -905,8 +905,8 @@ packages:
     resolution: {integrity: sha512-8nS/7OIysYsjd5d64cprdwupgqzpMmFDHw25EWuPLRxxJw5q91K7Z+bjIcAPjikMU9vmptY5GyhsZDbcr1ym4Q==}
     engines: {node: '>=18.0.0'}
 
-  '@humanspeak/svelte-markdown@1.4.0':
-    resolution: {integrity: sha512-ARoLQgY38sh9kSYO11mtTmMTz3vC0PFXZX8CayzalVAp41rWsy8L+HUeCB2uTfSqTHqnID1NuD52MRM61Exlfw==}
+  '@humanspeak/svelte-markdown@1.4.1':
+    resolution: {integrity: sha512-91Rj+MtrEOUpO/cBqAIlmNk0CHBIVFCqgdPvjwFCMG9SlhwkicGwMlpiP+ebj6U9hjjHAx36K9qtiJ39zfe4Qg==}
     peerDependencies:
       mermaid: '>=10.0.0'
       svelte: ^5.0.0
@@ -5397,7 +5397,7 @@ snapshots:
 
   '@humanspeak/memory-cache@1.0.6': {}
 
-  '@humanspeak/svelte-markdown@1.4.0(svelte@5.55.2)':
+  '@humanspeak/svelte-markdown@1.4.1(svelte@5.55.2)':
     dependencies:
       '@humanspeak/memory-cache': 1.0.6
       github-slugger: 2.0.0
