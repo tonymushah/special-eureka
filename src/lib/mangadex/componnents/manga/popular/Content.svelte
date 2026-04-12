@@ -140,7 +140,7 @@
 		flex-wrap: wrap;
 	}
 	.description {
-		height: 10em;
+		max-height: 10em;
 		overflow-y: scroll;
 		width: 100%;
 	}
