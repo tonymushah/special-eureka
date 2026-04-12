@@ -49,6 +49,7 @@ jobs:
     needs: run-clippy
     strategy:
       fail-fast: false
+    # TODO run this on all major platforms
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
