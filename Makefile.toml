@@ -1,3 +1,5 @@
+# Move all package.json tasks here
+
 [tasks.run]
 workspace = false
 command = "pnpm"
