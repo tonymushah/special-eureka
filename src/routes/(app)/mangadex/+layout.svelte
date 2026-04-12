@@ -47,6 +47,9 @@
 			justify-content: center;
 			display: flex;
 			flex-direction: column;
+			h1 {
+				font-family: "Poppins", "Lexend Variable", sans-serif;
+			}
 		}
 	}
 	@media (prefers-color-scheme: light) {
