@@ -67,6 +67,7 @@ mod tests {
             app.app_handle(),
             Notification {
                 summary: "aaaaaaaaaaaaaaaaaaaaaaa".into(),
+                body: Some("oooooooooooooooooo".into()),
                 ..Default::default()
             },
         );
