@@ -58,10 +58,7 @@ diesel-sqlite-utils = { path = "./crates/diesel-sqlite-utils" }
 non-exhaustive = "0.1"
 tempfile = "3"
 notify-rust = "4"
-
-# Temporary fix before upgrading reqwest to v0.13.x
-# [patch.crates-io]
-# reqwest = { git = "https://github.com/seanmonstar/reqwest.git", branch = "0.12.x" }
+duration-string = "0.5"
 
 [workspace.dependencies.tauri-plugin-notification]
 git = "https://github.com/tauri-apps/plugins-workspace"

@@ -6245,7 +6245,6 @@ dependencies = [
  "tauri-plugin-clipboard-manager",
  "tauri-plugin-deep-link",
  "tauri-plugin-dialog",
- "tauri-plugin-notification",
  "tauri-plugin-opener",
  "tauri-plugin-single-instance",
  "tauri-plugin-speu-mangadex",
@@ -6262,7 +6261,10 @@ dependencies = [
 name = "special-eureka-notification"
 version = "0.2.4-3"
 dependencies = [
+ "duration-string",
+ "log",
  "notify-rust",
+ "serde",
  "tauri",
 ]
 

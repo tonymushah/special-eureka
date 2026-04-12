@@ -30,7 +30,8 @@ uuid.workspace = true
 actix.workspace = true
 tauri-plugin-opener.workspace = true
 tauri-plugin-deep-link.workspace = true
-tauri-plugin-notification.workspace = true
+# disabled in favor of `special-eureka-notification`
+# tauri-plugin-notification.workspace = true
 tauri-plugin-clipboard-manager.workspace = true
 tauri-plugin-dialog.workspace = true
 fern = {workspace = true, features = ["colored"]}

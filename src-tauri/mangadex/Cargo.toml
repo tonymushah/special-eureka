@@ -43,7 +43,7 @@ tokio-util = "0.7"
 actix.workspace = true
 tauri-plugin-notification.workspace = true
 tower = { workspace = true, features = ["limit", "buffer"] }
-duration-string = { version = "0.5", features = ["serde"] }
+duration-string = { workspace = true, features = ["serde"] }
 impl-trait-for-tuples = "0.2"
 dirs.workspace = true
 enum-repr.workspace = true
