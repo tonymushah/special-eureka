@@ -38,6 +38,9 @@ pub fn notify<R: Runtime>(app: &AppHandle<R>, notification: CrateNotification) {
         }
     }
     cmd.arg(notification.summary);
+    if let Some(body) = notification.body {
+        cmd.arg(body);
+    }
     match cmd.spawn() {
         Ok(mut child) => match child.wait() {
             Ok(e) => log::info!("Notification exited ({e})"),
