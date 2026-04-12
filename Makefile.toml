@@ -54,3 +54,8 @@ args = ["format"]
 [tasks.format]
 workspace = false
 dependencies = ["fmt-rust", "fmt-js-svelte"]
+
+[tasks.check-svelte]
+workspace = false
+command = "pnpm"
+args = ["check"]
