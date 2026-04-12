@@ -32,7 +32,8 @@ pub fn get_builder() -> Builder<Wry> {
             crate::commands::sys_locale::sys_locale,
             crate::commands::context_menu::context_menu,
             crate::commands::updater::check_for_updates,
-            crate::commands::updater::download_and_install_updates
+            crate::commands::updater::download_and_install_updates,
+            crate::commands::send_notification::send_notification
         ])
         .plugin(tauri_plugin_store::Builder::default().build())
         .plugin(mangadex::init())
