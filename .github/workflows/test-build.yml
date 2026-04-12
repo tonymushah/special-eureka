@@ -43,7 +43,7 @@ jobs:
         run: mv .cargo/build.config.toml .cargo/config.toml
       # Using upx on test builds
       - name: install upx via crazy-max/ghaction-upx (windows and ubuntu only)
-        if: matrix.platform == 'windows-latest' || matrix.platform == 'ubuntu-24.04'
+        if: matrix.platform == 'windows-latest' || matrix.platform == 'ubuntu-latest'
         uses: crazy-max/ghaction-upx@v4
         with:
           install-only: true
