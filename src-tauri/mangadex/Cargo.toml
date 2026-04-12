@@ -41,7 +41,8 @@ favicon-picker.workspace = true
 tempfile.workspace = true
 tokio-util = "0.7"
 actix.workspace = true
-tauri-plugin-notification.workspace = true
+# disabled in favor of `special-eureka-notification`
+# tauri-plugin-notification.workspace = true
 tower = { workspace = true, features = ["limit", "buffer"] }
 duration-string = { workspace = true, features = ["serde"] }
 impl-trait-for-tuples = "0.2"
@@ -68,6 +69,7 @@ mangadex-blacklist-raw = { workspace = true }
 diesel_migrations.workspace = true
 diesel-sqlite-utils.workspace = true
 non-exhaustive.workspace = true
+special-eureka-notification.workspace = true
 
 [dependencies.eureka-mmanager]
 git = "https://github.com/tonymushah/eureka-mmanager.git"

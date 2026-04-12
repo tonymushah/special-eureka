@@ -59,10 +59,12 @@ non-exhaustive = "0.1"
 tempfile = "3"
 notify-rust = "4"
 duration-string = "0.5"
+special-eureka-notification = { path = "./crates/special-eureka-notification" }
 
-[workspace.dependencies.tauri-plugin-notification]
-git = "https://github.com/tauri-apps/plugins-workspace"
-branch = "v2"
+# disabled in favor of `special-eureka-notification`
+# [workspace.dependencies.tauri-plugin-notification]
+# git = "https://github.com/tauri-apps/plugins-workspace"
+# branch = "v2"
 
 [workspace.dependencies.tauri-plugin-deep-link]
 git = "https://github.com/tauri-apps/plugins-workspace"
