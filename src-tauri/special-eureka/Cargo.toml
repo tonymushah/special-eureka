@@ -46,6 +46,7 @@ hotpath = { workspace = true, optional = true }
 mimalloc = { version = "0.1", optional = true }
 reqwest = { workspace = true, optional = true }
 env_filter = "1"
+special-eureka-notification.workspace = true
 
 [target.'cfg(windows)'.dependencies]
 libsqlite3-sys = { workspace = true, features = ["bundled"] }
