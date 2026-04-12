@@ -12,6 +12,7 @@ impl From<CrateNotification> for Notification {
         if let Some(timeout) = value.timeout {
             notif.timeout(*timeout);
         }
+        #[cfg(not(target_os = "macos"))]
         if let Some(urgency) = value.urgency {
             notif.urgency(urgency.into());
         }
