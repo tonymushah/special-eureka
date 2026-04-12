@@ -35,7 +35,7 @@ jobs:
         uses: rui314/setup-mold@v1
         with:
           make-default: false
-      - name: install dependencies (ubuntu only)
+      - name: install dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
@@ -49,25 +49,33 @@ jobs:
     needs: run-clippy
     strategy:
       fail-fast: false
-    # TODO run this on all major platforms
-    runs-on: ubuntu-latest
+      matrix:
+        platform: [macos-latest, ubuntu-latest, windows-latest]
+    # run this on all major platforms
+    runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v6
       - name: install Rust stable
         uses: dtolnay/rust-toolchain@stable
-      - name: make build dir
-        run: mkdir build
+      # Mold is not supported on windows
       - name: install mold linker
+        if: matrix.platform == 'macos-latest' || matrix.platform == 'ubuntu-latest'
         uses: rui314/setup-mold@v1
         with:
           make-default: false
+      # Switch to mold for faster compile times
+      - name: change project cargo config
+        if: matrix.platform == 'macos-latest' || matrix.platform == 'ubuntu-latest'
+        run: mv .cargo/build.config.toml .cargo/config.toml
       - name: install dependencies (ubuntu only)
+        if: matrix.platform == 'ubuntu-latest'
         run: |
           sudo apt-get update
           sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
-      - name: change project cargo config
-        run: mv .cargo/build.config.toml .cargo/config.toml
       - name: install cargo-make
         run: cargo install --force cargo-make
+      # NOTE: This might not be required but i will keep this one here just in case :)
+      - name: make build dir
+        run: mkdir build
       - name: Run tests
         run: cargo make run-workspace-tests --profile clippy-fast
