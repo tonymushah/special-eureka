@@ -30,7 +30,8 @@ uuid.workspace = true
 actix.workspace = true
 tauri-plugin-opener.workspace = true
 tauri-plugin-deep-link.workspace = true
-tauri-plugin-notification.workspace = true
+# disabled in favor of `special-eureka-notification`
+# tauri-plugin-notification.workspace = true
 tauri-plugin-clipboard-manager.workspace = true
 tauri-plugin-dialog.workspace = true
 fern = {workspace = true, features = ["colored"]}
@@ -45,6 +46,7 @@ hotpath = { workspace = true, optional = true }
 mimalloc = { version = "0.1", optional = true }
 reqwest = { workspace = true, optional = true }
 env_filter = "1"
+special-eureka-notification.workspace = true
 
 [target.'cfg(windows)'.dependencies]
 libsqlite3-sys = { workspace = true, features = ["bundled"] }

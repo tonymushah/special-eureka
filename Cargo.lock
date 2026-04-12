@@ -1595,7 +1595,7 @@ dependencies = [
 
 [[package]]
 name = "diesel-sqlite-utils"
-version = "0.2.4-2"
+version = "0.2.4-3"
 dependencies = [
  "diesel",
 ]
@@ -3834,7 +3834,7 @@ dependencies = [
 
 [[package]]
 name = "mangadex-blacklist-raw"
-version = "0.2.4-2"
+version = "0.2.4-3"
 dependencies = [
  "diesel",
  "diesel_migrations",
@@ -6241,7 +6241,7 @@ dependencies = [
 
 [[package]]
 name = "special-eureka"
-version = "0.2.4-2"
+version = "0.2.4-3"
 dependencies = [
  "actix",
  "anyhow",
@@ -6255,13 +6255,13 @@ dependencies = [
  "reqwest",
  "serde",
  "serde_json",
+ "special-eureka-notification",
  "sys-locale",
  "tauri",
  "tauri-build",
  "tauri-plugin-clipboard-manager",
  "tauri-plugin-deep-link",
  "tauri-plugin-dialog",
- "tauri-plugin-notification",
  "tauri-plugin-opener",
  "tauri-plugin-single-instance",
  "tauri-plugin-speu-mangadex",
@@ -6272,6 +6272,17 @@ dependencies = [
  "time",
  "tokio",
  "uuid",
+]
+
+[[package]]
+name = "special-eureka-notification"
+version = "0.2.4-3"
+dependencies = [
+ "duration-string",
+ "log",
+ "notify-rust",
+ "serde",
+ "tauri",
 ]
 
 [[package]]
@@ -6766,24 +6777,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "tauri-plugin-notification"
-version = "2.3.3"
-source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#d016a8ab1e84cd89762f7f7ba996940acb62a834"
-dependencies = [
- "log",
- "notify-rust",
- "rand 0.9.2",
- "serde",
- "serde_json",
- "serde_repr",
- "tauri",
- "tauri-plugin",
- "thiserror 2.0.18",
- "time",
- "url",
-]
-
-[[package]]
 name = "tauri-plugin-opener"
 version = "2.5.3"
 source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#d016a8ab1e84cd89762f7f7ba996940acb62a834"
@@ -6821,7 +6814,7 @@ dependencies = [
 
 [[package]]
 name = "tauri-plugin-speu-mangadex"
-version = "0.2.4-2"
+version = "0.2.4-3"
 dependencies = [
  "actix",
  "async-graphql",
@@ -6866,9 +6859,9 @@ dependencies = [
  "serde_json",
  "serde_repr",
  "shrink_fit_wrapper",
+ "special-eureka-notification",
  "tar",
  "tauri",
- "tauri-plugin-notification",
  "tauri-plugin-store",
  "tempfile",
  "thiserror 1.0.69",

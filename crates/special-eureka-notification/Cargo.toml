@@ -1,0 +1,20 @@
+[package]
+name = "special-eureka-notification"
+rust-version.workspace = true
+license-file.workspace = true
+authors.workspace = true
+edition.workspace = true
+repository.workspace = true
+version.workspace = true
+
+[dependencies]
+tauri = { workspace = true }
+log = { workspace = true }
+serde = { workspace = true, features = ["derive"] }
+duration-string = { workspace = true, features = ["serde"] }
+
+[target.'cfg(not(target_os = "linux"))'.dependencies]
+notify-rust.workspace = true
+
+[dev-dependencies]
+tauri = { workspace = true, features = ["test"] }

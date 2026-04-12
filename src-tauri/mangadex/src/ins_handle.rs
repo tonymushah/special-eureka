@@ -1,11 +1,10 @@
 use crate::intelligent_notification_system::DownloadEntries;
+use special_eureka_notification::Notification;
 use std::sync::Mutex;
 use tauri::AppHandle;
 use tauri::Manager;
 use tauri::Runtime;
 use tauri::State;
-use tauri_plugin_notification::NotificationExt;
-use tauri_plugin_notification::PermissionState;
 use uuid::Uuid;
 
 type INSHandle = Mutex<DownloadEntries<Uuid>>;
@@ -36,22 +35,22 @@ fn check_and_notify<R: Runtime>(
     handle: &mut DownloadEntries<Uuid>,
 ) -> crate::Result<()> {
     if handle.is_all_finished() {
-        if app.notification().permission_state()? == PermissionState::Prompt {
-            app.notification().request_permission()?;
-        }
-        if app.notification().permission_state()? == PermissionState::Granted {
-            let notif = app
-                .notification()
-                .builder()
-                .title("Chapters Downloads Finished")
-                .body(format!(
-                    "Success {}\nFailed {}",
-                    handle.get_success_len(),
-                    handle.get_failed_len()
-                ));
-            handle.clear();
-            handle.shrink_to_fit();
-            notif.show()?;
+        let notif = Notification {
+            summary: "Chapters Downloads Finished".into(),
+            body: Some(format!(
+                "Success {}\nFailed {}",
+                handle.get_success_len(),
+                handle.get_failed_len()
+            )),
+            ..Default::default()
+        };
+        handle.clear();
+        handle.shrink_to_fit();
+        {
+            let app = app.clone();
+            tauri::async_runtime::spawn_blocking(move || {
+                notif.show(&app);
+            });
         }
     }
     Ok(())

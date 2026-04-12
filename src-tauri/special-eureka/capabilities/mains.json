@@ -27,14 +27,10 @@
 		"mangadex-desktop-api:allow-graphql",
 		"mangadex-desktop-api:allow-subscriptions",
 		"opener:default",
-		"notification:default",
 		"core:webview:allow-create-webview-window",
 		"dialog:allow-open",
 		"dialog:allow-save",
 		"opener:allow-reveal-item-in-dir",
-		"notification:allow-notify",
-		"notification:allow-is-permission-granted",
-		"notification:deny-request-permission",
 		"core:window:allow-is-focused"
 	]
 }

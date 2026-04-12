@@ -106,8 +106,6 @@ pub enum Error {
     SpawnDataResultMissingActixArbiter,
     #[error("MangaDex Eureka Manager SDK Error: {0}")]
     EurekaManagerCore(#[from] eureka_mmanager_core::Error),
-    #[error(transparent)]
-    Notification(#[from] tauri_plugin_notification::Error),
     #[error("Cannot access at the Tauri Webview Handle from the GraphQL Context")]
     NoAccessWebviewGQLCtx,
     #[error("Cannot access at the Subscription Cancel Token from the GraphQL Context")]

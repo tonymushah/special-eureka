@@ -19,20 +19,10 @@
 				Promise.resolve()
 					.then(async () => {
 						if (!(await getCurrentWindow().isFocused())) {
-							// Do you have permission to send a notification?
-							let permissionGranted = await isPermissionGranted();
-
-							// If not we need to request it
-							if (!permissionGranted) {
-								const permission = await requestPermission();
-								permissionGranted = permission === "granted";
-							}
-							if (permissionGranted) {
-								sendNotification({
-									title: param.title,
-									body: param.description
-								});
-							}
+							send_notification({
+								summary: param.title,
+								body: param.description
+							});
 						}
 					})
 					.catch(console.error);
@@ -70,11 +60,6 @@
 	import { createToaster, Toaster as ArkToaster, Toast, Portal } from "@ark-ui/svelte";
 	import MangaDexVarThemeProvider from "../MangaDexVarThemeProvider.svelte";
 	import { toastNotify } from "@mangadex/stores/toastNotify";
-	import {
-		isPermissionGranted,
-		requestPermission,
-		sendNotification
-	} from "@tauri-apps/plugin-notification";
 	import { getCurrentWindow } from "@tauri-apps/api/window";
 	import { CombinedError } from "@urql/svelte";
 	import { dev } from "$app/environment";
@@ -82,6 +67,7 @@
 	import toastStyles from "./toaster.module.scss";
 	import { isLinuxStore } from "@special-eureka/core/commands/isLinux";
 	import { playMDFahh } from "@mangadex/stores/fahh.svelte";
+	import { send_notification } from "@special-eureka/core/commands/send_notification";
 </script>
 
 <div>
