@@ -90,10 +90,15 @@ impl ChapterMutations {
             .await
             .map_err(|e| e.into_inner())?;
         if let Err(_err) = res {
+            log::warn!("Cannot download chapter {id} -> {_err}");
             ins_handle::add_in_failed(&tauri_handle, id)?;
             Ok(state)
         } else {
-            ins_handle::add_in_success(&tauri_handle, id)?;
+            if matches!(state, DownloadState::Downloaded { has_failed: true }) {
+                ins_handle::add_in_failed(&tauri_handle, id)?;
+            } else {
+                ins_handle::add_in_success(&tauri_handle, id)?;
+            }
 
             let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
             let ola: tauri::State<'_, crate::app_state::OfflineAppState> =
