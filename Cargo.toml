@@ -42,7 +42,7 @@ clap = "4"
 csv = "1"
 hotpath = { version = "0.15" }
 shrink_fit_wrapper = "1"
-rand = "0.9"
+rand = "0.10"
 itertools = "0.14"
 favicon-picker = "1.0.0"
 zip = "8"
