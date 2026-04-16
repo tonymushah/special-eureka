@@ -100,5 +100,6 @@
 	swiper-slide {
 		padding-bottom: 10px;
 		padding-top: 3px;
+		display: flex;
 	}
 </style>

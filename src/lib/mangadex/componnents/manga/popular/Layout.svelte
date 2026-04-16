@@ -59,6 +59,7 @@
 			align-items: start;
 			flex-direction: row;
 			width: 100%;
+			gap: 1em;
 		}
 	}
 </style>
