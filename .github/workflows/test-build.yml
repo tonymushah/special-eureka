@@ -33,7 +33,7 @@ jobs:
           run_install: false
       - name: install pnpm (on windows)
         if: matrix.platform == 'windows-latest'
-        run: Invoke-WebRequest https://get.pnpm.io/install.ps1 -UseBasicParsing | Invoke-Expression
+        run: choco install pnpm
       - name: install Rust stable
         uses: dtolnay/rust-toolchain@stable
       - name: install Cargo make
