@@ -30,16 +30,9 @@ impl From<crate::Urgency> for notify_rust::Urgency {
     }
 }
 
-pub fn notify<R: Runtime>(app: &AppHandle<R>, notification: CrateNotification) {
+pub fn notify<R: Runtime>(_app: &AppHandle<R>, notification: CrateNotification) {
     let mut notif: Notification = notification.into();
-    notif
-        .appname(
-            app.config()
-                .product_name
-                .as_deref()
-                .unwrap_or(&app.config().identifier),
-        )
-        .auto_icon();
+    notif.auto_icon();
     if let Err(err) = notif.show() {
         log::error!("{err}");
     }
