@@ -1,2 +1,9 @@
 # We put this here since the script might break on Windows
+if set_env CARGO_BUILD_PROFILE release-fast-compile
+	echo CARGO_BUILD_PROFILE=release-fast-compile
+else
+	echo Cannot set CARGO_BUILD_PROFILE to release-fast-compile
+	code = q 1
+end
+
 exec pnpm build -- --profile release-fast-compile
