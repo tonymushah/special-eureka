@@ -57,7 +57,7 @@ jobs:
         run: mv .cargo/build.config.toml .cargo/config.toml
       # Using upx on test builds
       # windows install
-      - name: install upx via winget (windows)
+      - name: install upx via choco (windows)
         if: matrix.platform == 'windows-latest'
         run: choco install upx
       # linux install
