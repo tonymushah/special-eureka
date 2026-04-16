@@ -199,10 +199,10 @@ importers:
         version: 4.6.4
       prettier:
         specifier: ^3.8.1
-        version: 3.8.2
+        version: 3.8.3
       prettier-plugin-svelte:
         specifier: ^3.5.1
-        version: 3.5.1(prettier@3.8.2)(svelte@5.55.4(@typescript-eslint/types@8.58.2))
+        version: 3.5.1(prettier@3.8.3)(svelte@5.55.4(@typescript-eslint/types@8.58.2))
       sass:
         specifier: ^1.99.0
         version: 1.99.0
@@ -3887,8 +3887,8 @@ packages:
       prettier: ^3.0.0
       svelte: '>=4.2.19'
 
-  prettier@3.8.2:
-    resolution: {integrity: sha512-8c3mgTe0ASwWAJK+78dpviD+A8EqhndQPUBpNUIPt6+xWlIigCwfN01lWr9MAede4uqXGTEKeQWTvzb3vjia0Q==}
+  prettier@3.8.3:
+    resolution: {integrity: sha512-7igPTM53cGHMW8xWuVTydi2KO233VFiTNyF5hLJqpilHfmn8C8gPf+PS7dUT64YcXFbiMGZxS9pCSxL/Dxm/Jw==}
     engines: {node: '>=14'}
     hasBin: true
 
@@ -5014,8 +5014,8 @@ snapshots:
       jsonc-parser: 3.3.1
       markdown-it: 14.1.1
       monaco-editor: 0.52.2
-      monaco-graphql: 1.7.3(graphql@16.13.2)(monaco-editor@0.52.2)(prettier@3.8.2)
-      prettier: 3.8.2
+      monaco-graphql: 1.7.3(graphql@16.13.2)(monaco-editor@0.52.2)(prettier@3.8.3)
+      prettier: 3.8.3
       react: 19.2.5
       react-compiler-runtime: 19.1.0-rc.1(react@19.2.5)
       react-dom: 19.2.5(react@19.2.5)
@@ -8348,13 +8348,13 @@ snapshots:
 
   monaco-editor@0.52.2: {}
 
-  monaco-graphql@1.7.3(graphql@16.13.2)(monaco-editor@0.52.2)(prettier@3.8.2):
+  monaco-graphql@1.7.3(graphql@16.13.2)(monaco-editor@0.52.2)(prettier@3.8.3):
     dependencies:
       graphql: 16.13.2
       graphql-language-service: 5.5.0(graphql@16.13.2)
       monaco-editor: 0.52.2
       picomatch-browser: 2.2.6
-      prettier: 3.8.2
+      prettier: 3.8.3
 
   motion-dom@12.38.0:
     dependencies:
@@ -8576,12 +8576,12 @@ snapshots:
 
   prelude-ls@1.2.1: {}
 
-  prettier-plugin-svelte@3.5.1(prettier@3.8.2)(svelte@5.55.4(@typescript-eslint/types@8.58.2)):
+  prettier-plugin-svelte@3.5.1(prettier@3.8.3)(svelte@5.55.4(@typescript-eslint/types@8.58.2)):
     dependencies:
-      prettier: 3.8.2
+      prettier: 3.8.3
       svelte: 5.55.4(@typescript-eslint/types@8.58.2)
 
-  prettier@3.8.2: {}
+  prettier@3.8.3: {}
 
   proxy-compare@3.0.1: {}
 
