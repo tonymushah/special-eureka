@@ -1,3 +1,11 @@
+[workspace.package]
+rust-version = "1.93"
+license-file = "./LICENSE"
+authors = ["tonymushah tonymushahDev06@yahoo.com"]
+edition = "2024"
+repository = "https://github.com/tonymushah/special-eureka"
+version = "0.2.4-4"
+
 [workspace]
 members = [
 	"./src-tauri/special-eureka", 
@@ -126,15 +134,8 @@ strip = true
 inherits = "release"
 codegen-units = 1
 
-# this is used for github releases ci
+# this is used for github test build ci
 [profile.release-fast-compile]
 inherits = "release"
 codegen-units = 256
-
-[workspace.package]
-rust-version = "1.93"
-license-file = "./LICENSE"
-authors = ["tonymushah tonymushahDev06@yahoo.com"]
-edition = "2024"
-repository = "https://github.com/tonymushah/special-eureka"
-version = "0.2.4-4"
+incremental = true
