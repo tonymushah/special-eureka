@@ -30,28 +30,8 @@ impl From<crate::Urgency> for notify_rust::Urgency {
     }
 }
 
-pub fn notify<R: Runtime>(app: &AppHandle<R>, notification: CrateNotification) {
+pub fn notify<R: Runtime>(_app: &AppHandle<R>, notification: CrateNotification) {
     let mut notif: Notification = notification.into();
-	#[cfg(windows)]
-    {
-    	let exe = tauri::utils::platform::current_exe()?;
-        let exe_dir = exe.parent().expect("failed to get exe directory");
-        let curr_dir = exe_dir.display().to_string();
-        // set the notification's System.AppUserModel.ID only when running the installed app
-        if !(curr_dir.ends_with(format!("{SEP}target{SEP}debug").as_str())
-            || curr_dir.ends_with(format!("{SEP}target{SEP}release").as_str()))
-        {
-            notification.app_id(&self.identifier);
-        }
-    }
-    #[cfg(target_os = "macos")]
-    {
-    	let _ = notify_rust::set_application(if tauri::is_dev() {
-        	"com.apple.Terminal"
-        } else {
-            &self.identifier
-        });
-    }
     notif
         .auto_icon();
     if let Err(err) = notif.show() {
