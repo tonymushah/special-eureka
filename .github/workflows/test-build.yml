@@ -55,7 +55,7 @@ jobs:
       # windows install
       - name: install upx via winget (windows)
         if: matrix.platform == 'windows-latest'
-        run: winget install -e --id UPX.UPX
+        run: choco install upx
       # linux install
       - name: install brew (linux only)
         if: matrix.platform == 'ubuntu-latest'

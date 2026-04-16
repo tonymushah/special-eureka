@@ -66,7 +66,7 @@ jobs:
       # we are now using winget for this since the old action doesn't work properly
       - name: install upx via winget (windows)
         if: matrix.platform == 'windows-latest'
-        run: winget install -e --id UPX.UPX
+        run: choco install upx
       # disabled upx for macos because it doesn't work
       - name: install brew (linux only)
         if: matrix.platform == 'ubuntu-24.04'
