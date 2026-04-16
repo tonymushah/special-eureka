@@ -39,7 +39,9 @@ command = "cargo"
 args = [
 	"test", 
 	"--workspace", 
-	"--tests"
+	"--tests",
+	"--profile",
+	"clippy-fast"
 ]
 
 [tasks.fmt-rust]
