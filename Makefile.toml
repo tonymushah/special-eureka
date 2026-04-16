@@ -68,3 +68,4 @@ args = ["check"]
 workspace = false
 script_runner = "@duckscript"
 script = { file = "./scripts/build-release-fast-compile.ds" }
+env = { "CARGO_BUILD_PROFILE" = "release-fast-compile" }
