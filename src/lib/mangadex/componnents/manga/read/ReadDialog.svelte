@@ -156,6 +156,7 @@
 	dialog::backdrop {
 		backdrop-filter: blur(10px);
 		-webkit-backdrop-filter: blur(10px);
+		background-color: color-mix(in srgb, var(--main-background) 50%, transparent 50%);
 	}
 	.chapters {
 		display: grid;

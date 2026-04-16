@@ -65,6 +65,7 @@
 	.backdrop-filter {
 		backdrop-filter: blur(2px);
 		-webkit-backdrop-filter: blur(2px);
+		background-color: color-mix(in srgb, var(--main-background) 50%, transparent 50%);
 		.top {
 			display: flex;
 			flex-direction: row;

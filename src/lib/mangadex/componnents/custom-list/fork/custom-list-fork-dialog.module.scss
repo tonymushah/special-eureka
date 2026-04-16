@@ -25,6 +25,7 @@
 	z-index: 5;
 	inset: 0px;
 	position: fixed;
+	background-color: color-mix(in srgb, var(--main-background) 50%, transparent 50%);
 }
 
 .icon {

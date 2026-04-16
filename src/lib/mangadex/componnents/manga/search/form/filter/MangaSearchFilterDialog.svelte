@@ -105,5 +105,6 @@
 	dialog::backdrop {
 		backdrop-filter: blur(5px);
 		-webkit-backdrop-filter: blur(5px);
+		background-color: color-mix(in srgb, var(--main-background) 50%, transparent 50%);
 	}
 </style>
