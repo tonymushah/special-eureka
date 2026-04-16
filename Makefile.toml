@@ -61,3 +61,13 @@ dependencies = ["fmt-rust", "fmt-js-svelte"]
 workspace = false
 command = "pnpm"
 args = ["check"]
+
+[tasks.release-fast-compile]
+workspace = false
+command = "pnpm"
+args = [
+	"build",
+	"--",
+	"--profile",
+	"release-fast-compile"
+]
