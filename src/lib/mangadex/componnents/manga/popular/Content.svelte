@@ -122,7 +122,7 @@
 	}
 	.content {
 		display: flex;
-		margin: 1rem;
+		margin-bottom: 1em;
 		flex-direction: column;
 		align-items: start;
 		text-align: start;
@@ -131,6 +131,9 @@
 		width: 100%;
 		.content-top {
 			width: 100%;
+			display: flex;
+			flex-direction: column;
+			height: 100%;
 		}
 	}
 	.tags {
@@ -140,9 +143,9 @@
 		flex-wrap: wrap;
 	}
 	.description {
-		max-height: 10em;
-		overflow-y: scroll;
+		overflow-y: auto;
 		width: 100%;
+		flex: 1;
 	}
 	.authors {
 		display: flex;
