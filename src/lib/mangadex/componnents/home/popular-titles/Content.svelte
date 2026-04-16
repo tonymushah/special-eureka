@@ -18,10 +18,10 @@
 	const swiperParams: SwiperOptions = {
 		initialSlide: random(0, 9, false),
 		slidesPerView: 1,
-		// autoplay: {
-		// 	pauseOnMouseEnter: true,
-		// 	delay: 5000
-		// },
+		autoplay: {
+			pauseOnMouseEnter: true,
+			delay: 5000
+		},
 		on: {
 			init() {
 				if (swiper_container != undefined) {
