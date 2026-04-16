@@ -68,9 +68,11 @@
 	img.blur {
 		filter: blur(10px);
 		-webkit-filter: blur(10px);
+		/* mask-image: color-mix(in srgb, var(--main-background) 50%, transparent 50%); */
 	}
 	img.blur:hover {
 		filter: blur(5px);
 		-webkit-filter: blur(10px);
+		/* mask-image: color-mix(in srgb, var(--main-background) 50%, transparent 50%); */
 	}
 </style>

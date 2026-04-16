@@ -1,5 +1,8 @@
 name: "on pull_request test"
-on: [pull_request]
+on: 
+  pull_request:
+    branches: [main]
+    # TODO only run the workflow if the pull request is not a draft
 permissions:
   contents: read
 
