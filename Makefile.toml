@@ -68,5 +68,4 @@ args = ["check"]
 workspace = false
 command = "pnpm"
 args = ["build", "--", "--profile", "release-fast-compile"]
-# Moved to `test-build.yml`
-# env = { "CARGO_BUILD_PROFILE" = "release-fast-compile" }
+env = { "CARGO_BUILD_PROFILE" = "release-fast-compile" }
