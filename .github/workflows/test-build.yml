@@ -64,7 +64,7 @@ jobs:
       - name: install brew (linux only)
         if: matrix.platform == 'ubuntu-latest'
         id: set-up-homebrew
-        uses: Homebrew/actions/setup-homebrew@master
+        uses: Homebrew/actions/setup-homebrew@main
       - name: install upx upx via brew (linux only)
         if: matrix.platform == 'ubuntu-latest'
         run: brew install upx
