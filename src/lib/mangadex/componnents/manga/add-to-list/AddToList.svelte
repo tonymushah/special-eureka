@@ -105,7 +105,7 @@
 		width: 50vw;
 		height: 65vh;
 		border: 2px solid var(--primary);
-		border-radius: 3px;
+		border-radius: 12px;
 		padding: 12px;
 		z-index: 30;
 		overflow: hidden;
