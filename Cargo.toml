@@ -123,8 +123,13 @@ strip = true
 
 # this is used for github releases ci
 [profile.release-slow-compile]
-inherits = "dev"
+inherits = "release"
 codegen-units = 1
+
+# this is used for github releases ci
+[profile.release-fast-compile]
+inherits = "release"
+codegen-units = 256
 
 [workspace.package]
 rust-version = "1.93"
