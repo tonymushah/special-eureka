@@ -63,18 +63,14 @@ jobs:
         run: mv .cargo/build.config.toml .cargo/config.toml
       - name: install cargo-make
         run: cargo install --force cargo-make
-      - name: install upx via crazy-max/ghaction-upx (windows and ubuntu only)
-        if: matrix.platform == 'windows-latest' || matrix.platform == 'ubuntu-24.04'
-        uses: crazy-max/ghaction-upx@v4
-        with:
-          install-only: true
+      # we are now using winget for this since the old action doesn't work properly
+      - name: install upx via winget (windows)
+        if: matrix.platform == 'windows-latest'
+        run: winget install -e --id UPX.UPX
       # disabled upx for macos because it doesn't work
-      # - name: install brew (macos only)
-      #   if: matrix.platform == 'macos-latest'
-      #   run: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-      # - name: install upx upx via brew (macos only)
-      #   if: matrix.platform == 'macos-latest'
-      #   run: brew install upx
+      - name: install upx upx via brew (linux only)
+        if: matrix.platform == 'ubuntu-24.04'
+        run: brew install upx
       - name: build the actual app with tauri action
         uses: tauri-apps/tauri-action@v0
         env:
@@ -87,4 +83,4 @@ jobs:
           releaseBody: "See the assets to download this version and install."
           releaseDraft: true
           prerelease: false
-          args: '-- --profile release-slow-compile'
+          args: "-- --profile release-slow-compile"
