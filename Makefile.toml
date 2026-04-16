@@ -66,6 +66,6 @@ args = ["check"]
 
 [tasks.release-fast-compile]
 workspace = false
-script_runner = "@duckscript"
-script = { file = "./scripts/build-release-fast-compile.ds" }
+command = "pnpm"
+args = ["build", "--", "--profile", "release-fast-compile"]
 env = { "CARGO_BUILD_PROFILE" = "release-fast-compile" }
