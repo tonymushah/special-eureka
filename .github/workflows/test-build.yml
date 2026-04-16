@@ -57,6 +57,9 @@ jobs:
         if: matrix.platform == 'windows-latest'
         run: winget install -e --id UPX.UPX
       # linux install
+      - name: install brew (linux only)
+        if: matrix.platform == 'ubuntu-latest'
+        run: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
       - name: install upx upx via brew (linux only)
         if: matrix.platform == 'ubuntu-latest'
         run: brew install upx
