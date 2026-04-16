@@ -26,10 +26,14 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: 24
-      - name: install pnpm
+      - name: install pnpm (non windows)
+        if: matrix.platform != 'windows-latest'
         uses: pnpm/action-setup@v6
         with:
           run_install: false
+      - name: install pnpm (on windows)
+        if: matrix.platform == 'windows-latest'
+        run: Invoke-WebRequest https://get.pnpm.io/install.ps1 -UseBasicParsing | Invoke-Expression
       - name: install Rust stable
         uses: dtolnay/rust-toolchain@stable
       - name: install Cargo make
