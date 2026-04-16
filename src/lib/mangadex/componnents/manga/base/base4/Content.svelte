@@ -12,7 +12,7 @@
 
 <style lang="scss">
 	div.title > p {
-		font-weight: 500;
+		font-weight: 700;
 		text-align: center;
 		margin: 0px;
 		padding: 0px;
@@ -23,6 +23,7 @@
 		line-clamp: 2;
 		overflow: hidden;
 		width: 100%;
+		/* font-family: var(--fonts); */
 	}
 	.title {
 		display: flex;
