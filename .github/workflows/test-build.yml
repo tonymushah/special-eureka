@@ -59,7 +59,8 @@ jobs:
       # linux install
       - name: install brew (linux only)
         if: matrix.platform == 'ubuntu-latest'
-        run: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        id: set-up-homebrew
+        uses: Homebrew/actions/setup-homebrew@master
       - name: install upx upx via brew (linux only)
         if: matrix.platform == 'ubuntu-latest'
         run: brew install upx
