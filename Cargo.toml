@@ -137,5 +137,5 @@ codegen-units = 1
 # this is used for github test build ci
 [profile.release-fast-compile]
 inherits = "release"
-codegen-units = 256
-incremental = true
+codegen-units = 16
+opt-level = "z"
