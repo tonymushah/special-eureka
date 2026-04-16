@@ -71,7 +71,7 @@ jobs:
       - name: install brew (linux only)
         if: matrix.platform == 'ubuntu-24.04'
         id: set-up-homebrew
-        uses: Homebrew/actions/setup-homebrew@master
+        uses: Homebrew/actions/setup-homebrew@main
       - name: install upx upx via brew (linux only)
         if: matrix.platform == 'ubuntu-24.04'
         run: brew install upx
