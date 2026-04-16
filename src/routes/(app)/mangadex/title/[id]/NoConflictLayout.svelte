@@ -166,21 +166,21 @@
 		queryFn() {
 			return get_manga_following_status(data.layoutData.id);
 		},
-		enabled: $isLogged
+		enabled: $isLogged && isInViewport.current
 	}));
 	let readingStatusQuery = createQuery(() => ({
 		queryKey: ["title", data.layoutData.id, "reading", "status"],
 		queryFn() {
 			return get_manga_reading_status(data.layoutData.id);
 		},
-		enabled: $isLogged
+		enabled: $isLogged && isInViewport.current
 	}));
 	let title_rating = createQuery(() => ({
 		queryKey: ["title", data.layoutData.id, "user-defined", "rating"],
 		queryFn() {
 			return get_manga_rating(data.layoutData.id);
 		},
-		enabled: $isLogged
+		enabled: $isLogged && isInViewport.current
 	}));
 	function refetchReadingFollowingStatus() {
 		Promise.all([
@@ -287,12 +287,9 @@
 
 	const webview = getCurrentWebview();
 	$effect(() => {
-		const sub = webview.listen(
-			`mangadex-title-read-markers-change-${data.layoutData.id}`,
-			() => {
-				chapterReadMarkers.refetch();
-			}
-		);
+		const sub = webview.listen(`mangadex-title-read-markers-change-${data.layoutData.id}`, () => {
+			chapterReadMarkers.refetch();
+		});
 		return () => {
 			sub.then((v) => v());
 		};
@@ -307,10 +304,7 @@
 			[readMarkerStores],
 			([query], set, update) => {
 				if (query.isSuccess) {
-					const tosend = new Map(query.data.map((d) => [d, true])) as Map<
-						string,
-						boolean
-					>;
+					const tosend = new Map(query.data.map((d) => [d, true])) as Map<string, boolean>;
 					set(tosend);
 					const sub = listenToAnyChapterReadMarkers.subscribe((a) => {
 						if (a != undefined) {
