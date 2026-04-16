@@ -73,4 +73,5 @@ jobs:
         env:
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_PASSWORD }}
+          CARGO_BUILD_PROFILE: release-fast-compile
       # TODO add reports to the actual pr about the bundle sizes
