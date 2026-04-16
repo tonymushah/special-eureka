@@ -57,8 +57,15 @@ jobs:
         uses: crazy-max/ghaction-upx@v4
         with:
           install-only: true
-      - name: build it the app
+      - name: build it the app (non-windows targets)
         run: cargo make release-fast-compile
+        if: matrix.platform == 'macos-latest' || matrix.platform == 'ubuntu-latest'
+        env:
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_PASSWORD }}
+      - name: build it the app (windows target)
+        run: pnpm build:fast-compile
+        if: matrix.platform == 'windows-latest'
         env:
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_PASSWORD }}
