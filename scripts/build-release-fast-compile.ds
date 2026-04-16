@@ -1,2 +1,2 @@
 # We put this here since the script might break on Windows
-exec pnpm build -- --profile release-fast-compile
+exec pnpm build:fast-compile
