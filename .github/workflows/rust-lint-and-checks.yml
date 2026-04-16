@@ -78,4 +78,4 @@ jobs:
       - name: make build dir
         run: mkdir build
       - name: Run tests
-        run: cargo make run-workspace-tests --profile clippy-fast
+        run: cargo make run-workspace-tests

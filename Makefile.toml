@@ -39,7 +39,9 @@ command = "cargo"
 args = [
 	"test", 
 	"--workspace", 
-	"--tests"
+	"--tests",
+	"--profile",
+	"clippy-fast"
 ]
 
 [tasks.fmt-rust]
@@ -61,3 +63,9 @@ dependencies = ["fmt-rust", "fmt-js-svelte"]
 workspace = false
 command = "pnpm"
 args = ["check"]
+
+[tasks.release-fast-compile]
+workspace = false
+command = "pnpm"
+args = ["build", "--", "--profile", "release-fast-compile"]
+env = { "CARGO_BUILD_PROFILE" = "release-fast-compile" }

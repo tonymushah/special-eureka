@@ -1,8 +1,15 @@
 name: "on pull_request test"
-on: 
+on:
   pull_request:
     branches: [main]
     # TODO only run the workflow if the pull request is not a draft
+    paths-ignore:
+      - "**/README.md"
+      - "**/LICENSE"
+      - "docs/**"
+      - ".zed/**"
+      - ".vscode/**"
+      - ".github/FUNDING.yml"
 permissions:
   contents: read
 
@@ -19,10 +26,14 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: 24
-      - name: install pnpm
+      - name: install pnpm (non windows)
+        if: matrix.platform != 'windows-latest'
         uses: pnpm/action-setup@v6
         with:
           run_install: false
+      - name: install pnpm (on windows)
+        if: matrix.platform == 'windows-latest'
+        run: choco install pnpm
       - name: install Rust stable
         uses: dtolnay/rust-toolchain@stable
       - name: install Cargo make
@@ -31,6 +42,7 @@ jobs:
         if: matrix.platform == 'ubuntu-latest'
         run: |
           sudo apt-get update
+          sudo apt-get remove upx-ucl
           sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
       - name: install app dependencies
         run: pnpm install
@@ -45,14 +57,23 @@ jobs:
         if: matrix.platform == 'macos-latest' || matrix.platform == 'ubuntu-latest'
         run: mv .cargo/build.config.toml .cargo/config.toml
       # Using upx on test builds
-      - name: install upx via crazy-max/ghaction-upx (windows and ubuntu only)
-        if: matrix.platform == 'windows-latest' || matrix.platform == 'ubuntu-latest'
-        uses: crazy-max/ghaction-upx@v4
-        with:
-          install-only: true
+      # windows install
+      - name: install upx via choco (windows)
+        if: matrix.platform == 'windows-latest' && contains(github.event.pull_request.labels.*.name, 'run-upx')
+        run: choco install upx
+      # linux install
+      - name: install brew (linux only)
+        if: matrix.platform == 'ubuntu-latest' && contains(github.event.pull_request.labels.*.name, 'run-upx')
+        id: set-up-homebrew
+        uses: Homebrew/actions/setup-homebrew@main
+      - name: install upx via brew (linux only)
+        if: matrix.platform == 'ubuntu-latest' && contains(github.event.pull_request.labels.*.name, 'run-upx')
+        run: brew install upx
       - name: build it the app
-        run: pnpm build
+        run: cargo make release-fast-compile
         env:
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_PASSWORD }}
+          # moved back to the make file file
+          # CARGO_BUILD_PROFILE: release-fast-compile
       # TODO add reports to the actual pr about the bundle sizes

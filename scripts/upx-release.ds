@@ -1,10 +1,21 @@
+profile = get_env CARGO_BUILD_PROFILE
+
+echo Initial CARGO_BUILD_PROFILE env (${profile})
+
+if is_empty ${profile}
+	echo "CARGO_BUILD_PROFILE env not found! Using 'release'..."
+	profile = set "release"
+end
+
+echo profile to use = ${profile}
+
 if which upx	
-	if is_windows 
-		mv target/release/special-eureka.exe target/release/special-eureka.bin_backup
-		exec upx --best -o target/release/special-eureka.exe target/release/special-eureka.bin_backup
+	if is_windows
+		mv target/${profile}/special-eureka.exe target/${profile}/special-eureka.bin_backup
+		exec upx --best -o target/${profile}/special-eureka.exe target/${profile}/special-eureka.bin_backup
 	else 
-		mv target/release/special-eureka target/release/special-eureka.bin_backup
-		exec upx --best -o target/release/special-eureka target/release/special-eureka.bin_backup
+		mv target/${profile}/special-eureka target/${profile}/special-eureka.bin_backup
+		exec upx --best -o target/${profile}/special-eureka target/${profile}/special-eureka.bin_backup
 	end
 	echo "Finished upx"
 else 
