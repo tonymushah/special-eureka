@@ -1,8 +1,15 @@
 name: "on pull_request test"
-on: 
+on:
   pull_request:
     branches: [main]
     # TODO only run the workflow if the pull request is not a draft
+    paths-ignore:
+      - "**/README.md"
+      - "**/LICENSE"
+      - "docs/**"
+      - ".zed/**"
+      - ".vscode/**"
+      - ".github/FUNDING.yml"
 permissions:
   contents: read
 
@@ -51,7 +58,7 @@ jobs:
         with:
           install-only: true
       - name: build it the app
-        run: pnpm build
+        run: cargo make release-fast-compile
         env:
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_PASSWORD }}
