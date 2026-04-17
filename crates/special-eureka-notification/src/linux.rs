@@ -11,6 +11,7 @@ pub fn notify<R: Runtime>(app: &AppHandle<R>, notification: CrateNotification) {
             .product_name
             .as_deref()
             .unwrap_or(app.config().identifier.as_str()),
+		"--wait",
     ]);
     if let Some(timeout) = notification.timeout {
         cmd.args(["-t", format!("{}", timeout.as_millis()).as_str()]);
