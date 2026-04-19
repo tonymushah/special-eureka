@@ -14,6 +14,8 @@
 	import { flip } from "svelte/animate";
 	import { fade } from "svelte/transition";
 	import imageIconCss from "./images.module.scss";
+	import { SvelteMap } from "svelte/reactivity";
+	import { find, reduce } from "lodash";
 
 	const imageIcon = imageIconCss.imageIcon;
 	interface Props {
@@ -30,32 +32,64 @@
 	let toAddFiles: string[] = [];
 	let overPhysicalPosition: PhysicalPosition | undefined = $state();
 	let swapFileMutation = swapFileToInternalSessionMutation();
+	let imagesButtons = new SvelteMap<string, HTMLButtonElement>();
+	function getImageButton(point: PhysicalPosition) {
+		return find(imagesButtons.values().toArray(), (button) => {
+			const bound = button.getBoundingClientRect();
+			return (
+				// bound left right
+				bound.left < point.x &&
+				point.x < bound.right &&
+				// bound top bottom
+				bound.top < point.y &&
+				point.y < bound.bottom
+			);
+		});
+	}
 	onMount(async () => {
 		unlistens.push(
-			await t_window.onDragDropEvent((ev) => {
-				console.log(ev);
-				const payload = ev.payload;
-				switch (payload.type) {
-					case "enter":
-						toAddFiles = payload.paths;
-						overPhysicalPosition = payload.position;
-						break;
-					case "over":
-						overPhysicalPosition = payload.position;
-						break;
-					case "drop":
-						overPhysicalPosition = payload.position;
-						addFilesMutation.mutate({
-							sessionId,
-							paths: toAddFiles
-						});
-						break;
-					case "leave":
-						toAddFiles = [];
-						overPhysicalPosition = undefined;
-						break;
-				}
-			})
+			await t_window
+				.onDragDropEvent((ev) => {
+					console.log(ev);
+					const payload = ev.payload;
+					switch (payload.type) {
+						case "enter":
+							toAddFiles = payload.paths;
+							overPhysicalPosition = payload.position;
+							break;
+						case "over":
+							overPhysicalPosition = payload.position;
+							break;
+						case "drop":
+							overPhysicalPosition = payload.position;
+							let index: number | undefined = undefined;
+							try {
+								const maybe_index =
+									getImageButton(overPhysicalPosition)?.getAttribute("data-image-index");
+								if (typeof maybe_index == "string") {
+									index = new Number(maybe_index).valueOf();
+								}
+							} catch {}
+							addFilesMutation.mutate({
+								sessionId,
+								paths: toAddFiles,
+								index
+							});
+							break;
+						case "leave":
+							toAddFiles = [];
+							overPhysicalPosition = undefined;
+							break;
+					}
+				})
+				.then((f) => {
+					console.log("added on drag drop");
+					return f;
+				})
+				.catch((e) => {
+					console.warn(e);
+					throw e;
+				})
 		);
 	});
 	onDestroy(() => {
@@ -63,6 +97,16 @@
 	});
 	let selectedIndex = $state<number | undefined>();
 </script>
+
+<svelte:window
+	onblur={() => {
+		imagesButtons.entries().forEach(([k, _]) => {
+			if (!images.includes(k)) {
+				imagesButtons.delete(k);
+			}
+		});
+	}}
+/>
 
 <h4>Images</h4>
 
@@ -96,6 +140,14 @@
 			transition:fade={{
 				duration: 200
 			}}
+			data-image-index={index}
+			data-image-value={image}
+			bind:this={
+				() => {},
+				(d) => {
+					imagesButtons.set(image, d);
+				}
+			}
 			class:selected={selectedIndex == index}
 			onclick={() => {
 				if (selectedIndex == index) {
