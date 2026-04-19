@@ -7,6 +7,6 @@
 	let { params }: PageProps = $props();
 </script>
 
-<AppTitle title={`Upload Session ${params.id}`} />
+<AppTitle title={`Upload Session ${params.id} | MangaDex`} />
 
 <SessionPage sessionId={params.id} />
