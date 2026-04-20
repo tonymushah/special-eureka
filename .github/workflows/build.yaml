@@ -11,16 +11,16 @@ jobs:
       matrix:
         include:
           - platform: "macos-latest" # for Arm based macs (M1 and above).
-            args: "--target aarch64-apple-darwin -- --profile release-slow-compile"
+            args: "--target aarch64-apple-darwin -f jemalloc -- --profile release-slow-compile"
             id: m-macos
           - platform: "macos-latest" # for Intel based macs.
-            args: "--target x86_64-apple-darwin -- --profile release-slow-compile"
+            args: "--target x86_64-apple-darwin -f jemalloc -- --profile release-slow-compile"
             id: intel-macos
           - platform: "ubuntu-24.04" # for Tauri v1 you could replace this with ubuntu-20.04.
-            args: "-- --profile release-slow-compile"
+            args: "-f jemalloc -- --profile release-slow-compile"
             id: linux
           - platform: "windows-latest"
-            args: "-- --profile release-slow-compile"
+            args: "-f mimalloc -- --profile release-slow-compile"
             id: windows
     runs-on: ${{ matrix.platform }}
     steps:
