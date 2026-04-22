@@ -27,7 +27,7 @@ importers:
     dependencies:
       '@ark-ui/svelte':
         specifier: ^5.21.0
-        version: 5.21.1(svelte@5.55.4(@typescript-eslint/types@8.59.0))
+        version: 5.21.2(svelte@5.55.4(@typescript-eslint/types@8.59.0))
       '@floating-ui/dom':
         specifier: ^1.7.6
         version: 1.7.6
@@ -261,8 +261,8 @@ packages:
     peerDependencies:
       graphql: '*'
 
-  '@ark-ui/svelte@5.21.1':
-    resolution: {integrity: sha512-vTl+9095RQqrciRE6nEPS4zQCflrVidjfQ9FqS/eVDjm7hQOCZ1Nq4o0RB2CCyZ78MNgiBznI/7HbXYrvc5V9Q==}
+  '@ark-ui/svelte@5.21.2':
+    resolution: {integrity: sha512-bVqnG5wDfOXhbwui46ZKAnZ79Uf5M2WyVCPL80X9RD45QrW4nRGfiTUzwgLFFGAvDWXe7CHpvU1OgDwg36QNaA==}
     peerDependencies:
       svelte: '>=5.20.0'
 
@@ -4538,7 +4538,7 @@ snapshots:
       immutable: 5.1.5
       invariant: 2.2.4
 
-  '@ark-ui/svelte@5.21.1(svelte@5.55.4(@typescript-eslint/types@8.59.0))':
+  '@ark-ui/svelte@5.21.2(svelte@5.55.4(@typescript-eslint/types@8.59.0))':
     dependencies:
       '@internationalized/date': 3.12.0
       '@zag-js/accordion': 1.40.0
