@@ -11,7 +11,6 @@
 	}
 
 	let { data }: Props = $props();
-	// svelte-ignore state_referenced_locally
 	const groupId = writable<string>(data.id);
 	$effect(() => {
 		groupId.set(data.id);

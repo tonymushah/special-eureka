@@ -84,7 +84,6 @@
 	let _isInViewport = new IsInViewport(() => isInViewPortTrigger);
 	let isInViewport = new Debounced(() => _isInViewport.current, 500);
 	// NOTE: this is completely intentional
-	// svelte-ignore state_referenced_locally
 	let statsQuery = createQuery(() => ({
 		queryKey: ["title", data.layoutData.id, "stats"],
 		async queryFn() {
@@ -145,20 +144,16 @@
 		() => isInViewport.current
 	);
 	// TODO transform these into class based reactivit
-	// svelte-ignore state_referenced_locally
 	const _state = toStore(() => mangaDownload.mangaDownloadState);
 	const reading_status = der(
-		// svelte-ignore state_referenced_locally
 		manga_reading_status(data.layoutData.id, {
 			getOnMount: false
 		}),
 		(status) => status ?? undefined
 	);
-	// svelte-ignore state_referenced_locally
 	const isFollowing = manga_following_status(data.layoutData.id, {
 		getOnMount: false
 	});
-	// svelte-ignore state_referenced_locally
 	const ratingStore = der(manga_rating(data.layoutData.id), (d) => d ?? undefined);
 
 	let followingStatusQuery = createQuery(() => ({
@@ -245,7 +240,6 @@
 	const onrating = debounce((e: number | null) => {
 		titleRatingMutation.mutate(e);
 	});
-	// svelte-ignore state_referenced_locally
 	const hasChaptToRead = hasChapterToRead(data.layoutData.id);
 	setContextMenuContext(() =>
 		mangaElementContextMenu({
@@ -287,12 +281,9 @@
 
 	const webview = getCurrentWebview();
 	$effect(() => {
-		const sub = webview.listen(
-			`mangadex-title-read-markers-change-${data.layoutData.id}`,
-			() => {
-				chapterReadMarkers.refetch();
-			}
-		);
+		const sub = webview.listen(`mangadex-title-read-markers-change-${data.layoutData.id}`, () => {
+			chapterReadMarkers.refetch();
+		});
 		return () => {
 			sub.then((v) => v());
 		};
@@ -307,10 +298,7 @@
 			[readMarkerStores],
 			([query], set, update) => {
 				if (query.isSuccess) {
-					const tosend = new Map(query.data.map((d) => [d, true])) as Map<
-						string,
-						boolean
-					>;
+					const tosend = new Map(query.data.map((d) => [d, true])) as Map<string, boolean>;
 					set(tosend);
 					const sub = listenToAnyChapterReadMarkers.subscribe((a) => {
 						if (a != undefined) {

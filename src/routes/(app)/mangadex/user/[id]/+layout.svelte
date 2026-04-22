@@ -27,7 +27,6 @@
 	}
 
 	let { data, children }: Props = $props();
-	// svelte-ignore state_referenced_locally
 	const isFollowed = isFollowingUser(data.id);
 	let isFollowing = $derived($isFollowed);
 	let openReportDialog = $state(false);

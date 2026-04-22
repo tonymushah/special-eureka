@@ -31,10 +31,8 @@
 		hideReadTitle = $bindable(false),
 		disableAuthorArtitsBlacklist
 	}: Props = $props();
-	// svelte-ignore state_referenced_locally
 	const params = writable(get(initialParam), (set) => initialParam.subscribe(set));
 	const p_p_offline = derived(
-		// svelte-ignore state_referenced_locally
 		[
 			params,
 			offlineStore,
@@ -69,12 +67,7 @@
 				getNextPageParam(
 					lastPage,
 					allPages,
-					[
-						lastPageParam,
-						lastPageOffline,
-						lastHideReadTitle,
-						disableAuthorArtistsBlacklist
-					]
+					[lastPageParam, lastPageOffline, lastHideReadTitle, disableAuthorArtistsBlacklist]
 				) {
 					const next_offset = lastPage.limit + lastPage.offset;
 					if (next_offset > lastPage.total) {
@@ -92,9 +85,7 @@
 						];
 					}
 				},
-				async queryFn({
-					pageParam: [p, offline, hideReadTitle, disableAuthorArtistsBlacklist]
-				}) {
+				async queryFn({ pageParam: [p, offline, hideReadTitle, disableAuthorArtistsBlacklist] }) {
 					const res = await executeSearchQuery(
 						client,
 						p,
@@ -111,12 +102,7 @@
 				getPreviousPageParam(
 					firstPage,
 					allPages,
-					[
-						firstPageParam,
-						firstPageOffline,
-						firstHideReadTitle,
-						disableAuthorArtistsBlacklist
-					]
+					[firstPageParam, firstPageOffline, firstHideReadTitle, disableAuthorArtistsBlacklist]
 				) {
 					const next_offset = firstPage.limit - firstPage.offset;
 					if (next_offset < 0) {

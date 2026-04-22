@@ -114,19 +114,12 @@
 	}: Props = $props();
 
 	setTopMangaIdContextStore(id);
-	// svelte-ignore state_referenced_locally
 	setTopMangaTitleContextStore(title);
-	// svelte-ignore state_referenced_locally
 	setTopMangaReadingStatusContextStore(reading_status);
-	// svelte-ignore state_referenced_locally
 	setTopCoverAltContextStore(coverImageAlt);
-	// svelte-ignore state_referenced_locally
 	setTopMangaIsFollowingContextStore(isFollowing);
-	// svelte-ignore state_referenced_locally
 	setTopMangaRatingContextStore(rating);
-	// svelte-ignore state_referenced_locally
 	setTopMangaDownloadContextStore(downloadState);
-	// svelte-ignore state_referenced_locally
 	setTopMangaOriginalLanguageContextStore(originalLanguage);
 </script>
 

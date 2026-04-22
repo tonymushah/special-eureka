@@ -22,7 +22,6 @@
 	}
 
 	let { authorName }: Props = $props();
-	// svelte-ignore state_referenced_locally
 	const params = derived([authorName, pageLimit], ([$authorName, $limit]) => {
 		return {
 			name: $authorName,
@@ -85,10 +84,7 @@
 		}
 		return Array.from(
 			new Map(
-				(result.data?.pages.map((d) => d.data).flatMap((i) => i) ?? []).map((d) => [
-					d.id,
-					d
-				])
+				(result.data?.pages.map((d) => d.data).flatMap((i) => i) ?? []).map((d) => [d.id, d])
 			).values()
 		);
 	});

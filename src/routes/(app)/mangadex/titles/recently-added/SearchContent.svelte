@@ -23,7 +23,6 @@
 	}
 
 	let { params, refetch = $bindable() }: Props = $props();
-	// svelte-ignore state_referenced_locally
 	const p_p_offline = derived([params, defaultContentProfile], ([merged]) => [merged]);
 	interface InfiniteQueryData {
 		data: MangaListContentItemProps[];

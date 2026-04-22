@@ -28,7 +28,6 @@
 	}
 
 	let { groupName }: Props = $props();
-	// svelte-ignore state_referenced_locally
 	const params = derived([groupName, pageLimit], ([$groupName, $limit]) => {
 		return {
 			name: $groupName,

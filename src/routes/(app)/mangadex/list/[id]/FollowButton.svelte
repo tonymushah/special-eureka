@@ -13,7 +13,6 @@
 	}
 
 	let { id }: Props = $props();
-	// svelte-ignore state_referenced_locally
 	const isFollowed = isFollowingCustomList(id, {
 		onSucess() {
 			mangadexQueryClient.refetchQueries({

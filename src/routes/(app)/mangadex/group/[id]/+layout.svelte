@@ -30,7 +30,6 @@
 	let description = $derived(data.description ?? undefined);
 	let createdSince = $derived(data.createdAt);
 	//$: console.log(`since date: ${createdSince}`);
-	// svelte-ignore state_referenced_locally
 	const isFollowed = isFollowingGroup(data.id);
 	let isFollowing = $derived($isFollowed);
 	let openReportDialog = $state(false);

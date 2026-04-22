@@ -5,11 +5,7 @@
 	import Fetching from "@mangadex/componnents/search/content/Fetching.svelte";
 	import HasNext from "@mangadex/componnents/search/content/HasNext.svelte";
 	import NothingToShow from "@mangadex/componnents/search/content/NothingToShow.svelte";
-	import {
-		ForumThreadType,
-		OrderDirection,
-		type MangaFeedSortOrder
-	} from "@mangadex/gql/graphql";
+	import { ForumThreadType, OrderDirection, type MangaFeedSortOrder } from "@mangadex/gql/graphql";
 	import chapterFeedStyle from "@mangadex/stores/chapterFeedStyle";
 	import type AbstractSearchResult from "@mangadex/utils/searchResult/AbstractSearchResult";
 	import { createInfiniteQuery, type CreateInfiniteQueryOptions } from "@tanstack/svelte-query";
@@ -41,11 +37,7 @@
 		readableAt: OrderDirection.Descending
 	});
 	const client = getContextClient();
-	// svelte-ignore state_referenced_locally
-	const queryParams = derived(
-		[customListId, pageLimit, isPrivate, order, hideReadTitle],
-		(d) => d
-	);
+	const queryParams = derived([customListId, pageLimit, isPrivate, order, hideReadTitle], (d) => d);
 	let query = createInfiniteQuery(() => {
 		const [_customListId, _limit, _isPrivate, _order, _hideReadTitles] = $queryParams;
 		return {
