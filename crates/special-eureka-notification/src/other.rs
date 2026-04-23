@@ -1,6 +1,8 @@
 use crate::Notification as CrateNotification;
 use notify_rust::Notification;
 use tauri::{AppHandle, Runtime};
+#[cfg(windows)]
+use std::path::MAIN_SEPARATOR as SEP;
 
 impl From<CrateNotification> for Notification {
     fn from(value: CrateNotification) -> Self {
