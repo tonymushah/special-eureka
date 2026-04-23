@@ -24,25 +24,31 @@ jobs:
     needs: check-fmt
     strategy:
       fail-fast: false
-    runs-on: ubuntu-latest
+      matrix:
+        platform: [macos-latest, ubuntu-latest, windows-latest]
+    # Run this on all platform
+    runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v6
       - name: install Rust stable
         uses: dtolnay/rust-toolchain@stable
+      - name: install cargo-make
+        run: cargo install --force cargo-make
       - name: make build dir
         run: mkdir build
       - name: install mold linker
         uses: rui314/setup-mold@v1
+        if: matrix.platform == 'macos-latest' || matrix.platform == 'ubuntu-latest'
         with:
           make-default: false
       - name: install dependencies
+        if: matrix.platform == 'ubuntu-latest'
         run: |
           sudo apt-get update
           sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
       - name: change project cargo config
+        if: matrix.platform == 'macos-latest' || matrix.platform == 'ubuntu-latest'
         run: mv .cargo/build.config.toml .cargo/config.toml
-      - name: install cargo-make
-        run: cargo install --force cargo-make
       - name: Run clippy fast
         run: cargo make clippy-fast-ci
   run-tests:
