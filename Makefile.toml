@@ -69,3 +69,8 @@ workspace = false
 command = "pnpm"
 args = ["build", "--", "--profile", "release-fast-compile"]
 env = { "CARGO_BUILD_PROFILE" = "release-fast-compile" }
+
+[tasks.release-fast-compile-no-bundle]
+workspace = false
+command = "pnpm"
+args = ["build", "--no-bundle", "--", "--profile", "release-fast-compile"]
