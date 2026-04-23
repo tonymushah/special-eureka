@@ -1,5 +1,7 @@
 use crate::Notification as CrateNotification;
 use notify_rust::Notification;
+#[cfg(windows)]
+use std::path::MAIN_SEPARATOR as SEP;
 use tauri::{AppHandle, Runtime};
 
 impl From<CrateNotification> for Notification {
@@ -32,7 +34,34 @@ impl From<crate::Urgency> for notify_rust::Urgency {
 
 pub fn notify<R: Runtime>(_app: &AppHandle<R>, notification: CrateNotification) {
     let mut notif: Notification = notification.into();
-    notif.auto_icon();
+    // Ref: https://github.com/tauri-apps/plugins-workspace/blob/1bb7beb3076a8bf76b084223d0e4225bb2e53bc9/plugins/notification/src/desktop.rs#L195
+    #[cfg(windows)]
+    {
+        let exe = match tauri::utils::platform::current_exe() {
+            Ok(exe) => exe,
+            Err(err) => {
+                log::warn!("Cannot get current exe {err}");
+                return;
+            }
+        };
+        let exe_dir = exe.parent().expect("failed to get exe directory");
+        let curr_dir = exe_dir.display().to_string();
+        // set the notification's System.AppUserModel.ID only when running the installed app
+        if !(curr_dir.ends_with(format!("{SEP}target{SEP}debug").as_str())
+            || curr_dir.ends_with(format!("{SEP}target{SEP}release").as_str()))
+        {
+            notif.app_id(&_app.config().identifier);
+        }
+    }
+    #[cfg(target_os = "macos")]
+    {
+        let _ = notify_rust::set_application(if tauri::is_dev() {
+            "com.apple.Terminal"
+        } else {
+            &_app.config().identifier
+        });
+    }
+
     if let Err(err) = notif.show() {
         log::error!("{err}");
     }
