@@ -33,6 +33,6 @@
 		flex-direction: column;
 		gap: 6px;
 		max-height: 100%;
-		overflow-y: scroll;
+		overflow-y: auto;
 	}
 </style>
