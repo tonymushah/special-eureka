@@ -130,7 +130,7 @@
 		flex-wrap: wrap;
 		flex-direction: row;
 		gap: 6px;
-		overflow-y: auto;
+		overflow-y: scroll;
 		width: 100%;
 		max-height: 90%;
 	}
