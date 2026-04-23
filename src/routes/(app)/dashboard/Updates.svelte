@@ -59,7 +59,7 @@
 <h2>Updates</h2>
 
 <section>
-	{#if query.isPending || dev}
+	{#if updateMutation.isPending || dev}
 		<UpdateProgress />
 	{:else if query.isLoading}
 		<p class="loading">Loading...</p>
