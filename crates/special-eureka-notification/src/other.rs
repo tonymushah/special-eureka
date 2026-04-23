@@ -38,7 +38,7 @@ pub fn notify<R: Runtime>(_app: &AppHandle<R>, notification: CrateNotification) 
         let exe = match tauri::utils::platform::current_exe() {
             Ok(exe) => exe,
             Err(err) => {
-                log::warn!();
+                log::warn!("Cannot get current exe {err}");
                 return;
             }
         };
