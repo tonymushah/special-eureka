@@ -23,6 +23,7 @@
 	import { v4 } from "uuid";
 	import { Progress } from "@ark-ui/svelte/progress";
 	import cssMod from "./mal.module.scss";
+	import { isLinuxStore } from "@special-eureka/core/commands/isLinux";
 
 	interface Props {
 		titles: string[];
@@ -76,10 +77,7 @@
 							}
 						},
 						onError(error) {
-							addErrorToast(
-								"Cannot export library as a My Anime List XML Import file",
-								error
-							);
+							addErrorToast("Cannot export library as a My Anime List XML Import file", error);
 						}
 					}
 				);
@@ -179,7 +177,7 @@
 	</section>
 	<section class="input-row">
 		<Title underline type={4}>Reading Status Priorities</Title>
-		<section class="priorities">
+		<section class="priorities" class:isNotLinux={!$isLinuxStore}>
 			<div class="priority">
 				<label for={reading_id}>Reading: </label>
 				<select
@@ -330,14 +328,13 @@
 	</section>
 	<section class="notes">
 		<p>
-			<u>Note:</u> Since exporting your titles sends a lot of requests to the MangaDex API, it
-			is
+			<u>Note:</u> Since exporting your titles sends a lot of requests to the MangaDex API, it is
 			<b>recommended to not open MangaDex on your browser </b>
 			<i>or any similar activities that might send unecessary requests to the API </i>
 			because it might blow your
 			<i>IP rate-limit</i>
-			and also check if <b>your internet connection is smooth enough</b> for this operation.
-			(also check if you have enough RAM too.
+			and also check if <b>your internet connection is smooth enough</b> for this operation. (Also
+			check if you have enough RAM too.
 			<code>`The bigger the library, the more it needs RAM`</code>)
 		</p>
 	</section>
@@ -366,9 +363,16 @@
 			align-items: center;
 			justify-content: center;
 			select {
+				padding: 2px 0px;
+				border-radius: 3px;
 				font-family: var(--fonts);
 				background-color: var(--accent-l1);
 			}
+		}
+	}
+	.priorities.isNotLinux {
+		select {
+			color: var(--text-color);
 		}
 	}
 	.checkboxes {
