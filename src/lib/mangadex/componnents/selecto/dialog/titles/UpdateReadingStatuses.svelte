@@ -108,10 +108,7 @@
 								});
 								break;
 							case "rejected":
-								addErrorToast(
-									"Error on updateing titles following statuses",
-									following.reason
-								);
+								addErrorToast("Error on updateing titles following statuses", following.reason);
 								break;
 							default:
 								break;
@@ -142,7 +139,7 @@
 		align-items: center;
 		justify-content: center;
 		flex-direction: column;
-		height: 80%;
+		height: 100%;
 		gap: 8px;
 	}
 </style>
