@@ -22,6 +22,9 @@ jobs:
           - platform: "windows-latest"
             args: "-f mimalloc -- --profile release-slow-compile"
             id: windows
+          - platform: "windows-latest"
+            args: "-f mimalloc --target aarch64-pc-windows-msvc -- --profile release-slow-compile"
+            id: windows-arm
     runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v6
@@ -38,6 +41,9 @@ jobs:
       - name: install x86_64-apple-darwin target for intel macs
         if: matrix.id == 'intel-macos'
         run: rustup target add x86_64-apple-darwin
+      - name: install aarch64-pc-windows-msvc target for arm64 windows
+        if: matrix.id == 'windows-arm'
+        run: rustup target add aarch64-pc-windows-msvc
       - name: install dependencies (ubuntu only)
         if: matrix.platform == 'ubuntu-24.04'
         run: |
