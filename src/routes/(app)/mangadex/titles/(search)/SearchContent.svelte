@@ -69,12 +69,7 @@
 				getNextPageParam(
 					lastPage,
 					allPages,
-					[
-						lastPageParam,
-						lastPageOffline,
-						lastHideReadTitle,
-						disableAuthorArtistsBlacklist
-					]
+					[lastPageParam, lastPageOffline, lastHideReadTitle, disableAuthorArtistsBlacklist]
 				) {
 					const next_offset = lastPage.limit + lastPage.offset;
 					if (next_offset > lastPage.total) {
@@ -92,9 +87,7 @@
 						];
 					}
 				},
-				async queryFn({
-					pageParam: [p, offline, hideReadTitle, disableAuthorArtistsBlacklist]
-				}) {
+				async queryFn({ pageParam: [p, offline, hideReadTitle, disableAuthorArtistsBlacklist] }) {
 					const res = await executeSearchQuery(
 						client,
 						p,
@@ -111,12 +104,7 @@
 				getPreviousPageParam(
 					firstPage,
 					allPages,
-					[
-						firstPageParam,
-						firstPageOffline,
-						firstHideReadTitle,
-						disableAuthorArtistsBlacklist
-					]
+					[firstPageParam, firstPageOffline, firstHideReadTitle, disableAuthorArtistsBlacklist]
 				) {
 					const next_offset = firstPage.limit - firstPage.offset;
 					if (next_offset < 0) {
@@ -247,7 +235,14 @@
 	/>
 {/if}
 
-<div class="observer-trigger" bind:this={to_obserce_bind}>
+<!-- svelte-ignore a11y_no_static_element_interactions -->
+<div
+	class="observer-trigger"
+	bind:this={to_obserce_bind}
+	onmouseenter={() => {
+		fetchNext();
+	}}
+>
 	{#if isFetching}
 		<Fetching />
 	{:else if hasNext}
