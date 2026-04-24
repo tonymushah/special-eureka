@@ -114,6 +114,8 @@
 		flex-wrap: wrap;
 		gap: 6px;
 		padding-bottom: 10px;
+		flex-direction: row;
+		height: fit-content;
 		/* flex-grow: 0; */
 	}
 	.help {
