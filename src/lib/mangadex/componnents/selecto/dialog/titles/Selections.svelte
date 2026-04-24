@@ -72,36 +72,52 @@
 	{/each}
 {/snippet}
 
-<p>Click on the badge to remove the title from the selection</p>
-<div class="titles-selected">
-	{#if selectedTitles.isSuccess}
-		{@const _titles = titlesData}
-		{#each _titles as title}
-			<StatusBadgeOnlyLabel
-				label={title.title}
-				color="blue"
-				onclick={() => {
-					removeSelection(title.id);
-				}}
-			/>
-		{:else}
-			{@render showIDsOnly()}
-		{/each}
-	{:else}
-		{@render showIDsOnly()}
-	{/if}
+<div class="layout">
+	<p class="help">Click on the badge to remove the title from the selection</p>
+	<div class="wrapper">
+		<!-- <p class="test">clasdadsadads</p> -->
+		<div class="titles-selected">
+			{#if selectedTitles.isSuccess}
+				{@const _titles = titlesData}
+				{#each _titles as title}
+					<StatusBadgeOnlyLabel
+						label={title.title}
+						color="blue"
+						onclick={() => {
+							removeSelection(title.id);
+						}}
+					/>
+				{:else}
+					{@render showIDsOnly()}
+				{/each}
+			{:else}
+				{@render showIDsOnly()}
+			{/if}
+		</div>
+	</div>
 </div>
 
 <style lang="scss">
+	.layout {
+		display: flex;
+		width: 100%;
+		height: 100%;
+		flex-direction: column;
+	}
+	.wrapper {
+		display: grid;
+		overflow-y: auto;
+		flex-grow: 1;
+	}
 	.titles-selected {
 		display: flex;
 		flex-wrap: wrap;
 		gap: 6px;
-		overflow-y: auto;
-		max-height: 90%;
 		padding-bottom: 10px;
+		/* flex-grow: 0; */
 	}
-	p {
+	.help {
 		margin: 4px 0px;
+		display: flex;
 	}
 </style>

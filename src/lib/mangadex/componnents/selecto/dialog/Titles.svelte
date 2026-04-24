@@ -56,12 +56,12 @@
 
 <SectionBase>
 	{#snippet content()}
-		{#if isLists}
-			<AddToListBatch {titles} />
+		{#if isSelecting}
+			<Selections bind:titles />
 		{:else if isStatus}
 			<UpdateReadingStatuses {titles} />
-		{:else if isSelecting}
-			<Selections bind:titles />
+		{:else if isLists}
+			<AddToListBatch {titles} />
 		{:else if isExportCSV}
 			<ExportTitlesAsCsv {titles} />
 		{:else if isExportMAL}
