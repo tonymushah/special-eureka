@@ -105,8 +105,8 @@
 <style lang="scss">
 	section {
 		display: grid;
-		height: 100%;
-		overflow-y: scroll;
+		max-height: 100%;
+		overflow-y: auto;
 	}
 	.users {
 		display: flex;

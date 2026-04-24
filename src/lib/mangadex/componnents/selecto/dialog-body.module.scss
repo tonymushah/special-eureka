@@ -1,5 +1,7 @@
 .content {
 	flex-grow: 1;
 	max-height: 100%;
-	overflow-y: clip;
+	// NOTE: Please don't change this to `clip` or whatever value
+	// it will break otherwise
+	overflow-y: hidden;
 }

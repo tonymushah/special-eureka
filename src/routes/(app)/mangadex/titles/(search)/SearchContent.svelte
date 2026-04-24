@@ -247,7 +247,14 @@
 	/>
 {/if}
 
-<div class="observer-trigger" bind:this={to_obserce_bind}>
+<!-- svelte-ignore a11y_no_static_element_interactions -->
+<div
+	class="observer-trigger"
+	bind:this={to_obserce_bind}
+	onmouseenter={() => {
+		fetchNext();
+	}}
+>
 	{#if isFetching}
 		<Fetching />
 	{:else if hasNext}

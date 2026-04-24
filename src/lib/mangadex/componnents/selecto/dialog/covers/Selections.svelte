@@ -29,7 +29,7 @@
 		/* grid-template-columns: repeat(5, 1fr); */
 		gap: 6px;
 		max-height: 100%;
-		overflow-y: scroll;
+		overflow-y: auto;
 		padding: 6px;
 	}
 	.covers.empty {

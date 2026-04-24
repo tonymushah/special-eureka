@@ -71,8 +71,6 @@
 	});
 </script>
 
-<p>Click on the badge to remove the MD list from the selection</p>
-
 {#snippet showIDsOnly()}
 	{#each customLists as customlist}
 		<button
@@ -106,32 +104,40 @@
 		</button>
 	{/each}
 {/snippet}
+<div class="layout">
+	<p>Click on the badge to remove the MD list from the selection</p>
 
-<section>
-	<div class="md-lists-selected" class:empty={customListsEmpty}>
-		{#if customListsEmpty}
-			<NothingToShow />
-		{:else if customListsQuery.isSuccess}
-			{@render showinfos()}
-		{:else}
-			{@render showIDsOnly()}
-		{/if}
-	</div>
-</section>
+	<section>
+		<div class="md-lists-selected" class:empty={customListsEmpty}>
+			{#if customListsEmpty}
+				<NothingToShow />
+			{:else if customListsQuery.isSuccess}
+				{@render showinfos()}
+			{:else}
+				{@render showIDsOnly()}
+			{/if}
+		</div>
+	</section>
+</div>
 
 <style lang="scss">
+	.layout {
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+		height: 100%;
+	}
 	section {
 		display: grid;
-		height: 100%;
-		overflow-y: scroll;
+		overflow-y: auto;
+		flex-grow: 1;
 	}
 	.md-lists-selected {
 		display: flex;
 		/* align-items: center; */
 		/* grid-template-columns: repeat(5, 1fr); */
 		gap: 6px;
-		overflow-y: scroll;
-		padding: 6px;
+		padding-bottom: 6px;
 		flex-wrap: wrap;
 		/* flex-direction: column; */
 		width: 100%;

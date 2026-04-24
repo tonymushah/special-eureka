@@ -154,7 +154,7 @@
 	.lists {
 		display: grid;
 		gap: 4px;
-		overflow-y: scroll;
+		overflow-y: auto;
 		padding: 0px 12px;
 		flex-grow: 1;
 	}

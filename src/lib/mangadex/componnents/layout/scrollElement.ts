@@ -9,5 +9,5 @@ export const preventScroll = debounce(() => {
 
 export const makeScroll = debounce(() => {
 	const element = document.getElementById(scrollElementId);
-	if (element) element.style.overflowY = "scroll";
+	if (element) element.style.overflowY = "auto";
 });

@@ -23,6 +23,7 @@
 	import { v4 } from "uuid";
 	import { Progress } from "@ark-ui/svelte/progress";
 	import cssMod from "./mal.module.scss";
+	import { isLinuxStore } from "@special-eureka/core/commands/isLinux";
 
 	interface Props {
 		titles: string[];
@@ -179,7 +180,7 @@
 	</section>
 	<section class="input-row">
 		<Title underline type={4}>Reading Status Priorities</Title>
-		<section class="priorities">
+		<section class="priorities" class:isNotLinux={!$isLinuxStore}>
 			<div class="priority">
 				<label for={reading_id}>Reading: </label>
 				<select
@@ -337,7 +338,7 @@
 			because it might blow your
 			<i>IP rate-limit</i>
 			and also check if <b>your internet connection is smooth enough</b> for this operation.
-			(also check if you have enough RAM too.
+			(Also check if you have enough RAM too.
 			<code>`The bigger the library, the more it needs RAM`</code>)
 		</p>
 	</section>
@@ -366,9 +367,16 @@
 			align-items: center;
 			justify-content: center;
 			select {
+				padding: 2px 0px;
+				border-radius: 3px;
 				font-family: var(--fonts);
 				background-color: var(--accent-l1);
 			}
+		}
+	}
+	.priorities.isNotLinux {
+		select {
+			color: var(--text-color);
 		}
 	}
 	.checkboxes {

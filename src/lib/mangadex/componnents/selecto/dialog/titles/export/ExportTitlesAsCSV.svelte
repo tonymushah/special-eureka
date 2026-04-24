@@ -165,8 +165,8 @@
 </section>
 
 <style lang="scss">
-	.title {
-		display: flex;
+	h3 {
+		text-align: center;
 	}
 	.options {
 		display: grid;

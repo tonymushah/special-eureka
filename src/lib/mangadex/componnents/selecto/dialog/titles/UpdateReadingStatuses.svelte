@@ -142,7 +142,7 @@
 		align-items: center;
 		justify-content: center;
 		flex-direction: column;
-		height: 80%;
+		height: 100%;
 		gap: 8px;
 	}
 </style>

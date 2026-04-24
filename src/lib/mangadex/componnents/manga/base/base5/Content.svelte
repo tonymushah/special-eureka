@@ -57,7 +57,7 @@
 
 <style lang="scss">
 	:root {
-		--transition-duration: 500ms;
+		--transition-duration: 100ms;
 		--transition-timing-function: ease-in-out;
 		--width: 16em;
 		--height: 23em;
@@ -111,7 +111,7 @@
 	}
 	div.contents > div.description {
 		height: 15em;
-		overflow-y: scroll;
+		overflow-y: auto;
 		margin: 0px;
 		padding: 10px;
 	}
