@@ -25,14 +25,7 @@
 	let { selectedLists = $bindable() }: Props = $props();
 	const queryOptions = der(pageLimit, (limit) => {
 		return {
-			queryKey: [
-				"current",
-				"user",
-				"custom-list",
-				"for-add-to-list",
-				"batch",
-				`limit:${limit}`
-			],
+			queryKey: ["current", "user", "custom-list", "for-add-to-list", "batch", `limit:${limit}`],
 			initialPageParam: {
 				offset: 0,
 				limit
@@ -121,9 +114,7 @@
 								if (checked) {
 									selectedLists.push(customList.id);
 								} else {
-									selectedLists = selectedLists.filter(
-										(dd) => dd != customList.id
-									);
+									selectedLists = selectedLists.filter((dd) => dd != customList.id);
 								}
 							}
 						}
@@ -154,7 +145,7 @@
 	.lists {
 		display: grid;
 		gap: 4px;
-		overflow-y: scroll;
+		overflow-y: auto;
 		padding: 0px 12px;
 		flex-grow: 1;
 	}
