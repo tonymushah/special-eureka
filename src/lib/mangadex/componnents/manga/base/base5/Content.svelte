@@ -111,7 +111,7 @@
 	}
 	div.contents > div.description {
 		height: 15em;
-		overflow-y: scroll;
+		overflow-y: auto;
 		margin: 0px;
 		padding: 10px;
 	}
