@@ -57,7 +57,7 @@
 
 <style lang="scss">
 	:root {
-		--transition-duration: 500ms;
+		--transition-duration: 100ms;
 		--transition-timing-function: ease-in-out;
 		--width: 16em;
 		--height: 23em;
