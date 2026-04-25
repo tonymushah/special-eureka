@@ -78,7 +78,8 @@ jobs:
         run: cargo install --force cargo-make
       # we are now using winget for this since the old action doesn't work properly
       - name: install upx via winget (windows)
-        if: matrix.platform == 'windows-latest'
+        # we disable upx on windows arm for now
+        if: matrix.platform == 'windows-latest' && matrix.id != 'windows-arm'
         run: choco install upx
       # disabled upx for macos because it doesn't work
       - name: install brew (linux only)
