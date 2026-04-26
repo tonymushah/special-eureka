@@ -78,7 +78,7 @@
 	import UserRolesComp from "@mangadex/componnents/user/UserRolesComp.svelte";
 	import ChapterDownload from "@mangadex/download/chapter.svelte";
 	import type { Language, UserRole } from "@mangadex/gql/graphql";
-	import { getContextReadChapterMarker } from "@mangadex/stores/read-markers/context";
+	import { getContextReadChapterMarker } from "@mangadex/stores/read-markers/context.svelte";
 	import { readMarkers as readMarkersLoader } from "@mangadex/stores/read-markers/mutations";
 	import { isLogged } from "@mangadex/utils/auth";
 	import chapterElementContextMenuItems from "@mangadex/utils/context-menu/chapter";
@@ -146,11 +146,12 @@
 		});
 	}, true);
 	// TODO make a reaction read marker system
-	const hasBeenRead = getContextReadChapterMarker(id);
+	const hasBeenReadCxx = getContextReadChapterMarker(() => id);
+	let hasBeenRead = $derived.by(() => hasBeenReadCxx.value);
 	const handleRead = debounce(() => {
 		if ($isLogged) {
 			if (!readMarkers.isPending) {
-				if ($hasBeenRead) {
+				if (hasBeenRead) {
 					readMarkers.mutate({
 						reads: [],
 						unreads: [id]
@@ -173,7 +174,7 @@
 	})}
 	bind:this={layoutElement}
 >
-	<Layout haveBeenRead={$hasBeenRead} {id}>
+	<Layout haveBeenRead={hasBeenRead} {id}>
 		{#snippet state()}
 			<div
 				class="buttons"
@@ -253,7 +254,7 @@
 				}}
 				aria-disabled={readMarkers.isPending}
 			>
-				{#if !$hasBeenRead && $isLogged}
+				{#if !hasBeenRead && $isLogged}
 					<EyeIcon />
 				{:else if readMarkers.isPending || !$isLogged}
 					<BookSearch />

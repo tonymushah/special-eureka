@@ -37,7 +37,7 @@
 		set_manga_reading_status
 	} from "@mangadex/stores/manga/manga_reading_status";
 	import { listenToAnyChapterReadMarkers } from "@mangadex/stores/read-markers";
-	import { initContextReadChapterMarkers } from "@mangadex/stores/read-markers/context";
+	import { initContextReadChapterMarkers } from "@mangadex/stores/read-markers/context.svelte";
 	import mangaElementContextMenu from "@mangadex/utils/context-menu/manga";
 	import manga_title_to_lang_map from "@mangadex/utils/lang/record-to-map/manga-title-to-lang-map";
 	import { ContextMenuItemProvider } from "@special-eureka/core/commands/contextMenu";
@@ -48,7 +48,7 @@
 	import { writeText } from "@tauri-apps/plugin-clipboard-manager";
 	import { openUrl as open } from "@tauri-apps/plugin-opener";
 	import { debounce, delay, noop } from "lodash";
-	import { type Snippet } from "svelte";
+	import { untrack, type Snippet } from "svelte";
 	import { derived as der, derived, toStore } from "svelte/store";
 	import { v4 } from "uuid";
 	import type { LayoutData } from "./layout.context";
@@ -288,39 +288,30 @@
 			sub.then((v) => v());
 		};
 	});
-	const readMarkerStores = toStore(() => {
-		return {
-			...chapterReadMarkers
-		};
-	});
-	initContextReadChapterMarkers(
-		derived(
-			[readMarkerStores],
-			([query], set, update) => {
-				if (query.isSuccess) {
-					const tosend = new Map(query.data.map((d) => [d, true])) as Map<string, boolean>;
-					set(tosend);
-					const sub = listenToAnyChapterReadMarkers.subscribe((a) => {
-						if (a != undefined) {
-							if (query.isSuccess) {
-								update((markers: Map<string, boolean>) => {
-									if (markers.size > 1) {
-										const state = markers.get(a.chapter);
-										if (state != undefined) {
-											markers.set(a.chapter, a.read);
-										}
-									}
-									return markers;
-								});
+
+	let readContextMarkers = initContextReadChapterMarkers();
+	$effect(() => {
+		const query = chapterReadMarkers;
+		if (query.isSuccess) {
+			readContextMarkers.clear();
+			query.data.forEach((d) => readContextMarkers.set(d, true));
+			const sub = listenToAnyChapterReadMarkers.subscribe((a) => {
+				untrack(() => {
+					if (a != undefined) {
+						if (query.isSuccess) {
+							if (readContextMarkers.size > 1) {
+								const state = readContextMarkers.get(a.chapter);
+								if (state != undefined) {
+									readContextMarkers.set(a.chapter, a.read);
+								}
 							}
 						}
-					});
-					return sub;
-				}
-			},
-			new Map()
-		)
-	);
+					}
+				});
+			});
+			return sub;
+		}
+	});
 	let removeMutation = removeMutationLoader();
 	let downloadMutationQuery = downloadMutationQueryLoader();
 	let cancelMutation = cancelMutationLoader();

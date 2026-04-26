@@ -4,7 +4,7 @@
 	import defaultContentProfile from "@mangadex/content-profile/graphql/defaultProfile";
 	import { mangadexQueryClient } from "@mangadex/index";
 	import { getTitleLayoutData } from "@mangadex/routes/title/[id]/layout.context";
-	import { getContextReadChapterMarkers } from "@mangadex/stores/read-markers/context";
+	import { getContextReadChapterMarkers } from "@mangadex/stores/read-markers/context.svelte";
 	import { createQuery } from "@tanstack/svelte-query";
 	import type { UnlistenFn } from "@tauri-apps/api/event";
 	import { openUrl as open } from "@tauri-apps/plugin-opener";
@@ -97,8 +97,7 @@
 		unlistens.push(
 			$effect.root(() => {
 				$effect(() => {
-					let ids: string[] =
-						query.data?.manga.aggregate.chunked.at(selectedIndex)?.ids ?? [];
+					let ids: string[] = query.data?.manga.aggregate.chunked.at(selectedIndex)?.ids ?? [];
 					const task = delay(() => {
 						if (ids.length > 0)
 							if (!chaptersStore.isPresents(ids)) {
@@ -141,9 +140,7 @@
 	onDestroy(() => {
 		unlistens.forEach((u) => u());
 	});
-	let selected = $derived(
-		$isReversed ? aggregateReverse[selectedIndex] : aggregate[selectedIndex]
-	);
+	let selected = $derived($isReversed ? aggregateReverse[selectedIndex] : aggregate[selectedIndex]);
 	/// Test if this work
 	onMount(() =>
 		defaultContentProfile.subscribe(() => {
@@ -158,12 +155,10 @@
 
 	const readMarkers = getContextReadChapterMarkers();
 	let unread = $derived.by(() => {
-		let chapters = new Set(
-			query.data?.manga.aggregate.chunked.flatMap((t) => t.ids as string[])
-		);
+		let chapters = new Set(query.data?.manga.aggregate.chunked.flatMap((t) => t.ids as string[]));
 
 		let readChapters = new Set(
-			$readMarkers
+			readMarkers
 				.entries()
 				.filter(([, v]) => {
 					return v;
@@ -218,9 +213,7 @@
 								reads: hasUnread ? unread.values().toArray() : [],
 								unreads: hasUnread
 									? []
-									: (query.data?.manga.aggregate.chunked.flatMap(
-											(d) => d.ids as string[]
-										) ?? [])
+									: (query.data?.manga.aggregate.chunked.flatMap((d) => d.ids as string[]) ?? [])
 							},
 							{
 								onSuccess() {
@@ -261,17 +254,11 @@
 												},
 												{
 													onError(error) {
-														addErrorToast(
-															"Cannot create chapter theard",
-															error
-														);
+														addErrorToast("Cannot create chapter theard", error);
 													},
 													onSuccess(data) {
 														threadUrls.set(detail.id, data.forumUrl);
-														chaptersStore.setComment(
-															detail.id,
-															data.repliesCount
-														);
+														chaptersStore.setComment(detail.id, data.repliesCount);
 														open(data.forumUrl);
 													}
 												}
