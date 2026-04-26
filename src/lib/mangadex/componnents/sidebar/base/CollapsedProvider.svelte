@@ -1,12 +1,24 @@
 <script lang="ts" module>
-	import { getContext, setContext } from "svelte";
+	import { Context, type Getter } from "runed";
 
 	const CONTEXT_NAME = "IS_SIDEBAR_COLLAPSED";
-	export function isContextSidebarCollapsed(): boolean {
-		return getContext(CONTEXT_NAME) === true;
+	const ctt = new Context<{ val: boolean }>(CONTEXT_NAME);
+	export function isContextSidebarCollapsed() {
+		let val = ctt.getOr({
+			val: false
+		});
+		return {
+			get val() {
+				return val.val == true;
+			}
+		};
 	}
-	export function setContextSidebarCollapsed(collapsed: boolean = true) {
-		setContext(CONTEXT_NAME, collapsed);
+	export function setContextSidebarCollapsed(collapsed: Getter<boolean>) {
+		ctt.set({
+			get val() {
+				return collapsed();
+			}
+		});
 	}
 </script>
 
@@ -17,7 +29,7 @@
 	}
 
 	let { collapsed = true, children }: Props = $props();
-	setContextSidebarCollapsed(collapsed);
+	setContextSidebarCollapsed(() => collapsed);
 </script>
 
 {@render children?.()}

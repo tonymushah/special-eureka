@@ -16,8 +16,9 @@
 		collapsed?: boolean;
 		children?: import("svelte").Snippet;
 	}
-
-	let { collapsed = isContextSidebarCollapsed(), children }: Props = $props();
+	let __collapsed = isContextSidebarCollapsed();
+	let { collapsed: _collapsed, children }: Props = $props();
+	let collapsed = $derived(_collapsed ?? __collapsed.val);
 	let rtl = $derived($rlt_sub.data?.watchSidebarDirection == Direction.Rtl);
 	onMount(async () => {
 		const res = await client.query(sidebarDir, {}).toPromise();
