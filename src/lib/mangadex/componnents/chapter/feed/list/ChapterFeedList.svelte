@@ -8,7 +8,7 @@
 	import { ChapterFeedStyle } from "@mangadex/gql/graphql";
 	import { client } from "@mangadex/gql/urql";
 	import { initContextReadChapterMarkers } from "@mangadex/stores/read-markers/context.svelte";
-	import { derived, toStore, type Writable } from "svelte/store";
+	import { type Writable } from "svelte/store";
 	import type { ChapterFeedListItem } from ".";
 	import ChapterFeedElement2 from "../element2/ChapterFeedElement2.svelte";
 	import ChapterFeedElement3 from "../element3/ChapterFeedElement3.svelte";
