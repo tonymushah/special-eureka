@@ -7,7 +7,7 @@
 	import { mangasReadMarkers } from "@mangadex/gql-docs/read-markers/chapters";
 	import { ChapterFeedStyle } from "@mangadex/gql/graphql";
 	import { client } from "@mangadex/gql/urql";
-	import { initContextReadChapterMarkers } from "@mangadex/stores/read-markers/context";
+	import { initContextReadChapterMarkers } from "@mangadex/stores/read-markers/context.svelte";
 	import { derived, toStore, type Writable } from "svelte/store";
 	import type { ChapterFeedListItem } from ".";
 	import ChapterFeedElement2 from "../element2/ChapterFeedElement2.svelte";
@@ -88,63 +88,46 @@
 	let selectedMangas: string[] = $state([]);
 	let selectedChapters: string[] = $state([]);
 
-	const ctxMarkers = derived(
-		[toStore(() => list)],
-		([$list], set, update) => {
-			const chapterIds = new Set(
-				$list.flatMap((item) => item.chapters.map((c) => c.chapterId))
-			);
-			const mangaIds = new Set($list.map((item) => item.mangaId));
+	let markers = initContextReadChapterMarkers();
+	$effect(() => {
+		const chapterIds = new Set(list.flatMap((item) => item.chapters.map((c) => c.chapterId)));
+		const mangaIds = new Set(list.map((item) => item.mangaId));
 
-			const sub = client
-				.query(
-					mangasReadMarkers,
-					{
-						ids: mangaIds.values().toArray()
-					},
-					{
-						optimistic: true
-					}
-				)
-				.subscribe((res) => {
-					const markersArray = res.data?.readMarker.mangaReadMarkers;
-					if (isArray(markersArray)) {
-						const read = new Set<string>(markersArray);
-						read.forEach((chapter) => {
-							update((ctx) => {
-								ctx.markers.set(chapter, true);
-
-								return ctx;
-							});
-						});
-						const unread = chapterIds.difference(read);
-						unread.forEach((chapter) => {
-							update((ctx) => {
-								ctx.markers.delete(chapter);
-								return ctx;
-							});
-						});
-					}
-				});
-			const anySub = listenToAnyChapterReadMarkers.subscribe((marker) => {
-				if (marker) {
-					if (chapterIds.has(marker.chapter)) {
-						update((ctx) => {
-							ctx.markers.set(marker.chapter, marker.read);
-							return ctx;
-						});
-					}
+		const sub = client
+			.query(
+				mangasReadMarkers,
+				{
+					ids: mangaIds.values().toArray()
+				},
+				{
+					optimistic: true
+				}
+			)
+			.subscribe((res) => {
+				const markersArray = res.data?.readMarker.mangaReadMarkers;
+				if (isArray(markersArray)) {
+					const read = new Set<string>(markersArray);
+					read.forEach((chapter) => {
+						markers.set(chapter, true);
+					});
+					const unread = chapterIds.difference(read);
+					unread.forEach((chapter) => {
+						markers.delete(chapter);
+					});
 				}
 			});
-			return () => {
-				anySub();
-				sub.unsubscribe();
-			};
-		},
-		{ markers: new Map<string, boolean>() }
-	);
-
-	initContextReadChapterMarkers(derived(ctxMarkers, (ctx) => ctx.markers));
+		const anySub = listenToAnyChapterReadMarkers.subscribe((marker) => {
+			if (marker) {
+				if (chapterIds.has(marker.chapter)) {
+					markers.set(marker.chapter, marker.read);
+				}
+			}
+		});
+		return () => {
+			anySub();
+			sub.unsubscribe();
+		};
+	});
 </script>
 
 <ChapterFeedSelecto bind:container bind:selectedChapters bind:selectedMangas />
