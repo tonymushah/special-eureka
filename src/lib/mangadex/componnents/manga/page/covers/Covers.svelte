@@ -14,7 +14,7 @@
 	import NothingToShow from "@mangadex/componnents/search/content/NothingToShow.svelte";
 
 	const d = getTitleLayoutData();
-	let data = $derived(d.layoutData);
+	let data = $derived(d.value.layoutData);
 	let id = $derived(data!.id);
 	const client = getContextClient();
 
@@ -34,8 +34,7 @@
 			} else {
 				return {
 					list: res.data.cover.list.data.map<CoverInput>((v) => {
-						const locale =
-							v.attributes.locale == null ? undefined : v.attributes.locale;
+						const locale = v.attributes.locale == null ? undefined : v.attributes.locale;
 						const title =
 							v.attributes.volume == null || v.attributes.volume == undefined
 								? v.id
