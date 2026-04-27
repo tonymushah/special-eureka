@@ -21,7 +21,9 @@ export function createReadonlyValue<T>(val_getter: Getter<T>): ReadonlyValue<T> 
 	};
 }
 
-export function get_value_from_maybe_getter<T extends object>(maybe_getter: MaybeGetter<T>): T {
+export function get_value_from_maybe_getter<
+	T extends object | string | number | undefined | boolean | symbol
+>(maybe_getter: MaybeGetter<T>): T {
 	if (typeof maybe_getter == "function") {
 		return maybe_getter();
 	} else {
