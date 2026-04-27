@@ -4,15 +4,14 @@
 	import FormInput from "@mangadex/componnents/theme/form/input/FormInput.svelte";
 	import MidToneLine from "@mangadex/componnents/theme/lines/MidToneLine.svelte";
 	import { SearchIcon } from "@lucide/svelte";
-	import { writable } from "svelte/store";
 	import SearchContent from "./SearchContent.svelte";
 
 	let realTime = $state(false);
 	let inputName = $state("");
-	const groupName = writable<string | undefined>(undefined);
+	let groupName = $state<string | undefined>(undefined);
 	$effect(() => {
 		if (realTime) {
-			groupName.set(inputName);
+			groupName = inputName;
 		}
 	});
 </script>
@@ -22,7 +21,7 @@
 		onsubmit={(e) => {
 			e.preventDefault();
 			if (!realTime) {
-				groupName.set(inputName);
+				groupName = inputName;
 			}
 		}}
 	>
