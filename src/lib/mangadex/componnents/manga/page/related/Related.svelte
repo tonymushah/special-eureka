@@ -65,7 +65,7 @@
 		await query.refetch();
 	});
 	$effect(() => {
-		const data = $store;
+		const data = store;
 		let res: ComponentProps<typeof CategorizedTitles>[] = [];
 		relatedTitles.forEach((v, k) => {
 			let title: RelatedTitle[] = [];
