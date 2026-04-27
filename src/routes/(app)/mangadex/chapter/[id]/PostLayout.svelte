@@ -188,7 +188,7 @@
 	const chapterSync = getChapterPageSync(() => data.data.id);
 	const currentPage = initChapterCurrentPageContext(writable(data.currentPage));
 	$effect(() => {
-		const page = data;
+		const page = chapterSync.value;
 		if (allowSync.allow && typeof page == "number") {
 			currentPage.set(page);
 		}
