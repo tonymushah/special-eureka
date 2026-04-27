@@ -6,11 +6,7 @@
 	import Fetching from "@mangadex/componnents/search/content/Fetching.svelte";
 	import HasNext from "@mangadex/componnents/search/content/HasNext.svelte";
 	import NothingToShow from "@mangadex/componnents/search/content/NothingToShow.svelte";
-	import {
-		ForumThreadType,
-		OrderDirection,
-		type MangaFeedSortOrder
-	} from "@mangadex/gql/graphql";
+	import { ForumThreadType, OrderDirection, type MangaFeedSortOrder } from "@mangadex/gql/graphql";
 	import type { ChapterFeedListItemExt } from "@mangadex/routes/user/[id]/uploads/search";
 	import chapterFeedStyle from "@mangadex/stores/chapterFeedStyle";
 	import pageLimit from "@mangadex/stores/page-limit";
@@ -34,18 +30,12 @@
 	import { listenToBlacklistChange } from "@mangadex/utils/blacklist/listen";
 
 	const client = getContextClient();
-	const order = writable<MangaFeedSortOrder | undefined>({
+	let order = $state<MangaFeedSortOrder | undefined>({
 		readableAt: OrderDirection.Descending
 	});
-	const queryOptions = derived([pageLimit, order], ([$limit, $order]) => {
+	let queryOptions = $derived.by(() => {
 		return {
-			queryKey: [
-				"user-logged",
-				"manga",
-				"feed",
-				`limit:${$limit}`,
-				`${JSON.stringify($order)}`
-			],
+			queryKey: ["user-logged", "manga", "feed", `limit:${$pageLimit}`, `${JSON.stringify(order)}`],
 			async queryFn({ pageParam }) {
 				return await executeSearchQuery(client, pageParam);
 			},
@@ -63,8 +53,8 @@
 				}
 			},
 			initialPageParam: {
-				limit: $limit,
-				order: $order
+				limit: $pageLimit,
+				order
 			} satisfies Params
 		} satisfies CreateInfiniteQueryOptions<
 			AbstractSearchResult<ChapterFeedListItemExt>,
@@ -74,7 +64,7 @@
 			Params
 		>;
 	});
-	let query = createInfiniteQuery(() => $queryOptions);
+	let query = createInfiniteQuery(() => queryOptions);
 	$effect(() => listenToBlacklistChange(() => query.refetch()));
 	let hasNext = $derived(query.hasNextPage);
 	let isFetching = $derived(query.isFetching);
