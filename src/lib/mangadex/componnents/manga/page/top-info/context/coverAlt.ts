@@ -1,18 +1,20 @@
-import { getContext, setContext } from "svelte";
+import type { ReadonlyValue } from "$lib";
+import { Context } from "runed";
 
 const key = "top-info-cover-alt";
 
 type TopInfoCoverAlt = string;
 
-export function setTopCoverAltContextStore(coverAlt: TopInfoCoverAlt) {
-	return setContext<TopInfoCoverAlt>(key, coverAlt);
+const ctx = new Context<ReadonlyValue<TopInfoCoverAlt>>(key);
+
+export function setTopCoverAltContextStore(coverAlt: () => TopInfoCoverAlt) {
+	return ctx.set({
+		get value() {
+			return coverAlt();
+		}
+	});
 }
 
 export function getTopCoverAltContextStore() {
-	const coverAltContext = getContext<TopInfoCoverAlt | undefined>(key);
-	if (coverAltContext) {
-		return coverAltContext;
-	} else {
-		throw new Error(`\`${key}\` is not declared`);
-	}
+	return ctx.get();
 }
