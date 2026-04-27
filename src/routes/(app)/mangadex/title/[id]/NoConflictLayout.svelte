@@ -24,7 +24,7 @@
 	} from "@mangadex/download/manga.svelte";
 	import { mangaReadMarkers } from "@mangadex/gql-docs/read-markers/chapters";
 	import { client } from "@mangadex/gql/urql";
-	import manga_following_status, {
+	import {
 		get_manga_following_status,
 		set_manga_following_status
 	} from "@mangadex/stores/manga/manga_following_status";
@@ -48,7 +48,6 @@
 	import { openUrl as open } from "@tauri-apps/plugin-opener";
 	import { debounce, delay, noop } from "lodash";
 	import { untrack, type Snippet } from "svelte";
-	import { derived as der, derived, toStore } from "svelte/store";
 	import { v4 } from "uuid";
 	import type { LayoutData } from "./layout.context";
 	import { setTitleLayoutData } from "./layout.context";
@@ -66,6 +65,7 @@
 	import { getCurrentWebview } from "@tauri-apps/api/webview";
 	import { waitAsync } from "$lib/utils";
 	import { Debounced, IsInViewport } from "runed";
+	import manga_following_status from "@mangadex/stores/manga/manga_following_status.svelte";
 
 	type TopMangaStatisticsStoreData = TopMangaStatistics & {
 		threadUrl?: string;
@@ -144,7 +144,7 @@
 	const reading_status = manga_reading_status(() => data.layoutData.id, {
 		getOnMount: false
 	});
-	const isFollowing = manga_following_status(data.layoutData.id, {
+	const isFollowing = manga_following_status(() => data.layoutData.id, {
 		getOnMount: false
 	});
 	const ratingStore = manga_rating(() => data.layoutData.id);
@@ -405,7 +405,7 @@
 			await cancelMutation.mutateAsync(data.layoutData.id);
 		}}
 		reading_status={reading_status.value ?? undefined}
-		{isFollowing}
+		isFollowing={isFollowing.value}
 		{onreadingStatus}
 		ontag={({ id }) => {
 			goto(
@@ -415,7 +415,7 @@
 			);
 		}}
 		disableAddToLibrary={disableAddToLibrary || !$isLogged}
-		rating={ratingStore.value}
+		rating={ratingStore.value ?? undefined}
 		{onrating}
 		disableRating={disableRating || !$isLogged}
 		disableRead={!hasChaptToRead.value}

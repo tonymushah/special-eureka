@@ -1,36 +1,11 @@
-import { graphql } from "@mangadex/gql";
 import { client } from "@mangadex/gql/urql";
 import { readable, type Readable } from "svelte/store";
-
-const subscription = graphql(`
-	subscription mangaFollowingStatusSubscription($id: UUID!) {
-		watchIsFollowingManga(mangaId: $id)
-	}
-`);
-
-const query = graphql(`
-	query mangaFollowingStatusQuery($id: UUID!) {
-		follows {
-			isFollowingManga(id: $id)
-		}
-	}
-`);
-
-const followMutation = graphql(`
-	mutation followMangaMutation($id: UUID!) {
-		manga {
-			follow(id: $id)
-		}
-	}
-`);
-
-const unfollowMutation = graphql(`
-	mutation unfollowMangaMutation($id: UUID!) {
-		manga {
-			unfollow(id: $id)
-		}
-	}
-`);
+import {
+	followMutation,
+	query,
+	subscription,
+	unfollowMutation
+} from "./manga_following_status.query";
 
 export async function get_manga_following_status(manga_id: string): Promise<boolean> {
 	const res = await client
