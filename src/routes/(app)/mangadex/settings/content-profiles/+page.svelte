@@ -10,17 +10,18 @@
 		data: PageData;
 	}
 	let { data = $bindable() }: Props = $props();
-	const tags = writable<
+	let tags = $derived.by<
 		{
 			id: string;
 			name: string;
 			group: TagGroup;
 		}[]
-	>([]);
-	$effect(() => {
+	>(() => {
 		const dataTags = data.tags;
 		if (dataTags) {
-			tags.set(dataTags);
+			return dataTags;
+		} else {
+			return [];
 		}
 	});
 </script>
@@ -33,7 +34,7 @@
 	<ContentProfileSelector />
 </section>
 <section class="editor">
-	<ContentProfilesEditor tags={readonly(tags)} />
+	<ContentProfilesEditor {tags} />
 </section>
 
 <style lang="scss">
