@@ -82,7 +82,7 @@
 	import relatedChaptersQuery from "@mangadex/gql-docs/chapter/layout-query/related";
 	import chapterPageThread from "@mangadex/gql-docs/chapter/layout-query/thread";
 	import { DrawerMode, ForumThreadType, ReadingMode } from "@mangadex/gql/graphql";
-	import { getChapterPageSync } from "@mangadex/stores/chapter/page";
+	import { getChapterPageSync } from "@mangadex/stores/chapter/page.svelte";
 	import { allowSync } from "@mangadex/stores/chapter/page/allowSync.svelte";
 	import { drawerModeStore } from "@mangadex/stores/chapterLayout";
 	import { readMarkers as readMarkersLoader } from "@mangadex/stores/read-markers/mutations";
@@ -159,9 +159,7 @@
 	});
 	initIsDrawerOpenWritable(writable(false));
 
-	const currentChapterData = initCurrentChapterData(
-		writable(layoutDataToCurrentChapterData(data))
-	);
+	const currentChapterData = initCurrentChapterData(writable(layoutDataToCurrentChapterData(data)));
 
 	const dataStore = toStore(() => data);
 	const readingModeCur = derived([readingModeWritable, dataStore], ([inner, data]) => {
@@ -187,16 +185,14 @@
 
 	initCurrentChapterDirection(readingDirectionWritable);
 	initCurrentChapterImageFit(imageFitWritable);
-	const chapterSync = getChapterPageSync(data.data.id);
-	const currentPage = initChapterCurrentPageContext(
-		writable(data.currentPage, (set) => {
-			return chapterSync.subscribe((page) => {
-				if (allowSync.allow && typeof page == "number") {
-					set(page);
-				}
-			});
-		})
-	);
+	const chapterSync = getChapterPageSync(() => data.data.id);
+	const currentPage = initChapterCurrentPageContext(writable(data.currentPage));
+	$effect(() => {
+		const page = data;
+		if (allowSync.allow && typeof page == "number") {
+			currentPage.set(page);
+		}
+	});
 	$effect(() => {
 		currentPage.set(data.currentPage);
 	});
@@ -204,7 +200,7 @@
 		currentChapterData.set(layoutDataToCurrentChapterData(data));
 	});
 	$effect(() => {
-		chapterSync.set($currentPage);
+		chapterSync.value = $currentPage;
 	});
 	$effect(() => {
 		client
@@ -218,13 +214,12 @@
 				if (res.error) {
 					throw res.error;
 				}
-				const rel = res.data?.manga.aggregate.default.volumes.flatMap(
-					({ volume, chapters }) =>
-						chapters.map<RelatedChapter>(({ chapter, ids }) => ({
-							volume,
-							chapter,
-							id: ids.includes(data.data.id) ? data.data.id : ids[0]
-						}))
+				const rel = res.data?.manga.aggregate.default.volumes.flatMap(({ volume, chapters }) =>
+					chapters.map<RelatedChapter>(({ chapter, ids }) => ({
+						volume,
+						chapter,
+						id: ids.includes(data.data.id) ? data.data.id : ids[0]
+					}))
 				);
 				if (rel) {
 					related.set(rel);
