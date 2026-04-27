@@ -1,14 +1,17 @@
-import { getContext, setContext } from "svelte";
-import type { Readable } from "svelte/store";
+import { createReadonlyValue, type ReadonlyValue } from "$lib";
+import type { InputMaybe } from "@mangadex/gql/graphql";
+import { Context, type Getter } from "runed";
 
 const key = "top-manga-rating";
 
-type RatingTopManga = Readable<number | undefined>;
+type RatingTopManga = InputMaybe<number | undefined>;
 
-export function setTopMangaRatingContextStore(rating: RatingTopManga) {
-	return setContext<RatingTopManga>(key, rating);
+const ctx = new Context<ReadonlyValue<RatingTopManga>>(key);
+
+export function setTopMangaRatingContextStore(rating: Getter<RatingTopManga>) {
+	return ctx.set(createReadonlyValue(rating));
 }
 
 export function getTopMangaRatingContextStore() {
-	return getContext<RatingTopManga | undefined>(key);
+	return ctx.get();
 }
