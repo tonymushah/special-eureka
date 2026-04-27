@@ -5,6 +5,7 @@
 	import pageLimit from "@mangadex/stores/page-limit";
 	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
 	import { hideReadTitle } from "@mangadex/stores/hide-read-title";
+
 	interface Props {
 		data: PageData;
 	}
