@@ -12,7 +12,8 @@ import { client as mangadexClient } from "@mangadex/gql/urql";
 import getImageSize from "@mangadex/utils/img/getSize";
 import type { Client, OperationResult } from "@urql/svelte";
 import { isArray, range } from "lodash";
-import { get, readable, writable, type Readable, type Writable } from "svelte/store";
+import type { Getter } from "runed";
+import { SvelteMap } from "svelte/reactivity";
 
 export const subscription = graphql(`
 	subscription chapterPagesSubscription($chapter: UUID!, $mode: DownloadMode) {
@@ -193,15 +194,6 @@ export async function resendChapterPage(
 	}
 }
 
-export type ChapterPagesStore = Writable<ChapterPages> & {
-	startCaching: () => Promise<void>;
-	fetchMetadata: () => Promise<void>;
-	resendAll: () => Promise<void>;
-	refetchChapterPage: (page: number) => Promise<void>;
-	resendChapterPage: (page: number) => Promise<void>;
-	refetchIncompletes: () => Promise<void>;
-};
-
 export type ChapterImage = {
 	value: string;
 	size?: {
@@ -241,24 +233,96 @@ export type PageState = PageStateInner | null;
 
 export type DoublePageState = [PageState, PageState] | PageState;
 
+export type ChapterPagesConstructorParam = {
+	chapter_id: Getter<string>;
+	mode?: Getter<DownloadMode>;
+	client?: Client;
+};
+
 export default class ChapterPages {
-	private pages: Map<number, ChapterImage>;
-	private pagesError: Map<number, Error>;
+	private pages: SvelteMap<number, ChapterImage>;
+	private pagesError: SvelteMap<number, Error>;
 	private pages_len?: number;
-	private chapter_id?: string;
-	get id(): string | undefined {
-		return this.chapter_id;
+	private chapter_id: Getter<string>;
+	private _mode?: Getter<DownloadMode>;
+	private client: Client;
+	public get id(): string {
+		return this.chapter_id();
 	}
-	private constructor() {
-		this.pages = new Map();
-		this.pagesError = new Map();
+	public get mode(): DownloadMode | undefined {
+		return this._mode?.();
+	}
+	private sub_func(
+		op: OperationResult<
+			ChapterPagesSubscriptionSubscription,
+			ChapterPagesSubscriptionSubscriptionVariables
+		>
+	) {
+		const error = op.error;
+		const extensions = op.extensions;
+		if (op.data) {
+			const data = op.data;
+			const toUse = data.getChapterPages;
+			this.pagesLen = toUse.pages;
+
+			if (toUse.size != null && toUse.size != undefined) {
+				if (toUse.size != null && toUse.size != undefined)
+					this.addPage(toUse.index, {
+						value: toUse.url,
+						size: {
+							width: toUse.size.width,
+							height: toUse.size.height
+						}
+					});
+			} else {
+				this.addPage(toUse.index, {
+					value: toUse.url
+				});
+				getImageSize(toUse.url).then((d) => {
+					this.addPage(toUse.index, {
+						value: toUse.url,
+						size: d
+					});
+				});
+			}
+		} else if (error && extensions) {
+			const page = extensions.page;
+			if (typeof page == "number" || typeof page == "string") {
+				try {
+					this.addPageError(Number(page), error);
+				} catch (e) {
+					addErrorToast("Chapter loading error", e);
+				}
+			} else {
+				addErrorToast("Chapter loading error", error);
+			}
+		}
+	}
+	private constructor({ chapter_id, mode, client: _client }: ChapterPagesConstructorParam) {
+		this.pages = new SvelteMap();
+		this.pagesError = new SvelteMap();
+		this.chapter_id = chapter_id;
+		this._mode = mode;
+		const client = _client ?? mangadexClient;
+		this.client = client;
+		$effect(() => {
+			const inner_sub = client
+				.subscription(subscription, {
+					chapter: this.chapter_id,
+					mode: mode?.()
+				})
+				.subscribe((d) => this.sub_func(d));
+			return () => {
+				inner_sub.unsubscribe();
+			};
+		});
 	}
 	private addPage(index: number, page: ChapterImage) {
 		this.pages.set(index, page);
 		this.pagesError.delete(index);
 	}
 
-	set pagesLen(pages: number) {
+	private set pagesLen(pages: number) {
 		this.pages_len = pages;
 	}
 
@@ -268,14 +332,14 @@ export default class ChapterPages {
 	private addPageError(index: number, error: Error) {
 		this.pagesError.set(index, error);
 	}
-	public getImages(): (ChapterImage | null)[] {
+	public get images(): (ChapterImage | null)[] {
 		return this.pagesLenRange().map((index) => {
 			const page = this.pages.get(index);
 			return page ?? null;
 		});
 	}
-	public getUrls(): (string | null)[] {
-		return this.getImages().map((d) => {
+	public get urls(): (string | null)[] {
+		return this.images.map((d) => {
 			return d?.value ?? null;
 		});
 	}
@@ -289,7 +353,7 @@ export default class ChapterPages {
 		if (this.pagesLen) return range(0, this.pagesLen);
 		else return [];
 	}
-	public pagesAsDoublePageIndexes(): DoublePageIndex[] {
+	public get pagesAsDoublePageIndexes(): DoublePageIndex[] {
 		const output: Array<DoublePageIndex> = [];
 		let accumalator: number[] = [];
 		function push_acc_to_out1() {
@@ -357,7 +421,7 @@ export default class ChapterPages {
 		}
 	}
 	public getDoublePageState(doublePageIndex: number): DoublePageState {
-		const pages = this.pagesAsDoublePageIndexes();
+		const pages = this.pagesAsDoublePageIndexes;
 		const current = pages.at(doublePageIndex);
 		if (current != undefined) {
 			if (isArray(current)) {
@@ -372,11 +436,11 @@ export default class ChapterPages {
 	private _removePageError(page: number) {
 		this.pagesError.delete(page);
 	}
-	public getPagesState(): PageState[] {
+	public get pagesState(): PageState[] {
 		return this.pagesLenRange().map((index) => this.getPageState(index));
 	}
-	public getDoublePageStates(): IndexedDoublePageState[] {
-		return this.pagesAsDoublePageIndexes().map((e) => {
+	public get doublePageStates(): IndexedDoublePageState[] {
+		return this.pagesAsDoublePageIndexes.map((e) => {
 			if (isArray(e)) {
 				return [
 					{
@@ -396,188 +460,55 @@ export default class ChapterPages {
 			}
 		});
 	}
-	public static removePageError(pages: Writable<ChapterPages>, page: number) {
-		pages.update((ps) => {
-			ps._removePageError(page);
-			return ps;
+	public removePageError(page: number) {
+		this._removePageError(page);
+	}
+	public async startCaching() {
+		await startCaching(this.id, {
+			client: this.client,
+			mode: this.mode
 		});
 	}
-	public static initFromStore(
-		chapterId: Readable<string>,
-		options?: ChapterPagesFuncOptions
-	): ChapterPagesStore {
-		const client = options?.client ?? mangadexClient;
-		const mode = options?.mode ?? DownloadMode.Normal;
-		const store = writable(new ChapterPages(), (set, update) => {
-			let unsub: (() => void) | undefined = undefined;
-			function chapterIdSub(chapter: string) {
-				// NOTE I am lazy to rewrite the same function over and over. This is why i came with this `sub_func` thingy.
-				const sub_func = (
-					op: OperationResult<
-						ChapterPagesSubscriptionSubscription,
-						ChapterPagesSubscriptionSubscriptionVariables
-					>
-				) => {
-					const error = op.error;
-					const extensions = op.extensions;
-					if (op.data) {
-						const data = op.data;
-						const toUse = data.getChapterPages;
-						update((value) => {
-							value.pagesLen = toUse.pages;
-							return value;
-						});
-						if (toUse.size != null && toUse.size != undefined) {
-							update((value) => {
-								if (toUse.size != null && toUse.size != undefined)
-									value.addPage(toUse.index, {
-										value: toUse.url,
-										size: {
-											width: toUse.size.width,
-											height: toUse.size.height
-										}
-									});
-								return value;
-							});
-						} else {
-							update((value) => {
-								value.addPage(toUse.index, {
-									value: toUse.url
-								});
-								return value;
-							});
-							getImageSize(toUse.url).then((d) => {
-								update((value) => {
-									value.addPage(toUse.index, {
-										value: toUse.url,
-										size: d
-									});
-									return value;
-								});
-							});
-						}
-					} else if (error && extensions) {
-						const page = extensions.page;
-						if (typeof page == "number" || typeof page == "string") {
-							update((d) => {
-								try {
-									d.addPageError(Number(page), error);
-								} catch (e) {
-									addErrorToast("Chapter loading error", e);
-								}
-								return d;
-							});
-						} else {
-							addErrorToast("Chapter loading error", error);
-						}
-					}
-				};
-				// TODO test if this `mode` store *actually* works
-				if (typeof mode == "object") {
-					const sub = mode.subscribe(
-						($mode) => {
-							const inner_sub = client
-								.subscription(subscription, {
-									chapter,
-									mode: $mode
-								})
-								.subscribe((d) => sub_func(d));
-							unsub = () => {
-								inner_sub.unsubscribe();
-							};
-						},
-						() => {
-							unsub?.();
-						}
-					);
-					return () => {
-						sub();
-					};
-				} else {
-					// NOTE this one doesn't need test. It should work fine.
-					const inner_sub = client
-						.subscription(subscription, {
-							chapter,
-							mode
-						})
-						.subscribe((d) => sub_func(d));
-					return () => {
-						inner_sub.unsubscribe();
-					};
-				}
-			}
-			chapterId.subscribe((chapter) => {
-				set(new ChapterPages());
-				unsub?.();
-				unsub = chapterIdSub(chapter);
-			});
-			return () => {
-				unsub?.();
-			};
+	public async fetchMetadata() {
+		await fetchMetadata(this.id, {
+			client: this.client,
+			mode: this.mode
 		});
-		const getMode = () => {
-			if (typeof mode == "object") {
-				return get(mode);
-			} else {
-				return mode;
-			}
-		};
-		return {
-			...store,
-			async startCaching() {
-				await startCaching(get(chapterId), {
-					client,
-					mode: getMode()
-				});
-			},
-			async fetchMetadata() {
-				await fetchMetadata(get(chapterId), {
-					client,
-					mode: getMode()
-				});
-			},
-			async resendAll() {
-				await resendAll(get(chapterId), {
-					client,
-					mode: getMode()
-				});
-			},
-			async refetchChapterPage(page) {
-				await refetchChapterPage(get(chapterId), page, {
-					client,
-					mode: getMode()
-				});
-			},
-			async resendChapterPage(page) {
-				await resendChapterPage(get(chapterId), page, {
-					client,
-					mode: getMode()
-				});
-			},
-			async refetchIncompletes() {
-				await refetchIncompletePages(get(chapterId), {
-					client,
-					mode: getMode()
-				});
-			}
-		};
 	}
-	public static initStore(chapter: string, options?: ChapterPagesFuncOptions): ChapterPagesStore {
-		return ChapterPages.initFromStore(readable(chapter), options);
+	public async resendAll() {
+		await resendAll(this.id, {
+			client: this.client,
+			mode: this.mode
+		});
 	}
-	public isComplete(): boolean {
+	public async refetchChapterPage(page: number) {
+		await refetchChapterPage(this.id, page, {
+			client: this.client,
+			mode: this.mode
+		});
+	}
+	public async resendChapterPage(page: number) {
+		await resendChapterPage(this.id, page, {
+			client: this.client,
+			mode: this.mode
+		});
+	}
+	public async refetchIncompletes() {
+		await refetchIncompletePages(this.id, {
+			client: this.client,
+			mode: this.mode
+		});
+	}
+	public get isComplete(): boolean {
 		return this.pages.size == this.pagesLen;
 	}
-	public getIncompleteIndexes(): number[] {
-		return this.getImages().flatMap((value, index) => {
+	public get getIncompleteIndexes(): number[] {
+		return this.images.flatMap((value, index) => {
 			if (value == null) {
 				return [index];
 			} else {
 				return [];
 			}
 		});
-	}
-	public static async refetchIncompletes(pages: ChapterPagesStore) {
-		await pages.refetchIncompletes();
 	}
 }
