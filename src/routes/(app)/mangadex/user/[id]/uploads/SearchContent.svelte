@@ -26,17 +26,17 @@
 	import { addErrorToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 
 	interface Props {
-		userId: Readable<string>;
+		userId: string;
 	}
 
 	let { userId }: Props = $props();
 	const client = getContextClient();
-	const order = writable<ChapterSortOrder | undefined>({
+	let order = $state<ChapterSortOrder | undefined>({
 		readableAt: OrderDirection.Descending
 	});
-	const queryOptions = derived([userId, pageLimit, order], ([$userId, $limit, $order]) => {
+	let queryOptions = $derived.by(() => {
 		return {
-			queryKey: ["user", $userId, "uploads", `limit:${$limit}`, `${$order}`],
+			queryKey: ["user", userId, "uploads", `limit:${$pageLimit}`, `${order}`],
 			async queryFn({ pageParam }) {
 				return await executeSearchQuery(client, pageParam);
 			},
@@ -54,9 +54,9 @@
 				}
 			},
 			initialPageParam: {
-				user: $userId,
-				limit: $limit,
-				order: $order
+				user: userId,
+				limit: $pageLimit,
+				order
 			} satisfies UserUploadsFeedChapterParams
 		} satisfies CreateInfiniteQueryOptions<
 			AbstractSearchResult<ChapterFeedListItemExt>,
@@ -66,7 +66,7 @@
 			UserUploadsFeedChapterParams
 		>;
 	});
-	let query = createInfiniteQuery(() => $queryOptions);
+	let query = createInfiniteQuery(() => queryOptions);
 	let hasNext = $derived(query.hasNextPage);
 	let isFetching = $derived(query.isLoading);
 	let feed = $derived(query.data?.pages.flatMap((e) => e.data) ?? []);
