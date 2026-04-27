@@ -1,20 +1,21 @@
-import type { ReadingStatus } from "@mangadex/gql/graphql";
-import { getContext, setContext } from "svelte";
-import type { Readable } from "svelte/store";
+import type { ReadonlyValue } from "$lib";
+import type { InputMaybe, ReadingStatus } from "@mangadex/gql/graphql";
+import { Context, type Getter } from "runed";
 
 const key = "top-manga-reading-status";
 
-type TopMangaReadingStatus = Readable<ReadingStatus | undefined>;
+type TopMangaReadingStatus = InputMaybe<ReadingStatus>;
 
-export function setTopMangaReadingStatusContextStore(cover: TopMangaReadingStatus) {
-	return setContext<TopMangaReadingStatus>(key, cover);
+const ctx = new Context<ReadonlyValue<TopMangaReadingStatus>>(key);
+
+export function setTopMangaReadingStatusContextStore(cover: Getter<TopMangaReadingStatus>) {
+	return ctx.set({
+		get value() {
+			return cover();
+		}
+	});
 }
 
 export function getTopMangaReadingStatusContextStore() {
-	const coverContext = getContext<TopMangaReadingStatus | undefined>(key);
-	if (coverContext) {
-		return coverContext;
-	} else {
-		throw new Error(`\`${key}\` is not declared`);
-	}
+	return ctx.get();
 }
