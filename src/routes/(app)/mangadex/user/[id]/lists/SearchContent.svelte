@@ -11,8 +11,6 @@
 	import { getContextClient } from "@urql/svelte";
 	import { debounce } from "lodash";
 	import { onDestroy } from "svelte";
-	import type { Readable } from "svelte/store";
-	import { derived, get } from "svelte/store";
 	import executeSearchQuery, { type UserCustomListItemData } from "./search";
 	import pageLimit from "@mangadex/stores/page-limit";
 	import ErrorComponent from "@mangadex/componnents/ErrorComponent.svelte";
@@ -22,14 +20,14 @@
 	import { flip } from "svelte/animate";
 
 	interface Props {
-		userId: Readable<string>;
+		userId: string;
 	}
 
 	let { userId }: Props = $props();
 	const client = getContextClient();
-	const queryOptions = derived([userId, pageLimit], ([$userId, $limit]) => {
+	let queryOptions = $derived.by(() => {
 		return {
-			queryKey: ["user", $userId, "custom-lists", `limit:${$limit}`],
+			queryKey: ["user", userId, "custom-lists", `limit:${$pageLimit}`],
 			async queryFn({ pageParam }) {
 				return await executeSearchQuery(client, pageParam);
 			},
@@ -47,8 +45,8 @@
 				}
 			},
 			initialPageParam: {
-				userId: $userId,
-				limit: $limit
+				userId: userId,
+				limit: $pageLimit
 			} satisfies UserCustomListParams
 		} satisfies CreateInfiniteQueryOptions<
 			AbstractSearchResult<UserCustomListItemData>,
@@ -58,7 +56,7 @@
 			UserCustomListParams
 		>;
 	});
-	let query = createInfiniteQuery(() => $queryOptions);
+	let query = createInfiniteQuery(() => queryOptions);
 	let hasNext = $derived(query.hasNextPage);
 	let isFetching = $derived(query.isLoading);
 	let lists = $derived.by(() => new Set(query.data?.pages.flatMap((e) => e.data)) ?? []);
