@@ -9,6 +9,10 @@ export interface ReadonlyValue<T> {
 	readonly value: T;
 }
 
+export interface WritableValue<T> {
+	value: T;
+}
+
 export function createReadonlyValue<T>(val_getter: Getter<T>): ReadonlyValue<T> {
 	return {
 		get value() {
