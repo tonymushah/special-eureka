@@ -1,40 +1,6 @@
-import { graphql } from "@mangadex/gql";
 import { client } from "@mangadex/gql/urql";
 import { readable, type Readable } from "svelte/store";
-
-const subscription = graphql(`
-	subscription mangaRatingSubscription($id: UUID!) {
-		watchRating(mangaId: $id) {
-			rating
-		}
-	}
-`);
-
-const query = graphql(`
-	query getMangaRating($id: UUID!) {
-		rating {
-			lists(mangaIds: [$id]) {
-				rating
-			}
-		}
-	}
-`);
-
-const updateCreateMutation = graphql(`
-	mutation updateMangaRating($id: UUID!, $rating: Int!) {
-		rating {
-			createUpdate(params: { mangaId: $id, rating: $rating })
-		}
-	}
-`);
-
-const deleteMutation = graphql(`
-	mutation deleteMangaRating($id: UUID!) {
-		rating {
-			delete(id: $id)
-		}
-	}
-`);
+import { deleteMutation, query, subscription, updateCreateMutation } from "./manga_rating.query";
 
 export async function get_manga_rating(manga_id: string): Promise<number | null> {
 	const res = await client
