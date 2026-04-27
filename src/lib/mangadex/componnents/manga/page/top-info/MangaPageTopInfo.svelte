@@ -9,7 +9,6 @@
 		type ReadingStatus
 	} from "@mangadex/gql/graphql";
 	import type { Tag } from "@mangadex/utils/types/Tag";
-	import { readable, type Readable } from "svelte/store";
 	import type { ReadingStatusEventDetail } from "./buttons/readingStatus";
 	import {
 		setTopCoverAltContextStore,
@@ -61,10 +60,10 @@
 		tags: Tag[];
 		status: MangaStatus;
 		year?: number | undefined;
-		reading_status?: Readable<ReadingStatus | undefined>;
-		isFollowing?: Readable<boolean | undefined>;
-		rating?: Readable<number | undefined>;
-		downloadState?: Readable<MangaDownloadState>;
+		reading_status?: ReadingStatus;
+		isFollowing?: boolean;
+		rating?: number | undefined;
+		downloadState?: MangaDownloadState;
 		stats?: TopMangaStatistics | undefined;
 		contentRating?: ContentRating;
 		closeDialogOnAdd?: boolean;
@@ -86,10 +85,10 @@
 		tags = $bindable(),
 		status = $bindable(),
 		year = $bindable(undefined),
-		reading_status = readable<ReadingStatus | undefined>(undefined),
-		isFollowing = readable<boolean | undefined>(undefined),
-		rating = readable<number | undefined>(undefined),
-		downloadState = readable(MangaDownloadState.Pending),
+		reading_status,
+		isFollowing,
+		rating,
+		downloadState,
 		stats = $bindable(undefined),
 		contentRating = ContentRating.Safe,
 		closeDialogOnAdd,
@@ -113,14 +112,14 @@
 		originalLanguage
 	}: Props = $props();
 
-	setTopMangaIdContextStore(id);
-	setTopMangaTitleContextStore(title);
-	setTopMangaReadingStatusContextStore(reading_status);
-	setTopCoverAltContextStore(coverImageAlt);
-	setTopMangaIsFollowingContextStore(isFollowing);
-	setTopMangaRatingContextStore(rating);
-	setTopMangaDownloadContextStore(downloadState);
-	setTopMangaOriginalLanguageContextStore(originalLanguage);
+	setTopMangaIdContextStore(() => id);
+	setTopMangaTitleContextStore(() => title);
+	setTopMangaReadingStatusContextStore(() => reading_status);
+	setTopCoverAltContextStore(() => coverImageAlt);
+	setTopMangaIsFollowingContextStore(() => isFollowing);
+	setTopMangaRatingContextStore(() => rating);
+	setTopMangaDownloadContextStore(() => downloadState);
+	setTopMangaOriginalLanguageContextStore(() => originalLanguage);
 </script>
 
 <TopInfoLayout>
