@@ -10,7 +10,7 @@ export default function manga_rating(
 		getOnMount: true
 	}
 ): ReadonlyValue<number | null> {
-	let val = $state<number | null>(null);
+	let val = $state<number | null>(option.initValue ?? null);
 	let manga_id = $derived.by(mangaId);
 	$effect.pre(() => {
 		const sub = client
