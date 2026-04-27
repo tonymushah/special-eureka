@@ -1,19 +1,21 @@
+import type { ReadonlyValue } from "$lib";
 import { isArray } from "lodash";
-import { derived, type Readable } from "svelte/store";
+import { fromStore, readonly } from "svelte/store";
 import { getChapterCurrentPageContext } from "../../../contexts/currentPage";
 import getChapterDoublePageIndexes from "./getChapterDoublePageIndexes";
 
-export default function getChapterDoublePageCurrentPageIndex(): Readable<number> {
+export default function getChapterDoublePageCurrentPageIndex(): ReadonlyValue<number> {
 	const doublePages = getChapterDoublePageIndexes();
-	const currentPageContext = getChapterCurrentPageContext();
-
-	return derived([doublePages, currentPageContext], ([$images, $currentPage]) => {
-		return $images.findIndex((image) => {
-			if (isArray(image)) {
-				return image.includes($currentPage);
-			} else {
-				return image == $currentPage;
-			}
-		});
-	});
+	const currentPage = fromStore(readonly(getChapterCurrentPageContext()));
+	return {
+		get value() {
+			return doublePages.value.findIndex((image) => {
+				if (isArray(image)) {
+					return image.includes(currentPage.current);
+				} else {
+					return image == currentPage.current;
+				}
+			});
+		}
+	};
 }
