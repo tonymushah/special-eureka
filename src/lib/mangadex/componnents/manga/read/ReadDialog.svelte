@@ -81,7 +81,7 @@
 		chapter_store.clear();
 		goto(route(`/mangadex/chapter/[id]`, { id }));
 	}
-	let chapters = $derived(Array.from($chapter_store.values()));
+	let chapters = $derived(Array.from(chapter_store.values()));
 </script>
 
 <dialog bind:this={dialog}>
