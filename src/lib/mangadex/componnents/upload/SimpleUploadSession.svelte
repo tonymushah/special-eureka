@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { client } from "@mangadex/gql/urql";
 	import { titleOnlyQuery } from "@mangadex/stores/title/title-only-query";
-	import { sessionObjStore } from "@mangadex/stores/upload/sessions";
+	import { sessionObjStore } from "@mangadex/stores/upload/sessions.svelte";
 	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
 	import { slide } from "svelte/transition";
 	import Tooltip from "../Tooltip.svelte";
@@ -30,8 +30,8 @@
 		highlighted?: boolean;
 	}
 	let { sessionId, onmouseenter, onmouseleave, highlighted }: Props = $props();
-	const sessionS = sessionObjStore(sessionId);
-	let session = $derived($sessionS);
+	const sessionS = sessionObjStore(() => sessionId);
+	let session = $derived(sessionS.value);
 	let titleQuery = titleOnlyQuery({
 		mangaId: () => session?.mangaId ?? "",
 		enabled: () => !!session,
@@ -241,11 +241,7 @@
 						{commitData.title}
 					{/if}
 					{#if commitData.publishAt}
-						(Publish <TimeAgo
-							date={new Date(commitData.publishAt)}
-							asDateUTC
-							asInline
-						/>)
+						(Publish <TimeAgo date={new Date(commitData.publishAt)} asDateUTC asInline />)
 					{/if}
 					{#if commitData.termsAccepted == true}
 						<span class="terms accepted">(Terms Accepted)</span>
