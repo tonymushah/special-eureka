@@ -14,9 +14,9 @@
 	import MangaDexVarThemeProvider from "../theme/MangaDexVarThemeProvider.svelte";
 
 	interface Props {
-		params: Writable<UserLibrarySectionParam>;
+		params: UserLibrarySectionParam;
 	}
-	let { params }: Props = $props();
+	let { params = $bindable() }: Props = $props();
 	let open = $state(false);
 	$effect(() => {
 		if (open) {
@@ -46,9 +46,7 @@
 					<div class="content">
 						<div class="top">
 							<div class="title-desc">
-								<Dialog.Title class={cssDialogMod.title}
-									>Filter Library</Dialog.Title
-								>
+								<Dialog.Title class={cssDialogMod.title}>Filter Library</Dialog.Title>
 							</div>
 							<div class="close">
 								<Dialog.CloseTrigger class={cssDialogMod.closeButton}>
@@ -56,7 +54,7 @@
 								</Dialog.CloseTrigger>
 							</div>
 						</div>
-						<FilterContent {params} />
+						<FilterContent bind:params />
 					</div>
 				</Dialog.Content>
 			</Dialog.Positioner>
