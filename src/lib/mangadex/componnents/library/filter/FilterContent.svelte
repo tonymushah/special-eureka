@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { UserLibrarySectionParam } from "@mangadex/gql/graphql";
-	import { derived, get, writable, type Writable } from "svelte/store";
+	import { derived, get, toStore, writable, type Writable } from "svelte/store";
 	import SortBySelector from "./SortBySelector.svelte";
 	import { initMangaSearchPublicationStatusContextStore } from "@mangadex/componnents/manga/search/form/filter/contexts/publicationStatus";
 	import PublicationStatus from "@mangadex/componnents/manga/search/form/filter/content/PublicationStatus.svelte";
@@ -18,40 +18,34 @@
 	import { route } from "$lib/ROUTES";
 
 	interface Props {
-		params: Writable<UserLibrarySectionParam>;
+		params: UserLibrarySectionParam;
 	}
 
-	let { params }: Props = $props();
-	const publicationStatus = derived(params, (params) => params.publicationStatus ?? []);
+	let { params = $bindable() }: Props = $props();
+	const publicationStatus = derived(
+		toStore(() => params),
+		(params) => params.publicationStatus ?? []
+	);
 	initMangaSearchPublicationStatusContextStore({
 		subscribe: publicationStatus.subscribe,
 		set(value) {
-			params.update((param) => {
-				param.publicationStatus = value;
-				return param;
-			});
+			params.publicationStatus = value;
 		},
 		update(updater) {
-			params.update((param) => {
-				param.publicationStatus = updater(get(publicationStatus));
-				return param;
-			});
+			params.publicationStatus = updater(get(publicationStatus));
 		}
 	});
-	const year = derived(params, (params) => params.year ?? null);
+	const year = derived(
+		toStore(() => params),
+		(params) => params.year ?? null
+	);
 	initMangaSearchYearContextStore({
 		subscribe: year.subscribe,
 		set(value) {
-			params.update((param) => {
-				param.year = value;
-				return param;
-			});
+			params.year = value;
 		},
 		update(updater) {
-			params.update((param) => {
-				param.year = updater(get(year));
-				return param;
-			});
+			params.year = updater(get(year));
 		}
 	});
 	initMangaSearchAuthorSearchFetcher(gqlAuthorFetcher);
@@ -59,11 +53,8 @@
 	const authorArtistsParam = writable<AuthorArtistOptions>({ artists: [], authors: [] });
 	onMount(() =>
 		authorArtistsParam.subscribe(({ authors, artists }) => {
-			params.update(($params) => {
-				$params.authors = authors.map((author) => author.id);
-				$params.artists = artists.map((artist) => artist.id);
-				return $params;
-			});
+			params.authors = authors.map((author) => author.id);
+			params.artists = artists.map((artist) => artist.id);
 		})
 	);
 	initMangaSearchAuthorArtistsOptions(authorArtistsParam);
@@ -85,7 +76,7 @@
 				class="checkbox"
 				type="checkbox"
 				id={availableChapterCheckId}
-				bind:checked={$params.hasAvailableChapters}
+				bind:checked={params.hasAvailableChapters}
 				defaultChecked
 			/>
 			<label for={availableChapterCheckId}>Has available chapters</label>
@@ -95,7 +86,7 @@
 				class="checkbox"
 				type="checkbox"
 				id={excludeContentProfileId}
-				bind:checked={$params.excludeContentProfile}
+				bind:checked={params.excludeContentProfile}
 			/>
 			<label for={excludeContentProfileId}>Exclude content profile</label>
 		</article>
