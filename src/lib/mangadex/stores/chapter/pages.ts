@@ -1,4 +1,4 @@
-// TODO refactor double page and store it directly inside the class
+// TODO refactor svelte reactive classes
 
 import type { StoreOrVal } from "$lib";
 import { addErrorToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
