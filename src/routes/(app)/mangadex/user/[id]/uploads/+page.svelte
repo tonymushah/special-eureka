@@ -8,13 +8,8 @@
 	}
 
 	let { data }: Props = $props();
-	const idWritable = writable(data.id);
-	$effect(() => {
-		idWritable.set(data.id);
-	});
-	const id = readonly(idWritable);
 </script>
 
 <AppTitle title="{data.username} uploads - MangaDex" />
 
-<SearchContent userId={id} />
+<SearchContent userId={data.id} />
