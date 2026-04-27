@@ -1,3 +1,4 @@
+// TODO refactor to svelte map and remove store
 import type { Props as ChapterElement1Props } from "@mangadex/componnents/chapter/base/element1/ChapterElement1.svelte";
 import { getContext, setContext } from "svelte";
 import { get, writable, type Readable } from "svelte/store";
