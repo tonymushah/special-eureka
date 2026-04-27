@@ -27,7 +27,7 @@
 	let { volumes, ...events }: Props = $props();
 	const chaptersStore: ChapterStores = getChapterStoreContext();
 	let data: ComponentProps<typeof VolumeAccordion>[] = $derived.by(() => {
-		const store = $chaptersStore;
+		const store = chaptersStore;
 		return volumes.map((volume) => {
 			return {
 				title: volume.volume,
