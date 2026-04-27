@@ -9,16 +9,11 @@
 		data: PageData;
 	}
 	let { data }: Props = $props();
-	const isPrivate = writable(data.attributes.visibility == CustomListVisibility.Private);
-	$effect(() => {
-		isPrivate.set(data.attributes.visibility == CustomListVisibility.Private);
-	});
-	const customListId = writable<string>(data.id);
-	$effect(() => {
-		customListId.set(data.id);
-	});
+	let isPrivate = $derived(data.attributes.visibility == CustomListVisibility.Private);
+
+	let customListId = $derived<string>(data.id);
 </script>
 
 <AppTitle title="{data.attributes.name} feed - MangaDex" />
 
-<SearchContent customListId={readonly(customListId)} isPrivate={readonly(isPrivate)} />
+<SearchContent {customListId} {isPrivate} />
