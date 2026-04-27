@@ -31,14 +31,14 @@
 		groupId: string;
 	}
 
-	const sort = writable<ChapterSortOrder | undefined>({
+	let sort = $state<ChapterSortOrder | undefined>({
 		readableAt: OrderDirection.Descending
 	});
 	let { groupId }: Props = $props();
 	const client = getContextClient();
 	let query = createInfiniteQuery(() => {
 		return {
-			queryKey: ["group", groupId, "uploads", `limit:${$pageLimit}`, `${$sort}`],
+			queryKey: ["group", groupId, "uploads", `limit:${$pageLimit}`, `${sort}`],
 			async queryFn({ pageParam }) {
 				return await executeSearchQuery(client, pageParam, {
 					// i dunno if this is right
@@ -61,7 +61,7 @@
 			initialPageParam: {
 				group: groupId,
 				limit: $pageLimit,
-				order: $sort
+				order: sort
 			} satisfies Params
 		} satisfies CreateInfiniteQueryOptions<
 			AbstractSearchResult<ChapterFeedListItemExt>,
