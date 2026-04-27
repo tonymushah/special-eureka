@@ -17,8 +17,9 @@
 
 	const client = getContextClient();
 	const store = getRelatedTitlesStoreContext();
-	const titles = getTitleLayoutData().queryResult?.relationships.manga;
-	const manga_id = getTitleLayoutData().layoutData.id;
+	const titleLayoutDataCtx = getTitleLayoutData();
+	let titles = $derived(titleLayoutDataCtx.value.queryResult?.relationships.manga);
+	let manga_id = $derived(titleLayoutDataCtx.value.layoutData.id as string);
 	const relatedTitles = new Map<MangaRelation, string[]>();
 	let categories: ComponentProps<typeof CategorizedTitles>[] = $state([]);
 
@@ -41,8 +42,7 @@
 				title: get_value_from_title_and_random_if_undefined(t.attributes.title, "en") ?? "",
 				status: t.attributes.status,
 				description:
-					get_value_from_title_and_random_if_undefined(t.attributes.description, "en") ??
-					""
+					get_value_from_title_and_random_if_undefined(t.attributes.description, "en") ?? ""
 			}));
 			if (ts) store.addTitles(ts);
 			return ts;
