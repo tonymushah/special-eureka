@@ -1,7 +1,6 @@
 <script lang="ts">
 	import SearchContent from "@mangadex/routes/titles/(search)/SearchContent.svelte";
 	import type { PageData } from "./$types";
-	import { derived, readable, toStore } from "svelte/store";
 	import type { MangaListParams } from "@mangadex/gql/graphql";
 	import pageLimit from "@mangadex/stores/page-limit";
 	import { hideReadTitle } from "@mangadex/stores/hide-read-title";
@@ -10,13 +9,11 @@
 	}
 
 	let { data }: Props = $props();
-	const authorId = toStore(() => data.id);
-	const offlineStore = readable(false);
 
-	const listParams = derived([authorId, pageLimit], ([$id, $limit]) => {
+	let listParams = $derived.by(() => {
 		return {
-			authorOrArtist: $id,
-			limit: $limit
+			authorOrArtist: data.id,
+			limit: $pageLimit
 		} as MangaListParams;
 	});
 </script>
@@ -24,7 +21,7 @@
 <section class="content">
 	<SearchContent
 		params={listParams}
-		{offlineStore}
+		offlineStore={false}
 		hideReadTitle={$hideReadTitle}
 		disableAuthorArtitsBlacklist
 	/>
