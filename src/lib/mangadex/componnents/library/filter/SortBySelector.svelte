@@ -1,30 +1,27 @@
 <script lang="ts">
 	import SortSelector from "@mangadex/componnents/manga/list/sortSelector/SortSelector.svelte";
 	import type { MangaSortOrder, UserLibrarySectionParam } from "@mangadex/gql/graphql";
-	import { derived, type Readable, type Writable } from "svelte/store";
+	import { derived, toStore, type Readable, type Writable } from "svelte/store";
 	interface Props {
-		params: Writable<UserLibrarySectionParam>;
+		params: UserLibrarySectionParam;
 	}
 
-	let { params }: Props = $props();
-	const sortDer: Readable<MangaSortOrder | undefined> = derived(params, ($params) => {
-		return $params.order ?? undefined;
-	});
+	let { params = $bindable() }: Props = $props();
+	const sortDer: Readable<MangaSortOrder | undefined> = derived(
+		toStore(() => params),
+		($params) => {
+			return $params.order ?? undefined;
+		}
+	);
 	const sort: Writable<MangaSortOrder | undefined> = {
 		subscribe(run, invalidate) {
 			return sortDer.subscribe(run, invalidate);
 		},
 		set(value) {
-			params.update((param) => {
-				param.order = value;
-				return param;
-			});
+			params.order = value;
 		},
 		update(updater) {
-			params.update((param) => {
-				param.order = updater(param.order ?? undefined);
-				return param;
-			});
+			params.order = updater(params.order ?? undefined);
 		}
 	};
 </script>
