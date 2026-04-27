@@ -28,10 +28,7 @@
 		get_manga_following_status,
 		set_manga_following_status
 	} from "@mangadex/stores/manga/manga_following_status";
-	import {
-		get_manga_rating,
-		set_manga_rating
-	} from "@mangadex/stores/manga/manga_rating";
+	import { get_manga_rating, set_manga_rating } from "@mangadex/stores/manga/manga_rating";
 	import manga_rating from "@mangadex/stores/manga/manga_rating.svelte";
 	import manga_reading_status, {
 		get_manga_reading_status,
@@ -155,7 +152,7 @@
 	const isFollowing = manga_following_status(data.layoutData.id, {
 		getOnMount: false
 	});
-	const ratingStore = manga_rating(() => data.layoutData.id));
+	const ratingStore = manga_rating(() => data.layoutData.id);
 
 	let followingStatusQuery = createQuery(() => ({
 		queryKey: ["title", data.layoutData.id, "following", "status"],
