@@ -5,7 +5,8 @@
 	import PrimaryButton from "@mangadex/componnents/theme/buttons/PrimaryButton.svelte";
 	import UserRoleBadge from "@mangadex/componnents/user/UserRoleBadge.svelte";
 	import UsersPageBase from "@mangadex/componnents/users/page/UsersPageBase.svelte";
-	import isFollowingUser, { isChangingUserFollowing } from "@mangadex/gql-docs/user/id/follow";
+	import { isChangingUserFollowing } from "@mangadex/gql-docs/user/id/follow";
+	import isFollowingUser from "@mangadex/gql-docs/user/id/follow.svelte";
 	import { isLogged } from "@mangadex/utils/auth";
 	import { writeText } from "@tauri-apps/plugin-clipboard-manager";
 	import { openUrl as shellOpen } from "@tauri-apps/plugin-opener";
@@ -27,8 +28,8 @@
 	}
 
 	let { data, children }: Props = $props();
-	const isFollowed = isFollowingUser(data.id);
-	let isFollowing = $derived($isFollowed);
+	const isFollowed = isFollowingUser(() => data.id);
+	let isFollowing = $derived(isFollowed.value);
 	let openReportDialog = $state(false);
 	let isBlocked = $derived(data.isBlocked);
 	let blockMutation = createBlockUserMutation();
@@ -86,9 +87,9 @@
 		<div class="buttons">
 			<PrimaryButton
 				isBase
-				disabled={$isChangingUserFollowing || !$isLogged}
+				disabled={$isChangingUserFollowing || !$isLogged || isFollowed.isMutating}
 				onclick={() => {
-					$isFollowed = !$isFollowed;
+					isFollowed.value = !isFollowed.value;
 				}}
 			>
 				<p>
