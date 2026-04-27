@@ -26,6 +26,7 @@
 	import { addErrorToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 	import ExtraOptions from "./ExtraOptions.svelte";
 	import { isMounted } from "@mangadex/stores/offlineIsMounted";
+	import { dev } from "$app/environment";
 
 	let readMarkersMutation = readMarkersMutationLoader();
 	const chaptersStore = getChapterStoreContext();
@@ -50,7 +51,6 @@
 		networkMode: "always"
 	}));
 	let threadUrls = $state(new Map<string, string>());
-	let unlistens: UnlistenFn[] = [];
 	let isFetching = $derived(query.isFetching);
 
 	let isEmpty = $derived(
@@ -94,53 +94,45 @@
 	});
 	const isReversed = writable(false);
 	let selectedIndex = $state(0);
-	onMount(async () => {
-		unlistens.push(
-			$effect.root(() => {
-				$effect(() => {
-					let ids: string[] = query.data?.manga.aggregate.chunked.at(selectedIndex)?.ids ?? [];
-					const task = delay(() => {
-						if (ids.length > 0)
-							if (!chaptersStore.isPresents(ids)) {
-								fetchChapters({
-									ids,
-									feedContent: !hasConflicts(__res.conflicts),
-									lastChapter: data.attributes.lastChapter ?? undefined,
-									lastVolume: data.attributes.lastVolume ?? undefined
-								})
-									.then(async (cs) => {
-										if (cs) chaptersStore.addByBatch(cs);
-										const comments = await fetchComments(ids);
-										comments.forEach((c) => {
-											threadUrls.set(c.id, c.stats.threadUrl);
-										});
-										chaptersStore.setComments(
-											comments.map((c) => ({
-												id: c.id,
-												comments: c.stats.comments
-											}))
-										);
-									})
-									.catch((e) => {
-										console.error(e);
-									});
-							}
-					}, 100);
-					return () => {
-						clearTimeout(task);
-					};
-				});
-			})
-		);
-		unlistens.push(
-			chaptersStore.subscribe((e) => {
-				console.debug(e.keys());
-			})
-		);
+
+	$effect(() => {
+		let ids: string[] = query.data?.manga.aggregate.chunked.at(selectedIndex)?.ids ?? [];
+		const task = delay(() => {
+			if (ids.length > 0)
+				if (!chaptersStore.isPresents(ids)) {
+					fetchChapters({
+						ids,
+						feedContent: !hasConflicts(__res.conflicts),
+						lastChapter: data.attributes.lastChapter ?? undefined,
+						lastVolume: data.attributes.lastVolume ?? undefined
+					})
+						.then(async (cs) => {
+							if (cs) chaptersStore.addByBatch(cs);
+							const comments = await fetchComments(ids);
+							comments.forEach((c) => {
+								threadUrls.set(c.id, c.stats.threadUrl);
+							});
+							chaptersStore.setComments(
+								comments.map((c) => ({
+									id: c.id,
+									comments: c.stats.comments
+								}))
+							);
+						})
+						.catch((e) => {
+							console.error(e);
+						});
+				}
+		}, 100);
+		return () => {
+			clearTimeout(task);
+		};
 	});
-	onDestroy(() => {
-		unlistens.forEach((u) => u());
-	});
+
+	if (dev)
+		$effect(() => {
+			console.debug(chaptersStore.keys());
+		});
 	let selected = $derived($isReversed ? aggregateReverse[selectedIndex] : aggregate[selectedIndex]);
 	/// Test if this work
 	onMount(() =>
