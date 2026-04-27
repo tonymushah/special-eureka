@@ -28,7 +28,7 @@
 	import { hideReadTitle } from "@mangadex/stores/hide-read-title";
 
 	interface Props {
-		groupId: Readable<string>;
+		groupId: string;
 	}
 
 	const sort = writable<ChapterSortOrder | undefined>({
@@ -38,7 +38,7 @@
 	const client = getContextClient();
 	let query = createInfiniteQuery(() => {
 		return {
-			queryKey: ["group", $groupId, "uploads", `limit:${$pageLimit}`, `${$sort}`],
+			queryKey: ["group", groupId, "uploads", `limit:${$pageLimit}`, `${$sort}`],
 			async queryFn({ pageParam }) {
 				return await executeSearchQuery(client, pageParam, {
 					// i dunno if this is right
@@ -59,7 +59,7 @@
 				}
 			},
 			initialPageParam: {
-				group: $groupId,
+				group: groupId,
 				limit: $pageLimit,
 				order: $sort
 			} satisfies Params
