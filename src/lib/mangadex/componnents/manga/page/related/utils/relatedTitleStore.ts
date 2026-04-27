@@ -1,3 +1,4 @@
+// TODO refactor to svelte map
 import type { MangaStatus } from "@mangadex/gql/graphql";
 import { getContext, setContext } from "svelte";
 import { type Readable, writable } from "svelte/store";
