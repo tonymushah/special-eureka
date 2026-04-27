@@ -1,7 +1,6 @@
 <script lang="ts">
-	import isFollowingCustomList, {
-		isChangingListFollowing
-	} from "@mangadex/gql-docs/list/id/follow";
+	import isFollowingCustomList from "@mangadex/gql-docs/list/id/follow.svelte";
+	import { isChangingListFollowing } from "@mangadex/gql-docs/list/id/follow";
 	import PrimaryButton from "@mangadex/componnents/theme/buttons/PrimaryButton.svelte";
 	import { BookmarkIcon } from "@lucide/svelte";
 	import { isLogged } from "@mangadex/utils/auth";
@@ -13,21 +12,21 @@
 	}
 
 	let { id }: Props = $props();
-	const isFollowed = isFollowingCustomList(id, {
+	const isFollowed = isFollowingCustomList(() => id, {
 		onSucess() {
 			mangadexQueryClient.refetchQueries({
 				queryKey: ["custom-list", id, "is-following"]
 			});
 		}
 	});
-	let isFollowing = $derived($isFollowed);
+	let isFollowing = $derived(isFollowed.value);
 </script>
 
 <PrimaryButton
 	isBase
 	disabled={$isChangingListFollowing || !$isLogged}
 	onclick={() => {
-		$isFollowed = !$isFollowed;
+		isFollowed.value = isFollowed.value;
 	}}
 >
 	<p class={layoutButtonCssMod.innerButton}>
