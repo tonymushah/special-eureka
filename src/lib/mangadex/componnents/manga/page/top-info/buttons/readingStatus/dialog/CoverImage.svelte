@@ -6,13 +6,13 @@
 	const alt = getTopCoverAltContextStore();
 	const mangaId = getTopMangaIdContextStore();
 	let coverImage = get_cover_image_auto_handle_error(() => ({
-		id: mangaId,
+		id: mangaId.value,
 		asManga: true
 	}));
 </script>
 
 {#if coverImage.value}
-	<img {alt} src={coverImage.value} />
+	<img alt={alt.value} src={coverImage.value} />
 {:else}
 	<Skeleton width={"100%"} height={"100%"} />
 {/if}
