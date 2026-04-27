@@ -59,7 +59,7 @@ export async function set_manga_rating(manga_id: string, rating: number | null) 
 export type MangaRatingOption = {
 	getOnMount?: boolean;
 	onGetError?: (e: unknown) => void;
-	initValue?: boolean;
+	initValue?: number;
 };
 
 export default function manga_rating(
@@ -68,7 +68,7 @@ export default function manga_rating(
 		getOnMount: true
 	}
 ): Readable<number | null> {
-	return readable<number | null>(null, (set) => {
+	return readable<number | null>(option.initValue ?? null, (set) => {
 		const sub = client
 			.subscription(subscription, {
 				id: manga_id
