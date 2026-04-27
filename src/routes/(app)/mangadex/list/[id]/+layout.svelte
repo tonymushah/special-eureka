@@ -45,9 +45,9 @@
 
 	setContextMenuContext(
 		customListElementContextMenu({
-			id: data.id,
-			name: data.attributes.name,
-			isMine: data.isMine,
+			id: () => data.id,
+			name: () => data.attributes.name,
+			isMine: () => data.isMine ?? false,
 			onVisibilityChange(vis) {
 				switch (vis) {
 					case CustomListVisibility.Private:
