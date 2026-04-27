@@ -30,10 +30,11 @@
 	} from "@mangadex/stores/manga/manga_following_status";
 	import { get_manga_rating, set_manga_rating } from "@mangadex/stores/manga/manga_rating";
 	import manga_rating from "@mangadex/stores/manga/manga_rating.svelte";
-	import manga_reading_status, {
+	import {
 		get_manga_reading_status,
 		set_manga_reading_status
 	} from "@mangadex/stores/manga/manga_reading_status";
+	import manga_reading_status from "@mangadex/stores/manga/manga_reading_status.svelte";
 	import { listenToAnyChapterReadMarkers } from "@mangadex/stores/read-markers";
 	import { initContextReadChapterMarkers } from "@mangadex/stores/read-markers/context.svelte";
 	import mangaElementContextMenu from "@mangadex/utils/context-menu/manga";
@@ -74,9 +75,7 @@
 		children?: Snippet;
 	}
 	let { data, children }: Props = $props();
-	$effect.pre(() => {
-		setTitleLayoutData(data);
-	});
+	setTitleLayoutData(data);
 
 	let isInViewPortTrigger = $state<HTMLElement | undefined>();
 	let _isInViewport = new IsInViewport(() => isInViewPortTrigger);
@@ -142,13 +141,9 @@
 		() => isInViewport.current
 	);
 	// TODO transform these into class based reactivit
-	const _state = toStore(() => mangaDownload.mangaDownloadState);
-	const reading_status = der(
-		manga_reading_status(data.layoutData.id, {
-			getOnMount: false
-		}),
-		(status) => status ?? undefined
-	);
+	const reading_status = manga_reading_status(() => data.layoutData.id, {
+		getOnMount: false
+	});
 	const isFollowing = manga_following_status(data.layoutData.id, {
 		getOnMount: false
 	});
@@ -399,7 +394,7 @@
 			}
 		}}
 		contentRating={layoutData.contentRating ?? undefined}
-		downloadState={_state}
+		downloadState={mangaDownload.mangaDownloadState}
 		ondownload={async () => {
 			await downloadMutationQuery.mutateAsync(data.layoutData.id);
 		}}
@@ -409,7 +404,7 @@
 		ondownloading={async () => {
 			await cancelMutation.mutateAsync(data.layoutData.id);
 		}}
-		{reading_status}
+		reading_status={reading_status.value ?? undefined}
 		{isFollowing}
 		{onreadingStatus}
 		ontag={({ id }) => {
