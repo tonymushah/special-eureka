@@ -1,7 +1,6 @@
 <script lang="ts">
 	import SearchContent from "@mangadex/routes/titles/(search)/SearchContent.svelte";
 	import type { PageData } from "./$types";
-	import { derived, readable, writable } from "svelte/store";
 	import type { MangaListParams } from "@mangadex/gql/graphql";
 	import pageLimit from "@mangadex/stores/page-limit";
 	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
@@ -11,16 +10,11 @@
 	}
 
 	let { data }: Props = $props();
-	const groupId = writable<string>(data.id);
-	$effect(() => {
-		groupId.set(data.id);
-	});
-	const offlineStore = readable(false);
 
-	const listParams = derived([groupId, pageLimit], ([$id, $limit]) => {
+	const listParams = $derived.by(() => {
 		return {
-			group: $id,
-			limit: $limit
+			group: data.id,
+			limit: $pageLimit
 		} as MangaListParams;
 	});
 </script>
@@ -28,7 +22,7 @@
 <AppTitle title="Titles of {data.name} - MangaDex" />
 
 <section class="content">
-	<SearchContent params={listParams} {offlineStore} hideReadTitle={$hideReadTitle} />
+	<SearchContent params={listParams} offlineStore={false} hideReadTitle={$hideReadTitle} />
 </section>
 
 <style lang="scss">
