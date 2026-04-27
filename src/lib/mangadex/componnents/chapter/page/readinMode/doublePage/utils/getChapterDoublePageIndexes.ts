@@ -1,7 +1,12 @@
-import { derived, type Readable } from "svelte/store";
+import type { ReadonlyValue } from "$lib";
+import type { DoublePageIndex } from "@mangadex/stores/chapter/pages.svelte";
 import getCurrentChapterImages from "../../../utils/getCurrentChapterImages";
-import type { DoublePageIndex } from "@mangadex/stores/chapter/pages";
 
-export default function getChapterDoublePageIndexes(): Readable<DoublePageIndex[]> {
-	return derived(getCurrentChapterImages(), (images) => images.pagesAsDoublePageIndexes());
+export default function getChapterDoublePageIndexes(): ReadonlyValue<DoublePageIndex[]> {
+	const images = getCurrentChapterImages();
+	return {
+		get value() {
+			return images.pagesAsDoublePageIndexes;
+		}
+	};
 }
