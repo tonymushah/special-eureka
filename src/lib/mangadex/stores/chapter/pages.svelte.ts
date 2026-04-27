@@ -298,7 +298,7 @@ export default class ChapterPages {
 			}
 		}
 	}
-	private constructor({ chapter_id, mode, client: _client }: ChapterPagesConstructorParam) {
+	public constructor({ chapter_id, mode, client: _client }: ChapterPagesConstructorParam) {
 		this.pages = new SvelteMap();
 		this.pagesError = new SvelteMap();
 		this.chapter_id = chapter_id;
