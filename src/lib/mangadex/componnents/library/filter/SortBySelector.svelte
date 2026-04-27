@@ -7,28 +7,20 @@
 	}
 
 	let { params = $bindable() }: Props = $props();
-	const sortDer: Readable<MangaSortOrder | undefined> = derived(
-		toStore(() => params),
-		($params) => {
-			return $params.order ?? undefined;
-		}
-	);
-	const sort: Writable<MangaSortOrder | undefined> = {
-		subscribe(run, invalidate) {
-			return sortDer.subscribe(run, invalidate);
-		},
-		set(value) {
-			params.order = value;
-		},
-		update(updater) {
-			params.order = updater(params.order ?? undefined);
-		}
-	};
 </script>
 
 <section>
 	<p>Sort by:</p>
-	<SortSelector {sort} />
+	<SortSelector
+		bind:sort={
+			() => {
+				return params.order ?? undefined;
+			},
+			(order) => {
+				params.order = order;
+			}
+		}
+	/>
 </section>
 
 <style lang="scss">

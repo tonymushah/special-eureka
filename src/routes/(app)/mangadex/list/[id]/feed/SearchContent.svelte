@@ -28,33 +28,31 @@
 	import { hideReadTitle } from "@mangadex/stores/hide-read-title";
 
 	interface Props {
-		customListId: Readable<string>;
-		isPrivate: Readable<boolean>;
+		customListId: string;
+		isPrivate: boolean;
 	}
 
 	let { customListId, isPrivate }: Props = $props();
-	const order = writable<MangaFeedSortOrder | undefined>({
+	let order = $state<MangaFeedSortOrder | undefined>({
 		readableAt: OrderDirection.Descending
 	});
 	const client = getContextClient();
-	const queryParams = derived([customListId, pageLimit, isPrivate, order, hideReadTitle], (d) => d);
 	let query = createInfiniteQuery(() => {
-		const [_customListId, _limit, _isPrivate, _order, _hideReadTitles] = $queryParams;
 		return {
 			queryKey: [
 				"customList",
-				_customListId,
+				customListId,
 				"feed",
-				`limit:${_limit}`,
-				`private:${_isPrivate}`,
-				`${_order}`,
-				`${_hideReadTitles}`
+				`limit:${$pageLimit}`,
+				`private:${isPrivate}`,
+				`${order}`,
+				`${$hideReadTitle}`
 			],
 			async queryFn({ pageParam }) {
 				// TODO implement hideReadTitle
 				// i dunno if it is right to do that here?
-				return await executeSearchQuery(client, pageParam, _isPrivate, undefined, {
-					onlyUnreadTitles: _hideReadTitles
+				return await executeSearchQuery(client, pageParam, isPrivate, undefined, {
+					onlyUnreadTitles: $hideReadTitle
 				});
 			},
 			getNextPageParam(lastPage, _allPages, lastPageParam) {
@@ -71,9 +69,9 @@
 				}
 			},
 			initialPageParam: {
-				listId: _customListId,
-				limit: _limit,
-				order: _order
+				listId: customListId,
+				limit: $pageLimit,
+				order
 			} satisfies CustomListFeedChapterParams
 		} satisfies CreateInfiniteQueryOptions<
 			AbstractSearchResult<ChapterFeedListItemExt>,
@@ -159,7 +157,7 @@
 			<div class="additional-content">
 				<section>
 					<p>Sort by:</p>
-					<MangaFeedSortOrderSelection sort={order} />
+					<MangaFeedSortOrderSelection bind:sort={order} />
 				</section>
 			</div>
 		{/snippet}
