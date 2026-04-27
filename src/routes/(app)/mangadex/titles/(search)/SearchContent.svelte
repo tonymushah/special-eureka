@@ -11,125 +11,113 @@
 	import { getContextClient } from "@urql/svelte";
 	import { debounce /* , last, range */ } from "lodash";
 	import { onDestroy } from "svelte";
-	import { derived, get, toStore, writable, type Readable, type Writable } from "svelte/store";
 	import executeSearchQuery from "./search";
 	import { listenToBlacklistChange } from "@mangadex/utils/blacklist/listen";
 
 	const client = getContextClient();
 	interface Props {
-		params: Readable<MangaListParams>;
-		offlineStore: Readable<boolean>;
+		params: MangaListParams;
+		offlineStore: boolean;
 		excludeContentProfile?: boolean;
 		hideReadTitle?: boolean;
 		disableAuthorArtitsBlacklist?: boolean;
 	}
 
 	let {
-		params: initialParam,
+		params: _initialParam,
 		offlineStore,
 		excludeContentProfile,
 		hideReadTitle = $bindable(false),
 		disableAuthorArtitsBlacklist
 	}: Props = $props();
-	const params = writable(get(initialParam), (set) => initialParam.subscribe(set));
-	const p_p_offline = derived(
-		[
-			params,
-			offlineStore,
-			toStore(() => hideReadTitle),
-			toStore(() => disableAuthorArtitsBlacklist)
-		],
-		(merged) => merged
-	);
+	let initialParam = $derived(structuredClone(_initialParam));
 	interface InfiniteQueryData {
 		data: MangaListContentItemProps[];
 		offset: number;
 		limit: number;
 		total: number;
 	}
-	const infiniteQueryOptions = derived(
-		p_p_offline,
-		([$params, isOffline, hideReadTitle, disableAuthorArtistsBlacklist]) => {
-			return {
-				queryKey: [
-					"manga-search",
-					$params,
-					isOffline,
-					hideReadTitle,
-					disableAuthorArtistsBlacklist ?? false
-				],
-				initialPageParam: [
-					{ ...$params },
-					isOffline,
-					hideReadTitle,
-					disableAuthorArtistsBlacklist ?? false
-				],
-				getNextPageParam(
-					lastPage,
-					allPages,
-					[lastPageParam, lastPageOffline, lastHideReadTitle, disableAuthorArtistsBlacklist]
-				) {
-					const next_offset = lastPage.limit + lastPage.offset;
-					if (next_offset > lastPage.total) {
-						return null;
-					} else {
-						return [
-							{
-								...lastPageParam,
-								limit: lastPage.limit,
-								offset: next_offset
-							},
-							lastPageOffline,
-							lastHideReadTitle,
-							disableAuthorArtistsBlacklist
-						];
-					}
-				},
-				async queryFn({ pageParam: [p, offline, hideReadTitle, disableAuthorArtistsBlacklist] }) {
-					const res = await executeSearchQuery(
-						client,
-						p,
-						offline,
-						excludeContentProfile,
-						hideReadTitle,
+	let infiniteQuery = createInfiniteQuery(() => {
+		let params = initialParam;
+		let isOffline = offlineStore;
+		return {
+			queryKey: [
+				"manga-search",
+				params,
+				isOffline,
+				hideReadTitle,
+				disableAuthorArtitsBlacklist ?? false
+			],
+			initialPageParam: [
+				{ ...params },
+				isOffline,
+				hideReadTitle,
+				disableAuthorArtitsBlacklist ?? false
+			],
+			getNextPageParam(
+				lastPage,
+				allPages,
+				[lastPageParam, lastPageOffline, lastHideReadTitle, disableAuthorArtistsBlacklist]
+			) {
+				const next_offset = lastPage.limit + lastPage.offset;
+				if (next_offset > lastPage.total) {
+					return null;
+				} else {
+					return [
+						{
+							...lastPageParam,
+							limit: lastPage.limit,
+							offset: next_offset
+						},
+						lastPageOffline,
+						lastHideReadTitle,
 						disableAuthorArtistsBlacklist
-					);
-					return {
-						data: res.data,
-						...res.paginationData
-					};
-				},
-				getPreviousPageParam(
-					firstPage,
-					allPages,
-					[firstPageParam, firstPageOffline, firstHideReadTitle, disableAuthorArtistsBlacklist]
-				) {
-					const next_offset = firstPage.limit - firstPage.offset;
-					if (next_offset < 0) {
-						return null;
-					} else {
-						return [
-							{
-								...firstPageParam,
-								limit: firstPage.limit,
-								offset: next_offset
-							},
-							firstPageOffline,
-							firstHideReadTitle,
-							disableAuthorArtistsBlacklist
-						];
-					}
+					];
 				}
-			} satisfies CreateInfiniteQueryOptions<
-				InfiniteQueryData,
-				Error,
-				InfiniteQueryData,
-				[string, MangaListParams, boolean, boolean, boolean],
-				[MangaListParams, boolean, boolean, boolean]
-			>;
-		}
-	);
-	let infiniteQuery = createInfiniteQuery(() => $infiniteQueryOptions);
+			},
+			async queryFn({ pageParam: [p, offline, hideReadTitle, disableAuthorArtistsBlacklist] }) {
+				const res = await executeSearchQuery(
+					client,
+					p,
+					offline,
+					excludeContentProfile,
+					hideReadTitle,
+					disableAuthorArtistsBlacklist
+				);
+				return {
+					data: res.data,
+					...res.paginationData
+				};
+			},
+			getPreviousPageParam(
+				firstPage,
+				allPages,
+				[firstPageParam, firstPageOffline, firstHideReadTitle, disableAuthorArtistsBlacklist]
+			) {
+				const next_offset = firstPage.limit - firstPage.offset;
+				if (next_offset < 0) {
+					return null;
+				} else {
+					return [
+						{
+							...firstPageParam,
+							limit: firstPage.limit,
+							offset: next_offset
+						},
+						firstPageOffline,
+						firstHideReadTitle,
+						disableAuthorArtistsBlacklist
+					];
+				}
+			}
+		} satisfies CreateInfiniteQueryOptions<
+			InfiniteQueryData,
+			Error,
+			InfiniteQueryData,
+			[string, MangaListParams, boolean, boolean, boolean],
+			[MangaListParams, boolean, boolean, boolean]
+		>;
+	});
 	let titles = $derived.by(() => {
 		const result = infiniteQuery;
 		if (result.isLoading) {
@@ -192,26 +180,6 @@
 	onDestroy(() => {
 		observer.disconnect();
 	});
-	const sortDer: Readable<MangaSortOrder | undefined> = derived(params, ($params) => {
-		return $params.order ?? undefined;
-	});
-	const sort: Writable<MangaSortOrder | undefined> = {
-		subscribe(run, invalidate) {
-			return sortDer.subscribe(run, invalidate);
-		},
-		set(value) {
-			params.update((param) => {
-				param.order = value;
-				return param;
-			});
-		},
-		update(updater) {
-			params.update((param) => {
-				param.order = updater(param.order ?? undefined);
-				return param;
-			});
-		}
-	};
 </script>
 
 <MangaList list={titles}>
@@ -219,7 +187,14 @@
 		<div class="additional-content">
 			<section>
 				<p>Sort by:</p>
-				<SortSelector {sort} />
+				<SortSelector
+					bind:sort={
+						() => initialParam.order ?? undefined,
+						(val) => {
+							initialParam.order = val;
+						}
+					}
+				/>
 			</section>
 		</div>
 	{/snippet}
