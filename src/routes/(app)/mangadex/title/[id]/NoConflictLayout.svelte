@@ -75,7 +75,7 @@
 		children?: Snippet;
 	}
 	let { data, children }: Props = $props();
-	setTitleLayoutData(data);
+	setTitleLayoutData(() => data);
 
 	let isInViewPortTrigger = $state<HTMLElement | undefined>();
 	let _isInViewport = new IsInViewport(() => isInViewPortTrigger);
