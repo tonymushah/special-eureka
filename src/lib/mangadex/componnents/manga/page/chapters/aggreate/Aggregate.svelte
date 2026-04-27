@@ -30,8 +30,9 @@
 	let readMarkersMutation = readMarkersMutationLoader();
 	const chaptersStore = getChapterStoreContext();
 	const client = getContextClient();
-	const __res = getTitleLayoutData();
-	const data = __res.queryResult;
+	const ___res = getTitleLayoutData();
+	let __res = $derived(___res.value);
+	let data = $derived(__res.queryResult);
 	let query = createQuery(() => ({
 		queryKey: ["title", __res.layoutData.id, "aggregate"],
 		async queryFn() {
