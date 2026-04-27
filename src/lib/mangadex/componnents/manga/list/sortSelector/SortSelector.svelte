@@ -59,10 +59,6 @@
 	}
 	let { sort = $bindable() }: Props = $props();
 	const collection = createListCollection({ items: sortDataMap.keys().toArray() });
-	let bal = $state<string[]>([]);
-	$effect(() => {
-		sort = sortDataMap.get(bal[0]);
-	});
 </script>
 
 <SelectSortOrderBase
