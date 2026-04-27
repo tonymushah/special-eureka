@@ -1,5 +1,5 @@
-import type { ReadonlyValue } from "$lib";
-import { Context } from "runed";
+import { createReadonlyValue, type ReadonlyValue } from "$lib";
+import { Context, type Getter } from "runed";
 
 const key = "top-info-manga-id";
 
@@ -7,12 +7,8 @@ type TopInfoMangaId = string;
 
 const ctt = new Context<ReadonlyValue<string>>(key);
 
-export function setTopMangaIdContextStore(mangaId: () => TopInfoMangaId) {
-	return ctt.set({
-		get value() {
-			return mangaId();
-		}
-	});
+export function setTopMangaIdContextStore(mangaId: Getter<TopInfoMangaId>) {
+	return ctt.set(createReadonlyValue(mangaId));
 }
 
 export function getTopMangaIdContextStore() {

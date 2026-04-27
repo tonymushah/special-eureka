@@ -1,4 +1,4 @@
-import type { ReadonlyValue } from "$lib";
+import { createReadonlyValue, type ReadonlyValue } from "$lib";
 import type { InputMaybe } from "@mangadex/gql/graphql";
 import { Context, type Getter } from "runed";
 
@@ -9,11 +9,7 @@ type IsFollowingTopManga = InputMaybe<boolean | undefined>;
 const ctx = new Context<ReadonlyValue<IsFollowingTopManga>>(key);
 
 export function setTopMangaIsFollowingContextStore(is_following: Getter<IsFollowingTopManga>) {
-	return ctx.set({
-		get value() {
-			return is_following();
-		}
-	});
+	return ctx.set(createReadonlyValue(is_following));
 }
 
 export function getTopMangaIsFollowingContextStore() {
