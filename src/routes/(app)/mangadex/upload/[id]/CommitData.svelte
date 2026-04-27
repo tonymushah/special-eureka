@@ -25,7 +25,7 @@
 		translatedLanguage?: Language;
 	};
 	let { commitData: pCommitData, sessionId, isUploading }: Props = $props();
-	let commitData = $state<InnerInternalSessionObjCommitData | undefined>(
+	let commitData = $derived<InnerInternalSessionObjCommitData | undefined>(
 		structuredClone(pCommitData)
 	);
 	let mutation = setInternalSessionCommitDataMutation();
@@ -230,9 +230,7 @@
 								...commitData,
 								translatedLanguage: commitData.translatedLanguage,
 								publishAt: commitData.publishAt
-									? format_js_date_to_rs_md_date_time_str(
-											new Date(commitData.publishAt)
-										)
+									? format_js_date_to_rs_md_date_time_str(new Date(commitData.publishAt))
 									: undefined
 							},
 							sessionId,
@@ -262,9 +260,7 @@
 								...commitData,
 								translatedLanguage: commitData.translatedLanguage,
 								publishAt: commitData.publishAt
-									? format_js_date_to_rs_md_date_time_str(
-											new Date(commitData.publishAt)
-										)
+									? format_js_date_to_rs_md_date_time_str(new Date(commitData.publishAt))
 									: undefined
 							},
 							sessionId
@@ -297,9 +293,7 @@
 								...commitData,
 								translatedLanguage: commitData.translatedLanguage,
 								publishAt: commitData.publishAt
-									? format_js_date_to_rs_md_date_time_str(
-											new Date(commitData.publishAt)
-										)
+									? format_js_date_to_rs_md_date_time_str(new Date(commitData.publishAt))
 									: undefined
 							},
 							sessionId
