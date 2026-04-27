@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { derived, get, type Readable } from "svelte/store";
+	import { derived, get, toStore, type Readable } from "svelte/store";
 	import { initMangaSearchContentRatingContextStore } from "../manga/search/form/filter/contexts/contentRating";
 	import defaultContentProfile from "@mangadex/content-profile/graphql/defaultProfile";
 	import {
@@ -27,7 +27,7 @@
 		group: TagGroup;
 	};
 	interface Props {
-		tags: Readable<SimpleTag[]>;
+		tags: SimpleTag[];
 	}
 	let { tags }: Props = $props();
 	const contentRatings = derived(defaultContentProfile, ($profile) => $profile.contentRating);
@@ -62,7 +62,7 @@
 	);
 
 	const tagsStore = derived(
-		[includedTags, excludedTags, tags],
+		[includedTags, excludedTags, toStore(() => tags)],
 		([$includes, $excludes, $tags]) => {
 			const tagMap: TagOptions = new Map(
 				$tags.map((tag) => [
