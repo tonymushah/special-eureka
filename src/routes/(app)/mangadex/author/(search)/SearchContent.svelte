@@ -6,7 +6,7 @@
 	import { getContextClient } from "@urql/svelte";
 	import { debounce } from "lodash";
 	import { onDestroy } from "svelte";
-	import { derived, type Readable } from "svelte/store";
+	import { derived, toStore, type Readable } from "svelte/store";
 	import executeSearchQuery, { type AuthorListItemData } from "./search";
 
 	import { goto } from "$app/navigation";
@@ -18,11 +18,11 @@
 
 	const client = getContextClient();
 	interface Props {
-		authorName: Readable<string | undefined>;
+		authorName: string | undefined;
 	}
 
 	let { authorName }: Props = $props();
-	const params = derived([authorName, pageLimit], ([$authorName, $limit]) => {
+	const params = derived([toStore(() => authorName), pageLimit], ([$authorName, $limit]) => {
 		return {
 			name: $authorName,
 			limit: $limit
