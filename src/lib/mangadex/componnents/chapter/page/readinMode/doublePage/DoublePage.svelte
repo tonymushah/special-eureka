@@ -2,7 +2,6 @@
 	import { Direction } from "@mangadex/gql/graphql";
 	import { ceil, isArray, noop, random } from "lodash";
 	import { onMount, type Snippet } from "svelte";
-	import { derived } from "svelte/store";
 	import { getChapterCurrentPageContext } from "../../contexts/currentPage";
 	import { getCurrentChapterDirection } from "../../contexts/readingDirection";
 	import { resetZoom } from "../../contexts/resetZoomEventTarget";
@@ -11,9 +10,8 @@
 	import getChapterDoublePageCurrentPageIndex from "./utils/getChapterDoublePageCurrentPageIndex";
 	import getChapterDoublePageIndexes from "./utils/getChapterDoublePageIndexes";
 	import getCurrentChapterImages from "../../utils/getCurrentChapterImages";
-	import type { DoublePageState } from "@mangadex/stores/chapter/pages";
+	import type { DoublePageState } from "@mangadex/stores/chapter/pages.svelte";
 	import DangerButtonOnlyLabel from "@mangadex/componnents/theme/buttons/DangerButtonOnlyLabel.svelte";
-	import ChapterPages from "@mangadex/stores/chapter/pages";
 	import type { OnReadingModeContextMenu } from "..";
 
 	const readingDirection = getCurrentChapterDirection();
@@ -21,18 +19,15 @@
 	const currentPageIndex = getChapterDoublePageCurrentPageIndex();
 	const images_indexes = getChapterDoublePageIndexes();
 	const images = getCurrentChapterImages();
-	const images_length = derived(images, ($imgs) => $imgs.pagesAsDoublePageIndexes().length);
-	const currentPage = derived(
-		[images, currentPageIndex, readingDirection],
-		([$imgs, $index, $direction]) => {
-			const doublePageMaybe = $imgs.getDoublePageState($index);
-			if (isArray(doublePageMaybe) && $direction == Direction.Rtl) {
-				return [doublePageMaybe[1], doublePageMaybe[0]] satisfies DoublePageState;
-			} else {
-				return doublePageMaybe satisfies DoublePageState;
-			}
+	let images_length = $derived.by(() => images.pagesAsDoublePageIndexes.length);
+	let currentPage = $derived.by(() => {
+		const doublePageMaybe = images.getDoublePageState($currentChapterPage);
+		if (isArray(doublePageMaybe) && $readingDirection == Direction.Rtl) {
+			return [doublePageMaybe[1], doublePageMaybe[0]] satisfies DoublePageState;
+		} else {
+			return doublePageMaybe satisfies DoublePageState;
 		}
-	);
+	});
 
 	interface Events {
 		onnext?: () => any;
@@ -48,16 +43,12 @@
 
 	/// BUG or more like shit code xd
 	/// Required or else the component may not work proprely
-	onMount(() => images_indexes.subscribe(noop));
-	onMount(() => images.subscribe(noop));
-	onMount(() => currentPage.subscribe(noop));
 	onMount(() => currentChapterPage.subscribe(noop));
-	onMount(() => currentPageIndex.subscribe(noop));
 	function next() {
-		if ($currentPageIndex < $images_length - 1) {
+		if (currentPageIndex.value < images_length - 1) {
 			resetZoom();
 			currentChapterPage.update((i) => {
-				const index = $images_indexes[$currentPageIndex + 1];
+				const index = images_indexes.value[currentPageIndex.value + 1];
 				if (isArray(index)) {
 					return index[ceil(random(0, 1))];
 				} else if (typeof index == "number" && !isNaN(index)) {
@@ -71,10 +62,10 @@
 		}
 	}
 	function previous() {
-		if ($currentPageIndex > 0) {
+		if (currentPageIndex.value > 0) {
 			resetZoom();
 			currentChapterPage.update((i) => {
-				const index = $images_indexes[$currentPageIndex - 1];
+				const index = images_indexes.value[currentPageIndex.value - 1];
 				if (isArray(index)) {
 					return index[ceil(random(0, 1))];
 				} else if (typeof index == "number" && !isNaN(index)) {
@@ -87,9 +78,6 @@
 			onprevious?.();
 		}
 	}
-	onMount(() => {
-		return currentPage.subscribe(console.debug);
-	});
 </script>
 
 <svelte:window
@@ -137,11 +125,11 @@
 	}}
 />
 
-{#if $currentPage != null && $currentPage != undefined}
+{#if currentPage != null && currentPage != undefined}
 	<div class="double-page">
-		{#if isArray($currentPage)}
-			{@const p1 = $currentPage[0]}
-			{@const p2 = $currentPage[1]}
+		{#if isArray(currentPage)}
+			{@const p1 = currentPage[0]}
+			{@const p2 = currentPage[1]}
 			{#if p1?.page && p2?.page}
 				<ZoomableImage
 					src={[p1.page.value, p2.page.value]}
@@ -193,21 +181,14 @@
 								<DangerButtonOnlyLabel
 									label="Error"
 									onclick={() => {
-										const pageIndex = $images_indexes.at($currentPageIndex);
+										const pageIndex = images_indexes.value.at(currentPageIndex.value);
 										if (isArray(pageIndex)) {
-											ChapterPages.removePageError(
-												images,
-												pageIndex[
-													$readingDirection == Direction.Ltr ? 0 : 1
-												]
-											);
+											images.removePageError(pageIndex[$readingDirection == Direction.Ltr ? 0 : 1]);
 											images.refetchChapterPage(
-												pageIndex[
-													$readingDirection == Direction.Ltr ? 0 : 1
-												]
+												pageIndex[$readingDirection == Direction.Ltr ? 0 : 1]
 											);
 										} else if (typeof pageIndex == "number") {
-											ChapterPages.removePageError(images, pageIndex);
+											images.removePageError(pageIndex);
 											images.refetchChapterPage(pageIndex);
 										}
 									}}
@@ -236,21 +217,14 @@
 								<DangerButtonOnlyLabel
 									label="Error"
 									onclick={() => {
-										const pageIndex = $images_indexes.at($currentPageIndex);
+										const pageIndex = images_indexes.value.at(currentPageIndex.value);
 										if (isArray(pageIndex)) {
-											ChapterPages.removePageError(
-												images,
-												pageIndex[
-													$readingDirection == Direction.Ltr ? 1 : 0
-												]
-											);
+											images.removePageError(pageIndex[$readingDirection == Direction.Ltr ? 1 : 0]);
 											images.refetchChapterPage(
-												pageIndex[
-													$readingDirection == Direction.Ltr ? 1 : 0
-												]
+												pageIndex[$readingDirection == Direction.Ltr ? 1 : 0]
 											);
 										} else if (typeof pageIndex == "number") {
-											ChapterPages.removePageError(images, pageIndex);
+											images.removePageError(pageIndex);
 											images.refetchChapterPage(pageIndex);
 										}
 									}}
@@ -264,8 +238,8 @@
 					{/if}
 				</div>
 			{/if}
-		{:else if typeof $currentPage == "object"}
-			{@const p1 = $currentPage}
+		{:else if typeof currentPage == "object"}
+			{@const p1 = currentPage}
 			{#if p1.page}
 				<ZoomableImage src={p1.page.value} alt={p1.page.value} />
 			{:else if p1.error}
@@ -275,9 +249,9 @@
 						<DangerButtonOnlyLabel
 							label="Error"
 							onclick={() => {
-								const pageIndex = $images_indexes.at($currentPageIndex);
+								const pageIndex = images_indexes.value.at(currentPageIndex.value);
 								if (typeof pageIndex == "number") {
-									ChapterPages.removePageError(images, pageIndex);
+									images.removePageError(pageIndex);
 									images.refetchChapterPage(pageIndex);
 								}
 							}}
