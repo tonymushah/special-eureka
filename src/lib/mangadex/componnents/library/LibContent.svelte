@@ -9,7 +9,10 @@
 	import type AbstractSearchResult from "@mangadex/utils/searchResult/AbstractSearchResult";
 	import { createInfiniteQuery, type CreateInfiniteQueryOptions } from "@tanstack/svelte-query";
 	import { Client, getContextClient } from "@urql/svelte";
-	import { debounce, last, range } from "lodash";
+	import {
+		debounce
+		// last, range
+	} from "lodash";
 	import { onDestroy, onMount } from "svelte";
 	import { derived, get, writable } from "svelte/store";
 	import LibContentFilter from "./LibContentFilter.svelte";
@@ -28,12 +31,9 @@
 	}
 
 	let { executeSearchQuery, section }: Props = $props();
-	const params = writable<UserLibrarySectionParam>({
-		hasAvailableChapters: true
-	});
-	const p_p_offline = derived([params, pageLimit], ([$params, $pageLimit]) => {
-		$params.limit = $pageLimit;
-		return $params;
+	let params = $derived<UserLibrarySectionParam>({
+		hasAvailableChapters: true,
+		limit: $pageLimit
 	});
 	interface InfiniteQueryData {
 		data: MangaListContentItemProps[];
@@ -41,10 +41,10 @@
 		limit: number;
 		total: number;
 	}
-	const infiniteQueryOptions = derived(p_p_offline, ($params) => {
+	const infiniteQueryOptions = $derived.by(() => {
 		return {
-			queryKey: ["user", "library", section, $params],
-			initialPageParam: [$params],
+			queryKey: ["user", "library", section, params],
+			initialPageParam: [params],
 			getNextPageParam(lastPage, allPages, [lastPageParam], allPageParams) {
 				const next_offset = lastPage.limit + lastPage.offset;
 				if (next_offset > lastPage.total) {
@@ -88,7 +88,7 @@
 			[UserLibrarySectionParam]
 		>;
 	});
-	let infiniteQuery = createInfiniteQuery(() => $infiniteQueryOptions);
+	let infiniteQuery = createInfiniteQuery(() => infiniteQueryOptions);
 	$effect(() => listenToBlacklistChange(() => infiniteQuery.refetch()));
 	onMount(() =>
 		defaultContentProfile.subscribe(() => {
@@ -105,23 +105,23 @@
 	let isFetching = $derived(infiniteQuery.isFetching);
 	let hasNext = $derived(infiniteQuery.hasNextPage);
 	/// TODO implement this
-	let pages = $derived.by(() => {
-		const result = infiniteQuery;
-		const initalPage = result.data?.pages[0];
-		if (initalPage) {
-			return Math.floor(initalPage.total / initalPage.limit);
-		}
-	});
-	let currentPage = $derived.by(() => {
-		const result = infiniteQuery;
-		const current = last(result.data?.pages);
-		const initalPage = result.data?.pages[0];
-		if (current && initalPage) {
-			return range(initalPage.offset, current.total, initalPage.limit).findIndex(
-				(step) => step <= current.offset
-			);
-		}
-	});
+	// let pages = $derived.by(() => {
+	// 	const result = infiniteQuery;
+	// 	const initalPage = result.data?.pages[0];
+	// 	if (initalPage) {
+	// 		return Math.floor(initalPage.total / initalPage.limit);
+	// 	}
+	// });
+	// let currentPage = $derived.by(() => {
+	// 	const result = infiniteQuery;
+	// 	const current = last(result.data?.pages);
+	// 	const initalPage = result.data?.pages[0];
+	// 	if (current && initalPage) {
+	// 		return range(initalPage.offset, current.total, initalPage.limit).findIndex(
+	// 			(step) => step <= current.offset
+	// 		);
+	// 	}
+	// });
 	const fetchNext = debounce(async function () {
 		const inf = infiniteQuery;
 		return await inf.fetchNextPage();
