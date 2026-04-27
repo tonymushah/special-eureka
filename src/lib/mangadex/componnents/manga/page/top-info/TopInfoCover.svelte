@@ -19,13 +19,19 @@
 		zoom?.close();
 	});
 
-	const mangaId = getTopMangaIdContextStore();
-	const originalLanguage = getTopMangaOriginalLanguageContextStore();
+	const mangaIdCtx = getTopMangaIdContextStore();
+	let mangaId = $derived(mangaIdCtx.value);
+
+	const originalLanguageCtx = getTopMangaOriginalLanguageContextStore();
+	let originalLanguage = $derived(originalLanguageCtx.value);
+
 	let coverImage = get_cover_image_auto_handle_error(() => ({
 		id: mangaId,
 		asManga: true
 	}));
-	const alt = getTopCoverAltContextStore();
+
+	const altCtx = getTopCoverAltContextStore();
+	let alt = $derived(altCtx.value);
 </script>
 
 <div class="show-dialog" class:fetching={coverImage.value == undefined}>
