@@ -70,9 +70,9 @@ export type TagOptionsValueGrouped = {
 
 export function groupTagOption(
 	options: Readable<TagOptions>,
-	group: TagGroup
+	group: Readable<TagGroup>
 ): Readable<TagOptionsValueGrouped[]> {
-	return derived(options, ($options) =>
+	return derived([options, group], ([$options, group]) =>
 		Array.from($options.entries())
 			.filter(([, a]) => a.group == group)
 			.flatMap(([id, value]) => {
