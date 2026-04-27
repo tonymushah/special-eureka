@@ -1,20 +1,19 @@
+import type { ReadonlyValue } from "$lib";
 import type { MangaDownloadState } from "@mangadex/download/manga.svelte";
-import { getContext, setContext } from "svelte";
-import type { Readable } from "svelte/store";
+import { Context } from "runed";
 
 const key = "top-manga-download-state";
 
-type DownloadStateTopManga = Readable<MangaDownloadState>;
+const ctx = new Context<ReadonlyValue<MangaDownloadState>>(key);
 
-export function setTopMangaDownloadContextStore(state: DownloadStateTopManga) {
-	return setContext<DownloadStateTopManga>(key, state);
+export function setTopMangaDownloadContextStore(state: () => MangaDownloadState) {
+	return ctx.set({
+		get value() {
+			return state();
+		}
+	});
 }
 
 export function getTopMangaDownloadContextStore() {
-	const context = getContext<DownloadStateTopManga | undefined>(key);
-	if (context) {
-		return context;
-	} else {
-		throw new Error(`\`${key}\` is not declared`);
-	}
+	return ctx.get();
 }
