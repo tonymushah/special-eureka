@@ -1,12 +1,13 @@
 import { createReadonlyValue, type ReadonlyValue } from "$lib";
 import type { MangaDownloadState } from "@mangadex/download/manga.svelte";
+import type { InputMaybe } from "@mangadex/gql/graphql";
 import { Context } from "runed";
 
 const key = "top-manga-download-state";
 
-const ctx = new Context<ReadonlyValue<MangaDownloadState>>(key);
+const ctx = new Context<ReadonlyValue<InputMaybe<MangaDownloadState>>>(key);
 
-export function setTopMangaDownloadContextStore(state: () => MangaDownloadState) {
+export function setTopMangaDownloadContextStore(state: () => InputMaybe<MangaDownloadState>) {
 	return ctx.set(createReadonlyValue(state));
 }
 
