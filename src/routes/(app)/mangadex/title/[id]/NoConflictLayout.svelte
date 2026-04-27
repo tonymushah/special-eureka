@@ -13,7 +13,7 @@
 	import type { ReadingStatusEventDetail } from "@mangadex/componnents/manga/page/top-info/buttons/readingStatus";
 	import MangaPageTopInfo from "@mangadex/componnents/manga/page/top-info/MangaPageTopInfo.svelte";
 	import type { TopMangaStatistics } from "@mangadex/componnents/manga/page/top-info/stats";
-	import { hasChapterToRead } from "@mangadex/componnents/manga/read/getMangaToReadChapter";
+	import { hasChapterToRead } from "@mangadex/componnents/manga/read/getMangaToReadChapter.svelte";
 	import { readManga } from "@mangadex/componnents/manga/read/ReadDialog.svelte";
 	import Markdown from "@mangadex/componnents/markdown/Markdown.svelte";
 	import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
@@ -240,7 +240,7 @@
 	const onrating = debounce((e: number | null) => {
 		titleRatingMutation.mutate(e);
 	});
-	const hasChaptToRead = hasChapterToRead(data.layoutData.id);
+	const hasChaptToRead = hasChapterToRead(() => data.layoutData.id);
 	setContextMenuContext(() =>
 		mangaElementContextMenu({
 			id: data.layoutData.id,
@@ -425,7 +425,7 @@
 		rating={ratingStore}
 		{onrating}
 		disableRating={disableRating || !$isLogged}
-		disableRead={!$hasChaptToRead}
+		disableRead={!hasChaptToRead.value}
 		onread={() => {
 			readManga(data.layoutData.id);
 		}}
