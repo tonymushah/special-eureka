@@ -10,7 +10,7 @@
 	import IsFollowingIcon from "./readingStatus/IsFollowingIcon.svelte";
 	import Added from "./readingStatus/Added.svelte";
 
-	const readingStatus = getTopMangaReadingStatusContextStore();
+	const readingStatusCtx = getTopMangaReadingStatusContextStore();
 	const isFollowingStore = getTopMangaIsFollowingContextStore();
 	interface Events {
 		onreadingStatus?: (ev: ReadingStatusEventDetail) => any;
@@ -21,16 +21,16 @@
 	}
 
 	let { onreadingStatus, closeDialogOnAdd, disabled }: Props = $props();
-
+	let readingStatus = $derived(readingStatusCtx.value ?? undefined);
 	let dialog: HTMLDialogElement | undefined = $state(undefined);
 	function openDialog() {
 		if (dialog) {
 			dialog.showModal();
 		}
 	}
-	let isFollowing = $derived($isFollowingStore);
+	let isFollowing = $derived(isFollowingStore.value ?? undefined);
 	let readingStatusText = $derived(
-		getText($readingStatus) ?? (isFollowing ? "Followed" : "Add to Library")
+		getText(readingStatus ?? undefined) ?? (isFollowing ? "Followed" : "Add to Library")
 	);
 </script>
 
@@ -44,7 +44,7 @@
 	<div class="primary-button">
 		{#if isFollowing}
 			<IsFollowingIcon />
-		{:else if $readingStatus}
+		{:else if readingStatus}
 			<Added />
 		{/if}
 		{readingStatusText}
@@ -53,7 +53,7 @@
 
 <Dialog
 	{disabled}
-	status={$readingStatus}
+	status={readingStatus}
 	{isFollowing}
 	bind:dialog
 	{onreadingStatus}
