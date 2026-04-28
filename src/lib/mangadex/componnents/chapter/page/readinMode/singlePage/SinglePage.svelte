@@ -6,9 +6,7 @@
 	import { chapterKeyBindingsStore } from "../../stores/keyBindings";
 	import ZoomableImage from "../zoomableImage/ZoomableImage.svelte";
 	import getCurrentChapterImages from "../../utils/getCurrentChapterImages";
-	import { derived as der } from "svelte/store";
 	import DangerButtonOnlyLabel from "@mangadex/componnents/theme/buttons/DangerButtonOnlyLabel.svelte";
-	import ChapterPages from "@mangadex/stores/chapter/pages";
 	import type { OnReadingModeContextMenu } from "..";
 
 	const readingDirection = getCurrentChapterDirection();
@@ -26,27 +24,27 @@
 
 	const images = getCurrentChapterImages();
 
-	const images_len = der(images, ($images) => $images.pagesLen);
+	let images_len = $derived.by(() => images.pagesLen);
 
-	let next = $derived(function () {
-		if ($images_len) {
-			if ($currentChapterPage < $images_len - 1) {
+	const next = function () {
+		if (images_len) {
+			if ($currentChapterPage < images_len - 1) {
 				resetZoom();
 				$currentChapterPage++;
 			} else {
 				onnext?.();
 			}
 		}
-	});
-	let previous = $derived(function () {
+	};
+	const previous = function () {
 		if ($currentChapterPage > 0) {
 			resetZoom();
 			$currentChapterPage--;
 		} else {
 			onprevious?.();
 		}
-	});
-	let current_page = $derived($images.getPageState($currentChapterPage));
+	};
+	let current_page = $derived(images.getPageState($currentChapterPage));
 	/*
 	$: previous_p = $images_context[$currentChapterPage - 1];
 	$: next_p = $images_context[$currentChapterPage + 1];
@@ -122,7 +120,7 @@
 					<DangerButtonOnlyLabel
 						label="Retry"
 						onclick={() => {
-							ChapterPages.removePageError(images, $currentChapterPage);
+							images.removePageError($currentChapterPage);
 							images.refetchChapterPage($currentChapterPage);
 						}}
 					/>
