@@ -18,6 +18,7 @@
 			style.set(ChapterFeedStyle.CoverLess);
 		}}
 		variant={$style == ChapterFeedStyle.CoverLess ? "5" : "1"}
+		disabled={$style == ChapterFeedStyle.CoverLess}
 	>
 		<div class="icon">
 			<ListIcon {size} />
@@ -28,6 +29,7 @@
 			style.set(ChapterFeedStyle.CoverFull);
 		}}
 		variant={$style == ChapterFeedStyle.CoverFull ? "5" : "1"}
+		disabled={$style == ChapterFeedStyle.CoverFull}
 	>
 		<div class="icon">
 			<Rows3 {size} />
