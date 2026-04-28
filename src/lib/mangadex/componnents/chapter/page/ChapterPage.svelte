@@ -8,8 +8,7 @@
 	import ChapterPageHeader from "./top-info/ChapterPageHeader.svelte";
 	import { isSidebarRtl } from "@mangadex/componnents/sidebar/states/isRtl";
 	import getCurrentChapterImages from "./utils/getCurrentChapterImages";
-	import { debounce, delay, noop } from "lodash";
-	import ChapterPages from "@mangadex/stores/chapter/pages.svelte";
+	import { debounce, delay } from "lodash";
 	import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 	import type { Action } from "svelte/action";
 	import { onDestroy, onMount } from "svelte";
