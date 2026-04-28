@@ -3,17 +3,22 @@
 	import { startCase } from "lodash";
 	import type { TableData } from "../Mangas.svelte";
 	import ActionButton from "./row/ActionButton.svelte";
-	import { Debounced, IsInViewport } from "runed";
+	import {
+		// Debounced,
+		IsInViewport
+	} from "runed";
 
 	interface Props extends TableData {}
 	let { id, title: title_store }: Props = $props();
 
 	let layout = $state<HTMLElement | undefined>();
-	let isInViewport = new IsInViewport(() => layout);
-	let isInViewportDebounced = new Debounced(() => isInViewport.current, 500);
+	let isInViewport = new IsInViewport(() => layout, {
+		threshold: 0.2
+	});
+	// let isInViewportDebounced = new Debounced(() => isInViewport.current, 500);
 	let mangaDownload = new MangaDownload(
 		() => id,
-		() => isInViewportDebounced.current
+		() => isInViewport.current
 	);
 	let title: string | undefined = $state();
 	$effect(() =>
