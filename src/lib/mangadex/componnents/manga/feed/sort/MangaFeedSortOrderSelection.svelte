@@ -38,7 +38,9 @@
 		}
 	};
 	const sortDataMap = new Map(Object.entries(sortsData).map(([key, value]) => [key, value]));
-	const sortDataMapRev = new Map(Object.entries(sortsData).map(([key, value]) => [value, key]));
+	const sortDataMapRev = new Map(
+		Object.entries(sortsData).map(([key, value]) => [JSON.stringify(value), key])
+	);
 </script>
 
 <script lang="ts">
@@ -59,7 +61,11 @@
 			if (sort == undefined) {
 				return undefined;
 			} else {
-				const res = sortDataMapRev.get(sort);
+				const key = JSON.stringify({
+					...sort
+				});
+				const res = sortDataMapRev.get(key);
+				console.log(res);
 				if (res) {
 					return [res];
 				} else {
