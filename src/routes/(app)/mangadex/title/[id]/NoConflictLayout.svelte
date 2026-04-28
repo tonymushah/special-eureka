@@ -6,7 +6,7 @@
 		addMangaToAList,
 		isMutating as isAddingToList
 	} from "@mangadex/componnents/manga/add-to-list/AddToList.svelte";
-	import { initChapterStoreContext } from "@mangadex/componnents/manga/page/chapters/aggreate/utils/chapterStores";
+	import { initChapterStoreContext } from "@mangadex/componnents/manga/page/chapters/aggreate/utils/chapterStores.svelte";
 	import MangaPageInfo from "@mangadex/componnents/manga/page/chapters/MangaPageInfo.svelte";
 	import MangaNavBar from "@mangadex/componnents/manga/page/MangaNavBar.svelte";
 	import { initRelatedTitlesStoreContext } from "@mangadex/componnents/manga/page/related/utils/relatedTitleStore";
@@ -274,12 +274,9 @@
 
 	const webview = getCurrentWebview();
 	$effect(() => {
-		const sub = webview.listen(
-			`mangadex-title-read-markers-change-${data.layoutData.id}`,
-			() => {
-				chapterReadMarkers.refetch();
-			}
-		);
+		const sub = webview.listen(`mangadex-title-read-markers-change-${data.layoutData.id}`, () => {
+			chapterReadMarkers.refetch();
+		});
 		return () => {
 			sub.then((v) => v());
 		};

@@ -11,7 +11,7 @@
 	import { debounce } from "lodash";
 	import { writable } from "svelte/store";
 	import { fetchComments } from "../page/chapters/aggreate/utils";
-	import chapterStores from "../page/chapters/aggreate/utils/chapterStores";
+	import chapterStores from "../page/chapters/aggreate/utils/chapterStores.svelte";
 	import getMangaToReadChapter from "./getMangaToReadChapter";
 
 	const currentMangaId = writable<string | null>(null);

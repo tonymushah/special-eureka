@@ -11,8 +11,9 @@ type SetCommentsEntry = {
 };
 
 export class ChapterStores extends SvelteMap<string, Chapter> {
-	add(value: Chapter) {
-		this.set(value.id, value);
+	add(_value: Chapter) {
+		let value = $state(_value);
+		this.set(_value.id, value);
 	}
 	remove(id: string) {
 		this.delete(id);
@@ -21,9 +22,11 @@ export class ChapterStores extends SvelteMap<string, Chapter> {
 		value.forEach((v) => this.add(v));
 	}
 	setComment(id: string, comments: number) {
+		console.debug(`setting comment ${id} => ${comments}`);
 		let chapter_data = this.get(id);
 		if (chapter_data) {
 			chapter_data.comments = comments;
+			this.set(id, chapter_data);
 		}
 	}
 	setComments(input: SetCommentsEntry[]) {
@@ -45,7 +48,8 @@ const KEY = "mangadex-title-page-chapters";
 
 const ctx = new Context<ChapterStores>(KEY);
 
-export function setChapterStoreContext(store: ChapterStores): ChapterStores {
+export function setChapterStoreContext(_store: ChapterStores): ChapterStores {
+	let store = $state(_store);
 	return ctx.set(store);
 }
 

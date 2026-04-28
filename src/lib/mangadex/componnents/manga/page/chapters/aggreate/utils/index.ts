@@ -1,6 +1,5 @@
 import { dev } from "$app/environment";
 import ChapterElement1 from "@mangadex/componnents/chapter/base/element1/ChapterElement1.svelte";
-import getChapterDownloadState from "@mangadex/componnents/home/latest-updates/getChapterDownloadState";
 import { client } from "@mangadex/gql/urql";
 import { mangadexQueryClient } from "@mangadex/index";
 import chapterTitle from "@mangadex/utils/chapter/title";
@@ -28,8 +27,7 @@ export async function fetchChapters({
 	if (result.error) {
 		throw result.error;
 	}
-	if (dev)
-		mangadexQueryClient.setQueryData(["getMangaAggregateChapterQuery", v7()], () => result);
+	if (dev) mangadexQueryClient.setQueryData(["getMangaAggregateChapterQuery", v7()], () => result);
 	const chapters = result.data?.chapter.list.data.map<ComponentProps<typeof ChapterElement1>>(
 		(c) => {
 			let isLastChapter = false;
@@ -60,10 +58,6 @@ export async function fetchChapters({
 				lang: c.attributes.translatedLanguage,
 				uploader,
 				upload_date: new Date(c.attributes.readableAt),
-				download_state: getChapterDownloadState({
-					id: c.id,
-					client
-				}),
 				groups,
 				end: isLastChapter && isLastVolume
 			};
