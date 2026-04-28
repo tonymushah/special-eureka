@@ -236,10 +236,8 @@
 		object-fit: cover;
 		width: 8em;
 		padding: 0.5em;
-		border-radius: 0.55em;
-	}
-	div.cover {
-		height: 12em;
+		border-radius: 0.25rem;
+		overflow: hidden;
 	}
 	div.title > p {
 		margin: 0px;
