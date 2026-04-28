@@ -1,6 +1,6 @@
 // TODO refactor svelte reactive classes
 
-import type { StoreOrVal, WritableValue } from "$lib";
+import type { ReadonlyValue, StoreOrVal, WritableValue } from "$lib";
 import { addErrorToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 import { graphql } from "@mangadex/gql";
 import {
@@ -369,7 +369,10 @@ export default class ChapterPages {
 		else return [];
 	}
 	public get pagesAsDoublePageIndexes(): DoublePageIndex[] {
-		const output: Array<DoublePageIndex> = [];
+		return this.__pagesAsDoublePageIndexes.value;
+	}
+	private get __pagesAsDoublePageIndexes(): ReadonlyValue<DoublePageIndex[]> {
+		let output: Array<DoublePageIndex> = $state([]);
 		let accumalator: number[] = [];
 		function push_acc_to_out1() {
 			if (accumalator.length == 1) {
@@ -416,7 +419,11 @@ export default class ChapterPages {
 			push_acc_to_out2();
 		});*/
 		push_acc_to_out1();
-		return output;
+		return {
+			get value() {
+				return output;
+			}
+		};
 	}
 	public getPageState(page: number): PageState {
 		const pageData = this.getPageData(page);
