@@ -19,7 +19,6 @@
 		display: flex;
 		flex-direction: row;
 		padding-right: 10px;
-		height: 120px;
 		overflow: hidden;
 		text-overflow: ellipsis;
 		border-radius: 0.25em;
