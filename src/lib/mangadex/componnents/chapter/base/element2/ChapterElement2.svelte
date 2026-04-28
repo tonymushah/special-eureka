@@ -140,11 +140,13 @@
 		}
 	});
 
-	let isInViewport = new IsInViewport(() => layout);
-	let isInViewportDebounced = new Debounced(() => isInViewport.current, 500);
+	let isInViewport = new IsInViewport(() => layout, {
+		threshold: 0.2
+	});
+	// let isInViewportDebounced = new Debounced(() => isInViewport.current, 500);
 	let downloadInstance = new ChapterDownload(
 		() => id,
-		() => isInViewportDebounced.current
+		() => isInViewport.current
 	);
 
 	const handle_download_event = debounce(async function () {
