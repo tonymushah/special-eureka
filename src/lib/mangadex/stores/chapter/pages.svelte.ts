@@ -252,9 +252,11 @@ export default class ChapterPages {
 		this.pages_len = undefined;
 	}
 	private get pages_len(): number | undefined {
-		return this._pages_len.value;
+		console.log(this);
+		return this._pages_len?.value;
 	}
 	private set pages_len(value: number | undefined) {
+		console.log(this._pages_len);
 		this._pages_len.value = value;
 	}
 	public get id(): string {
@@ -310,11 +312,12 @@ export default class ChapterPages {
 		}
 	}
 	public constructor({ chapter_id, mode, client: _client }: ChapterPagesConstructorParam) {
-		this.pages = new SvelteMap();
-		this.pagesError = new SvelteMap();
-		this._pages_len = $state({
+		let __pages_len = $state({
 			value: undefined
 		});
+		this.pages = new SvelteMap();
+		this.pagesError = new SvelteMap();
+		this._pages_len = __pages_len;
 		this.chapter_id = chapter_id;
 		this._mode = mode;
 		const client = _client ?? mangadexClient;
