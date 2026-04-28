@@ -44,7 +44,9 @@
 		}
 	};
 	const sortDataMap = new Map(Object.entries(sortsData).map(([key, value]) => [key, value]));
-	const sortDataMapRev = new Map(Object.entries(sortsData).map(([key, value]) => [value, key]));
+	const sortDataMapRev = new Map(
+		Object.entries(sortsData).map(([key, value]) => [JSON.stringify(value), key])
+	);
 </script>
 
 <script lang="ts">
@@ -63,12 +65,13 @@
 
 <SelectSortOrderBase
 	{collection}
+	disableClear
 	bind:value={
 		() => {
 			if (sort == undefined) {
 				return undefined;
 			} else {
-				const res = sortDataMapRev.get(sort);
+				const res = sortDataMapRev.get(JSON.stringify({ ...sort }));
 				if (res) {
 					return [res];
 				} else {
