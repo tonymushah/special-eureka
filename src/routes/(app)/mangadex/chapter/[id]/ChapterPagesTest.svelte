@@ -1,13 +1,15 @@
 <script lang="ts">
 	import type { CurrentChapterData } from "@mangadex/componnents/chapter/page/contexts/currentChapter";
 	import { addErrorToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
-	import ChapterPages from "@mangadex/stores/chapter/pages";
+	import ChapterPages from "@mangadex/stores/chapter/pages.svelte";
 
 	interface Props {
 		data: CurrentChapterData;
 	}
 	let { data }: Props = $props();
-	const pages = ChapterPages.initStore(data.id);
+	const pages = new ChapterPages({
+		chapter_id: () => data.id
+	});
 </script>
 
 <button
@@ -21,7 +23,7 @@
 <div class="grid">
 	<div class="simple">
 		<ul>
-			{#each $pages.getImages() as img, index}
+			{#each pages.images as img, index}
 				<li>
 					{index} -
 					{#if img != null}
@@ -41,7 +43,7 @@
 	</div>
 	<div class="double">
 		<ul>
-			{#each $pages.pagesAsDoublePageIndexes() as doubles, index}
+			{#each pages.pagesAsDoublePageIndexes as doubles, index}
 				<li>
 					{index} - {doubles}
 				</li>
