@@ -1,7 +1,6 @@
 <script lang="ts">
 	import SortSelector from "@mangadex/componnents/manga/list/sortSelector/SortSelector.svelte";
-	import type { MangaSortOrder, UserLibrarySectionParam } from "@mangadex/gql/graphql";
-	import { derived, toStore, type Readable, type Writable } from "svelte/store";
+	import type { UserLibrarySectionParam } from "@mangadex/gql/graphql";
 	interface Props {
 		params: UserLibrarySectionParam;
 	}
