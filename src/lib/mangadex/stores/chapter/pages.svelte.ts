@@ -1,6 +1,6 @@
 // TODO refactor svelte reactive classes
 
-import type { StoreOrVal } from "$lib";
+import type { StoreOrVal, WritableValue } from "$lib";
 import { addErrorToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 import { graphql } from "@mangadex/gql";
 import {
@@ -242,10 +242,21 @@ export type ChapterPagesConstructorParam = {
 export default class ChapterPages {
 	private pages: SvelteMap<number, ChapterImage>;
 	private pagesError: SvelteMap<number, Error>;
-	private pages_len?: number;
+	private _pages_len: WritableValue<number | undefined>;
 	private chapter_id: Getter<string>;
 	private _mode?: Getter<DownloadMode>;
 	private client: Client;
+	public reset() {
+		this.pages.clear();
+		this.pagesError.clear();
+		this.pages_len = undefined;
+	}
+	private get pages_len(): number | undefined {
+		return this._pages_len.value;
+	}
+	private set pages_len(value: number | undefined) {
+		this._pages_len.value = value;
+	}
 	public get id(): string {
 		return this.chapter_id();
 	}
@@ -301,6 +312,9 @@ export default class ChapterPages {
 	public constructor({ chapter_id, mode, client: _client }: ChapterPagesConstructorParam) {
 		this.pages = new SvelteMap();
 		this.pagesError = new SvelteMap();
+		this._pages_len = $state({
+			value: undefined
+		});
 		this.chapter_id = chapter_id;
 		this._mode = mode;
 		const client = _client ?? mangadexClient;
@@ -309,11 +323,12 @@ export default class ChapterPages {
 			const inner_sub = client
 				.subscription(subscription, {
 					chapter: this.chapter_id,
-					mode: mode?.()
+					mode: this.mode
 				})
 				.subscribe((d) => this.sub_func(d));
 			return () => {
 				inner_sub.unsubscribe();
+				this.reset();
 			};
 		});
 	}
