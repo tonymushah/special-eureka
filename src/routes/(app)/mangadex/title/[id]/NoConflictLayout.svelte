@@ -64,7 +64,10 @@
 	import statsGQLQuery from "./(layout)/statsQuery";
 	import { getCurrentWebview } from "@tauri-apps/api/webview";
 	import { waitAsync } from "$lib/utils";
-	import { Debounced, IsInViewport } from "runed";
+	import {
+		// Debounced,
+		IsInViewport
+	} from "runed";
 	import manga_following_status from "@mangadex/stores/manga/manga_following_status.svelte";
 
 	type TopMangaStatisticsStoreData = TopMangaStatistics & {
@@ -78,8 +81,10 @@
 	setTitleLayoutData(() => data);
 
 	let isInViewPortTrigger = $state<HTMLElement | undefined>();
-	let _isInViewport = new IsInViewport(() => isInViewPortTrigger);
-	let isInViewport = new Debounced(() => _isInViewport.current, 500);
+	let isInViewport = new IsInViewport(() => isInViewPortTrigger, {
+		threshold: 0.1
+	});
+	// let isInViewport = new Debounced(() => _isInViewport.current, 500);
 	// NOTE: this is completely intentional
 	let statsQuery = createQuery(() => ({
 		queryKey: ["title", data.layoutData.id, "stats"],
