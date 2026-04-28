@@ -179,7 +179,7 @@
 	})}
 	bind:this={layoutElement}
 >
-	<Layout haveBeenRead={hasBeenRead} {id}>
+	<Layout haveBeenRead={hasBeenRead} {id} {downloadInstance}>
 		{#snippet state()}
 			<div
 				class="buttons"
