@@ -6,11 +6,7 @@
 	import Fetching from "@mangadex/componnents/search/content/Fetching.svelte";
 	import HasNext from "@mangadex/componnents/search/content/HasNext.svelte";
 	import NothingToShow from "@mangadex/componnents/search/content/NothingToShow.svelte";
-	import {
-		ForumThreadType,
-		OrderDirection,
-		type MangaFeedSortOrder
-	} from "@mangadex/gql/graphql";
+	import { ForumThreadType, OrderDirection, type MangaFeedSortOrder } from "@mangadex/gql/graphql";
 	import type { ChapterFeedListItemExt } from "@mangadex/routes/user/[id]/uploads/search";
 	import chapterFeedStyle from "@mangadex/stores/chapterFeedStyle";
 	import pageLimit from "@mangadex/stores/page-limit";
@@ -39,13 +35,7 @@
 	});
 	let queryOptions = $derived.by(() => {
 		return {
-			queryKey: [
-				"user-logged",
-				"manga",
-				"feed",
-				`limit:${$pageLimit}`,
-				`${JSON.stringify(order)}`
-			],
+			queryKey: ["user-logged", "manga", "feed", `limit:${$pageLimit}`, `${JSON.stringify(order)}`],
 			async queryFn({ pageParam }) {
 				return await executeSearchQuery(client, pageParam);
 			},
@@ -160,7 +150,7 @@
 			<div class="additional-content">
 				<section>
 					<p>Sort by:</p>
-					<MangaFeedSortOrderSelection sort={order} />
+					<MangaFeedSortOrderSelection bind:sort={order} />
 				</section>
 			</div>
 		{/snippet}
