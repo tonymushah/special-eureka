@@ -18,7 +18,7 @@
 	const currentChapterPage = getChapterCurrentPageContext();
 	const currentPageIndex = getChapterDoublePageCurrentPageIndex();
 	const images_indexes = getChapterDoublePageIndexes();
-	const images_length = der(images_indexes, ($imgs) => $imgs.length);
+	let images_length = $derived(images_indexes.value.length);
 
 	interface Events {
 		onnext?: () => any;
@@ -30,21 +30,16 @@
 	}
 
 	let { onnext, onprevious, children }: Props = $props();
-	let disabled = $derived($chapterPages.pagesLen == undefined);
+	let disabled = $derived(chapterPages.pagesLen == undefined);
 
-	/// BUG or more like shit code xd
-	/// Required or else the component may not work proprely
-	onMount(() => images_indexes.subscribe(noop));
-	// onMount(() => images.subscribe(noop));
-	onMount(() => currentPageIndex.subscribe(noop));
 	function next() {
 		if (disabled) {
 			return;
 		}
-		if ($currentPageIndex < $images_length - 1) {
+		if (currentPageIndex.value < images_length - 1) {
 			resetZoom();
 			currentChapterPage.update((i) => {
-				const index = $images_indexes[$currentPageIndex + 1];
+				const index = images_indexes.value[currentPageIndex.value + 1];
 				if (isArray(index)) {
 					return index[ceil(random(0, 1))];
 				} else if (typeof index == "number" && !isNaN(index)) {
@@ -61,10 +56,10 @@
 		if (disabled) {
 			return;
 		}
-		if ($currentPageIndex > 0) {
+		if (currentPageIndex.value > 0) {
 			resetZoom();
 			currentChapterPage.update((i) => {
-				const index = $images_indexes[$currentPageIndex - 1];
+				const index = images_indexes.value[currentPageIndex.value - 1];
 				if (isArray(index)) {
 					return index[ceil(random(0, 1))];
 				} else if (typeof index == "number" && !isNaN(index)) {
