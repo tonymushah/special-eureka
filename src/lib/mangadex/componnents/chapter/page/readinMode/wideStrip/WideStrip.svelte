@@ -11,14 +11,13 @@
 	import { getCurrentChapterDirection } from "../../contexts/readingDirection";
 	import getCurrentChapterImages from "../../utils/getCurrentChapterImages";
 	import DangerButtonOnlyLabel from "@mangadex/componnents/theme/buttons/DangerButtonOnlyLabel.svelte";
-	import ChapterPages from "@mangadex/stores/chapter/pages";
 	import type { OnReadingModeContextMenu } from "..";
 
 	const readingDirection = getCurrentChapterDirection();
 	let widestrip_root: HTMLDivElement | undefined = $state();
 
 	const images_root_data = getCurrentChapterImages();
-	const images = der(images_root_data, ($data) => $data.getPagesState());
+	let images = $derived.by(() => images_root_data.pagesState);
 
 	const isFromIntersector = writable(false);
 	let shouldIgnore = false;
@@ -194,7 +193,7 @@
 	}}
 >
 	{@render before?.()}
-	{#each $images as image, page}
+	{#each images as image, page}
 		<div data-page={page} use:mount>
 			{#if image?.page}
 				<img
@@ -215,7 +214,7 @@
 						<DangerButtonOnlyLabel
 							label="Error"
 							onclick={() => {
-								ChapterPages.removePageError(images_root_data, page);
+								images_root_data.removePageError(page);
 								images_root_data.refetchChapterPage(page);
 							}}
 						/>
