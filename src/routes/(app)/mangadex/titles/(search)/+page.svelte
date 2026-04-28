@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { TagOptionState } from "@mangadex/componnents/manga/search/form/filter/contexts/tags";
 	import MangaSearchForm from "@mangadex/componnents/manga/search/form/MangaSearchForm.svelte";
-	import {
+	import defaultMangaSearchParams, {
 		mangaSearchParamsFromContentProfile,
 		toMangaListParams,
 		type MangaSearchParams
@@ -12,9 +12,7 @@
 	import type { MangaListParams } from "@mangadex/gql/graphql";
 	import pageLimit from "@mangadex/stores/page-limit";
 	import defaultContextMenuContent from "@mangadex/utils/defaultContextMenuContent";
-	import contextMenu, {
-		ContextMenuItemProvider
-	} from "@special-eureka/core/commands/contextMenu";
+	import contextMenu, { ContextMenuItemProvider } from "@special-eureka/core/commands/contextMenu";
 	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
 	import { setContextMenuContext } from "@special-eureka/core/utils/contextMenuContext";
 	import { delay } from "lodash";
@@ -29,7 +27,7 @@
 	let { data = $bindable() }: Props = $props();
 	let defaultParams = $derived.by(() => {
 		const defaultProfile = $defaultContentProfile;
-		const p = structuredClone(mangaSearchParamsFromContentProfile(defaultProfile));
+		const p = mangaSearchParamsFromContentProfile(defaultProfile);
 		data.tags?.forEach((tag) => {
 			p.filter.tags.set(tag.id, {
 				state: TagOptionState.NONE,
@@ -54,8 +52,9 @@
 		return p;
 	});
 
-	let currentSearchParams = $derived.by<MangaSearchParams | undefined>(() => {
-		return defaultParams;
+	let currentSearchParams = $state<MangaSearchParams | undefined>();
+	$effect(() => {
+		currentSearchParams = defaultParams;
 	});
 	let preListParams = $derived.by(() => {
 		if (currentSearchParams) {
@@ -136,7 +135,7 @@
 		<MangaSearchForm
 			bind:dialog_bind
 			bind:realTime
-			bind:defaultParams
+			{defaultParams}
 			onchange={(detail) => {
 				if (realTime) {
 					currentSearchParams = detail;
