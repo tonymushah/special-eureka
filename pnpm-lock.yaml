@@ -57,7 +57,7 @@ importers:
         version: 7.2.0(@sveltejs/kit@2.58.0(@sveltejs/vite-plugin-svelte@7.0.0(svelte@5.55.5(@typescript-eslint/types@8.59.1))(vite@8.0.10(@types/node@25.6.0)(esbuild@0.27.4)(jiti@2.6.1)(less@4.6.4)(sass@1.99.0)(yaml@2.8.3)))(svelte@5.55.5(@typescript-eslint/types@8.59.1))(typescript@6.0.3)(vite@8.0.10(@types/node@25.6.0)(esbuild@0.27.4)(jiti@2.6.1)(less@4.6.4)(sass@1.99.0)(yaml@2.8.3)))(svelte@5.55.5(@typescript-eslint/types@8.59.1))
       '@lucide/svelte':
         specifier: ^1.11.0
-        version: 1.11.0(svelte@5.55.5(@typescript-eslint/types@8.59.1))
+        version: 1.12.0(svelte@5.55.5(@typescript-eslint/types@8.59.1))
       '@panzoom/panzoom':
         specifier: ^4.6.2
         version: 4.6.2
@@ -1256,8 +1256,8 @@ packages:
     resolution: {integrity: sha512-QsnnkYdzIXjMEUL+1z873gxnQ752mWkT0DoUQTwQoS/S9FpAcvTJHpu42ctsnMxSqP5i8XO4mK3SCewA5atHLQ==}
     engines: {node: ^16.14 || >=18}
 
-  '@lucide/svelte@1.11.0':
-    resolution: {integrity: sha512-4I9b+RuxIf8OkGG883bIYDIXjqVOH0ClgrB0j+jI6CrzEziroEwxiubQwW2xKT3esdJcRVTtW9RtCQM9D+r+ew==}
+  '@lucide/svelte@1.12.0':
+    resolution: {integrity: sha512-zU5wSMAFfc4/RME6tEA9+DK9tVye2/yi9oYVbaXmFyfjAskrXIUlPddDv+6VUN1FoBY6iNczhDs3UcxB0ixsyA==}
     peerDependencies:
       svelte: ^5
 
@@ -2983,7 +2983,7 @@ packages:
         optional: true
 
   esrap@https://pkg.pr.new/sveltejs/esrap@87:
-    resolution: {integrity: sha512-/7B6z01CTa9sYMsCREUCwzWPda7WCS2/g8tELUKshdfe3l50iWy7pr9E3m5QOlW9Qh5acXIxf72AWkI+YpkVig==, tarball: https://pkg.pr.new/sveltejs/esrap@87}
+    resolution: {tarball: https://pkg.pr.new/sveltejs/esrap@87}
     version: 2.1.2
 
   esrecurse@4.3.0:
@@ -5704,7 +5704,7 @@ snapshots:
       - '@emnapi/runtime'
       - '@typescript-eslint/types'
 
-  '@lucide/svelte@1.11.0(svelte@5.55.5(@typescript-eslint/types@8.59.1))':
+  '@lucide/svelte@1.12.0(svelte@5.55.5(@typescript-eslint/types@8.59.1))':
     dependencies:
       svelte: 5.55.5(@typescript-eslint/types@8.59.1)
 
