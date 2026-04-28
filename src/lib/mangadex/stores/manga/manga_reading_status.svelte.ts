@@ -26,7 +26,8 @@ export default function manga_reading_status(
 				const status = res.data?.watchMangaReadingState;
 				val = status ?? null;
 			});
-		if (options.getOnMount) get_manga_reading_status(id).catch(options.onGetError ?? console.error);
+		if (options.getOnMount)
+			get_manga_reading_status(id).catch(options.onGetError ?? console.error);
 		return () => {
 			sub.unsubscribe();
 		};

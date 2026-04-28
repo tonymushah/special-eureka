@@ -181,11 +181,19 @@
 								<DangerButtonOnlyLabel
 									label="Error"
 									onclick={() => {
-										const pageIndex = images_indexes.value.at(currentPageIndex.value);
+										const pageIndex = images_indexes.value.at(
+											currentPageIndex.value
+										);
 										if (isArray(pageIndex)) {
-											images.removePageError(pageIndex[$readingDirection == Direction.Ltr ? 0 : 1]);
+											images.removePageError(
+												pageIndex[
+													$readingDirection == Direction.Ltr ? 0 : 1
+												]
+											);
 											images.refetchChapterPage(
-												pageIndex[$readingDirection == Direction.Ltr ? 0 : 1]
+												pageIndex[
+													$readingDirection == Direction.Ltr ? 0 : 1
+												]
 											);
 										} else if (typeof pageIndex == "number") {
 											images.removePageError(pageIndex);
@@ -217,11 +225,19 @@
 								<DangerButtonOnlyLabel
 									label="Error"
 									onclick={() => {
-										const pageIndex = images_indexes.value.at(currentPageIndex.value);
+										const pageIndex = images_indexes.value.at(
+											currentPageIndex.value
+										);
 										if (isArray(pageIndex)) {
-											images.removePageError(pageIndex[$readingDirection == Direction.Ltr ? 1 : 0]);
+											images.removePageError(
+												pageIndex[
+													$readingDirection == Direction.Ltr ? 1 : 0
+												]
+											);
 											images.refetchChapterPage(
-												pageIndex[$readingDirection == Direction.Ltr ? 1 : 0]
+												pageIndex[
+													$readingDirection == Direction.Ltr ? 1 : 0
+												]
 											);
 										} else if (typeof pageIndex == "number") {
 											images.removePageError(pageIndex);

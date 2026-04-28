@@ -218,7 +218,10 @@ export default function customListElementContextMenu({
 						action() {
 							using mut = extractFromAccessor(updateCustomListVisibilityMutation);
 							mut.value.mutate(
-								{ id: get_value_from_maybe_getter(id), visibility: CustomListVisibility.Public },
+								{
+									id: get_value_from_maybe_getter(id),
+									visibility: CustomListVisibility.Public
+								},
 								{
 									onSuccess() {
 										addToast({
@@ -240,7 +243,10 @@ export default function customListElementContextMenu({
 						action() {
 							using mut = extractFromAccessor(updateCustomListVisibilityMutation);
 							mut.value.mutate(
-								{ id: get_value_from_maybe_getter(id), visibility: CustomListVisibility.Private },
+								{
+									id: get_value_from_maybe_getter(id),
+									visibility: CustomListVisibility.Private
+								},
 								{
 									onSuccess() {
 										addToast({

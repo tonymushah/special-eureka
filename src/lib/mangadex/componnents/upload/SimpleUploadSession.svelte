@@ -241,7 +241,11 @@
 						{commitData.title}
 					{/if}
 					{#if commitData.publishAt}
-						(Publish <TimeAgo date={new Date(commitData.publishAt)} asDateUTC asInline />)
+						(Publish <TimeAgo
+							date={new Date(commitData.publishAt)}
+							asDateUTC
+							asInline
+						/>)
 					{/if}
 					{#if commitData.termsAccepted == true}
 						<span class="terms accepted">(Terms Accepted)</span>

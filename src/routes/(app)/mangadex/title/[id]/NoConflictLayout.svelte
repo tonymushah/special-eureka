@@ -274,9 +274,12 @@
 
 	const webview = getCurrentWebview();
 	$effect(() => {
-		const sub = webview.listen(`mangadex-title-read-markers-change-${data.layoutData.id}`, () => {
-			chapterReadMarkers.refetch();
-		});
+		const sub = webview.listen(
+			`mangadex-title-read-markers-change-${data.layoutData.id}`,
+			() => {
+				chapterReadMarkers.refetch();
+			}
+		);
 		return () => {
 			sub.then((v) => v());
 		};

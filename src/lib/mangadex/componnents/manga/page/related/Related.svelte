@@ -42,7 +42,8 @@
 				title: get_value_from_title_and_random_if_undefined(t.attributes.title, "en") ?? "",
 				status: t.attributes.status,
 				description:
-					get_value_from_title_and_random_if_undefined(t.attributes.description, "en") ?? ""
+					get_value_from_title_and_random_if_undefined(t.attributes.description, "en") ??
+					""
 			}));
 			if (ts) store.addTitles(ts);
 			return ts;

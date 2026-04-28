@@ -5,7 +5,11 @@
 	import Fetching from "@mangadex/componnents/search/content/Fetching.svelte";
 	import HasNext from "@mangadex/componnents/search/content/HasNext.svelte";
 	import NothingToShow from "@mangadex/componnents/search/content/NothingToShow.svelte";
-	import { ForumThreadType, OrderDirection, type MangaFeedSortOrder } from "@mangadex/gql/graphql";
+	import {
+		ForumThreadType,
+		OrderDirection,
+		type MangaFeedSortOrder
+	} from "@mangadex/gql/graphql";
 	import chapterFeedStyle from "@mangadex/stores/chapterFeedStyle";
 	import type AbstractSearchResult from "@mangadex/utils/searchResult/AbstractSearchResult";
 	import { createInfiniteQuery, type CreateInfiniteQueryOptions } from "@tanstack/svelte-query";

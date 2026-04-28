@@ -46,7 +46,9 @@
 					<div class="content">
 						<div class="top">
 							<div class="title-desc">
-								<Dialog.Title class={cssDialogMod.title}>Filter Library</Dialog.Title>
+								<Dialog.Title class={cssDialogMod.title}
+									>Filter Library</Dialog.Title
+								>
 							</div>
 							<div class="close">
 								<Dialog.CloseTrigger class={cssDialogMod.closeButton}>

@@ -159,7 +159,9 @@
 	});
 	initIsDrawerOpenWritable(writable(false));
 
-	const currentChapterData = initCurrentChapterData(writable(layoutDataToCurrentChapterData(data)));
+	const currentChapterData = initCurrentChapterData(
+		writable(layoutDataToCurrentChapterData(data))
+	);
 
 	const dataStore = toStore(() => data);
 	const readingModeCur = derived([readingModeWritable, dataStore], ([inner, data]) => {
@@ -214,12 +216,13 @@
 				if (res.error) {
 					throw res.error;
 				}
-				const rel = res.data?.manga.aggregate.default.volumes.flatMap(({ volume, chapters }) =>
-					chapters.map<RelatedChapter>(({ chapter, ids }) => ({
-						volume,
-						chapter,
-						id: ids.includes(data.data.id) ? data.data.id : ids[0]
-					}))
+				const rel = res.data?.manga.aggregate.default.volumes.flatMap(
+					({ volume, chapters }) =>
+						chapters.map<RelatedChapter>(({ chapter, ids }) => ({
+							volume,
+							chapter,
+							id: ids.includes(data.data.id) ? data.data.id : ids[0]
+						}))
 				);
 				if (rel) {
 					related.set(rel);
