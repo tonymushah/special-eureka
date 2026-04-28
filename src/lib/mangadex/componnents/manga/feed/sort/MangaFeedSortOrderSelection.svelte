@@ -56,6 +56,7 @@
 
 <SelectSortOrderBase
 	{collection}
+	disableClear
 	bind:value={
 		() => {
 			if (sort == undefined) {
@@ -65,7 +66,6 @@
 					...sort
 				});
 				const res = sortDataMapRev.get(key);
-				console.log(res);
 				if (res) {
 					return [res];
 				} else {
@@ -73,10 +73,10 @@
 				}
 			}
 		},
-		(val) => {
-			if (val) {
-				if (val.length > 0) {
-					sort = sortDataMap.get(val[0]);
+		(value) => {
+			if (value) {
+				if (value.length > 0) {
+					sort = sortDataMap.get(value[0]);
 				} else {
 					sort = undefined;
 				}
