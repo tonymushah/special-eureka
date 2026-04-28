@@ -40,7 +40,9 @@
 		}
 	};
 	const sortDataMap = new Map(Object.entries(sortsData).map(([key, value]) => [key, value]));
-	const sortDataMapRev = new Map(Object.entries(sortsData).map(([key, value]) => [value, key]));
+	const sortDataMapRev = new Map(
+		Object.entries(sortsData).map(([key, value]) => [JSON.stringify(value), key])
+	);
 </script>
 
 <script lang="ts">
@@ -50,7 +52,7 @@
 	interface Props {
 		sort: Order | undefined;
 	}
-	let { sort }: Props = $props();
+	let { sort = $bindable() }: Props = $props();
 	const collection = createListCollection({ items: sortDataMap.keys().toArray() });
 </script>
 
@@ -61,7 +63,7 @@
 			if (sort == undefined) {
 				return undefined;
 			} else {
-				const res = sortDataMapRev.get(sort);
+				const res = sortDataMapRev.get(JSON.stringify({ ...sort }));
 				if (res) {
 					return [res];
 				} else {

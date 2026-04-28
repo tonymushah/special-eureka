@@ -147,7 +147,7 @@
 			<div class="additional-content">
 				<section>
 					<p>Sort by:</p>
-					<ChapterSortSelector {sort} />
+					<ChapterSortSelector bind:sort />
 				</section>
 			</div>
 		{/snippet}
