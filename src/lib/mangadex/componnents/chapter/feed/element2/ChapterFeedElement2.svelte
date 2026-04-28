@@ -104,7 +104,9 @@
 	setContextMenuContext(() => mangaElementContextMenu({ id: mangaId, coverArtId: mangaId }));
 
 	let coverIsInViewPortAnchor = $state<HTMLElement | undefined>();
-	let isCoverInViewPort = new IsInViewport(() => coverIsInViewPortAnchor);
+	let isCoverInViewPort = new IsInViewport(() => coverIsInViewPortAnchor, {
+		threshold: 0.2
+	});
 
 	let coverImage = get_cover_image_auto_handle_error(
 		() => ({
