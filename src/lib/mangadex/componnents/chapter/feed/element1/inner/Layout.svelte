@@ -19,10 +19,11 @@
 		display: flex;
 		flex-direction: row;
 		padding-right: 10px;
-		/* height: 120px; */
+		height: 120px;
 		overflow: hidden;
 		text-overflow: ellipsis;
 		border-radius: 0.25em;
+		/* padding-top: 6px; */
 	}
 	.layout:not(.haveBeenRead) {
 		border-style: solid;
