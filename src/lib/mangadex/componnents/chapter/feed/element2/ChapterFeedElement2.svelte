@@ -10,6 +10,7 @@
 		setContextMenuContext
 	} from "@special-eureka/core/utils/contextMenuContext";
 	import { get_cover_image_auto_handle_error } from "@mangadex/utils/cover-art/get_cover_art.svelte";
+	import { IsInViewport } from "runed";
 
 	type MouseEnvDiv = MouseEvent & {
 		currentTarget: HTMLDivElement & EventTarget;
@@ -102,11 +103,17 @@
 	let canCollaspe = $derived(toHide.length > 0);
 	setContextMenuContext(() => mangaElementContextMenu({ id: mangaId, coverArtId: mangaId }));
 
-	let coverImage = get_cover_image_auto_handle_error(() => ({
-		id: mangaId,
-		asManga: true,
-		quality: "256"
-	}));
+	let coverIsInViewPortAnchor = $state<HTMLElement | undefined>();
+	let isCoverInViewPort = new IsInViewport(() => coverIsInViewPortAnchor);
+
+	let coverImage = get_cover_image_auto_handle_error(
+		() => ({
+			id: mangaId,
+			asManga: true,
+			quality: "256"
+		}),
+		() => isCoverInViewPort.current
+	);
 </script>
 
 {#snippet _chapters(chaps: Chapter[])}
@@ -152,6 +159,7 @@
 		oncontextmenu={registerContextMenuEvent({
 			preventDefault: true
 		})}
+		bind:this={coverIsInViewPortAnchor}
 	>
 		{#if coverImage.value}
 			<img src={coverImage.value} alt={coverImageAlt} />
