@@ -7,8 +7,9 @@
 	interface Props {
 		value?: string[];
 		collection: Select.ListCollection<string>;
+		disableClear?: boolean;
 	}
-	let { collection, value = $bindable() }: Props = $props();
+	let { collection, value = $bindable(), disableClear }: Props = $props();
 </script>
 
 <!--bind:value={
@@ -42,9 +43,11 @@
 				<ChevronDownIcon />
 			</Select.Indicator>
 		</Select.Trigger>
-		<Select.ClearTrigger>
-			<FunnelX />
-		</Select.ClearTrigger>
+		{#if !disableClear}
+			<Select.ClearTrigger>
+				<FunnelX />
+			</Select.ClearTrigger>
+		{/if}
 	</Select.Control>
 	<Portal>
 		<MangaDexVarThemeProvider>
