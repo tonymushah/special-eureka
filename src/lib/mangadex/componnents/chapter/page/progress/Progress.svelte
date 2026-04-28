@@ -2,7 +2,10 @@
 	import SomeDiv from "@mangadex/componnents/theme/SomeDiv.svelte";
 	import readingDirectionWritable from "@mangadex/gql-docs/chapter/layout-query/pageDirection";
 	import { Direction, ProgressMode } from "@mangadex/gql/graphql";
-	import type { IndexedDoublePageState, IndexedPageState } from "@mangadex/stores/chapter/pages";
+	import type {
+		IndexedDoublePageState,
+		IndexedPageState
+	} from "@mangadex/stores/chapter/pages.svelte";
 	import { isArray, last } from "lodash";
 	import { derived as der } from "svelte/store";
 	import { isDoublePage } from "../contexts/currentChapterReadingMode";
@@ -18,8 +21,8 @@
 	const direction = getCurrentChapterDirection(readingDirectionWritable);
 	let isRtl = $derived($direction == Direction.Rtl);
 	const currentPage = getChapterCurrentPageContext();
-	const doublePageStates = der(images, ($images) => $images.getDoublePageStates());
-	const pageStates = der(images, ($images) => $images.getPagesState());
+	let doublePageStates = $derived(images.doublePageStates);
+	let pageStates = $derived(images.pagesState);
 	function hasError(page: [IndexedPageState, IndexedPageState]): boolean {
 		return page.some((page) => page.state?.error != undefined);
 	}
@@ -33,7 +36,7 @@
 	const currentDoublePage = getChapterDoublePageCurrentPageIndex();
 </script>
 
-<SomeDiv --pages={$images.pagesLen}>
+<SomeDiv --pages={images.pagesLen}>
 	<div
 		class="progress-container"
 		class:floating={$progressModeStore == ProgressMode.Floating}
@@ -41,7 +44,7 @@
 	>
 		<div class="progress" class:isRtl>
 			{#if $doublePage}
-				{@const _first = $images.pagesAsDoublePageIndexes().at(0)}
+				{@const _first = images.pagesAsDoublePageIndexes.at(0)}
 				<p>
 					{#if isArray(_first)}
 						{#if isRtl}
@@ -54,7 +57,7 @@
 					{/if}
 				</p>
 			{:else}
-				{@const _last = $images.pagesLen}
+				{@const _last = images.pagesLen}
 				<p>
 					{#if _last != undefined}
 						1
@@ -62,9 +65,9 @@
 				</p>
 			{/if}
 			<div class="progress-inner" class:isRtl>
-				{#if $images.pagesLen}
+				{#if images.pagesLen}
 					{#if $doublePage}
-						{#each $doublePageStates as page, doublePageIndex}
+						{#each doublePageStates as page, doublePageIndex}
 							{#if isArray(page)}
 								<!-- svelte-ignore a11y_no_static_element_interactions -->
 								<!-- svelte-ignore a11y_click_events_have_key_events -->
@@ -72,8 +75,8 @@
 									class="item"
 									class:loaded={isDoublePageLoaded(page)}
 									class:hasError={hasError(page)}
-									class:aSelect={doublePageIndex < $currentDoublePage}
-									class:selected={doublePageIndex == $currentDoublePage}
+									class:aSelect={doublePageIndex < currentDoublePage.value}
+									class:selected={doublePageIndex == currentDoublePage.value}
 									onclick={() => {
 										$currentPage = page[0].index;
 										resetZoom();
@@ -97,7 +100,7 @@
 							{/if}
 						{/each}
 					{:else}
-						{#each $pageStates as page, index}
+						{#each pageStates as page, index}
 							<!-- svelte-ignore a11y_no_static_element_interactions -->
 							<!-- svelte-ignore a11y_click_events_have_key_events -->
 							<div
@@ -118,7 +121,7 @@
 				{/if}
 			</div>
 			{#if $doublePage}
-				{@const _last = last($images.pagesAsDoublePageIndexes())}
+				{@const _last = last(images.pagesAsDoublePageIndexes)}
 				<p>
 					{#if isArray(_last)}
 						{#if isRtl}
@@ -131,7 +134,7 @@
 					{/if}
 				</p>
 			{:else}
-				{@const _last = $images.pagesLen}
+				{@const _last = images.pagesLen}
 				<p>
 					{#if _last != undefined}
 						{_last + 1}
