@@ -9,7 +9,6 @@
 	import type { Action } from "svelte/action";
 	import getCurrentChapterImages from "../../utils/getCurrentChapterImages";
 	import DangerButtonOnlyLabel from "@mangadex/componnents/theme/buttons/DangerButtonOnlyLabel.svelte";
-	import ChapterPages from "@mangadex/stores/chapter/pages";
 	import { zoomSpeedValue } from "../zoomableImage/settings";
 	import type { OnReadingModeContextMenu } from "..";
 
@@ -24,7 +23,7 @@
 	const currentChapterPage = getChapterCurrentPageContext();
 	let longstrip_root: HTMLDivElement | undefined = undefined;
 	const images_root_data = getCurrentChapterImages();
-	const images = derived(images_root_data, ($data) => $data.getPagesState());
+	let images = $derived.by(() => images_root_data.pagesState);
 
 	const imageWidth = derived(getLongStripImagesWidthContext(), ($width) => {
 		if ($width == 0) {
@@ -133,7 +132,7 @@
 	}}
 >
 	{@render top?.()}
-	{#each $images as image, page}
+	{#each images as image, page}
 		<div data-page={page} use:mount class="image">
 			{#if image?.page}
 				<img
@@ -152,7 +151,7 @@
 						<DangerButtonOnlyLabel
 							label="Error"
 							onclick={() => {
-								ChapterPages.removePageError(images_root_data, page);
+								images_root_data.removePageError(page);
 								images_root_data.refetchChapterPage(page);
 							}}
 						/>
