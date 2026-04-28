@@ -58,6 +58,7 @@
 
 <SelectSortOrderBase
 	{collection}
+	disableClear
 	bind:value={
 		() => {
 			if (sort == undefined) {
