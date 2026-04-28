@@ -120,6 +120,7 @@ export class CurrentChapterData {
 	}
 }
 
+// TODO Refactor to reactive classes
 export const {
 	getReadonly: getCurrentChapterData,
 	get: getCurrentChapterDataWritable,
