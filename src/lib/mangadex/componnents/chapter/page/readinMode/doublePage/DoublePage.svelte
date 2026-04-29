@@ -21,14 +21,14 @@
 	const images = getCurrentChapterImages();
 	let images_length = $derived.by(() => images.pagesAsDoublePageIndexes.length);
 	let currentPage = $derived.by(() => {
-		const doublePageMaybe = images.getDoublePageState($currentChapterPage);
+		const doublePageMaybe = images.getDoublePageState(currentPageIndex.value);
 		if (isArray(doublePageMaybe) && $readingDirection == Direction.Rtl) {
 			return [doublePageMaybe[1], doublePageMaybe[0]] satisfies DoublePageState;
 		} else {
 			return doublePageMaybe satisfies DoublePageState;
 		}
 	});
-
+	$inspect(currentPage);
 	interface Events {
 		onnext?: () => any;
 		onprevious?: () => any;
@@ -40,10 +40,10 @@
 	}
 
 	let { onnext, onprevious, children, oncontextmenu }: Props = $props();
-
+	// $inspect(images_indexes.value);
 	/// BUG or more like shit code xd
 	/// Required or else the component may not work proprely
-	onMount(() => currentChapterPage.subscribe(noop));
+	// onMount(() => currentChapterPage.subscribe(noop));
 	function next() {
 		if (currentPageIndex.value < images_length - 1) {
 			resetZoom();
@@ -78,6 +78,7 @@
 			onprevious?.();
 		}
 	}
+	// $inspect($currentChapterPage);
 </script>
 
 <svelte:window
@@ -181,19 +182,11 @@
 								<DangerButtonOnlyLabel
 									label="Error"
 									onclick={() => {
-										const pageIndex = images_indexes.value.at(
-											currentPageIndex.value
-										);
+										const pageIndex = images_indexes.value.at(currentPageIndex.value);
 										if (isArray(pageIndex)) {
-											images.removePageError(
-												pageIndex[
-													$readingDirection == Direction.Ltr ? 0 : 1
-												]
-											);
+											images.removePageError(pageIndex[$readingDirection == Direction.Ltr ? 0 : 1]);
 											images.refetchChapterPage(
-												pageIndex[
-													$readingDirection == Direction.Ltr ? 0 : 1
-												]
+												pageIndex[$readingDirection == Direction.Ltr ? 0 : 1]
 											);
 										} else if (typeof pageIndex == "number") {
 											images.removePageError(pageIndex);
@@ -225,19 +218,11 @@
 								<DangerButtonOnlyLabel
 									label="Error"
 									onclick={() => {
-										const pageIndex = images_indexes.value.at(
-											currentPageIndex.value
-										);
+										const pageIndex = images_indexes.value.at(currentPageIndex.value);
 										if (isArray(pageIndex)) {
-											images.removePageError(
-												pageIndex[
-													$readingDirection == Direction.Ltr ? 1 : 0
-												]
-											);
+											images.removePageError(pageIndex[$readingDirection == Direction.Ltr ? 1 : 0]);
 											images.refetchChapterPage(
-												pageIndex[
-													$readingDirection == Direction.Ltr ? 1 : 0
-												]
+												pageIndex[$readingDirection == Direction.Ltr ? 1 : 0]
 											);
 										} else if (typeof pageIndex == "number") {
 											images.removePageError(pageIndex);
