@@ -95,21 +95,36 @@
 		}}
 	>
 		{#if Array.isArray(src) && Array.isArray(alt)}
-			<div
-				class="double-image"
-				class:fitWidth={$shouldFitWidth}
-				class:fitHeight={$shouldFitHeight}
-			>
-				<img data-image-left src={src[0]} alt={alt[0]} />
-				<img data-image-right src={src[1]} alt={alt[1]} />
+			<div class="double-image" class:fitWidth={$shouldFitWidth} class:fitHeight={$shouldFitHeight}>
+				<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+				<img
+					data-image-left
+					src={src[0]}
+					alt={alt[0]}
+					onmousedown={(e) => {
+						e.preventDefault();
+					}}
+				/>
+				<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+				<img
+					data-image-right
+					src={src[1]}
+					alt={alt[1]}
+					onmousedown={(e) => {
+						e.preventDefault();
+					}}
+				/>
 			</div>
 		{:else if typeof src == "string" && typeof alt == "string"}
-			<div
-				class="single-image"
-				class:fitWidth={$shouldFitWidth}
-				class:fitHeight={$shouldFitHeight}
-			>
-				<img {src} {alt} />
+			<div class="single-image" class:fitWidth={$shouldFitWidth} class:fitHeight={$shouldFitHeight}>
+				<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+				<img
+					{src}
+					{alt}
+					onmousedown={(e) => {
+						e.preventDefault();
+					}}
+				/>
 			</div>
 		{/if}
 	</div>
