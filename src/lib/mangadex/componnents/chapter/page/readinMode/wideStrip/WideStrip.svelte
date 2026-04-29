@@ -300,6 +300,7 @@
 		scrollbar-width: none;
 		width: 100%;
 		height: 100%;
+		cursor: grab;
 		/* scroll-behavior: smooth; */
 	}
 	.wide-strip.innerOverflow::-webkit-scrollbar {
