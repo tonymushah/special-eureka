@@ -79,7 +79,7 @@ jobs:
       # we are now using winget for this since the old action doesn't work properly
       - name: install upx via winget (windows)
         # we disable upx on windows arm for now
-        if: matrix.platform == 'windows-latest' || matrix.platform == 'windows-11-arm'
+        if: matrix.platform == 'windows-latest'
         run: choco install upx
       # disabled upx for macos because it doesn't work
       - name: install brew (linux only)
