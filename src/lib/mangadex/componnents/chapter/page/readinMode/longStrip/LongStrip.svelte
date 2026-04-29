@@ -11,6 +11,7 @@
 	import DangerButtonOnlyLabel from "@mangadex/componnents/theme/buttons/DangerButtonOnlyLabel.svelte";
 	import { zoomSpeedValue } from "../zoomableImage/settings";
 	import type { OnReadingModeContextMenu } from "..";
+	import { delay } from "lodash";
 
 	interface Props {
 		innerOverflow?: boolean;
@@ -42,8 +43,10 @@
 		} catch (error) {
 			throw error;
 		} finally {
-			isFromIntersector.set(false);
-			shouldIgnore = false;
+			delay(() => {
+				isFromIntersector.set(false);
+				shouldIgnore = false;
+			}, 1);
 		}
 	}
 	const currentChapter: Readable<[number, boolean]> = derived(
@@ -96,7 +99,8 @@
 			}
 		},
 		{
-			root: longstrip_root
+			root: longstrip_root,
+			threshold: 0.1
 		}
 	);
 	const mount: Action = (node) => {
