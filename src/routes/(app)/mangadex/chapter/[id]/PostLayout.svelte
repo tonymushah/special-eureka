@@ -167,12 +167,7 @@
 		return layoutDataToCurrentChapterData(structuredClone(data));
 	});
 
-	const currentChapterData = initCurrentChapterData(
-		toStore(
-			() => _c_c_c ?? _currentChapterData,
-			(d) => (_c_c_c = d)
-		)
-	);
+	initCurrentChapterData(() => _c_c_c ?? _currentChapterData);
 
 	const dataStore = toStore(() => data);
 	const readingModeCur = derived([readingModeWritable, dataStore], ([inner, data]) => {
@@ -276,18 +271,24 @@
 	$effect(() => {
 		let commentsData = chapterPageThreadQuery.data;
 		if (commentsData != undefined && commentsData != null)
-			currentChapterData.update((current) => {
-				current.thread = new CurrentChapterThread({
+			if (untrack(() => _c_c_c) != undefined) {
+				/* @ts-ignore */
+				_c_c_c.thread = new CurrentChapterThread({
 					comments: commentsData.repliesCount,
 					threadUrl: commentsData.threadUrl
 				});
-				return current;
-			});
+			} else {
+				_c_c_c = _currentChapterData;
+				_c_c_c.thread = new CurrentChapterThread({
+					comments: commentsData.repliesCount,
+					threadUrl: commentsData.threadUrl
+				});
+			}
 	});
 	let createForumThreadMutation = createForumThread();
 	onMount(() =>
 		addListenerToChapterThreadEventTarget(() => {
-			const threadUrl = $currentChapterData.thread?.threadUrl;
+			const threadUrl = _c_c_c?.thread?.threadUrl;
 			if (threadUrl) {
 				openUrl(threadUrl).catch((e) => {
 					addErrorToast("Error on opening url", e);

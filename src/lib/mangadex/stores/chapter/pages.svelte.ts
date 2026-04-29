@@ -252,11 +252,11 @@ export default class ChapterPages {
 		this.pages_len = undefined;
 	}
 	private get pages_len(): number | undefined {
-		console.log(this);
+		// console.log(this);
 		return this._pages_len?.value;
 	}
 	private set pages_len(value: number | undefined) {
-		console.log(this._pages_len);
+		// console.log(this._pages_len);
 		this._pages_len.value = value;
 	}
 	public get id(): string {
@@ -325,7 +325,7 @@ export default class ChapterPages {
 		$effect(() => {
 			const inner_sub = client
 				.subscription(subscription, {
-					chapter: this.chapter_id,
+					chapter: this.id,
 					mode: this.mode
 				})
 				.subscribe((d) => this.sub_func(d));

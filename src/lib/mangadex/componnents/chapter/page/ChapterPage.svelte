@@ -53,7 +53,6 @@
 	const data = getCurrentChapterData();
 	onMount(() => {
 		return data.subscribe((d) => {
-			console.log(`changing data ${d.id}`);
 			images.resendAll();
 		});
 	});
