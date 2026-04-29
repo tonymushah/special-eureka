@@ -164,7 +164,7 @@
 		_c_c_c = undefined;
 	});
 	let _currentChapterData = $derived.by(() => {
-		return layoutDataToCurrentChapterData(data);
+		return layoutDataToCurrentChapterData(structuredClone(data));
 	});
 
 	const currentChapterData = initCurrentChapterData(
@@ -219,12 +219,12 @@
 			currentPage.set(page);
 		}
 	});
-	$effect(() => {
-		currentPage.set(data.currentPage);
-	});
-	$effect(() => {
-		currentChapterData.set(layoutDataToCurrentChapterData(data));
-	});
+	// $effect(() => {
+	// 	currentPage.set(data.currentPage);
+	// });
+	// $effect(() => {
+	// 	currentChapterData.set(layoutDataToCurrentChapterData(data));
+	// });
 	$effect(() => {
 		chapterSync.value = $currentPage;
 	});

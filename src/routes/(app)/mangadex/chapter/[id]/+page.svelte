@@ -1,5 +1,5 @@
 <script lang="ts">
-	/*import ChapterPagesTest from "./ChapterPagesTest.svelte";*/
+	// /*import ChapterPagesTest from "./ChapterPagesTest.svelte";*/
 
 	import ChapterPage from "@mangadex/componnents/chapter/page/ChapterPage.svelte";
 	import { isDrawerFixed } from "@mangadex/componnents/chapter/page/contexts/isDrawerFixed";
@@ -37,9 +37,7 @@
 
 <ReportDialog bind:open={openReportDialog} objectId={data.id} category={ReportCategory.Chapter} />
 
-<!--
-<ChapterPagesTest data={$chap} />
--->
+<!-- <ChapterPagesTest data={$chap} /> -->
 
 {#if $isFixed && !$open}
 	<OpenMenuButton left={$isSidebarRtl} />
