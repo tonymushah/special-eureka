@@ -4,7 +4,7 @@ license-file = "./LICENSE"
 authors = ["tonymushah tonymushahDev06@yahoo.com"]
 edition = "2024"
 repository = "https://github.com/tonymushah/special-eureka"
-version = "0.2.4-5"
+version = "0.2.4-6"
 
 [workspace]
 members = [
