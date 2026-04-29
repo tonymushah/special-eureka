@@ -27,7 +27,7 @@
 	}
 	interface Props extends Events {}
 	let { ondelete, ondownload, ondownloading }: Props = $props();
-	let state = $derived($stateStore);
+	let state = $derived(stateStore.value);
 	let isDownloaded = $derived(state == MangaDownloadState.Done);
 	let hasFailed = $derived(
 		state == MangaDownloadState.Error || state == MangaDownloadState.Canceled

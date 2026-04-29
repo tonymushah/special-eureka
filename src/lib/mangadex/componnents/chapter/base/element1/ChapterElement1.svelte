@@ -78,7 +78,7 @@
 	import UserRolesComp from "@mangadex/componnents/user/UserRolesComp.svelte";
 	import ChapterDownload from "@mangadex/download/chapter.svelte";
 	import type { Language, UserRole } from "@mangadex/gql/graphql";
-	import { getContextReadChapterMarker } from "@mangadex/stores/read-markers/context";
+	import { getContextReadChapterMarker } from "@mangadex/stores/read-markers/context.svelte";
 	import { readMarkers as readMarkersLoader } from "@mangadex/stores/read-markers/mutations";
 	import { isLogged } from "@mangadex/utils/auth";
 	import chapterElementContextMenuItems from "@mangadex/utils/context-menu/chapter";
@@ -91,7 +91,10 @@
 	import Layout from "./Layout.svelte";
 	import { cancelChapterDownload, downloadChapter } from "./utils";
 	import IndicationBadge from "@mangadex/componnents/theme/tag/IndicationBadge.svelte";
-	import { Debounced, IsInViewport } from "runed";
+	import {
+		// Debounced,
+		IsInViewport
+	} from "runed";
 
 	let {
 		id,
@@ -115,11 +118,13 @@
 
 	let readMarkers = readMarkersLoader();
 	let layoutElement = $state<HTMLElement | undefined>();
-	let isInViewport = new IsInViewport(() => layoutElement);
-	let isInViewportDebounced = new Debounced(() => isInViewport.current, 500);
+	let isInViewport = new IsInViewport(() => layoutElement, {
+		threshold: 0.2
+	});
+	// let isInViewportDebounced = new Debounced(() => isInViewport.current, 500);
 	let downloadInstance = new ChapterDownload(
 		() => id,
-		() => isInViewportDebounced.current
+		() => isInViewport.current
 	);
 
 	const handle_download_event = debounce(async function () {
@@ -146,11 +151,12 @@
 		});
 	}, true);
 	// TODO make a reaction read marker system
-	const hasBeenRead = getContextReadChapterMarker(id);
+	const hasBeenReadCxx = getContextReadChapterMarker(() => id);
+	let hasBeenRead = $derived.by(() => hasBeenReadCxx.value);
 	const handleRead = debounce(() => {
 		if ($isLogged) {
 			if (!readMarkers.isPending) {
-				if ($hasBeenRead) {
+				if (hasBeenRead) {
 					readMarkers.mutate({
 						reads: [],
 						unreads: [id]
@@ -173,7 +179,7 @@
 	})}
 	bind:this={layoutElement}
 >
-	<Layout haveBeenRead={$hasBeenRead} {id}>
+	<Layout haveBeenRead={hasBeenRead} {id} {downloadInstance}>
 		{#snippet state()}
 			<div
 				class="buttons"
@@ -193,7 +199,7 @@
 				}}
 				tabindex={0}
 			>
-				<DownloadStateComp {id} />
+				<DownloadStateComp {downloadInstance} />
 			</div>
 			{#if showTrashButton}
 				<div
@@ -253,7 +259,7 @@
 				}}
 				aria-disabled={readMarkers.isPending}
 			>
-				{#if !$hasBeenRead && $isLogged}
+				{#if !hasBeenRead && $isLogged}
 					<EyeIcon />
 				{:else if readMarkers.isPending || !$isLogged}
 					<BookSearch />

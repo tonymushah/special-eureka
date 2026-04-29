@@ -1,19 +1,17 @@
-import { getContext, setContext } from "svelte";
-import type { Readable } from "svelte/store";
+import { createReadonlyValue, type ReadonlyValue } from "$lib";
+import type { InputMaybe } from "@mangadex/gql/graphql";
+import { Context, type Getter } from "runed";
 
 const key = "top-manga-is-following";
 
-type IsFollowingTopManga = Readable<boolean | undefined>;
+type IsFollowingTopManga = InputMaybe<boolean | undefined>;
 
-export function setTopMangaIsFollowingContextStore(cover: IsFollowingTopManga) {
-	return setContext<IsFollowingTopManga>(key, cover);
+const ctx = new Context<ReadonlyValue<IsFollowingTopManga>>(key);
+
+export function setTopMangaIsFollowingContextStore(is_following: Getter<IsFollowingTopManga>) {
+	return ctx.set(createReadonlyValue(is_following));
 }
 
 export function getTopMangaIsFollowingContextStore() {
-	const coverContext = getContext<IsFollowingTopManga | undefined>(key);
-	if (coverContext) {
-		return coverContext;
-	} else {
-		throw new Error(`\`${key}\` is not declared`);
-	}
+	return ctx.get();
 }

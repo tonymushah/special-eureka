@@ -1,40 +1,6 @@
-import { graphql } from "@mangadex/gql";
 import { client } from "@mangadex/gql/urql";
 import { readable, type Readable } from "svelte/store";
-
-const subscription = graphql(`
-	subscription mangaRatingSubscription($id: UUID!) {
-		watchRating(mangaId: $id) {
-			rating
-		}
-	}
-`);
-
-const query = graphql(`
-	query getMangaRating($id: UUID!) {
-		rating {
-			lists(mangaIds: [$id]) {
-				rating
-			}
-		}
-	}
-`);
-
-const updateCreateMutation = graphql(`
-	mutation updateMangaRating($id: UUID!, $rating: Int!) {
-		rating {
-			createUpdate(params: { mangaId: $id, rating: $rating })
-		}
-	}
-`);
-
-const deleteMutation = graphql(`
-	mutation deleteMangaRating($id: UUID!) {
-		rating {
-			delete(id: $id)
-		}
-	}
-`);
+import { deleteMutation, query, subscription, updateCreateMutation } from "./manga_rating.query";
 
 export async function get_manga_rating(manga_id: string): Promise<number | null> {
 	const res = await client
@@ -93,7 +59,7 @@ export async function set_manga_rating(manga_id: string, rating: number | null) 
 export type MangaRatingOption = {
 	getOnMount?: boolean;
 	onGetError?: (e: unknown) => void;
-	initValue?: boolean;
+	initValue?: number;
 };
 
 export default function manga_rating(
@@ -102,7 +68,7 @@ export default function manga_rating(
 		getOnMount: true
 	}
 ): Readable<number | null> {
-	return readable<number | null>(null, (set) => {
+	return readable<number | null>(option.initValue ?? null, (set) => {
 		const sub = client
 			.subscription(subscription, {
 				id: manga_id

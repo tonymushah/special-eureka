@@ -1,13 +1,14 @@
-import { getContext, setContext } from "svelte";
+import { createReadonlyValue, type ReadonlyValue } from "$lib";
+import { Context, type Getter } from "runed";
 
 const key = "top-manga-title";
 
-type TopMangaTitle = string;
+const ctx = new Context<ReadonlyValue<string>>(key);
 
-export function setTopMangaTitleContextStore(title: TopMangaTitle) {
-	return setContext<TopMangaTitle>(key, title);
+export function setTopMangaTitleContextStore(title: Getter<string>) {
+	return ctx.set(createReadonlyValue(title));
 }
 
 export function getTopMangaTitleContextStore() {
-	return getContext<TopMangaTitle | undefined>(key);
+	return ctx.get();
 }

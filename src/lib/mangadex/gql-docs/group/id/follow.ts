@@ -4,6 +4,7 @@ import { graphql } from "@mangadex/gql/gql";
 import { client } from "@mangadex/gql/urql";
 import { mangadexQueryClient } from "@mangadex/index";
 import { createMutation, createQuery, type CreateQueryResult } from "@tanstack/svelte-query";
+import type { MaybeGetter } from "runed";
 import { derived, get, readonly, writable, type Writable } from "svelte/store";
 
 export const followGroupGQLMutation = graphql(`
@@ -116,26 +117,29 @@ export default function isFollowingGroup(
 	};
 }
 
-export function isFollowingGroupQuery_(id: string) {
+export function isFollowingGroupQuery_(_id: MaybeGetter<string>) {
 	return () =>
 		createQuery(
-			() => ({
-				queryKey: ["scanlation-group", id, "is-following"],
-				async queryFn() {
-					const res = await client
-						.query(isFollowingGroupQuery, {
-							id
-						})
-						.toPromise();
-					if (res.error) {
-						throw res.error;
-					} else if (res.data) {
-						return res.data.follows.isFollowingGroup;
-					} else {
-						throw new Error("no data??");
+			() => {
+				let id = typeof _id == "function" ? _id() : _id;
+				return {
+					queryKey: ["scanlation-group", id, "is-following"],
+					async queryFn() {
+						const res = await client
+							.query(isFollowingGroupQuery, {
+								id
+							})
+							.toPromise();
+						if (res.error) {
+							throw res.error;
+						} else if (res.data) {
+							return res.data.follows.isFollowingGroup;
+						} else {
+							throw new Error("no data??");
+						}
 					}
-				}
-			}),
+				};
+			},
 			() => mangadexQueryClient
 		);
 }

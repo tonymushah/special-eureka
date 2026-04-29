@@ -23,18 +23,18 @@
 	const readingMode = getCurrentChapterReadingMode();
 	const currentChapterPage = getChapterCurrentPageContext();
 	const images_context = getCurrentChapterImages();
-	let next = $derived(function () {
-		if ($images_context.pagesLen) {
-			if ($currentChapterPage < $images_context.pagesLen - 1) {
+	let next = function () {
+		if (images_context.pagesLen) {
+			if ($currentChapterPage < images_context.pagesLen - 1) {
 				resetZoom();
 				$currentChapterPage++;
 			} else {
 				onnext?.();
 			}
 		}
-	});
-	let previous = $derived(function () {
-		if ($images_context.pagesLen) {
+	};
+	let previous = function () {
+		if (images_context.pagesLen) {
 			if ($currentChapterPage > 0) {
 				resetZoom();
 				$currentChapterPage--;
@@ -42,8 +42,8 @@
 				onprevious?.();
 			}
 		}
-	});
-	let onNext = $derived(function () {
+	};
+	let onNext = function () {
 		switch ($direction) {
 			case ReadingDirection.Ltr:
 				next();
@@ -54,7 +54,7 @@
 			default:
 				break;
 		}
-	});
+	};
 	let onPrevious = $derived(function () {
 		switch ($direction) {
 			case ReadingDirection.Ltr:
@@ -71,7 +71,7 @@
 	let isLongstrip = $derived($readingMode == ReadingMode.LongStrip);
 </script>
 
-<ButtonAccent {variant} onclick={onPrevious} disabled={$images_context.pagesLen == undefined}>
+<ButtonAccent {variant} onclick={onPrevious} disabled={images_context.pagesLen == undefined}>
 	{#if isLongstrip}
 		{#if $direction == ReadingDirection.Ltr}
 			<ArrowUpIcon />
@@ -85,7 +85,7 @@
 
 {@render children?.()}
 
-<ButtonAccent {variant} onclick={onNext} disabled={$images_context.pagesLen == undefined}>
+<ButtonAccent {variant} onclick={onNext} disabled={images_context.pagesLen == undefined}>
 	{#if isLongstrip}
 		{#if $direction == ReadingDirection.Ltr}
 			<ArrowDownIcon />

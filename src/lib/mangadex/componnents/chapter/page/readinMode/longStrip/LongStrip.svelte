@@ -9,9 +9,9 @@
 	import type { Action } from "svelte/action";
 	import getCurrentChapterImages from "../../utils/getCurrentChapterImages";
 	import DangerButtonOnlyLabel from "@mangadex/componnents/theme/buttons/DangerButtonOnlyLabel.svelte";
-	import ChapterPages from "@mangadex/stores/chapter/pages";
 	import { zoomSpeedValue } from "../zoomableImage/settings";
 	import type { OnReadingModeContextMenu } from "..";
+	import { delay } from "lodash";
 
 	interface Props {
 		innerOverflow?: boolean;
@@ -24,7 +24,7 @@
 	const currentChapterPage = getChapterCurrentPageContext();
 	let longstrip_root: HTMLDivElement | undefined = undefined;
 	const images_root_data = getCurrentChapterImages();
-	const images = derived(images_root_data, ($data) => $data.getPagesState());
+	let images = $derived.by(() => images_root_data.pagesState);
 
 	const imageWidth = derived(getLongStripImagesWidthContext(), ($width) => {
 		if ($width == 0) {
@@ -43,8 +43,10 @@
 		} catch (error) {
 			throw error;
 		} finally {
-			isFromIntersector.set(false);
-			shouldIgnore = false;
+			delay(() => {
+				isFromIntersector.set(false);
+				shouldIgnore = false;
+			}, 1);
 		}
 	}
 	const currentChapter: Readable<[number, boolean]> = derived(
@@ -97,7 +99,8 @@
 			}
 		},
 		{
-			root: longstrip_root
+			root: longstrip_root,
+			threshold: 0.1
 		}
 	);
 	const mount: Action = (node) => {
@@ -110,14 +113,14 @@
 	};
 	const widthWritable = getLongStripImagesWidthContextWritable();
 	//onMount(() => currentChapter.subscribe(([p]) => console.debug(p)));
+	let isDown = false;
+	let startX: number | undefined = undefined;
+	let startY: number | undefined = undefined;
+	let scrollLeft: number | undefined = undefined;
+	let scrollTop: number | undefined = undefined;
 </script>
 
-<svelte:window
-	onkeydown={(e) => {
-		console.log(e);
-	}}
-/>
-
+<!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
 	class="longstrip"
 	class:innerOverflow
@@ -131,11 +134,52 @@
 			$widthWritable = Math.min(Math.max(0, width), 100);
 		}
 	}}
+	onmousedown={(e) => {
+		if (longstrip_root) {
+			isDown = true;
+			startX = e.pageX - longstrip_root.offsetLeft;
+			startY = e.pageY - longstrip_root.offsetTop;
+			scrollLeft = longstrip_root.scrollLeft;
+			scrollTop = longstrip_root.scrollTop;
+			longstrip_root.style.cursor = "grabbing";
+		}
+	}}
+	onmouseleave={(e) => {
+		if (longstrip_root) {
+			isDown = false;
+			longstrip_root.style.cursor = "grab";
+		}
+	}}
+	onmouseup={(e) => {
+		if (longstrip_root) {
+			isDown = false;
+			longstrip_root.style.cursor = "grab";
+		}
+	}}
+	onmousemove={(e) => {
+		if (
+			longstrip_root != undefined &&
+			startX != undefined &&
+			startY != undefined &&
+			scrollLeft != undefined &&
+			scrollTop != undefined
+		) {
+			if (!isDown) return;
+			e.preventDefault();
+			const x = e.pageX - longstrip_root.offsetLeft;
+			const y = e.pageY - longstrip_root.offsetTop;
+			const walkX = (x - startX) * 1; // Change this number to adjust the scroll speed
+			const walkY = (y - startY) * 1; // Change this number to adjust the scroll speed
+			longstrip_root.scrollLeft = scrollLeft - walkX;
+			longstrip_root.scrollTop = scrollTop - walkY;
+		}
+	}}
 >
 	{@render top?.()}
-	{#each $images as image, page}
+	{#each images as image, page}
 		<div data-page={page} use:mount class="image">
 			{#if image?.page}
+				<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 				<img
 					data-page={page}
 					src={image.page.value}
@@ -143,6 +187,9 @@
 					width="{$imageWidth}%"
 					oncontextmenu={(e) => {
 						oncontextmenu?.(Object.assign(e, { pageNumber: page }));
+					}}
+					onmousedown={(e) => {
+						e.preventDefault();
 					}}
 				/>
 			{:else if image?.error}
@@ -152,7 +199,7 @@
 						<DangerButtonOnlyLabel
 							label="Error"
 							onclick={() => {
-								ChapterPages.removePageError(images_root_data, page);
+								images_root_data.removePageError(page);
 								images_root_data.refetchChapterPage(page);
 							}}
 						/>
@@ -180,6 +227,7 @@
 		height: 100%;
 		width: 100%;
 		overflow-y: scroll;
+		cursor: grab;
 	}
 	.error {
 		display: flex;

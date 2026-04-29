@@ -24,15 +24,14 @@
 	const client = getContextClient();
 
 	interface Props {
-		groupName: Readable<string | undefined>;
+		groupName: string | undefined;
 	}
 
 	let { groupName }: Props = $props();
-	// svelte-ignore state_referenced_locally
-	const params = derived([groupName, pageLimit], ([$groupName, $limit]) => {
+	let params = $derived.by(() => {
 		return {
-			name: $groupName,
-			limit: $limit
+			name: groupName,
+			limit: $pageLimit
 		} satisfies ScanlationGroupListParams;
 	});
 	interface InfiniteQueryData {
@@ -43,8 +42,8 @@
 	}
 	let infiniteQuery = createInfiniteQuery(() => {
 		return {
-			queryKey: ["scanalation-group-search", $params],
-			initialPageParam: $params,
+			queryKey: ["scanalation-group-search", params],
+			initialPageParam: params,
 			getNextPageParam(lastPage, allPages, lastPageParam) {
 				const next_offset = lastPage.limit + lastPage.offset;
 				if (next_offset > lastPage.total) {

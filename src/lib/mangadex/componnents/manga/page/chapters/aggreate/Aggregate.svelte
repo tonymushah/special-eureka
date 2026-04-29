@@ -4,19 +4,18 @@
 	import defaultContentProfile from "@mangadex/content-profile/graphql/defaultProfile";
 	import { mangadexQueryClient } from "@mangadex/index";
 	import { getTitleLayoutData } from "@mangadex/routes/title/[id]/layout.context";
-	import { getContextReadChapterMarkers } from "@mangadex/stores/read-markers/context";
+	import { getContextReadChapterMarkers } from "@mangadex/stores/read-markers/context.svelte";
 	import { createQuery } from "@tanstack/svelte-query";
-	import type { UnlistenFn } from "@tauri-apps/api/event";
 	import { openUrl as open } from "@tauri-apps/plugin-opener";
 	import { getContextClient } from "@urql/svelte";
 	import { debounce, delay } from "lodash";
-	import { onDestroy, onMount } from "svelte";
+	import { onMount } from "svelte";
 	import { writable } from "svelte/store";
 	import { fade } from "svelte/transition";
 	import type { MangaAggregateData, Volume } from "./AggregateContent.svelte";
 	import AggregateContent from "./AggregateContent.svelte";
 	import { fetchChapters, fetchComments } from "./utils";
-	import { getChapterStoreContext } from "./utils/chapterStores";
+	import { getChapterStoreContext } from "./utils/chapterStores.svelte";
 	import mangaAggregateQuery from "./utils/query";
 	import { readMarkers as readMarkersMutationLoader } from "@mangadex/stores/read-markers/mutations";
 	import ChapterFeedSelecto from "@mangadex/componnents/selecto/ChapterFeedSelecto.svelte";
@@ -26,12 +25,14 @@
 	import { addErrorToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 	import ExtraOptions from "./ExtraOptions.svelte";
 	import { isMounted } from "@mangadex/stores/offlineIsMounted";
+	import { dev } from "$app/environment";
 
 	let readMarkersMutation = readMarkersMutationLoader();
 	const chaptersStore = getChapterStoreContext();
 	const client = getContextClient();
-	const __res = getTitleLayoutData();
-	const data = __res.queryResult;
+	const ___res = getTitleLayoutData();
+	let __res = $derived(___res.value);
+	let data = $derived(__res.queryResult);
 	let query = createQuery(() => ({
 		queryKey: ["title", __res.layoutData.id, "aggregate"],
 		async queryFn() {
@@ -49,7 +50,6 @@
 		networkMode: "always"
 	}));
 	let threadUrls = $state(new Map<string, string>());
-	let unlistens: UnlistenFn[] = [];
 	let isFetching = $derived(query.isFetching);
 
 	let isEmpty = $derived(
@@ -93,54 +93,45 @@
 	});
 	const isReversed = writable(false);
 	let selectedIndex = $state(0);
-	onMount(async () => {
-		unlistens.push(
-			$effect.root(() => {
-				$effect(() => {
-					let ids: string[] =
-						query.data?.manga.aggregate.chunked.at(selectedIndex)?.ids ?? [];
-					const task = delay(() => {
-						if (ids.length > 0)
-							if (!chaptersStore.isPresents(ids)) {
-								fetchChapters({
-									ids,
-									feedContent: !hasConflicts(__res.conflicts),
-									lastChapter: data.attributes.lastChapter ?? undefined,
-									lastVolume: data.attributes.lastVolume ?? undefined
-								})
-									.then(async (cs) => {
-										if (cs) chaptersStore.addByBatch(cs);
-										const comments = await fetchComments(ids);
-										comments.forEach((c) => {
-											threadUrls.set(c.id, c.stats.threadUrl);
-										});
-										chaptersStore.setComments(
-											comments.map((c) => ({
-												id: c.id,
-												comments: c.stats.comments
-											}))
-										);
-									})
-									.catch((e) => {
-										console.error(e);
-									});
-							}
-					}, 100);
-					return () => {
-						clearTimeout(task);
-					};
-				});
-			})
-		);
-		unlistens.push(
-			chaptersStore.subscribe((e) => {
-				console.debug(e.keys());
-			})
-		);
+
+	$effect(() => {
+		let ids: string[] = query.data?.manga.aggregate.chunked.at(selectedIndex)?.ids ?? [];
+		const task = delay(() => {
+			if (ids.length > 0)
+				if (!chaptersStore.isPresents(ids)) {
+					fetchChapters({
+						ids,
+						feedContent: !hasConflicts(__res.conflicts),
+						lastChapter: data.attributes.lastChapter ?? undefined,
+						lastVolume: data.attributes.lastVolume ?? undefined
+					})
+						.then(async (cs) => {
+							if (cs) chaptersStore.addByBatch(cs);
+							const comments = await fetchComments(ids);
+							comments.forEach((c) => {
+								threadUrls.set(c.id, c.stats.threadUrl);
+							});
+							chaptersStore.setComments(
+								comments.map((c) => ({
+									id: c.id,
+									comments: c.stats.comments
+								}))
+							);
+						})
+						.catch((e) => {
+							console.error(e);
+						});
+				}
+		}, 100);
+		return () => {
+			clearTimeout(task);
+		};
 	});
-	onDestroy(() => {
-		unlistens.forEach((u) => u());
-	});
+
+	if (dev)
+		$effect(() => {
+			console.debug(chaptersStore.keys());
+		});
 	let selected = $derived(
 		$isReversed ? aggregateReverse[selectedIndex] : aggregate[selectedIndex]
 	);
@@ -163,7 +154,7 @@
 		);
 
 		let readChapters = new Set(
-			$readMarkers
+			readMarkers
 				.entries()
 				.filter(([, v]) => {
 					return v;

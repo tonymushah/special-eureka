@@ -10,7 +10,7 @@
 	let { cover, children }: Props = $props();
 	const mangaId = getTopMangaIdContextStore();
 	let coverImage = get_cover_image_auto_handle_error(() => ({
-		id: mangaId,
+		id: mangaId.value,
 		asManga: true
 	}));
 </script>

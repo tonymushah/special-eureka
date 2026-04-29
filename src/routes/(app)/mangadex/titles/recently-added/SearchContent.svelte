@@ -9,7 +9,6 @@
 	import { getContextClient } from "@urql/svelte";
 	import { debounce } from "lodash";
 	import { onDestroy } from "svelte";
-	import { derived, get, type Readable } from "svelte/store";
 	import executeSearchQuery from "./execute";
 	import defaultContentProfile from "@mangadex/content-profile/graphql/defaultProfile";
 	import ErrorComponent from "@mangadex/componnents/ErrorComponent.svelte";
@@ -18,23 +17,22 @@
 	const client = getContextClient();
 	const debounce_wait = 450;
 	interface Props {
-		params: Readable<MangaListParams>;
+		params: MangaListParams;
 		refetch?: () => void;
 	}
 
 	let { params, refetch = $bindable() }: Props = $props();
-	// svelte-ignore state_referenced_locally
-	const p_p_offline = derived([params, defaultContentProfile], ([merged]) => [merged]);
 	interface InfiniteQueryData {
 		data: MangaListContentItemProps[];
 		offset: number;
 		limit: number;
 		total: number;
 	}
-	const infiniteQueryOptions = derived(p_p_offline, ([$params]) => {
+	let infiniteQuery = createInfiniteQuery(() => {
+		let _ = defaultContentProfile;
 		return {
-			queryKey: ["rencently-added-page", $params],
-			initialPageParam: [$params],
+			queryKey: ["rencently-added-page", params],
+			initialPageParam: [params],
 			getNextPageParam(lastPage, allPages, [lastPageParam], allPageParams) {
 				const next_offset = lastPage.limit + lastPage.offset;
 				if (next_offset > lastPage.total) {
@@ -78,7 +76,6 @@
 			[MangaListParams]
 		>;
 	});
-	let infiniteQuery = createInfiniteQuery(() => $infiniteQueryOptions);
 	$effect(() => listenToBlacklistChange(() => infiniteQuery.refetch()));
 	refetch = debounce(() => {
 		infiniteQuery.refetch();

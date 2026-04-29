@@ -34,17 +34,17 @@
 	import { listenToBlacklistChange } from "@mangadex/utils/blacklist/listen";
 
 	const client = getContextClient();
-	const order = writable<MangaFeedSortOrder | undefined>({
+	let order = $state<MangaFeedSortOrder | undefined>({
 		readableAt: OrderDirection.Descending
 	});
-	const queryOptions = derived([pageLimit, order], ([$limit, $order]) => {
+	let queryOptions = $derived.by(() => {
 		return {
 			queryKey: [
 				"user-logged",
 				"manga",
 				"feed",
-				`limit:${$limit}`,
-				`${JSON.stringify($order)}`
+				`limit:${$pageLimit}`,
+				`${JSON.stringify(order)}`
 			],
 			async queryFn({ pageParam }) {
 				return await executeSearchQuery(client, pageParam);
@@ -63,8 +63,8 @@
 				}
 			},
 			initialPageParam: {
-				limit: $limit,
-				order: $order
+				limit: $pageLimit,
+				order
 			} satisfies Params
 		} satisfies CreateInfiniteQueryOptions<
 			AbstractSearchResult<ChapterFeedListItemExt>,
@@ -74,7 +74,7 @@
 			Params
 		>;
 	});
-	let query = createInfiniteQuery(() => $queryOptions);
+	let query = createInfiniteQuery(() => queryOptions);
 	$effect(() => listenToBlacklistChange(() => query.refetch()));
 	let hasNext = $derived(query.hasNextPage);
 	let isFetching = $derived(query.isFetching);
@@ -160,7 +160,7 @@
 			<div class="additional-content">
 				<section>
 					<p>Sort by:</p>
-					<MangaFeedSortOrderSelection sort={order} />
+					<MangaFeedSortOrderSelection bind:sort={order} />
 				</section>
 			</div>
 		{/snippet}

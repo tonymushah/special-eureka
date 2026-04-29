@@ -24,15 +24,14 @@
 
 	const client = getContextClient();
 	interface Props {
-		userName: Readable<string | undefined>;
+		userName: string | undefined;
 	}
 
 	let { userName }: Props = $props();
-	// svelte-ignore state_referenced_locally
-	const params = derived([userName, pageLimit], ([$userName, $limit]) => {
+	let params = $derived.by(() => {
 		return {
-			username: $userName,
-			limit: $limit
+			username: userName,
+			limit: $pageLimit
 		} satisfies UserListParam;
 	});
 	interface InfiniteQueryData {
@@ -41,10 +40,10 @@
 		limit: number;
 		total: number;
 	}
-	const infiniteQueryOptions = derived(params, ($params) => {
+	let infiniteQuery = createInfiniteQuery(() => {
 		return {
-			queryKey: ["user-search", $params],
-			initialPageParam: $params,
+			queryKey: ["user-search", params],
+			initialPageParam: params,
 			getNextPageParam(lastPage, allPages, lastPageParam) {
 				const next_offset = lastPage.limit + lastPage.offset;
 				if (next_offset >= lastPage.total) {
@@ -84,7 +83,6 @@
 			UserListParam
 		>;
 	});
-	let infiniteQuery = createInfiniteQuery(() => $infiniteQueryOptions);
 	let users = $derived.by(() => {
 		const result = infiniteQuery;
 		if (result.isLoading) {

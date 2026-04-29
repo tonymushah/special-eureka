@@ -14,7 +14,7 @@
 	import NothingToShow from "@mangadex/componnents/search/content/NothingToShow.svelte";
 
 	const d = getTitleLayoutData();
-	let data = $derived(d.layoutData);
+	let data = $derived(d.value.layoutData);
 	let id = $derived(data!.id);
 	const client = getContextClient();
 

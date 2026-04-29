@@ -18,7 +18,6 @@
 	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
 	import { setContextMenuContext } from "@special-eureka/core/utils/contextMenuContext";
 	import { delay } from "lodash";
-	import { derived, get, writable } from "svelte/store";
 	import type { PageData } from "./$types";
 	import SearchContent from "./SearchContent.svelte";
 	import { hideReadTitle } from "@mangadex/stores/hide-read-title";
@@ -28,62 +27,59 @@
 	}
 
 	let { data = $bindable() }: Props = $props();
-	const defaultParams = writable(defaultMangaSearchParams());
-
-	$effect(() => {
-		return defaultContentProfile.subscribe((defaultProfile) => {
-			defaultParams.update(() => {
-				const p = structuredClone(mangaSearchParamsFromContentProfile(defaultProfile));
-				data.tags?.forEach((tag) => {
-					p.filter.tags.set(tag.id, {
-						state: TagOptionState.NONE,
-						name: tag.name,
-						group: tag.group
-					});
-				});
-				defaultProfile.excludedTags.forEach((tag) => {
-					const inner_tag = p.filter.tags.get(tag);
-					if (inner_tag) {
-						inner_tag.state = TagOptionState.EXCLUDE;
-						p.filter.tags.set(tag, inner_tag);
-					}
-				});
-				defaultProfile.includedTags.forEach((tag) => {
-					const inner_tag = p.filter.tags.get(tag);
-					if (inner_tag) {
-						inner_tag.state = TagOptionState.INCLUDE;
-						p.filter.tags.set(tag, inner_tag);
-					}
-				});
-				return p;
+	let defaultParams = $derived.by(() => {
+		const defaultProfile = $defaultContentProfile;
+		const p = mangaSearchParamsFromContentProfile(defaultProfile);
+		data.tags?.forEach((tag) => {
+			p.filter.tags.set(tag.id, {
+				state: TagOptionState.NONE,
+				name: tag.name,
+				group: tag.group
 			});
 		});
-	});
-	const currentSearchParams = writable<MangaSearchParams | undefined>(undefined, (set) => {
-		return defaultParams.subscribe((params) => {
-			set(params);
+		defaultProfile.excludedTags.forEach((tag) => {
+			const inner_tag = p.filter.tags.get(tag);
+			if (inner_tag) {
+				inner_tag.state = TagOptionState.EXCLUDE;
+				p.filter.tags.set(tag, inner_tag);
+			}
 		});
+		defaultProfile.includedTags.forEach((tag) => {
+			const inner_tag = p.filter.tags.get(tag);
+			if (inner_tag) {
+				inner_tag.state = TagOptionState.INCLUDE;
+				p.filter.tags.set(tag, inner_tag);
+			}
+		});
+		return p;
 	});
-	const preListParams = derived(currentSearchParams, ($p) => {
-		if ($p) {
-			return toMangaListParams($p);
+
+	let currentSearchParams = $state<MangaSearchParams | undefined>();
+	$effect(() => {
+		currentSearchParams = defaultParams;
+	});
+	let preListParams = $derived.by(() => {
+		if (currentSearchParams) {
+			return toMangaListParams(currentSearchParams);
 		}
 	});
-	const isEmpty = derived(preListParams, ($p) => $p == undefined);
-	const listParams = derived([preListParams, pageLimit], ([$p, $limit]) => {
-		if ($p) {
+	let isEmpty = $derived(preListParams == undefined);
+	let listParams = $derived.by(() => {
+		const p = preListParams;
+		const limit = $pageLimit;
+		if (p) {
 			return {
-				...$p,
-				limit: $limit
+				...p,
+				limit: limit
 			} satisfies MangaListParams;
 		} else {
 			return {
-				limit: $limit
+				limit: limit
 			} satisfies MangaListParams;
 		}
 	});
 	let realTime = $state(false);
-	const offlineStore = derived(currentSearchParams, ($p) => $p?.offlineOnly ?? false);
+	let offlineStore = $derived.by(() => currentSearchParams?.offlineOnly ?? false);
 	let dialog_bind: HTMLDialogElement | undefined = $state();
 
 	let topElement: HTMLElement | undefined = $state(undefined);
@@ -121,14 +117,10 @@
 				...menu(),
 				ContextMenuItemProvider.seperator(),
 				ContextMenuItemProvider.menuItem({
-					text: get(offlineStore) ? "Include online" : "Local only",
+					text: offlineStore ? "Include online" : "Local only",
 					action() {
-						defaultParams.update((d) => {
-							if (d) {
-								d.offlineOnly = !d.offlineOnly;
-							}
-							return d;
-						});
+						const d = defaultParams;
+						d.offlineOnly = !d.offlineOnly;
 					}
 				})
 			],
@@ -145,22 +137,22 @@
 		<MangaSearchForm
 			bind:dialog_bind
 			bind:realTime
-			bind:defaultParams={$defaultParams}
+			{defaultParams}
 			onchange={(detail) => {
 				if (realTime) {
-					currentSearchParams.set(detail);
+					currentSearchParams = structuredClone(detail);
 				}
 			}}
 			onsubmit={(detail) => {
 				if (!realTime) {
-					currentSearchParams.set(detail);
+					currentSearchParams = structuredClone(detail);
 				}
 			}}
 		/>
 	</section>
 
 	<section class="content">
-		{#if !$isEmpty}
+		{#if !isEmpty}
 			<SearchContent
 				params={listParams}
 				{offlineStore}

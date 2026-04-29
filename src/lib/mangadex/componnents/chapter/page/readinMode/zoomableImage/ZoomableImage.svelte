@@ -100,8 +100,24 @@
 				class:fitWidth={$shouldFitWidth}
 				class:fitHeight={$shouldFitHeight}
 			>
-				<img data-image-left src={src[0]} alt={alt[0]} />
-				<img data-image-right src={src[1]} alt={alt[1]} />
+				<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+				<img
+					data-image-left
+					src={src[0]}
+					alt={alt[0]}
+					onmousedown={(e) => {
+						e.preventDefault();
+					}}
+				/>
+				<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+				<img
+					data-image-right
+					src={src[1]}
+					alt={alt[1]}
+					onmousedown={(e) => {
+						e.preventDefault();
+					}}
+				/>
 			</div>
 		{:else if typeof src == "string" && typeof alt == "string"}
 			<div
@@ -109,7 +125,14 @@
 				class:fitWidth={$shouldFitWidth}
 				class:fitHeight={$shouldFitHeight}
 			>
-				<img {src} {alt} />
+				<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+				<img
+					{src}
+					{alt}
+					onmousedown={(e) => {
+						e.preventDefault();
+					}}
+				/>
 			</div>
 		{/if}
 	</div>

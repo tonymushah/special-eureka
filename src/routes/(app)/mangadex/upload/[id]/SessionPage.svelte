@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { sessionObjStore } from "@mangadex/stores/upload/sessions";
+	import { sessionObjStore } from "@mangadex/stores/upload/sessions.svelte";
 	import PageError from "@mangadex/componnents/PageError.svelte";
 	import { titleOnlyQuery } from "@mangadex/stores/title/title-only-query";
 	import { client } from "@mangadex/gql/urql";
@@ -13,14 +13,15 @@
 	import mangaElementContextMenu from "@mangadex/utils/context-menu/manga";
 	import Images from "./Images.svelte";
 	import CommitData from "./CommitData.svelte";
-	import { queueEntryState } from "@mangadex/stores/upload/queue";
+	import { queueEntryState } from "@mangadex/stores/upload/queue.svelte";
+	import { dev } from "$app/environment";
 
 	interface Props {
 		sessionId: string;
 	}
 	let { sessionId }: Props = $props();
-	const sessionS = sessionObjStore(sessionId);
-	let session = $derived($sessionS);
+	const sessionS = sessionObjStore(() => sessionId);
+	let session = $derived(sessionS.value);
 	let titleQuery = titleOnlyQuery({
 		mangaId: () => session?.mangaId ?? "",
 		enabled: () => !!session,
@@ -40,13 +41,9 @@
 	let groupNames = $derived(
 		new Map(groupNamesQuery.data?.map((d) => [d.id as string, d.attributes.name]) ?? [])
 	);
-	onMount(() =>
-		sessionS.subscribe((d) => {
-			console.debug(d);
-		})
-	);
-	const entryState = queueEntryState(sessionId);
-	let isUploading = $derived($entryState?.state == "Uploading");
+	if (dev) $effect(() => console.debug(session));
+	let entryState = queueEntryState(() => sessionId);
+	let isUploading = $derived(entryState.value?.state == "Uploading");
 </script>
 
 {#if session != null && session != undefined}

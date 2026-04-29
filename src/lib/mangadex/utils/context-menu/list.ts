@@ -1,4 +1,5 @@
 import { goto } from "$app/navigation";
+import { get_value_from_maybe_getter } from "$lib";
 import { extractFromAccessor } from "$lib/index.svelte";
 import { route } from "$lib/ROUTES";
 import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
@@ -17,38 +18,41 @@ import openNewWindow from "@special-eureka/core/commands/openNewWindow";
 import { currentLocationWithNewPath } from "@special-eureka/core/utils/url";
 import { save } from "@tauri-apps/plugin-dialog";
 import { openUrl, revealItemInDir } from "@tauri-apps/plugin-opener";
+import type { MaybeGetter } from "runed";
 import { derived, get } from "svelte/store";
 import { isLogged } from "../auth";
 
 type CustomListElementContextMenuOptions = {
-	id: string;
-	name?: string;
-	isMine?: boolean;
+	id: MaybeGetter<string>;
+	name?: MaybeGetter<string>;
+	isMine?: MaybeGetter<boolean>;
 	onVisibilityChange?: (newVis: CustomListVisibility) => unknown;
 	onDelete?: () => unknown;
 };
 
 export default function customListElementContextMenu({
 	id,
-	name,
-	isMine,
+	name: _name,
+	isMine: _isMine,
 	onVisibilityChange,
 	onDelete
 }: CustomListElementContextMenuOptions): ContextMenuItem[] {
+	const name = get_value_from_maybe_getter(_name);
+	const isMine = get_value_from_maybe_getter(_isMine);
 	const items = [
 		ContextMenuItemProvider.menuItem({
 			text: name ? `Goto ${name}` : "Open custom list",
 			action() {
 				goto(
 					route("/mangadex/list/[id]", {
-						id
+						id: get_value_from_maybe_getter(id)
 					})
 				);
 			},
 			enabled:
 				location.pathname !=
 				route("/mangadex/list/[id]", {
-					id
+					id: get_value_from_maybe_getter(id)
 				})
 		}),
 		ContextMenuItemProvider.menuItem({
@@ -57,7 +61,7 @@ export default function customListElementContextMenu({
 				openNewWindow(
 					currentLocationWithNewPath(
 						route("/mangadex/list/[id]", {
-							id
+							id: get_value_from_maybe_getter(id)
 						})
 					)
 				);
@@ -66,12 +70,12 @@ export default function customListElementContextMenu({
 		ContextMenuItemProvider.menuItem({
 			text: name ? `Open ${name} in the broswer` : "Open custom list in the broswer",
 			action() {
-				openUrl(`https://mangadex.org/list/${id}`);
+				openUrl(`https://mangadex.org/list/${get_value_from_maybe_getter(id)}`);
 			}
 		}),
 		ContextMenuItemProvider.seperator()
 	];
-	const isFollowed = isFollowingCustomList(id);
+	const isFollowed = isFollowingCustomList(get_value_from_maybe_getter(id));
 	items.push(
 		ContextMenuItemProvider.menuItem({
 			text: derived(isFollowed, (isFollowed) => (isFollowed ? "Unfollow" : "Follow")),
@@ -99,7 +103,7 @@ export default function customListElementContextMenu({
 					using mut = extractFromAccessor(exportCustomListsToCSV);
 					mut.value.mutateAsync(
 						{
-							ids: [id],
+							ids: [get_value_from_maybe_getter(id)],
 							exportPath,
 							includePrivate: get(isLogged),
 							includeReadingStatus: get(isLogged),
@@ -143,7 +147,7 @@ export default function customListElementContextMenu({
 					text: "Download all chapters",
 					action() {
 						downloadTitlesCustomLists({
-							listIDs: [id],
+							listIDs: [get_value_from_maybe_getter(id)],
 							extras: MangaDownloadExtras.AllChapters,
 							filter: true
 						}).catch(console.error);
@@ -153,7 +157,7 @@ export default function customListElementContextMenu({
 					text: "Download all unread",
 					action() {
 						downloadTitlesCustomLists({
-							listIDs: [id],
+							listIDs: [get_value_from_maybe_getter(id)],
 							extras: MangaDownloadExtras.Unreads,
 							filter: true
 						}).catch(console.error);
@@ -164,7 +168,7 @@ export default function customListElementContextMenu({
 					text: "Download all undownloaded",
 					action() {
 						downloadTitlesCustomLists({
-							listIDs: [id],
+							listIDs: [get_value_from_maybe_getter(id)],
 							extras: MangaDownloadExtras.UnDownloadeds,
 							filter: true
 						}).catch(console.error);
@@ -174,7 +178,7 @@ export default function customListElementContextMenu({
 					text: "Download all undownloaded unread",
 					action() {
 						downloadTitlesCustomLists({
-							listIDs: [id],
+							listIDs: [get_value_from_maybe_getter(id)],
 							extras: MangaDownloadExtras.UnReadUnDownloadeds,
 							filter: true
 						}).catch(console.error);
@@ -185,7 +189,7 @@ export default function customListElementContextMenu({
 					text: "Re-download all failed chapters",
 					action() {
 						downloadTitlesCustomLists({
-							listIDs: [id],
+							listIDs: [get_value_from_maybe_getter(id)],
 							extras: MangaDownloadExtras.Failed,
 							filter: true
 						}).catch(console.error);
@@ -195,7 +199,7 @@ export default function customListElementContextMenu({
 					text: "Re-download all failed unread chapters",
 					action() {
 						downloadTitlesCustomLists({
-							listIDs: [id],
+							listIDs: [get_value_from_maybe_getter(id)],
 							extras: MangaDownloadExtras.UnReadFailed,
 							filter: true
 						}).catch(console.error);
@@ -214,12 +218,15 @@ export default function customListElementContextMenu({
 						action() {
 							using mut = extractFromAccessor(updateCustomListVisibilityMutation);
 							mut.value.mutate(
-								{ id, visibility: CustomListVisibility.Public },
+								{
+									id: get_value_from_maybe_getter(id),
+									visibility: CustomListVisibility.Public
+								},
 								{
 									onSuccess() {
 										addToast({
 											title: "Sucefully made custom list public",
-											description: name ?? id,
+											description: name ?? get_value_from_maybe_getter(id),
 											type: "success"
 										});
 										onVisibilityChange?.(CustomListVisibility.Public);
@@ -236,12 +243,15 @@ export default function customListElementContextMenu({
 						action() {
 							using mut = extractFromAccessor(updateCustomListVisibilityMutation);
 							mut.value.mutate(
-								{ id, visibility: CustomListVisibility.Private },
+								{
+									id: get_value_from_maybe_getter(id),
+									visibility: CustomListVisibility.Private
+								},
 								{
 									onSuccess() {
 										addToast({
 											title: "Sucefully made custom list private",
-											description: name ?? id,
+											description: name ?? get_value_from_maybe_getter(id),
 											type: "success"
 										});
 										onVisibilityChange?.(CustomListVisibility.Private);
@@ -260,14 +270,14 @@ export default function customListElementContextMenu({
 				text: "Delete",
 				action() {
 					using mut = extractFromAccessor(deleteCustomListMutation);
-					mut.value.mutate(id, {
+					mut.value.mutate(get_value_from_maybe_getter(id), {
 						onError(error) {
 							addErrorToast("Cannot delete custom list", error);
 						},
 						onSuccess() {
 							addToast({
 								title: "Deleted custom list",
-								description: name ?? id,
+								description: name ?? get_value_from_maybe_getter(id),
 								type: "warning"
 							});
 							onDelete?.();

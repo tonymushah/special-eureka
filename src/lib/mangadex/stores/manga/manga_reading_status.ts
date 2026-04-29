@@ -1,29 +1,7 @@
-import { graphql } from "@mangadex/gql";
 import type { ReadingStatus } from "@mangadex/gql/graphql";
 import { client } from "@mangadex/gql/urql";
 import { readable, type Readable } from "svelte/store";
-
-const subscription = graphql(`
-	subscription mangaReadingStatusSubscription($id: UUID!) {
-		watchMangaReadingState(mangaId: $id)
-	}
-`);
-
-const init_query = graphql(`
-	query mangaReadingStatusQuery($id: UUID!) {
-		manga {
-			readingStatus(id: $id)
-		}
-	}
-`);
-
-const mutation = graphql(`
-	mutation mangaReadingStatusMutation($id: UUID!, $status: ReadingStatus) {
-		manga {
-			updateReadingStatus(id: $id, status: $status)
-		}
-	}
-`);
+import { init_query, mutation, subscription } from "./manga_reading_status.query";
 
 export async function get_manga_reading_status(id: string): Promise<ReadingStatus | null> {
 	const res = await client

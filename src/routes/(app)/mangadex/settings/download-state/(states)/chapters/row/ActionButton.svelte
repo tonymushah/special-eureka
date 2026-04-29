@@ -6,18 +6,20 @@
 		downloadMutation as downloadMutationLoader,
 		cancelDownloadMutation as cancelDownloadMutationLoader
 	} from "@mangadex/download/chapter.svelte";
-	import { Debounced, IsInViewport } from "runed";
+	import { IsInViewport } from "runed";
 
 	interface Props {
 		id: string;
 	}
 	let { id }: Props = $props();
 	let layout = $state<HTMLElement | undefined>();
-	let isInViewport = new IsInViewport(() => layout);
-	let isInViewportDebounced = new Debounced(() => isInViewport.current, 500);
+	let isInViewport = new IsInViewport(() => layout, {
+		threshold: 0.2
+	});
+	// let isInViewportDebounced = new Debounced(() => isInViewport.current, 500);
 	let downloadInstance = new ChapterDownload(
 		() => id,
-		() => isInViewportDebounced.current
+		() => isInViewport.current
 	);
 	let is_downloading = $derived(downloadInstance.isDownloading);
 	let is_downloaded = $derived(

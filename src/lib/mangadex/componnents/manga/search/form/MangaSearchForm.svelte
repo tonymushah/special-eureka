@@ -5,7 +5,7 @@
 	import type { UnlistenFn } from "@tauri-apps/api/event";
 	import { onDestroy } from "svelte";
 	import { ArchiveIcon, FilterIcon, SearchIcon } from "@lucide/svelte";
-	import { derived, writable, type Writable } from "svelte/store";
+	import { derived, toStore, writable, type Writable } from "svelte/store";
 	import { init as initFilterContext, type MangaSearchFilterParams } from "./filter/contexts";
 	import MangaSearchFilterDialog from "./filter/MangaSearchFilterDialog.svelte";
 	import type { MangaSearchParams } from "./state";
@@ -25,12 +25,22 @@
 
 	let {
 		realTime = $bindable(false),
-		defaultParams = $bindable(defaultMangaSearchParams()),
+		defaultParams: _defaultParams = defaultMangaSearchParams(),
 		onchange,
 		onsubmit,
 		dialog_bind = $bindable()
 	}: Props = $props();
-	const params = writable(defaultParams);
+
+	let defaultParams = $state(defaultMangaSearchParams());
+	$effect(() => {
+		defaultParams = structuredClone(_defaultParams);
+	});
+
+	const params = toStore(
+		() => defaultParams,
+		(d) => (defaultParams = d)
+	);
+
 	const titleParams: Writable<string | undefined> = (() => {
 		const title_params_derived = derived(params, ($p) => $p.title);
 		return {
@@ -71,9 +81,6 @@
 			}
 		};
 	})();
-	$effect(() => {
-		params.set(defaultParams);
-	});
 	initFilterContext(
 		(() => {
 			const params_derived = derived(params, ($p) => $p.filter);

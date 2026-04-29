@@ -10,17 +10,13 @@
 		data: PageData;
 	}
 	let { data }: Props = $props();
-	const titlesIds = writable<string[]>([]);
-	$effect(() => {
-		titlesIds.set(data.relationships.titlesIds);
-	});
-	const params = sderived(titlesIds, (ids) => {
+	const params = $derived.by(() => {
 		return {
-			mangaIds: ids
+			mangaIds: data.relationships.titlesIds
 		} satisfies MangaListParams;
 	});
 </script>
 
 <AppTitle title="{data.attributes.name} - MangaDex" />
 
-<SearchContent offlineStore={readable(false)} {params} hideReadTitle={$hideReadTitle} />
+<SearchContent offlineStore={false} {params} hideReadTitle={$hideReadTitle} />

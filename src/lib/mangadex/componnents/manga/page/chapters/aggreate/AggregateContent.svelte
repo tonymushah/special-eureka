@@ -17,7 +17,7 @@
 	import { type ComponentProps } from "svelte";
 	import VolumeAccordion from "./VolumeAccordion.svelte";
 	import Volumes from "./Volumes.svelte";
-	import { getChapterStoreContext, type ChapterStores } from "./utils/chapterStores";
+	import { getChapterStoreContext, type ChapterStores } from "./utils/chapterStores.svelte";
 	import { setContextMenuContext } from "@special-eureka/core/utils/contextMenuContext";
 
 	interface Props extends ChapterEl1Events {
@@ -27,19 +27,17 @@
 	let { volumes, ...events }: Props = $props();
 	const chaptersStore: ChapterStores = getChapterStoreContext();
 	let data: ComponentProps<typeof VolumeAccordion>[] = $derived.by(() => {
-		const store = $chaptersStore;
 		return volumes.map((volume) => {
 			return {
 				title: volume.volume,
 				volumeContent: volume.chapters.map((chapter) => {
 					const ids = chapter.ids;
-					let chapters: ComponentProps<typeof ChapterElement1>[] = [];
-					ids.forEach((id) => {
-						const res = store.get(id);
-						if (res) {
-							chapters.push(res);
-						}
-					});
+					let chapters: ComponentProps<typeof ChapterElement1>[] = chaptersStore
+						.entries()
+						.filter(([k, _]) => ids.includes(k))
+						.map(([_, v]) => v)
+						.toArray();
+
 					return {
 						title: chapter.chapter,
 						chapters

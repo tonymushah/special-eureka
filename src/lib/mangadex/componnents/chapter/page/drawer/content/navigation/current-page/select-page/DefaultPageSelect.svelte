@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { WritableValue } from "$lib";
 	import { getChapterCurrentPageContext } from "@mangadex/componnents/chapter/page/contexts/currentPage";
 	import getCurrentChapterImages from "@mangadex/componnents/chapter/page/utils/getCurrentChapterImages";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
@@ -10,33 +11,31 @@
 	import { slide } from "svelte/transition";
 
 	const currentPageContext = getChapterCurrentPageContext();
-	const currentPageSelectedReadable = derived(currentPageContext, ($page) => {
+	let currentPageSelectedReadable = $derived.by(() => {
+		const page = $currentPageContext;
 		return {
-			value: $page,
-			label: `${$page + 1}`
+			value: page,
+			label: `${page + 1}`
 		} as SelectOption<number>;
 	});
 	//const currentData = getCurrentChapterData();
-
-	const options = derived(getCurrentChapterImages(), ($images) =>
-		range(0, $images.getImages().length).map<SelectOption<number>>((index) => ({
+	const images = getCurrentChapterImages();
+	let options = $derived.by(() =>
+		range(0, images.images.length).map<SelectOption<number>>((index) => ({
 			value: index,
 			label: `${index + 1}`
 		}))
 	);
-	const selected: Writable<SelectOption<number>> = {
-		subscribe(run, invalidate) {
-			return currentPageSelectedReadable.subscribe(run, invalidate);
+	let selected: WritableValue<SelectOption<number>> = {
+		get value() {
+			return currentPageSelectedReadable;
 		},
-		set(value) {
+		set value(value) {
 			currentPageContext.set(value.value);
-		},
-		update(updater) {
-			currentPageContext.set(updater(get(currentPageSelectedReadable)).value);
 		}
 	};
 	function isSelected(val: number) {
-		return $selected.value == val;
+		return selected.value.value == val;
 	}
 	//onMount(() => options.subscribe(noop));
 	let open = $state(false);
@@ -61,14 +60,14 @@
 				open = !open;
 			}}
 		>
-			Page: {$selected.label}
+			Page: {selected.value.label}
 		</ButtonAccent>
 	</div>
 	{#if open}
 		<div class="menu-outer" bind:this={menu}>
 			<MangaDexVarThemeProvider>
 				<menu transition:slide={{ duration: 150, axis: "y" }}>
-					{#each $options as { value, label } (value)}
+					{#each options as { value, label } (value)}
 						<button
 							class="li"
 							onclick={() => {

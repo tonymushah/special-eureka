@@ -12,7 +12,7 @@
 	import { addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 
 	const __res = getTitleLayoutData();
-	let data = $derived.by(() => __res.queryResult);
+	let data = $derived.by(() => __res.value.queryResult);
 	function buildAtlTitles(altTitle: Record<string, string>[]): AltTitleItem[] {
 		let map = manga_altTitle_to_lang_map(altTitle);
 		let output: AltTitleItem[] = [];

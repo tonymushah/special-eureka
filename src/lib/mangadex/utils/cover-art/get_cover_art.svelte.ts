@@ -2,6 +2,7 @@ import coverNotFound from "@mangadex/assets/artworks/cover-not-found.jpg";
 import { mangadexQueryClient, type GetCoverParam } from "@mangadex/index";
 import { createQuery } from "@tanstack/svelte-query";
 import { delay } from "lodash";
+import type { Getter } from "runed";
 import { get_cover_image_url } from "./get_cover_art";
 
 function load_image(base_url: string) {
@@ -19,7 +20,7 @@ function load_image(base_url: string) {
 	});
 }
 
-export function get_cover_image(_param: () => GetCoverParam) {
+export function get_cover_image(_param: () => GetCoverParam, disabled?: Getter<boolean>) {
 	let base_url = $derived.by(() => get_cover_image_url(_param()));
 	return createQuery(
 		() => ({
@@ -29,15 +30,21 @@ export function get_cover_image(_param: () => GetCoverParam) {
 					// console.log(`loaded ${e}`);
 					return e;
 				});
-			}
+			},
+			disabled: disabled?.(),
+			// 15 mins
+			staleTime: 15 * 60 * 1000
 			// networkMode: "always"
 		}),
 		() => mangadexQueryClient
 	);
 }
 
-export function get_cover_image_auto_handle_error(_param: () => GetCoverParam) {
-	let query = get_cover_image(_param);
+export function get_cover_image_auto_handle_error(
+	_param: () => GetCoverParam,
+	disabled?: Getter<boolean>
+) {
+	let query = get_cover_image(_param, disabled);
 	let maybe_url = $derived.by(() => {
 		if (query.isSuccess) {
 			return query.data;

@@ -45,12 +45,9 @@
 
 	setContextMenuContext(
 		customListElementContextMenu({
-			// svelte-ignore state_referenced_locally
-			id: data.id,
-			// svelte-ignore state_referenced_locally
-			name: data.attributes.name,
-			// svelte-ignore state_referenced_locally
-			isMine: data.isMine,
+			id: () => data.id,
+			name: () => data.attributes.name,
+			isMine: () => data.isMine ?? false,
 			onVisibilityChange(vis) {
 				switch (vis) {
 					case CustomListVisibility.Private:

@@ -8,8 +8,7 @@
 	import ChapterPageHeader from "./top-info/ChapterPageHeader.svelte";
 	import { isSidebarRtl } from "@mangadex/componnents/sidebar/states/isRtl";
 	import getCurrentChapterImages from "./utils/getCurrentChapterImages";
-	import { debounce, delay, noop } from "lodash";
-	import ChapterPages from "@mangadex/stores/chapter/pages";
+	import { debounce, delay } from "lodash";
 	import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 	import type { Action } from "svelte/action";
 	import { onDestroy, onMount } from "svelte";
@@ -32,7 +31,7 @@
 
 	const triggerFunc = debounce(() =>
 		delay(() => {
-			ChapterPages.refetchIncompletes(images).catch((e) => {
+			images.refetchIncompletes().catch((e) => {
 				addErrorToast("Error on sending messages", e);
 			});
 		}, 1000)
@@ -54,13 +53,8 @@
 	const data = getCurrentChapterData();
 	onMount(() => {
 		return data.subscribe((d) => {
-			console.log(`changing data ${d.id}`);
 			images.resendAll();
 		});
-	});
-	onMount(() => {
-		let sub = images.subscribe(noop);
-		return sub;
 	});
 	let pageToUse: number = -1;
 	const exportPageMutation = exportPageMutationLoader();
@@ -132,7 +126,7 @@
 				</div>
 			{/if}
 			<section class="content">
-				{#if $images.pagesLen}
+				{#if images.pagesLen}
 					<ChapterReadingMode
 						oncontextmenu={(e) => {
 							console.log(e);

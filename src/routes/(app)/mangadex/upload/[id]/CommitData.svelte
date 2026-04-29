@@ -25,7 +25,7 @@
 		translatedLanguage?: Language;
 	};
 	let { commitData: pCommitData, sessionId, isUploading }: Props = $props();
-	let commitData = $state<InnerInternalSessionObjCommitData | undefined>(
+	let commitData = $derived<InnerInternalSessionObjCommitData | undefined>(
 		structuredClone(pCommitData)
 	);
 	let mutation = setInternalSessionCommitDataMutation();

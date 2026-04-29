@@ -1,10 +1,11 @@
+import { createReadonlyValue, type ReadonlyValue } from "$lib";
 import getTitleConflicts from "@mangadex/utils/conflicts";
 import get_value_and_random_if_undefined from "@mangadex/utils/lang/get_value_and_random_if_undefined";
 import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
 import manga_altTitle_to_lang_map from "@mangadex/utils/lang/record-to-map/manga-altTitle-to-lang-map";
 import type { Tag } from "@mangadex/utils/types/Tag";
 import type { Client } from "@urql/svelte";
-import { getContext, setContext } from "svelte";
+import { Context, type Getter } from "runed";
 import query from "./(layout)/query";
 
 const contextKey = "title-layout-data";
@@ -59,9 +60,11 @@ export async function load(id: string, client: Client) {
 
 export type LayoutData = Awaited<ReturnType<typeof load>>;
 
-export function getTitleLayoutData(): LayoutData {
-	return getContext(contextKey);
+const ctx = new Context<ReadonlyValue<LayoutData>>(contextKey);
+
+export function getTitleLayoutData(): ReadonlyValue<LayoutData> {
+	return ctx.get();
 }
-export function setTitleLayoutData(data: LayoutData) {
-	setContext(contextKey, data);
+export function setTitleLayoutData(data: Getter<LayoutData>) {
+	return ctx.set(createReadonlyValue(data));
 }

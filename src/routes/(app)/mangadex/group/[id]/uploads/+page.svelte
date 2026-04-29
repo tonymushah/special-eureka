@@ -8,14 +8,8 @@
 	}
 
 	let { data }: Props = $props();
-	// svelte-ignore state_referenced_locally
-	const idWritable = writable(data.id);
-	$effect(() => {
-		idWritable.set(data.id);
-	});
-	const id = readonly(idWritable);
 </script>
 
 <AppTitle title="Uploads of {data.name} - MangaDex" />
 
-<SearchContent groupId={id} />
+<SearchContent groupId={data.id} />

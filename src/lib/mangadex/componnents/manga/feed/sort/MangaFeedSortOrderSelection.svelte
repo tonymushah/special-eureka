@@ -38,22 +38,51 @@
 		}
 	};
 	const sortDataMap = new Map(Object.entries(sortsData).map(([key, value]) => [key, value]));
+	const sortDataMapRev = new Map(
+		Object.entries(sortsData).map(([key, value]) => [JSON.stringify(value), key])
+	);
 </script>
 
 <script lang="ts">
 	import { OrderDirection, type MangaFeedSortOrder as Order } from "@mangadex/gql/graphql";
-	import { type Writable } from "svelte/store";
 	import { createListCollection } from "@ark-ui/svelte/select";
 	import SelectSortOrderBase from "@mangadex/componnents/theme/selects/sort-order-base/SelectSortOrderBase.svelte";
 	interface Props {
-		sort: Writable<Order | undefined>;
+		sort: Order | undefined;
 	}
-	let { sort }: Props = $props();
+	let { sort = $bindable() }: Props = $props();
 	const collection = createListCollection({ items: sortDataMap.keys().toArray() });
-	let bal = $state<string[]>([]);
-	$effect(() => {
-		sort.set(sortDataMap.get(bal[0]));
-	});
 </script>
 
-<SelectSortOrderBase {collection} bind:value={bal} />
+<SelectSortOrderBase
+	{collection}
+	disableClear
+	bind:value={
+		() => {
+			if (sort == undefined) {
+				return undefined;
+			} else {
+				const key = JSON.stringify({
+					...sort
+				});
+				const res = sortDataMapRev.get(key);
+				if (res) {
+					return [res];
+				} else {
+					return [];
+				}
+			}
+		},
+		(value) => {
+			if (value) {
+				if (value.length > 0) {
+					sort = sortDataMap.get(value[0]);
+				} else {
+					sort = undefined;
+				}
+			} else {
+				sort = undefined;
+			}
+		}
+	}
+/>

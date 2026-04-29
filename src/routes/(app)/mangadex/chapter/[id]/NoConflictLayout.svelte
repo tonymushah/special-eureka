@@ -9,7 +9,7 @@
 		children?: import("svelte").Snippet;
 	}
 
-	let { data = $bindable(), children }: Props = $props();
+	let { data, children }: Props = $props();
 	function isLayoutDataValid({ data, currentPage }: LayoutData): boolean {
 		if (data != null && data != undefined && currentPage != undefined) {
 			return true;
@@ -32,7 +32,7 @@
 		<h1>Loading chapter...</h1>
 	</div>
 {:else if isDataValid}
-	<PostLayout bind:data>
+	<PostLayout {data}>
 		{@render children?.()}
 	</PostLayout>
 {:else}

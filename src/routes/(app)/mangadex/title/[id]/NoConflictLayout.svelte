@@ -6,14 +6,14 @@
 		addMangaToAList,
 		isMutating as isAddingToList
 	} from "@mangadex/componnents/manga/add-to-list/AddToList.svelte";
-	import { initChapterStoreContext } from "@mangadex/componnents/manga/page/chapters/aggreate/utils/chapterStores";
+	import { initChapterStoreContext } from "@mangadex/componnents/manga/page/chapters/aggreate/utils/chapterStores.svelte";
 	import MangaPageInfo from "@mangadex/componnents/manga/page/chapters/MangaPageInfo.svelte";
 	import MangaNavBar from "@mangadex/componnents/manga/page/MangaNavBar.svelte";
 	import { initRelatedTitlesStoreContext } from "@mangadex/componnents/manga/page/related/utils/relatedTitleStore";
 	import type { ReadingStatusEventDetail } from "@mangadex/componnents/manga/page/top-info/buttons/readingStatus";
 	import MangaPageTopInfo from "@mangadex/componnents/manga/page/top-info/MangaPageTopInfo.svelte";
 	import type { TopMangaStatistics } from "@mangadex/componnents/manga/page/top-info/stats";
-	import { hasChapterToRead } from "@mangadex/componnents/manga/read/getMangaToReadChapter";
+	import { hasChapterToRead } from "@mangadex/componnents/manga/read/getMangaToReadChapter.svelte";
 	import { readManga } from "@mangadex/componnents/manga/read/ReadDialog.svelte";
 	import Markdown from "@mangadex/componnents/markdown/Markdown.svelte";
 	import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
@@ -24,20 +24,19 @@
 	} from "@mangadex/download/manga.svelte";
 	import { mangaReadMarkers } from "@mangadex/gql-docs/read-markers/chapters";
 	import { client } from "@mangadex/gql/urql";
-	import manga_following_status, {
+	import {
 		get_manga_following_status,
 		set_manga_following_status
 	} from "@mangadex/stores/manga/manga_following_status";
-	import manga_rating, {
-		get_manga_rating,
-		set_manga_rating
-	} from "@mangadex/stores/manga/manga_rating";
-	import manga_reading_status, {
+	import { get_manga_rating, set_manga_rating } from "@mangadex/stores/manga/manga_rating";
+	import manga_rating from "@mangadex/stores/manga/manga_rating.svelte";
+	import {
 		get_manga_reading_status,
 		set_manga_reading_status
 	} from "@mangadex/stores/manga/manga_reading_status";
+	import manga_reading_status from "@mangadex/stores/manga/manga_reading_status.svelte";
 	import { listenToAnyChapterReadMarkers } from "@mangadex/stores/read-markers";
-	import { initContextReadChapterMarkers } from "@mangadex/stores/read-markers/context";
+	import { initContextReadChapterMarkers } from "@mangadex/stores/read-markers/context.svelte";
 	import mangaElementContextMenu from "@mangadex/utils/context-menu/manga";
 	import manga_title_to_lang_map from "@mangadex/utils/lang/record-to-map/manga-title-to-lang-map";
 	import { ContextMenuItemProvider } from "@special-eureka/core/commands/contextMenu";
@@ -48,8 +47,7 @@
 	import { writeText } from "@tauri-apps/plugin-clipboard-manager";
 	import { openUrl as open } from "@tauri-apps/plugin-opener";
 	import { debounce, delay, noop } from "lodash";
-	import { type Snippet } from "svelte";
-	import { derived as der, derived, toStore } from "svelte/store";
+	import { untrack, type Snippet } from "svelte";
 	import { v4 } from "uuid";
 	import type { LayoutData } from "./layout.context";
 	import { setTitleLayoutData } from "./layout.context";
@@ -66,7 +64,11 @@
 	import statsGQLQuery from "./(layout)/statsQuery";
 	import { getCurrentWebview } from "@tauri-apps/api/webview";
 	import { waitAsync } from "$lib/utils";
-	import { Debounced, IsInViewport } from "runed";
+	import {
+		// Debounced,
+		IsInViewport
+	} from "runed";
+	import manga_following_status from "@mangadex/stores/manga/manga_following_status.svelte";
 
 	type TopMangaStatisticsStoreData = TopMangaStatistics & {
 		threadUrl?: string;
@@ -76,15 +78,14 @@
 		children?: Snippet;
 	}
 	let { data, children }: Props = $props();
-	$effect.pre(() => {
-		setTitleLayoutData(data);
-	});
+	setTitleLayoutData(() => data);
 
 	let isInViewPortTrigger = $state<HTMLElement | undefined>();
-	let _isInViewport = new IsInViewport(() => isInViewPortTrigger);
-	let isInViewport = new Debounced(() => _isInViewport.current, 500);
+	let isInViewport = new IsInViewport(() => isInViewPortTrigger, {
+		threshold: 0.1
+	});
+	// let isInViewport = new Debounced(() => _isInViewport.current, 500);
 	// NOTE: this is completely intentional
-	// svelte-ignore state_referenced_locally
 	let statsQuery = createQuery(() => ({
 		queryKey: ["title", data.layoutData.id, "stats"],
 		async queryFn() {
@@ -145,21 +146,13 @@
 		() => isInViewport.current
 	);
 	// TODO transform these into class based reactivit
-	// svelte-ignore state_referenced_locally
-	const _state = toStore(() => mangaDownload.mangaDownloadState);
-	const reading_status = der(
-		// svelte-ignore state_referenced_locally
-		manga_reading_status(data.layoutData.id, {
-			getOnMount: false
-		}),
-		(status) => status ?? undefined
-	);
-	// svelte-ignore state_referenced_locally
-	const isFollowing = manga_following_status(data.layoutData.id, {
+	const reading_status = manga_reading_status(() => data.layoutData.id, {
 		getOnMount: false
 	});
-	// svelte-ignore state_referenced_locally
-	const ratingStore = der(manga_rating(data.layoutData.id), (d) => d ?? undefined);
+	const isFollowing = manga_following_status(() => data.layoutData.id, {
+		getOnMount: false
+	});
+	const ratingStore = manga_rating(() => data.layoutData.id);
 
 	let followingStatusQuery = createQuery(() => ({
 		queryKey: ["title", data.layoutData.id, "following", "status"],
@@ -245,8 +238,7 @@
 	const onrating = debounce((e: number | null) => {
 		titleRatingMutation.mutate(e);
 	});
-	// svelte-ignore state_referenced_locally
-	const hasChaptToRead = hasChapterToRead(data.layoutData.id);
+	const hasChaptToRead = hasChapterToRead(() => data.layoutData.id);
 	setContextMenuContext(() =>
 		mangaElementContextMenu({
 			id: data.layoutData.id,
@@ -297,42 +289,30 @@
 			sub.then((v) => v());
 		};
 	});
-	const readMarkerStores = toStore(() => {
-		return {
-			...chapterReadMarkers
-		};
-	});
-	initContextReadChapterMarkers(
-		derived(
-			[readMarkerStores],
-			([query], set, update) => {
-				if (query.isSuccess) {
-					const tosend = new Map(query.data.map((d) => [d, true])) as Map<
-						string,
-						boolean
-					>;
-					set(tosend);
-					const sub = listenToAnyChapterReadMarkers.subscribe((a) => {
-						if (a != undefined) {
-							if (query.isSuccess) {
-								update((markers: Map<string, boolean>) => {
-									if (markers.size > 1) {
-										const state = markers.get(a.chapter);
-										if (state != undefined) {
-											markers.set(a.chapter, a.read);
-										}
-									}
-									return markers;
-								});
+
+	let readContextMarkers = initContextReadChapterMarkers();
+	$effect(() => {
+		const query = chapterReadMarkers;
+		if (query.isSuccess) {
+			readContextMarkers.clear();
+			query.data.forEach((d) => readContextMarkers.set(d, true));
+			const sub = listenToAnyChapterReadMarkers.subscribe((a) => {
+				untrack(() => {
+					if (a != undefined) {
+						if (query.isSuccess) {
+							if (readContextMarkers.size > 1) {
+								const state = readContextMarkers.get(a.chapter);
+								if (state != undefined) {
+									readContextMarkers.set(a.chapter, a.read);
+								}
 							}
 						}
-					});
-					return sub;
-				}
-			},
-			new Map()
-		)
-	);
+					}
+				});
+			});
+			return sub;
+		}
+	});
 	let removeMutation = removeMutationLoader();
 	let downloadMutationQuery = downloadMutationQueryLoader();
 	let cancelMutation = cancelMutationLoader();
@@ -422,7 +402,7 @@
 			}
 		}}
 		contentRating={layoutData.contentRating ?? undefined}
-		downloadState={_state}
+		downloadState={mangaDownload.mangaDownloadState}
 		ondownload={async () => {
 			await downloadMutationQuery.mutateAsync(data.layoutData.id);
 		}}
@@ -432,8 +412,8 @@
 		ondownloading={async () => {
 			await cancelMutation.mutateAsync(data.layoutData.id);
 		}}
-		{reading_status}
-		{isFollowing}
+		reading_status={reading_status.value ?? undefined}
+		isFollowing={isFollowing.value}
 		{onreadingStatus}
 		ontag={({ id }) => {
 			goto(
@@ -443,10 +423,10 @@
 			);
 		}}
 		disableAddToLibrary={disableAddToLibrary || !$isLogged}
-		rating={ratingStore}
+		rating={ratingStore.value ?? undefined}
 		{onrating}
 		disableRating={disableRating || !$isLogged}
-		disableRead={!$hasChaptToRead}
+		disableRead={!hasChaptToRead.value}
 		onread={() => {
 			readManga(data.layoutData.id);
 		}}

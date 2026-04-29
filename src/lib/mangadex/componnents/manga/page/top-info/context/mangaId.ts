@@ -1,18 +1,16 @@
-import { getContext, setContext } from "svelte";
+import { createReadonlyValue, type ReadonlyValue } from "$lib";
+import { Context, type Getter } from "runed";
 
 const key = "top-info-manga-id";
 
 type TopInfoMangaId = string;
 
-export function setTopMangaIdContextStore(mangaId: TopInfoMangaId) {
-	return setContext<TopInfoMangaId>(key, mangaId);
+const ctt = new Context<ReadonlyValue<string>>(key);
+
+export function setTopMangaIdContextStore(mangaId: Getter<TopInfoMangaId>) {
+	return ctt.set(createReadonlyValue(mangaId));
 }
 
 export function getTopMangaIdContextStore() {
-	const mangaId = getContext<TopInfoMangaId | undefined>(key);
-	if (mangaId) {
-		return mangaId;
-	} else {
-		throw new Error(`\`${key}\` is not declared`);
-	}
+	return ctt.get();
 }

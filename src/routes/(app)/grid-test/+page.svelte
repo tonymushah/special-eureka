@@ -9,8 +9,10 @@
 	import { IsInViewport } from "runed";
 	let content: HTMLElement | undefined = undefined;
 	let isInViewPortTrigger = $state<HTMLElement | undefined>();
-	let isInViewport = new IsInViewport(() => isInViewPortTrigger);
-	$inspect(isInViewport.current);
+	let isInViewport = new IsInViewport(() => isInViewPortTrigger, {
+		threshold: 0.2
+	});
+	// $inspect(isInViewport.current);
 	$effect(() => {
 		if (content) {
 			const selecto = new SelectionArea({

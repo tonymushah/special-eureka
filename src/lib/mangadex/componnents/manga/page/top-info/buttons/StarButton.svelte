@@ -19,7 +19,7 @@
 
 	let { onselect, disabled }: Props = $props();
 
-	let rating = $derived($ratingStore);
+	let rating = $derived(ratingStore.value);
 
 	function toggle() {
 		isOpen = !isOpen;
@@ -27,7 +27,7 @@
 </script>
 
 <div class="star-button" bind:this={target}>
-	{#if rating == undefined}
+	{#if typeof rating != "number"}
 		<ButtonAccent isBase onclick={toggle} {disabled}>
 			<StarIcon />
 		</ButtonAccent>

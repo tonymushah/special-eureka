@@ -82,7 +82,7 @@
 	import relatedChaptersQuery from "@mangadex/gql-docs/chapter/layout-query/related";
 	import chapterPageThread from "@mangadex/gql-docs/chapter/layout-query/thread";
 	import { DrawerMode, ForumThreadType, ReadingMode } from "@mangadex/gql/graphql";
-	import { getChapterPageSync } from "@mangadex/stores/chapter/page";
+	import { getChapterPageSync } from "@mangadex/stores/chapter/page.svelte";
 	import { allowSync } from "@mangadex/stores/chapter/page/allowSync.svelte";
 	import { drawerModeStore } from "@mangadex/stores/chapterLayout";
 	import { readMarkers as readMarkersLoader } from "@mangadex/stores/read-markers/mutations";
@@ -103,7 +103,7 @@
 		children?: import("svelte").Snippet;
 	}
 
-	let { data = $bindable(), children }: Props = $props();
+	let { data, children }: Props = $props();
 
 	const client = getContextClient();
 	let readMarkers = readMarkersLoader();
@@ -158,10 +158,16 @@
 		}
 	});
 	initIsDrawerOpenWritable(writable(false));
+	let _c_c_c = $state<ReturnType<typeof layoutDataToCurrentChapterData> | undefined>(undefined);
+	$effect(() => {
+		data;
+		_c_c_c = undefined;
+	});
+	let _currentChapterData = $derived.by(() => {
+		return layoutDataToCurrentChapterData(structuredClone(data));
+	});
 
-	const currentChapterData = initCurrentChapterData(
-		writable(layoutDataToCurrentChapterData(data))
-	);
+	initCurrentChapterData(() => _c_c_c ?? _currentChapterData);
 
 	const dataStore = toStore(() => data);
 	const readingModeCur = derived([readingModeWritable, dataStore], ([inner, data]) => {
@@ -187,24 +193,35 @@
 
 	initCurrentChapterDirection(readingDirectionWritable);
 	initCurrentChapterImageFit(imageFitWritable);
-	const chapterSync = getChapterPageSync(data.data.id);
+	const chapterSync = getChapterPageSync(() => data.data.id);
+
+	let __current_page = $state<number | undefined>();
+	$effect(() => {
+		data;
+		__current_page = undefined;
+	});
+
 	const currentPage = initChapterCurrentPageContext(
-		writable(data.currentPage, (set) => {
-			return chapterSync.subscribe((page) => {
-				if (allowSync.allow && typeof page == "number") {
-					set(page);
-				}
-			});
-		})
+		toStore(
+			() => __current_page ?? data.currentPage,
+			(d) => (__current_page = d)
+		)
 	);
+
 	$effect(() => {
-		currentPage.set(data.currentPage);
+		const page = chapterSync.value;
+		if (allowSync.allow && typeof page == "number") {
+			currentPage.set(page);
+		}
 	});
+	// $effect(() => {
+	// 	currentPage.set(data.currentPage);
+	// });
+	// $effect(() => {
+	// 	currentChapterData.set(layoutDataToCurrentChapterData(data));
+	// });
 	$effect(() => {
-		currentChapterData.set(layoutDataToCurrentChapterData(data));
-	});
-	$effect(() => {
-		chapterSync.set($currentPage);
+		chapterSync.value = $currentPage;
 	});
 	$effect(() => {
 		client
@@ -255,18 +272,24 @@
 	$effect(() => {
 		let commentsData = chapterPageThreadQuery.data;
 		if (commentsData != undefined && commentsData != null)
-			currentChapterData.update((current) => {
-				current.thread = new CurrentChapterThread({
+			if (untrack(() => _c_c_c) != undefined) {
+				/* @ts-ignore */
+				_c_c_c.thread = new CurrentChapterThread({
 					comments: commentsData.repliesCount,
 					threadUrl: commentsData.threadUrl
 				});
-				return current;
-			});
+			} else {
+				_c_c_c = _currentChapterData;
+				_c_c_c.thread = new CurrentChapterThread({
+					comments: commentsData.repliesCount,
+					threadUrl: commentsData.threadUrl
+				});
+			}
 	});
 	let createForumThreadMutation = createForumThread();
 	onMount(() =>
 		addListenerToChapterThreadEventTarget(() => {
-			const threadUrl = $currentChapterData.thread?.threadUrl;
+			const threadUrl = _c_c_c?.thread?.threadUrl;
 			if (threadUrl) {
 				openUrl(threadUrl).catch((e) => {
 					addErrorToast("Error on opening url", e);

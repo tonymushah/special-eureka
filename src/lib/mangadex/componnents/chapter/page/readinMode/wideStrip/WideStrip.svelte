@@ -1,5 +1,6 @@
 <!--
-    TODO Add drag support for scrolling
+    [x] Add drag support for scrolling
+    Ref: https://stackoverflow.com/questions/76066584/how-to-enable-touch-like-scrolling-by-grabbing-and-dragging-with-the-mouse#76066874
 -->
 <script lang="ts">
 	import { derived as der, get, writable, type Readable } from "svelte/store";
@@ -11,14 +12,13 @@
 	import { getCurrentChapterDirection } from "../../contexts/readingDirection";
 	import getCurrentChapterImages from "../../utils/getCurrentChapterImages";
 	import DangerButtonOnlyLabel from "@mangadex/componnents/theme/buttons/DangerButtonOnlyLabel.svelte";
-	import ChapterPages from "@mangadex/stores/chapter/pages";
 	import type { OnReadingModeContextMenu } from "..";
 
 	const readingDirection = getCurrentChapterDirection();
 	let widestrip_root: HTMLDivElement | undefined = $state();
 
 	const images_root_data = getCurrentChapterImages();
-	const images = der(images_root_data, ($data) => $data.getPagesState());
+	let images = $derived.by(() => images_root_data.pagesState);
 
 	const isFromIntersector = writable(false);
 	let shouldIgnore = false;
@@ -30,8 +30,10 @@
 		} catch (error) {
 			throw error;
 		} finally {
-			isFromIntersector.set(false);
-			shouldIgnore = false;
+			delay(() => {
+				isFromIntersector.set(false);
+				shouldIgnore = false;
+			}, 1);
 		}
 	}
 	const currentChapterPage = getChapterCurrentPageContext();
@@ -171,6 +173,11 @@
 		isDown.set(false);
 	}}
     */
+	let isDown = false;
+	let startX: number | undefined = undefined;
+	let startY: number | undefined = undefined;
+	let scrollLeft: number | undefined = undefined;
+	let scrollTop: number | undefined = undefined;
 </script>
 
 {@render top?.()}
@@ -192,16 +199,57 @@
 			}
 		}
 	}}
+	onmousedown={(e) => {
+		if (widestrip_root) {
+			isDown = true;
+			startX = e.pageX - widestrip_root.offsetLeft;
+			startY = e.pageY - widestrip_root.offsetTop;
+			scrollLeft = widestrip_root.scrollLeft;
+			scrollTop = widestrip_root.scrollTop;
+			widestrip_root.style.cursor = "grabbing";
+		}
+	}}
+	onmouseleave={(e) => {
+		if (widestrip_root) {
+			isDown = false;
+			widestrip_root.style.cursor = "grab";
+		}
+	}}
+	onmouseup={(e) => {
+		if (widestrip_root) {
+			isDown = false;
+			widestrip_root.style.cursor = "grab";
+		}
+	}}
+	onmousemove={(e) => {
+		if (
+			widestrip_root != undefined &&
+			startX != undefined &&
+			startY != undefined &&
+			scrollLeft != undefined &&
+			scrollTop != undefined
+		) {
+			if (!isDown) return;
+			e.preventDefault();
+			const x = e.pageX - widestrip_root.offsetLeft;
+			const y = e.pageY - widestrip_root.offsetTop;
+			const walkX = (x - startX) * 1; // Change this number to adjust the scroll speed
+			const walkY = (y - startY) * 1; // Change this number to adjust the scroll speed
+			widestrip_root.scrollLeft = scrollLeft - walkX;
+			widestrip_root.scrollTop = scrollTop - walkY;
+		}
+	}}
 >
 	{@render before?.()}
-	{#each $images as image, page}
+	{#each images as image, page}
 		<div data-page={page} use:mount>
 			{#if image?.page}
+				<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 				<img
 					data-page={page}
 					src={image.page.value}
 					alt={image.page.value}
-					ondrag={(e) => {
+					onmousedown={(e) => {
 						e.preventDefault();
 					}}
 					oncontextmenu={(e) => {
@@ -215,7 +263,7 @@
 						<DangerButtonOnlyLabel
 							label="Error"
 							onclick={() => {
-								ChapterPages.removePageError(images_root_data, page);
+								images_root_data.removePageError(page);
 								images_root_data.refetchChapterPage(page);
 							}}
 						/>
@@ -235,6 +283,7 @@
 	.wide-strip {
 		display: flex;
 		flex-direction: row;
+		user-select: none;
 		div {
 			display: flex;
 			height: 100%;
@@ -248,12 +297,19 @@
 	}
 	.wide-strip.innerOverflow {
 		overflow-x: scroll;
+		scrollbar-width: none;
 		width: 100%;
 		height: 100%;
-		scroll-behavior: smooth;
+		cursor: grab;
+		/* scroll-behavior: smooth; */
+	}
+	.wide-strip.innerOverflow::-webkit-scrollbar {
+		display: none;
+		/* For Chrome, Safari, and Edge */
 	}
 	img {
 		height: 100%;
+		user-select: none;
 	}
 	.error {
 		display: flex;

@@ -4,7 +4,7 @@
 	import make_first_upper_case from "@mangadex/utils/make_first_upper_case";
 	import { Ban, CheckIcon as PlusIcon } from "@lucide/svelte";
 	import { bounceInOut } from "svelte/easing";
-	import { derived, readonly } from "svelte/store";
+	import { derived, readonly, toStore } from "svelte/store";
 	import { fade } from "svelte/transition";
 	import {
 		getMangaSearchTagOptionsContextStoreWritable,
@@ -20,7 +20,10 @@
 
 	let { title, group }: Props = $props();
 	const options = getMangaSearchTagOptionsContextStoreWritable();
-	const grouped = groupTagOption(readonly(options), group);
+	const grouped = groupTagOption(
+		readonly(options),
+		toStore(() => group)
+	);
 	function toggle(id: string, inverted?: boolean) {
 		options.update((opts) => {
 			toggleTagOption(opts, id, inverted);

@@ -23,6 +23,7 @@
 		overflow: hidden;
 		text-overflow: ellipsis;
 		border-radius: 0.25em;
+		/* padding-top: 6px; */
 	}
 	.layout:not(.haveBeenRead) {
 		border-style: solid;

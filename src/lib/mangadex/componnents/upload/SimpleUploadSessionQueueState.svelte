@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { queueEntryState } from "@mangadex/stores/upload/queue";
+	import { queueEntryState } from "@mangadex/stores/upload/queue.svelte";
 	import type { HTMLButtonAttributes } from "svelte/elements";
 	import Tooltip from "../Tooltip.svelte";
 
@@ -12,9 +12,8 @@
 	}
 
 	let { queueId, highlighted, selected, index, ...restProps }: Props = $props();
-	// svelte-ignore state_referenced_locally
-	const _queueState = queueEntryState(queueId);
-	let queueState = $derived($_queueState);
+	const _queueState = queueEntryState(() => queueId);
+	let queueState = $derived(_queueState.value);
 </script>
 
 <button

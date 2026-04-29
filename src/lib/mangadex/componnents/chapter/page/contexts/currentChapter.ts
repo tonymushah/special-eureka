@@ -1,5 +1,7 @@
+import { createReadonlyValue, type ReadonlyValue } from "$lib";
 import type { Language, UserRole } from "@mangadex/gql/graphql";
-import { generateContextStoresMethods } from "@mangadex/utils/contexts";
+import { Context, type Getter } from "runed";
+import { toStore } from "svelte/store";
 
 export class CurrentChapterTitle {
 	title: string;
@@ -120,11 +122,20 @@ export class CurrentChapterData {
 	}
 }
 
-export const {
-	getReadonly: getCurrentChapterData,
-	get: getCurrentChapterDataWritable,
-	init: initCurrentChapterData
-} = generateContextStoresMethods<CurrentChapterData>(
-	"CURRENT_CHAPTER_DATA",
-	"The current chapter data is undefined"
-);
+// TODO Refactor to reactive classes
+// export const {
+// 	getReadonly: getCurrentChapterData,
+// } = generateContextStoresMethods<CurrentChapterData>(
+// 	"The current chapter data is undefined"
+// 	);
+
+const ctx = new Context<ReadonlyValue<CurrentChapterData>>("CURRENT_CHAPTER_DATA");
+
+export function initCurrentChapterData(val: Getter<CurrentChapterData>) {
+	ctx.set(createReadonlyValue(val));
+}
+
+export function getCurrentChapterData() {
+	const ctx_value = ctx.get();
+	return toStore(() => ctx_value.value);
+}
