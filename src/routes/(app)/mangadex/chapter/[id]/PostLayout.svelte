@@ -103,7 +103,7 @@
 		children?: import("svelte").Snippet;
 	}
 
-	let { data = $bindable(), children }: Props = $props();
+	let { data, children }: Props = $props();
 
 	const client = getContextClient();
 	let readMarkers = readMarkersLoader();
@@ -158,9 +158,20 @@
 		}
 	});
 	initIsDrawerOpenWritable(writable(false));
+	let _c_c_c = $state<ReturnType<typeof layoutDataToCurrentChapterData> | undefined>(undefined);
+	$effect(() => {
+		data;
+		_c_c_c = undefined;
+	});
+	let _currentChapterData = $derived.by(() => {
+		return layoutDataToCurrentChapterData(data);
+	});
 
 	const currentChapterData = initCurrentChapterData(
-		writable(layoutDataToCurrentChapterData(data))
+		toStore(
+			() => _c_c_c ?? _currentChapterData,
+			(d) => (_c_c_c = d)
+		)
 	);
 
 	const dataStore = toStore(() => data);
@@ -188,7 +199,20 @@
 	initCurrentChapterDirection(readingDirectionWritable);
 	initCurrentChapterImageFit(imageFitWritable);
 	const chapterSync = getChapterPageSync(() => data.data.id);
-	const currentPage = initChapterCurrentPageContext(writable(data.currentPage));
+
+	let __current_page = $state<number | undefined>();
+	$effect(() => {
+		data;
+		__current_page = undefined;
+	});
+
+	const currentPage = initChapterCurrentPageContext(
+		toStore(
+			() => __current_page ?? data.currentPage,
+			(d) => (__current_page = d)
+		)
+	);
+
 	$effect(() => {
 		const page = chapterSync.value;
 		if (allowSync.allow && typeof page == "number") {
@@ -216,13 +240,12 @@
 				if (res.error) {
 					throw res.error;
 				}
-				const rel = res.data?.manga.aggregate.default.volumes.flatMap(
-					({ volume, chapters }) =>
-						chapters.map<RelatedChapter>(({ chapter, ids }) => ({
-							volume,
-							chapter,
-							id: ids.includes(data.data.id) ? data.data.id : ids[0]
-						}))
+				const rel = res.data?.manga.aggregate.default.volumes.flatMap(({ volume, chapters }) =>
+					chapters.map<RelatedChapter>(({ chapter, ids }) => ({
+						volume,
+						chapter,
+						id: ids.includes(data.data.id) ? data.data.id : ids[0]
+					}))
 				);
 				if (rel) {
 					related.set(rel);
