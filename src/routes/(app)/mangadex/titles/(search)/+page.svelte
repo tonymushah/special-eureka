@@ -138,12 +138,12 @@
 			{defaultParams}
 			onchange={(detail) => {
 				if (realTime) {
-					currentSearchParams = detail;
+					currentSearchParams = structuredClone(detail);
 				}
 			}}
 			onsubmit={(detail) => {
 				if (!realTime) {
-					currentSearchParams = detail;
+					currentSearchParams = structuredClone(detail);
 				}
 			}}
 		/>
