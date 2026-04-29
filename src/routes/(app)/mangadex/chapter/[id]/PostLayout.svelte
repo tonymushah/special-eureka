@@ -235,12 +235,13 @@
 				if (res.error) {
 					throw res.error;
 				}
-				const rel = res.data?.manga.aggregate.default.volumes.flatMap(({ volume, chapters }) =>
-					chapters.map<RelatedChapter>(({ chapter, ids }) => ({
-						volume,
-						chapter,
-						id: ids.includes(data.data.id) ? data.data.id : ids[0]
-					}))
+				const rel = res.data?.manga.aggregate.default.volumes.flatMap(
+					({ volume, chapters }) =>
+						chapters.map<RelatedChapter>(({ chapter, ids }) => ({
+							volume,
+							chapter,
+							id: ids.includes(data.data.id) ? data.data.id : ids[0]
+						}))
 				);
 				if (rel) {
 					related.set(rel);

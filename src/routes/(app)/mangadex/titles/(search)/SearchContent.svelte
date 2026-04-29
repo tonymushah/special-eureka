@@ -76,7 +76,9 @@
 					];
 				}
 			},
-			async queryFn({ pageParam: [p, offline, hideReadTitle, disableAuthorArtistsBlacklist] }) {
+			async queryFn({
+				pageParam: [p, offline, hideReadTitle, disableAuthorArtistsBlacklist]
+			}) {
 				const res = await executeSearchQuery(
 					client,
 					p,
@@ -93,7 +95,12 @@
 			getPreviousPageParam(
 				firstPage,
 				allPages,
-				[firstPageParam, firstPageOffline, firstHideReadTitle, disableAuthorArtistsBlacklist]
+				[
+					firstPageParam,
+					firstPageOffline,
+					firstHideReadTitle,
+					disableAuthorArtistsBlacklist
+				]
 			) {
 				const next_offset = firstPage.limit - firstPage.offset;
 				if (next_offset < 0) {

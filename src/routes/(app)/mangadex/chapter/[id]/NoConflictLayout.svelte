@@ -43,8 +43,8 @@
 		<section class="explaination">
 			<h3>What happened??</h3>
 			<p>
-				It happens when the Svelte Kit Layout Load function returns an empty object instead (even
-				though it shouldn't return that)
+				It happens when the Svelte Kit Layout Load function returns an empty object instead
+				(even though it shouldn't return that)
 			</p>
 			<p class="hate-js">And that's why I hate JS.</p>
 			<p>

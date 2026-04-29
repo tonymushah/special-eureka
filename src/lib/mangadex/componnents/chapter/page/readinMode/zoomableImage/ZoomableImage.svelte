@@ -95,7 +95,11 @@
 		}}
 	>
 		{#if Array.isArray(src) && Array.isArray(alt)}
-			<div class="double-image" class:fitWidth={$shouldFitWidth} class:fitHeight={$shouldFitHeight}>
+			<div
+				class="double-image"
+				class:fitWidth={$shouldFitWidth}
+				class:fitHeight={$shouldFitHeight}
+			>
 				<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 				<img
 					data-image-left
@@ -116,7 +120,11 @@
 				/>
 			</div>
 		{:else if typeof src == "string" && typeof alt == "string"}
-			<div class="single-image" class:fitWidth={$shouldFitWidth} class:fitHeight={$shouldFitHeight}>
+			<div
+				class="single-image"
+				class:fitWidth={$shouldFitWidth}
+				class:fitHeight={$shouldFitHeight}
+			>
 				<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 				<img
 					{src}

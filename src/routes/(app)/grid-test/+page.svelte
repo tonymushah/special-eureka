@@ -1,6 +1,8 @@
 <script lang="ts">
 	import cssSelecto from "./selecto.module.css";
-	import contextMenu, { ContextMenuItemProvider } from "@special-eureka/core/commands/contextMenu";
+	import contextMenu, {
+		ContextMenuItemProvider
+	} from "@special-eureka/core/commands/contextMenu";
 	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
 	import { playFahh } from "@special-eureka/core/fahh/play";
 	import SelectionArea from "@viselect/vanilla";
@@ -75,121 +77,121 @@
 			</section>
 			<section>
 				<p>
-					Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed, alias doloremque? Eveniet
-					est beatae debitis facilis aliquam dignissimos alias nihil, quae placeat quidem excepturi
-					molestias natus quaerat inventore sunt dolorum?
+					Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed, alias doloremque?
+					Eveniet est beatae debitis facilis aliquam dignissimos alias nihil, quae placeat
+					quidem excepturi molestias natus quaerat inventore sunt dolorum?
 				</p>
 				<p>
-					Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quaerat sint doloribus dicta
-					expedita! Iste animi architecto rem cupiditate odio perspiciatis odit voluptatum earum
-					quasi quis quo expedita, ratione illum itaque!
+					Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quaerat sint doloribus
+					dicta expedita! Iste animi architecto rem cupiditate odio perspiciatis odit
+					voluptatum earum quasi quis quo expedita, ratione illum itaque!
 				</p>
 				<p>
-					Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita quos adipisci maiores
-					odit ipsum, magni sit delectus blanditiis. Iste veniam sunt doloribus sint voluptatem
-					reiciendis quo illo natus ab minima?
-				</p>
-			</section>
-			<section>
-				<p>
-					Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed, alias doloremque? Eveniet
-					est beatae debitis facilis aliquam dignissimos alias nihil, quae placeat quidem excepturi
-					molestias natus quaerat inventore sunt dolorum?
-				</p>
-				<p>
-					Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quaerat sint doloribus dicta
-					expedita! Iste animi architecto rem cupiditate odio perspiciatis odit voluptatum earum
-					quasi quis quo expedita, ratione illum itaque!
-				</p>
-				<p>
-					Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita quos adipisci maiores
-					odit ipsum, magni sit delectus blanditiis. Iste veniam sunt doloribus sint voluptatem
-					reiciendis quo illo natus ab minima?
+					Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita quos adipisci
+					maiores odit ipsum, magni sit delectus blanditiis. Iste veniam sunt doloribus
+					sint voluptatem reiciendis quo illo natus ab minima?
 				</p>
 			</section>
 			<section>
 				<p>
-					Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed, alias doloremque? Eveniet
-					est beatae debitis facilis aliquam dignissimos alias nihil, quae placeat quidem excepturi
-					molestias natus quaerat inventore sunt dolorum?
+					Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed, alias doloremque?
+					Eveniet est beatae debitis facilis aliquam dignissimos alias nihil, quae placeat
+					quidem excepturi molestias natus quaerat inventore sunt dolorum?
 				</p>
 				<p>
-					Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quaerat sint doloribus dicta
-					expedita! Iste animi architecto rem cupiditate odio perspiciatis odit voluptatum earum
-					quasi quis quo expedita, ratione illum itaque!
+					Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quaerat sint doloribus
+					dicta expedita! Iste animi architecto rem cupiditate odio perspiciatis odit
+					voluptatum earum quasi quis quo expedita, ratione illum itaque!
 				</p>
 				<p>
-					Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita quos adipisci maiores
-					odit ipsum, magni sit delectus blanditiis. Iste veniam sunt doloribus sint voluptatem
-					reiciendis quo illo natus ab minima?
+					Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita quos adipisci
+					maiores odit ipsum, magni sit delectus blanditiis. Iste veniam sunt doloribus
+					sint voluptatem reiciendis quo illo natus ab minima?
+				</p>
+			</section>
+			<section>
+				<p>
+					Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed, alias doloremque?
+					Eveniet est beatae debitis facilis aliquam dignissimos alias nihil, quae placeat
+					quidem excepturi molestias natus quaerat inventore sunt dolorum?
+				</p>
+				<p>
+					Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quaerat sint doloribus
+					dicta expedita! Iste animi architecto rem cupiditate odio perspiciatis odit
+					voluptatum earum quasi quis quo expedita, ratione illum itaque!
+				</p>
+				<p>
+					Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita quos adipisci
+					maiores odit ipsum, magni sit delectus blanditiis. Iste veniam sunt doloribus
+					sint voluptatem reiciendis quo illo natus ab minima?
 				</p>
 			</section>
 			<section bind:this={isInViewPortTrigger}>
 				<p>
-					Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed, alias doloremque? Eveniet
-					est beatae debitis facilis aliquam dignissimos alias nihil, quae placeat quidem excepturi
-					molestias natus quaerat inventore sunt dolorum?
+					Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed, alias doloremque?
+					Eveniet est beatae debitis facilis aliquam dignissimos alias nihil, quae placeat
+					quidem excepturi molestias natus quaerat inventore sunt dolorum?
 				</p>
 				<p>
-					Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quaerat sint doloribus dicta
-					expedita! Iste animi architecto rem cupiditate odio perspiciatis odit voluptatum earum
-					quasi quis quo expedita, ratione illum itaque!
+					Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quaerat sint doloribus
+					dicta expedita! Iste animi architecto rem cupiditate odio perspiciatis odit
+					voluptatum earum quasi quis quo expedita, ratione illum itaque!
 				</p>
 				<p>
-					Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita quos adipisci maiores
-					odit ipsum, magni sit delectus blanditiis. Iste veniam sunt doloribus sint voluptatem
-					reiciendis quo illo natus ab minima?
-				</p>
-			</section>
-			<section>
-				<p>
-					Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed, alias doloremque? Eveniet
-					est beatae debitis facilis aliquam dignissimos alias nihil, quae placeat quidem excepturi
-					molestias natus quaerat inventore sunt dolorum?
-				</p>
-				<p>
-					Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quaerat sint doloribus dicta
-					expedita! Iste animi architecto rem cupiditate odio perspiciatis odit voluptatum earum
-					quasi quis quo expedita, ratione illum itaque!
-				</p>
-				<p>
-					Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita quos adipisci maiores
-					odit ipsum, magni sit delectus blanditiis. Iste veniam sunt doloribus sint voluptatem
-					reiciendis quo illo natus ab minima?
+					Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita quos adipisci
+					maiores odit ipsum, magni sit delectus blanditiis. Iste veniam sunt doloribus
+					sint voluptatem reiciendis quo illo natus ab minima?
 				</p>
 			</section>
 			<section>
 				<p>
-					Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed, alias doloremque? Eveniet
-					est beatae debitis facilis aliquam dignissimos alias nihil, quae placeat quidem excepturi
-					molestias natus quaerat inventore sunt dolorum?
+					Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed, alias doloremque?
+					Eveniet est beatae debitis facilis aliquam dignissimos alias nihil, quae placeat
+					quidem excepturi molestias natus quaerat inventore sunt dolorum?
 				</p>
 				<p>
-					Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quaerat sint doloribus dicta
-					expedita! Iste animi architecto rem cupiditate odio perspiciatis odit voluptatum earum
-					quasi quis quo expedita, ratione illum itaque!
+					Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quaerat sint doloribus
+					dicta expedita! Iste animi architecto rem cupiditate odio perspiciatis odit
+					voluptatum earum quasi quis quo expedita, ratione illum itaque!
 				</p>
 				<p>
-					Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita quos adipisci maiores
-					odit ipsum, magni sit delectus blanditiis. Iste veniam sunt doloribus sint voluptatem
-					reiciendis quo illo natus ab minima?
+					Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita quos adipisci
+					maiores odit ipsum, magni sit delectus blanditiis. Iste veniam sunt doloribus
+					sint voluptatem reiciendis quo illo natus ab minima?
 				</p>
 			</section>
 			<section>
 				<p>
-					Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed, alias doloremque? Eveniet
-					est beatae debitis facilis aliquam dignissimos alias nihil, quae placeat quidem excepturi
-					molestias natus quaerat inventore sunt dolorum?
+					Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed, alias doloremque?
+					Eveniet est beatae debitis facilis aliquam dignissimos alias nihil, quae placeat
+					quidem excepturi molestias natus quaerat inventore sunt dolorum?
 				</p>
 				<p>
-					Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quaerat sint doloribus dicta
-					expedita! Iste animi architecto rem cupiditate odio perspiciatis odit voluptatum earum
-					quasi quis quo expedita, ratione illum itaque!
+					Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quaerat sint doloribus
+					dicta expedita! Iste animi architecto rem cupiditate odio perspiciatis odit
+					voluptatum earum quasi quis quo expedita, ratione illum itaque!
 				</p>
 				<p>
-					Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita quos adipisci maiores
-					odit ipsum, magni sit delectus blanditiis. Iste veniam sunt doloribus sint voluptatem
-					reiciendis quo illo natus ab minima?
+					Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita quos adipisci
+					maiores odit ipsum, magni sit delectus blanditiis. Iste veniam sunt doloribus
+					sint voluptatem reiciendis quo illo natus ab minima?
+				</p>
+			</section>
+			<section>
+				<p>
+					Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed, alias doloremque?
+					Eveniet est beatae debitis facilis aliquam dignissimos alias nihil, quae placeat
+					quidem excepturi molestias natus quaerat inventore sunt dolorum?
+				</p>
+				<p>
+					Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quaerat sint doloribus
+					dicta expedita! Iste animi architecto rem cupiditate odio perspiciatis odit
+					voluptatum earum quasi quis quo expedita, ratione illum itaque!
+				</p>
+				<p>
+					Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita quos adipisci
+					maiores odit ipsum, magni sit delectus blanditiis. Iste veniam sunt doloribus
+					sint voluptatem reiciendis quo illo natus ab minima?
 				</p>
 			</section>
 		</div>
