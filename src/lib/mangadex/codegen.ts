@@ -14,7 +14,7 @@ const config: CodegenConfig = {
 			preset: "client-preset",
 			config: {
 				useTypeImports: true,
-				fragmentMaking: false,
+				// fragmentMaking: false,
 				enumType: "native",
 				scalars: {
 					UUID: "string",
