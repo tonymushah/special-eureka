@@ -21,4 +21,17 @@ overrides:
   rollup@>=4.0.0 <4.59.0: '>=4.59.0'
   svelte@<4.2.19: '>=4.2.19'
   svgo@=4.0.0: '>=4.0.1'
+  vite: 'catalog:'
+  vitest: 'catalog:'
 engineStrict: false
+catalog:
+  vite: npm:@voidzero-dev/vite-plus-core@latest
+  vitest: npm:@voidzero-dev/vite-plus-test@latest
+  vite-plus: latest
+peerDependencyRules:
+  allowAny:
+    - vite
+    - vitest
+  allowedVersions:
+    vite: '*'
+    vitest: '*'
