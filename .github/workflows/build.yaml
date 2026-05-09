@@ -31,8 +31,8 @@ jobs:
     runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v6
-      - name: setup node
-        uses: actions/setup-node@v6
+      - name: setup vite plus
+        uses: voidzero-dev/setup-vp@v1
         with:
           node-version: 24
       - name: install pnpm
