@@ -196,7 +196,7 @@
 	import type { LinkItem } from "./info/links/MangaLinksBase.svelte";
 	import { TitleKey } from "./Info.utils";
 	import { goto } from "$app/navigation";
-	import { route, routes } from "$lib/ROUTES";
+	import { route } from "$lib/ROUTES";
 
 	interface Props {
 		authors?: SimpleItems[];

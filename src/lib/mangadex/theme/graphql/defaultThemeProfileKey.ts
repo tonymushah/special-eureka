@@ -1,7 +1,6 @@
 import { graphql } from "@mangadex/gql/exports";
 import { client } from "@mangadex/gql/urql";
 import { get, readable, type Writable } from "svelte/store";
-import { v4 } from "uuid";
 
 export const subscription = graphql(`
 	subscription defaultThemeProfileKeySubscription {

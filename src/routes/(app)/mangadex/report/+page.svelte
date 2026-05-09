@@ -3,11 +3,13 @@
 	import Fetching from "@mangadex/componnents/search/content/Fetching.svelte";
 	import HasNext from "@mangadex/componnents/search/content/HasNext.svelte";
 	import NothingToShow from "@mangadex/componnents/search/content/NothingToShow.svelte";
-	import { createCurrentUserReportsQuery } from "@mangadex/gql-docs/report";
+	import {
+		createCurrentUserReportsQuery,
+		ReportAttributesFrag,
+	} from "@mangadex/gql-docs/report";
 	import { type InputMaybe } from "$lib";
 	import {
 		ReportStatus,
-		type ReportAttributes,
 		type ReportCategory,
 		type ReportSortOrder,
 	} from "@mangadex/gql/graphql";
@@ -21,9 +23,11 @@
 	import Reason from "./_filter/Reason.svelte";
 	import type { ReportData } from "./types";
 	import Content from "./_content/Content.svelte";
-	import { v4, v5, v7 } from "uuid";
+	import { v4, v7 } from "uuid";
 	import { dev } from "$app/environment";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
+	import type { ResultOf } from "@graphql-typed-document-node/core";
+	import { useFragment } from "@mangadex/gql";
 
 	let category: InputMaybe<ReportCategory> = $state();
 	let objectId: InputMaybe<string> = $state();
@@ -89,12 +93,15 @@
 			});
 			return data;
 		}
-		let map = new Map<string, ReportAttributes>();
+		let map = new Map<string, ResultOf<typeof ReportAttributesFrag>>();
 		if (reports.isSuccess) {
 			reports.data.pages
 				.flatMap((d) => d.data)
 				.forEach((e) => {
-					map.set(e.id, e.attributes);
+					map.set(
+						e.id,
+						useFragment(ReportAttributesFrag, e.attributes),
+					);
 				});
 			return map
 				.entries()

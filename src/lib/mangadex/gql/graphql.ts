@@ -3154,6 +3154,19 @@ export type MangasReadMarkersGroupedQuery = {
 	readMarker: { mangaReadMarkersGrouped: Array<{ mangaId: string; chapters: Array<string> }> };
 };
 
+export type ReportAttributesFragFragment = {
+	details: string;
+	objectId: string;
+	status: ReportStatus;
+	createdAt: string;
+} & { " $fragmentName"?: "ReportAttributesFragFragment" };
+
+export type ReportReasonAttributesFragFragment = {
+	reason: Record<string, unknown>;
+	category: ReportCategory;
+	detailsRequired: boolean;
+} & { " $fragmentName"?: "ReportReasonAttributesFragFragment" };
+
 export type CurrentUserReportsQueryVariables = Exact<{
 	params?: ListReportParams | null | undefined;
 }>;
@@ -3166,7 +3179,9 @@ export type CurrentUserReportsQuery = {
 			total: number;
 			data: Array<{
 				id: string;
-				attributes: { details: string; objectId: string; status: ReportStatus; createdAt: string };
+				attributes: {
+					" $fragmentRefs"?: { ReportAttributesFragFragment: ReportAttributesFragFragment };
+				};
 			}>;
 		};
 	};
@@ -3185,9 +3200,9 @@ export type CurrentUserReportReasonQuery = {
 			data: Array<{
 				id: string;
 				attributes: {
-					reason: Record<string, unknown>;
-					category: ReportCategory;
-					detailsRequired: boolean;
+					" $fragmentRefs"?: {
+						ReportReasonAttributesFragFragment: ReportReasonAttributesFragFragment;
+					};
 				};
 			}>;
 		};
@@ -4071,10 +4086,14 @@ export type ChapterQualityMutationMutationVariables = Exact<{
 
 export type ChapterQualityMutationMutation = { userOption: { setChapterQuality: DownloadMode } };
 
+export type ClientInfoFragFragment = { clientId: string; clientSecret: string } & {
+	" $fragmentName"?: "ClientInfoFragFragment";
+};
+
 export type CurrentClientInfoSubscriptionVariables = Exact<{ [key: string]: never }>;
 
 export type CurrentClientInfoSubscription = {
-	watchClientInfo: { clientSecret: string; clientId: string } | null;
+	watchClientInfo: { " $fragmentRefs"?: { ClientInfoFragFragment: ClientInfoFragFragment } } | null;
 };
 
 export type SetAuthClientMutationVariables = Exact<{
@@ -4233,31 +4252,7 @@ export type DefaultThemeProfileSubscriptionSubscriptionVariables = Exact<{ [key:
 
 export type DefaultThemeProfileSubscriptionSubscription = {
 	watchThemeProfileDefault: {
-		textColor: string;
-		mainBackground: string;
-		midTone: string;
-		accents: {
-			default: { default: string; hover: string; active: string };
-			l1: { default: string; hover: string; active: string };
-			l2: { default: string; hover: string; active: string };
-			l3: { default: string; hover: string; active: string };
-			l4: { default: string; hover: string; active: string };
-			l5: { default: string; hover: string; active: string };
-		};
-		contrast: { l1: string };
-		scrollbar: { default: string; hovered: string };
-		button: { default: string; alternate: string };
-		primary: { primary: string; primary1: string; primary2: string };
-		status: {
-			red: string;
-			grey: string;
-			green: string;
-			yellow: string;
-			blue: string;
-			purple: string;
-		};
-		indication: { blue: string };
-		danger: { default: string; l1: string; l2: string };
+		" $fragmentRefs"?: { MangaDexThemeFragFragment: MangaDexThemeFragFragment };
 	};
 };
 
@@ -4268,31 +4263,7 @@ export type UpdateDefaultThemeMutationVariables = Exact<{
 export type UpdateDefaultThemeMutation = {
 	userOption: {
 		updateDefaultTheme: {
-			textColor: string;
-			mainBackground: string;
-			midTone: string;
-			accents: {
-				default: { default: string; hover: string; active: string };
-				l1: { default: string; hover: string; active: string };
-				l2: { default: string; hover: string; active: string };
-				l3: { default: string; hover: string; active: string };
-				l4: { default: string; hover: string; active: string };
-				l5: { default: string; hover: string; active: string };
-			};
-			contrast: { l1: string };
-			scrollbar: { default: string; hovered: string };
-			button: { default: string; alternate: string };
-			primary: { primary: string; primary1: string; primary2: string };
-			status: {
-				red: string;
-				grey: string;
-				green: string;
-				yellow: string;
-				blue: string;
-				purple: string;
-			};
-			indication: { blue: string };
-			danger: { default: string; l1: string; l2: string };
+			" $fragmentRefs"?: { MangaDexThemeFragFragment: MangaDexThemeFragFragment };
 		};
 	};
 };
@@ -4313,38 +4284,40 @@ export type UpdateDefaultThemeProfileKeyMutation = {
 	userOption: { setDefaultThemeProfile: string | null };
 };
 
+export type MangaDexThemeFragFragment = {
+	textColor: string;
+	mainBackground: string;
+	midTone: string;
+	accents: {
+		default: { default: string; hover: string; active: string };
+		l1: { default: string; hover: string; active: string };
+		l2: { default: string; hover: string; active: string };
+		l3: { default: string; hover: string; active: string };
+		l4: { default: string; hover: string; active: string };
+		l5: { default: string; hover: string; active: string };
+	};
+	contrast: { l1: string };
+	scrollbar: { default: string; hovered: string };
+	button: { default: string; alternate: string };
+	primary: { primary: string; primary1: string; primary2: string };
+	status: {
+		red: string;
+		grey: string;
+		green: string;
+		yellow: string;
+		blue: string;
+		purple: string;
+	};
+	indication: { blue: string };
+	danger: { default: string; l1: string; l2: string };
+} & { " $fragmentName"?: "MangaDexThemeFragFragment" };
+
 export type ThemeProfilesSubscriptionSubscriptionVariables = Exact<{ [key: string]: never }>;
 
 export type ThemeProfilesSubscriptionSubscription = {
 	watchThemesProfile: Array<{
 		name: string;
-		value: {
-			textColor: string;
-			mainBackground: string;
-			midTone: string;
-			accents: {
-				default: { default: string; hover: string; active: string };
-				l1: { default: string; hover: string; active: string };
-				l2: { default: string; hover: string; active: string };
-				l3: { default: string; hover: string; active: string };
-				l4: { default: string; hover: string; active: string };
-				l5: { default: string; hover: string; active: string };
-			};
-			contrast: { l1: string };
-			scrollbar: { default: string; hovered: string };
-			button: { default: string; alternate: string };
-			primary: { primary: string; primary1: string; primary2: string };
-			status: {
-				red: string;
-				grey: string;
-				green: string;
-				yellow: string;
-				blue: string;
-				purple: string;
-			};
-			indication: { blue: string };
-			danger: { default: string; l1: string; l2: string };
-		};
+		value: { " $fragmentRefs"?: { MangaDexThemeFragFragment: MangaDexThemeFragFragment } };
 	}>;
 };
 
@@ -4362,31 +4335,7 @@ export type UpdateThemeProfileMutationVariables = Exact<{
 export type UpdateThemeProfileMutation = {
 	userOption: {
 		setThemeProfile: {
-			textColor: string;
-			mainBackground: string;
-			midTone: string;
-			accents: {
-				default: { default: string; hover: string; active: string };
-				l1: { default: string; hover: string; active: string };
-				l2: { default: string; hover: string; active: string };
-				l3: { default: string; hover: string; active: string };
-				l4: { default: string; hover: string; active: string };
-				l5: { default: string; hover: string; active: string };
-			};
-			contrast: { l1: string };
-			scrollbar: { default: string; hovered: string };
-			button: { default: string; alternate: string };
-			primary: { primary: string; primary1: string; primary2: string };
-			status: {
-				red: string;
-				grey: string;
-				green: string;
-				yellow: string;
-				blue: string;
-				purple: string;
-			};
-			indication: { blue: string };
-			danger: { default: string; l1: string; l2: string };
+			" $fragmentRefs"?: { MangaDexThemeFragFragment: MangaDexThemeFragFragment };
 		};
 	};
 };
@@ -4448,6 +4397,237 @@ export const ContentProfileItemFragmentDoc = {
 		}
 	]
 } as unknown as DocumentNode<ContentProfileItemFragment, unknown>;
+export const ReportAttributesFragFragmentDoc = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "FragmentDefinition",
+			name: { kind: "Name", value: "ReportAttributesFrag" },
+			typeCondition: { kind: "NamedType", name: { kind: "Name", value: "ReportAttributes" } },
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{ kind: "Field", name: { kind: "Name", value: "details" } },
+					{ kind: "Field", name: { kind: "Name", value: "objectId" } },
+					{ kind: "Field", name: { kind: "Name", value: "status" } },
+					{ kind: "Field", name: { kind: "Name", value: "createdAt" } }
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<ReportAttributesFragFragment, unknown>;
+export const ReportReasonAttributesFragFragmentDoc = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "FragmentDefinition",
+			name: { kind: "Name", value: "ReportReasonAttributesFrag" },
+			typeCondition: { kind: "NamedType", name: { kind: "Name", value: "ReportReasonAttributes" } },
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{ kind: "Field", name: { kind: "Name", value: "reason" } },
+					{ kind: "Field", name: { kind: "Name", value: "category" } },
+					{ kind: "Field", name: { kind: "Name", value: "detailsRequired" } }
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<ReportReasonAttributesFragFragment, unknown>;
+export const ClientInfoFragFragmentDoc = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "FragmentDefinition",
+			name: { kind: "Name", value: "ClientInfoFrag" },
+			typeCondition: { kind: "NamedType", name: { kind: "Name", value: "ClientInfo" } },
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{ kind: "Field", name: { kind: "Name", value: "clientId" } },
+					{ kind: "Field", name: { kind: "Name", value: "clientSecret" } }
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<ClientInfoFragFragment, unknown>;
+export const MangaDexThemeFragFragmentDoc = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "FragmentDefinition",
+			name: { kind: "Name", value: "MangaDexThemeFrag" },
+			typeCondition: { kind: "NamedType", name: { kind: "Name", value: "MangaDexTheme" } },
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{ kind: "Field", name: { kind: "Name", value: "textColor" } },
+					{ kind: "Field", name: { kind: "Name", value: "mainBackground" } },
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "accents" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "default" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{ kind: "Field", name: { kind: "Name", value: "default" } },
+											{ kind: "Field", name: { kind: "Name", value: "hover" } },
+											{ kind: "Field", name: { kind: "Name", value: "active" } }
+										]
+									}
+								},
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "l1" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{ kind: "Field", name: { kind: "Name", value: "default" } },
+											{ kind: "Field", name: { kind: "Name", value: "hover" } },
+											{ kind: "Field", name: { kind: "Name", value: "active" } }
+										]
+									}
+								},
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "l2" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{ kind: "Field", name: { kind: "Name", value: "default" } },
+											{ kind: "Field", name: { kind: "Name", value: "hover" } },
+											{ kind: "Field", name: { kind: "Name", value: "active" } }
+										]
+									}
+								},
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "l3" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{ kind: "Field", name: { kind: "Name", value: "default" } },
+											{ kind: "Field", name: { kind: "Name", value: "hover" } },
+											{ kind: "Field", name: { kind: "Name", value: "active" } }
+										]
+									}
+								},
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "l4" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{ kind: "Field", name: { kind: "Name", value: "default" } },
+											{ kind: "Field", name: { kind: "Name", value: "hover" } },
+											{ kind: "Field", name: { kind: "Name", value: "active" } }
+										]
+									}
+								},
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "l5" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{ kind: "Field", name: { kind: "Name", value: "default" } },
+											{ kind: "Field", name: { kind: "Name", value: "hover" } },
+											{ kind: "Field", name: { kind: "Name", value: "active" } }
+										]
+									}
+								}
+							]
+						}
+					},
+					{ kind: "Field", name: { kind: "Name", value: "midTone" } },
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "contrast" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [{ kind: "Field", name: { kind: "Name", value: "l1" } }]
+						}
+					},
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "scrollbar" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{ kind: "Field", name: { kind: "Name", value: "default" } },
+								{ kind: "Field", name: { kind: "Name", value: "hovered" } }
+							]
+						}
+					},
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "button" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{ kind: "Field", name: { kind: "Name", value: "default" } },
+								{ kind: "Field", name: { kind: "Name", value: "alternate" } }
+							]
+						}
+					},
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "primary" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{ kind: "Field", name: { kind: "Name", value: "primary" } },
+								{ kind: "Field", name: { kind: "Name", value: "primary1" } },
+								{ kind: "Field", name: { kind: "Name", value: "primary2" } }
+							]
+						}
+					},
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "status" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{ kind: "Field", name: { kind: "Name", value: "red" } },
+								{ kind: "Field", name: { kind: "Name", value: "grey" } },
+								{ kind: "Field", name: { kind: "Name", value: "green" } },
+								{ kind: "Field", name: { kind: "Name", value: "yellow" } },
+								{ kind: "Field", name: { kind: "Name", value: "blue" } },
+								{ kind: "Field", name: { kind: "Name", value: "grey" } },
+								{ kind: "Field", name: { kind: "Name", value: "purple" } }
+							]
+						}
+					},
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "indication" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [{ kind: "Field", name: { kind: "Name", value: "blue" } }]
+						}
+					},
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "danger" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{ kind: "Field", name: { kind: "Name", value: "default" } },
+								{ kind: "Field", name: { kind: "Name", value: "l1" } },
+								{ kind: "Field", name: { kind: "Name", value: "l2" } }
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<MangaDexThemeFragFragment, unknown>;
 export const CustomlistPageQueryDocument = {
 	kind: "Document",
 	definitions: [
@@ -17182,10 +17362,10 @@ export const CurrentUserReportsDocument = {
 															selectionSet: {
 																kind: "SelectionSet",
 																selections: [
-																	{ kind: "Field", name: { kind: "Name", value: "details" } },
-																	{ kind: "Field", name: { kind: "Name", value: "objectId" } },
-																	{ kind: "Field", name: { kind: "Name", value: "status" } },
-																	{ kind: "Field", name: { kind: "Name", value: "createdAt" } }
+																	{
+																		kind: "FragmentSpread",
+																		name: { kind: "Name", value: "ReportAttributesFrag" }
+																	}
 																]
 															}
 														}
@@ -17198,6 +17378,20 @@ export const CurrentUserReportsDocument = {
 							]
 						}
 					}
+				]
+			}
+		},
+		{
+			kind: "FragmentDefinition",
+			name: { kind: "Name", value: "ReportAttributesFrag" },
+			typeCondition: { kind: "NamedType", name: { kind: "Name", value: "ReportAttributes" } },
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{ kind: "Field", name: { kind: "Name", value: "details" } },
+					{ kind: "Field", name: { kind: "Name", value: "objectId" } },
+					{ kind: "Field", name: { kind: "Name", value: "status" } },
+					{ kind: "Field", name: { kind: "Name", value: "createdAt" } }
 				]
 			}
 		}
@@ -17264,11 +17458,9 @@ export const CurrentUserReportReasonDocument = {
 															selectionSet: {
 																kind: "SelectionSet",
 																selections: [
-																	{ kind: "Field", name: { kind: "Name", value: "reason" } },
-																	{ kind: "Field", name: { kind: "Name", value: "category" } },
 																	{
-																		kind: "Field",
-																		name: { kind: "Name", value: "detailsRequired" }
+																		kind: "FragmentSpread",
+																		name: { kind: "Name", value: "ReportReasonAttributesFrag" }
 																	}
 																]
 															}
@@ -17285,6 +17477,19 @@ export const CurrentUserReportReasonDocument = {
 							]
 						}
 					}
+				]
+			}
+		},
+		{
+			kind: "FragmentDefinition",
+			name: { kind: "Name", value: "ReportReasonAttributesFrag" },
+			typeCondition: { kind: "NamedType", name: { kind: "Name", value: "ReportReasonAttributes" } },
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{ kind: "Field", name: { kind: "Name", value: "reason" } },
+					{ kind: "Field", name: { kind: "Name", value: "category" } },
+					{ kind: "Field", name: { kind: "Name", value: "detailsRequired" } }
 				]
 			}
 		}
@@ -22831,11 +23036,22 @@ export const CurrentClientInfoDocument = {
 						selectionSet: {
 							kind: "SelectionSet",
 							selections: [
-								{ kind: "Field", name: { kind: "Name", value: "clientSecret" } },
-								{ kind: "Field", name: { kind: "Name", value: "clientId" } }
+								{ kind: "FragmentSpread", name: { kind: "Name", value: "ClientInfoFrag" } }
 							]
 						}
 					}
+				]
+			}
+		},
+		{
+			kind: "FragmentDefinition",
+			name: { kind: "Name", value: "ClientInfoFrag" },
+			typeCondition: { kind: "NamedType", name: { kind: "Name", value: "ClientInfo" } },
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{ kind: "Field", name: { kind: "Name", value: "clientId" } },
+					{ kind: "Field", name: { kind: "Name", value: "clientSecret" } }
 				]
 			}
 		}
@@ -23827,168 +24043,179 @@ export const DefaultThemeProfileSubscriptionDocument = {
 						selectionSet: {
 							kind: "SelectionSet",
 							selections: [
-								{ kind: "Field", name: { kind: "Name", value: "textColor" } },
-								{ kind: "Field", name: { kind: "Name", value: "mainBackground" } },
+								{ kind: "FragmentSpread", name: { kind: "Name", value: "MangaDexThemeFrag" } }
+							]
+						}
+					}
+				]
+			}
+		},
+		{
+			kind: "FragmentDefinition",
+			name: { kind: "Name", value: "MangaDexThemeFrag" },
+			typeCondition: { kind: "NamedType", name: { kind: "Name", value: "MangaDexTheme" } },
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{ kind: "Field", name: { kind: "Name", value: "textColor" } },
+					{ kind: "Field", name: { kind: "Name", value: "mainBackground" } },
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "accents" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
 								{
 									kind: "Field",
-									name: { kind: "Name", value: "accents" },
-									selectionSet: {
-										kind: "SelectionSet",
-										selections: [
-											{
-												kind: "Field",
-												name: { kind: "Name", value: "default" },
-												selectionSet: {
-													kind: "SelectionSet",
-													selections: [
-														{ kind: "Field", name: { kind: "Name", value: "default" } },
-														{ kind: "Field", name: { kind: "Name", value: "hover" } },
-														{ kind: "Field", name: { kind: "Name", value: "active" } }
-													]
-												}
-											},
-											{
-												kind: "Field",
-												name: { kind: "Name", value: "l1" },
-												selectionSet: {
-													kind: "SelectionSet",
-													selections: [
-														{ kind: "Field", name: { kind: "Name", value: "default" } },
-														{ kind: "Field", name: { kind: "Name", value: "hover" } },
-														{ kind: "Field", name: { kind: "Name", value: "active" } }
-													]
-												}
-											},
-											{
-												kind: "Field",
-												name: { kind: "Name", value: "l2" },
-												selectionSet: {
-													kind: "SelectionSet",
-													selections: [
-														{ kind: "Field", name: { kind: "Name", value: "default" } },
-														{ kind: "Field", name: { kind: "Name", value: "hover" } },
-														{ kind: "Field", name: { kind: "Name", value: "active" } }
-													]
-												}
-											},
-											{
-												kind: "Field",
-												name: { kind: "Name", value: "l3" },
-												selectionSet: {
-													kind: "SelectionSet",
-													selections: [
-														{ kind: "Field", name: { kind: "Name", value: "default" } },
-														{ kind: "Field", name: { kind: "Name", value: "hover" } },
-														{ kind: "Field", name: { kind: "Name", value: "active" } }
-													]
-												}
-											},
-											{
-												kind: "Field",
-												name: { kind: "Name", value: "l4" },
-												selectionSet: {
-													kind: "SelectionSet",
-													selections: [
-														{ kind: "Field", name: { kind: "Name", value: "default" } },
-														{ kind: "Field", name: { kind: "Name", value: "hover" } },
-														{ kind: "Field", name: { kind: "Name", value: "active" } }
-													]
-												}
-											},
-											{
-												kind: "Field",
-												name: { kind: "Name", value: "l5" },
-												selectionSet: {
-													kind: "SelectionSet",
-													selections: [
-														{ kind: "Field", name: { kind: "Name", value: "default" } },
-														{ kind: "Field", name: { kind: "Name", value: "hover" } },
-														{ kind: "Field", name: { kind: "Name", value: "active" } }
-													]
-												}
-											}
-										]
-									}
-								},
-								{ kind: "Field", name: { kind: "Name", value: "midTone" } },
-								{
-									kind: "Field",
-									name: { kind: "Name", value: "contrast" },
-									selectionSet: {
-										kind: "SelectionSet",
-										selections: [{ kind: "Field", name: { kind: "Name", value: "l1" } }]
-									}
-								},
-								{
-									kind: "Field",
-									name: { kind: "Name", value: "scrollbar" },
+									name: { kind: "Name", value: "default" },
 									selectionSet: {
 										kind: "SelectionSet",
 										selections: [
 											{ kind: "Field", name: { kind: "Name", value: "default" } },
-											{ kind: "Field", name: { kind: "Name", value: "hovered" } }
+											{ kind: "Field", name: { kind: "Name", value: "hover" } },
+											{ kind: "Field", name: { kind: "Name", value: "active" } }
 										]
 									}
 								},
 								{
 									kind: "Field",
-									name: { kind: "Name", value: "button" },
+									name: { kind: "Name", value: "l1" },
 									selectionSet: {
 										kind: "SelectionSet",
 										selections: [
 											{ kind: "Field", name: { kind: "Name", value: "default" } },
-											{ kind: "Field", name: { kind: "Name", value: "alternate" } }
+											{ kind: "Field", name: { kind: "Name", value: "hover" } },
+											{ kind: "Field", name: { kind: "Name", value: "active" } }
 										]
 									}
 								},
 								{
 									kind: "Field",
-									name: { kind: "Name", value: "primary" },
-									selectionSet: {
-										kind: "SelectionSet",
-										selections: [
-											{ kind: "Field", name: { kind: "Name", value: "primary" } },
-											{ kind: "Field", name: { kind: "Name", value: "primary1" } },
-											{ kind: "Field", name: { kind: "Name", value: "primary2" } }
-										]
-									}
-								},
-								{
-									kind: "Field",
-									name: { kind: "Name", value: "status" },
-									selectionSet: {
-										kind: "SelectionSet",
-										selections: [
-											{ kind: "Field", name: { kind: "Name", value: "red" } },
-											{ kind: "Field", name: { kind: "Name", value: "grey" } },
-											{ kind: "Field", name: { kind: "Name", value: "green" } },
-											{ kind: "Field", name: { kind: "Name", value: "yellow" } },
-											{ kind: "Field", name: { kind: "Name", value: "blue" } },
-											{ kind: "Field", name: { kind: "Name", value: "grey" } },
-											{ kind: "Field", name: { kind: "Name", value: "purple" } }
-										]
-									}
-								},
-								{
-									kind: "Field",
-									name: { kind: "Name", value: "indication" },
-									selectionSet: {
-										kind: "SelectionSet",
-										selections: [{ kind: "Field", name: { kind: "Name", value: "blue" } }]
-									}
-								},
-								{
-									kind: "Field",
-									name: { kind: "Name", value: "danger" },
+									name: { kind: "Name", value: "l2" },
 									selectionSet: {
 										kind: "SelectionSet",
 										selections: [
 											{ kind: "Field", name: { kind: "Name", value: "default" } },
-											{ kind: "Field", name: { kind: "Name", value: "l1" } },
-											{ kind: "Field", name: { kind: "Name", value: "l2" } }
+											{ kind: "Field", name: { kind: "Name", value: "hover" } },
+											{ kind: "Field", name: { kind: "Name", value: "active" } }
+										]
+									}
+								},
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "l3" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{ kind: "Field", name: { kind: "Name", value: "default" } },
+											{ kind: "Field", name: { kind: "Name", value: "hover" } },
+											{ kind: "Field", name: { kind: "Name", value: "active" } }
+										]
+									}
+								},
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "l4" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{ kind: "Field", name: { kind: "Name", value: "default" } },
+											{ kind: "Field", name: { kind: "Name", value: "hover" } },
+											{ kind: "Field", name: { kind: "Name", value: "active" } }
+										]
+									}
+								},
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "l5" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{ kind: "Field", name: { kind: "Name", value: "default" } },
+											{ kind: "Field", name: { kind: "Name", value: "hover" } },
+											{ kind: "Field", name: { kind: "Name", value: "active" } }
 										]
 									}
 								}
+							]
+						}
+					},
+					{ kind: "Field", name: { kind: "Name", value: "midTone" } },
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "contrast" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [{ kind: "Field", name: { kind: "Name", value: "l1" } }]
+						}
+					},
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "scrollbar" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{ kind: "Field", name: { kind: "Name", value: "default" } },
+								{ kind: "Field", name: { kind: "Name", value: "hovered" } }
+							]
+						}
+					},
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "button" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{ kind: "Field", name: { kind: "Name", value: "default" } },
+								{ kind: "Field", name: { kind: "Name", value: "alternate" } }
+							]
+						}
+					},
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "primary" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{ kind: "Field", name: { kind: "Name", value: "primary" } },
+								{ kind: "Field", name: { kind: "Name", value: "primary1" } },
+								{ kind: "Field", name: { kind: "Name", value: "primary2" } }
+							]
+						}
+					},
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "status" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{ kind: "Field", name: { kind: "Name", value: "red" } },
+								{ kind: "Field", name: { kind: "Name", value: "grey" } },
+								{ kind: "Field", name: { kind: "Name", value: "green" } },
+								{ kind: "Field", name: { kind: "Name", value: "yellow" } },
+								{ kind: "Field", name: { kind: "Name", value: "blue" } },
+								{ kind: "Field", name: { kind: "Name", value: "grey" } },
+								{ kind: "Field", name: { kind: "Name", value: "purple" } }
+							]
+						}
+					},
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "indication" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [{ kind: "Field", name: { kind: "Name", value: "blue" } }]
+						}
+					},
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "danger" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{ kind: "Field", name: { kind: "Name", value: "default" } },
+								{ kind: "Field", name: { kind: "Name", value: "l1" } },
+								{ kind: "Field", name: { kind: "Name", value: "l2" } }
 							]
 						}
 					}
@@ -24039,171 +24266,182 @@ export const UpdateDefaultThemeDocument = {
 									selectionSet: {
 										kind: "SelectionSet",
 										selections: [
-											{ kind: "Field", name: { kind: "Name", value: "textColor" } },
-											{ kind: "Field", name: { kind: "Name", value: "mainBackground" } },
-											{
-												kind: "Field",
-												name: { kind: "Name", value: "accents" },
-												selectionSet: {
-													kind: "SelectionSet",
-													selections: [
-														{
-															kind: "Field",
-															name: { kind: "Name", value: "default" },
-															selectionSet: {
-																kind: "SelectionSet",
-																selections: [
-																	{ kind: "Field", name: { kind: "Name", value: "default" } },
-																	{ kind: "Field", name: { kind: "Name", value: "hover" } },
-																	{ kind: "Field", name: { kind: "Name", value: "active" } }
-																]
-															}
-														},
-														{
-															kind: "Field",
-															name: { kind: "Name", value: "l1" },
-															selectionSet: {
-																kind: "SelectionSet",
-																selections: [
-																	{ kind: "Field", name: { kind: "Name", value: "default" } },
-																	{ kind: "Field", name: { kind: "Name", value: "hover" } },
-																	{ kind: "Field", name: { kind: "Name", value: "active" } }
-																]
-															}
-														},
-														{
-															kind: "Field",
-															name: { kind: "Name", value: "l2" },
-															selectionSet: {
-																kind: "SelectionSet",
-																selections: [
-																	{ kind: "Field", name: { kind: "Name", value: "default" } },
-																	{ kind: "Field", name: { kind: "Name", value: "hover" } },
-																	{ kind: "Field", name: { kind: "Name", value: "active" } }
-																]
-															}
-														},
-														{
-															kind: "Field",
-															name: { kind: "Name", value: "l3" },
-															selectionSet: {
-																kind: "SelectionSet",
-																selections: [
-																	{ kind: "Field", name: { kind: "Name", value: "default" } },
-																	{ kind: "Field", name: { kind: "Name", value: "hover" } },
-																	{ kind: "Field", name: { kind: "Name", value: "active" } }
-																]
-															}
-														},
-														{
-															kind: "Field",
-															name: { kind: "Name", value: "l4" },
-															selectionSet: {
-																kind: "SelectionSet",
-																selections: [
-																	{ kind: "Field", name: { kind: "Name", value: "default" } },
-																	{ kind: "Field", name: { kind: "Name", value: "hover" } },
-																	{ kind: "Field", name: { kind: "Name", value: "active" } }
-																]
-															}
-														},
-														{
-															kind: "Field",
-															name: { kind: "Name", value: "l5" },
-															selectionSet: {
-																kind: "SelectionSet",
-																selections: [
-																	{ kind: "Field", name: { kind: "Name", value: "default" } },
-																	{ kind: "Field", name: { kind: "Name", value: "hover" } },
-																	{ kind: "Field", name: { kind: "Name", value: "active" } }
-																]
-															}
-														}
-													]
-												}
-											},
-											{ kind: "Field", name: { kind: "Name", value: "midTone" } },
-											{
-												kind: "Field",
-												name: { kind: "Name", value: "contrast" },
-												selectionSet: {
-													kind: "SelectionSet",
-													selections: [{ kind: "Field", name: { kind: "Name", value: "l1" } }]
-												}
-											},
-											{
-												kind: "Field",
-												name: { kind: "Name", value: "scrollbar" },
-												selectionSet: {
-													kind: "SelectionSet",
-													selections: [
-														{ kind: "Field", name: { kind: "Name", value: "default" } },
-														{ kind: "Field", name: { kind: "Name", value: "hovered" } }
-													]
-												}
-											},
-											{
-												kind: "Field",
-												name: { kind: "Name", value: "button" },
-												selectionSet: {
-													kind: "SelectionSet",
-													selections: [
-														{ kind: "Field", name: { kind: "Name", value: "default" } },
-														{ kind: "Field", name: { kind: "Name", value: "alternate" } }
-													]
-												}
-											},
-											{
-												kind: "Field",
-												name: { kind: "Name", value: "primary" },
-												selectionSet: {
-													kind: "SelectionSet",
-													selections: [
-														{ kind: "Field", name: { kind: "Name", value: "primary" } },
-														{ kind: "Field", name: { kind: "Name", value: "primary1" } },
-														{ kind: "Field", name: { kind: "Name", value: "primary2" } }
-													]
-												}
-											},
-											{
-												kind: "Field",
-												name: { kind: "Name", value: "status" },
-												selectionSet: {
-													kind: "SelectionSet",
-													selections: [
-														{ kind: "Field", name: { kind: "Name", value: "red" } },
-														{ kind: "Field", name: { kind: "Name", value: "grey" } },
-														{ kind: "Field", name: { kind: "Name", value: "green" } },
-														{ kind: "Field", name: { kind: "Name", value: "yellow" } },
-														{ kind: "Field", name: { kind: "Name", value: "blue" } },
-														{ kind: "Field", name: { kind: "Name", value: "grey" } },
-														{ kind: "Field", name: { kind: "Name", value: "purple" } }
-													]
-												}
-											},
-											{
-												kind: "Field",
-												name: { kind: "Name", value: "indication" },
-												selectionSet: {
-													kind: "SelectionSet",
-													selections: [{ kind: "Field", name: { kind: "Name", value: "blue" } }]
-												}
-											},
-											{
-												kind: "Field",
-												name: { kind: "Name", value: "danger" },
-												selectionSet: {
-													kind: "SelectionSet",
-													selections: [
-														{ kind: "Field", name: { kind: "Name", value: "default" } },
-														{ kind: "Field", name: { kind: "Name", value: "l1" } },
-														{ kind: "Field", name: { kind: "Name", value: "l2" } }
-													]
-												}
-											}
+											{ kind: "FragmentSpread", name: { kind: "Name", value: "MangaDexThemeFrag" } }
 										]
 									}
 								}
+							]
+						}
+					}
+				]
+			}
+		},
+		{
+			kind: "FragmentDefinition",
+			name: { kind: "Name", value: "MangaDexThemeFrag" },
+			typeCondition: { kind: "NamedType", name: { kind: "Name", value: "MangaDexTheme" } },
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{ kind: "Field", name: { kind: "Name", value: "textColor" } },
+					{ kind: "Field", name: { kind: "Name", value: "mainBackground" } },
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "accents" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "default" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{ kind: "Field", name: { kind: "Name", value: "default" } },
+											{ kind: "Field", name: { kind: "Name", value: "hover" } },
+											{ kind: "Field", name: { kind: "Name", value: "active" } }
+										]
+									}
+								},
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "l1" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{ kind: "Field", name: { kind: "Name", value: "default" } },
+											{ kind: "Field", name: { kind: "Name", value: "hover" } },
+											{ kind: "Field", name: { kind: "Name", value: "active" } }
+										]
+									}
+								},
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "l2" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{ kind: "Field", name: { kind: "Name", value: "default" } },
+											{ kind: "Field", name: { kind: "Name", value: "hover" } },
+											{ kind: "Field", name: { kind: "Name", value: "active" } }
+										]
+									}
+								},
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "l3" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{ kind: "Field", name: { kind: "Name", value: "default" } },
+											{ kind: "Field", name: { kind: "Name", value: "hover" } },
+											{ kind: "Field", name: { kind: "Name", value: "active" } }
+										]
+									}
+								},
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "l4" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{ kind: "Field", name: { kind: "Name", value: "default" } },
+											{ kind: "Field", name: { kind: "Name", value: "hover" } },
+											{ kind: "Field", name: { kind: "Name", value: "active" } }
+										]
+									}
+								},
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "l5" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{ kind: "Field", name: { kind: "Name", value: "default" } },
+											{ kind: "Field", name: { kind: "Name", value: "hover" } },
+											{ kind: "Field", name: { kind: "Name", value: "active" } }
+										]
+									}
+								}
+							]
+						}
+					},
+					{ kind: "Field", name: { kind: "Name", value: "midTone" } },
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "contrast" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [{ kind: "Field", name: { kind: "Name", value: "l1" } }]
+						}
+					},
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "scrollbar" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{ kind: "Field", name: { kind: "Name", value: "default" } },
+								{ kind: "Field", name: { kind: "Name", value: "hovered" } }
+							]
+						}
+					},
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "button" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{ kind: "Field", name: { kind: "Name", value: "default" } },
+								{ kind: "Field", name: { kind: "Name", value: "alternate" } }
+							]
+						}
+					},
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "primary" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{ kind: "Field", name: { kind: "Name", value: "primary" } },
+								{ kind: "Field", name: { kind: "Name", value: "primary1" } },
+								{ kind: "Field", name: { kind: "Name", value: "primary2" } }
+							]
+						}
+					},
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "status" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{ kind: "Field", name: { kind: "Name", value: "red" } },
+								{ kind: "Field", name: { kind: "Name", value: "grey" } },
+								{ kind: "Field", name: { kind: "Name", value: "green" } },
+								{ kind: "Field", name: { kind: "Name", value: "yellow" } },
+								{ kind: "Field", name: { kind: "Name", value: "blue" } },
+								{ kind: "Field", name: { kind: "Name", value: "grey" } },
+								{ kind: "Field", name: { kind: "Name", value: "purple" } }
+							]
+						}
+					},
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "indication" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [{ kind: "Field", name: { kind: "Name", value: "blue" } }]
+						}
+					},
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "danger" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{ kind: "Field", name: { kind: "Name", value: "default" } },
+								{ kind: "Field", name: { kind: "Name", value: "l1" } },
+								{ kind: "Field", name: { kind: "Name", value: "l2" } }
 							]
 						}
 					}
@@ -24299,171 +24537,182 @@ export const ThemeProfilesSubscriptionDocument = {
 									selectionSet: {
 										kind: "SelectionSet",
 										selections: [
-											{ kind: "Field", name: { kind: "Name", value: "textColor" } },
-											{ kind: "Field", name: { kind: "Name", value: "mainBackground" } },
-											{
-												kind: "Field",
-												name: { kind: "Name", value: "accents" },
-												selectionSet: {
-													kind: "SelectionSet",
-													selections: [
-														{
-															kind: "Field",
-															name: { kind: "Name", value: "default" },
-															selectionSet: {
-																kind: "SelectionSet",
-																selections: [
-																	{ kind: "Field", name: { kind: "Name", value: "default" } },
-																	{ kind: "Field", name: { kind: "Name", value: "hover" } },
-																	{ kind: "Field", name: { kind: "Name", value: "active" } }
-																]
-															}
-														},
-														{
-															kind: "Field",
-															name: { kind: "Name", value: "l1" },
-															selectionSet: {
-																kind: "SelectionSet",
-																selections: [
-																	{ kind: "Field", name: { kind: "Name", value: "default" } },
-																	{ kind: "Field", name: { kind: "Name", value: "hover" } },
-																	{ kind: "Field", name: { kind: "Name", value: "active" } }
-																]
-															}
-														},
-														{
-															kind: "Field",
-															name: { kind: "Name", value: "l2" },
-															selectionSet: {
-																kind: "SelectionSet",
-																selections: [
-																	{ kind: "Field", name: { kind: "Name", value: "default" } },
-																	{ kind: "Field", name: { kind: "Name", value: "hover" } },
-																	{ kind: "Field", name: { kind: "Name", value: "active" } }
-																]
-															}
-														},
-														{
-															kind: "Field",
-															name: { kind: "Name", value: "l3" },
-															selectionSet: {
-																kind: "SelectionSet",
-																selections: [
-																	{ kind: "Field", name: { kind: "Name", value: "default" } },
-																	{ kind: "Field", name: { kind: "Name", value: "hover" } },
-																	{ kind: "Field", name: { kind: "Name", value: "active" } }
-																]
-															}
-														},
-														{
-															kind: "Field",
-															name: { kind: "Name", value: "l4" },
-															selectionSet: {
-																kind: "SelectionSet",
-																selections: [
-																	{ kind: "Field", name: { kind: "Name", value: "default" } },
-																	{ kind: "Field", name: { kind: "Name", value: "hover" } },
-																	{ kind: "Field", name: { kind: "Name", value: "active" } }
-																]
-															}
-														},
-														{
-															kind: "Field",
-															name: { kind: "Name", value: "l5" },
-															selectionSet: {
-																kind: "SelectionSet",
-																selections: [
-																	{ kind: "Field", name: { kind: "Name", value: "default" } },
-																	{ kind: "Field", name: { kind: "Name", value: "hover" } },
-																	{ kind: "Field", name: { kind: "Name", value: "active" } }
-																]
-															}
-														}
-													]
-												}
-											},
-											{ kind: "Field", name: { kind: "Name", value: "midTone" } },
-											{
-												kind: "Field",
-												name: { kind: "Name", value: "contrast" },
-												selectionSet: {
-													kind: "SelectionSet",
-													selections: [{ kind: "Field", name: { kind: "Name", value: "l1" } }]
-												}
-											},
-											{
-												kind: "Field",
-												name: { kind: "Name", value: "scrollbar" },
-												selectionSet: {
-													kind: "SelectionSet",
-													selections: [
-														{ kind: "Field", name: { kind: "Name", value: "default" } },
-														{ kind: "Field", name: { kind: "Name", value: "hovered" } }
-													]
-												}
-											},
-											{
-												kind: "Field",
-												name: { kind: "Name", value: "button" },
-												selectionSet: {
-													kind: "SelectionSet",
-													selections: [
-														{ kind: "Field", name: { kind: "Name", value: "default" } },
-														{ kind: "Field", name: { kind: "Name", value: "alternate" } }
-													]
-												}
-											},
-											{
-												kind: "Field",
-												name: { kind: "Name", value: "primary" },
-												selectionSet: {
-													kind: "SelectionSet",
-													selections: [
-														{ kind: "Field", name: { kind: "Name", value: "primary" } },
-														{ kind: "Field", name: { kind: "Name", value: "primary1" } },
-														{ kind: "Field", name: { kind: "Name", value: "primary2" } }
-													]
-												}
-											},
-											{
-												kind: "Field",
-												name: { kind: "Name", value: "status" },
-												selectionSet: {
-													kind: "SelectionSet",
-													selections: [
-														{ kind: "Field", name: { kind: "Name", value: "red" } },
-														{ kind: "Field", name: { kind: "Name", value: "grey" } },
-														{ kind: "Field", name: { kind: "Name", value: "green" } },
-														{ kind: "Field", name: { kind: "Name", value: "yellow" } },
-														{ kind: "Field", name: { kind: "Name", value: "blue" } },
-														{ kind: "Field", name: { kind: "Name", value: "grey" } },
-														{ kind: "Field", name: { kind: "Name", value: "purple" } }
-													]
-												}
-											},
-											{
-												kind: "Field",
-												name: { kind: "Name", value: "indication" },
-												selectionSet: {
-													kind: "SelectionSet",
-													selections: [{ kind: "Field", name: { kind: "Name", value: "blue" } }]
-												}
-											},
-											{
-												kind: "Field",
-												name: { kind: "Name", value: "danger" },
-												selectionSet: {
-													kind: "SelectionSet",
-													selections: [
-														{ kind: "Field", name: { kind: "Name", value: "default" } },
-														{ kind: "Field", name: { kind: "Name", value: "l1" } },
-														{ kind: "Field", name: { kind: "Name", value: "l2" } }
-													]
-												}
-											}
+											{ kind: "FragmentSpread", name: { kind: "Name", value: "MangaDexThemeFrag" } }
 										]
 									}
 								}
+							]
+						}
+					}
+				]
+			}
+		},
+		{
+			kind: "FragmentDefinition",
+			name: { kind: "Name", value: "MangaDexThemeFrag" },
+			typeCondition: { kind: "NamedType", name: { kind: "Name", value: "MangaDexTheme" } },
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{ kind: "Field", name: { kind: "Name", value: "textColor" } },
+					{ kind: "Field", name: { kind: "Name", value: "mainBackground" } },
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "accents" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "default" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{ kind: "Field", name: { kind: "Name", value: "default" } },
+											{ kind: "Field", name: { kind: "Name", value: "hover" } },
+											{ kind: "Field", name: { kind: "Name", value: "active" } }
+										]
+									}
+								},
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "l1" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{ kind: "Field", name: { kind: "Name", value: "default" } },
+											{ kind: "Field", name: { kind: "Name", value: "hover" } },
+											{ kind: "Field", name: { kind: "Name", value: "active" } }
+										]
+									}
+								},
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "l2" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{ kind: "Field", name: { kind: "Name", value: "default" } },
+											{ kind: "Field", name: { kind: "Name", value: "hover" } },
+											{ kind: "Field", name: { kind: "Name", value: "active" } }
+										]
+									}
+								},
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "l3" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{ kind: "Field", name: { kind: "Name", value: "default" } },
+											{ kind: "Field", name: { kind: "Name", value: "hover" } },
+											{ kind: "Field", name: { kind: "Name", value: "active" } }
+										]
+									}
+								},
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "l4" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{ kind: "Field", name: { kind: "Name", value: "default" } },
+											{ kind: "Field", name: { kind: "Name", value: "hover" } },
+											{ kind: "Field", name: { kind: "Name", value: "active" } }
+										]
+									}
+								},
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "l5" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{ kind: "Field", name: { kind: "Name", value: "default" } },
+											{ kind: "Field", name: { kind: "Name", value: "hover" } },
+											{ kind: "Field", name: { kind: "Name", value: "active" } }
+										]
+									}
+								}
+							]
+						}
+					},
+					{ kind: "Field", name: { kind: "Name", value: "midTone" } },
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "contrast" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [{ kind: "Field", name: { kind: "Name", value: "l1" } }]
+						}
+					},
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "scrollbar" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{ kind: "Field", name: { kind: "Name", value: "default" } },
+								{ kind: "Field", name: { kind: "Name", value: "hovered" } }
+							]
+						}
+					},
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "button" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{ kind: "Field", name: { kind: "Name", value: "default" } },
+								{ kind: "Field", name: { kind: "Name", value: "alternate" } }
+							]
+						}
+					},
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "primary" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{ kind: "Field", name: { kind: "Name", value: "primary" } },
+								{ kind: "Field", name: { kind: "Name", value: "primary1" } },
+								{ kind: "Field", name: { kind: "Name", value: "primary2" } }
+							]
+						}
+					},
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "status" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{ kind: "Field", name: { kind: "Name", value: "red" } },
+								{ kind: "Field", name: { kind: "Name", value: "grey" } },
+								{ kind: "Field", name: { kind: "Name", value: "green" } },
+								{ kind: "Field", name: { kind: "Name", value: "yellow" } },
+								{ kind: "Field", name: { kind: "Name", value: "blue" } },
+								{ kind: "Field", name: { kind: "Name", value: "grey" } },
+								{ kind: "Field", name: { kind: "Name", value: "purple" } }
+							]
+						}
+					},
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "indication" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [{ kind: "Field", name: { kind: "Name", value: "blue" } }]
+						}
+					},
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "danger" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{ kind: "Field", name: { kind: "Name", value: "default" } },
+								{ kind: "Field", name: { kind: "Name", value: "l1" } },
+								{ kind: "Field", name: { kind: "Name", value: "l2" } }
 							]
 						}
 					}
@@ -24575,171 +24824,182 @@ export const UpdateThemeProfileDocument = {
 									selectionSet: {
 										kind: "SelectionSet",
 										selections: [
-											{ kind: "Field", name: { kind: "Name", value: "textColor" } },
-											{ kind: "Field", name: { kind: "Name", value: "mainBackground" } },
-											{
-												kind: "Field",
-												name: { kind: "Name", value: "accents" },
-												selectionSet: {
-													kind: "SelectionSet",
-													selections: [
-														{
-															kind: "Field",
-															name: { kind: "Name", value: "default" },
-															selectionSet: {
-																kind: "SelectionSet",
-																selections: [
-																	{ kind: "Field", name: { kind: "Name", value: "default" } },
-																	{ kind: "Field", name: { kind: "Name", value: "hover" } },
-																	{ kind: "Field", name: { kind: "Name", value: "active" } }
-																]
-															}
-														},
-														{
-															kind: "Field",
-															name: { kind: "Name", value: "l1" },
-															selectionSet: {
-																kind: "SelectionSet",
-																selections: [
-																	{ kind: "Field", name: { kind: "Name", value: "default" } },
-																	{ kind: "Field", name: { kind: "Name", value: "hover" } },
-																	{ kind: "Field", name: { kind: "Name", value: "active" } }
-																]
-															}
-														},
-														{
-															kind: "Field",
-															name: { kind: "Name", value: "l2" },
-															selectionSet: {
-																kind: "SelectionSet",
-																selections: [
-																	{ kind: "Field", name: { kind: "Name", value: "default" } },
-																	{ kind: "Field", name: { kind: "Name", value: "hover" } },
-																	{ kind: "Field", name: { kind: "Name", value: "active" } }
-																]
-															}
-														},
-														{
-															kind: "Field",
-															name: { kind: "Name", value: "l3" },
-															selectionSet: {
-																kind: "SelectionSet",
-																selections: [
-																	{ kind: "Field", name: { kind: "Name", value: "default" } },
-																	{ kind: "Field", name: { kind: "Name", value: "hover" } },
-																	{ kind: "Field", name: { kind: "Name", value: "active" } }
-																]
-															}
-														},
-														{
-															kind: "Field",
-															name: { kind: "Name", value: "l4" },
-															selectionSet: {
-																kind: "SelectionSet",
-																selections: [
-																	{ kind: "Field", name: { kind: "Name", value: "default" } },
-																	{ kind: "Field", name: { kind: "Name", value: "hover" } },
-																	{ kind: "Field", name: { kind: "Name", value: "active" } }
-																]
-															}
-														},
-														{
-															kind: "Field",
-															name: { kind: "Name", value: "l5" },
-															selectionSet: {
-																kind: "SelectionSet",
-																selections: [
-																	{ kind: "Field", name: { kind: "Name", value: "default" } },
-																	{ kind: "Field", name: { kind: "Name", value: "hover" } },
-																	{ kind: "Field", name: { kind: "Name", value: "active" } }
-																]
-															}
-														}
-													]
-												}
-											},
-											{ kind: "Field", name: { kind: "Name", value: "midTone" } },
-											{
-												kind: "Field",
-												name: { kind: "Name", value: "contrast" },
-												selectionSet: {
-													kind: "SelectionSet",
-													selections: [{ kind: "Field", name: { kind: "Name", value: "l1" } }]
-												}
-											},
-											{
-												kind: "Field",
-												name: { kind: "Name", value: "scrollbar" },
-												selectionSet: {
-													kind: "SelectionSet",
-													selections: [
-														{ kind: "Field", name: { kind: "Name", value: "default" } },
-														{ kind: "Field", name: { kind: "Name", value: "hovered" } }
-													]
-												}
-											},
-											{
-												kind: "Field",
-												name: { kind: "Name", value: "button" },
-												selectionSet: {
-													kind: "SelectionSet",
-													selections: [
-														{ kind: "Field", name: { kind: "Name", value: "default" } },
-														{ kind: "Field", name: { kind: "Name", value: "alternate" } }
-													]
-												}
-											},
-											{
-												kind: "Field",
-												name: { kind: "Name", value: "primary" },
-												selectionSet: {
-													kind: "SelectionSet",
-													selections: [
-														{ kind: "Field", name: { kind: "Name", value: "primary" } },
-														{ kind: "Field", name: { kind: "Name", value: "primary1" } },
-														{ kind: "Field", name: { kind: "Name", value: "primary2" } }
-													]
-												}
-											},
-											{
-												kind: "Field",
-												name: { kind: "Name", value: "status" },
-												selectionSet: {
-													kind: "SelectionSet",
-													selections: [
-														{ kind: "Field", name: { kind: "Name", value: "red" } },
-														{ kind: "Field", name: { kind: "Name", value: "grey" } },
-														{ kind: "Field", name: { kind: "Name", value: "green" } },
-														{ kind: "Field", name: { kind: "Name", value: "yellow" } },
-														{ kind: "Field", name: { kind: "Name", value: "blue" } },
-														{ kind: "Field", name: { kind: "Name", value: "grey" } },
-														{ kind: "Field", name: { kind: "Name", value: "purple" } }
-													]
-												}
-											},
-											{
-												kind: "Field",
-												name: { kind: "Name", value: "indication" },
-												selectionSet: {
-													kind: "SelectionSet",
-													selections: [{ kind: "Field", name: { kind: "Name", value: "blue" } }]
-												}
-											},
-											{
-												kind: "Field",
-												name: { kind: "Name", value: "danger" },
-												selectionSet: {
-													kind: "SelectionSet",
-													selections: [
-														{ kind: "Field", name: { kind: "Name", value: "default" } },
-														{ kind: "Field", name: { kind: "Name", value: "l1" } },
-														{ kind: "Field", name: { kind: "Name", value: "l2" } }
-													]
-												}
-											}
+											{ kind: "FragmentSpread", name: { kind: "Name", value: "MangaDexThemeFrag" } }
 										]
 									}
 								}
+							]
+						}
+					}
+				]
+			}
+		},
+		{
+			kind: "FragmentDefinition",
+			name: { kind: "Name", value: "MangaDexThemeFrag" },
+			typeCondition: { kind: "NamedType", name: { kind: "Name", value: "MangaDexTheme" } },
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{ kind: "Field", name: { kind: "Name", value: "textColor" } },
+					{ kind: "Field", name: { kind: "Name", value: "mainBackground" } },
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "accents" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "default" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{ kind: "Field", name: { kind: "Name", value: "default" } },
+											{ kind: "Field", name: { kind: "Name", value: "hover" } },
+											{ kind: "Field", name: { kind: "Name", value: "active" } }
+										]
+									}
+								},
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "l1" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{ kind: "Field", name: { kind: "Name", value: "default" } },
+											{ kind: "Field", name: { kind: "Name", value: "hover" } },
+											{ kind: "Field", name: { kind: "Name", value: "active" } }
+										]
+									}
+								},
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "l2" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{ kind: "Field", name: { kind: "Name", value: "default" } },
+											{ kind: "Field", name: { kind: "Name", value: "hover" } },
+											{ kind: "Field", name: { kind: "Name", value: "active" } }
+										]
+									}
+								},
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "l3" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{ kind: "Field", name: { kind: "Name", value: "default" } },
+											{ kind: "Field", name: { kind: "Name", value: "hover" } },
+											{ kind: "Field", name: { kind: "Name", value: "active" } }
+										]
+									}
+								},
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "l4" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{ kind: "Field", name: { kind: "Name", value: "default" } },
+											{ kind: "Field", name: { kind: "Name", value: "hover" } },
+											{ kind: "Field", name: { kind: "Name", value: "active" } }
+										]
+									}
+								},
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "l5" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{ kind: "Field", name: { kind: "Name", value: "default" } },
+											{ kind: "Field", name: { kind: "Name", value: "hover" } },
+											{ kind: "Field", name: { kind: "Name", value: "active" } }
+										]
+									}
+								}
+							]
+						}
+					},
+					{ kind: "Field", name: { kind: "Name", value: "midTone" } },
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "contrast" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [{ kind: "Field", name: { kind: "Name", value: "l1" } }]
+						}
+					},
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "scrollbar" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{ kind: "Field", name: { kind: "Name", value: "default" } },
+								{ kind: "Field", name: { kind: "Name", value: "hovered" } }
+							]
+						}
+					},
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "button" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{ kind: "Field", name: { kind: "Name", value: "default" } },
+								{ kind: "Field", name: { kind: "Name", value: "alternate" } }
+							]
+						}
+					},
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "primary" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{ kind: "Field", name: { kind: "Name", value: "primary" } },
+								{ kind: "Field", name: { kind: "Name", value: "primary1" } },
+								{ kind: "Field", name: { kind: "Name", value: "primary2" } }
+							]
+						}
+					},
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "status" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{ kind: "Field", name: { kind: "Name", value: "red" } },
+								{ kind: "Field", name: { kind: "Name", value: "grey" } },
+								{ kind: "Field", name: { kind: "Name", value: "green" } },
+								{ kind: "Field", name: { kind: "Name", value: "yellow" } },
+								{ kind: "Field", name: { kind: "Name", value: "blue" } },
+								{ kind: "Field", name: { kind: "Name", value: "grey" } },
+								{ kind: "Field", name: { kind: "Name", value: "purple" } }
+							]
+						}
+					},
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "indication" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [{ kind: "Field", name: { kind: "Name", value: "blue" } }]
+						}
+					},
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "danger" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{ kind: "Field", name: { kind: "Name", value: "default" } },
+								{ kind: "Field", name: { kind: "Name", value: "l1" } },
+								{ kind: "Field", name: { kind: "Name", value: "l2" } }
 							]
 						}
 					}
