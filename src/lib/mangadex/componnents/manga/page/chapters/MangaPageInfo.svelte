@@ -4,7 +4,10 @@
 		type SimpleItems,
 	} from "@mangadex/componnents/manga/page/chapters/Info.svelte";
 	import manga_altTitle_to_lang_map from "@mangadex/utils/lang/record-to-map/manga-altTitle-to-lang-map";
-	import { TagGroup, type MangaLinks } from "@mangadex/gql/graphql";
+	import {
+		TagGroup,
+		type MangaLinksFragFragment,
+	} from "@mangadex/gql/graphql";
 	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
 	import getDemographicName from "@mangadex/utils/demographic/getDemographicName";
 	import LatestChapter from "@mangadex/componnents/manga/page/chapters/info/LatestChapter.svelte";
@@ -16,6 +19,9 @@
 		transformToStringRecord,
 		transformToStringRecords,
 	} from "@mangadex/utils/transformToStringRecord";
+	import type { ResultOf } from "@graphql-typed-document-node/core";
+	import type { MangaLinksFrag } from "@mangadex/gql-docs/title/links";
+	import type { FragmentType } from "@mangadex/gql";
 
 	const __res = getTitleLayoutData();
 	let data = $derived.by(() => __res.value.queryResult);
@@ -110,12 +116,14 @@
 		});
 		return returns;
 	}
-	function getLinks(d: typeof data): MangaLinks | undefined {
+	function getLinks(
+		d: typeof data,
+	): FragmentType<typeof MangaLinksFrag> | undefined {
 		const links = d?.attributes.links;
-		if (links == null) {
-			return undefined;
-		} else {
+		if (links) {
 			return links;
+		} else {
+			return undefined;
 		}
 	}
 	let altTitles = $derived(

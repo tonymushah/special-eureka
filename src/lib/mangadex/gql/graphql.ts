@@ -3394,21 +3394,7 @@ export type GetMangaHihiQuery = {
 				lastChapter: string | null;
 				latestUploadedChapter: string | null;
 				originalLanguage: Language;
-				links: {
-					hasNoLinks: boolean;
-					amazon: string | null;
-					anilist: string | null;
-					animePlanet: string | null;
-					bookWalker: string | null;
-					cdJapan: string | null;
-					ebookJapan: string | null;
-					englishTranslation: string | null;
-					kitsu: string | null;
-					mangaUpdates: string | null;
-					myAnimeList: string | null;
-					novelUpdates: string | null;
-					raw: string | null;
-				} | null;
+				links: { " $fragmentRefs"?: { MangaLinksFragFragment: MangaLinksFragFragment } } | null;
 				tags: Array<{ id: string; attributes: { name: Record<string, unknown>; group: TagGroup } }>;
 			};
 			relationships: {
@@ -3532,6 +3518,22 @@ export type LatestUploadsPageQueryQuery = {
 		};
 	};
 };
+
+export type MangaLinksFragFragment = {
+	hasNoLinks: boolean;
+	amazon: string | null;
+	anilist: string | null;
+	animePlanet: string | null;
+	bookWalker: string | null;
+	cdJapan: string | null;
+	ebookJapan: string | null;
+	englishTranslation: string | null;
+	kitsu: string | null;
+	mangaUpdates: string | null;
+	myAnimeList: string | null;
+	novelUpdates: string | null;
+	raw: string | null;
+} & { " $fragmentName"?: "MangaLinksFragFragment" };
 
 export type RandomTitleQueryVariables = Exact<{
 	options?: MangaRandomParams | null | undefined;
@@ -4434,6 +4436,34 @@ export const ReportReasonAttributesFragFragmentDoc = {
 		}
 	]
 } as unknown as DocumentNode<ReportReasonAttributesFragFragment, unknown>;
+export const MangaLinksFragFragmentDoc = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "FragmentDefinition",
+			name: { kind: "Name", value: "MangaLinksFrag" },
+			typeCondition: { kind: "NamedType", name: { kind: "Name", value: "MangaLinks" } },
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{ kind: "Field", name: { kind: "Name", value: "hasNoLinks" } },
+					{ kind: "Field", name: { kind: "Name", value: "amazon" } },
+					{ kind: "Field", name: { kind: "Name", value: "anilist" } },
+					{ kind: "Field", name: { kind: "Name", value: "animePlanet" } },
+					{ kind: "Field", name: { kind: "Name", value: "bookWalker" } },
+					{ kind: "Field", name: { kind: "Name", value: "cdJapan" } },
+					{ kind: "Field", name: { kind: "Name", value: "ebookJapan" } },
+					{ kind: "Field", name: { kind: "Name", value: "englishTranslation" } },
+					{ kind: "Field", name: { kind: "Name", value: "kitsu" } },
+					{ kind: "Field", name: { kind: "Name", value: "mangaUpdates" } },
+					{ kind: "Field", name: { kind: "Name", value: "myAnimeList" } },
+					{ kind: "Field", name: { kind: "Name", value: "novelUpdates" } },
+					{ kind: "Field", name: { kind: "Name", value: "raw" } }
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<MangaLinksFragFragment, unknown>;
 export const ClientInfoFragFragmentDoc = {
 	kind: "Document",
 	definitions: [
@@ -18588,22 +18618,10 @@ export const GetMangaHihiDocument = {
 															selectionSet: {
 																kind: "SelectionSet",
 																selections: [
-																	{ kind: "Field", name: { kind: "Name", value: "hasNoLinks" } },
-																	{ kind: "Field", name: { kind: "Name", value: "amazon" } },
-																	{ kind: "Field", name: { kind: "Name", value: "anilist" } },
-																	{ kind: "Field", name: { kind: "Name", value: "animePlanet" } },
-																	{ kind: "Field", name: { kind: "Name", value: "bookWalker" } },
-																	{ kind: "Field", name: { kind: "Name", value: "cdJapan" } },
-																	{ kind: "Field", name: { kind: "Name", value: "ebookJapan" } },
 																	{
-																		kind: "Field",
-																		name: { kind: "Name", value: "englishTranslation" }
-																	},
-																	{ kind: "Field", name: { kind: "Name", value: "kitsu" } },
-																	{ kind: "Field", name: { kind: "Name", value: "mangaUpdates" } },
-																	{ kind: "Field", name: { kind: "Name", value: "myAnimeList" } },
-																	{ kind: "Field", name: { kind: "Name", value: "novelUpdates" } },
-																	{ kind: "Field", name: { kind: "Name", value: "raw" } }
+																		kind: "FragmentSpread",
+																		name: { kind: "Name", value: "MangaLinksFrag" }
+																	}
 																]
 															}
 														},
@@ -18742,6 +18760,29 @@ export const GetMangaHihiDocument = {
 							]
 						}
 					}
+				]
+			}
+		},
+		{
+			kind: "FragmentDefinition",
+			name: { kind: "Name", value: "MangaLinksFrag" },
+			typeCondition: { kind: "NamedType", name: { kind: "Name", value: "MangaLinks" } },
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{ kind: "Field", name: { kind: "Name", value: "hasNoLinks" } },
+					{ kind: "Field", name: { kind: "Name", value: "amazon" } },
+					{ kind: "Field", name: { kind: "Name", value: "anilist" } },
+					{ kind: "Field", name: { kind: "Name", value: "animePlanet" } },
+					{ kind: "Field", name: { kind: "Name", value: "bookWalker" } },
+					{ kind: "Field", name: { kind: "Name", value: "cdJapan" } },
+					{ kind: "Field", name: { kind: "Name", value: "ebookJapan" } },
+					{ kind: "Field", name: { kind: "Name", value: "englishTranslation" } },
+					{ kind: "Field", name: { kind: "Name", value: "kitsu" } },
+					{ kind: "Field", name: { kind: "Name", value: "mangaUpdates" } },
+					{ kind: "Field", name: { kind: "Name", value: "myAnimeList" } },
+					{ kind: "Field", name: { kind: "Name", value: "novelUpdates" } },
+					{ kind: "Field", name: { kind: "Name", value: "raw" } }
 				]
 			}
 		}
