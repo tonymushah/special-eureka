@@ -15,7 +15,10 @@ export const load: LayoutLoad = async (param) => {
 				throw res.error;
 			} else if (res.data) {
 				const tags = new Map(
-					res.data.tag.list.data.map((d) => [d.id, manga_title_to_lang_map(transformToStringRecord(d.attributes.name))])
+					res.data.tag.list.data.map((d) => [
+						d.id,
+						manga_title_to_lang_map(transformToStringRecord(d.attributes.name))
+					])
 				);
 				const names = tags.get(param.params.id);
 				if (names == null) {

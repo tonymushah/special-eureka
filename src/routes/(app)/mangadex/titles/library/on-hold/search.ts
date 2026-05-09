@@ -3,7 +3,7 @@ import libraryOnHoldQuery from "@mangadex/gql-docs/library/onHold";
 import { type UserLibrarySectionParam } from "@mangadex/gql/graphql";
 import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
 import AbstractSearchResult, {
-    type PaginationData
+	type PaginationData
 } from "@mangadex/utils/searchResult/AbstractSearchResult";
 import { transformToStringRecord } from "@mangadex/utils/transformToStringRecord";
 import type { Client } from "@urql/svelte";
@@ -84,13 +84,24 @@ export default async function executeSearchQuery(
 					status: v.attributes.status,
 					contentRating: contentRating != null ? contentRating : undefined,
 					description:
-						get_value_from_title_and_random_if_undefined(transformToStringRecord(v.attributes.description), "en") ?? "",
-					title: get_value_from_title_and_random_if_undefined(transformToStringRecord(v.attributes.title), "en") ?? "",
+						get_value_from_title_and_random_if_undefined(
+							transformToStringRecord(v.attributes.description),
+							"en"
+						) ?? "",
+					title:
+						get_value_from_title_and_random_if_undefined(
+							transformToStringRecord(v.attributes.title),
+							"en"
+						) ?? "",
 					coverImageAlt: v.relationships.coverArt.id,
 					withFull: true,
 					tags: v.attributes.tags.map((tag) => ({
 						id: tag.id,
-						name: get_value_from_title_and_random_if_undefined(transformToStringRecord(tag.attributes.name), "en") ?? ""
+						name:
+							get_value_from_title_and_random_if_undefined(
+								transformToStringRecord(tag.attributes.name),
+								"en"
+							) ?? ""
 					})),
 					language: v.attributes.originalLanguage,
 					publicationDemographic: v.attributes.publicationDemographic ?? undefined

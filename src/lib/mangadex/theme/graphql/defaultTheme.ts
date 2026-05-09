@@ -28,7 +28,7 @@ const readSub = readable<MangadexTheme>(custom, (set) => {
 	const unsub = client.subscription(subscription, {}).subscribe((res) => {
 		const data = res.data;
 		if (data) {
-			set(GqlThemeToITheme(useFragment(MangaDexThemeFrag,data.watchThemeProfileDefault)));
+			set(GqlThemeToITheme(useFragment(MangaDexThemeFrag, data.watchThemeProfileDefault)));
 		}
 	});
 	return () => {

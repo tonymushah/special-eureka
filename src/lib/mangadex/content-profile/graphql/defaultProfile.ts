@@ -24,7 +24,7 @@ const sub_read = readable<ContentProfileItemFragmentType>(
 		const sub = client.subscription(subscription, {}).subscribe((res) => {
 			const data = res.data;
 			if (data) {
-				set(useFragment(ContentProfileItemFragment,data.watchContentProfileDefault));
+				set(useFragment(ContentProfileItemFragment, data.watchContentProfileDefault));
 			}
 		});
 		return () => {

@@ -1,6 +1,6 @@
 import type { InputMaybe } from "$lib";
 import { graphql } from "@mangadex/gql/gql";
-import type { CustomListVisibility, } from "@mangadex/gql/graphql";
+import type { CustomListVisibility } from "@mangadex/gql/graphql";
 import { client } from "@mangadex/gql/urql";
 import { mangadexQueryClient } from "@mangadex/index";
 import { createMutation } from "@tanstack/svelte-query";

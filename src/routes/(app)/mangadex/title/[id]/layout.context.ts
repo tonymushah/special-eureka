@@ -3,7 +3,10 @@ import getTitleConflicts from "@mangadex/utils/conflicts";
 import get_value_and_random_if_undefined from "@mangadex/utils/lang/get_value_and_random_if_undefined";
 import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
 import manga_altTitle_to_lang_map from "@mangadex/utils/lang/record-to-map/manga-altTitle-to-lang-map";
-import { transformToStringRecord, transformToStringRecords } from "@mangadex/utils/transformToStringRecord";
+import {
+	transformToStringRecord,
+	transformToStringRecords
+} from "@mangadex/utils/transformToStringRecord";
 import type { Tag } from "@mangadex/utils/types/Tag";
 import type { Client } from "@urql/svelte";
 import { Context, type Getter } from "runed";
@@ -24,7 +27,7 @@ export async function load(id: string, client: Client) {
 
 		const tags = data.attributes.tags.map<Tag>((t) => ({
 			id: t.id,
-			name: typeof t.attributes.name.en == "string"? t.attributes.name.en: t.id
+			name: typeof t.attributes.name.en == "string" ? t.attributes.name.en : t.id
 		}));
 		const conflicts = await getTitleConflicts({ client, title: data, id });
 
@@ -32,7 +35,10 @@ export async function load(id: string, client: Client) {
 			queryResult: data,
 			layoutData: {
 				id: data.id,
-				title: get_value_from_title_and_random_if_undefined(transformToStringRecord(data.attributes.title), "en"),
+				title: get_value_from_title_and_random_if_undefined(
+					transformToStringRecord(data.attributes.title),
+					"en"
+				),
 				altTitle: get_value_and_random_if_undefined(
 					manga_altTitle_to_lang_map(transformToStringRecords(data.attributes.altTitles)),
 					"en"

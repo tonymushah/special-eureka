@@ -44,7 +44,10 @@ const sub_read = readable(new Map<string, IMangadexTheme>(), (set) => {
 						.sort((a, b) => {
 							return a.name.localeCompare(b.name);
 						})
-						.map((entry) => [entry.name, GqlThemeToITheme(useFragment(MangaDexThemeFrag,entry.value))])
+						.map((entry) => [
+							entry.name,
+							GqlThemeToITheme(useFragment(MangaDexThemeFrag, entry.value))
+						])
 				)
 			);
 		}

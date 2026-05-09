@@ -13,7 +13,11 @@ export const load: PageLoad = async () => {
 	return {
 		tags: res.data?.tag.list.data.map((t) => ({
 			id: t.id,
-			name: get_value_from_title_and_random_if_undefined(transformToStringRecord(t.attributes.name), "en") ?? "",
+			name:
+				get_value_from_title_and_random_if_undefined(
+					transformToStringRecord(t.attributes.name),
+					"en"
+				) ?? "",
 			group: t.attributes.group
 		}))
 	};

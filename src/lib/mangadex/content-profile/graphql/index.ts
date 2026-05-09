@@ -18,4 +18,4 @@ export const ContentProfileItemFragment = graphql(`
 	}
 `);
 
-export type ContentProfileItemFragmentType = ResultOf<typeof ContentProfileItemFragment>
+export type ContentProfileItemFragmentType = ResultOf<typeof ContentProfileItemFragment>;

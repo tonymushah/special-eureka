@@ -1,6 +1,4 @@
-import {
-	type ContentProfileItemFragmentType as ContentProfile,
-} from "@mangadex/content-profile/graphql";
+import { type ContentProfileItemFragmentType as ContentProfile } from "@mangadex/content-profile/graphql";
 import defaultContentProfile from "@mangadex/content-profile/graphql/defaultProfile";
 import {
 	TagSearchMode,

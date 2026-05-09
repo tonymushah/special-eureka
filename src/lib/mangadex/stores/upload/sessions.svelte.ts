@@ -43,7 +43,7 @@ export function sessionObjStore(
 									if (cData) {
 										return {
 											chapter: cData.chapter ?? undefined,
-											externalUrl: cData.externalUrl?? undefined,
+											externalUrl: cData.externalUrl ?? undefined,
 											publishAt: cData.publishAt ?? undefined,
 											termsAccepted: cData.termsAccepted ?? undefined,
 											title: cData.title ?? undefined,

@@ -1,5 +1,5 @@
 import type { MangaListContentItemProps } from "@mangadex/componnents/manga/list/MangaListContent.svelte";
-import type { ContentProfileItemFragmentType as ContentProfile, } from "@mangadex/content-profile/graphql";
+import type { ContentProfileItemFragmentType as ContentProfile } from "@mangadex/content-profile/graphql";
 import { isInLibrarySync, isInLibraryUnlessDroppedSync } from "@mangadex/gql-docs/library/isIn";
 import {
 	ContentProfileWarningMode,

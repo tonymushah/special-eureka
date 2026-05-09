@@ -1,4 +1,7 @@
-import { ContentProfileItemFragment, type ContentProfileItemFragmentType as ContentProfile } from "@mangadex/content-profile/graphql/";
+import {
+	ContentProfileItemFragment,
+	type ContentProfileItemFragmentType as ContentProfile
+} from "@mangadex/content-profile/graphql/";
 import { query as defaultProfileQuery } from "@mangadex/content-profile/graphql/defaultProfile/query";
 import { useFragment } from "@mangadex/gql";
 import isInLibrary, {
@@ -13,7 +16,7 @@ import {
 	Language,
 	MangaState,
 	MangaStatus,
-	ReadingStatus,
+	ReadingStatus
 } from "@mangadex/gql/graphql";
 import getContentProfileWarningMode from "@mangadex/utils/contentProfileWarningMode";
 import type { Tag } from "@mangadex/utils/types/Tag";
@@ -46,7 +49,10 @@ export default async function getTitleConflicts({
 		.toPromise()
 		.then((res) => {
 			if (res.data) {
-				return useFragment(ContentProfileItemFragment,res.data.userOption.getDefaultContentProfile);
+				return useFragment(
+					ContentProfileItemFragment,
+					res.data.userOption.getDefaultContentProfile
+				);
 			}
 			if (res.error) {
 				throw res.error;
@@ -55,7 +61,11 @@ export default async function getTitleConflicts({
 		});
 	const tags = title.attributes.tags.map<Tag>((t) => ({
 		id: t.id,
-		name: get_value_from_title_and_random_if_undefined(transformToStringRecord(t.attributes.name), "en") ?? t.id
+		name:
+			get_value_from_title_and_random_if_undefined(
+				transformToStringRecord(t.attributes.name),
+				"en"
+			) ?? t.id
 	}));
 	const warningMode = await getContentProfileWarningMode(client);
 	switch (warningMode) {
@@ -145,7 +155,6 @@ export function hasConflicts(conflicts: ContentProfileConflicts | null): boolean
 	}
 }
 
-
 export type MaybeConflictedTitle = {
 	id: string;
 	attributes: {
@@ -166,7 +175,7 @@ export type MaybeConflictedTitle = {
 		authorArtists: Array<{
 			id: string;
 			isBlocked: boolean;
-			attributes: {  name: string };
+			attributes: { name: string };
 		}>;
 	};
 };
@@ -186,7 +195,11 @@ export function getTitleConflictsSync({
 }: GetTitleConflictsSyncParams): ContentProfileConflicts | null {
 	const tags = title.attributes.tags.map<Tag>((t) => ({
 		id: t.id,
-		name: get_value_from_title_and_random_if_undefined(transformToStringRecord(t.attributes.name), "en") ?? t.id
+		name:
+			get_value_from_title_and_random_if_undefined(
+				transformToStringRecord(t.attributes.name),
+				"en"
+			) ?? t.id
 	}));
 	switch (warningMode) {
 		case ContentProfileWarningMode.Never:

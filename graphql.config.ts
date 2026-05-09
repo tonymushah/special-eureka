@@ -5,7 +5,7 @@ const config: IGraphQLConfig = {
 		mangadex: {
 			documents: ["./src/lib/mangadex/**/*.ts"],
 			schemaPath: "./src/lib/mangadex/schemas.graphqls",
-			includes: ["./src/lib/mangadex/**/*.ts"],
+			includes: ["./src/lib/mangadex/**/*.ts"]
 		}
 	},
 	excludes: ["./src-tauri/*", "./.svelte-kit/*"]

@@ -12,5 +12,5 @@ export enum ReportStatusMode {
 export type ReportData = {
 	id: string;
 } & Omit<ReportAttributes, "createdAt"> & {
-	createdAt: Date | string
-};
+		createdAt: Date | string;
+	};
