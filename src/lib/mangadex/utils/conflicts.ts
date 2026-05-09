@@ -17,6 +17,8 @@ import {
 import getContentProfileWarningMode from "@mangadex/utils/contentProfileWarningMode";
 import type { Tag } from "@mangadex/utils/types/Tag";
 import type { Client } from "@urql/svelte";
+import get_value_from_title_and_random_if_undefined from "./lang/get_value_from_title_and_random_if_undefined";
+import { transformToStringRecord } from "./transformToStringRecord";
 
 export type ContentProfileConflicts = {
 	tags: Tag[];
@@ -52,7 +54,7 @@ export default async function getTitleConflicts({
 		});
 	const tags = title.attributes.tags.map<Tag>((t) => ({
 		id: t.id,
-		name: t.attributes.name.en
+		name: get_value_from_title_and_random_if_undefined(transformToStringRecord(t.attributes.name), "en") ?? t.id
 	}));
 	const warningMode = await getContentProfileWarningMode(client);
 	switch (warningMode) {
@@ -142,33 +144,28 @@ export function hasConflicts(conflicts: ContentProfileConflicts | null): boolean
 	}
 }
 
+
 export type MaybeConflictedTitle = {
-	__typename?: "MangaObject";
-	id: any;
+	id: string;
 	attributes: {
-		__typename?: "GraphQLMangaAttributes";
-		title: any;
+		title: Record<string, unknown>;
 		status: MangaStatus;
 		state: MangaState;
 		originalLanguage: Language;
 		contentRating?: ContentRating | null;
 		publicationDemographic?: Demographic | null;
 		tags: Array<{
-			__typename?: "Tag";
-			id: any;
+			id: string;
 			attributes: {
-				__typename?: "TagAttributes";
-				name: any;
+				name: Record<string, unknown>;
 			};
 		}>;
 	};
 	relationships?: {
-		__typename?: "MangaRelationships";
 		authorArtists: Array<{
-			__typename?: "Author";
-			id: any;
+			id: string;
 			isBlocked: boolean;
-			attributes: { __typename?: "AuthorAttributes"; name: string };
+			attributes: {  name: string };
 		}>;
 	};
 };
@@ -188,7 +185,7 @@ export function getTitleConflictsSync({
 }: GetTitleConflictsSyncParams): ContentProfileConflicts | null {
 	const tags = title.attributes.tags.map<Tag>((t) => ({
 		id: t.id,
-		name: t.attributes.name.en
+		name: get_value_from_title_and_random_if_undefined(transformToStringRecord(t.attributes.name), "en") ?? t.id
 	}));
 	switch (warningMode) {
 		case ContentProfileWarningMode.Never:
