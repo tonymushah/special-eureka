@@ -31,6 +31,8 @@
 		"clippy:next": "RUSTFLAGS='--cfg reqwest_unstable' cargo clippy -F next"
 	},
 	"devDependencies": {
+		"@eslint/compat": "^2.0.4",
+		"@eslint/js": "^10.0.1",
 		"@graphql-codegen/cli": "^7.0.0",
 		"@graphql-codegen/client-preset": "^6.0.0",
 		"@parcel/watcher": "^2.5.6",
@@ -41,30 +43,30 @@
 		"@tanstack/svelte-query-devtools": "^6.1.28",
 		"@tauri-apps/cli": "^2.11.1",
 		"@types/lodash": "^4.17.24",
-		"@types/node": "^25.6.2",
-		"globals": "^17.6.0",
+		"@types/node": "^24",
+		"eslint": "^10.2.0",
+		"eslint-plugin-svelte": "^3.17.0",
+		"globals": "^17.4.0",
 		"graphql": "^16.14.0",
 		"graphql-config": "^5.1.6",
 		"less": "^4.6.4",
 		"sass": "^1.99.0",
 		"sharp": "^0.34.5",
 		"svelte": "^5.55.5",
-		
 		"svelte-check": "^4.4.8",
 		"svelte2tsx": "~0.7.55",
 		"svgo": "^4.0.1",
 		"tslib": "^2.8.1",
 		"typescript": "^6.0.3",
-		"typescript-eslint": "^8.59.2",
+		"typescript-eslint": "^8.58.1",
 		"vite": "catalog:",
 		"vite-plugin-image-optimizer": "^2.0.3",
 		"vite-plugin-kit-routes": "^1.0.4",
-		"vitest": "catalog:",
-		"vite-plus": "catalog:"
+		"vite-plus": "catalog:",
+		"vitest": "catalog:"
 	},
 	"type": "module",
 	"dependencies": {
-		"@viselect/vanilla": "^3.9.0",
 		"@ark-ui/svelte": "^5.21.2",
 		"@floating-ui/dom": "^1.7.6",
 		"@fontsource-variable/josefin-sans": "^5.2.8",
@@ -84,6 +86,7 @@
 		"@tauri-apps/plugin-dialog": "^2.7.1",
 		"@tauri-apps/plugin-opener": "^2.5.4",
 		"@urql/svelte": "^5.0.0",
+		"@viselect/vanilla": "^3.9.0",
 		"core-js": "^3.49.0",
 		"fast-xml-parser": "^5.7.3",
 		"flag-icons": "^7.5.0",
@@ -95,10 +98,10 @@
 		"mizuki-urql-adapter": "^1.1.0",
 		"panzoom": "^9.4.4",
 		"runed": "^0.37.1",
+		"svelte-awesome-color-picker": "^4.1.2",
 		"swiper": "^12.1.4",
 		"timeago.js": "^4.0.2",
-		"uuid": "^14.0.0",
-		"svelte-awesome-color-picker": "^4.1.2"
+		"uuid": "^14.0.0"
 	},
 	"packageManager": "pnpm@11.0.9",
 	"engines": {
