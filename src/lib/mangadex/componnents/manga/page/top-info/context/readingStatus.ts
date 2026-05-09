@@ -1,5 +1,5 @@
-import { createReadonlyValue, type ReadonlyValue } from "$lib";
-import type { InputMaybe, ReadingStatus } from "@mangadex/gql/graphql";
+import { createReadonlyValue, type InputMaybe, type ReadonlyValue } from "$lib";
+import type { ReadingStatus } from "@mangadex/gql/graphql";
 import { Context, type Getter } from "runed";
 
 const key = "top-manga-reading-status";

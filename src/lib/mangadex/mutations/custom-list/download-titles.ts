@@ -1,5 +1,6 @@
+import { type InputMaybe } from "$lib";
 import { downloadMDListsTitlesGQLDoc } from "@mangadex/gql-docs/list/download-titles";
-import type { InputMaybe, MangaDownloadExtras } from "@mangadex/gql/graphql";
+import type { MangaDownloadExtras } from "@mangadex/gql/graphql";
 import { client } from "@mangadex/gql/urql";
 import { mangadexQueryClient } from "@mangadex/index";
 import { createMutation } from "@tanstack/svelte-query";

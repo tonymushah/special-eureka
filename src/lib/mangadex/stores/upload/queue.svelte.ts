@@ -1,6 +1,6 @@
-import type { ReadonlyValue } from "$lib";
+import type { InputMaybe, ReadonlyValue } from "$lib";
 import { internalQueueEntryStateGQLDocs } from "@mangadex/gql-docs/upload/internal-queue-entry-state";
-import { InternUploadQueueState, type InputMaybe } from "@mangadex/gql/graphql";
+import { InternUploadQueueState, } from "@mangadex/gql/graphql";
 import { client } from "@mangadex/gql/urql";
 import { delay } from "lodash";
 import type { Getter } from "runed";

@@ -5,6 +5,7 @@
 	import openTitle from "@mangadex/utils/links/title/[id]";
 	import { getContextClient } from "@urql/svelte";
 	import NothingToShow from "../NothingToShow.svelte";
+	import { transformToStringRecord } from "@mangadex/utils/transformToStringRecord";
 	const client = getContextClient();
 	interface Props {
 		chapters: RecentlyAddedHomeQuery;
@@ -15,21 +16,25 @@
 		chapters.home.recentlyUploaded.data.map((c) => ({
 			mangaId: c.relationships.manga.id,
 			chapterId: c.id,
-			upload_date: new Date(c.attributes.readableAt),
+			upload_date: c.attributes.readableAt
+				? new Date(c.attributes.readableAt)
+				: new Date(),
 			lang: c.attributes.translatedLanguage,
 			uploader: {
 				id: c.relationships.user.id,
 				name: c.relationships.user.attributes.username,
-				roles: c.relationships.user.attributes.roles
+				roles: c.relationships.user.attributes.roles,
 			},
 			groups: c.relationships.scanlationGroups.map((v) => ({
 				id: v.id,
-				name: v.attributes.name
+				name: v.attributes.name,
 			})),
 			mangaTitle:
 				get_value_from_title_and_random_if_undefined(
-					c.relationships.manga.attributes.title,
-					"en"
+					transformToStringRecord(
+						c.relationships.manga.attributes.title,
+					),
+					"en",
 				) ?? "",
 			coverImageAlt: `${c.id}/${c.attributes.volume}`,
 			chapterTitle: `${
@@ -37,7 +42,8 @@
 					? ` Vol. ${c.attributes.volume}`
 					: ""
 			}${
-				c.attributes.chapter != null && c.attributes.chapter != undefined
+				c.attributes.chapter != null &&
+				c.attributes.chapter != undefined
 					? ` Ch. ${c.attributes.chapter}`
 					: ""
 			}${
@@ -47,7 +53,8 @@
 			}`,
 			end: (() => {
 				let isLastChapter = false;
-				const lastChapter = c.relationships.manga.attributes.lastChapter;
+				const lastChapter =
+					c.relationships.manga.attributes.lastChapter;
 				if (lastChapter) {
 					isLastChapter = c.attributes.chapter == lastChapter;
 				}
@@ -57,8 +64,8 @@
 					isLastVolume = c.attributes.volume == lastVolume;
 				}
 				return isLastVolume && isLastChapter;
-			})()
-		}))
+			})(),
+		})),
 	);
 	let halfwayThrough = $derived(Math.floor(data.length / 2));
 

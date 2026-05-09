@@ -30,3 +30,5 @@ export function get_value_from_maybe_getter<
 		return maybe_getter;
 	}
 }
+
+export type InputMaybe<T> = T | null | undefined;

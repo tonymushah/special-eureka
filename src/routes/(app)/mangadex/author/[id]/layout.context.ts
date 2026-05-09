@@ -1,4 +1,5 @@
 import query from "@mangadex/gql-docs/author/id";
+import { transformToStringRecord } from "@mangadex/utils/transformToStringRecord";
 import type { Client } from "@urql/svelte";
 
 export type AuthorLinks = {
@@ -44,22 +45,22 @@ export async function load({ id, client }: { id: string; client: Client }) {
 			id: authorData.id,
 			titles: data.manga.list.total,
 			name: authorData.attributes.name,
-			biography: authorData.attributes.biography,
-			imageUrl: authorData.attributes.imageUrl,
+			biography: transformToStringRecord(authorData.attributes.biography),
+			imageUrl: authorData.attributes.imageUrl ?? undefined,
 			links: {
-				twitter: authorData.attributes.twitter,
-				pixiv: authorData.attributes.pixiv,
-				melonBook: authorData.attributes.melonBook,
-				fanBox: authorData.attributes.fanBox,
-				booth: authorData.attributes.booth,
-				nicoVideo: authorData.attributes.nicoVideo,
-				skeb: authorData.attributes.skeb,
-				fantia: authorData.attributes.fantia,
-				tumblr: authorData.attributes.tumblr,
-				youtube: authorData.attributes.youtube,
-				weibo: authorData.attributes.weibo,
-				naver: authorData.attributes.naver,
-				website: authorData.attributes.website
+				twitter: authorData.attributes.twitter ?? undefined,
+				pixiv: authorData.attributes.pixiv ?? undefined,
+				melonBook: authorData.attributes.melonBook ?? undefined,
+				fanBox: authorData.attributes.fanBox ?? undefined,
+				booth: authorData.attributes.booth ?? undefined,
+				nicoVideo: authorData.attributes.nicoVideo ?? undefined,
+				skeb: authorData.attributes.skeb ?? undefined,
+				fantia: authorData.attributes.fantia ?? undefined,
+				tumblr: authorData.attributes.tumblr ?? undefined,
+				youtube: authorData.attributes.youtube ?? undefined,
+				weibo: authorData.attributes.weibo ?? undefined,
+				naver: authorData.attributes.naver ?? undefined,
+				website: authorData.attributes.website ?? undefined
 			},
 			isBlocked: authorData.isBlocked
 		} satisfies LayoutLoadReturnData;

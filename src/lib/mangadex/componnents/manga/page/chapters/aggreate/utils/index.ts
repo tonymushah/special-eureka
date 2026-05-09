@@ -27,8 +27,7 @@ export async function fetchChapters({
 	if (result.error) {
 		throw result.error;
 	}
-	if (dev)
-		mangadexQueryClient.setQueryData(["getMangaAggregateChapterQuery", v7()], () => result);
+	if (dev) mangadexQueryClient.setQueryData(["getMangaAggregateChapterQuery", v7()], () => result);
 	const chapters = result.data?.chapter.list.data.map<ComponentProps<typeof ChapterElement1>>(
 		(c) => {
 			let isLastChapter = false;
@@ -58,7 +57,7 @@ export async function fetchChapters({
 				title,
 				lang: c.attributes.translatedLanguage,
 				uploader,
-				upload_date: new Date(c.attributes.readableAt),
+				upload_date: c.attributes.readableAt ? new Date(c.attributes.readableAt) : new Date(),
 				groups,
 				end: isLastChapter && isLastVolume
 			};

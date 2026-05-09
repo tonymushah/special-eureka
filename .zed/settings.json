@@ -27,9 +27,7 @@
 		}
 	},
 	"file_types": {
-		"JSONC": [
-			"*.json5"
-		]
+		"JSONC": ["*.json5"]
 	},
 	"format_on_save": "on",
 	"languages": {
@@ -38,12 +36,7 @@
 				"source.organizeImports": true
 			},
 			"format_on_save": "on",
-			"language_servers": [
-				"!tailwindcss-language-server",
-				"eslint",
-				"vtsls",
-				"graphql"
-			],
+			"language_servers": ["!tailwindcss-language-server", "eslint", "vtsls", "graphql"],
 			"prettier": {
 				"allowed": false
 			},

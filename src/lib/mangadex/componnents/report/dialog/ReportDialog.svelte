@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { ReportCategory, type InputMaybe } from "@mangadex/gql/graphql";
+	import type{InputMaybe} from "$lib";
+	import { ReportCategory } from "@mangadex/gql/graphql";
 	import { XIcon as CloseIcon } from "@lucide/svelte";
 	import {
 		createReportReasonListQuery,
@@ -13,6 +14,7 @@
 	import MangaDexVarThemeProvider from "@mangadex/componnents/theme/MangaDexVarThemeProvider.svelte";
 	import cssMod from "./report-dialog.module.scss";
 	import cssDialogMod from "@mangadex/componnents/theme/dialog/dialog.module.scss";
+	import { transformToStringRecord } from "@mangadex/utils/transformToStringRecord";
 	interface Props {
 		category: ReportCategory;
 		open?: boolean;
@@ -79,7 +81,7 @@
 														reason.attributes.detailsRequired
 												} as ReasonState}
 												>{get_value_from_title_and_random_if_undefined(
-													reason.attributes.reason,
+													transformToStringRecord(reason.attributes.reason),
 													"key"
 												)}</option
 											>

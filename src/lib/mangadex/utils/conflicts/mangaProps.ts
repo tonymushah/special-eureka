@@ -49,8 +49,7 @@ export function getTitleConflictsFromMangaListContentItemProps({
 		tags: excludedTags,
 		originalLanguage:
 			($profile.originalLanguages.some((value) => originalLanguage == value) == false ||
-				$profile.excludedOriginalLanguage.some((value) => originalLanguage == value) ==
-					true) &&
+				$profile.excludedOriginalLanguage.some((value) => originalLanguage == value) == true) &&
 			$profile.originalLanguages.length != 0 &&
 			$profile.excludedOriginalLanguage.length != 0
 				? originalLanguage
@@ -60,8 +59,8 @@ export function getTitleConflictsFromMangaListContentItemProps({
 				? status
 				: undefined,
 		publicationDemographic:
-			$profile.publicationDemographic.some((value) => value == publicationDemographic) ==
-				false && $profile.publicationDemographic.length != 0
+			$profile.publicationDemographic.some((value) => value == publicationDemographic) == false &&
+			$profile.publicationDemographic.length != 0
 				? publicationDemographic
 				: undefined,
 		contentRating:

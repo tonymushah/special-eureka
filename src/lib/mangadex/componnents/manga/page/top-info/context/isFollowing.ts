@@ -1,5 +1,5 @@
+import type { InputMaybe } from "$lib";
 import { createReadonlyValue, type ReadonlyValue } from "$lib";
-import type { InputMaybe } from "@mangadex/gql/graphql";
 import { Context, type Getter } from "runed";
 
 const key = "top-manga-is-following";

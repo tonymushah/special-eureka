@@ -1,10 +1,10 @@
 import type { Chapter } from "@mangadex/componnents/chapter/feed";
+import getChapterDownloadState from "@mangadex/componnents/home/latest-updates/getChapterDownloadState";
 import { graphql } from "@mangadex/gql";
 import { client } from "@mangadex/gql/urql";
-import { getMangaAggregateChapterQuery } from "../page/chapters/aggreate/utils/query";
 import chapterTitle from "@mangadex/utils/chapter/title";
-import getChapterDownloadState from "@mangadex/componnents/home/latest-updates/getChapterDownloadState";
 import { readable, type Readable } from "svelte/store";
+import { getMangaAggregateChapterQuery } from "../page/chapters/aggreate/utils/query";
 
 const aggregateQuery = graphql(`
 	query getMangatoReadAggregate($id: UUID!) {
@@ -78,7 +78,7 @@ async function getMangaToReadChapter(manga_id: string): Promise<Chapter[]> {
 			title,
 			lang: c.attributes.translatedLanguage,
 			uploader,
-			upload_date: new Date(c.attributes.readableAt),
+			upload_date: c.attributes.readableAt ? new Date(c.attributes.readableAt) : new Date(),
 			download_state: getChapterDownloadState({
 				id: c.id,
 				client

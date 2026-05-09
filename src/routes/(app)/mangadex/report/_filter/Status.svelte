@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { ReportStatus, type InputMaybe } from "@mangadex/gql/graphql";
+	import { type InputMaybe } from "$lib";
+	import { ReportStatus } from "@mangadex/gql/graphql";
 	import FilterLayout from "./FilterLayout.svelte";
 
 	interface Props {

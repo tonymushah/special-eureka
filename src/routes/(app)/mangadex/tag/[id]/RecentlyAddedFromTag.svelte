@@ -4,6 +4,7 @@
 	import defaultContentProfile from "@mangadex/content-profile/graphql/defaultProfile";
 	import tagRecentlyAddedQuery from "@mangadex/gql-docs/tag/page/recentlyAdded";
 	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
+	import { transformToStringRecord } from "@mangadex/utils/transformToStringRecord";
 	import { createQuery } from "@tanstack/svelte-query";
 	import { getContextClient } from "@urql/svelte";
 	import { debounce } from "lodash";
@@ -21,22 +22,22 @@
 			slidesPerView: "auto",
 			breakpoints: {
 				640: {
-					slidesPerView: 3
+					slidesPerView: 3,
 				},
 				1024: {
-					slidesPerView: 5
+					slidesPerView: 5,
 				},
 				1360: {
-					slidesPerView: 6
-				}
+					slidesPerView: 6,
+				},
 			},
 			mousewheel: true,
 			freeMode: true,
 			on: {
 				init() {
 					// ...
-				}
-			}
+				},
+			},
 		};
 
 		if (swiper_container) {
@@ -55,7 +56,7 @@
 		async queryFn() {
 			const res = await client
 				.query(tagRecentlyAddedQuery, {
-					id
+					id,
 				})
 				.toPromise();
 			if (res.error) {
@@ -66,14 +67,14 @@
 				throw new Error("No data??");
 			}
 		},
-		networkMode: "online"
+		networkMode: "online",
 	}));
 	$effect(() =>
 		defaultContentProfile.subscribe(
 			debounce(() => {
 				query.refetch();
-			})
-		)
+			}),
+		),
 	);
 </script>
 
@@ -94,10 +95,11 @@
 				<swiper-slide>
 					<MangaElementBase4
 						title={get_value_from_title_and_random_if_undefined(
-							title.attributes.title,
-							"en"
+							transformToStringRecord(title.attributes.title),
+							"en",
 						) ?? ""}
-						coverImageAlt={title.relationships.coverArt.attributes.description}
+						coverImageAlt={title.relationships.coverArt.attributes
+							.description}
 						mangaId={title.id}
 					/>
 				</swiper-slide>

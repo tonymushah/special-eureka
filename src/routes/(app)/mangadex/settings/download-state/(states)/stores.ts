@@ -14,10 +14,7 @@ import { debounce, delay } from "lodash";
 
 const mangaTasksSubStart = debounce<
 	StartStopNotifier<
-		| OperationResult<
-				ListenToMangaTasksIDsSubscription,
-				ListenToMangaTasksIDsSubscriptionVariables
-		  >
+		| OperationResult<ListenToMangaTasksIDsSubscription, ListenToMangaTasksIDsSubscriptionVariables>
 		| undefined
 	>
 >((set) => {
@@ -42,10 +39,7 @@ export const mangaTasksSub = readable<
 
 const coverTasksSubStart = debounce<
 	StartStopNotifier<
-		| OperationResult<
-				ListenToCoverTasksIDsSubscription,
-				ListenToCoverTasksIDsSubscriptionVariables
-		  >
+		| OperationResult<ListenToCoverTasksIDsSubscription, ListenToCoverTasksIDsSubscriptionVariables>
 		| undefined
 	>
 >((set) => {

@@ -1,61 +1,66 @@
 import { sveltekit } from "@sveltejs/kit/vite";
-import { defineConfig, searchForWorkspaceRoot } from "vite-plus";
 import { ViteImageOptimizer } from "vite-plugin-image-optimizer";
 import { kitRoutes } from "vite-plugin-kit-routes";
+import { defineConfig, searchForWorkspaceRoot } from "vite-plus";
 
 export default defineConfig({
-  lint: {"options":{"typeAware":true,"typeCheck":true}},
-  fmt: {
-  		useTabs: true,
-  		singleQuote: false,
-  		trailingComma: "none",
-  		printWidth: 100,
-  		sortPackageJson: false,
-  		ignorePatterns: [
-  			"pnpm-lock.yaml",
-  			"package-lock.json",
-  			"yarn.lock",
-  			"/src-tauri",
-  			"/target",
-  			"src/lib/ROUTES.ts",
-  			"src/lib/mangadex/schemas.graphqls",
-  		],
-  	},
-  	plugins: [sveltekit(), kitRoutes(), ViteImageOptimizer()],
-  	optimizeDeps: {
-  		exclude: ["@urql/svelte", "@urql/core"],
-  	},
-  	// prevent vite from obscuring rust errors
-  	clearScreen: false,
-  	oxc: {
-  		// We need this or else the ts code that uses `using` will not work on linux ;(
-  		target: process.env.TAURI_ENV_PLATFORM == "windows" ? "es2022" : "es2018",
-  	},
-  	// Tauri expects a fixed port, fail if that port is not available
-  	server: {
-  		port: 9305,
-  		strictPort: true,
-  		fs: {
-  			deny: ["./src-tauri", ".env", ".env.*", "*.crt", "*.pem", "./target", "./data"],
-  		},
-  		watch: {
-  			ignored: [
-  				`${searchForWorkspaceRoot(process.cwd())}/src-tauri`,
-  				`${searchForWorkspaceRoot(process.cwd())}/target`,
-  				`${searchForWorkspaceRoot(process.cwd())}/data`,
-  			],
-  		},
-  	},
-  	dev: {},
-  	// to access the Tauri environment variables set by the CLI with information about the current target
-  	envPrefix: ["VITE_", "TAURI_ENV_*"],
-  	build: {
-  		// Tauri uses Chromium on Windows and WebKit on macOS and Linux
-  		target: process.env.TAURI_ENV_PLATFORM == "windows" ? "chrome105" : "safari13",
-  		// don't minify for debug builds
-  		minify: !process.env.TAURI_ENV_DEBUG ? "oxc" : false,
-  		// produce sourcemaps for debug builds
-  		sourcemap: !!process.env.TAURI_ENV_DEBUG,
-  		cssMinify: "lightningcss",
-  	},
+	lint: { options: { typeAware: true, typeCheck: true } },
+	fmt: {
+		useTabs: true,
+		singleQuote: false,
+		trailingComma: "none",
+		printWidth: 100,
+		sortPackageJson: false,
+		ignorePatterns: [
+			"pnpm-lock.yaml",
+			"package-lock.json",
+			"yarn.lock",
+			"/src-tauri",
+			"/target",
+			"crates",
+			"src/lib/ROUTES.ts",
+			"src/lib/mangadex/schemas.graphqls",
+			"Cargo.toml",
+			"Cargo.lock",
+			".github",
+			"*.graphqls"
+		]
+	},
+	plugins: [sveltekit(), kitRoutes(), ViteImageOptimizer()],
+	optimizeDeps: {
+		exclude: ["@urql/svelte", "@urql/core"]
+	},
+	// prevent vite from obscuring rust errors
+	clearScreen: false,
+	oxc: {
+		// We need this or else the ts code that uses `using` will not work on linux ;(
+		target: process.env.TAURI_ENV_PLATFORM == "windows" ? "es2022" : "es2018"
+	},
+	// Tauri expects a fixed port, fail if that port is not available
+	server: {
+		port: 9305,
+		strictPort: true,
+		fs: {
+			deny: ["./src-tauri", ".env", ".env.*", "*.crt", "*.pem", "./target", "./data"]
+		},
+		watch: {
+			ignored: [
+				`${searchForWorkspaceRoot(process.cwd())}/src-tauri`,
+				`${searchForWorkspaceRoot(process.cwd())}/target`,
+				`${searchForWorkspaceRoot(process.cwd())}/data`
+			]
+		}
+	},
+	dev: {},
+	// to access the Tauri environment variables set by the CLI with information about the current target
+	envPrefix: ["VITE_", "TAURI_ENV_*"],
+	build: {
+		// Tauri uses Chromium on Windows and WebKit on macOS and Linux
+		target: process.env.TAURI_ENV_PLATFORM == "windows" ? "chrome105" : "safari13",
+		// don't minify for debug builds
+		minify: !process.env.TAURI_ENV_DEBUG ? "oxc" : false,
+		// produce sourcemaps for debug builds
+		sourcemap: !!process.env.TAURI_ENV_DEBUG,
+		cssMinify: "lightningcss"
+	}
 });

@@ -1,7 +1,8 @@
 import { dev } from "$app/environment";
+import { type InputMaybe } from "$lib";
 import { internalSessionGQLDocs } from "@mangadex/gql-docs/upload/internal-session";
 import { internalSessionListIDsGQLDocs } from "@mangadex/gql-docs/upload/internal-session-list";
-import type { InputMaybe, Language } from "@mangadex/gql/graphql";
+import type { Language } from "@mangadex/gql/graphql";
 import { client } from "@mangadex/gql/urql";
 import { delay } from "lodash";
 import { readable } from "svelte/store";
@@ -70,8 +71,8 @@ export function sessionObjStore(id: string) {
 									if (cData) {
 										return {
 											chapter: cData.chapter ?? undefined,
-											externalUrl: cData.externalUrl,
-											publishAt: cData.publishAt,
+											externalUrl: cData.externalUrl ?? undefined,
+											publishAt: cData.publishAt ?? undefined,
 											termsAccepted: cData.termsAccepted ?? undefined,
 											title: cData.title ?? undefined,
 											translatedLanguage: cData.translatedLanguage,

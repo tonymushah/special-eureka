@@ -114,10 +114,7 @@ export default function scanlationGroupElementContextMenu({
 								});
 							})
 							.catch((e) => {
-								addErrorToast(
-									`Cannot removed group ${name ?? id} to the blacklist`,
-									e
-								);
+								addErrorToast(`Cannot removed group ${name ?? id} to the blacklist`, e);
 							});
 					}
 				})
@@ -190,10 +187,7 @@ export default function scanlationGroupElementContextMenu({
 									});
 								})
 								.catch((e) => {
-									addErrorToast(
-										`Cannot add user ${leader.name} to the blacklist`,
-										e
-									);
+									addErrorToast(`Cannot add user ${leader.name} to the blacklist`, e);
 								});
 						}
 					}),
@@ -208,10 +202,7 @@ export default function scanlationGroupElementContextMenu({
 									});
 								})
 								.catch((e) => {
-									addErrorToast(
-										`Cannot remove user ${leader.name} to the blacklist`,
-										e
-									);
+									addErrorToast(`Cannot remove user ${leader.name} to the blacklist`, e);
 								});
 						}
 					}),

@@ -11,6 +11,7 @@
 	import PopularTitleSpinner from "./utils/PopularTitleSpinner.svelte";
 	import TopTitle from "./utils/TopTitle.svelte";
 	import { get_cover_image_url } from "@mangadex/utils/cover-art/get_cover_art";
+	import { transformToStringRecord } from "@mangadex/utils/transformToStringRecord";
 
 	const client = getContextClient();
 
@@ -51,19 +52,19 @@
 	<Content
 		popular_titles={popular_titles_query.data.map((manga) => ({
 			id: manga.id,
-			title: get_value_from_title_and_random_if_undefined(manga.attributes.title, "en") ?? "",
+			title: get_value_from_title_and_random_if_undefined(transformToStringRecord(manga.attributes.title), "en") ?? "",
 			description:
-				get_value_from_title_and_random_if_undefined(manga.attributes.description, "en") ??
+				get_value_from_title_and_random_if_undefined(transformToStringRecord(manga.attributes.description), "en") ??
 				"",
 			coverImage: get_cover_image_url({
 				id: manga.relationships.coverArt.id,
 				quality: "512"
 			}),
-			coverImageAlt: manga.attributes.title["en"] ?? manga.relationships.coverArt.id,
+			coverImageAlt:get_value_from_title_and_random_if_undefined(transformToStringRecord(manga.attributes.title), "en") ?? manga.relationships.coverArt.id,
 			contentRating: manga.attributes.contentRating ?? undefined,
 			tags: manga.attributes.tags.map<Tag>((tag) => ({
 				id: tag.id,
-				name: tag.attributes.name["en"] ?? ""
+				name: get_value_from_title_and_random_if_undefined(transformToStringRecord(manga.attributes.title), "en") ?? ""
 			})),
 			authors: manga.relationships.authorArtists.map<{ id: string; name: string }>(
 				(author_artist) => ({

@@ -69,6 +69,7 @@
 		IsInViewport
 	} from "runed";
 	import manga_following_status from "@mangadex/stores/manga/manga_following_status.svelte";
+	import { transformToStringRecord } from "@mangadex/utils/transformToStringRecord";
 
 	type TopMangaStatisticsStoreData = TopMangaStatistics & {
 		threadUrl?: string;
@@ -245,7 +246,7 @@
 			coverArtId: data.queryResult.relationships.coverArt.id,
 			tags: data.queryResult.attributes.tags.map((tag) => ({
 				id: tag.id,
-				name: manga_title_to_lang_map(tag.attributes.name)
+				name: manga_title_to_lang_map(transformToStringRecord(tag.attributes.name))
 			})),
 			artists: data.queryResult.relationships.artists.map((a) => ({
 				id: a.id,

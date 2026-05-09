@@ -30,7 +30,7 @@
 			id: data.relationships.manga.id,
 			title:
 				get_value_from_title_and_random_if_undefined(
-					data.relationships.manga.attributes.title,
+					transformToStringRecord(data.relationships.manga.attributes.title),
 					"en"
 				) ?? ""
 		});
@@ -97,6 +97,7 @@
 	import { onMount, untrack } from "svelte";
 	import { delay } from "lodash";
 	import { isLogged } from "@mangadex/utils/auth";
+	import { transformToStringRecord } from "@mangadex/utils/transformToStringRecord";
 
 	interface Props {
 		data: LayoutData;
@@ -315,10 +316,11 @@
 			}
 		})
 	);
+	let mangaTitle = $derived(get_value_from_title_and_random_if_undefined(transformToStringRecord(data.data.relationships.manga.attributes.title), "en") ?? "none")
 </script>
 
 <AppTitle
-	title={`${$currentPage + 1} | ${data.data.attributes.chapter ?? "Oneshot"} - ${get_value_from_title_and_random_if_undefined(data.data.relationships.manga.attributes.title, "en") ?? "none"} - MangaDex`}
+	title={`${$currentPage + 1} | ${data.data.attributes.chapter ?? "Oneshot"} - ${mangaTitle} - MangaDex`}
 />
 
 {@render children?.()}

@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { type InputMaybe, OrderDirection, type ReportSortOrder } from "@mangadex/gql/graphql";
+	import {type InputMaybe} from "$lib"
+	import { OrderDirection, type ReportSortOrder } from "@mangadex/gql/graphql";
 	import FilterLayout from "./FilterLayout.svelte";
 
 	interface Props {

@@ -78,9 +78,7 @@ export function getMangaSearchAvailableTranslatedLanguageContextWritableStore():
 		},
 		update(updater) {
 			const contextData = get(context);
-			contextData.availableTranslatedLanguage = updater(
-				contextData.availableTranslatedLanguage
-			);
+			contextData.availableTranslatedLanguage = updater(contextData.availableTranslatedLanguage);
 			context.set(contextData);
 		}
 	};

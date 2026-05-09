@@ -4,12 +4,12 @@
 	import HasNext from "@mangadex/componnents/search/content/HasNext.svelte";
 	import NothingToShow from "@mangadex/componnents/search/content/NothingToShow.svelte";
 	import { createCurrentUserReportsQuery } from "@mangadex/gql-docs/report";
+	import { type InputMaybe } from "$lib";
 	import {
 		ReportStatus,
-		type InputMaybe,
 		type ReportAttributes,
 		type ReportCategory,
-		type ReportSortOrder
+		type ReportSortOrder,
 	} from "@mangadex/gql/graphql";
 	import pageLimit from "@mangadex/stores/page-limit";
 	import { debounce, random, range } from "lodash";
@@ -37,8 +37,8 @@
 			objectId: (objectId?.length ?? 0) == 0 ? undefined : objectId,
 			order,
 			reasonId,
-			status
-		})
+			status,
+		}),
 	);
 	let isFetching = $derived(reports.isFetching);
 	let hasNext = $derived(reports.hasNextPage);
@@ -56,8 +56,8 @@
 			}
 		},
 		{
-			threshold: 1.0
-		}
+			threshold: 1.0,
+		},
 	);
 	let to_obserce_bind: HTMLElement | undefined = $state(undefined);
 	$effect(() => {
@@ -80,8 +80,11 @@
 					details:
 						"Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores expedita officia suscipit odit accusantium natus in perspiciatis ex doloribus ipsum cupiditate ad corporis aut, praesentium nulla, sit culpa. Aliquam, ipsam.",
 					objectId: v7(),
-					status: random(1, 3) == 2 ? ReportStatus.Waiting : ReportStatus.Accepted,
-					createdAt: new Date()
+					status:
+						random(1, 3) == 2
+							? ReportStatus.Waiting
+							: ReportStatus.Accepted,
+					createdAt: new Date(),
 				};
 			});
 			return data;
@@ -99,8 +102,8 @@
 					([id, att]) =>
 						({
 							id,
-							...att
-						}) satisfies ReportData
+							...att,
+						}) satisfies ReportData,
 				)
 				.toArray();
 		}

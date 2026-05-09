@@ -1,6 +1,6 @@
+import type { InputMaybe } from "$lib";
 import { createReadonlyValue, type ReadonlyValue } from "$lib";
 import type { MangaDownloadState } from "@mangadex/download/manga.svelte";
-import type { InputMaybe } from "@mangadex/gql/graphql";
 import { Context } from "runed";
 
 const key = "top-manga-download-state";

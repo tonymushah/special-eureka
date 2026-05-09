@@ -17,6 +17,7 @@
 	import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 	import { invalidate } from "$app/navigation";
 	import { route } from "$lib/ROUTES";
+	import { transformToStringRecord } from "@mangadex/utils/transformToStringRecord";
 
 	interface Props {
 		data: LayoutData;
@@ -25,7 +26,7 @@
 	}
 
 	let { data, children, refetch }: Props = $props();
-	let description = $derived(get_value_from_title_and_random_if_undefined(data.biography, "en"));
+	let description = $derived(get_value_from_title_and_random_if_undefined(transformToStringRecord(data.biography), "en"));
 	let openReportDialog = $state(false);
 	let isBlocked = $derived(data.isBlocked);
 	let blockMutation = createBlockAuthorArtistMutation();

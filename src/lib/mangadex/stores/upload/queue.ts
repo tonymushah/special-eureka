@@ -1,6 +1,7 @@
+import { type InputMaybe } from "$lib";
 import { internalQueueEntryStateGQLDocs } from "@mangadex/gql-docs/upload/internal-queue-entry-state";
 import { internalSessionQueueOrderIDsGQLDocs } from "@mangadex/gql-docs/upload/internal-queue-order";
-import { InternUploadQueueState, type InputMaybe } from "@mangadex/gql/graphql";
+import { InternUploadQueueState } from "@mangadex/gql/graphql";
 import { client } from "@mangadex/gql/urql";
 import type { CombinedError } from "@urql/svelte";
 import { delay } from "lodash";

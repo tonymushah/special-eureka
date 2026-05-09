@@ -2,9 +2,9 @@
 	import {
 		CoverImageFormat,
 		type CoverArtResizeOption,
-		type InputMaybe,
-		type CoverArtSaveOption
+		type CoverArtSaveOption,
 	} from "@mangadex/gql/graphql";
+	import { type InputMaybe } from "$lib";
 	import { saveCoversInADirectory } from "@mangadex/mutations/covers/save";
 	import { isLinuxStore } from "@special-eureka/core/commands/isLinux";
 	import { Slider } from "@ark-ui/svelte/slider";
@@ -13,7 +13,10 @@
 	import { FolderUp, FolderArchive } from "@lucide/svelte";
 	import { dev } from "$app/environment";
 	import ButtonAccentOnlyLabel from "@mangadex/componnents/theme/buttons/ButtonAccentOnlyLabel.svelte";
-	import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
+	import {
+		addErrorToast,
+		addToast,
+	} from "@mangadex/componnents/theme/toast/Toaster.svelte";
 	import { saveCoversInAArchive } from "@mangadex/mutations/covers/save-archive";
 	import { revealItemInDir } from "@tauri-apps/plugin-opener";
 
@@ -33,22 +36,22 @@
 			switch (resizeMode) {
 				case "width":
 					resizePercentage = {
-						width: resizeValue
+						width: resizeValue,
 					};
 					break;
 				case "height":
 					resizePercentage = {
-						height: resizeValue
+						height: resizeValue,
 					};
 					break;
 			}
 			return {
 				format: imageFormat,
-				resizePercentage
+				resizePercentage,
 			};
 		} else {
 			return {
-				format: imageFormat
+				format: imageFormat,
 			};
 		}
 	});
@@ -70,10 +73,19 @@
 			<option value={CoverImageFormat.Webp}>Webp</option>
 		</select>
 		<label for="can-resize-image">Resize Image:</label>
-		<input class="resize-check" type="checkbox" id="can-resize-image" bind:checked={resize} />
+		<input
+			class="resize-check"
+			type="checkbox"
+			id="can-resize-image"
+			bind:checked={resize}
+		/>
 		{#if resize}
 			<label for="resize-mode">Resize Mode:</label>
-			<select id="resize-mode" bind:value={resizeMode} class:isNotLinux={!$isLinuxStore}>
+			<select
+				id="resize-mode"
+				bind:value={resizeMode}
+				class:isNotLinux={!$isLinuxStore}
+			>
 				<option value="width">Width</option>
 				<option value="height">Height</option>
 			</select>
@@ -81,14 +93,19 @@
 			<Slider.Root
 				id="resize-value"
 				class={cssSliderMod.root}
-				bind:value={() => [resizeValue], (i) => (resizeValue = i.at(0) ?? 0)}
+				bind:value={
+					() => [resizeValue], (i) => (resizeValue = i.at(0) ?? 0)
+				}
 			>
 				<div class="slider-root">
 					<Slider.Control class={cssSliderMod.sliderContainer}>
 						<Slider.Track class={cssSliderMod.sliderRangeOuter}>
 							<Slider.Range class={cssSliderMod.sliderRange} />
 						</Slider.Track>
-						<Slider.Thumb index={0} class={cssSliderMod.sliderThumbs}>
+						<Slider.Thumb
+							index={0}
+							class={cssSliderMod.sliderThumbs}
+						>
 							<Slider.HiddenInput />
 						</Slider.Thumb>
 					</Slider.Control>
@@ -105,19 +122,22 @@
 				dirMutation.mutate(
 					{
 						ids: covers,
-						option: options
+						option: options,
 					},
 					{
 						onSuccess() {
 							addToast({
 								title: "Exported covers",
-								type: "success"
+								type: "success",
 							});
 						},
 						onError(error) {
-							addErrorToast("Cannot export covers in the directory", error);
-						}
-					}
+							addErrorToast(
+								"Cannot export covers in the directory",
+								error,
+							);
+						},
+					},
 				);
 			}}
 		/>
@@ -128,20 +148,23 @@
 				archiveMutation.mutate(
 					{
 						ids: covers,
-						option: options
+						option: options,
 					},
 					{
 						onSuccess(archive) {
 							revealItemInDir(archive).catch(console.warn);
 							addToast({
 								title: "Exported covers",
-								type: "success"
+								type: "success",
 							});
 						},
 						onError(error) {
-							addErrorToast("Cannot export covers in a archive", error);
-						}
-					}
+							addErrorToast(
+								"Cannot export covers in a archive",
+								error,
+							);
+						},
+					},
 				);
 			}}
 		/>
