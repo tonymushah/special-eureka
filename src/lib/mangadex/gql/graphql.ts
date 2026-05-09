@@ -1548,18 +1548,7 @@ export type WatchDefaultContentProfileSubscriptionVariables = Exact<{ [key: stri
 
 export type WatchDefaultContentProfileSubscription = {
 	watchContentProfileDefault: {
-		originalLanguages: Array<Language>;
-		publicationDemographic: Array<Demographic>;
-		includedTags: Array<string>;
-		includedTagsMode: TagSearchMode | null;
-		excludedTags: Array<string>;
-		excludedTagsMode: TagSearchMode | null;
-		status: Array<MangaStatus>;
-		excludedOriginalLanguage: Array<Language>;
-		translatedLanguages: Array<Language>;
-		contentRating: Array<ContentRating>;
-		excludedGroups: Array<string>;
-		excludedUploaders: Array<string>;
+		" $fragmentRefs"?: { ContentProfileItemFragment: ContentProfileItemFragment };
 	};
 };
 
@@ -1570,18 +1559,7 @@ export type UpdateDefaultContentProfileMutationVariables = Exact<{
 export type UpdateDefaultContentProfileMutation = {
 	userOption: {
 		updateDefaultContentProfile: {
-			originalLanguages: Array<Language>;
-			publicationDemographic: Array<Demographic>;
-			includedTags: Array<string>;
-			includedTagsMode: TagSearchMode | null;
-			excludedTags: Array<string>;
-			excludedTagsMode: TagSearchMode | null;
-			status: Array<MangaStatus>;
-			excludedOriginalLanguage: Array<Language>;
-			translatedLanguages: Array<Language>;
-			contentRating: Array<ContentRating>;
-			excludedGroups: Array<string>;
-			excludedUploaders: Array<string>;
+			" $fragmentRefs"?: { ContentProfileItemFragment: ContentProfileItemFragment };
 		};
 	};
 };
@@ -1591,18 +1569,7 @@ export type GetDefaultContentProfileQueryVariables = Exact<{ [key: string]: neve
 export type GetDefaultContentProfileQuery = {
 	userOption: {
 		getDefaultContentProfile: {
-			originalLanguages: Array<Language>;
-			publicationDemographic: Array<Demographic>;
-			includedTags: Array<string>;
-			includedTagsMode: TagSearchMode | null;
-			excludedTags: Array<string>;
-			excludedTagsMode: TagSearchMode | null;
-			status: Array<MangaStatus>;
-			excludedOriginalLanguage: Array<Language>;
-			translatedLanguages: Array<Language>;
-			contentRating: Array<ContentRating>;
-			excludedGroups: Array<string>;
-			excludedUploaders: Array<string>;
+			" $fragmentRefs"?: { ContentProfileItemFragment: ContentProfileItemFragment };
 		};
 	};
 };
@@ -1621,25 +1588,27 @@ export type UpdateDefaultContentProfileKeyMutation = {
 	userOption: { setDefaultContentProfileKey: string | null };
 };
 
+export type ContentProfileItemFragment = {
+	originalLanguages: Array<Language>;
+	publicationDemographic: Array<Demographic>;
+	includedTags: Array<string>;
+	includedTagsMode: TagSearchMode | null;
+	excludedTags: Array<string>;
+	excludedTagsMode: TagSearchMode | null;
+	status: Array<MangaStatus>;
+	excludedOriginalLanguage: Array<Language>;
+	translatedLanguages: Array<Language>;
+	contentRating: Array<ContentRating>;
+	excludedGroups: Array<string>;
+	excludedUploaders: Array<string>;
+} & { " $fragmentName"?: "ContentProfileItemFragment" };
+
 export type WatchContentProfilesSubscriptionVariables = Exact<{ [key: string]: never }>;
 
 export type WatchContentProfilesSubscription = {
 	watchContentProfiles: Array<{
 		name: string;
-		value: {
-			originalLanguages: Array<Language>;
-			publicationDemographic: Array<Demographic>;
-			includedTags: Array<string>;
-			includedTagsMode: TagSearchMode | null;
-			excludedTags: Array<string>;
-			excludedTagsMode: TagSearchMode | null;
-			status: Array<MangaStatus>;
-			excludedOriginalLanguage: Array<Language>;
-			translatedLanguages: Array<Language>;
-			contentRating: Array<ContentRating>;
-			excludedGroups: Array<string>;
-			excludedUploaders: Array<string>;
-		};
+		value: { " $fragmentRefs"?: { ContentProfileItemFragment: ContentProfileItemFragment } };
 	}>;
 };
 
@@ -1657,18 +1626,7 @@ export type UpdateContentProfileMutationVariables = Exact<{
 export type UpdateContentProfileMutation = {
 	userOption: {
 		setContentProfile: {
-			originalLanguages: Array<Language>;
-			publicationDemographic: Array<Demographic>;
-			includedTags: Array<string>;
-			includedTagsMode: TagSearchMode | null;
-			excludedTags: Array<string>;
-			excludedTagsMode: TagSearchMode | null;
-			status: Array<MangaStatus>;
-			excludedOriginalLanguage: Array<Language>;
-			translatedLanguages: Array<Language>;
-			contentRating: Array<ContentRating>;
-			excludedGroups: Array<string>;
-			excludedUploaders: Array<string>;
+			" $fragmentRefs"?: { ContentProfileItemFragment: ContentProfileItemFragment };
 		};
 	};
 };
@@ -4463,6 +4421,33 @@ export type ChaptersStatsQuery = {
 	};
 };
 
+export const ContentProfileItemFragmentDoc = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "FragmentDefinition",
+			name: { kind: "Name", value: "ContentProfileItem" },
+			typeCondition: { kind: "NamedType", name: { kind: "Name", value: "ContentProfile" } },
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{ kind: "Field", name: { kind: "Name", value: "originalLanguages" } },
+					{ kind: "Field", name: { kind: "Name", value: "publicationDemographic" } },
+					{ kind: "Field", name: { kind: "Name", value: "includedTags" } },
+					{ kind: "Field", name: { kind: "Name", value: "includedTagsMode" } },
+					{ kind: "Field", name: { kind: "Name", value: "excludedTags" } },
+					{ kind: "Field", name: { kind: "Name", value: "excludedTagsMode" } },
+					{ kind: "Field", name: { kind: "Name", value: "status" } },
+					{ kind: "Field", name: { kind: "Name", value: "excludedOriginalLanguage" } },
+					{ kind: "Field", name: { kind: "Name", value: "translatedLanguages" } },
+					{ kind: "Field", name: { kind: "Name", value: "contentRating" } },
+					{ kind: "Field", name: { kind: "Name", value: "excludedGroups" } },
+					{ kind: "Field", name: { kind: "Name", value: "excludedUploaders" } }
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<ContentProfileItemFragment, unknown>;
 export const CustomlistPageQueryDocument = {
 	kind: "Document",
 	definitions: [
@@ -7149,21 +7134,32 @@ export const WatchDefaultContentProfileDocument = {
 						selectionSet: {
 							kind: "SelectionSet",
 							selections: [
-								{ kind: "Field", name: { kind: "Name", value: "originalLanguages" } },
-								{ kind: "Field", name: { kind: "Name", value: "publicationDemographic" } },
-								{ kind: "Field", name: { kind: "Name", value: "includedTags" } },
-								{ kind: "Field", name: { kind: "Name", value: "includedTagsMode" } },
-								{ kind: "Field", name: { kind: "Name", value: "excludedTags" } },
-								{ kind: "Field", name: { kind: "Name", value: "excludedTagsMode" } },
-								{ kind: "Field", name: { kind: "Name", value: "status" } },
-								{ kind: "Field", name: { kind: "Name", value: "excludedOriginalLanguage" } },
-								{ kind: "Field", name: { kind: "Name", value: "translatedLanguages" } },
-								{ kind: "Field", name: { kind: "Name", value: "contentRating" } },
-								{ kind: "Field", name: { kind: "Name", value: "excludedGroups" } },
-								{ kind: "Field", name: { kind: "Name", value: "excludedUploaders" } }
+								{ kind: "FragmentSpread", name: { kind: "Name", value: "ContentProfileItem" } }
 							]
 						}
 					}
+				]
+			}
+		},
+		{
+			kind: "FragmentDefinition",
+			name: { kind: "Name", value: "ContentProfileItem" },
+			typeCondition: { kind: "NamedType", name: { kind: "Name", value: "ContentProfile" } },
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{ kind: "Field", name: { kind: "Name", value: "originalLanguages" } },
+					{ kind: "Field", name: { kind: "Name", value: "publicationDemographic" } },
+					{ kind: "Field", name: { kind: "Name", value: "includedTags" } },
+					{ kind: "Field", name: { kind: "Name", value: "includedTagsMode" } },
+					{ kind: "Field", name: { kind: "Name", value: "excludedTags" } },
+					{ kind: "Field", name: { kind: "Name", value: "excludedTagsMode" } },
+					{ kind: "Field", name: { kind: "Name", value: "status" } },
+					{ kind: "Field", name: { kind: "Name", value: "excludedOriginalLanguage" } },
+					{ kind: "Field", name: { kind: "Name", value: "translatedLanguages" } },
+					{ kind: "Field", name: { kind: "Name", value: "contentRating" } },
+					{ kind: "Field", name: { kind: "Name", value: "excludedGroups" } },
+					{ kind: "Field", name: { kind: "Name", value: "excludedUploaders" } }
 				]
 			}
 		}
@@ -7211,24 +7207,38 @@ export const UpdateDefaultContentProfileDocument = {
 									selectionSet: {
 										kind: "SelectionSet",
 										selections: [
-											{ kind: "Field", name: { kind: "Name", value: "originalLanguages" } },
-											{ kind: "Field", name: { kind: "Name", value: "publicationDemographic" } },
-											{ kind: "Field", name: { kind: "Name", value: "includedTags" } },
-											{ kind: "Field", name: { kind: "Name", value: "includedTagsMode" } },
-											{ kind: "Field", name: { kind: "Name", value: "excludedTags" } },
-											{ kind: "Field", name: { kind: "Name", value: "excludedTagsMode" } },
-											{ kind: "Field", name: { kind: "Name", value: "status" } },
-											{ kind: "Field", name: { kind: "Name", value: "excludedOriginalLanguage" } },
-											{ kind: "Field", name: { kind: "Name", value: "translatedLanguages" } },
-											{ kind: "Field", name: { kind: "Name", value: "contentRating" } },
-											{ kind: "Field", name: { kind: "Name", value: "excludedGroups" } },
-											{ kind: "Field", name: { kind: "Name", value: "excludedUploaders" } }
+											{
+												kind: "FragmentSpread",
+												name: { kind: "Name", value: "ContentProfileItem" }
+											}
 										]
 									}
 								}
 							]
 						}
 					}
+				]
+			}
+		},
+		{
+			kind: "FragmentDefinition",
+			name: { kind: "Name", value: "ContentProfileItem" },
+			typeCondition: { kind: "NamedType", name: { kind: "Name", value: "ContentProfile" } },
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{ kind: "Field", name: { kind: "Name", value: "originalLanguages" } },
+					{ kind: "Field", name: { kind: "Name", value: "publicationDemographic" } },
+					{ kind: "Field", name: { kind: "Name", value: "includedTags" } },
+					{ kind: "Field", name: { kind: "Name", value: "includedTagsMode" } },
+					{ kind: "Field", name: { kind: "Name", value: "excludedTags" } },
+					{ kind: "Field", name: { kind: "Name", value: "excludedTagsMode" } },
+					{ kind: "Field", name: { kind: "Name", value: "status" } },
+					{ kind: "Field", name: { kind: "Name", value: "excludedOriginalLanguage" } },
+					{ kind: "Field", name: { kind: "Name", value: "translatedLanguages" } },
+					{ kind: "Field", name: { kind: "Name", value: "contentRating" } },
+					{ kind: "Field", name: { kind: "Name", value: "excludedGroups" } },
+					{ kind: "Field", name: { kind: "Name", value: "excludedUploaders" } }
 				]
 			}
 		}
@@ -7259,24 +7269,38 @@ export const GetDefaultContentProfileDocument = {
 									selectionSet: {
 										kind: "SelectionSet",
 										selections: [
-											{ kind: "Field", name: { kind: "Name", value: "originalLanguages" } },
-											{ kind: "Field", name: { kind: "Name", value: "publicationDemographic" } },
-											{ kind: "Field", name: { kind: "Name", value: "includedTags" } },
-											{ kind: "Field", name: { kind: "Name", value: "includedTagsMode" } },
-											{ kind: "Field", name: { kind: "Name", value: "excludedTags" } },
-											{ kind: "Field", name: { kind: "Name", value: "excludedTagsMode" } },
-											{ kind: "Field", name: { kind: "Name", value: "status" } },
-											{ kind: "Field", name: { kind: "Name", value: "excludedOriginalLanguage" } },
-											{ kind: "Field", name: { kind: "Name", value: "translatedLanguages" } },
-											{ kind: "Field", name: { kind: "Name", value: "contentRating" } },
-											{ kind: "Field", name: { kind: "Name", value: "excludedGroups" } },
-											{ kind: "Field", name: { kind: "Name", value: "excludedUploaders" } }
+											{
+												kind: "FragmentSpread",
+												name: { kind: "Name", value: "ContentProfileItem" }
+											}
 										]
 									}
 								}
 							]
 						}
 					}
+				]
+			}
+		},
+		{
+			kind: "FragmentDefinition",
+			name: { kind: "Name", value: "ContentProfileItem" },
+			typeCondition: { kind: "NamedType", name: { kind: "Name", value: "ContentProfile" } },
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{ kind: "Field", name: { kind: "Name", value: "originalLanguages" } },
+					{ kind: "Field", name: { kind: "Name", value: "publicationDemographic" } },
+					{ kind: "Field", name: { kind: "Name", value: "includedTags" } },
+					{ kind: "Field", name: { kind: "Name", value: "includedTagsMode" } },
+					{ kind: "Field", name: { kind: "Name", value: "excludedTags" } },
+					{ kind: "Field", name: { kind: "Name", value: "excludedTagsMode" } },
+					{ kind: "Field", name: { kind: "Name", value: "status" } },
+					{ kind: "Field", name: { kind: "Name", value: "excludedOriginalLanguage" } },
+					{ kind: "Field", name: { kind: "Name", value: "translatedLanguages" } },
+					{ kind: "Field", name: { kind: "Name", value: "contentRating" } },
+					{ kind: "Field", name: { kind: "Name", value: "excludedGroups" } },
+					{ kind: "Field", name: { kind: "Name", value: "excludedUploaders" } }
 				]
 			}
 		}
@@ -7369,24 +7393,38 @@ export const WatchContentProfilesDocument = {
 									selectionSet: {
 										kind: "SelectionSet",
 										selections: [
-											{ kind: "Field", name: { kind: "Name", value: "originalLanguages" } },
-											{ kind: "Field", name: { kind: "Name", value: "publicationDemographic" } },
-											{ kind: "Field", name: { kind: "Name", value: "includedTags" } },
-											{ kind: "Field", name: { kind: "Name", value: "includedTagsMode" } },
-											{ kind: "Field", name: { kind: "Name", value: "excludedTags" } },
-											{ kind: "Field", name: { kind: "Name", value: "excludedTagsMode" } },
-											{ kind: "Field", name: { kind: "Name", value: "status" } },
-											{ kind: "Field", name: { kind: "Name", value: "excludedOriginalLanguage" } },
-											{ kind: "Field", name: { kind: "Name", value: "translatedLanguages" } },
-											{ kind: "Field", name: { kind: "Name", value: "contentRating" } },
-											{ kind: "Field", name: { kind: "Name", value: "excludedGroups" } },
-											{ kind: "Field", name: { kind: "Name", value: "excludedUploaders" } }
+											{
+												kind: "FragmentSpread",
+												name: { kind: "Name", value: "ContentProfileItem" }
+											}
 										]
 									}
 								}
 							]
 						}
 					}
+				]
+			}
+		},
+		{
+			kind: "FragmentDefinition",
+			name: { kind: "Name", value: "ContentProfileItem" },
+			typeCondition: { kind: "NamedType", name: { kind: "Name", value: "ContentProfile" } },
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{ kind: "Field", name: { kind: "Name", value: "originalLanguages" } },
+					{ kind: "Field", name: { kind: "Name", value: "publicationDemographic" } },
+					{ kind: "Field", name: { kind: "Name", value: "includedTags" } },
+					{ kind: "Field", name: { kind: "Name", value: "includedTagsMode" } },
+					{ kind: "Field", name: { kind: "Name", value: "excludedTags" } },
+					{ kind: "Field", name: { kind: "Name", value: "excludedTagsMode" } },
+					{ kind: "Field", name: { kind: "Name", value: "status" } },
+					{ kind: "Field", name: { kind: "Name", value: "excludedOriginalLanguage" } },
+					{ kind: "Field", name: { kind: "Name", value: "translatedLanguages" } },
+					{ kind: "Field", name: { kind: "Name", value: "contentRating" } },
+					{ kind: "Field", name: { kind: "Name", value: "excludedGroups" } },
+					{ kind: "Field", name: { kind: "Name", value: "excludedUploaders" } }
 				]
 			}
 		}
@@ -7498,24 +7536,38 @@ export const UpdateContentProfileDocument = {
 									selectionSet: {
 										kind: "SelectionSet",
 										selections: [
-											{ kind: "Field", name: { kind: "Name", value: "originalLanguages" } },
-											{ kind: "Field", name: { kind: "Name", value: "publicationDemographic" } },
-											{ kind: "Field", name: { kind: "Name", value: "includedTags" } },
-											{ kind: "Field", name: { kind: "Name", value: "includedTagsMode" } },
-											{ kind: "Field", name: { kind: "Name", value: "excludedTags" } },
-											{ kind: "Field", name: { kind: "Name", value: "excludedTagsMode" } },
-											{ kind: "Field", name: { kind: "Name", value: "status" } },
-											{ kind: "Field", name: { kind: "Name", value: "excludedOriginalLanguage" } },
-											{ kind: "Field", name: { kind: "Name", value: "translatedLanguages" } },
-											{ kind: "Field", name: { kind: "Name", value: "contentRating" } },
-											{ kind: "Field", name: { kind: "Name", value: "excludedGroups" } },
-											{ kind: "Field", name: { kind: "Name", value: "excludedUploaders" } }
+											{
+												kind: "FragmentSpread",
+												name: { kind: "Name", value: "ContentProfileItem" }
+											}
 										]
 									}
 								}
 							]
 						}
 					}
+				]
+			}
+		},
+		{
+			kind: "FragmentDefinition",
+			name: { kind: "Name", value: "ContentProfileItem" },
+			typeCondition: { kind: "NamedType", name: { kind: "Name", value: "ContentProfile" } },
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{ kind: "Field", name: { kind: "Name", value: "originalLanguages" } },
+					{ kind: "Field", name: { kind: "Name", value: "publicationDemographic" } },
+					{ kind: "Field", name: { kind: "Name", value: "includedTags" } },
+					{ kind: "Field", name: { kind: "Name", value: "includedTagsMode" } },
+					{ kind: "Field", name: { kind: "Name", value: "excludedTags" } },
+					{ kind: "Field", name: { kind: "Name", value: "excludedTagsMode" } },
+					{ kind: "Field", name: { kind: "Name", value: "status" } },
+					{ kind: "Field", name: { kind: "Name", value: "excludedOriginalLanguage" } },
+					{ kind: "Field", name: { kind: "Name", value: "translatedLanguages" } },
+					{ kind: "Field", name: { kind: "Name", value: "contentRating" } },
+					{ kind: "Field", name: { kind: "Name", value: "excludedGroups" } },
+					{ kind: "Field", name: { kind: "Name", value: "excludedUploaders" } }
 				]
 			}
 		}

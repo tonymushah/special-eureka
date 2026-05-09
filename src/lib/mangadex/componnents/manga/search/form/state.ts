@@ -1,4 +1,5 @@
-import type { ContentProfile, MangaListParams } from "@mangadex/gql/graphql";
+import type { ContentProfileItemFragmentType as ContentProfile } from "@mangadex/content-profile/graphql";
+import type { MangaListParams } from "@mangadex/gql/graphql";
 import {
 	defaultMangaFilterParams,
 	mangaFilterParamsFromContentProfile,

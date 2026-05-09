@@ -1,4 +1,6 @@
+import { ContentProfileItemFragment, type ContentProfileItemFragmentType as ContentProfile } from "@mangadex/content-profile/graphql/";
 import { query as defaultProfileQuery } from "@mangadex/content-profile/graphql/defaultProfile/query";
+import { useFragment } from "@mangadex/gql";
 import isInLibrary, {
 	isInLibrarySync,
 	isInLibraryUnlessDropped,
@@ -12,7 +14,6 @@ import {
 	MangaState,
 	MangaStatus,
 	ReadingStatus,
-	type ContentProfile
 } from "@mangadex/gql/graphql";
 import getContentProfileWarningMode from "@mangadex/utils/contentProfileWarningMode";
 import type { Tag } from "@mangadex/utils/types/Tag";
@@ -45,7 +46,7 @@ export default async function getTitleConflicts({
 		.toPromise()
 		.then((res) => {
 			if (res.data) {
-				return res.data.userOption.getDefaultContentProfile;
+				return useFragment(ContentProfileItemFragment,res.data.userOption.getDefaultContentProfile);
 			}
 			if (res.error) {
 				throw res.error;

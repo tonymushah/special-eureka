@@ -108,12 +108,13 @@
 							<section class="buttons">
 								<PrimaryButton
 									onclick={() => {
+										if(reason){
 										mutation.mutate(
 											{
 												objectId,
 												category,
 												details,
-												reason: reason?.id
+												reason: reason.id
 											},
 											{
 												onSuccess() {
@@ -127,7 +128,7 @@
 													addErrorToast("cannot send report", error);
 												}
 											}
-										);
+										);}
 									}}
 									isBase
 									disabled={mutation.isPending ||

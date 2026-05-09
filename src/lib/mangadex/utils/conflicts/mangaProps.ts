@@ -1,12 +1,12 @@
 import type { MangaListContentItemProps } from "@mangadex/componnents/manga/list/MangaListContent.svelte";
-import { hasConflicts, type ContentProfileConflicts } from "../conflicts";
+import type { ContentProfileItemFragmentType as ContentProfile, } from "@mangadex/content-profile/graphql";
+import { isInLibrarySync, isInLibraryUnlessDroppedSync } from "@mangadex/gql-docs/library/isIn";
 import {
 	ContentProfileWarningMode,
 	ContentRating,
-	type ContentProfile,
 	type ReadingStatus
 } from "@mangadex/gql/graphql";
-import { isInLibrarySync, isInLibraryUnlessDroppedSync } from "@mangadex/gql-docs/library/isIn";
+import { hasConflicts, type ContentProfileConflicts } from "../conflicts";
 
 type GetTitleConflictsFromMangaListContentItemPropsParams = {
 	title: MangaListContentItemProps;

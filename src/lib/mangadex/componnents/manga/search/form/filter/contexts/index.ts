@@ -1,7 +1,9 @@
+import {
+	type ContentProfileItemFragmentType as ContentProfile,
+} from "@mangadex/content-profile/graphql";
 import defaultContentProfile from "@mangadex/content-profile/graphql/defaultProfile";
 import {
 	TagSearchMode,
-	type ContentProfile,
 	type ContentRating,
 	type Demographic,
 	type MangaStatus

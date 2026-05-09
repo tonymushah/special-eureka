@@ -46,14 +46,15 @@ type Documents = {
 	"\n\tmutation unfollowTitlesBatch($titles: [UUID!]!) {\n\t\tmanga {\n\t\t\tunfollowBatch(mangaIds: $titles)\n\t\t}\n\t}\n": typeof types.UnfollowTitlesBatchDocument;
 	"\n\tquery userMeOnSidebarFooter {\n\t\tuser {\n\t\t\tme {\n\t\t\t\tid\n\t\t\t\tattributes {\n\t\t\t\t\tusername\n\t\t\t\t\troles\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.UserMeOnSidebarFooterDocument;
 	"\n\tmutation setSidebarDirection($direction: Direction!) {\n\t\tuserOption {\n\t\t\tsetSidebarDirection(direction: $direction)\n\t\t}\n\t}\n": typeof types.SetSidebarDirectionDocument;
-	"\n\tsubscription watchDefaultContentProfile {\n\t\twatchContentProfileDefault {\n\t\t\toriginalLanguages\n\t\t\tpublicationDemographic\n\t\t\tincludedTags\n\t\t\tincludedTagsMode\n\t\t\texcludedTags\n\t\t\texcludedTagsMode\n\t\t\tstatus\n\t\t\texcludedOriginalLanguage\n\t\t\ttranslatedLanguages\n\t\t\tcontentRating\n\t\t\texcludedGroups\n\t\t\texcludedUploaders\n\t\t}\n\t}\n": typeof types.WatchDefaultContentProfileDocument;
-	"\n\tmutation updateDefaultContentProfile($entry: ContentProfileInput!) {\n\t\tuserOption {\n\t\t\tupdateDefaultContentProfile(profile: $entry) {\n\t\t\t\toriginalLanguages\n\t\t\t\tpublicationDemographic\n\t\t\t\tincludedTags\n\t\t\t\tincludedTagsMode\n\t\t\t\texcludedTags\n\t\t\t\texcludedTagsMode\n\t\t\t\tstatus\n\t\t\t\texcludedOriginalLanguage\n\t\t\t\ttranslatedLanguages\n\t\t\t\tcontentRating\n\t\t\t\texcludedGroups\n\t\t\t\texcludedUploaders\n\t\t\t}\n\t\t}\n\t}\n": typeof types.UpdateDefaultContentProfileDocument;
-	"\n\tquery getDefaultContentProfile {\n\t\tuserOption {\n\t\t\tgetDefaultContentProfile {\n\t\t\t\toriginalLanguages\n\t\t\t\tpublicationDemographic\n\t\t\t\tincludedTags\n\t\t\t\tincludedTagsMode\n\t\t\t\texcludedTags\n\t\t\t\texcludedTagsMode\n\t\t\t\tstatus\n\t\t\t\texcludedOriginalLanguage\n\t\t\t\ttranslatedLanguages\n\t\t\t\tcontentRating\n\t\t\t\texcludedGroups\n\t\t\t\texcludedUploaders\n\t\t\t}\n\t\t}\n\t}\n": typeof types.GetDefaultContentProfileDocument;
+	"\n\tsubscription watchDefaultContentProfile {\n\t\twatchContentProfileDefault {\n\t\t\t...ContentProfileItem\n\t\t}\n\t}\n": typeof types.WatchDefaultContentProfileDocument;
+	"\n\tmutation updateDefaultContentProfile($entry: ContentProfileInput!) {\n\t\tuserOption {\n\t\t\tupdateDefaultContentProfile(profile: $entry) {\n\t\t\t\t...ContentProfileItem\n\t\t\t}\n\t\t}\n\t}\n": typeof types.UpdateDefaultContentProfileDocument;
+	"\n\tquery getDefaultContentProfile {\n\t\tuserOption {\n\t\t\tgetDefaultContentProfile {\n\t\t\t\t...ContentProfileItem\n\t\t\t}\n\t\t}\n\t}\n": typeof types.GetDefaultContentProfileDocument;
 	"\n\tsubscription watchDefaultContentProfileKey {\n\t\twatchContentProfileDefaultName\n\t}\n": typeof types.WatchDefaultContentProfileKeyDocument;
 	"\n\tmutation updateDefaultContentProfileKey($name: String) {\n\t\tuserOption {\n\t\t\tsetDefaultContentProfileKey(name: $name)\n\t\t}\n\t}\n": typeof types.UpdateDefaultContentProfileKeyDocument;
-	"\n\tsubscription watchContentProfiles {\n\t\twatchContentProfiles {\n\t\t\tname\n\t\t\tvalue {\n\t\t\t\toriginalLanguages\n\t\t\t\tpublicationDemographic\n\t\t\t\tincludedTags\n\t\t\t\tincludedTagsMode\n\t\t\t\texcludedTags\n\t\t\t\texcludedTagsMode\n\t\t\t\tstatus\n\t\t\t\texcludedOriginalLanguage\n\t\t\t\ttranslatedLanguages\n\t\t\t\tcontentRating\n\t\t\t\texcludedGroups\n\t\t\t\texcludedUploaders\n\t\t\t}\n\t\t}\n\t}\n": typeof types.WatchContentProfilesDocument;
+	"\n\tfragment ContentProfileItem on ContentProfile {\n\t\toriginalLanguages\n\t\tpublicationDemographic\n\t\tincludedTags\n\t\tincludedTagsMode\n\t\texcludedTags\n\t\texcludedTagsMode\n\t\tstatus\n\t\texcludedOriginalLanguage\n\t\ttranslatedLanguages\n\t\tcontentRating\n\t\texcludedGroups\n\t\texcludedUploaders\n\t}\n": typeof types.ContentProfileItemFragmentDoc;
+	"\n\tsubscription watchContentProfiles {\n\t\twatchContentProfiles {\n\t\t\tname\n\t\t\tvalue {\n\t\t\t\t...ContentProfileItem\n\t\t\t}\n\t\t}\n\t}\n": typeof types.WatchContentProfilesDocument;
 	"\n\tmutation updateContentProfiles($entries: [ContentProfileEntryInput!]!) {\n\t\tuserOption {\n\t\t\tsetContentProfiles(entries: $entries)\n\t\t}\n\t}\n": typeof types.UpdateContentProfilesDocument;
-	"\n\tmutation updateContentProfile($name: String!, $entry: ContentProfileInput) {\n\t\tuserOption {\n\t\t\tsetContentProfile(name: $name, profile: $entry) {\n\t\t\t\toriginalLanguages\n\t\t\t\tpublicationDemographic\n\t\t\t\tincludedTags\n\t\t\t\tincludedTagsMode\n\t\t\t\texcludedTags\n\t\t\t\texcludedTagsMode\n\t\t\t\tstatus\n\t\t\t\texcludedOriginalLanguage\n\t\t\t\ttranslatedLanguages\n\t\t\t\tcontentRating\n\t\t\t\texcludedGroups\n\t\t\t\texcludedUploaders\n\t\t\t}\n\t\t}\n\t}\n": typeof types.UpdateContentProfileDocument;
+	"\n\tmutation updateContentProfile($name: String!, $entry: ContentProfileInput) {\n\t\tuserOption {\n\t\t\tsetContentProfile(name: $name, profile: $entry) {\n\t\t\t\t...ContentProfileItem\n\t\t\t}\n\t\t}\n\t}\n": typeof types.UpdateContentProfileDocument;
 	"\n\tmutation downloadChapterMutation($id: UUID!, $quality: DownloadMode) {\n\t\tchapter {\n\t\t\tdownload(id: $id, quality: $quality) {\n\t\t\t\thasFailed\n\t\t\t\tisDownloaded\n\t\t\t}\n\t\t}\n\t}\n": typeof types.DownloadChapterMutationDocument;
 	"\n\tmutation cancelDownloadChapterMutation($id: UUID!) {\n\t\tchapter {\n\t\t\tcancelDownload(id: $id)\n\t\t}\n\t}\n": typeof types.CancelDownloadChapterMutationDocument;
 	"\n\tsubscription chapterDownloadState($id: UUID!, $deferred: Boolean) {\n\t\twatchChapterDownloadState(chapterId: $id, deferred: $deferred) {\n\t\t\tisPending\n\t\t\tisDone\n\t\t\tisCanceled\n\t\t\tisOfflineAppStateNotLoaded\n\t\t\terror\n\t\t\tdownloading {\n\t\t\t\tisPreloading\n\t\t\t\tisFetchingData\n\t\t\t\tfetchingImage {\n\t\t\t\t\tfilename\n\t\t\t\t\tindex\n\t\t\t\t\tlen\n\t\t\t\t}\n\t\t\t\tisFetchingAtHomeData\n\t\t\t}\n\t\t}\n\t}\n": typeof types.ChapterDownloadStateDocument;
@@ -356,21 +357,23 @@ const documents: Documents = {
 		types.UserMeOnSidebarFooterDocument,
 	"\n\tmutation setSidebarDirection($direction: Direction!) {\n\t\tuserOption {\n\t\t\tsetSidebarDirection(direction: $direction)\n\t\t}\n\t}\n":
 		types.SetSidebarDirectionDocument,
-	"\n\tsubscription watchDefaultContentProfile {\n\t\twatchContentProfileDefault {\n\t\t\toriginalLanguages\n\t\t\tpublicationDemographic\n\t\t\tincludedTags\n\t\t\tincludedTagsMode\n\t\t\texcludedTags\n\t\t\texcludedTagsMode\n\t\t\tstatus\n\t\t\texcludedOriginalLanguage\n\t\t\ttranslatedLanguages\n\t\t\tcontentRating\n\t\t\texcludedGroups\n\t\t\texcludedUploaders\n\t\t}\n\t}\n":
+	"\n\tsubscription watchDefaultContentProfile {\n\t\twatchContentProfileDefault {\n\t\t\t...ContentProfileItem\n\t\t}\n\t}\n":
 		types.WatchDefaultContentProfileDocument,
-	"\n\tmutation updateDefaultContentProfile($entry: ContentProfileInput!) {\n\t\tuserOption {\n\t\t\tupdateDefaultContentProfile(profile: $entry) {\n\t\t\t\toriginalLanguages\n\t\t\t\tpublicationDemographic\n\t\t\t\tincludedTags\n\t\t\t\tincludedTagsMode\n\t\t\t\texcludedTags\n\t\t\t\texcludedTagsMode\n\t\t\t\tstatus\n\t\t\t\texcludedOriginalLanguage\n\t\t\t\ttranslatedLanguages\n\t\t\t\tcontentRating\n\t\t\t\texcludedGroups\n\t\t\t\texcludedUploaders\n\t\t\t}\n\t\t}\n\t}\n":
+	"\n\tmutation updateDefaultContentProfile($entry: ContentProfileInput!) {\n\t\tuserOption {\n\t\t\tupdateDefaultContentProfile(profile: $entry) {\n\t\t\t\t...ContentProfileItem\n\t\t\t}\n\t\t}\n\t}\n":
 		types.UpdateDefaultContentProfileDocument,
-	"\n\tquery getDefaultContentProfile {\n\t\tuserOption {\n\t\t\tgetDefaultContentProfile {\n\t\t\t\toriginalLanguages\n\t\t\t\tpublicationDemographic\n\t\t\t\tincludedTags\n\t\t\t\tincludedTagsMode\n\t\t\t\texcludedTags\n\t\t\t\texcludedTagsMode\n\t\t\t\tstatus\n\t\t\t\texcludedOriginalLanguage\n\t\t\t\ttranslatedLanguages\n\t\t\t\tcontentRating\n\t\t\t\texcludedGroups\n\t\t\t\texcludedUploaders\n\t\t\t}\n\t\t}\n\t}\n":
+	"\n\tquery getDefaultContentProfile {\n\t\tuserOption {\n\t\t\tgetDefaultContentProfile {\n\t\t\t\t...ContentProfileItem\n\t\t\t}\n\t\t}\n\t}\n":
 		types.GetDefaultContentProfileDocument,
 	"\n\tsubscription watchDefaultContentProfileKey {\n\t\twatchContentProfileDefaultName\n\t}\n":
 		types.WatchDefaultContentProfileKeyDocument,
 	"\n\tmutation updateDefaultContentProfileKey($name: String) {\n\t\tuserOption {\n\t\t\tsetDefaultContentProfileKey(name: $name)\n\t\t}\n\t}\n":
 		types.UpdateDefaultContentProfileKeyDocument,
-	"\n\tsubscription watchContentProfiles {\n\t\twatchContentProfiles {\n\t\t\tname\n\t\t\tvalue {\n\t\t\t\toriginalLanguages\n\t\t\t\tpublicationDemographic\n\t\t\t\tincludedTags\n\t\t\t\tincludedTagsMode\n\t\t\t\texcludedTags\n\t\t\t\texcludedTagsMode\n\t\t\t\tstatus\n\t\t\t\texcludedOriginalLanguage\n\t\t\t\ttranslatedLanguages\n\t\t\t\tcontentRating\n\t\t\t\texcludedGroups\n\t\t\t\texcludedUploaders\n\t\t\t}\n\t\t}\n\t}\n":
+	"\n\tfragment ContentProfileItem on ContentProfile {\n\t\toriginalLanguages\n\t\tpublicationDemographic\n\t\tincludedTags\n\t\tincludedTagsMode\n\t\texcludedTags\n\t\texcludedTagsMode\n\t\tstatus\n\t\texcludedOriginalLanguage\n\t\ttranslatedLanguages\n\t\tcontentRating\n\t\texcludedGroups\n\t\texcludedUploaders\n\t}\n":
+		types.ContentProfileItemFragmentDoc,
+	"\n\tsubscription watchContentProfiles {\n\t\twatchContentProfiles {\n\t\t\tname\n\t\t\tvalue {\n\t\t\t\t...ContentProfileItem\n\t\t\t}\n\t\t}\n\t}\n":
 		types.WatchContentProfilesDocument,
 	"\n\tmutation updateContentProfiles($entries: [ContentProfileEntryInput!]!) {\n\t\tuserOption {\n\t\t\tsetContentProfiles(entries: $entries)\n\t\t}\n\t}\n":
 		types.UpdateContentProfilesDocument,
-	"\n\tmutation updateContentProfile($name: String!, $entry: ContentProfileInput) {\n\t\tuserOption {\n\t\t\tsetContentProfile(name: $name, profile: $entry) {\n\t\t\t\toriginalLanguages\n\t\t\t\tpublicationDemographic\n\t\t\t\tincludedTags\n\t\t\t\tincludedTagsMode\n\t\t\t\texcludedTags\n\t\t\t\texcludedTagsMode\n\t\t\t\tstatus\n\t\t\t\texcludedOriginalLanguage\n\t\t\t\ttranslatedLanguages\n\t\t\t\tcontentRating\n\t\t\t\texcludedGroups\n\t\t\t\texcludedUploaders\n\t\t\t}\n\t\t}\n\t}\n":
+	"\n\tmutation updateContentProfile($name: String!, $entry: ContentProfileInput) {\n\t\tuserOption {\n\t\t\tsetContentProfile(name: $name, profile: $entry) {\n\t\t\t\t...ContentProfileItem\n\t\t\t}\n\t\t}\n\t}\n":
 		types.UpdateContentProfileDocument,
 	"\n\tmutation downloadChapterMutation($id: UUID!, $quality: DownloadMode) {\n\t\tchapter {\n\t\t\tdownload(id: $id, quality: $quality) {\n\t\t\t\thasFailed\n\t\t\t\tisDownloaded\n\t\t\t}\n\t\t}\n\t}\n":
 		types.DownloadChapterMutationDocument,
@@ -1052,20 +1055,20 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-	source: "\n\tsubscription watchDefaultContentProfile {\n\t\twatchContentProfileDefault {\n\t\t\toriginalLanguages\n\t\t\tpublicationDemographic\n\t\t\tincludedTags\n\t\t\tincludedTagsMode\n\t\t\texcludedTags\n\t\t\texcludedTagsMode\n\t\t\tstatus\n\t\t\texcludedOriginalLanguage\n\t\t\ttranslatedLanguages\n\t\t\tcontentRating\n\t\t\texcludedGroups\n\t\t\texcludedUploaders\n\t\t}\n\t}\n"
-): (typeof documents)["\n\tsubscription watchDefaultContentProfile {\n\t\twatchContentProfileDefault {\n\t\t\toriginalLanguages\n\t\t\tpublicationDemographic\n\t\t\tincludedTags\n\t\t\tincludedTagsMode\n\t\t\texcludedTags\n\t\t\texcludedTagsMode\n\t\t\tstatus\n\t\t\texcludedOriginalLanguage\n\t\t\ttranslatedLanguages\n\t\t\tcontentRating\n\t\t\texcludedGroups\n\t\t\texcludedUploaders\n\t\t}\n\t}\n"];
+	source: "\n\tsubscription watchDefaultContentProfile {\n\t\twatchContentProfileDefault {\n\t\t\t...ContentProfileItem\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tsubscription watchDefaultContentProfile {\n\t\twatchContentProfileDefault {\n\t\t\t...ContentProfileItem\n\t\t}\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-	source: "\n\tmutation updateDefaultContentProfile($entry: ContentProfileInput!) {\n\t\tuserOption {\n\t\t\tupdateDefaultContentProfile(profile: $entry) {\n\t\t\t\toriginalLanguages\n\t\t\t\tpublicationDemographic\n\t\t\t\tincludedTags\n\t\t\t\tincludedTagsMode\n\t\t\t\texcludedTags\n\t\t\t\texcludedTagsMode\n\t\t\t\tstatus\n\t\t\t\texcludedOriginalLanguage\n\t\t\t\ttranslatedLanguages\n\t\t\t\tcontentRating\n\t\t\t\texcludedGroups\n\t\t\t\texcludedUploaders\n\t\t\t}\n\t\t}\n\t}\n"
-): (typeof documents)["\n\tmutation updateDefaultContentProfile($entry: ContentProfileInput!) {\n\t\tuserOption {\n\t\t\tupdateDefaultContentProfile(profile: $entry) {\n\t\t\t\toriginalLanguages\n\t\t\t\tpublicationDemographic\n\t\t\t\tincludedTags\n\t\t\t\tincludedTagsMode\n\t\t\t\texcludedTags\n\t\t\t\texcludedTagsMode\n\t\t\t\tstatus\n\t\t\t\texcludedOriginalLanguage\n\t\t\t\ttranslatedLanguages\n\t\t\t\tcontentRating\n\t\t\t\texcludedGroups\n\t\t\t\texcludedUploaders\n\t\t\t}\n\t\t}\n\t}\n"];
+	source: "\n\tmutation updateDefaultContentProfile($entry: ContentProfileInput!) {\n\t\tuserOption {\n\t\t\tupdateDefaultContentProfile(profile: $entry) {\n\t\t\t\t...ContentProfileItem\n\t\t\t}\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tmutation updateDefaultContentProfile($entry: ContentProfileInput!) {\n\t\tuserOption {\n\t\t\tupdateDefaultContentProfile(profile: $entry) {\n\t\t\t\t...ContentProfileItem\n\t\t\t}\n\t\t}\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-	source: "\n\tquery getDefaultContentProfile {\n\t\tuserOption {\n\t\t\tgetDefaultContentProfile {\n\t\t\t\toriginalLanguages\n\t\t\t\tpublicationDemographic\n\t\t\t\tincludedTags\n\t\t\t\tincludedTagsMode\n\t\t\t\texcludedTags\n\t\t\t\texcludedTagsMode\n\t\t\t\tstatus\n\t\t\t\texcludedOriginalLanguage\n\t\t\t\ttranslatedLanguages\n\t\t\t\tcontentRating\n\t\t\t\texcludedGroups\n\t\t\t\texcludedUploaders\n\t\t\t}\n\t\t}\n\t}\n"
-): (typeof documents)["\n\tquery getDefaultContentProfile {\n\t\tuserOption {\n\t\t\tgetDefaultContentProfile {\n\t\t\t\toriginalLanguages\n\t\t\t\tpublicationDemographic\n\t\t\t\tincludedTags\n\t\t\t\tincludedTagsMode\n\t\t\t\texcludedTags\n\t\t\t\texcludedTagsMode\n\t\t\t\tstatus\n\t\t\t\texcludedOriginalLanguage\n\t\t\t\ttranslatedLanguages\n\t\t\t\tcontentRating\n\t\t\t\texcludedGroups\n\t\t\t\texcludedUploaders\n\t\t\t}\n\t\t}\n\t}\n"];
+	source: "\n\tquery getDefaultContentProfile {\n\t\tuserOption {\n\t\t\tgetDefaultContentProfile {\n\t\t\t\t...ContentProfileItem\n\t\t\t}\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tquery getDefaultContentProfile {\n\t\tuserOption {\n\t\t\tgetDefaultContentProfile {\n\t\t\t\t...ContentProfileItem\n\t\t\t}\n\t\t}\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -1082,8 +1085,14 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-	source: "\n\tsubscription watchContentProfiles {\n\t\twatchContentProfiles {\n\t\t\tname\n\t\t\tvalue {\n\t\t\t\toriginalLanguages\n\t\t\t\tpublicationDemographic\n\t\t\t\tincludedTags\n\t\t\t\tincludedTagsMode\n\t\t\t\texcludedTags\n\t\t\t\texcludedTagsMode\n\t\t\t\tstatus\n\t\t\t\texcludedOriginalLanguage\n\t\t\t\ttranslatedLanguages\n\t\t\t\tcontentRating\n\t\t\t\texcludedGroups\n\t\t\t\texcludedUploaders\n\t\t\t}\n\t\t}\n\t}\n"
-): (typeof documents)["\n\tsubscription watchContentProfiles {\n\t\twatchContentProfiles {\n\t\t\tname\n\t\t\tvalue {\n\t\t\t\toriginalLanguages\n\t\t\t\tpublicationDemographic\n\t\t\t\tincludedTags\n\t\t\t\tincludedTagsMode\n\t\t\t\texcludedTags\n\t\t\t\texcludedTagsMode\n\t\t\t\tstatus\n\t\t\t\texcludedOriginalLanguage\n\t\t\t\ttranslatedLanguages\n\t\t\t\tcontentRating\n\t\t\t\texcludedGroups\n\t\t\t\texcludedUploaders\n\t\t\t}\n\t\t}\n\t}\n"];
+	source: "\n\tfragment ContentProfileItem on ContentProfile {\n\t\toriginalLanguages\n\t\tpublicationDemographic\n\t\tincludedTags\n\t\tincludedTagsMode\n\t\texcludedTags\n\t\texcludedTagsMode\n\t\tstatus\n\t\texcludedOriginalLanguage\n\t\ttranslatedLanguages\n\t\tcontentRating\n\t\texcludedGroups\n\t\texcludedUploaders\n\t}\n"
+): (typeof documents)["\n\tfragment ContentProfileItem on ContentProfile {\n\t\toriginalLanguages\n\t\tpublicationDemographic\n\t\tincludedTags\n\t\tincludedTagsMode\n\t\texcludedTags\n\t\texcludedTagsMode\n\t\tstatus\n\t\texcludedOriginalLanguage\n\t\ttranslatedLanguages\n\t\tcontentRating\n\t\texcludedGroups\n\t\texcludedUploaders\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tsubscription watchContentProfiles {\n\t\twatchContentProfiles {\n\t\t\tname\n\t\t\tvalue {\n\t\t\t\t...ContentProfileItem\n\t\t\t}\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tsubscription watchContentProfiles {\n\t\twatchContentProfiles {\n\t\t\tname\n\t\t\tvalue {\n\t\t\t\t...ContentProfileItem\n\t\t\t}\n\t\t}\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -1094,8 +1103,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-	source: "\n\tmutation updateContentProfile($name: String!, $entry: ContentProfileInput) {\n\t\tuserOption {\n\t\t\tsetContentProfile(name: $name, profile: $entry) {\n\t\t\t\toriginalLanguages\n\t\t\t\tpublicationDemographic\n\t\t\t\tincludedTags\n\t\t\t\tincludedTagsMode\n\t\t\t\texcludedTags\n\t\t\t\texcludedTagsMode\n\t\t\t\tstatus\n\t\t\t\texcludedOriginalLanguage\n\t\t\t\ttranslatedLanguages\n\t\t\t\tcontentRating\n\t\t\t\texcludedGroups\n\t\t\t\texcludedUploaders\n\t\t\t}\n\t\t}\n\t}\n"
-): (typeof documents)["\n\tmutation updateContentProfile($name: String!, $entry: ContentProfileInput) {\n\t\tuserOption {\n\t\t\tsetContentProfile(name: $name, profile: $entry) {\n\t\t\t\toriginalLanguages\n\t\t\t\tpublicationDemographic\n\t\t\t\tincludedTags\n\t\t\t\tincludedTagsMode\n\t\t\t\texcludedTags\n\t\t\t\texcludedTagsMode\n\t\t\t\tstatus\n\t\t\t\texcludedOriginalLanguage\n\t\t\t\ttranslatedLanguages\n\t\t\t\tcontentRating\n\t\t\t\texcludedGroups\n\t\t\t\texcludedUploaders\n\t\t\t}\n\t\t}\n\t}\n"];
+	source: "\n\tmutation updateContentProfile($name: String!, $entry: ContentProfileInput) {\n\t\tuserOption {\n\t\t\tsetContentProfile(name: $name, profile: $entry) {\n\t\t\t\t...ContentProfileItem\n\t\t\t}\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tmutation updateContentProfile($name: String!, $entry: ContentProfileInput) {\n\t\tuserOption {\n\t\t\tsetContentProfile(name: $name, profile: $entry) {\n\t\t\t\t...ContentProfileItem\n\t\t\t}\n\t\t}\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

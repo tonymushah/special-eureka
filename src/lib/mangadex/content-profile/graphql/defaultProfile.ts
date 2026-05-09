@@ -1,10 +1,11 @@
-import type { ContentProfile } from "@mangadex/gql/graphql";
 import { client } from "@mangadex/gql/urql";
 import { get, readable, type Writable } from "svelte/store";
 
+import { useFragment } from "@mangadex/gql";
+import { ContentProfileItemFragment, type ContentProfileItemFragmentType } from ".";
 import { mutation, subscription } from "./defaultProfile/query";
 
-const sub_read = readable<ContentProfile>(
+const sub_read = readable<ContentProfileItemFragmentType>(
 	{
 		contentRating: [],
 		excludedGroups: [],
@@ -15,13 +16,15 @@ const sub_read = readable<ContentProfile>(
 		originalLanguages: [],
 		status: [],
 		translatedLanguages: [],
-		publicationDemographic: []
+		publicationDemographic: [],
+		excludedTagsMode: null,
+		includedTagsMode: null
 	},
 	(set) => {
 		const sub = client.subscription(subscription, {}).subscribe((res) => {
 			const data = res.data;
 			if (data) {
-				set(data.watchContentProfileDefault);
+				set(useFragment(ContentProfileItemFragment,data.watchContentProfileDefault));
 			}
 		});
 		return () => {
@@ -30,7 +33,7 @@ const sub_read = readable<ContentProfile>(
 	}
 );
 
-const defaultContentProfile: Writable<ContentProfile> = {
+const defaultContentProfile: Writable<ContentProfileItemFragmentType> = {
 	subscribe: sub_read.subscribe,
 	set(value) {
 		client

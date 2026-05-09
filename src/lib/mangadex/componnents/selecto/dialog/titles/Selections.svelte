@@ -6,6 +6,7 @@
 	import { createQuery, type CreateQueryOptions } from "@tanstack/svelte-query";
 	import { getContextClient } from "@urql/svelte";
 	import { query } from "./selections/query";
+	import { transformToStringRecord } from "@mangadex/utils/transformToStringRecord";
 
 	interface Props {
 		titles: string[];
@@ -29,7 +30,7 @@
 						id: e.id,
 						title:
 							get_value_from_title_and_random_if_undefined(
-								e.attributes.title,
+								transformToStringRecord(e.attributes.title),
 								"en"
 							) ?? e.id
 					}));
