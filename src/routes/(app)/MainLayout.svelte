@@ -23,9 +23,7 @@
 	let decorationHeigth: number | undefined = $state(undefined);
 	const unlistens: UnlistenFn[] = [];
 	$effect.pre(() => {
-		import("swiper/element/bundle")
-            .then((m) => m.register())
-            .catch(console.error);
+		import("swiper/element/bundle").then((m) => m.register()).catch(console.error);
 	});
 	onMount(async () => {
 		unlistens.push(
