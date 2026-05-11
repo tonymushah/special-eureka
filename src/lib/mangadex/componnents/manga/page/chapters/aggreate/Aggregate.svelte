@@ -37,7 +37,7 @@
 		queryKey: ["title", __res.layoutData.id, "aggregate"],
 		async queryFn() {
 			const res = await client.query(mangaAggregateQuery, {
-				id: __res.layoutData.id
+				id: __res.layoutData.id,
 			});
 			if (res.error) {
 				throw res.error;
@@ -47,13 +47,14 @@
 				throw new Error("no data??");
 			}
 		},
-		networkMode: "always"
+		networkMode: "always",
 	}));
 	let threadUrls = $state(new Map<string, string>());
 	let isFetching = $derived(query.isFetching);
 
 	let isEmpty = $derived(
-		(query.data?.manga.aggregate.chunked.flatMap((d) => d.ids).length ?? 0) == 0
+		(query.data?.manga.aggregate.chunked.flatMap((d) => d.ids).length ??
+			0) == 0,
 	);
 	let aggregate = $derived.by(() => {
 		const res = query?.data?.manga.aggregate.chunked.map<{
@@ -66,14 +67,14 @@
 					chapters: vo.chapters.map((chaps) => {
 						return {
 							chapter: `Chapter ${chaps.chapter}`,
-							ids: chaps.ids
+							ids: chaps.ids,
 						};
-					})
+					}),
 				};
 			});
 			return {
 				id: `${data?.id}|${i}`,
-				chapter: d
+				chapter: d,
 			};
 		});
 		if (res) {
@@ -83,19 +84,22 @@
 		}
 	});
 	const aggregateReverse = $derived.by(() => {
-		return aggregate.toReversed().map<{ chapter: MangaAggregateData; id: string }>((vs) => ({
-			id: vs.id,
-			chapter: vs.chapter.toReversed().map((cs) => ({
-				volume: cs.volume,
-				chapters: cs.chapters.toReversed()
-			}))
-		}));
+		return aggregate
+			.toReversed()
+			.map<{ chapter: MangaAggregateData; id: string }>((vs) => ({
+				id: vs.id,
+				chapter: vs.chapter.toReversed().map((cs) => ({
+					volume: cs.volume,
+					chapters: cs.chapters.toReversed(),
+				})),
+			}));
 	});
 	const isReversed = writable(false);
 	let selectedIndex = $state(0);
 
 	$effect(() => {
-		let ids: string[] = query.data?.manga.aggregate.chunked.at(selectedIndex)?.ids ?? [];
+		let ids: string[] =
+			query.data?.manga.aggregate.chunked.at(selectedIndex)?.ids ?? [];
 		const task = delay(() => {
 			if (ids.length > 0)
 				if (!chaptersStore.isPresents(ids)) {
@@ -103,7 +107,7 @@
 						ids,
 						feedContent: !hasConflicts(__res.conflicts),
 						lastChapter: data.attributes.lastChapter ?? undefined,
-						lastVolume: data.attributes.lastVolume ?? undefined
+						lastVolume: data.attributes.lastVolume ?? undefined,
 					})
 						.then(async (cs) => {
 							if (cs) chaptersStore.addByBatch(cs);
@@ -114,8 +118,8 @@
 							chaptersStore.setComments(
 								comments.map((c) => ({
 									id: c.id,
-									comments: c.stats.comments
-								}))
+									comments: c.stats.comments,
+								})),
 							);
 						})
 						.catch((e) => {
@@ -133,24 +137,28 @@
 			console.debug(chaptersStore.keys());
 		});
 	let selected = $derived(
-		$isReversed ? aggregateReverse[selectedIndex] : aggregate[selectedIndex]
+		$isReversed
+			? aggregateReverse[selectedIndex]
+			: aggregate[selectedIndex],
 	);
 	/// Test if this work
 	onMount(() =>
 		defaultContentProfile.subscribe(() => {
 			query.refetch();
-		})
+		}),
 	);
 	function refetchTitleReadMarker() {
 		return mangadexQueryClient.refetchQueries({
-			queryKey: ["title", __res.layoutData.id, "read-markers", "page"]
+			queryKey: ["title", __res.layoutData.id, "read-markers", "page"],
 		});
 	}
 
 	const readMarkers = getContextReadChapterMarkers();
 	let unread = $derived.by(() => {
 		let chapters = new Set(
-			query.data?.manga.aggregate.chunked.flatMap((t) => t.ids as string[])
+			query.data?.manga.aggregate.chunked.flatMap(
+				(t) => t.ids as string[],
+			),
 		);
 
 		let readChapters = new Set(
@@ -161,7 +169,7 @@
 				})
 				.map(([k]) => {
 					return k;
-				})
+				}),
 		);
 		let unreadChapters = chapters.difference(readChapters);
 		return unreadChapters;
@@ -173,7 +181,11 @@
 	let createForumThreadMutation = createForumThread();
 </script>
 
-<ChapterFeedSelecto bind:container={selecto_container} bind:selectedMangas bind:selectedChapters />
+<ChapterFeedSelecto
+	bind:container={selecto_container}
+	bind:selectedMangas
+	bind:selectedChapters
+/>
 
 <div class="aggregate">
 	<div class="top">
@@ -202,25 +214,31 @@
 					{hasUnread}
 					disableReverse={query.isLoading}
 					disableDownloads={!$isMounted}
-					disableMarkAsRead={query.isLoading || readMarkersMutation.isPending}
+					disableMarkAsRead={query.isLoading ||
+						readMarkersMutation.isPending}
 					onreadmarks={() => {
 						readMarkersMutation.mutate(
 							{
-								reads: hasUnread ? unread.values().toArray() : [],
+								reads: hasUnread
+									? unread.values().toArray()
+									: [],
 								unreads: hasUnread
 									? []
 									: (query.data?.manga.aggregate.chunked.flatMap(
-											(d) => d.ids as string[]
-										) ?? [])
+											(d) => d.ids as string[],
+										) ?? []),
 							},
 							{
 								onSuccess() {
 									refetchTitleReadMarker();
 								},
 								onError(err) {
-									addErrorToast("Cannot mark unread as read", err);
-								}
-							}
+									addErrorToast(
+										"Cannot mark unread as read",
+										err,
+									);
+								},
+							},
 						);
 					}}
 				/>
@@ -244,28 +262,34 @@
 									if (threadUrl) {
 										open(threadUrl);
 									} else {
-										if (!createForumThreadMutation.isPending) {
+										if (
+											!createForumThreadMutation.isPending
+										) {
 											createForumThreadMutation.mutate(
 												{
 													id: detail.id,
-													threadType: ForumThreadType.Chapter
+													threadType:
+														ForumThreadType.Chapter,
 												},
 												{
 													onError(error) {
 														addErrorToast(
 															"Cannot create chapter theard",
-															error
+															error,
 														);
 													},
 													onSuccess(data) {
-														threadUrls.set(detail.id, data.forumUrl);
+														threadUrls.set(
+															detail.id,
+															data.forumUrl,
+														);
 														chaptersStore.setComment(
 															detail.id,
-															data.repliesCount
+															data.repliesCount,
 														);
 														open(data.forumUrl);
-													}
-												}
+													},
+												},
 											);
 										}
 									}
@@ -349,11 +373,19 @@
 			font-weight: 800;
 		}
 		.selector.selected:hover {
-			background-color: color-mix(in srgb, var(--primary) 90%, transparent 10%);
+			background-color: color-mix(
+				in srgb,
+				var(--primary) 90%,
+				transparent 10%
+			);
 			//background-color: color-mix(in srgb, var(--primary) 90%, var(--main-background) 10%);
 		}
 		.selector.selected:active {
-			background-color: color-mix(in srgb, var(--primary) 80%, transparent 20%);
+			background-color: color-mix(
+				in srgb,
+				var(--primary) 80%,
+				transparent 20%
+			);
 		}
 	}
 	.empty {
@@ -367,6 +399,9 @@
 	}
 	.content {
 		padding-top: 12px;
+	}
+	.left {
+		padding-top: 4px;
 	}
 	.right {
 		display: flex;

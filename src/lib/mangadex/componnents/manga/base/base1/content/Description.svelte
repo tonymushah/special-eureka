@@ -16,7 +16,7 @@
 		renderers={{
 			link: ExtLink,
 			paragraph: Paragraph,
-			heading: Heading
+			heading: Heading,
 		}}
 	/>
 </div>
