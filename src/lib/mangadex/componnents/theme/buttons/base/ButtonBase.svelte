@@ -46,16 +46,22 @@
 		background-color: var(--button-color);
 		font-family: var(--fonts);
 		border: var(--mid-tone) solid 3px;
-		box-shadow: 0px 3px 0px var(--mid-tone);
+		box-shadow: 0px 4px 0px var(--mid-tone);
 		display: var(--button-display);
 		align-items: var(--button-align-items);
 		justify-content: var(--button-justify-content);
+		transform: translateY(-4px);
 	}
 
 	button:hover:disabled {
 		background: linear-gradient(
 			45deg,
-			color-mix(in srgb, var(--main-background) 95%, var(--danger, transparent) 05%) 0% 0%,
+			color-mix(
+					in srgb,
+					var(--main-background) 95%,
+					var(--danger, transparent) 05%
+				)
+				0% 0%,
 			var(--button-color) 100%
 		);
 	}
@@ -67,7 +73,7 @@
 	}
 	button.isBase {
 		border-color: var(--button-active, var(--mid-tone));
-		box-shadow: 0px 3px 0px var(--button-active, var(--mid-tone));
+		box-shadow: 0px 4px 0px var(--button-active, var(--mid-tone));
 		min-height: 3em;
 		min-width: 3em;
 		padding-left: 0.75rem;
@@ -76,12 +82,17 @@
 	button.with-hover:hover {
 		background-color: var(--button-hover);
 	}
+	button:focus {
+		outline: none;
+		border-color: var(--contrast-l1);
+		box-shadow: 0px 4px 0px var(--contrast-l1);
+	}
 	button:hover {
 		cursor: pointer;
 	}
 	button:active {
 		box-shadow: none;
-		transform: translateY(3px);
+		transform: translateY(0px);
 	}
 	button.with-active:active {
 		background-color: var(--button-active);
@@ -96,11 +107,16 @@
 		cursor: not-allowed;
 		background: linear-gradient(
 			225deg,
-			color-mix(in srgb, var(--main-background) 95%, var(--danger, transparent) 5%) 0%,
+			color-mix(
+					in srgb,
+					var(--main-background) 95%,
+					var(--danger, transparent) 5%
+				)
+				0%,
 			var(--button-color) 100%
 		);
 		box-shadow: none;
-		transform: translateY(3px);
+		transform: translateY(0px);
 	}
 	button.isBase:disabled {
 		box-shadow: none;
