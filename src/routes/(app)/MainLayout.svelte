@@ -13,7 +13,6 @@
 	import { onDestroy, onMount } from "svelte";
 	import { readonly, writable } from "svelte/store";
 	import { slide } from "svelte/transition";
-	import { register } from "swiper/element/bundle";
 
 	interface Props {
 		children?: import("svelte").Snippet;
@@ -23,8 +22,10 @@
 	const appWindow = getCurrentWebviewWindow();
 	let decorationHeigth: number | undefined = $state(undefined);
 	const unlistens: UnlistenFn[] = [];
+	$effect.pre(() => {
+		import("swiper/element/bundle").then((m) => m.register()).catch(console.error);
+	});
 	onMount(async () => {
-		register();
 		unlistens.push(
 			await appWindow.listen<string>("redirect", ({ payload }) => {
 				goto(payload);
