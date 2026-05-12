@@ -4,11 +4,11 @@ import { route } from "$lib/ROUTES";
 import { readManga } from "@mangadex/componnents/manga/read/ReadDialog.svelte";
 import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 import {
-    cancelMutation,
-    downloadMutationQuery,
-    isMangaDownloaded,
-    isMangaDownloading,
-    removeMutation
+	cancelMutation,
+	downloadMutationQuery,
+	isMangaDownloaded,
+	isMangaDownloading,
+	removeMutation
 } from "@mangadex/download/manga.svelte";
 import { downloadTitleWithExtra } from "@mangadex/gql-docs/title/id/download-with-extras";
 import isFollowingTitle, { isChangingTitleFollowing } from "@mangadex/gql-docs/title/id/follow";
@@ -19,8 +19,8 @@ import { set_manga_rating } from "@mangadex/stores/manga/manga_rating";
 import { set_manga_reading_status } from "@mangadex/stores/manga/manga_reading_status";
 import { isMounted } from "@mangadex/stores/offlineIsMounted";
 import {
-    ContextMenuItemProvider,
-    type ContextMenuItem
+	ContextMenuItemProvider,
+	type ContextMenuItem
 } from "@special-eureka/core/commands/contextMenu";
 import openNewWindow from "@special-eureka/core/commands/openNewWindow";
 import { currentLocationWithNewPath } from "@special-eureka/core/utils/url";

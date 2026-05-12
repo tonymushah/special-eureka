@@ -1,10 +1,10 @@
 import type {
-    ListenToChapterTasksIDsSubscription,
-    ListenToChapterTasksIDsSubscriptionVariables,
-    ListenToCoverTasksIDsSubscription,
-    ListenToCoverTasksIDsSubscriptionVariables,
-    ListenToMangaTasksIDsSubscription,
-    ListenToMangaTasksIDsSubscriptionVariables
+	ListenToChapterTasksIDsSubscription,
+	ListenToChapterTasksIDsSubscriptionVariables,
+	ListenToCoverTasksIDsSubscription,
+	ListenToCoverTasksIDsSubscriptionVariables,
+	ListenToMangaTasksIDsSubscription,
+	ListenToMangaTasksIDsSubscriptionVariables
 } from "@mangadex/gql/graphql";
 import { client } from "@mangadex/gql/urql";
 import { type OperationResult } from "@urql/svelte";
