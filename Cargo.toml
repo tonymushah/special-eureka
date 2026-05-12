@@ -14,7 +14,7 @@ members = [
 	"crates/mangadex-blacklist", 
 	"crates/special-eureka-notification", 
 	"crates/graphql-persistent-queries-sqlite-schema"
-]
+, "crates/graphql-persistent-queries"]
 default-members = ["./src-tauri/special-eureka"]
 resolver = "3"
 
@@ -70,6 +70,8 @@ tempfile = "3"
 notify-rust = "4"
 duration-string = "0.5"
 special-eureka-notification = { path = "./crates/special-eureka-notification" }
+async-trait = "0.1"
+ciborium = "0.2"
 
 # disabled in favor of `special-eureka-notification`
 # [workspace.dependencies.tauri-plugin-notification]

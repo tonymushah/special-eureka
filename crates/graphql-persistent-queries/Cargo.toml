@@ -1,0 +1,18 @@
+[package]
+name = "graphql-persistent-queries"
+rust-version.workspace = true
+license-file.workspace = true
+authors.workspace = true
+edition.workspace = true
+repository.workspace = true
+version.workspace = true
+
+[dependencies]
+diesel = { workspace = true, features = ["sqlite", "returning_clauses_for_sqlite_3_35", "r2d2", "time"] }
+diesel-sqlite-utils.workspace = true
+diesel_migrations.workspace = true
+ciborium.workspace = true
+time.workspace = true
+tauri = { workspace = true }
+async-graphql = {workspace = true, features = ["apollo_persisted_queries"]}
+log.workspace = true

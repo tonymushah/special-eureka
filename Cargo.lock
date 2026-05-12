@@ -282,6 +282,7 @@ dependencies = [
  "handlebars",
  "http",
  "indexmap 2.14.0",
+ "lru",
  "mime",
  "multer",
  "num-traits",
@@ -290,6 +291,7 @@ dependencies = [
  "serde",
  "serde_json",
  "serde_urlencoded",
+ "sha2",
  "static_assertions_next",
  "tempfile",
  "thiserror 2.0.18",
@@ -2595,6 +2597,28 @@ dependencies = [
 ]
 
 [[package]]
+name = "graphql-persistent-queries"
+version = "0.2.4-6"
+dependencies = [
+ "async-graphql",
+ "ciborium",
+ "diesel",
+ "diesel-sqlite-utils",
+ "diesel_migrations",
+ "log",
+ "tauri",
+ "time",
+]
+
+[[package]]
+name = "graphql-persistent-queries-sqlite-schema"
+version = "0.2.4-6"
+dependencies = [
+ "diesel",
+ "diesel_migrations",
+]
+
+[[package]]
 name = "gtk"
 version = "0.18.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3598,6 +3622,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0fae87c125b03c1d2c0150c90365d7d6bcc53fb73a9acaef207d2d065860f062"
 dependencies = [
  "imgref",
+]
+
+[[package]]
+name = "lru"
+version = "0.16.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a1dc47f592c06f33f8e3aea9591776ec7c9f9e4124778ff8a3c3b87159f7e593"
+dependencies = [
+ "hashbrown 0.16.1",
 ]
 
 [[package]]
