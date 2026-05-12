@@ -1,0 +1,12 @@
+[package]
+name = "graphql-persistent-queries-sqlite-schema"
+rust-version.workspace = true
+license-file.workspace = true
+authors.workspace = true
+edition.workspace = true
+repository.workspace = true
+version.workspace = true
+
+[dependencies]
+diesel = { workspace = true, features = ["sqlite"] }
+diesel_migrations.workspace = true

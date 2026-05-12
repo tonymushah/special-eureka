@@ -8,11 +8,13 @@ version = "0.2.4-6"
 
 [workspace]
 members = [
-	"./src-tauri/special-eureka", 
-	"./src-tauri/mangadex", 
+	"src-tauri/special-eureka", 
+	"src-tauri/mangadex", 
 	"crates/diesel-sqlite-utils", 
-	"crates/mangadex-blacklist"
-, "crates/special-eureka-notification"]
+	"crates/mangadex-blacklist", 
+	"crates/special-eureka-notification", 
+	"crates/graphql-persistent-queries-sqlite-schema"
+]
 default-members = ["./src-tauri/special-eureka"]
 resolver = "3"
 
