@@ -102,7 +102,12 @@ If you want to give some feedback, please put them to :
 
 Before we start, make sure you have meet the [Tauri Prerequisites](https://tauri.app/start/prerequisites/) and done the [Tauri Quick Start With Vite](https://tauri.app/start/frontend/vite/).
 
-And, this project also use [pnpm](https://pnpm.io) as a package manager, so make sure you have installed it.
+And, this project also uses:
+
+- [pnpm](https://pnpm.io) as a package manager,
+- [vite-plus](https://viteplus.dev/) for "unifying"
+
+so make sure you have installed it.
 
 If that's done, then let's get started.
 
