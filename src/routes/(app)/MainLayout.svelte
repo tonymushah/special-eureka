@@ -23,13 +23,15 @@
 	let decorationHeigth: number | undefined = $state(undefined);
 	const unlistens: UnlistenFn[] = [];
 	$effect.pre(() => {
-		import("swiper/element/bundle").then((m) => m.register()).catch(console.error);
+		import("swiper/element/bundle")
+			.then((m) => m.register())
+			.catch(console.error);
 	});
 	onMount(async () => {
 		unlistens.push(
 			await appWindow.listen<string>("redirect", ({ payload }) => {
 				goto(payload);
-			})
+			}),
 		);
 	});
 	onDestroy(() => {
@@ -74,7 +76,7 @@
 		<div
 			class="decoration"
 			transition:slide={{
-				axis: "y"
+				axis: "y",
 			}}
 			bind:clientHeight={decorationHeigth}
 		>
