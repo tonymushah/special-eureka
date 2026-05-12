@@ -17,7 +17,7 @@
 	} from "@tanstack/svelte-query";
 	import { openUrl } from "@tauri-apps/plugin-opener";
 	import { getContextClient } from "@urql/svelte";
-	import { debounce } from "lodash";
+	import { debounce } from "es-toolkit/compat";
 	import { onDestroy } from "svelte";
 	import { derived } from "svelte/store";
 	import executeSearchQuery, {

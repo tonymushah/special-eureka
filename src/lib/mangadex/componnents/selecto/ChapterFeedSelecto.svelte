@@ -8,7 +8,7 @@
 	import cssMod from "./ChapterFeedSelecto.module.scss";
 	import SelectionArea from "@viselect/vanilla";
 	import { validate } from "uuid";
-	import { uniq } from "lodash";
+	import { uniq } from "es-toolkit/compat";
 	import ChapterFeedSelectoDialog from "./ChapterFeedSelectoDialog.svelte";
 	import { scrollElementId } from "../layout/scrollElement";
 	import { getCurrentWebviewWindow } from "@tauri-apps/api/webviewWindow";

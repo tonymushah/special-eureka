@@ -1,4 +1,4 @@
-import { debounce } from "lodash";
+import { debounce } from "es-toolkit/compat";
 
 export const scrollElementId = "mangadex-scroll-container";
 

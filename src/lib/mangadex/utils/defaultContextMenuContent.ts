@@ -1,5 +1,5 @@
 import { ContextMenuItemProvider } from "@special-eureka/core/commands/contextMenu";
-import { delay } from "lodash";
+import { delay } from "es-toolkit/compat";
 
 const defaultContextMenuContent = () => [
 	ContextMenuItemProvider.menuItem({

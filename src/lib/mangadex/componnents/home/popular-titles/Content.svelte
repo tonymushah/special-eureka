@@ -9,7 +9,7 @@
 	import { goto } from "$app/navigation";
 	import { route } from "$lib/ROUTES";
 	import type { SwiperOptions } from "swiper/types";
-	import { random } from "lodash";
+	import { random } from "es-toolkit/compat";
 	import NothingToShow from "../NothingToShow.svelte";
 
 	let swiper_container: SwiperContainer | undefined = $state(undefined);
@@ -20,7 +20,7 @@
 		slidesPerView: 1,
 		autoplay: {
 			pauseOnMouseEnter: true,
-			delay: 5000
+			delay: 5000,
 		},
 		on: {
 			init() {
@@ -32,8 +32,8 @@
 			},
 			slideChange(swiper) {
 				current_page_ = swiper.activeIndex;
-			}
-		}
+			},
+		},
 	};
 	$effect(() => {
 		if (swiper_container) {
@@ -89,15 +89,15 @@
 						onauthorClick={(detail) => {
 							goto(
 								route("/mangadex/author/[id]", {
-									id: detail.id
-								})
+									id: detail.id,
+								}),
 							);
 						}}
 						ontagClick={(detail) => {
 							goto(
 								route("/mangadex/tag/[id]", {
-									id: detail.id
-								})
+									id: detail.id,
+								}),
 							);
 						}}
 						{description}
@@ -123,8 +123,8 @@
 						if (title != undefined) {
 							goto(
 								route("/mangadex/title/[id]", {
-									id: title.id
-								})
+									id: title.id,
+								}),
 							);
 						}
 					}

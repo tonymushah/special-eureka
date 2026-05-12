@@ -1,6 +1,6 @@
 import { graphql, useFragment } from "@mangadex/gql/exports";
 import { client } from "@mangadex/gql/urql";
-import { debounce } from "lodash";
+import { debounce } from "es-toolkit/compat";
 import { get, readable, type Updater, type Writable } from "svelte/store";
 import { MangaDexThemeFrag } from ".";
 import { custom, type MangadexTheme } from "..";

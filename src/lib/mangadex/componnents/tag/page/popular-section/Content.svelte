@@ -13,7 +13,7 @@
 	import type AbstractSearchResult from "@mangadex/utils/searchResult/AbstractSearchResult";
 	import { createInfiniteQuery, type CreateInfiniteQueryOptions } from "@tanstack/svelte-query";
 	import { Client, getContextClient } from "@urql/svelte";
-	import { debounce, last, range } from "lodash";
+	import { debounce, last, range } from "es-toolkit/compat";
 	import { onDestroy, onMount } from "svelte";
 	import { derived, get, writable, type Writable } from "svelte/store";
 	import defaultContentProfile from "@mangadex/content-profile/graphql/defaultProfile";

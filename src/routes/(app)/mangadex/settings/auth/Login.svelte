@@ -6,7 +6,7 @@
 	import FormInput from "@mangadex/componnents/theme/form/input/FormInput.svelte";
 	import DangerButton from "@mangadex/componnents/theme/buttons/DangerButton.svelte";
 	import { login } from "./actions";
-	import { debounce, set, type DebouncedFunc } from "lodash";
+	import { debounce, set, type DebouncedFunc } from "es-toolkit/compat";
 	import { onDestroy } from "svelte";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import { slide } from "svelte/transition";
@@ -25,7 +25,7 @@
 			if (client_id.length != 0 && client_secret.length != 0) {
 				clientInfo.set({
 					clientId: client_id,
-					clientSecret: client_secret
+					clientSecret: client_secret,
 				});
 			} else {
 				clientInfo.set(undefined);
@@ -43,8 +43,8 @@
 					} else {
 						setError(
 							new Error("Unknown login error", {
-								cause: e
-							})
+								cause: e,
+							}),
 						);
 					}
 				})
@@ -93,7 +93,7 @@
 			<FormInput
 				inputProps={{
 					name: "client-id",
-					type: "text"
+					type: "text",
 				}}
 				widthFull
 				value={$clientInfo?.clientId}
@@ -104,7 +104,7 @@
 			<FormInput
 				inputProps={{
 					name: "client-secret",
-					type: "password"
+					type: "password",
 				}}
 				widthFull
 				value={$clientInfo?.clientSecret}
@@ -115,7 +115,7 @@
 			<FormInput
 				inputProps={{
 					name: "username-mail",
-					type: "text"
+					type: "text",
 				}}
 				widthFull
 			/>
@@ -125,7 +125,7 @@
 			<FormInput
 				inputProps={{
 					name: "password",
-					type: "password"
+					type: "password",
 				}}
 				widthFull
 			/>
@@ -166,7 +166,11 @@
 	}
 	.error {
 		padding: 10px;
-		background-color: color-mix(in srgb, var(--danger) 70%, transparent 30%);
+		background-color: color-mix(
+			in srgb,
+			var(--danger) 70%,
+			transparent 30%
+		);
 		border-radius: 8px;
 		border: solid 3px var(--mid-tone);
 		box-shadow: 0px 3px 0px var(--mid-tone);

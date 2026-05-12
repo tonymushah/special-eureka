@@ -6,7 +6,7 @@
 		IndexedDoublePageState,
 		IndexedPageState
 	} from "@mangadex/stores/chapter/pages.svelte";
-	import { isArray, last } from "lodash";
+	import { isArray, last } from "es-toolkit/compat";
 	import { derived as der } from "svelte/store";
 	import { isDoublePage } from "../contexts/currentChapterReadingMode";
 	import { getChapterCurrentPageContext } from "../contexts/currentPage";

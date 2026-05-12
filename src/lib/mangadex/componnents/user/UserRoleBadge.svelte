@@ -3,7 +3,7 @@
 	import StatusBadgeOnlyLabel from "../theme/tag/StatusBadgeOnlyLabel.svelte";
 	import IndicationBadge from "../theme/tag/IndicationBadge.svelte";
 	import IndicationOnlyLabel from "../theme/tag/IndicationOnlyLabel.svelte";
-	import { camelCase, startCase, upperCase } from "lodash";
+	import { camelCase, startCase, upperCase } from "es-toolkit/compat";
 	import StatusButtonOnlyLabel from "../theme/buttons/StatusButtonOnlyLabel.svelte";
 	import StatusBadge from "../theme/tag/StatusBadge.svelte";
 
@@ -19,7 +19,7 @@
 			role == UserRole.RolePublicRelations ||
 			role == UserRole.RoleGlobalModerator ||
 			role == UserRole.RoleForumModerator ||
-			role == UserRole.RoleAdmin
+			role == UserRole.RoleAdmin,
 	);
 	let contributor = $derived(role == UserRole.RoleContributor);
 	let powerUploader = $derived(role == UserRole.RolePowerUploader);

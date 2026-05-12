@@ -4,7 +4,7 @@ import { internalSessionGQLDocs } from "@mangadex/gql-docs/upload/internal-sessi
 import { internalSessionListIDsGQLDocs } from "@mangadex/gql-docs/upload/internal-session-list";
 import type { Language } from "@mangadex/gql/graphql";
 import { client } from "@mangadex/gql/urql";
-import { delay } from "lodash";
+import { delay } from "es-toolkit/compat";
 import { readable } from "svelte/store";
 
 export const sessionsIDs = readable<string[]>([], (set) => {

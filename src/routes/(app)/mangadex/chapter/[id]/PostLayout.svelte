@@ -95,7 +95,7 @@
 	import { createQuery } from "@tanstack/svelte-query";
 	import { createForumThread } from "@mangadex/stores/create-forum-thread";
 	import { onMount, untrack } from "svelte";
-	import { delay } from "lodash";
+	import { delay } from "es-toolkit/compat";
 	import { isLogged } from "@mangadex/utils/auth";
 	import { transformToStringRecord } from "@mangadex/utils/transformToStringRecord";
 

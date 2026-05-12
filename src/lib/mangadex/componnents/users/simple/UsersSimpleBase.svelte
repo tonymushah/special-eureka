@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { camelCase } from "lodash";
+	import { camelCase } from "es-toolkit/compat";
 	import BeeDexRaw from "@mangadex/assets/Bee Dex Raw.jpg";
 	import MangaDexUserSvg from "@mangadex/assets/artworks/user.png";
 	import type { HTMLButtonAttributes } from "svelte/elements";

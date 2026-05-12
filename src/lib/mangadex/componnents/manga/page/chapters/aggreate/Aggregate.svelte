@@ -8,7 +8,7 @@
 	import { createQuery } from "@tanstack/svelte-query";
 	import { openUrl as open } from "@tauri-apps/plugin-opener";
 	import { getContextClient } from "@urql/svelte";
-	import { debounce, delay } from "lodash";
+	import { debounce, delay } from "es-toolkit/compat";
 	import { onMount } from "svelte";
 	import { writable } from "svelte/store";
 	import { fade } from "svelte/transition";

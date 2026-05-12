@@ -5,7 +5,7 @@
 	import { slide } from "svelte/transition";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import { fireSelectChapterEvent } from "../../../../contexts/previousNextEventTarget";
-	import { groupBy, reverse, upperCase } from "lodash";
+	import { groupBy, reverse, upperCase } from "es-toolkit/compat";
 	import { floatingUImenu } from "@mangadex/utils/floating-ui/menu.svelte";
 	const hasRelated = hasRelatedChapters();
 	type OptionsMap = {

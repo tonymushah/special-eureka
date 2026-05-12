@@ -1,5 +1,5 @@
 import type { ReadonlyValue } from "$lib";
-import { isArray } from "lodash";
+import { isArray } from "es-toolkit/compat";
 import { fromStore, readonly } from "svelte/store";
 import { getChapterCurrentPageContext } from "../../../contexts/currentPage";
 import getChapterDoublePageIndexes from "./getChapterDoublePageIndexes";

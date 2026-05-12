@@ -11,7 +11,7 @@ import {
 import { client as mangadexClient } from "@mangadex/gql/urql";
 import getImageSize from "@mangadex/utils/img/getSize";
 import type { Client, OperationResult } from "@urql/svelte";
-import { isArray, range } from "lodash";
+import { isArray, range } from "es-toolkit/compat";
 import type { Getter } from "runed";
 import { SvelteMap } from "svelte/reactivity";
 

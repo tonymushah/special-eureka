@@ -14,7 +14,7 @@
 	import ChapterFeedElement3 from "../element3/ChapterFeedElement3.svelte";
 	import ChapterFeedListSelector from "./select/ChapterFeedListSelector.svelte";
 	import { listenToAnyChapterReadMarkers } from "@mangadex/stores/read-markers";
-	import { isArray } from "lodash";
+	import { isArray } from "es-toolkit/compat";
 
 	type MouseEnvDiv = MouseEvent & {
 		currentTarget: HTMLDivElement & EventTarget;

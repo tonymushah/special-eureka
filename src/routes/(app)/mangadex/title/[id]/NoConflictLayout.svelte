@@ -56,7 +56,7 @@
 	} from "@tanstack/svelte-query";
 	import { writeText } from "@tauri-apps/plugin-clipboard-manager";
 	import { openUrl as open } from "@tauri-apps/plugin-opener";
-	import { debounce, delay, noop } from "lodash";
+	import { debounce, delay, noop } from "es-toolkit/compat";
 	import { untrack, type Snippet } from "svelte";
 	import { v4 } from "uuid";
 	import type { LayoutData } from "./layout.context";

@@ -4,7 +4,7 @@ import {
 } from "@mangadex/gql-docs/manga-info-position";
 import { MangaInfosPositions } from "@mangadex/gql/graphql";
 import { client } from "@mangadex/gql/urql";
-import { delay } from "lodash";
+import { delay } from "es-toolkit/compat";
 import { get, readable, type Writable } from "svelte/store";
 
 async function setMangaInfoPosition(position: MangaInfosPositions) {

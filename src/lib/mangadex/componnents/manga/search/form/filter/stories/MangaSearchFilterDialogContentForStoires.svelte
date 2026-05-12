@@ -7,9 +7,9 @@
 	import { writable } from "svelte/store";
 	import {
 		initMangaSearchAuthorSearchFetcher,
-		NaiveAuthorSearchFetcherResultData
+		NaiveAuthorSearchFetcherResultData,
 	} from "../contexts/authorArtist";
-	import { random, range } from "lodash";
+	import { random, range } from "es-toolkit/compat";
 
 	const options = defaultMangaFilterParams();
 	(() => {
@@ -24,7 +24,7 @@
 		return {
 			data: range(0, random(10, false)).map((value) => ({
 				value: `Author ${value}`,
-				id: v4()
+				id: v4(),
 			})),
 			hasNext() {
 				return true;
@@ -33,10 +33,10 @@
 				return new NaiveAuthorSearchFetcherResultData(
 					range(0, random(25, false)).map((value) => ({
 						value: `Author ${value}`,
-						id: v4()
-					}))
+						id: v4(),
+					})),
 				);
-			}
+			},
 		};
 	});
 	const { store } = init(writable(options));

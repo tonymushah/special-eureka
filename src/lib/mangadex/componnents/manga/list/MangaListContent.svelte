@@ -20,7 +20,7 @@
 	import contentProfileWarningMode from "@mangadex/stores/contentProfileWarningMode";
 	import defaultContentProfile from "@mangadex/content-profile/graphql/defaultProfile";
 	import { titleStatusMapQuery as titleStatusMapQueryLoader } from "@mangadex/gql-docs/library/isIn";
-	import { isArray } from "lodash";
+	import { isArray } from "es-toolkit/compat";
 	import contentProfileBlur from "@mangadex/stores/contentProfileBlur";
 	import { updateTitleBlur } from "@mangadex/utils/conflicts/mangaProps";
 

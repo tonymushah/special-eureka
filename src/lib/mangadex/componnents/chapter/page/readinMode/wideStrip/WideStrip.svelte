@@ -6,7 +6,7 @@
 	import { derived as der, get, writable, type Readable } from "svelte/store";
 	import { Direction as ReadingDirection } from "@mangadex/gql/graphql";
 	import { onDestroy, onMount } from "svelte";
-	import { delay } from "lodash";
+	import { delay } from "es-toolkit/compat";
 	import { getChapterCurrentPageContext } from "../../contexts/currentPage";
 	import type { Action } from "svelte/action";
 	import { getCurrentChapterDirection } from "../../contexts/readingDirection";

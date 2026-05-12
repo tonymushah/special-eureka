@@ -4,15 +4,20 @@
 	import NothingToShow from "@mangadex/componnents/search/content/NothingToShow.svelte";
 	import type { ScanlationGroupListParams } from "@mangadex/gql/graphql";
 	import { getContextClient } from "@urql/svelte";
-	import { debounce } from "lodash";
+	import { debounce } from "es-toolkit/compat";
 	import { onDestroy } from "svelte";
 	import { derived, type Readable } from "svelte/store";
-	import executeSearchQuery, { type ScanlationGroupListItemData } from "./search";
+	import executeSearchQuery, {
+		type ScanlationGroupListItemData,
+	} from "./search";
 
 	import { goto } from "$app/navigation";
 	import { route } from "$lib/ROUTES";
 	import UsersSimpleBase from "@mangadex/componnents/users/simple/UsersSimpleBase.svelte";
-	import { createInfiniteQuery, type CreateInfiniteQueryOptions } from "@tanstack/svelte-query";
+	import {
+		createInfiniteQuery,
+		type CreateInfiniteQueryOptions,
+	} from "@tanstack/svelte-query";
 	import pageLimit from "@mangadex/stores/page-limit";
 	import ErrorComponent from "@mangadex/componnents/ErrorComponent.svelte";
 	import registerContextMenuEvent from "@special-eureka/core/utils/contextMenuContext";
@@ -31,7 +36,7 @@
 	let params = $derived.by(() => {
 		return {
 			name: groupName,
-			limit: $pageLimit
+			limit: $pageLimit,
 		} satisfies ScanlationGroupListParams;
 	});
 	interface InfiniteQueryData {
@@ -52,7 +57,7 @@
 					return {
 						...lastPageParam,
 						limit: lastPage.limit,
-						offset: next_offset
+						offset: next_offset,
 					};
 				}
 			},
@@ -60,7 +65,7 @@
 				const res = await executeSearchQuery(client, pageParam);
 				return {
 					data: res.data,
-					...res.paginationData
+					...res.paginationData,
 				};
 			},
 			getPreviousPageParam(firstPage, allPages, firstPageParam) {
@@ -71,10 +76,10 @@
 					return {
 						...firstPageParam,
 						limit: firstPage.limit,
-						offset: next_offset
+						offset: next_offset,
 					};
 				}
-			}
+			},
 		} satisfies CreateInfiniteQueryOptions<
 			InfiniteQueryData,
 			Error,
@@ -89,7 +94,9 @@
 			return [];
 		}
 		return Array.from(
-			new Set(result.data?.pages.map((d) => d.data).flatMap((i) => i) ?? []).values()
+			new Set(
+				result.data?.pages.map((d) => d.data).flatMap((i) => i) ?? [],
+			).values(),
 		);
 	});
 	let isFetching = $derived(infiniteQuery.isFetching);
@@ -109,8 +116,8 @@
 			}
 		},
 		{
-			threshold: 1.0
-		}
+			threshold: 1.0,
+		},
 	);
 	let to_obserce_bind: HTMLElement | undefined = $state(undefined);
 	$effect(() => {
@@ -135,10 +142,10 @@
 		<span
 			animate:flip
 			in:receive={{
-				key: group.id
+				key: group.id,
 			}}
 			out:send={{
-				key: group.id
+				key: group.id,
 			}}
 		>
 			<UsersSimpleBase
@@ -146,8 +153,8 @@
 				onclick={() => {
 					goto(
 						route("/mangadex/group/[id]", {
-							id: group.id
-						})
+							id: group.id,
+						}),
 					);
 				}}
 				oncontextmenu={registerContextMenuEvent({
@@ -160,9 +167,9 @@
 							name: group.name,
 							leader: group.leader,
 							website: group.website,
-							discord: group.discord
+							discord: group.discord,
 						});
-					}
+					},
 				})}
 			>
 				<p class="group-members">

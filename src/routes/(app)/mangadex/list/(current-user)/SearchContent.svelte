@@ -13,7 +13,7 @@
 	import registerContextMenuEvent from "@special-eureka/core/utils/contextMenuContext";
 	import { createInfiniteQuery, type CreateInfiniteQueryOptions } from "@tanstack/svelte-query";
 	import { getContextClient } from "@urql/svelte";
-	import { debounce } from "lodash";
+	import { debounce } from "es-toolkit/compat";
 	import { onDestroy } from "svelte";
 	import { flip } from "svelte/animate";
 	import { crossfade } from "svelte/transition";

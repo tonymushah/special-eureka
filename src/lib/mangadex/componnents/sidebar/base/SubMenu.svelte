@@ -7,7 +7,7 @@
 	import MenuIcons from "./MenuIcons.svelte";
 	import MenuLabel from "./MenuLabel.svelte";
 	import { autoPlacement, autoUpdate, computePosition, offset } from "@floating-ui/dom";
-	import { noop } from "lodash";
+	import { noop } from "es-toolkit/compat";
 	import { onDestroy } from "svelte";
 	import CollapsedProvider from "./CollapsedProvider.svelte";
 	import { isSidebarRtl } from "../states/isRtl";

@@ -1,6 +1,6 @@
 import { graphql } from "@mangadex/gql/exports";
 import type { Client } from "@urql/svelte";
-import { reduce } from "lodash";
+import { reduce } from "es-toolkit/compat";
 
 export const chaptersStatsQuery = graphql(`
 	query chaptersStats($ids: [UUID!]!) {

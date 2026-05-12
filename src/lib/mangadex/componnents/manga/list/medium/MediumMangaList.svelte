@@ -7,7 +7,7 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
 	import { route } from "$lib/ROUTES";
-	import { isArray } from "lodash";
+	import { isArray } from "es-toolkit/compat";
 	import type { ComponentProps } from "svelte";
 	import { flip } from "svelte/animate";
 	import MangaElementBase1 from "../../base/MangaElementBase1.svelte";

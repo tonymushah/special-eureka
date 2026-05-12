@@ -14,7 +14,7 @@
 		type ReportSortOrder,
 	} from "@mangadex/gql/graphql";
 	import pageLimit from "@mangadex/stores/page-limit";
-	import { debounce, random, range } from "lodash";
+	import { debounce, random, range } from "es-toolkit/compat";
 	import { onDestroy } from "svelte";
 	import CategoryFilter from "./_filter/CategoryFilter.svelte";
 	import ObjectId from "./_filter/ObjectId.svelte";

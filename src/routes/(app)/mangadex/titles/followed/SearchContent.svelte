@@ -9,7 +9,7 @@
 	import pageLimit from "@mangadex/stores/page-limit";
 	import { createInfiniteQuery, type CreateInfiniteQueryOptions } from "@tanstack/svelte-query";
 	import { getContextClient } from "@urql/svelte";
-	import { debounce, last, range } from "lodash";
+	import { debounce, last, range } from "es-toolkit/compat";
 	import { onDestroy } from "svelte";
 	import { derived } from "svelte/store";
 	import executeSearchQuery from "./search";

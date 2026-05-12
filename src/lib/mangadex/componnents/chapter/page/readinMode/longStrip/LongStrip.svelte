@@ -11,7 +11,7 @@
 	import DangerButtonOnlyLabel from "@mangadex/componnents/theme/buttons/DangerButtonOnlyLabel.svelte";
 	import { zoomSpeedValue } from "../zoomableImage/settings";
 	import type { OnReadingModeContextMenu } from "..";
-	import { delay } from "lodash";
+	import { delay } from "es-toolkit/compat";
 
 	interface Props {
 		innerOverflow?: boolean;

@@ -1,16 +1,16 @@
 import type {
-	ListenToChapterTasksIDsSubscription,
-	ListenToChapterTasksIDsSubscriptionVariables,
-	ListenToCoverTasksIDsSubscription,
-	ListenToCoverTasksIDsSubscriptionVariables,
-	ListenToMangaTasksIDsSubscription,
-	ListenToMangaTasksIDsSubscriptionVariables
+    ListenToChapterTasksIDsSubscription,
+    ListenToChapterTasksIDsSubscriptionVariables,
+    ListenToCoverTasksIDsSubscription,
+    ListenToCoverTasksIDsSubscriptionVariables,
+    ListenToMangaTasksIDsSubscription,
+    ListenToMangaTasksIDsSubscriptionVariables
 } from "@mangadex/gql/graphql";
 import { client } from "@mangadex/gql/urql";
 import { type OperationResult } from "@urql/svelte";
+import { debounce, delay } from "es-toolkit/compat";
 import { derived, readable, type Readable, type StartStopNotifier } from "svelte/store";
 import { chapterTasksSubQuery, coverTasksSubQuery, mangaTasksSubQuery } from "./query";
-import { debounce, delay } from "lodash";
 
 const mangaTasksSubStart = debounce<
 	StartStopNotifier<

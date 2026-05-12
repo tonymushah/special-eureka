@@ -8,7 +8,7 @@
 	import ButtonAccentOnlyLabel from "@mangadex/componnents/theme/buttons/ButtonAccentOnlyLabel.svelte";
 	import { createQuery, type CreateQueryOptions } from "@tanstack/svelte-query";
 	import { openUrl } from "@tauri-apps/plugin-opener";
-	import { debounce } from "lodash";
+	import { debounce } from "es-toolkit/compat";
 	import { writable } from "svelte/store";
 	import { fetchComments } from "../page/chapters/aggreate/utils";
 	import chapterStores from "../page/chapters/aggreate/utils/chapterStores.svelte";

@@ -4,16 +4,22 @@
 	import NothingToShow from "@mangadex/componnents/search/content/NothingToShow.svelte";
 	import type { UserListParam } from "@mangadex/gql/graphql";
 	import { getContextClient } from "@urql/svelte";
-	import { debounce } from "lodash";
+	import { debounce } from "es-toolkit/compat";
 	import { onDestroy } from "svelte";
 	import { derived, get, type Readable } from "svelte/store";
-	import executeSearchQuery, { type UserFollowingParams, type UserListItemData } from "./search";
+	import executeSearchQuery, {
+		type UserFollowingParams,
+		type UserListItemData,
+	} from "./search";
 
 	import { goto } from "$app/navigation";
 	import { route } from "$lib/ROUTES";
 	import UserRolesColorProvider from "@mangadex/componnents/user/UserRolesColorProvider.svelte";
 	import UsersSimpleBase from "@mangadex/componnents/users/simple/UsersSimpleBase.svelte";
-	import { createInfiniteQuery, type CreateInfiniteQueryOptions } from "@tanstack/svelte-query";
+	import {
+		createInfiniteQuery,
+		type CreateInfiniteQueryOptions,
+	} from "@tanstack/svelte-query";
 	import pageLimit from "@mangadex/stores/page-limit";
 	import ErrorComponent from "@mangadex/componnents/ErrorComponent.svelte";
 	import registerContextMenuEvent from "@special-eureka/core/utils/contextMenuContext";
@@ -25,7 +31,7 @@
 
 	const params = derived([pageLimit], ([$limit]) => {
 		return {
-			limit: $limit
+			limit: $limit,
 		};
 	});
 	interface InfiniteQueryData {
@@ -46,7 +52,7 @@
 					return {
 						...lastPageParam,
 						limit: lastPage.limit,
-						offset: next_offset
+						offset: next_offset,
 					};
 				}
 			},
@@ -54,7 +60,7 @@
 				const res = await executeSearchQuery(client, pageParam);
 				return {
 					data: res.data,
-					...res.paginationData
+					...res.paginationData,
 				};
 			},
 			getPreviousPageParam(firstPage, allPages, firstPageParam) {
@@ -65,10 +71,10 @@
 					return {
 						...firstPageParam,
 						limit: firstPage.limit,
-						offset: next_offset
+						offset: next_offset,
 					};
 				}
-			}
+			},
 		} satisfies CreateInfiniteQueryOptions<
 			InfiniteQueryData,
 			Error,
@@ -85,11 +91,11 @@
 		}
 		return Array.from(
 			new Map(
-				(result.data?.pages.map((d) => d.data).flatMap((i) => i) ?? []).map((d) => [
-					d.id,
-					d
-				])
-			).values()
+				(
+					result.data?.pages.map((d) => d.data).flatMap((i) => i) ??
+					[]
+				).map((d) => [d.id, d]),
+			).values(),
 		);
 	});
 	let isFetching = $derived(infiniteQuery.isFetching);
@@ -109,8 +115,8 @@
 			}
 		},
 		{
-			threshold: 1.0
-		}
+			threshold: 1.0,
+		},
 	);
 	let to_obserce_bind: HTMLElement | undefined = $state(undefined);
 	$effect(() => {
@@ -129,23 +135,30 @@
 
 <div class="result">
 	{#each users as user (user.id)}
-		<span animate:flip in:receive={{ key: user.id }} out:send={{ key: user.id }}>
+		<span
+			animate:flip
+			in:receive={{ key: user.id }}
+			out:send={{ key: user.id }}
+		>
 			<UserRolesColorProvider roles={user.roles}>
 				<UsersSimpleBase
 					name={user.name}
 					oncontextmenu={registerContextMenuEvent({
 						includeContext: false,
 						additionalMenus() {
-							return userElementContextMenu({ id: user.id, name: user.name });
+							return userElementContextMenu({
+								id: user.id,
+								name: user.name,
+							});
 						},
 						preventDefault: true,
-						stopPropagation: true
+						stopPropagation: true,
 					})}
 					onclick={() => {
 						goto(
 							route("/mangadex/user/[id]", {
-								id: user.id
-							})
+								id: user.id,
+							}),
 						);
 					}}
 				/>

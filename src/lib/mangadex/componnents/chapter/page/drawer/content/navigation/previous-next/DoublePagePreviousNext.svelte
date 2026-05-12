@@ -7,7 +7,7 @@
 	import { resetZoom } from "@mangadex/componnents/chapter/page/contexts/resetZoomEventTarget";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import { Direction as ReadingDirection } from "@mangadex/gql/graphql";
-	import { ceil, isArray, noop, random } from "lodash";
+	import { ceil, isArray, noop, random } from "es-toolkit/compat";
 	import { onMount, type Snippet } from "svelte";
 	import { ArrowLeftIcon, ArrowRightIcon } from "@lucide/svelte";
 	import { derived as der } from "svelte/store";

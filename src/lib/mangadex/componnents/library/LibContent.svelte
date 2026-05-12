@@ -12,7 +12,7 @@
 	import {
 		debounce
 		// last, range
-	} from "lodash";
+	} from "es-toolkit/compat";
 	import { onDestroy, onMount } from "svelte";
 	import { derived, get, writable } from "svelte/store";
 	import LibContentFilter from "./LibContentFilter.svelte";

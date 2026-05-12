@@ -9,7 +9,7 @@
 	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
 	import { createQuery } from "@tanstack/svelte-query";
 	import { getContextClient } from "@urql/svelte";
-	import loadash, { startCase } from "lodash";
+	import loadash, { startCase } from "es-toolkit/compat";
 	import { onMount, type ComponentProps } from "svelte";
 	import CategorizedTitles from "./CategorizedTitles.svelte";
 	import getRelatedTitlesDataQuery from "./utils/query";

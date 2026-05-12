@@ -3,13 +3,17 @@
 	import MangaDexVarThemeProvider from "@mangadex/componnents/theme/MangaDexVarThemeProvider.svelte";
 	import type { Language } from "@mangadex/gql/graphql";
 	import { language_list } from "@mangadex/utils/lang/list";
-	import { startCase } from "lodash";
+	import { startCase } from "es-toolkit/compat";
 	interface Props {
 		menu?: HTMLElement;
 		open: boolean;
 		selectedLanguages?: Language[];
 	}
-	let { open, selectedLanguages = $bindable([]), menu = $bindable() }: Props = $props();
+	let {
+		open,
+		selectedLanguages = $bindable([]),
+		menu = $bindable(),
+	}: Props = $props();
 </script>
 
 {#if open == true}
@@ -23,9 +27,14 @@
 						class="mi"
 						onclick={() => {
 							if (selectedLanguages.includes(value)) {
-								selectedLanguages = selectedLanguages.filter((t) => t != value);
+								selectedLanguages = selectedLanguages.filter(
+									(t) => t != value,
+								);
 							} else {
-								selectedLanguages = new Set([...selectedLanguages, value])
+								selectedLanguages = new Set([
+									...selectedLanguages,
+									value,
+								])
 									.values()
 									.toArray();
 							}
