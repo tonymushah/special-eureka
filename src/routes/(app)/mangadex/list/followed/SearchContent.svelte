@@ -7,15 +7,20 @@
 	import UsersSimpleBase from "@mangadex/componnents/users/simple/UsersSimpleBase.svelte";
 	import {
 		CustomListVisibility,
-		type UserFollowedCustomListsQueryVariables
+		type UserFollowedCustomListsQueryVariables,
 	} from "@mangadex/gql/graphql";
 	import pageLimit from "@mangadex/stores/page-limit";
 	import type AbstractSearchResult from "@mangadex/utils/searchResult/AbstractSearchResult";
-	import { createInfiniteQuery, type CreateInfiniteQueryOptions } from "@tanstack/svelte-query";
+	import {
+		createInfiniteQuery,
+		type CreateInfiniteQueryOptions,
+	} from "@tanstack/svelte-query";
 	import { getContextClient } from "@urql/svelte";
-	import { debounce } from "lodash";
+	import { debounce } from "es-toolkit/compat";
 	import { onDestroy } from "svelte";
-	import executeSearchQuery, { type FollowedUserCustomListItemData } from "./search";
+	import executeSearchQuery, {
+		type FollowedUserCustomListItemData,
+	} from "./search";
 	import ErrorComponent from "@mangadex/componnents/ErrorComponent.svelte";
 	import registerContextMenuEvent from "@special-eureka/core/utils/contextMenuContext";
 	import customListElementContextMenu from "@mangadex/utils/context-menu/list";
@@ -27,7 +32,12 @@
 	const client = getContextClient();
 	let query = createInfiniteQuery(() => {
 		return {
-			queryKey: ["user", "following", "custom-lists", `limit:${$pageLimit}`],
+			queryKey: [
+				"user",
+				"following",
+				"custom-lists",
+				`limit:${$pageLimit}`,
+			],
 			async queryFn({ pageParam }) {
 				return await executeSearchQuery(client, pageParam);
 			},
@@ -40,13 +50,13 @@
 					return {
 						...lastPageParam,
 						offset: next_offset,
-						limit
+						limit,
 					};
 				}
 			},
 			initialPageParam: {
-				limit: $pageLimit
-			} satisfies UserFollowedCustomListsQueryVariables
+				limit: $pageLimit,
+			} satisfies UserFollowedCustomListsQueryVariables,
 		} satisfies CreateInfiniteQueryOptions<
 			AbstractSearchResult<FollowedUserCustomListItemData>,
 			Error,
@@ -57,7 +67,9 @@
 	});
 	let hasNext = $derived(query.hasNextPage);
 	let isFetching = $derived(query.isLoading);
-	let lists = $derived(new Set(query.data?.pages.flatMap((e) => e.data)) ?? new Set());
+	let lists = $derived(
+		new Set(query.data?.pages.flatMap((e) => e.data)) ?? new Set(),
+	);
 	const debounce_wait = 450;
 	const fetchNext = debounce(() => {
 		return query.fetchNextPage();
@@ -74,8 +86,8 @@
 			}
 		},
 		{
-			threshold: 0.2
-		}
+			threshold: 0.2,
+		},
 	);
 	onDestroy(() => {
 		observer.disconnect();
@@ -97,10 +109,10 @@
 		<span
 			animate:flip
 			in:receive={{
-				key: list.id
+				key: list.id,
 			}}
 			out:send={{
-				key: list.id
+				key: list.id,
 			}}
 		>
 			<UsersSimpleBase
@@ -113,8 +125,8 @@
 							id:
 								list.visibility == CustomListVisibility.Private
 									? `private:${list.id}`
-									: list.id
-						})
+									: list.id,
+						}),
 					);
 				}}
 				oncontextmenu={registerContextMenuEvent({
@@ -128,14 +140,16 @@
 							isMine: true,
 							onVisibilityChange() {
 								query.refetch();
-							}
+							},
 						});
-					}
+					},
 				})}
 			>
 				<div class="child">
 					<p class:isPrivate class:isPublic class="visibility">
-						{list.visibility == CustomListVisibility.Public ? "Public" : "Private"}
+						{list.visibility == CustomListVisibility.Public
+							? "Public"
+							: "Private"}
 					</p>
 					<p class="titles-number">
 						{list.titles}
@@ -162,9 +176,9 @@
 								additionalMenus() {
 									return userElementContextMenu({
 										id: list.creator.id,
-										name: list.creator.name
+										name: list.creator.name,
 									});
-								}
+								},
 							})}
 							tabindex={0}
 							class="creator"

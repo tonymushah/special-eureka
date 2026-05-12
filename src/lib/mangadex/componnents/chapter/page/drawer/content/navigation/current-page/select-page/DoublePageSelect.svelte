@@ -6,7 +6,7 @@
 	import getChapterDoublePageCurrentPageIndex from "@mangadex/componnents/chapter/page/readinMode/doublePage/utils/getChapterDoublePageCurrentPageIndex";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import MangaDexVarThemeProvider from "@mangadex/componnents/theme/MangaDexVarThemeProvider.svelte";
-	import { every, isArray } from "lodash";
+	import { every, isArray } from "es-toolkit/compat";
 	import { slide } from "svelte/transition";
 	import { Direction as ReadingDirection } from "@mangadex/gql/graphql";
 	import { getCurrentChapterDirection } from "@mangadex/componnents/chapter/page/contexts/readingDirection";

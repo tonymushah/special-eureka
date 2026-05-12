@@ -4,7 +4,7 @@
 	import NothingToShow from "@mangadex/componnents/search/content/NothingToShow.svelte";
 	import type { UserFollowedGroupsQueryVariables } from "@mangadex/gql/graphql";
 	import { getContextClient } from "@urql/svelte";
-	import { debounce } from "lodash";
+	import { debounce } from "es-toolkit/compat";
 	import { onDestroy } from "svelte";
 	import { derived } from "svelte/store";
 	import executeSearchQuery from "./search";

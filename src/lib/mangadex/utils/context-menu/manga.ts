@@ -26,7 +26,7 @@ import openNewWindow from "@special-eureka/core/commands/openNewWindow";
 import { currentLocationWithNewPath } from "@special-eureka/core/utils/url";
 import { writeText } from "@tauri-apps/plugin-clipboard-manager";
 import { openUrl } from "@tauri-apps/plugin-opener";
-import { range } from "lodash";
+import { range } from "es-toolkit/compat";
 import { derived, get } from "svelte/store";
 import { isLogged } from "../auth";
 import get_value_and_random_if_undefined from "../lang/get_value_and_random_if_undefined";

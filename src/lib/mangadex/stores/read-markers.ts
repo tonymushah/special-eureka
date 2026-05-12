@@ -1,6 +1,6 @@
 import { anyChapterSub, individualChapterSub } from "@mangadex/gql-docs/read-markers/chapters";
 import { client } from "@mangadex/gql/urql";
-import { delay } from "lodash";
+import { delay } from "es-toolkit/compat";
 import { readable, type Readable } from "svelte/store";
 
 export type ChapterReadMarkersItem = {

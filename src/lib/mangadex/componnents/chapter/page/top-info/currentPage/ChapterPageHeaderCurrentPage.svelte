@@ -1,6 +1,6 @@
 <script lang="ts" module>
 	import { Direction, ReadingMode } from "@mangadex/gql/graphql";
-	import { isArray } from "lodash";
+	import { isArray } from "es-toolkit/compat";
 	import { getCurrentChapterReadingMode } from "../../contexts/currentChapterReadingMode";
 	import { getChapterCurrentPageContext } from "../../contexts/currentPage";
 	import getChapterDoublePageCurrentPageIndex from "../../readinMode/doublePage/utils/getChapterDoublePageCurrentPageIndex";

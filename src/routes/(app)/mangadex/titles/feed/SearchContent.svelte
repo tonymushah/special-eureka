@@ -21,7 +21,7 @@
 		type CreateInfiniteQueryOptions
 	} from "@tanstack/svelte-query";
 	import { getContextClient } from "@urql/svelte";
-	import { debounce } from "lodash";
+	import { debounce } from "es-toolkit/compat";
 	import { onDestroy, onMount } from "svelte";
 	import { derived, get, writable } from "svelte/store";
 	import executeSearchQuery, { type UserMangaFeedChapterParams as Params } from "./search";

@@ -85,7 +85,7 @@
 	import registerContextMenuEvent, {
 		setContextMenuContext
 	} from "@special-eureka/core/utils/contextMenuContext";
-	import { debounce } from "lodash";
+	import { debounce } from "es-toolkit/compat";
 	import { BookSearch, EyeIcon, EyeOffIcon, MessageSquareIcon, UsersIcon } from "@lucide/svelte";
 	import DownloadStateComp from "./DownloadStateComp.svelte";
 	import Layout from "./Layout.svelte";

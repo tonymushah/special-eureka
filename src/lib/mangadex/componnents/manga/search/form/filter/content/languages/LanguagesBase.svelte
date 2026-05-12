@@ -4,7 +4,7 @@
 	import type { Language } from "@mangadex/gql/graphql";
 	import { type Writable } from "svelte/store";
 	import LanguagesBaseMenu from "./LanguagesBaseMenu.svelte";
-	import { startCase } from "lodash";
+	import { startCase } from "es-toolkit/compat";
 	import { floatingUImenu } from "@mangadex/utils/floating-ui/menu.svelte";
 
 	interface Props {

@@ -93,6 +93,9 @@ importers:
       core-js:
         specifier: ^3.49.0
         version: 3.49.0
+      es-toolkit:
+        specifier: ^1.46.1
+        version: 1.46.1
       fast-xml-parser:
         specifier: ^5.7.3
         version: 5.7.3
@@ -102,9 +105,6 @@ importers:
       hotkeys-js:
         specifier: ^4.0.4
         version: 4.0.4
-      lodash:
-        specifier: ^4.18.1
-        version: 4.18.1
       medium-zoom:
         specifier: ^1.1.0
         version: 1.1.0
@@ -157,9 +157,6 @@ importers:
       '@tauri-apps/cli':
         specifier: ^2.11.1
         version: 2.11.1
-      '@types/lodash':
-        specifier: ^4.17.24
-        version: 4.17.24
       '@types/node':
         specifier: ^24
         version: 24.12.3
@@ -1632,9 +1629,6 @@ packages:
   '@types/estree@1.0.9':
     resolution: {integrity: sha512-GhdPgy1el4/ImP05X05Uw4cw2/M93BCUmnEvWZNStlCzEKME4Fkk+YpoA5OiHNQmoS7Cafb8Xa3Pya8m1Qrzeg==}
 
-  '@types/lodash@4.17.24':
-    resolution: {integrity: sha512-gIW7lQLZbue7lRSWEFql49QJJWThrTFFeIMJdp3eH4tKoxm1OvEPg02rm4wCCSHS0cL3/Fizimb35b7k8atwsQ==}
-
   '@types/node@24.12.3':
     resolution: {integrity: sha512-8oljBDGun9cIsZRJR6fkihn0TSXJI0UDOOhncYaERq6M0JMDoPLxyscwruJcb4GKS6dvK/d8xebYBg27h/duaQ==}
 
@@ -2354,6 +2348,9 @@ packages:
   es-module-lexer@1.7.0:
     resolution: {integrity: sha512-jEQoCwk8hyb2AZziIOLhDqpm5+2ww5uIE6lkO/6jcOCusfk6LhMHpXXfBLXTZ7Ydyt0j4VoUQv6uGNYbdW+kBA==}
 
+  es-toolkit@1.46.1:
+    resolution: {integrity: sha512-5eNtXOs3tbfxXOj04tjjseeWkRWaoCjdEI+96DgwzZoe6c9juL49pXlzAFTI72aWC9Y8p7168g6XIKjh7k6pyQ==}
+
   escalade@3.2.0:
     resolution: {integrity: sha512-WUj2qlxaQtO4g6Pq5c29GTcWGDyd8itL8zTlipgECz3JesAiiOKotd8JU6otB3PACgG6xkJUyVhboMS+bje/jA==}
     engines: {node: '>=6'}
@@ -2715,9 +2712,6 @@ packages:
 
   lodash.sortby@4.7.0:
     resolution: {integrity: sha512-HDWXG8isMntAyRF5vZ7xKuEvOhT4AhlRt/3czTSjvGUxjYCBVRQY48ViDHyfYz9VIoBkW4TMGQNapx+l3RUwdA==}
-
-  lodash@4.18.1:
-    resolution: {integrity: sha512-dMInicTPVE8d1e5otfwmmjlxkZoUpiVLwyeTdUsi/Caj/gfzzblBcCE5sRHV/AsjuCmxWrte2TNGSYuCeCq+0Q==}
 
   log-symbols@7.0.1:
     resolution: {integrity: sha512-ja1E3yCr9i/0hmBVaM0bfwDjnGy8I/s6PP4DFp+yP+a+mrHO4Rm7DtmnqROTUkHIkqffC84YY7AeqX6oFk0WFg==}
@@ -4705,8 +4699,6 @@ snapshots:
 
   '@types/estree@1.0.9': {}
 
-  '@types/lodash@4.17.24': {}
-
   '@types/node@24.12.3':
     dependencies:
       undici-types: 7.16.0
@@ -5645,6 +5637,8 @@ snapshots:
 
   es-module-lexer@1.7.0: {}
 
+  es-toolkit@1.46.1: {}
+
   escalade@3.2.0: {}
 
   esm-env@1.2.2: {}
@@ -5955,8 +5949,6 @@ snapshots:
   locate-character@3.0.0: {}
 
   lodash.sortby@4.7.0: {}
-
-  lodash@4.18.1: {}
 
   log-symbols@7.0.1:
     dependencies:

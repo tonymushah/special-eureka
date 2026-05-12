@@ -6,7 +6,7 @@
 	import MangaDexVarThemeProvider from "@mangadex/componnents/theme/MangaDexVarThemeProvider.svelte";
 	import { floatingUImenu } from "@mangadex/utils/floating-ui/menu.svelte";
 	import type { SelectOption } from "@mangadex/utils/legacy/melt-ui-select-option";
-	import { range } from "lodash";
+	import { range } from "es-toolkit/compat";
 	import { derived, get, type Writable } from "svelte/store";
 	import { slide } from "svelte/transition";
 

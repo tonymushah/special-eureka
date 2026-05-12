@@ -4,7 +4,7 @@ import { internalSessionQueueOrderIDsGQLDocs } from "@mangadex/gql-docs/upload/i
 import { InternUploadQueueState } from "@mangadex/gql/graphql";
 import { client } from "@mangadex/gql/urql";
 import type { CombinedError } from "@urql/svelte";
-import { delay } from "lodash";
+import { delay } from "es-toolkit/compat";
 import { readable } from "svelte/store";
 
 export const queueOrderIDs = readable<string[]>([], (set) => {

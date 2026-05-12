@@ -11,7 +11,7 @@
 	import type AbstractSearchResult from "@mangadex/utils/searchResult/AbstractSearchResult";
 	import { createInfiniteQuery, type CreateInfiniteQueryOptions } from "@tanstack/svelte-query";
 	import { getContextClient } from "@urql/svelte";
-	import { debounce } from "lodash";
+	import { debounce } from "es-toolkit/compat";
 	import { onDestroy } from "svelte";
 	import type { Readable } from "svelte/store";
 	import { writable } from "svelte/store";

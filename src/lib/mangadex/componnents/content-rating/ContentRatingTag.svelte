@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { ContentRating } from "@mangadex/gql/graphql";
 	import DangerBadgeOnlyLabel from "../theme/tag/DangerBadgeOnlyLabel.svelte";
-	import { lowerCase, startCase } from "lodash";
+	import { lowerCase, startCase } from "es-toolkit/compat";
 	import StatusBadgeOnlyLabel from "../theme/tag/StatusBadgeOnlyLabel.svelte";
 	import AccentBadgeOnlyLabel from "../theme/tag/AccentBadgeOnlyLabel.svelte";
 

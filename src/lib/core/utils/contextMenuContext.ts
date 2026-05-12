@@ -1,6 +1,6 @@
 import type { ContextMenuItem } from "@special-eureka/core/commands/contextMenu";
 import contextMenu, { ContextMenuItemProvider } from "@special-eureka/core/commands/contextMenu";
-import { isArray } from "lodash";
+import { isArray } from "es-toolkit/compat";
 import { getContext, setContext } from "svelte";
 
 const KEY = "context-menu-context";

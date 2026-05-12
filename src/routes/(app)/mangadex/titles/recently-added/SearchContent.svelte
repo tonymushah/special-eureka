@@ -7,7 +7,7 @@
 	import type { MangaListParams } from "@mangadex/gql/graphql";
 	import { createInfiniteQuery, type CreateInfiniteQueryOptions } from "@tanstack/svelte-query";
 	import { getContextClient } from "@urql/svelte";
-	import { debounce } from "lodash";
+	import { debounce } from "es-toolkit/compat";
 	import { onDestroy } from "svelte";
 	import executeSearchQuery from "./execute";
 	import defaultContentProfile from "@mangadex/content-profile/graphql/defaultProfile";

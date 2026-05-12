@@ -1,4 +1,4 @@
-import { debounce } from "lodash";
+import { debounce } from "es-toolkit/compat";
 import sound from "./sound.opus";
 
 export const playFahh = debounce(() => {

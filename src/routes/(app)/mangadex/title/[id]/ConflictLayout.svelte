@@ -8,7 +8,7 @@
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import PrimaryButton from "@mangadex/componnents/theme/buttons/PrimaryButton.svelte";
 	import type { ContentProfileConflicts } from "@mangadex/utils/conflicts";
-	import { lowerCase, startCase } from "lodash";
+	import { lowerCase, startCase } from "es-toolkit/compat";
 	import { ArrowLeftIcon } from "@lucide/svelte";
 	interface Props {
 		ingnoreConflict: boolean;
@@ -31,8 +31,8 @@
 						const { id } = e;
 						goto(
 							route("/mangadex/tag/[id]", {
-								id
-							})
+								id,
+							}),
 						);
 					}}
 				/>
@@ -43,7 +43,11 @@
 				<h3>Original Language</h3>
 				<div class="lang">
 					<FlagIcon lang={conflicts.originalLanguage} />
-					<span>{startCase(lowerCase(conflicts.originalLanguage))}</span>
+					<span
+						>{startCase(
+							lowerCase(conflicts.originalLanguage),
+						)}</span
+					>
 				</div>
 			</section>
 		{/if}
@@ -73,8 +77,8 @@
 						const { id } = e;
 						goto(
 							route("/mangadex/author/[id]", {
-								id
-							})
+								id,
+							}),
 						);
 					}}
 				/>
@@ -112,7 +116,11 @@
 		align-items: center;
 		flex-direction: column;
 		flex-wrap: nowrap;
-		background-color: color-mix(in srgb, var(--danger-l1) 50%, transparent 50%);
+		background-color: color-mix(
+			in srgb,
+			var(--danger-l1) 50%,
+			transparent 50%
+		);
 		h2 {
 			margin: 0px;
 		}

@@ -17,7 +17,7 @@
 	} from "@special-eureka/core/commands/contextMenu";
 	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
 	import { setContextMenuContext } from "@special-eureka/core/utils/contextMenuContext";
-	import { delay } from "lodash";
+	import { delay } from "es-toolkit/compat";
 	import type { PageData } from "./$types";
 	import SearchContent from "./SearchContent.svelte";
 	import { hideReadTitle } from "@mangadex/stores/hide-read-title";

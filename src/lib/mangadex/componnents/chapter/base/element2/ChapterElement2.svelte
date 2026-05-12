@@ -9,7 +9,7 @@
 	import registerContextMenuEvent, {
 		setContextMenuContext
 	} from "@special-eureka/core/utils/contextMenuContext";
-	import { debounce } from "lodash";
+	import { debounce } from "es-toolkit/compat";
 	import {
 		CheckIcon,
 		DownloadCloudIcon,

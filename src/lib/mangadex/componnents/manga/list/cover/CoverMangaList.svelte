@@ -9,7 +9,7 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
 	import { route } from "$lib/ROUTES";
-	import { isArray } from "lodash";
+	import { isArray } from "es-toolkit/compat";
 	import { flip } from "svelte/animate";
 	import MangaElementBase3 from "../../base/MangaElementBase3.svelte";
 	import { crossfade, fade } from "svelte/transition";

@@ -6,7 +6,7 @@
 	import { hasConflicts } from "@mangadex/utils/conflicts";
 	import ConflictLayout from "@mangadex/routes/title/[id]/ConflictLayout.svelte";
 	import { isDataSaver } from "@mangadex/stores/chapterQuality";
-	import { noop } from "lodash";
+	import { noop } from "es-toolkit/compat";
 
 	interface Props {
 		data: LayoutData;

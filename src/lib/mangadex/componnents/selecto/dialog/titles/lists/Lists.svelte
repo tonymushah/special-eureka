@@ -1,6 +1,6 @@
 <script lang="ts">
 	import executeSearchQuery, {
-		type CurrentUserCustomListItemData
+		type CurrentUserCustomListItemData,
 	} from "@mangadex/componnents/manga/add-to-list/content";
 	import Fetching from "@mangadex/componnents/search/content/Fetching.svelte";
 	import HasNext from "@mangadex/componnents/search/content/HasNext.svelte";
@@ -8,9 +8,12 @@
 	import type { CurrentLoggedLists } from "@mangadex/gql/graphql";
 	import pageLimit from "@mangadex/stores/page-limit";
 	import type AbstractSearchResult from "@mangadex/utils/searchResult/AbstractSearchResult";
-	import { createInfiniteQuery, type CreateInfiniteQueryOptions } from "@tanstack/svelte-query";
+	import {
+		createInfiniteQuery,
+		type CreateInfiniteQueryOptions,
+	} from "@tanstack/svelte-query";
 	import { getContextClient } from "@urql/svelte";
-	import { debounce } from "lodash";
+	import { debounce } from "es-toolkit/compat";
 	import { onDestroy } from "svelte";
 	import { derived as der } from "svelte/store";
 	import MakeEmptyList from "./MakeEmptyList.svelte";
@@ -31,11 +34,11 @@
 				"custom-list",
 				"for-add-to-list",
 				"batch",
-				`limit:${limit}`
+				`limit:${limit}`,
 			],
 			initialPageParam: {
 				offset: 0,
-				limit
+				limit,
 			} satisfies CurrentLoggedLists,
 			async queryFn({ pageParam }) {
 				return await executeSearchQuery(client, pageParam);
@@ -49,10 +52,10 @@
 					return {
 						...lastPageParam,
 						offset: next_offset,
-						limit
+						limit,
 					};
 				}
-			}
+			},
 		} satisfies CreateInfiniteQueryOptions<
 			AbstractSearchResult<CurrentUserCustomListItemData>,
 			Error,
@@ -81,8 +84,8 @@
 			}
 		},
 		{
-			threshold: 0.2
-		}
+			threshold: 0.2,
+		},
 	);
 	onDestroy(() => {
 		observer.disconnect();
@@ -122,13 +125,15 @@
 									selectedLists.push(customList.id);
 								} else {
 									selectedLists = selectedLists.filter(
-										(dd) => dd != customList.id
+										(dd) => dd != customList.id,
 									);
 								}
 							}
 						}
 					/>
-					<label for={`list:${customList.id}`}>{customList.name} </label>
+					<label for={`list:${customList.id}`}
+						>{customList.name}
+					</label>
 				</article>
 			{/each}
 		{/if}

@@ -9,7 +9,7 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
 	import { route } from "$lib/ROUTES";
-	import { isArray } from "lodash";
+	import { isArray } from "es-toolkit/compat";
 	import MangaElementBase2 from "../../base/MangaElementBase2.svelte";
 
 	interface Props {

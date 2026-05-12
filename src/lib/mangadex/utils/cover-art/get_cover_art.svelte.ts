@@ -1,7 +1,7 @@
 import coverNotFound from "@mangadex/assets/artworks/cover-not-found.jpg";
 import { mangadexQueryClient, type GetCoverParam } from "@mangadex/index";
 import { createQuery } from "@tanstack/svelte-query";
-import { delay } from "lodash";
+import { delay } from "es-toolkit/compat";
 import type { Getter } from "runed";
 import { get_cover_image_url } from "./get_cover_art";
 

@@ -17,7 +17,7 @@
 	import { titleOnlyQuery } from "@mangadex/stores/title/title-only-query";
 	import { floatingUImenu } from "@mangadex/utils/floating-ui/menu.svelte";
 	import { SvelteMap } from "svelte/reactivity";
-	import { delay } from "lodash";
+	import { delay } from "es-toolkit/compat";
 
 	interface Props {
 		mangaId: string;

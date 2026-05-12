@@ -1,6 +1,5 @@
+import { debounce } from "es-toolkit/compat";
 import type { MouseEventHandler } from "svelte/elements";
-import { debounce } from "lodash";
-import mangadexLogo from "@mangadex/assets/mangadex-logo.svg";
 
 const TOGGLE_SIDEBAR_KEY = "TOGGLE_SIDEBAR";
 const debunc = debounce(async () => {

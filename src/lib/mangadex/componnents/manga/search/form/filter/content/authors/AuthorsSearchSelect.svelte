@@ -1,7 +1,7 @@
 <script lang="ts">
 	import FormInput from "@mangadex/componnents/theme/form/input/FormInput.svelte";
 	import type { Tag } from "@mangadex/utils/legacy/melt-ui-tag.ts";
-	import { debounce, delay } from "lodash";
+	import { debounce, delay } from "es-toolkit/compat";
 	import { onDestroy } from "svelte";
 	import { XIcon } from "@lucide/svelte";
 	import { type Writable } from "svelte/store";

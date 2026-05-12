@@ -3,7 +3,7 @@ import {
 	hideReadTitlesSubscriptionGQL
 } from "@mangadex/gql-docs/hide-read-title";
 import { client } from "@mangadex/gql/urql";
-import { delay } from "lodash";
+import { delay } from "es-toolkit/compat";
 import { get, readable, type Writable } from "svelte/store";
 
 const hideReadTitlesReadSub = readable(false, (set) => {

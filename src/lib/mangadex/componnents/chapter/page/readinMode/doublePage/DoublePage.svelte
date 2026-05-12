@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Direction } from "@mangadex/gql/graphql";
-	import { ceil, isArray, noop, random } from "lodash";
+	import { ceil, isArray, noop, random } from "es-toolkit/compat";
 	import { onMount, type Snippet } from "svelte";
 	import { getChapterCurrentPageContext } from "../../contexts/currentPage";
 	import { getCurrentChapterDirection } from "../../contexts/readingDirection";

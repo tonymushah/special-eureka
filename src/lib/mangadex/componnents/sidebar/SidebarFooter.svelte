@@ -8,7 +8,7 @@
 	import { goto } from "$app/navigation";
 	import { addErrorToast } from "../theme/toast/Toaster.svelte";
 	import { route } from "$lib/ROUTES";
-	import { debounce } from "lodash";
+	import { debounce } from "es-toolkit/compat";
 
 	const client = getContextClient();
 	let initial_user_name: string | undefined = $state(undefined);

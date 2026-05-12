@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { kebabCase } from "lodash";
+	import { kebabCase } from "es-toolkit/compat";
 	import UsersPageBaseLayout from "./UsersPageBaseLayout.svelte";
 	import Markdown from "@mangadex/componnents/markdown/Markdown.svelte";
 	import profilePictureDev from "./images/story-profile-picture.jpg";

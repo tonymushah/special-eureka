@@ -2,7 +2,7 @@ import type { InputMaybe, ReadonlyValue } from "$lib";
 import { internalQueueEntryStateGQLDocs } from "@mangadex/gql-docs/upload/internal-queue-entry-state";
 import { InternUploadQueueState } from "@mangadex/gql/graphql";
 import { client } from "@mangadex/gql/urql";
-import { delay } from "lodash";
+import { delay } from "es-toolkit/compat";
 import type { Getter } from "runed";
 import type { QueueEntryState } from "./queue";
 

@@ -4,7 +4,7 @@
 	import NothingToShow from "@mangadex/componnents/search/content/NothingToShow.svelte";
 	import type { AuthorListParams } from "@mangadex/gql/graphql";
 	import { getContextClient } from "@urql/svelte";
-	import { debounce } from "lodash";
+	import { debounce } from "es-toolkit/compat";
 	import { onDestroy } from "svelte";
 	import { derived, toStore, type Readable } from "svelte/store";
 	import executeSearchQuery, { type AuthorListItemData } from "./search";

@@ -6,7 +6,7 @@
 	import TopTenElement from "./TopTenElement.svelte";
 	import manga_title_to_lang_map from "@mangadex/utils/lang/record-to-map/manga-title-to-lang-map";
 	import ErrorComponent from "@mangadex/componnents/ErrorComponent.svelte";
-	import { debounce } from "lodash";
+	import { debounce } from "es-toolkit/compat";
 	import { transformToStringRecord } from "@mangadex/utils/transformToStringRecord";
 
 	interface Props {

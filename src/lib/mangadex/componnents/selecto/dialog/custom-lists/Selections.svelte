@@ -7,7 +7,7 @@
 	import { client } from "@mangadex/gql/urql";
 	import { isLogged } from "@mangadex/utils/auth";
 	import { createQuery } from "@tanstack/svelte-query";
-	import { upperCase } from "lodash";
+	import { upperCase } from "es-toolkit/compat";
 
 	interface Props {
 		customLists: string[];

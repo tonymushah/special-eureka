@@ -2,7 +2,7 @@ import { dev } from "$app/environment";
 import type { InputMaybe, ReadonlyValue } from "$lib";
 import { internalSessionGQLDocs } from "@mangadex/gql-docs/upload/internal-session";
 import { client } from "@mangadex/gql/urql";
-import { delay } from "lodash";
+import { delay } from "es-toolkit/compat";
 import type { Getter } from "runed";
 import type { InternalSessionObj, InternalSessionObjCommitData } from "./sessions";
 

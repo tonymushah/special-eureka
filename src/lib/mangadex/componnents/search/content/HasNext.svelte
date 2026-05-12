@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { range } from "lodash";
+	import { range } from "es-toolkit/compat";
 	import { onMount } from "svelte";
 	const OO_LIMIT = 6;
 	let oo = $state("");
