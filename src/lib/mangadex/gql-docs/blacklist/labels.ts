@@ -136,10 +136,7 @@ export const unlinkBlacklistLabelsScanlationGroupsMutationGQLDocs = graphql(`
 	) {
 		blacklist {
 			labels {
-				unlinkScanlationGroups(
-					labelIds: $labelIds
-					scanlationGroupsIds: $scanlationGroupIds
-				)
+				unlinkScanlationGroups(labelIds: $labelIds, scanlationGroupsIds: $scanlationGroupIds)
 			}
 		}
 	}

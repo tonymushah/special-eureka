@@ -1,4 +1,5 @@
 <script lang="ts" module>
+	type MangaLinks = ResultOf<typeof MangaLinksFrag>
 	export type SimpleItems = {
 		id: string;
 		name: string;
@@ -189,14 +190,16 @@
 </script>
 
 <script lang="ts">
-	import { type MangaLinks } from "@mangadex/gql/graphql";
 	import { getContextClient } from "@urql/svelte";
 	import MangaPageChaptersInfo, { type MangaLinksItem } from "./MangaPageChaptersInfo.svelte";
 	import type { AltTitleItem } from "./info/alt-titles/MangaAltTitles.svelte";
 	import type { LinkItem } from "./info/links/MangaLinksBase.svelte";
 	import { TitleKey } from "./Info.utils";
 	import { goto } from "$app/navigation";
-	import { route, routes } from "$lib/ROUTES";
+	import { route } from "$lib/ROUTES";
+	import { useFragment, type FragmentType } from "@mangadex/gql";
+	import { MangaLinksFrag } from "@mangadex/gql-docs/title/links";
+	import type { ResultOf } from "@graphql-typed-document-node/core";
 
 	interface Props {
 		authors?: SimpleItems[];
@@ -206,7 +209,7 @@
 		demographic?: SimpleItems[];
 		format?: SimpleItems[];
 		content?: SimpleItems[];
-		links?: MangaLinks | undefined;
+		links?: FragmentType<typeof MangaLinksFrag> | undefined;
 		altTitles?: AltTitleItem[];
 		children?: import("svelte").Snippet;
 	}
@@ -261,7 +264,22 @@
 			items: content
 		}
 	]);
-	let toUseLinks = $derived(propsToUseLink(links ?? { hasNoLinks: true }));
+	let toUseLinks = $derived.by(() => {
+		const _links = useFragment(MangaLinksFrag, links); 
+		return propsToUseLink(_links ?? { hasNoLinks: true, amazon: null,
+		anilist: null,
+		animePlanet: null,
+		bookWalker: null,
+		cdJapan: null,
+		ebookJapan: null,
+		englishTranslation: null,
+		kitsu: null,
+		mangaUpdates: null,
+		myAnimeList: null,
+		novelUpdates: null,
+		raw: null 
+		}) 
+	});
 </script>
 
 <MangaPageChaptersInfo

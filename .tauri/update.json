@@ -1,43 +1,43 @@
 {
-  "version": "0.2.3",
-  "notes": "See the assets to download this version and install.",
-  "pub_date": "2026-03-31T14:16:19.924Z",
-  "platforms": {
-    "darwin-aarch64": {
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRTkdINzZQMGI4NmF0ZzVkeVI1cGZ2Y3k3UFNyK0NpOUFwSkVUWXhlbVZnS09FSTJheHJrMU41WDZOR0dCYm1qSVBTVC9lM2hVZ2JhM0lUZDgzQkFMaVEwQ1FVdnR0dlFFPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzc0OTY1Nzc5CWZpbGU6U3BlY2lhbCBFdXJla2EuYXBwLnRhci5negpFQ2lhZWh3YVZpME9oM2MxME1iSDRsSjNwMk5lbXFnMElXQVAxQW8rTG53amZhR2lJSmNTbSt2Mk9CalJUOWpBQlNRWW1FRW9odmxLM0hxU3pPSGlBdz09Cg==",
-      "url": "https://github.com/tonymushah/special-eureka/releases/download/v0.2.3/Special.Eureka_aarch64.app.tar.gz"
-    },
-    "darwin-aarch64-app": {
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRTkdINzZQMGI4NmF0ZzVkeVI1cGZ2Y3k3UFNyK0NpOUFwSkVUWXhlbVZnS09FSTJheHJrMU41WDZOR0dCYm1qSVBTVC9lM2hVZ2JhM0lUZDgzQkFMaVEwQ1FVdnR0dlFFPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzc0OTY1Nzc5CWZpbGU6U3BlY2lhbCBFdXJla2EuYXBwLnRhci5negpFQ2lhZWh3YVZpME9oM2MxME1iSDRsSjNwMk5lbXFnMElXQVAxQW8rTG53amZhR2lJSmNTbSt2Mk9CalJUOWpBQlNRWW1FRW9odmxLM0hxU3pPSGlBdz09Cg==",
-      "url": "https://github.com/tonymushah/special-eureka/releases/download/v0.2.3/Special.Eureka_aarch64.app.tar.gz"
-    },
-    "linux-x86_64": {
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRTkdINzZQMGI4NlFQOFF6VlRrclZzZUZHeXR6MFRCQXdIek9FN2xhLzM4aThITFFKUjBPaWk2OWNJazllRzl1M013cEZ4S2huS1RYZnYxMEtqVm81Slk1VjFRUFY0ZWdNPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzc0OTY1OTEyCWZpbGU6U3BlY2lhbCBFdXJla2FfMC4yLjNfYW1kNjQuQXBwSW1hZ2UudGFyLmd6Ck1iTkpTSHpISDJXNERRTmRGeGRwYmpUNmNWRCs4MHRlTklnZ3VZRnd5SDRkN2djd05YMnJRUDNqWGowdVhpZFZoOGkzNlJSRHdUaTM5R1lCdnFkNkNBPT0K",
-      "url": "https://github.com/tonymushah/special-eureka/releases/download/v0.2.3/Special.Eureka_0.2.3_amd64.AppImage.tar.gz"
-    },
-    "linux-x86_64-appimage": {
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRTkdINzZQMGI4NmVpOHlUOGJsQkRpZ1dENnZVeUpjOEdtR09ucXU4ZGhzTnB6djlreWp5enk0TE9qUWF2cmxOTmR1OGF3anZqTkdnb3g0Z0Nicm5ZU1BBRlNmOFFmcWdrPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzc0OTY1OTEyCWZpbGU6U3BlY2lhbCBFdXJla2FfMC4yLjNfYW1kNjQuQXBwSW1hZ2UKbW5VTTNEbWduRHY4ZjV6SnMvUGVmeVVPY0NXVWUrN3VSWHJOMExWMkkwNk9DdFpSeDgrQmJ1NXVTUXcrZUFVdnprZTZmVWFaa25QYnlEYmRSSWFiQVE9PQo=",
-      "url": "https://github.com/tonymushah/special-eureka/releases/download/v0.2.3/Special.Eureka_0.2.3_amd64.AppImage"
-    },
-    "linux-x86_64-deb": {
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRTkdINzZQMGI4Nll6bzA3ZnJQSG1tandUM3ZtSHVwbVBPS2Y2TTZab3YzT3BDcTF0a3BNck84U3p5dXpQVnNCalIrc1V5aG5Qa3hGSG1oZXhMYk1UUHNuZTNmVTVCU2dNPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzc0OTY1OTEyCWZpbGU6U3BlY2lhbCBFdXJla2FfMC4yLjNfYW1kNjQuZGViClFLL05MdUg3SW9OVExyQUtPcisvRDhQVmxDeEFiUnl2dVZhNkpTWWpIVlNSaTk1a09kTytSSTBsZVdqYUJoVndidS9tY1JaTEZQOTI4NG5PU2VsWkRnPT0K",
-      "url": "https://github.com/tonymushah/special-eureka/releases/download/v0.2.3/Special.Eureka_0.2.3_amd64.deb"
-    },
-    "linux-x86_64-rpm": {
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRTkdINzZQMGI4Nlk1TEgzRE9nOFdRS09Dbll1TEx0enErNTdtbHFEZU51MTFxbTZvenFBNHJPc0hOL2xmbFJqRDA3Z0V3dkZ0b3l4NFVCU0FJcHBSSkNQWVo2d3kyM2dBPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzc0OTY1OTEyCWZpbGU6U3BlY2lhbCBFdXJla2EtMC4yLjMtMS54ODZfNjQucnBtClpRZXpGQWRrVTBsdTRad3FwWk5jODJ5M2Z1KzBHN2JIeE51dHVNWkRQck96ZXMzZXdmdjhWeGcvZ1ZHNFNQY0tNTW14MmtCbllQQmNLMjY5Rzg0UkFBPT0K",
-      "url": "https://github.com/tonymushah/special-eureka/releases/download/v0.2.3/Special.Eureka-0.2.3-1.x86_64.rpm"
-    },
-    "windows-x86_64": {
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRTkdINzZQMGI4NlVwRDdkR2RTcERWck84RGpJQlJUQVl4V0VwRktOMTFlMVdwc2NRUXcrUk5YQzJ1akNCYWNVVHp3YUZiUDF2Rk1rSTlMU0VUbGlHbzU5WUZudDJ3OVEwPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzc0OTY2NTY5CWZpbGU6U3BlY2lhbCBFdXJla2FfMC4yLjNfeDY0X2VuLVVTLm1zaS56aXAKcWtYZkxuREt4bzhmZzdwN2JsYWE0UzJQbWRDNFhxeS9pdm1JdFViOTZZVzIvTmxqbzZLb2IybDY0N1V4M011M0ZvVmRUcDZkUFdic2g1MllHcUtpQ3c9PQo=",
-      "url": "https://github.com/tonymushah/special-eureka/releases/download/v0.2.3/Special.Eureka_0.2.3_x64_en-US.msi.zip"
-    },
-    "windows-x86_64-msi": {
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRTkdINzZQMGI4NlpNWUNGeGFuK0NQOWpJNjhUNy9TRWRXNWFTSnIyclh1aUFoQWJiMGJsVS9DLzY1Ri80WHM0dk84YzBkbmlQaTJ1UDdYY3FMdDNva1N2ZGEzd1llZGdFPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzc0OTY2NTY5CWZpbGU6U3BlY2lhbCBFdXJla2FfMC4yLjNfeDY0X2VuLVVTLm1zaQovd1AvVzBoZlNJVEJaOFhXWm9kUzgyZGhkTUpBdUlQR1dVbGlWUTN0WXluU21VdXVJeTlleEdkcUxxM1FVa2tMa0xCc3VSMC9jVXV4VDZxc0F6R3VDdz09Cg==",
-      "url": "https://github.com/tonymushah/special-eureka/releases/download/v0.2.3/Special.Eureka_0.2.3_x64_en-US.msi"
-    },
-    "windows-x86_64-nsis": {
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRTkdINzZQMGI4NlpJYjJCdkdqNG5lNXFueVVIR2RlYm1QRmhBcDNyaUFRemVxZXJCd0tQMndocm5lQkpGME5XV1p1MGczVk5VbkFCdU02QU90SWo5anlsS3crcm0rRFFZPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzc0OTY2NTY5CWZpbGU6U3BlY2lhbCBFdXJla2FfMC4yLjNfeDY0LXNldHVwLmV4ZQpYYWN4NzdGNG1VdGN0V1M5blFqak9keFR4K2FFL09ROWFRYWxHNXdFRTlPMVU3UmQxNWFVUU94emQ0OFd6ZFlmVkpxd2JmbVFIM3lJVExaT1Q0Z3NDQT09Cg==",
-      "url": "https://github.com/tonymushah/special-eureka/releases/download/v0.2.3/Special.Eureka_0.2.3_x64-setup.exe"
-    }
-  }
+	"version": "0.2.3",
+	"notes": "See the assets to download this version and install.",
+	"pub_date": "2026-03-31T14:16:19.924Z",
+	"platforms": {
+		"darwin-aarch64": {
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRTkdINzZQMGI4NmF0ZzVkeVI1cGZ2Y3k3UFNyK0NpOUFwSkVUWXhlbVZnS09FSTJheHJrMU41WDZOR0dCYm1qSVBTVC9lM2hVZ2JhM0lUZDgzQkFMaVEwQ1FVdnR0dlFFPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzc0OTY1Nzc5CWZpbGU6U3BlY2lhbCBFdXJla2EuYXBwLnRhci5negpFQ2lhZWh3YVZpME9oM2MxME1iSDRsSjNwMk5lbXFnMElXQVAxQW8rTG53amZhR2lJSmNTbSt2Mk9CalJUOWpBQlNRWW1FRW9odmxLM0hxU3pPSGlBdz09Cg==",
+			"url": "https://github.com/tonymushah/special-eureka/releases/download/v0.2.3/Special.Eureka_aarch64.app.tar.gz"
+		},
+		"darwin-aarch64-app": {
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRTkdINzZQMGI4NmF0ZzVkeVI1cGZ2Y3k3UFNyK0NpOUFwSkVUWXhlbVZnS09FSTJheHJrMU41WDZOR0dCYm1qSVBTVC9lM2hVZ2JhM0lUZDgzQkFMaVEwQ1FVdnR0dlFFPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzc0OTY1Nzc5CWZpbGU6U3BlY2lhbCBFdXJla2EuYXBwLnRhci5negpFQ2lhZWh3YVZpME9oM2MxME1iSDRsSjNwMk5lbXFnMElXQVAxQW8rTG53amZhR2lJSmNTbSt2Mk9CalJUOWpBQlNRWW1FRW9odmxLM0hxU3pPSGlBdz09Cg==",
+			"url": "https://github.com/tonymushah/special-eureka/releases/download/v0.2.3/Special.Eureka_aarch64.app.tar.gz"
+		},
+		"linux-x86_64": {
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRTkdINzZQMGI4NlFQOFF6VlRrclZzZUZHeXR6MFRCQXdIek9FN2xhLzM4aThITFFKUjBPaWk2OWNJazllRzl1M013cEZ4S2huS1RYZnYxMEtqVm81Slk1VjFRUFY0ZWdNPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzc0OTY1OTEyCWZpbGU6U3BlY2lhbCBFdXJla2FfMC4yLjNfYW1kNjQuQXBwSW1hZ2UudGFyLmd6Ck1iTkpTSHpISDJXNERRTmRGeGRwYmpUNmNWRCs4MHRlTklnZ3VZRnd5SDRkN2djd05YMnJRUDNqWGowdVhpZFZoOGkzNlJSRHdUaTM5R1lCdnFkNkNBPT0K",
+			"url": "https://github.com/tonymushah/special-eureka/releases/download/v0.2.3/Special.Eureka_0.2.3_amd64.AppImage.tar.gz"
+		},
+		"linux-x86_64-appimage": {
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRTkdINzZQMGI4NmVpOHlUOGJsQkRpZ1dENnZVeUpjOEdtR09ucXU4ZGhzTnB6djlreWp5enk0TE9qUWF2cmxOTmR1OGF3anZqTkdnb3g0Z0Nicm5ZU1BBRlNmOFFmcWdrPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzc0OTY1OTEyCWZpbGU6U3BlY2lhbCBFdXJla2FfMC4yLjNfYW1kNjQuQXBwSW1hZ2UKbW5VTTNEbWduRHY4ZjV6SnMvUGVmeVVPY0NXVWUrN3VSWHJOMExWMkkwNk9DdFpSeDgrQmJ1NXVTUXcrZUFVdnprZTZmVWFaa25QYnlEYmRSSWFiQVE9PQo=",
+			"url": "https://github.com/tonymushah/special-eureka/releases/download/v0.2.3/Special.Eureka_0.2.3_amd64.AppImage"
+		},
+		"linux-x86_64-deb": {
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRTkdINzZQMGI4Nll6bzA3ZnJQSG1tandUM3ZtSHVwbVBPS2Y2TTZab3YzT3BDcTF0a3BNck84U3p5dXpQVnNCalIrc1V5aG5Qa3hGSG1oZXhMYk1UUHNuZTNmVTVCU2dNPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzc0OTY1OTEyCWZpbGU6U3BlY2lhbCBFdXJla2FfMC4yLjNfYW1kNjQuZGViClFLL05MdUg3SW9OVExyQUtPcisvRDhQVmxDeEFiUnl2dVZhNkpTWWpIVlNSaTk1a09kTytSSTBsZVdqYUJoVndidS9tY1JaTEZQOTI4NG5PU2VsWkRnPT0K",
+			"url": "https://github.com/tonymushah/special-eureka/releases/download/v0.2.3/Special.Eureka_0.2.3_amd64.deb"
+		},
+		"linux-x86_64-rpm": {
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRTkdINzZQMGI4Nlk1TEgzRE9nOFdRS09Dbll1TEx0enErNTdtbHFEZU51MTFxbTZvenFBNHJPc0hOL2xmbFJqRDA3Z0V3dkZ0b3l4NFVCU0FJcHBSSkNQWVo2d3kyM2dBPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzc0OTY1OTEyCWZpbGU6U3BlY2lhbCBFdXJla2EtMC4yLjMtMS54ODZfNjQucnBtClpRZXpGQWRrVTBsdTRad3FwWk5jODJ5M2Z1KzBHN2JIeE51dHVNWkRQck96ZXMzZXdmdjhWeGcvZ1ZHNFNQY0tNTW14MmtCbllQQmNLMjY5Rzg0UkFBPT0K",
+			"url": "https://github.com/tonymushah/special-eureka/releases/download/v0.2.3/Special.Eureka-0.2.3-1.x86_64.rpm"
+		},
+		"windows-x86_64": {
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRTkdINzZQMGI4NlVwRDdkR2RTcERWck84RGpJQlJUQVl4V0VwRktOMTFlMVdwc2NRUXcrUk5YQzJ1akNCYWNVVHp3YUZiUDF2Rk1rSTlMU0VUbGlHbzU5WUZudDJ3OVEwPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzc0OTY2NTY5CWZpbGU6U3BlY2lhbCBFdXJla2FfMC4yLjNfeDY0X2VuLVVTLm1zaS56aXAKcWtYZkxuREt4bzhmZzdwN2JsYWE0UzJQbWRDNFhxeS9pdm1JdFViOTZZVzIvTmxqbzZLb2IybDY0N1V4M011M0ZvVmRUcDZkUFdic2g1MllHcUtpQ3c9PQo=",
+			"url": "https://github.com/tonymushah/special-eureka/releases/download/v0.2.3/Special.Eureka_0.2.3_x64_en-US.msi.zip"
+		},
+		"windows-x86_64-msi": {
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRTkdINzZQMGI4NlpNWUNGeGFuK0NQOWpJNjhUNy9TRWRXNWFTSnIyclh1aUFoQWJiMGJsVS9DLzY1Ri80WHM0dk84YzBkbmlQaTJ1UDdYY3FMdDNva1N2ZGEzd1llZGdFPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzc0OTY2NTY5CWZpbGU6U3BlY2lhbCBFdXJla2FfMC4yLjNfeDY0X2VuLVVTLm1zaQovd1AvVzBoZlNJVEJaOFhXWm9kUzgyZGhkTUpBdUlQR1dVbGlWUTN0WXluU21VdXVJeTlleEdkcUxxM1FVa2tMa0xCc3VSMC9jVXV4VDZxc0F6R3VDdz09Cg==",
+			"url": "https://github.com/tonymushah/special-eureka/releases/download/v0.2.3/Special.Eureka_0.2.3_x64_en-US.msi"
+		},
+		"windows-x86_64-nsis": {
+			"signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRTkdINzZQMGI4NlpJYjJCdkdqNG5lNXFueVVIR2RlYm1QRmhBcDNyaUFRemVxZXJCd0tQMndocm5lQkpGME5XV1p1MGczVk5VbkFCdU02QU90SWo5anlsS3crcm0rRFFZPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzc0OTY2NTY5CWZpbGU6U3BlY2lhbCBFdXJla2FfMC4yLjNfeDY0LXNldHVwLmV4ZQpYYWN4NzdGNG1VdGN0V1M5blFqak9keFR4K2FFL09ROWFRYWxHNXdFRTlPMVU3UmQxNWFVUU94emQ0OFd6ZFlmVkpxd2JmbVFIM3lJVExaT1Q0Z3NDQT09Cg==",
+			"url": "https://github.com/tonymushah/special-eureka/releases/download/v0.2.3/Special.Eureka_0.2.3_x64-setup.exe"
+		}
+	}
 }

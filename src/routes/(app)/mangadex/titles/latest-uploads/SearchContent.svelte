@@ -11,13 +11,18 @@
 	import pageLimit from "@mangadex/stores/page-limit";
 	import type AbstractSearchResult from "@mangadex/utils/searchResult/AbstractSearchResult";
 	import chapterThreadsFromChapterFeedQuery from "@mangadex/utils/threads/feed";
-	import { createInfiniteQuery, type CreateInfiniteQueryOptions } from "@tanstack/svelte-query";
+	import {
+		createInfiniteQuery,
+		type CreateInfiniteQueryOptions,
+	} from "@tanstack/svelte-query";
 	import { openUrl } from "@tauri-apps/plugin-opener";
 	import { getContextClient } from "@urql/svelte";
 	import { debounce } from "lodash";
 	import { onDestroy } from "svelte";
 	import { derived } from "svelte/store";
-	import executeSearchQuery, { type LatestUploadsParams as Params } from "./search";
+	import executeSearchQuery, {
+		type LatestUploadsParams as Params,
+	} from "./search";
 	import { createForumThread } from "@mangadex/stores/create-forum-thread";
 	import { ForumThreadType } from "@mangadex/gql/graphql";
 	import { addErrorToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
@@ -39,13 +44,13 @@
 					return {
 						...lastPageParam,
 						offset: next_offset,
-						limit
+						limit,
 					};
 				}
 			},
 			initialPageParam: {
-				limit: $limit
-			} satisfies Params
+				limit: $limit,
+			} satisfies Params,
 		} satisfies CreateInfiniteQueryOptions<
 			AbstractSearchResult<ChapterFeedListItemExt>,
 			Error,
@@ -75,8 +80,8 @@
 			}
 		},
 		{
-			threshold: 0.2
-		}
+			threshold: 0.2,
+		},
 	);
 	onDestroy(() => {
 		observer.disconnect();
@@ -102,8 +107,8 @@
 			const id = e.id;
 			goto(
 				route("/mangadex/title/[id]", {
-					id
-				})
+					id,
+				}),
 			);
 		}}
 		oncomments={({ id }) => {
@@ -114,7 +119,7 @@
 				createForumThreadMutation.mutate(
 					{
 						id: id,
-						threadType: ForumThreadType.Chapter
+						threadType: ForumThreadType.Chapter,
 					},
 					{
 						onError(error) {
@@ -122,8 +127,8 @@
 						},
 						onSuccess(data) {
 							openUrl(data.forumUrl);
-						}
-					}
+						},
+					},
 				);
 			}
 		}}

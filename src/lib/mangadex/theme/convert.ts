@@ -1,4 +1,5 @@
-import type { MangaDexTheme, MangaDexThemeInput } from "@mangadex/gql/graphql";
+import type { MangaDexThemeInput } from "@mangadex/gql/graphql";
+import type { MangaDexTheme } from "./graphql";
 import type { MangadexTheme as IMangaDexTheme } from "./index";
 
 export function IThemeToGqlThemeInput(theme: IMangaDexTheme): MangaDexThemeInput {

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import FormInput from "@mangadex/componnents/theme/form/input/FormInput.svelte";
-	import type { InputMaybe } from "@mangadex/gql/graphql";
+	import type { InputMaybe } from "$lib";
 	import FilterLayout from "./FilterLayout.svelte";
 
 	interface Props {
@@ -14,7 +14,7 @@
 	<FormInput
 		bind:value={objectId}
 		inputProps={{
-			id: "report-object-id-filter"
+			id: "report-object-id-filter",
 		}}
 	/>
 </FilterLayout>

@@ -1,9 +1,31 @@
 import { sveltekit } from "@sveltejs/kit/vite";
-import { defineConfig, searchForWorkspaceRoot } from "vite";
 import { ViteImageOptimizer } from "vite-plugin-image-optimizer";
 import { kitRoutes } from "vite-plugin-kit-routes";
+import { defineConfig, searchForWorkspaceRoot } from "vite-plus";
 
 export default defineConfig({
+	lint: { options: { typeAware: true, typeCheck: true } },
+	fmt: {
+		useTabs: true,
+		singleQuote: false,
+		trailingComma: "none",
+		printWidth: 100,
+		sortPackageJson: false,
+		ignorePatterns: [
+			"pnpm-lock.yaml",
+			"package-lock.json",
+			"yarn.lock",
+			"/src-tauri",
+			"/target",
+			"crates",
+			"src/lib/ROUTES.ts",
+			"src/lib/mangadex/schemas.graphqls",
+			"Cargo.toml",
+			"Cargo.lock",
+			".github",
+			"*.graphqls"
+		]
+	},
 	plugins: [sveltekit(), kitRoutes(), ViteImageOptimizer()],
 	optimizeDeps: {
 		exclude: ["@urql/svelte", "@urql/core"]

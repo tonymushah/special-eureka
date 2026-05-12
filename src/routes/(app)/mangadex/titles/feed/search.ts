@@ -11,6 +11,7 @@ import AbstractSearchResult, {
 	type PaginationData
 } from "@mangadex/utils/searchResult/AbstractSearchResult";
 import get_chapters_stats from "@mangadex/utils/statistics/chapter/query";
+import { transformToStringRecord } from "@mangadex/utils/transformToStringRecord";
 import type { Client } from "@urql/svelte";
 import { query } from "./query";
 
@@ -106,7 +107,7 @@ export default async function executeSearchQuery(
 					mangaId: e.manga.id,
 					title:
 						get_value_from_title_and_random_if_undefined(
-							e.manga.attributes.title,
+							transformToStringRecord(e.manga.attributes.title),
 							"en"
 						) ?? e.manga.id,
 					coverImageAlt: e.manga.relationships.coverArt.id,
@@ -141,9 +142,7 @@ export default async function executeSearchQuery(
 							chapterId: chap.id,
 							title,
 							lang: chap.attributes.translatedLanguage,
-							upload_date: new Date(
-								chap.attributes.readableAt ?? chap.attributes.createdAt
-							),
+							upload_date: new Date(chap.attributes.readableAt ?? chap.attributes.createdAt),
 							uploader: {
 								id: user.id,
 								name: user.attributes.username,

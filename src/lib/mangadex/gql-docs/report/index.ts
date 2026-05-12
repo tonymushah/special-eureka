@@ -4,6 +4,23 @@ import { client } from "@mangadex/gql/urql";
 import { mangadexQueryClient } from "@mangadex/index";
 import { createInfiniteQuery, createMutation, createQuery } from "@tanstack/svelte-query";
 
+export const ReportAttributesFrag = graphql(`
+	fragment ReportAttributesFrag on ReportAttributes {
+		details
+		objectId
+		status
+		createdAt
+	}
+`);
+
+export const ReportReasonAttributesFrag = graphql(`
+	fragment ReportReasonAttributesFrag on ReportReasonAttributes {
+		reason
+		category
+		detailsRequired
+	}
+`);
+
 export const currentUserReports = graphql(`
 	query currentUserReports($params: ListReportParams) {
 		report {
@@ -14,10 +31,7 @@ export const currentUserReports = graphql(`
 				data {
 					id
 					attributes {
-						details
-						objectId
-						status
-						createdAt
+						...ReportAttributesFrag
 					}
 				}
 			}
@@ -32,9 +46,7 @@ export const currentUserReportReason = graphql(`
 				data {
 					id
 					attributes {
-						reason
-						category
-						detailsRequired
+						...ReportReasonAttributesFrag
 					}
 				}
 				limit

@@ -1,15 +1,22 @@
-import { graphql } from "@mangadex/gql/exports";
-import type { ClientInfo } from "@mangadex/gql/graphql";
+import type { ResultOf } from "@graphql-typed-document-node/core";
+import { graphql, useFragment } from "@mangadex/gql/exports";
 import { client } from "@mangadex/gql/urql";
 import type { Client } from "@urql/svelte";
 import { get, readable, type Writable } from "svelte/store";
-import { v4 } from "uuid";
+
+export const ClientInfoFrag = graphql(`
+	fragment ClientInfoFrag on ClientInfo {
+		clientId
+		clientSecret
+	}
+`);
+
+export type ClientInfo = ResultOf<typeof ClientInfoFrag>;
 
 export const subscription = graphql(`
 	subscription currentClientInfo {
 		watchClientInfo {
-			clientSecret
-			clientId
+			...ClientInfoFrag
 		}
 	}
 `);
@@ -33,7 +40,7 @@ export const clearMutation = graphql(`
 const clientInfoReadable = readable<ClientInfo | undefined>(undefined, (set) => {
 	const sub = client.subscription(subscription, {}).subscribe((info) => {
 		if (info.data?.watchClientInfo) {
-			set(info.data.watchClientInfo);
+			set(useFragment(ClientInfoFrag, info.data.watchClientInfo));
 		} else {
 			set(undefined);
 		}

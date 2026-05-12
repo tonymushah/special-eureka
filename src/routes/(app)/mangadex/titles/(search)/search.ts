@@ -4,6 +4,7 @@ import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/g
 import AbstractSearchResult, {
 	type PaginationData
 } from "@mangadex/utils/searchResult/AbstractSearchResult";
+import { transformToStringRecord } from "@mangadex/utils/transformToStringRecord";
 import type { Client } from "@urql/svelte";
 import { defaultQuery, offlineQuery } from "./query";
 
@@ -104,12 +105,12 @@ export default async function executeSearchQuery(
 						contentRating: contentRating != null ? contentRating : undefined,
 						description:
 							get_value_from_title_and_random_if_undefined(
-								v.attributes.description,
+								transformToStringRecord(v.attributes.description),
 								"en"
 							) ?? "",
 						title:
 							get_value_from_title_and_random_if_undefined(
-								v.attributes.title,
+								transformToStringRecord(v.attributes.title),
 								"en"
 							) ?? "",
 						coverImageAlt: v.relationships.coverArt.id,
@@ -118,7 +119,7 @@ export default async function executeSearchQuery(
 							id: tag.id,
 							name:
 								get_value_from_title_and_random_if_undefined(
-									tag.attributes.name,
+									transformToStringRecord(tag.attributes.name),
 									"en"
 								) ?? ""
 						})),
@@ -155,12 +156,12 @@ export default async function executeSearchQuery(
 						contentRating: contentRating != null ? contentRating : undefined,
 						description:
 							get_value_from_title_and_random_if_undefined(
-								v.attributes.description,
+								transformToStringRecord(v.attributes.description),
 								"en"
 							) ?? "",
 						title:
 							get_value_from_title_and_random_if_undefined(
-								v.attributes.title,
+								transformToStringRecord(v.attributes.title),
 								"en"
 							) ?? "",
 						coverImageAlt: v.relationships.coverArt.id,
@@ -169,7 +170,7 @@ export default async function executeSearchQuery(
 							id: tag.id,
 							name:
 								get_value_from_title_and_random_if_undefined(
-									tag.attributes.name,
+									transformToStringRecord(tag.attributes.name),
 									"en"
 								) ?? ""
 						})),

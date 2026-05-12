@@ -1,9 +1,16 @@
 <script lang="ts">
-	import { ReportCategory, type InputMaybe } from "@mangadex/gql/graphql";
+	import type{InputMaybe} from "$lib";
+	import { ReportCategory } from "@mangadex/gql/graphql";
 	import { XIcon as CloseIcon } from "@lucide/svelte";
 	import {
 		createReportReasonListQuery,
-		createSendReportMutation
+		createSendReportMutation,
+
+		ReportAttributesFrag,
+
+		ReportReasonAttributesFrag
+
+
 	} from "@mangadex/gql-docs/report";
 	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
 	import PrimaryButton from "@mangadex/componnents/theme/buttons/PrimaryButton.svelte";
@@ -13,6 +20,8 @@
 	import MangaDexVarThemeProvider from "@mangadex/componnents/theme/MangaDexVarThemeProvider.svelte";
 	import cssMod from "./report-dialog.module.scss";
 	import cssDialogMod from "@mangadex/componnents/theme/dialog/dialog.module.scss";
+	import { transformToStringRecord } from "@mangadex/utils/transformToStringRecord";
+	import { useFragment } from "@mangadex/gql";
 	interface Props {
 		category: ReportCategory;
 		open?: boolean;
@@ -72,14 +81,15 @@
 									<option value={null}>Any</option>
 									{#if reasons.isSuccess}
 										{#each reasons.data as reason}
+											{@const attributes = useFragment(ReportReasonAttributesFrag, reason.attributes)}
 											<option
 												value={{
 													id: reason.id,
 													detailRequired:
-														reason.attributes.detailsRequired
+														attributes.detailsRequired
 												} as ReasonState}
 												>{get_value_from_title_and_random_if_undefined(
-													reason.attributes.reason,
+													transformToStringRecord(attributes.reason),
 													"key"
 												)}</option
 											>
@@ -106,12 +116,13 @@
 							<section class="buttons">
 								<PrimaryButton
 									onclick={() => {
+										if(reason){
 										mutation.mutate(
 											{
 												objectId,
 												category,
 												details,
-												reason: reason?.id
+												reason: reason.id
 											},
 											{
 												onSuccess() {
@@ -125,7 +136,7 @@
 													addErrorToast("cannot send report", error);
 												}
 											}
-										);
+										);}
 									}}
 									isBase
 									disabled={mutation.isPending ||

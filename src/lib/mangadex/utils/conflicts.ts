@@ -1,4 +1,9 @@
+import {
+	ContentProfileItemFragment,
+	type ContentProfileItemFragmentType as ContentProfile
+} from "@mangadex/content-profile/graphql/";
 import { query as defaultProfileQuery } from "@mangadex/content-profile/graphql/defaultProfile/query";
+import { useFragment } from "@mangadex/gql";
 import isInLibrary, {
 	isInLibrarySync,
 	isInLibraryUnlessDropped,
@@ -11,12 +16,13 @@ import {
 	Language,
 	MangaState,
 	MangaStatus,
-	ReadingStatus,
-	type ContentProfile
+	ReadingStatus
 } from "@mangadex/gql/graphql";
 import getContentProfileWarningMode from "@mangadex/utils/contentProfileWarningMode";
 import type { Tag } from "@mangadex/utils/types/Tag";
 import type { Client } from "@urql/svelte";
+import get_value_from_title_and_random_if_undefined from "./lang/get_value_from_title_and_random_if_undefined";
+import { transformToStringRecord } from "./transformToStringRecord";
 
 export type ContentProfileConflicts = {
 	tags: Tag[];
@@ -43,7 +49,10 @@ export default async function getTitleConflicts({
 		.toPromise()
 		.then((res) => {
 			if (res.data) {
-				return res.data.userOption.getDefaultContentProfile;
+				return useFragment(
+					ContentProfileItemFragment,
+					res.data.userOption.getDefaultContentProfile
+				);
 			}
 			if (res.error) {
 				throw res.error;
@@ -52,7 +61,11 @@ export default async function getTitleConflicts({
 		});
 	const tags = title.attributes.tags.map<Tag>((t) => ({
 		id: t.id,
-		name: t.attributes.name.en
+		name:
+			get_value_from_title_and_random_if_undefined(
+				transformToStringRecord(t.attributes.name),
+				"en"
+			) ?? t.id
 	}));
 	const warningMode = await getContentProfileWarningMode(client);
 	switch (warningMode) {
@@ -96,8 +109,7 @@ export default async function getTitleConflicts({
 		tags: excludedTags,
 		originalLanguage:
 			($profile.originalLanguages.some((value) => originalLanguage == value) == false ||
-				$profile.excludedOriginalLanguage.some((value) => originalLanguage == value) ==
-					true) &&
+				$profile.excludedOriginalLanguage.some((value) => originalLanguage == value) == true) &&
 			$profile.originalLanguages.length != 0 &&
 			$profile.excludedOriginalLanguage.length != 0
 				? originalLanguage
@@ -107,8 +119,8 @@ export default async function getTitleConflicts({
 				? status
 				: undefined,
 		publicationDemographic:
-			$profile.publicationDemographic.some((value) => value == publicationDemographic) ==
-				false && $profile.publicationDemographic.length != 0
+			$profile.publicationDemographic.some((value) => value == publicationDemographic) == false &&
+			$profile.publicationDemographic.length != 0
 				? publicationDemographic
 				: undefined,
 		contentRating:
@@ -144,32 +156,26 @@ export function hasConflicts(conflicts: ContentProfileConflicts | null): boolean
 }
 
 export type MaybeConflictedTitle = {
-	__typename?: "MangaObject";
-	id: any;
+	id: string;
 	attributes: {
-		__typename?: "GraphQLMangaAttributes";
-		title: any;
+		title: Record<string, unknown>;
 		status: MangaStatus;
 		state: MangaState;
 		originalLanguage: Language;
 		contentRating?: ContentRating | null;
 		publicationDemographic?: Demographic | null;
 		tags: Array<{
-			__typename?: "Tag";
-			id: any;
+			id: string;
 			attributes: {
-				__typename?: "TagAttributes";
-				name: any;
+				name: Record<string, unknown>;
 			};
 		}>;
 	};
 	relationships?: {
-		__typename?: "MangaRelationships";
 		authorArtists: Array<{
-			__typename?: "Author";
-			id: any;
+			id: string;
 			isBlocked: boolean;
-			attributes: { __typename?: "AuthorAttributes"; name: string };
+			attributes: { name: string };
 		}>;
 	};
 };
@@ -189,7 +195,11 @@ export function getTitleConflictsSync({
 }: GetTitleConflictsSyncParams): ContentProfileConflicts | null {
 	const tags = title.attributes.tags.map<Tag>((t) => ({
 		id: t.id,
-		name: t.attributes.name.en
+		name:
+			get_value_from_title_and_random_if_undefined(
+				transformToStringRecord(t.attributes.name),
+				"en"
+			) ?? t.id
 	}));
 	switch (warningMode) {
 		case ContentProfileWarningMode.Never:
@@ -224,8 +234,7 @@ export function getTitleConflictsSync({
 		tags: excludedTags,
 		originalLanguage:
 			($profile.originalLanguages.some((value) => originalLanguage == value) == false ||
-				$profile.excludedOriginalLanguage.some((value) => originalLanguage == value) ==
-					true) &&
+				$profile.excludedOriginalLanguage.some((value) => originalLanguage == value) == true) &&
 			$profile.originalLanguages.length != 0 &&
 			$profile.excludedOriginalLanguage.length != 0
 				? originalLanguage
@@ -235,8 +244,8 @@ export function getTitleConflictsSync({
 				? status
 				: undefined,
 		publicationDemographic:
-			$profile.publicationDemographic.some((value) => value == publicationDemographic) ==
-				false && $profile.publicationDemographic.length != 0
+			$profile.publicationDemographic.some((value) => value == publicationDemographic) == false &&
+			$profile.publicationDemographic.length != 0
 				? publicationDemographic
 				: undefined,
 		contentRating:

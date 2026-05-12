@@ -13,12 +13,18 @@
 	import { onMount, type ComponentProps } from "svelte";
 	import CategorizedTitles from "./CategorizedTitles.svelte";
 	import getRelatedTitlesDataQuery from "./utils/query";
-	import { getRelatedTitlesStoreContext, type RelatedTitle } from "./utils/relatedTitleStore";
+	import {
+		getRelatedTitlesStoreContext,
+		type RelatedTitle,
+	} from "./utils/relatedTitleStore";
+	import { transformToStringRecord } from "@mangadex/utils/transformToStringRecord";
 
 	const client = getContextClient();
 	const store = getRelatedTitlesStoreContext();
 	const titleLayoutDataCtx = getTitleLayoutData();
-	let titles = $derived(titleLayoutDataCtx.value.queryResult?.relationships.manga);
+	let titles = $derived(
+		titleLayoutDataCtx.value.queryResult?.relationships.manga,
+	);
 	let manga_id = $derived(titleLayoutDataCtx.value.layoutData.id as string);
 	const relatedTitles = new Map<MangaRelation, string[]>();
 	let categories: ComponentProps<typeof CategorizedTitles>[] = $state([]);
@@ -30,7 +36,7 @@
 			const ids = titles?.map<string>((t) => t.id);
 			const res = await client
 				.query(getRelatedTitlesDataQuery, {
-					ids
+					ids,
 				})
 				.toPromise();
 			if (res.error) {
@@ -39,15 +45,21 @@
 			const ts = res.data?.manga.list.data.map<RelatedTitle>((t) => ({
 				id: t.id,
 				coverArtAlt: t.relationships.coverArt.id,
-				title: get_value_from_title_and_random_if_undefined(t.attributes.title, "en") ?? "",
+				title:
+					get_value_from_title_and_random_if_undefined(
+						transformToStringRecord(t.attributes.title),
+						"en",
+					) ?? "",
 				status: t.attributes.status,
 				description:
-					get_value_from_title_and_random_if_undefined(t.attributes.description, "en") ??
-					""
+					get_value_from_title_and_random_if_undefined(
+						transformToStringRecord(t.attributes.description),
+						"en",
+					) ?? "",
 			}));
 			if (ts) store.addTitles(ts);
 			return ts;
-		}
+		},
 	}));
 	let error: Error | undefined = $derived.by(() => {
 		if (query.error != null) {
@@ -77,14 +89,16 @@
 			if (title.length > 0) {
 				res.push({
 					title: loadash.camelCase(k),
-					titles: title.map(({ id, coverArtAlt, title, description, status }) => ({
-						id,
-						coverImageAlt: coverArtAlt,
-						title,
-						description,
-						status,
-						mangaId: id
-					}))
+					titles: title.map(
+						({ id, coverArtAlt, title, description, status }) => ({
+							id,
+							coverImageAlt: coverArtAlt,
+							title,
+							description,
+							status,
+							mangaId: id,
+						}),
+					),
 				});
 			}
 		});
@@ -111,8 +125,8 @@
 			ontitles={({ id }) => {
 				goto(
 					route("/mangadex/title/[id]", {
-						id
-					})
+						id,
+					}),
 				);
 			}}
 		/>

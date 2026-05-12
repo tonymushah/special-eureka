@@ -88,9 +88,7 @@ export default function chapterElementContextMenuItems({
 	} else {
 		items.push(
 			ContextMenuItemProvider.menuItem({
-				text: derived(isDownloaded, (isDownloaded) =>
-					isDownloaded ? "Re-download" : "Download"
-				),
+				text: derived(isDownloaded, (isDownloaded) => (isDownloaded ? "Re-download" : "Download")),
 				action() {
 					using mut = extractFromAccessor(downloadMutation);
 					mut.value.mutateAsync({
@@ -162,10 +160,7 @@ export default function chapterElementContextMenuItems({
 											});
 										})
 										.catch((e) => {
-											addErrorToast(
-												`Cannot add group ${group.name} to the blacklist`,
-												e
-											);
+											addErrorToast(`Cannot add group ${group.name} to the blacklist`, e);
 										});
 								}
 							}),
@@ -180,10 +175,7 @@ export default function chapterElementContextMenuItems({
 											});
 										})
 										.catch((e) => {
-											addErrorToast(
-												`Cannot removed group ${group.name} to the blacklist`,
-												e
-											);
+											addErrorToast(`Cannot removed group ${group.name} to the blacklist`, e);
 										});
 								}
 							}),
@@ -244,10 +236,7 @@ export default function chapterElementContextMenuItems({
 								});
 							})
 							.catch((e) => {
-								addErrorToast(
-									`Cannot add user ${uploader.name} to the blacklist`,
-									e
-								);
+								addErrorToast(`Cannot add user ${uploader.name} to the blacklist`, e);
 							});
 					}
 				}),
@@ -262,10 +251,7 @@ export default function chapterElementContextMenuItems({
 								});
 							})
 							.catch((e) => {
-								addErrorToast(
-									`Cannot remove user ${uploader.name} to the blacklist`,
-									e
-								);
+								addErrorToast(`Cannot remove user ${uploader.name} to the blacklist`, e);
 							});
 					}
 				}),

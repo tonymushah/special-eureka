@@ -1,25 +1,15 @@
-import { graphql } from "@mangadex/gql";
-import type { ContentProfile } from "@mangadex/gql/graphql";
+import { graphql, useFragment } from "@mangadex/gql";
+import type { ContentProfileItemFragment as ContentProfile } from "@mangadex/gql/graphql";
 import { client } from "@mangadex/gql/urql";
 import { derived, get, readable, type Writable } from "svelte/store";
+import { ContentProfileItemFragment } from ".";
 
 export const subscription = graphql(`
 	subscription watchContentProfiles {
 		watchContentProfiles {
 			name
 			value {
-				originalLanguages
-				publicationDemographic
-				includedTags
-				includedTagsMode
-				excludedTags
-				excludedTagsMode
-				status
-				excludedOriginalLanguage
-				translatedLanguages
-				contentRating
-				excludedGroups
-				excludedUploaders
+				...ContentProfileItem
 			}
 		}
 	}
@@ -37,18 +27,7 @@ export const singleUpdateMutation = graphql(`
 	mutation updateContentProfile($name: String!, $entry: ContentProfileInput) {
 		userOption {
 			setContentProfile(name: $name, profile: $entry) {
-				originalLanguages
-				publicationDemographic
-				includedTags
-				includedTagsMode
-				excludedTags
-				excludedTagsMode
-				status
-				excludedOriginalLanguage
-				translatedLanguages
-				contentRating
-				excludedGroups
-				excludedUploaders
+				...ContentProfileItem
 			}
 		}
 	}
@@ -64,7 +43,7 @@ const sub_read = readable(new Map<string, ContentProfile>(), (set) => {
 						.sort((a, b) => {
 							return a.name.localeCompare(b.name);
 						})
-						.map((entry) => [entry.name, entry.value])
+						.map((entry) => [entry.name, useFragment(ContentProfileItemFragment, entry.value)])
 				)
 			);
 		}

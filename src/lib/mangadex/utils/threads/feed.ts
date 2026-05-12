@@ -12,9 +12,7 @@ export default function chapterThreadsFromChapterFeedQuery(
 			const pre_map =
 				query.data?.pages.flatMap((d) =>
 					d.data.flatMap((d) =>
-						d.chapters.map(
-							(c) => [c.chapterId, c.threadUrl] as [string, string | undefined]
-						)
+						d.chapters.map((c) => [c.chapterId, c.threadUrl] as [string, string | undefined])
 					)
 				) ?? [];
 			update((inner) => {

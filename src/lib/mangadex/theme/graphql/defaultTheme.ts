@@ -1,82 +1,15 @@
-import { graphql } from "@mangadex/gql/exports";
-import { get, readable, type Updater, type Writable } from "svelte/store";
-import { custom, type MangadexTheme } from "..";
+import { graphql, useFragment } from "@mangadex/gql/exports";
 import { client } from "@mangadex/gql/urql";
-import { v4 } from "uuid";
-import { GqlThemeToITheme, IThemeToGqlThemeInput } from "../convert";
 import { debounce } from "lodash";
+import { get, readable, type Updater, type Writable } from "svelte/store";
+import { MangaDexThemeFrag } from ".";
+import { custom, type MangadexTheme } from "..";
+import { GqlThemeToITheme, IThemeToGqlThemeInput } from "../convert";
 
 export const subscription = graphql(`
 	subscription defaultThemeProfileSubscription {
 		watchThemeProfileDefault {
-			textColor
-			mainBackground
-			accents {
-				default {
-					default
-					hover
-					active
-				}
-				l1 {
-					default
-					hover
-					active
-				}
-				l2 {
-					default
-					hover
-					active
-				}
-				l3 {
-					default
-					hover
-					active
-				}
-				l4 {
-					default
-					hover
-					active
-				}
-				l5 {
-					default
-					hover
-					active
-				}
-			}
-			midTone
-			contrast {
-				l1
-			}
-			scrollbar {
-				default
-				hovered
-			}
-			button {
-				default
-				alternate
-			}
-			primary {
-				primary
-				primary1
-				primary2
-			}
-			status {
-				red
-				grey
-				green
-				yellow
-				blue
-				grey
-				purple
-			}
-			indication {
-				blue
-			}
-			danger {
-				default
-				l1
-				l2
-			}
+			...MangaDexThemeFrag
 		}
 	}
 `);
@@ -85,85 +18,17 @@ export const mutation = graphql(`
 	mutation updateDefaultTheme($theme: MangaDexThemeInput!) {
 		userOption {
 			updateDefaultTheme(theme: $theme) {
-				textColor
-				mainBackground
-				accents {
-					default {
-						default
-						hover
-						active
-					}
-					l1 {
-						default
-						hover
-						active
-					}
-					l2 {
-						default
-						hover
-						active
-					}
-					l3 {
-						default
-						hover
-						active
-					}
-					l4 {
-						default
-						hover
-						active
-					}
-					l5 {
-						default
-						hover
-						active
-					}
-				}
-				midTone
-				contrast {
-					l1
-				}
-				scrollbar {
-					default
-					hovered
-				}
-				button {
-					default
-					alternate
-				}
-				primary {
-					primary
-					primary1
-					primary2
-				}
-				status {
-					red
-					grey
-					green
-					yellow
-					blue
-					grey
-					purple
-				}
-				indication {
-					blue
-				}
-				danger {
-					default
-					l1
-					l2
-				}
+				...MangaDexThemeFrag
 			}
 		}
 	}
 `);
 
 const readSub = readable<MangadexTheme>(custom, (set) => {
-	const subID = v4();
 	const unsub = client.subscription(subscription, {}).subscribe((res) => {
 		const data = res.data;
 		if (data) {
-			set(GqlThemeToITheme(data.watchThemeProfileDefault));
+			set(GqlThemeToITheme(useFragment(MangaDexThemeFrag, data.watchThemeProfileDefault)));
 		}
 	});
 	return () => {

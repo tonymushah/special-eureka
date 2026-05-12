@@ -1,8 +1,13 @@
 <script lang="ts">
 	import type { AltTitleItem } from "@mangadex/componnents/manga/page/chapters/info/alt-titles/MangaAltTitles.svelte";
-	import Info, { type SimpleItems } from "@mangadex/componnents/manga/page/chapters/Info.svelte";
+	import Info, {
+		type SimpleItems,
+	} from "@mangadex/componnents/manga/page/chapters/Info.svelte";
 	import manga_altTitle_to_lang_map from "@mangadex/utils/lang/record-to-map/manga-altTitle-to-lang-map";
-	import { TagGroup, type MangaLinks } from "@mangadex/gql/graphql";
+	import {
+		TagGroup,
+		type MangaLinksFragFragment,
+	} from "@mangadex/gql/graphql";
 	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
 	import getDemographicName from "@mangadex/utils/demographic/getDemographicName";
 	import LatestChapter from "@mangadex/componnents/manga/page/chapters/info/LatestChapter.svelte";
@@ -10,16 +15,25 @@
 	import { openUrl } from "@tauri-apps/plugin-opener";
 	import { writeText } from "@tauri-apps/plugin-clipboard-manager";
 	import { addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
+	import {
+		transformToStringRecord,
+		transformToStringRecords,
+	} from "@mangadex/utils/transformToStringRecord";
+	import type { ResultOf } from "@graphql-typed-document-node/core";
+	import type { MangaLinksFrag } from "@mangadex/gql-docs/title/links";
+	import type { FragmentType } from "@mangadex/gql";
 
 	const __res = getTitleLayoutData();
 	let data = $derived.by(() => __res.value.queryResult);
-	function buildAtlTitles(altTitle: Record<string, string>[]): AltTitleItem[] {
+	function buildAtlTitles(
+		altTitle: Record<string, string>[],
+	): AltTitleItem[] {
 		let map = manga_altTitle_to_lang_map(altTitle);
 		let output: AltTitleItem[] = [];
 		map.forEach((title, lang) => {
 			output.push({
 				title,
-				lang
+				lang,
 			});
 		});
 		return output;
@@ -31,7 +45,10 @@
 				returns.push({
 					id: v.id,
 					name:
-						get_value_from_title_and_random_if_undefined(v.attributes.name, "en") ?? ""
+						get_value_from_title_and_random_if_undefined(
+							transformToStringRecord(v.attributes.name),
+							"en",
+						) ?? "",
 				});
 			}
 		});
@@ -44,7 +61,10 @@
 				returns.push({
 					id: v.id,
 					name:
-						get_value_from_title_and_random_if_undefined(v.attributes.name, "en") ?? ""
+						get_value_from_title_and_random_if_undefined(
+							transformToStringRecord(v.attributes.name),
+							"en",
+						) ?? "",
 				});
 			}
 		});
@@ -57,8 +77,8 @@
 			return [
 				{
 					id: demographic,
-					name: getDemographicName(demographic)
-				}
+					name: getDemographicName(demographic),
+				},
 			];
 		} else {
 			return [];
@@ -71,7 +91,10 @@
 				returns.push({
 					id: v.id,
 					name:
-						get_value_from_title_and_random_if_undefined(v.attributes.name, "en") ?? ""
+						get_value_from_title_and_random_if_undefined(
+							transformToStringRecord(v.attributes.name),
+							"en",
+						) ?? "",
 				});
 			}
 		});
@@ -84,21 +107,30 @@
 				returns.push({
 					id: v.id,
 					name:
-						get_value_from_title_and_random_if_undefined(v.attributes.name, "en") ?? ""
+						get_value_from_title_and_random_if_undefined(
+							transformToStringRecord(v.attributes.name),
+							"en",
+						) ?? "",
 				});
 			}
 		});
 		return returns;
 	}
-	function getLinks(d: typeof data): MangaLinks | undefined {
+	function getLinks(
+		d: typeof data,
+	): FragmentType<typeof MangaLinksFrag> | undefined {
 		const links = d?.attributes.links;
-		if (links == null) {
-			return undefined;
-		} else {
+		if (links) {
 			return links;
+		} else {
+			return undefined;
 		}
 	}
-	let altTitles = $derived(buildAtlTitles(data?.attributes.altTitles ?? []));
+	let altTitles = $derived(
+		buildAtlTitles(
+			transformToStringRecords(data?.attributes.altTitles ?? []),
+		),
+	);
 
 	let genres = $derived(getGenres(data));
 
@@ -121,11 +153,11 @@
 	{altTitles}
 	authors={data?.relationships.authors.map((a) => ({
 		id: a.id,
-		name: a.attributes.name
+		name: a.attributes.name,
 	}))}
 	artists={data?.relationships.artists.map((a) => ({
 		id: a.id,
-		name: a.attributes.name
+		name: a.attributes.name,
 	}))}
 	{genres}
 	{links}
@@ -148,7 +180,7 @@
 				e.stopPropagation();
 				writeText(data.id).then(() => {
 					addToast({
-						title: "Title ID copied!"
+						title: "Title ID copied!",
 					});
 				});
 			}}

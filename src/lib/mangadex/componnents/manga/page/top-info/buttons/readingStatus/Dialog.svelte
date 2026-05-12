@@ -29,16 +29,16 @@
 		dialog = $bindable(),
 		closeDialogOnAdd,
 		onreadingStatus,
-		disabled
+		disabled,
 	}: Props = $props();
 
 	const selectedStatus = toStore<ReadingStatus | undefined>(
 		() => status,
-		(s) => (status = s)
+		(s) => (status = s),
 	);
 	const selectedIsFollowing = toStore(
 		() => isFollowing,
-		(i) => (isFollowing = i)
+		(i) => (isFollowing = i),
 	);
 
 	function closeDialog() {
@@ -61,11 +61,14 @@
 		</div>
 		<div class="content">
 			<div class="top">
-				<h3>{title}</h3>
+				<h3>{title.value}</h3>
 				<h4>Reading Status</h4>
 				<div class="form">
 					<StatusSelect {disabled} readingStatus={selectedStatus} />
-					<IsFollowingButton isFollowing={selectedIsFollowing} {disabled} />
+					<IsFollowingButton
+						isFollowing={selectedIsFollowing}
+						{disabled}
+					/>
 				</div>
 			</div>
 			<div class="bottom">
@@ -78,7 +81,7 @@
 						onreadingStatus?.({
 							readingStatus: $selectedStatus,
 							isFollowing: $selectedIsFollowing,
-							closeDialog
+							closeDialog,
 						});
 						if (closeDialogOnAdd == true) {
 							closeDialog();
@@ -104,7 +107,11 @@
 	dialog::backdrop {
 		backdrop-filter: blur(10px);
 		-webkit-backdrop-filter: blur(10px);
-		background-color: color-mix(in srgb, var(--main-background) 50%, transparent 50%);
+		background-color: color-mix(
+			in srgb,
+			var(--main-background) 50%,
+			transparent 50%
+		);
 	}
 	.title {
 		justify-content: space-between;

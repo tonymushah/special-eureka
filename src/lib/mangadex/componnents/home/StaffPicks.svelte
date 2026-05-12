@@ -10,6 +10,7 @@
 	import HomeErrorComponnent from "./utils/HomeErrorComponnent.svelte";
 	import PopularTitleSpinner from "./utils/PopularTitleSpinner.svelte";
 	import TopTitle from "./utils/TopTitle.svelte";
+	import { transformToStringRecord } from "@mangadex/utils/transformToStringRecord";
 
 	const client = getContextClient();
 	let staff_picks = createQuery(() => ({
@@ -23,23 +24,31 @@
 			} else {
 				throw new Error("no data??");
 			}
-		}
+		},
 	}));
 	let treatedData = $derived.by(() => {
-		return staff_picks.data?.home.staffPicks.relationships.titles.map<StaffPicksTitle>((t) => {
-			const manga_id: string = t.id;
-			const cover_id: string = t.relationships.coverArt.id;
-			const title =
-				get_value_from_title_and_random_if_undefined(t.attributes.title, "en") ?? "";
-			const description =
-				get_value_from_title_and_random_if_undefined(t.attributes.description, "en") ?? "";
-			return {
-				id: manga_id,
-				coverImageAlt: cover_id,
-				title,
-				description
-			};
-		});
+		return staff_picks.data?.home.staffPicks.relationships.titles.map<StaffPicksTitle>(
+			(t) => {
+				const manga_id: string = t.id;
+				const cover_id: string = t.relationships.coverArt.id;
+				const title =
+					get_value_from_title_and_random_if_undefined(
+						transformToStringRecord(t.attributes.title),
+						"en",
+					) ?? "";
+				const description =
+					get_value_from_title_and_random_if_undefined(
+						transformToStringRecord(t.attributes.description),
+						"en",
+					) ?? "";
+				return {
+					id: manga_id,
+					coverImageAlt: cover_id,
+					title,
+					description,
+				};
+			},
+		);
 	});
 	onMount(() => {
 		return defaultContentProfile.subscribe(() => {

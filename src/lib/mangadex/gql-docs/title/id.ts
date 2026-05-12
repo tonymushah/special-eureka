@@ -21,19 +21,7 @@ const query = graphql(/* GraphQL */ `
 					availableTranslatedLanguages
 					originalLanguage
 					links {
-						hasNoLinks
-						amazon
-						anilist
-						animePlanet
-						bookWalker
-						cdJapan
-						ebookJapan
-						englishTranslation
-						kitsu
-						mangaUpdates
-						myAnimeList
-						novelUpdates
-						raw
+						...MangaLinksFrag
 					}
 					tags {
 						id

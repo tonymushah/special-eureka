@@ -1,4 +1,7 @@
-import type { ReportAttributes } from "@mangadex/gql/graphql";
+import type { ResultOf } from "@graphql-typed-document-node/core";
+import type { ReportAttributesFrag } from "@mangadex/gql-docs/report";
+
+type ReportAttributes = ResultOf<typeof ReportAttributesFrag>;
 
 // TODO migrate as store
 export enum ReportStatusMode {
@@ -8,4 +11,6 @@ export enum ReportStatusMode {
 
 export type ReportData = {
 	id: string;
-} & ReportAttributes;
+} & Omit<ReportAttributes, "createdAt"> & {
+		createdAt: Date | string;
+	};

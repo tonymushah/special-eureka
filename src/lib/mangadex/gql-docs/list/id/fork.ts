@@ -1,5 +1,6 @@
+import type { InputMaybe } from "$lib";
 import { graphql } from "@mangadex/gql/gql";
-import type { CustomListVisibility, InputMaybe } from "@mangadex/gql/graphql";
+import type { CustomListVisibility } from "@mangadex/gql/graphql";
 import { client } from "@mangadex/gql/urql";
 import { mangadexQueryClient } from "@mangadex/index";
 import { createMutation } from "@tanstack/svelte-query";
@@ -37,12 +38,7 @@ export const forkCustomListMutation = () =>
 	createMutation(
 		() => ({
 			mutationKey: ["customList", "fork"],
-			async mutationFn({
-				toFork,
-				visibility,
-				filter,
-				name
-			}: ForkCustomListMutationVariables) {
+			async mutationFn({ toFork, visibility, filter, name }: ForkCustomListMutationVariables) {
 				const res = await client
 					.mutation(forkMGQLMutation, {
 						toFork,

@@ -13,42 +13,21 @@ script = { file = "./scripts/upx-release.ds" }
 [tasks.clippy-fast]
 workspace = false
 command = "cargo"
-args = [
-	"clippy", 
-	"--profile",
-	"clippy-fast"
-]
+args = ["clippy", "--profile", "clippy-fast"]
 
 [tasks.clippy-fast-ci]
 workspace = false
 command = "cargo"
-args = [
-	"clippy", 
-	"--profile",
-	"clippy-fast",
-	"--",
-	"-D",
-	"clippy::perf",
-	"-D",
-	"clippy::style"
-]
+args = ["clippy", "--profile", "clippy-fast", "--", "-D", "clippy::perf", "-D", "clippy::style"]
 
 [tasks.run-workspace-tests]
 workspace = false
 command = "cargo"
-args = [
-	"test", 
-	"--workspace", 
-	"--tests",
-	"--profile",
-	"clippy-fast"
-]
+args = ["test", "--workspace", "--tests", "--profile", "clippy-fast"]
 
 [tasks.fmt-rust]
 command = "cargo"
-args = [
-	"fmt"
-]
+args = ["fmt"]
 
 [tasks.fmt-js-svelte]
 workspace = false

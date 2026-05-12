@@ -1,4 +1,5 @@
-import type { InputMaybe, InternUploadSessionCommitDataInput } from "@mangadex/gql/graphql";
+import { type InputMaybe } from "$lib";
+import type { InternUploadSessionCommitDataInput } from "@mangadex/gql/graphql";
 import { client } from "@mangadex/gql/urql";
 import { mangadexQueryClient } from "@mangadex/index";
 import { createMutation } from "@tanstack/svelte-query";
@@ -18,10 +19,7 @@ export function setInternalSessionCommitDataMutation() {
 				startRunner?: boolean;
 			}) {
 				let externalUrl: InputMaybe<string>;
-				if (
-					typeof commitData.externalUrl == "string" &&
-					commitData.externalUrl.length != 0
-				) {
+				if (typeof commitData.externalUrl == "string" && commitData.externalUrl.length != 0) {
 					externalUrl = commitData.externalUrl;
 				} else {
 					externalUrl = null;

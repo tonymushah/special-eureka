@@ -3,12 +3,11 @@
 	import { type SeasonalQuery } from "@mangadex/gql/graphql";
 	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
 	import openTitle from "@mangadex/utils/links/title/[id]";
-	import { getContextClient } from "@urql/svelte";
 	import type { SwiperContainer } from "swiper/element";
 	import type { SwiperOptions } from "swiper/types";
 	import NothingToShow from "../NothingToShow.svelte";
+	import { transformToStringRecord } from "@mangadex/utils/transformToStringRecord";
 
-	const client = getContextClient();
 	interface Props {
 		data: SeasonalQuery;
 	}
@@ -25,9 +24,9 @@
 	let seasonal = $derived(
 		data.home.seasonal.relationships.titles.map<SeasonalTitle>((t) => ({
 			id: t.id,
-			title: getLangData(t.attributes.title),
-			coverImageAlt: t.relationships.coverArt.id
-		}))
+			title: getLangData(transformToStringRecord(t.attributes.title)),
+			coverImageAlt: t.relationships.coverArt.id,
+		})),
 	);
 
 	let swiper_container: SwiperContainer | undefined = $state(undefined);
@@ -35,28 +34,28 @@
 		slidesPerView: "auto",
 		breakpoints: {
 			640: {
-				slidesPerView: 3
+				slidesPerView: 3,
 			},
 			1024: {
-				slidesPerView: 5
+				slidesPerView: 5,
 			},
 			1360: {
-				slidesPerView: 6
+				slidesPerView: 6,
 			},
 			1500: {
-				slidesPerView: 7
+				slidesPerView: 7,
 			},
 			1920: {
-				slidesPerView: 8
-			}
+				slidesPerView: 8,
+			},
 		},
 		mousewheel: true,
 		freeMode: true,
 		on: {
 			init() {
 				// ...
-			}
-		}
+			},
+		},
 	};
 	$effect(() => {
 		// swiper parameters

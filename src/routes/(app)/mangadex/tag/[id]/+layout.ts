@@ -1,8 +1,9 @@
-import getClient from "@mangadex/gql/urql/getClient";
-import type { LayoutLoad } from "./$types";
 import { allTagsQuery } from "@mangadex/gql-docs/allTags";
+import getClient from "@mangadex/gql/urql/getClient";
 import manga_title_to_lang_map from "@mangadex/utils/lang/record-to-map/manga-title-to-lang-map";
+import { transformToStringRecord } from "@mangadex/utils/transformToStringRecord";
 import { error } from "@sveltejs/kit";
+import type { LayoutLoad } from "./$types";
 
 export const load: LayoutLoad = async (param) => {
 	const client = await getClient();
@@ -16,7 +17,7 @@ export const load: LayoutLoad = async (param) => {
 				const tags = new Map(
 					res.data.tag.list.data.map((d) => [
 						d.id,
-						manga_title_to_lang_map(d.attributes.name)
+						manga_title_to_lang_map(transformToStringRecord(d.attributes.name))
 					])
 				);
 				const names = tags.get(param.params.id);

@@ -1,8 +1,8 @@
-import { graphql } from "@mangadex/gql/exports";
-import { custom, type MangadexTheme as IMangadexTheme } from "../";
-import { derived, get, readable, writable, type Writable } from "svelte/store";
-import { v4 } from "uuid";
+import { graphql, useFragment } from "@mangadex/gql/exports";
 import { client } from "@mangadex/gql/urql";
+import { derived, get, readable, type Writable } from "svelte/store";
+import { MangaDexThemeFrag } from ".";
+import { type MangadexTheme as IMangadexTheme } from "../";
 import { GqlThemeToITheme, IThemeToGqlThemeInput } from "../convert";
 
 export const subscription = graphql(`
@@ -10,74 +10,7 @@ export const subscription = graphql(`
 		watchThemesProfile {
 			name
 			value {
-				textColor
-				mainBackground
-				accents {
-					default {
-						default
-						hover
-						active
-					}
-					l1 {
-						default
-						hover
-						active
-					}
-					l2 {
-						default
-						hover
-						active
-					}
-					l3 {
-						default
-						hover
-						active
-					}
-					l4 {
-						default
-						hover
-						active
-					}
-					l5 {
-						default
-						hover
-						active
-					}
-				}
-				midTone
-				contrast {
-					l1
-				}
-				scrollbar {
-					default
-					hovered
-				}
-				button {
-					default
-					alternate
-				}
-				primary {
-					primary
-					primary1
-					primary2
-				}
-				status {
-					red
-					grey
-					green
-					yellow
-					blue
-					grey
-					purple
-				}
-				indication {
-					blue
-				}
-				danger {
-					default
-					l1
-					l2
-				}
+				...MangaDexThemeFrag
 			}
 		}
 	}
@@ -95,74 +28,7 @@ export const singleUpdateMutation = graphql(`
 	mutation updateThemeProfile($name: String!, $theme: MangaDexThemeInput) {
 		userOption {
 			setThemeProfile(name: $name, theme: $theme) {
-				textColor
-				mainBackground
-				accents {
-					default {
-						default
-						hover
-						active
-					}
-					l1 {
-						default
-						hover
-						active
-					}
-					l2 {
-						default
-						hover
-						active
-					}
-					l3 {
-						default
-						hover
-						active
-					}
-					l4 {
-						default
-						hover
-						active
-					}
-					l5 {
-						default
-						hover
-						active
-					}
-				}
-				midTone
-				contrast {
-					l1
-				}
-				scrollbar {
-					default
-					hovered
-				}
-				button {
-					default
-					alternate
-				}
-				primary {
-					primary
-					primary1
-					primary2
-				}
-				status {
-					red
-					grey
-					green
-					yellow
-					blue
-					grey
-					purple
-				}
-				indication {
-					blue
-				}
-				danger {
-					default
-					l1
-					l2
-				}
+				...MangaDexThemeFrag
 			}
 		}
 	}
@@ -178,7 +44,10 @@ const sub_read = readable(new Map<string, IMangadexTheme>(), (set) => {
 						.sort((a, b) => {
 							return a.name.localeCompare(b.name);
 						})
-						.map((entry) => [entry.name, GqlThemeToITheme(entry.value)])
+						.map((entry) => [
+							entry.name,
+							GqlThemeToITheme(useFragment(MangaDexThemeFrag, entry.value))
+						])
 				)
 			);
 		}

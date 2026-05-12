@@ -1,7 +1,6 @@
 import { dev } from "$app/environment";
-import type { ReadonlyValue } from "$lib";
+import type { InputMaybe, ReadonlyValue } from "$lib";
 import { internalSessionGQLDocs } from "@mangadex/gql-docs/upload/internal-session";
-import type { InputMaybe } from "@mangadex/gql/graphql";
 import { client } from "@mangadex/gql/urql";
 import { delay } from "lodash";
 import type { Getter } from "runed";
@@ -44,8 +43,8 @@ export function sessionObjStore(
 									if (cData) {
 										return {
 											chapter: cData.chapter ?? undefined,
-											externalUrl: cData.externalUrl,
-											publishAt: cData.publishAt,
+											externalUrl: cData.externalUrl ?? undefined,
+											publishAt: cData.publishAt ?? undefined,
 											termsAccepted: cData.termsAccepted ?? undefined,
 											title: cData.title ?? undefined,
 											translatedLanguage: cData.translatedLanguage,

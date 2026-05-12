@@ -7,6 +7,7 @@
 	import manga_title_to_lang_map from "@mangadex/utils/lang/record-to-map/manga-title-to-lang-map";
 	import ErrorComponent from "@mangadex/componnents/ErrorComponent.svelte";
 	import { debounce } from "lodash";
+	import { transformToStringRecord } from "@mangadex/utils/transformToStringRecord";
 
 	interface Props {
 		id: string;
@@ -18,7 +19,7 @@
 		async queryFn() {
 			const res = await client
 				.query(tagTopTenQuery, {
-					id
+					id,
 				})
 				.toPromise();
 			if (res.error) {
@@ -28,15 +29,15 @@
 			} else {
 				throw new Error("no data??");
 			}
-		}
+		},
 	}));
 
 	$effect(() =>
 		defaultContentProfile.subscribe(
 			debounce(() => {
 				topTen.refetch();
-			})
-		)
+			}),
+		),
 	);
 </script>
 
@@ -50,19 +51,23 @@
 			loop="true"
 			autoplay={{
 				pauseOnMouseEnter: true,
-				delay: 5000
+				delay: 5000,
 			}}
 			mousewheel
 		>
 			{#each topTen.data as title (`tag-${id}-${title.id}`)}
-				{@const _title = manga_title_to_lang_map(title.attributes.title)}
+				{@const _title = manga_title_to_lang_map(
+					transformToStringRecord(title.attributes.title),
+				)}
 				<TopTenElement
 					mangaId={title.id}
 					coverId={title.relationships.coverArt.id}
 					originalLanguage={title.attributes.originalLanguage}
 					tags={title.attributes.tags.map((tag) => ({
 						id: tag.id,
-						name: manga_title_to_lang_map(tag.attributes.name)
+						name: manga_title_to_lang_map(
+							transformToStringRecord(tag.attributes.name),
+						),
 					}))}
 					title={_title}
 					cttRating={title.attributes.contentRating ?? undefined}

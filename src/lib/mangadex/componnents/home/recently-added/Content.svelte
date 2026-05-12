@@ -1,19 +1,18 @@
 <script lang="ts">
 	import { type RecentlyAddedHomeQueryQuery } from "@mangadex/gql/graphql";
 	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
-	import { getContextClient } from "@urql/svelte";
 	import type { SwiperContainer } from "swiper/element";
 	import MangaElementBase4 from "@mangadex/componnents/manga/base/MangaElementBase4.svelte";
 	import openTitle from "@mangadex/utils/links/title/[id]";
 	import type { SwiperOptions } from "swiper/types";
 	import NothingToShow from "../NothingToShow.svelte";
+	import { transformToStringRecord } from "@mangadex/utils/transformToStringRecord";
 
 	interface Props {
 		data: RecentlyAddedHomeQueryQuery;
 	}
 
 	let { data }: Props = $props();
-	const client = getContextClient();
 	type Title = {
 		id: string;
 		title: string;
@@ -25,9 +24,9 @@
 	let titles = $derived(
 		data.home.recentlyAdded.data.map<Title>((t) => ({
 			id: t.id,
-			title: getLangData(t.attributes.title),
-			coverImageAlt: t.relationships.coverArt.id
-		}))
+			title: getLangData(transformToStringRecord(t.attributes.title)),
+			coverImageAlt: t.relationships.coverArt.id,
+		})),
 	);
 
 	let swiper_container: SwiperContainer | undefined = $state(undefined);
@@ -36,28 +35,28 @@
 		slidesPerView: "auto",
 		breakpoints: {
 			640: {
-				slidesPerView: 3
+				slidesPerView: 3,
 			},
 			1024: {
-				slidesPerView: 5
+				slidesPerView: 5,
 			},
 			1360: {
-				slidesPerView: 6
+				slidesPerView: 6,
 			},
 			1500: {
-				slidesPerView: 7
+				slidesPerView: 7,
 			},
 			1920: {
-				slidesPerView: 8
-			}
+				slidesPerView: 8,
+			},
 		},
 		mousewheel: true,
 		freeMode: true,
 		on: {
 			init() {
 				// ...
-			}
-		}
+			},
+		},
 	};
 	$effect(() => {
 		if (swiper_container) {

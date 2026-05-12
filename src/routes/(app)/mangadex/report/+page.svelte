@@ -3,13 +3,15 @@
 	import Fetching from "@mangadex/componnents/search/content/Fetching.svelte";
 	import HasNext from "@mangadex/componnents/search/content/HasNext.svelte";
 	import NothingToShow from "@mangadex/componnents/search/content/NothingToShow.svelte";
-	import { createCurrentUserReportsQuery } from "@mangadex/gql-docs/report";
+	import {
+		createCurrentUserReportsQuery,
+		ReportAttributesFrag,
+	} from "@mangadex/gql-docs/report";
+	import { type InputMaybe } from "$lib";
 	import {
 		ReportStatus,
-		type InputMaybe,
-		type ReportAttributes,
 		type ReportCategory,
-		type ReportSortOrder
+		type ReportSortOrder,
 	} from "@mangadex/gql/graphql";
 	import pageLimit from "@mangadex/stores/page-limit";
 	import { debounce, random, range } from "lodash";
@@ -21,9 +23,11 @@
 	import Reason from "./_filter/Reason.svelte";
 	import type { ReportData } from "./types";
 	import Content from "./_content/Content.svelte";
-	import { v4, v5, v7 } from "uuid";
+	import { v4, v7 } from "uuid";
 	import { dev } from "$app/environment";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
+	import type { ResultOf } from "@graphql-typed-document-node/core";
+	import { useFragment } from "@mangadex/gql";
 
 	let category: InputMaybe<ReportCategory> = $state();
 	let objectId: InputMaybe<string> = $state();
@@ -37,8 +41,8 @@
 			objectId: (objectId?.length ?? 0) == 0 ? undefined : objectId,
 			order,
 			reasonId,
-			status
-		})
+			status,
+		}),
 	);
 	let isFetching = $derived(reports.isFetching);
 	let hasNext = $derived(reports.hasNextPage);
@@ -56,8 +60,8 @@
 			}
 		},
 		{
-			threshold: 1.0
-		}
+			threshold: 1.0,
+		},
 	);
 	let to_obserce_bind: HTMLElement | undefined = $state(undefined);
 	$effect(() => {
@@ -80,18 +84,24 @@
 					details:
 						"Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores expedita officia suscipit odit accusantium natus in perspiciatis ex doloribus ipsum cupiditate ad corporis aut, praesentium nulla, sit culpa. Aliquam, ipsam.",
 					objectId: v7(),
-					status: random(1, 3) == 2 ? ReportStatus.Waiting : ReportStatus.Accepted,
-					createdAt: new Date()
+					status:
+						random(1, 3) == 2
+							? ReportStatus.Waiting
+							: ReportStatus.Accepted,
+					createdAt: new Date(),
 				};
 			});
 			return data;
 		}
-		let map = new Map<string, ReportAttributes>();
+		let map = new Map<string, ResultOf<typeof ReportAttributesFrag>>();
 		if (reports.isSuccess) {
 			reports.data.pages
 				.flatMap((d) => d.data)
 				.forEach((e) => {
-					map.set(e.id, e.attributes);
+					map.set(
+						e.id,
+						useFragment(ReportAttributesFrag, e.attributes),
+					);
 				});
 			return map
 				.entries()
@@ -99,8 +109,8 @@
 					([id, att]) =>
 						({
 							id,
-							...att
-						}) satisfies ReportData
+							...att,
+						}) satisfies ReportData,
 				)
 				.toArray();
 		}

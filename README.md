@@ -128,7 +128,7 @@ pnpm dev
 
 The build might take a long time, like 30 minutes so i recommend doing something else in the meantime.
 
-__Note:__ The CSS might not load proprely in Linux. If this happens, retry the command. If it still persist, edit the css a little bit.
+**Note:** The CSS might not load proprely in Linux. If this happens, retry the command. If it still persist, edit the css a little bit.
 
 ### Building a standlone binary
 

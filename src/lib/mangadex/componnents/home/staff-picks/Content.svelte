@@ -18,28 +18,28 @@
 		slidesPerView: 1,
 		breakpoints: {
 			640: {
-				slidesPerView: 2
+				slidesPerView: 2,
 			},
 			1024: {
-				slidesPerView: 3
+				slidesPerView: 3,
 			},
 			1360: {
-				slidesPerView: 4
+				slidesPerView: 4,
 			},
 			1500: {
-				slidesPerView: 5
+				slidesPerView: 5,
 			},
 			1920: {
-				slidesPerView: 6
-			}
+				slidesPerView: 6,
+			},
 		},
 		mousewheel: true,
 		freeMode: true,
 		on: {
 			init() {
 				// ...
-			}
-		}
+			},
+		},
 	};
 	$effect(() => {
 		if (swiper_container) {

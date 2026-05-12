@@ -5,7 +5,7 @@
 		onclick?: (
 			ev: MouseEvent & {
 				currentTarget: EventTarget & HTMLElement;
-			}
+			},
 		) => any;
 	}
 
@@ -17,21 +17,20 @@
 	let { children, mangaId, onclick }: Props = $props();
 </script>
 
-<!-- svelte-ignore a11y_click_events_have_key_events -->
-<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-<article
+<button
 	{onclick}
 	class="layout manga-element"
 	data-manga-id={mangaId}
 	oncontextmenu={registerContextMenuEvent({
-		preventDefault: true
+		preventDefault: true,
 	})}
 >
 	{@render children?.()}
-</article>
+</button>
 
 <style lang="scss">
-	article.layout {
+	.layout {
+		--shadow-color: var(--mid-tone);
 		min-width: 10em;
 		max-height: var(--max-height);
 		display: flex;
@@ -44,19 +43,31 @@
 			filter 200ms ease-in-out;
 		background-color: var(--accent-l3);
 		border: var(--mid-tone) solid 3px;
+		color: inherit;
+		font-family: inherit;
+		padding: 0px;
 	}
-	article.layout:hover {
+	.layout:focus {
+		outline: none;
+		border-color: var(--contrast-l1);
+		--shadow-color: var(--contrast-l1);
+	}
+	.layout:hover {
 		background-color: var(--accent-l3-hover);
-		box-shadow: 0px 3px 0px var(--mid-tone);
-		transform: translateY(-3px);
+		box-shadow: 0px 4px 0px var(--shadow-color);
+		transform: translateY(-4px);
 	}
-	article.layout:active {
+	.layout:active {
 		background-color: var(--accent-l3-active);
 		box-shadow: none;
 		transform: translateY(0px);
 	}
 	.manga-element:global([data-selecto-selected]) {
-		background-color: color-mix(in srgb, var(--primary) 50%, transparent 50%);
+		background-color: color-mix(
+			in srgb,
+			var(--primary) 50%,
+			transparent 50%
+		);
 		border-radius: 3px;
 		border: 2px solid var(--primary);
 	}
