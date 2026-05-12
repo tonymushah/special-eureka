@@ -80,6 +80,7 @@
 		"@urql/svelte": "^5.0.0",
 		"@viselect/vanilla": "^3.9.0",
 		"core-js": "^3.49.0",
+		"es-toolkit": "^1.46.1",
 		"fast-xml-parser": "^5.7.3",
 		"flag-icons": "^7.5.0",
 		"hotkeys-js": "^4.0.4",
