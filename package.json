@@ -67,7 +67,7 @@
 		"@fontsource-variable/lexend": "^5.2.11",
 		"@fontsource/pacifico": "^5.2.7",
 		"@fontsource/poppins": "^5.2.7",
-		"@graphiql/toolkit": "~0.11.3",
+		"@graphiql/toolkit": "~0.12.0",
 		"@graphql-typed-document-node/core": "^3.2.0",
 		"@humanspeak/svelte-markdown": "^1.4.5",
 		"@icons-pack/svelte-simple-icons": "^7.2.0",
