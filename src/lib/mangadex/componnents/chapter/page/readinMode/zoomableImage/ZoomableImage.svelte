@@ -23,7 +23,7 @@
 	$effect(() => {
 		if (toZoom && !noZoom) {
 			toZoomPanZoom = panzoom(toZoom, {
-				animate: true
+				animate: true,
 			});
 			return () => {
 				toZoomPanZoom?.destroy();
@@ -36,11 +36,16 @@
 	onMount(() =>
 		addListenerToResetZoomEventTarget(() => {
 			toZoomPanZoom?.reset({ animate: true });
-		})
+		}),
 	);
 	const shouldFitWidth = derived(imageFitStore, ($i) => $i == ImageFit.Width);
-	const shouldFitHeight = derived(imageFitStore, ($i) => $i == ImageFit.Heigth);
-	onMount(() => imageFitStore.subscribe(() => toZoomPanZoom?.reset({ animate: true })));
+	const shouldFitHeight = derived(
+		imageFitStore,
+		($i) => $i == ImageFit.Heigth,
+	);
+	onMount(() =>
+		imageFitStore.subscribe(() => toZoomPanZoom?.reset({ animate: true })),
+	);
 </script>
 
 <svelte:window
@@ -64,7 +69,7 @@
 			// Restrict scale
 			scale = Math.min(Math.max(0.75, scale), 5);
 			zoomElement.zoomToPoint(scale, e, {
-				animate: true
+				animate: true,
 			});
 		}
 	}}
@@ -79,14 +84,14 @@
 				if (target.hasAttribute("data-image-left")) {
 					oncontextmenu?.(
 						Object.assign(e, {
-							source: "left" as "left"
-						})
+							source: "left" as "left",
+						}),
 					);
 				} else if (target.hasAttribute("data-image-right")) {
 					oncontextmenu?.(
 						Object.assign(e, {
-							source: "right" as "right"
-						})
+							source: "right" as "right",
+						}),
 					);
 				} else {
 					oncontextmenu?.(e);
@@ -149,9 +154,8 @@
 			align-content: center;
 			div.double-image:not(.fitHeight, .fitWidth) {
 				display: grid;
-				grid-template-rows: 2;
+				grid-template-columns: repeat(2, 1fr);
 				img {
-					grid-row: 1;
 					object-fit: contain;
 				}
 			}
@@ -174,11 +178,9 @@
 			div.double-image.fitWidth {
 				width: 100%;
 				display: grid;
-				height: 100%;
-				grid-template-rows: 2;
+				grid-template-columns: repeat(2, 1fr);
 				img {
-					grid-row: 1;
-					height: 100%;
+					/* grid-row: 1; */
 					object-fit: contain;
 					width: 100%;
 				}
