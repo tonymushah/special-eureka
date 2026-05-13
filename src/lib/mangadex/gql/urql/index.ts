@@ -1,8 +1,8 @@
 import { getExchanges } from "mizuki-urql-adapter";
-import { Client, cacheExchange } from "@urql/svelte";
+import { Client } from "@urql/svelte";
 import { pluginName } from "@mangadex/const";
 
-const exchanges = [cacheExchange, ...getExchanges(pluginName)];
+const exchanges = [...getExchanges(pluginName)];
 
 export const client = new Client({
 	url: "graphql",
