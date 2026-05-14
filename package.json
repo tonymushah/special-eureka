@@ -93,7 +93,7 @@
 		"timeago.js": "^4.0.2",
 		"uuid": "^14.0.0"
 	},
-	"packageManager": "pnpm@11.1.1",
+	"packageManager": "pnpm@11.1.2",
 	"engines": {
 		"node": ">=24"
 	}
