@@ -36,8 +36,7 @@
 		display: flex;
 		flex-direction: row;
 		overflow-y: hidden;
-		border-radius: 0.25rem;
-		border-radius: 0.25em;
+		border-radius: var(--radius-sm);
 		transition:
 			background-color,
 			filter 200ms ease-in-out;
