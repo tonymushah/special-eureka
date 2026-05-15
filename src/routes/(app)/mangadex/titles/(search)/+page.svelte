@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { TagOptionState } from "@mangadex/componnents/manga/search/form/filter/contexts/tags";
 	import MangaSearchForm from "@mangadex/componnents/manga/search/form/MangaSearchForm.svelte";
-	import defaultMangaSearchParams, {
+	import {
 		mangaSearchParamsFromContentProfile,
 		toMangaListParams,
-		type MangaSearchParams
+		type MangaSearchParams,
 	} from "@mangadex/componnents/manga/search/form/state";
 	import PageTitle from "@mangadex/componnents/pages/PageTitle.svelte";
 	import goto_sub_menu from "@mangadex/componnents/sidebar/goto_sub_menu";
@@ -13,7 +13,7 @@
 	import pageLimit from "@mangadex/stores/page-limit";
 	import defaultContextMenuContent from "@mangadex/utils/defaultContextMenuContent";
 	import contextMenu, {
-		ContextMenuItemProvider
+		ContextMenuItemProvider,
 	} from "@special-eureka/core/commands/contextMenu";
 	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
 	import { setContextMenuContext } from "@special-eureka/core/utils/contextMenuContext";
@@ -34,7 +34,7 @@
 			p.filter.tags.set(tag.id, {
 				state: TagOptionState.NONE,
 				name: tag.name,
-				group: tag.group
+				group: tag.group,
 			});
 		});
 		defaultProfile.excludedTags.forEach((tag) => {
@@ -56,7 +56,8 @@
 
 	let currentSearchParams = $state<MangaSearchParams | undefined>();
 	$effect(() => {
-		currentSearchParams = defaultParams;
+		let searchAA = structuredClone(defaultParams);
+		currentSearchParams = searchAA;
 	});
 	let preListParams = $derived.by(() => {
 		if (currentSearchParams) {
@@ -70,16 +71,18 @@
 		if (p) {
 			return {
 				...p,
-				limit: limit
+				limit: limit,
 			} satisfies MangaListParams;
 		} else {
 			return {
-				limit: limit
+				limit: limit,
 			} satisfies MangaListParams;
 		}
 	});
 	let realTime = $state(false);
-	let offlineStore = $derived.by(() => currentSearchParams?.offlineOnly ?? false);
+	let offlineStore = $derived.by(
+		() => currentSearchParams?.offlineOnly ?? false,
+	);
 	let dialog_bind: HTMLDialogElement | undefined = $state();
 
 	let topElement: HTMLElement | undefined = $state(undefined);
@@ -93,7 +96,7 @@
 			text: "Change filters",
 			action() {
 				dialog_bind?.showModal();
-			}
+			},
 		}),
 		ContextMenuItemProvider.menuItem({
 			text: "Go to top",
@@ -102,8 +105,8 @@
 					topElement?.scrollIntoView(true);
 				}, 10);
 				console.log(topElement);
-			}
-		})
+			},
+		}),
 	]);
 </script>
 
@@ -121,10 +124,10 @@
 					action() {
 						const d = defaultParams;
 						d.offlineOnly = !d.offlineOnly;
-					}
-				})
+					},
+				}),
 			],
-			e
+			e,
 		);
 	}}
 >

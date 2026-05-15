@@ -38,15 +38,11 @@
 		dialog_bind = $bindable(),
 	}: Props = $props();
 
-	let defaultParams = $state(defaultMangaSearchParams());
-	$effect(() => {
-		defaultParams = structuredClone(_defaultParams);
-	});
+	const params = writable(defaultMangaSearchParams());
 
-	const params = toStore(
-		() => defaultParams,
-		(d) => (defaultParams = d),
-	);
+	$effect(() => {
+		$params = structuredClone(_defaultParams);
+	});
 
 	const titleParams: Writable<string | undefined> = (() => {
 		const title_params_derived = derived(params, ($p) => $p.title);

@@ -6,6 +6,11 @@ export function root_effect(effect: () => void | VoidFunction): VoidFunction {
 	return $effect.root(effect);
 }
 
+export function make_state<T>(st: T): T {
+	let _st = $state(st);
+	return _st;
+}
+
 export function extractFromAccessor<T>(_access: Accessor<T>): ExtractedAccessor<T> {
 	let val: T;
 	const d = root_effect(() => {
