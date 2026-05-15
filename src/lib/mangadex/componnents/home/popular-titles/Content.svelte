@@ -1,7 +1,6 @@
 <script lang="ts">
 	import type { ContentRating } from "@mangadex/gql/graphql";
 	import { ArrowLeftIcon, ArrowRightIcon } from "@lucide/svelte";
-	import type { Readable } from "svelte/store";
 	import type { SwiperContainer } from "swiper/element";
 	import MangaPopularElement from "../../manga/popular/MangaPopularElement.svelte";
 	import ButtonAccent from "../../theme/buttons/ButtonAccent.svelte";
@@ -49,8 +48,6 @@
 		id: string;
 		title: string;
 		description: string;
-		coverImage: string;
-		coverImageAlt: string;
 		contentRating: ContentRating | undefined;
 		tags: {
 			id: string;
@@ -72,13 +69,11 @@
 {#if popular_titles.length > 0}
 	<div class="result">
 		<swiper-container bind:this={swiper_container} init="false">
-			{#each popular_titles as { coverImage, coverImageAlt, title, tags, contentRating, authors, description, id }, index (id)}
+			{#each popular_titles as { title, tags, contentRating, authors, description, id }, index (id)}
 				<swiper-slide>
 					<MangaPopularElement
 						mangaId={id}
 						{index}
-						{coverImage}
-						{coverImageAlt}
 						{tags}
 						{title}
 						{contentRating}

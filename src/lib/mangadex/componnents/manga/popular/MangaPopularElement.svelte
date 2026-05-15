@@ -9,6 +9,7 @@
 	import NoIndex from "./NoIndex.svelte";
 	import { setContextMenuContext } from "@special-eureka/core/utils/contextMenuContext";
 	import mangaElementContextMenu from "@mangadex/utils/context-menu/manga";
+	import { get_cover_image } from "@mangadex/utils/cover-art/get_cover_art.svelte";
 
 	type Author = {
 		id: string;
@@ -19,25 +20,23 @@
 		onclick?: (
 			ev: MouseEvent & {
 				currentTarget: EventTarget & HTMLDivElement;
-			}
+			},
 		) => any;
 		onauthorClick?: (
 			ev: MouseEvent & {
 				currentTarget: EventTarget & HTMLButtonElement;
 				id: string;
-			}
+			},
 		) => any;
 		ontagClick?: (
 			ev: MouseEvent & {
 				currentTarget: EventTarget & HTMLButtonElement;
 				id: string;
-			}
+			},
 		) => any;
 	}
 	interface Props extends Events {
 		index?: number;
-		coverImage: string;
-		coverImageAlt: string;
 		title: string;
 		description: string;
 		tags: Tag[];
@@ -48,8 +47,6 @@
 
 	let {
 		index = -1,
-		coverImage,
-		coverImageAlt,
 		title,
 		description,
 		tags,
@@ -58,36 +55,33 @@
 		onauthorClick,
 		onclick,
 		ontagClick,
-		mangaId
+		mangaId,
 	}: Props = $props();
 
-	let isCoverLoading = $state(true);
-	let isCoverError = $state(false);
-	onMount(() => {
-		let img = new Image();
-		img.addEventListener("load", (e) => {
-			isCoverLoading = false;
-		});
-		img.addEventListener("error", (e) => {
-			isCoverLoading = false;
-			isCoverError = true;
-		});
-		img.src = coverImage;
-	});
 	setContextMenuContext(() =>
 		mangaElementContextMenu({
 			id: mangaId,
 			coverArtId: mangaId,
 			tags: tags.map((tag) => ({
 				id: tag.id,
-				name: new Map([["id", tag.name]])
+				name: new Map([["id", tag.name]]),
 			})),
-			authors
-		})
+			authors,
+		}),
 	);
+	let coverImage = get_cover_image(() => ({
+		asManga: true,
+		id: mangaId,
+		quality: "512",
+	}));
+	let coverImageBack = get_cover_image(() => ({
+		asManga: true,
+		id: mangaId,
+		quality: "256",
+	}));
 </script>
 
-<Layout {coverImage}>
+<Layout coverImage={coverImageBack.data}>
 	{#snippet nOindex()}
 		<NoIndex {index} />
 	{/snippet}
@@ -101,12 +95,12 @@
 			onclick?.(e);
 		}}
 	>
-		{#if isCoverLoading}
-			<Skeleton width="13em" height="20em" />
-		{:else if isCoverError}
-			<img src={coverNotFound} alt={coverImageAlt} />
+		{#if coverImage.isSuccess}
+			<img src={coverImage.data} alt={mangaId} />
+		{:else if coverImage.error}
+			<img src={coverNotFound} alt={mangaId} />
 		{:else}
-			<img src={coverImage} alt={coverImageAlt} />
+			<Skeleton width="13em" height="20em" />
 		{/if}
 	</div>
 	<Content
