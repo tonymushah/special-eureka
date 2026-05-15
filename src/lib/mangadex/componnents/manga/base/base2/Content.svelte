@@ -54,9 +54,9 @@
 					<FlagIcon lang={language} />
 				</div>
 			{/if}
-			<p>
+			<h4>
 				{title}
-			</p>
+			</h4>
 		</div>
 		<div class="publication">
 			<DefaultSpan --font-size="12px">
@@ -110,7 +110,7 @@
 			display: none;
 		}
 	}
-	div.title > p {
+	div.title > h4 {
 		margin: 0px;
 		font-size: var(--text-heading-sm);
 		-webkit-box-orient: vertical;
@@ -119,6 +119,8 @@
 		display: -webkit-box;
 		overflow: hidden;
 		font-weight: 700;
+		text-align: start;
+		font-family: inherit;
 	}
 	div.title {
 		display: flex;
@@ -140,24 +142,22 @@
 		}
 	}
 	div.body {
-		display: grid;
+		display: flex;
+		flex-direction: column;
 		margin: 10px;
-		gap: 10px;
-		grid-template-areas: "top" "bottom";
-		grid-template-rows: 30px auto;
+		/* gap: 10px; */
 		flex-grow: 1;
-		align-items: center;
-		.top-body {
-			grid-area: top;
-		}
+		/* align-items: center; */
+		/* overflow: hidden; */
+
 		.bottom-body {
-			grid-area: bottom;
+			display: contents;
 		}
 	}
 	div.description {
 		font-size: var(--text-caption);
 		text-align: left;
-		-webkit-box-orient: vertical;
+		/* -webkit-box-orient: vertical; */
 		line-clamp: 3;
 		-webkit-line-clamp: 3;
 		display: -webkit-box;
