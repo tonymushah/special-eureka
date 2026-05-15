@@ -128,6 +128,6 @@
 		transform: translateY(0px);
 	}
 	button:global([data-top-abit]):disabled {
-		transform: translateY(-4px);
+		transform: translateY(0px);
 	}
 </style>
