@@ -1,5 +1,5 @@
 <script lang="ts">
-	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
+	// import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import { MangaListStyle } from "@mangadex/gql/graphql";
 	import { LayoutList, Grid3x2, LayoutGrid } from "@lucide/svelte";
 	import { getMangaListStyleContextWritable } from "../contexts/style";
@@ -81,6 +81,7 @@
 		box-shadow: none;
 	}
 	button:focus {
+		outline: none;
 		--box-shadow-color: var(--contrast-l1);
 	}
 	.grid-mode {
