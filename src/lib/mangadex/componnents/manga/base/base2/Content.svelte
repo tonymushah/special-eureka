@@ -70,7 +70,7 @@
 	<div class="bottom-body">
 		<div class="tags">
 			{#if contentRating == ContentRating.Erotica || contentRating == ContentRating.Pornographic}
-				<DangerBadge variant="l1">
+				<DangerBadge variant="l1" disabled>
 					{#if contentRating == ContentRating.Erotica}
 						Erotica
 					{:else}
@@ -78,7 +78,7 @@
 					{/if}
 				</DangerBadge>
 			{:else if contentRating == ContentRating.Suggestive}
-				<StatusBadge color="green">Suggestive</StatusBadge>
+				<StatusBadge color="green" disabled>Suggestive</StatusBadge>
 			{/if}
 			<TagComponnents
 				onclick={(e) => {
