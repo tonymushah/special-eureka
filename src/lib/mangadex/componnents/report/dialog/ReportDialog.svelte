@@ -1,20 +1,19 @@
 <script lang="ts">
-	import type{InputMaybe} from "$lib";
+	import type { InputMaybe } from "$lib";
 	import { ReportCategory } from "@mangadex/gql/graphql";
 	import { XIcon as CloseIcon } from "@lucide/svelte";
 	import {
 		createReportReasonListQuery,
 		createSendReportMutation,
-
 		ReportAttributesFrag,
-
-		ReportReasonAttributesFrag
-
-
+		ReportReasonAttributesFrag,
 	} from "@mangadex/gql-docs/report";
 	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
 	import PrimaryButton from "@mangadex/componnents/theme/buttons/PrimaryButton.svelte";
-	import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
+	import {
+		addErrorToast,
+		addToast,
+	} from "@mangadex/componnents/theme/toast/Toaster.svelte";
 	import { Portal } from "@ark-ui/svelte/portal";
 	import { Dialog } from "@ark-ui/svelte/dialog";
 	import MangaDexVarThemeProvider from "@mangadex/componnents/theme/MangaDexVarThemeProvider.svelte";
@@ -63,7 +62,9 @@
 								</Dialog.Title>
 							</div>
 							<div class="close">
-								<Dialog.CloseTrigger class={cssDialogMod.closeButton}>
+								<Dialog.CloseTrigger
+									class={cssDialogMod.closeButton}
+								>
 									<CloseIcon class={cssMod.icon} />
 								</Dialog.CloseTrigger>
 							</div>
@@ -76,21 +77,27 @@
 									name=""
 									id="report-reasons"
 									bind:value={reason}
-									disabled={!reasons.isSuccess || mutation.isPending}
+									disabled={!reasons.isSuccess ||
+										mutation.isPending}
 								>
 									<option value={null}>Any</option>
 									{#if reasons.isSuccess}
 										{#each reasons.data as reason}
-											{@const attributes = useFragment(ReportReasonAttributesFrag, reason.attributes)}
+											{@const attributes = useFragment(
+												ReportReasonAttributesFrag,
+												reason.attributes,
+											)}
 											<option
 												value={{
 													id: reason.id,
 													detailRequired:
-														attributes.detailsRequired
+														attributes.detailsRequired,
 												} as ReasonState}
 												>{get_value_from_title_and_random_if_undefined(
-													transformToStringRecord(attributes.reason),
-													"key"
+													transformToStringRecord(
+														attributes.reason,
+													),
+													"key",
 												)}</option
 											>
 										{/each}
@@ -107,7 +114,8 @@
 								<textarea
 									name=""
 									id="details"
-									disabled={!detailRequired || mutation.isPending}
+									disabled={!detailRequired ||
+										mutation.isPending}
 									required={detailRequired}
 									bind:value={details}
 								>
@@ -116,42 +124,44 @@
 							<section class="buttons">
 								<PrimaryButton
 									onclick={() => {
-										if(reason){
-										mutation.mutate(
-											{
-												objectId,
-												category,
-												details,
-												reason: reason.id
-											},
-											{
-												onSuccess() {
-													propsOpen = false;
-													addToast({
-														title: "Report sent!",
-														type: "success"
-													});
+										if (reason) {
+											mutation.mutate(
+												{
+													objectId,
+													category,
+													details,
+													reason: reason.id,
 												},
-												onError(error) {
-													addErrorToast("cannot send report", error);
-												}
-											}
-										);}
+												{
+													onSuccess() {
+														propsOpen = false;
+														addToast({
+															title: "Report sent!",
+															type: "success",
+														});
+													},
+													onError(error) {
+														addErrorToast(
+															"cannot send report",
+															error,
+														);
+													},
+												},
+											);
+										}
 									}}
 									isBase
 									disabled={mutation.isPending ||
 										reason == undefined ||
 										reason == null ||
-										(detailRequired && (details?.length ?? 0) == 0)}
+										(detailRequired &&
+											(details?.length ?? 0) == 0)}
 								>
 									<p class="send">Send</p>
 								</PrimaryButton>
 							</section>
 						</div>
 					</div>
-					<Dialog.CloseTrigger>
-						<CloseIcon />
-					</Dialog.CloseTrigger>
 				</Dialog.Content>
 			</MangaDexVarThemeProvider>
 		</Dialog.Positioner>
@@ -178,7 +188,7 @@
 	.content {
 		height: 100%;
 		display: flex;
-		//grid-template-rows: fit-content auto;
+		grid-template-rows: fit-content auto;
 		flex-direction: column;
 	}
 	.close {
@@ -196,10 +206,10 @@
 	}
 	.body {
 		display: grid;
-		grid-template-rows: 0fr 0fr 1fr 0fr 61px;
 		height: -webkit-fill-available;
 		gap: 12px;
 		margin: 0px 12px;
+		grid-template-rows: 0fr 0fr 1fr 0fr 61px;
 	}
 	span.detailRequired {
 		text-decoration: underline;
