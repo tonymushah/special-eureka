@@ -4,9 +4,16 @@
 	import FormInput from "@mangadex/componnents/theme/form/input/FormInput.svelte";
 	import type { UnlistenFn } from "@tauri-apps/api/event";
 	import { onDestroy } from "svelte";
-	import { ArchiveIcon, FilterIcon, SearchIcon } from "@lucide/svelte";
+	import {
+		ArchiveIcon,
+		Funnel as FilterIcon,
+		SearchIcon,
+	} from "@lucide/svelte";
 	import { derived, toStore, writable, type Writable } from "svelte/store";
-	import { init as initFilterContext, type MangaSearchFilterParams } from "./filter/contexts";
+	import {
+		init as initFilterContext,
+		type MangaSearchFilterParams,
+	} from "./filter/contexts";
 	import MangaSearchFilterDialog from "./filter/MangaSearchFilterDialog.svelte";
 	import type { MangaSearchParams } from "./state";
 	import defaultMangaSearchParams from "./state";
@@ -28,7 +35,7 @@
 		defaultParams: _defaultParams = defaultMangaSearchParams(),
 		onchange,
 		onsubmit,
-		dialog_bind = $bindable()
+		dialog_bind = $bindable(),
 	}: Props = $props();
 
 	let defaultParams = $state(defaultMangaSearchParams());
@@ -38,7 +45,7 @@
 
 	const params = toStore(
 		() => defaultParams,
-		(d) => (defaultParams = d)
+		(d) => (defaultParams = d),
 	);
 
 	const titleParams: Writable<string | undefined> = (() => {
@@ -58,7 +65,7 @@
 					inner.title = updater(inner.title);
 					return inner;
 				});
-			}
+			},
 		};
 	})();
 	const offlineParams: Writable<boolean> = (() => {
@@ -78,7 +85,7 @@
 					inner.offlineOnly = updater(inner.offlineOnly);
 					return inner;
 				});
-			}
+			},
 		};
 	})();
 	initFilterContext(
@@ -99,9 +106,9 @@
 						inner.filter = updater(inner.filter);
 						return inner;
 					});
-				}
+				},
 			} satisfies Writable<MangaSearchFilterParams>;
-		})()
+		})(),
 	);
 	let unlistens: UnlistenFn[] = [];
 	onDestroy(() => {
@@ -112,7 +119,7 @@
 	unlistens.push(
 		params.subscribe((p) => {
 			onchange?.(p);
-		})
+		}),
 	);
 </script>
 
@@ -126,7 +133,7 @@
 	<div class="input">
 		<FormInput
 			inputProps={{
-				name: "title"
+				name: "title",
 			}}
 			widthFull
 			bind:value={$titleParams}
@@ -134,6 +141,7 @@
 	</div>
 	<div class="buttons">
 		<ButtonAccent
+			data-top-abit
 			type="button"
 			variant="accent"
 			isBase
@@ -156,6 +164,7 @@
 				onclick={() => {
 					$offlineParams = !$offlineParams;
 				}}
+				data-top-abit
 			>
 				<div class="icons">
 					<ArchiveIcon />
@@ -170,6 +179,7 @@
 				onclick={() => {
 					$offlineParams = !$offlineParams;
 				}}
+				data-top-abit
 			>
 				<div class="icons">
 					<ArchiveIcon />
@@ -186,13 +196,13 @@
 		}}
 	>
 		{#if realTime}
-			<ButtonAccent variant="accent" isBase type="submit">
+			<ButtonAccent variant="accent" isBase type="submit" data-top-abit>
 				<div class="icons">
 					<SearchIcon />
 				</div>
 			</ButtonAccent>
 		{:else}
-			<PrimaryButton variant="1" isBase type="submit">
+			<PrimaryButton variant="1" isBase type="submit" data-top-abit>
 				<div class="icons">
 					<SearchIcon />
 				</div>
