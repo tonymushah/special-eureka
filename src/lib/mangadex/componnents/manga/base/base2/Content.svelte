@@ -5,7 +5,11 @@
 	import DangerBadge from "@mangadex/componnents/theme/tag/DangerBadge.svelte";
 	import StatusBadge from "@mangadex/componnents/theme/tag/StatusBadge.svelte";
 	import DefaultSpan from "@mangadex/componnents/theme/texts/span/DefaultSpan.svelte";
-	import { ContentRating, Language, type MangaStatus } from "@mangadex/gql/graphql";
+	import {
+		ContentRating,
+		Language,
+		type MangaStatus,
+	} from "@mangadex/gql/graphql";
 	import type { Tag } from "@mangadex/utils/types/Tag";
 	import PublicationStatusTag from "../../publicationStatusTag/PublicationStatusTag.svelte";
 
@@ -14,7 +18,7 @@
 			ev: MouseEvent & {
 				currentTarget: EventTarget & HTMLElement;
 				id: string;
-			}
+			},
 		) => any;
 	}
 
@@ -34,7 +38,7 @@
 		tags,
 		contentRating = ContentRating.Safe,
 		language,
-		ontagClick
+		ontagClick,
 	}: Props = $props();
 
 	$effect(() => {
@@ -94,10 +98,12 @@
 		display: flex;
 		gap: 6px;
 		flex-wrap: wrap;
-		height: 1.5em;
-		overflow: hidden;
-		padding: 2px 0px;
-		transform: translateY(-2px);
+		/* height: 1.5em; */
+		padding-bottom: var(--space-xs);
+		/* transform: translateY(-2px); */
+	}
+	.pub-tag {
+		text-wrap: nowrap;
 	}
 	@media (width < 600px) {
 		.pub-tag {
@@ -125,7 +131,7 @@
 		grid-template-areas: "title publication";
 		flex-direction: row;
 		align-items: center;
-		grid-template-columns: auto 160px;
+		grid-template-columns: auto 170px;
 		.title {
 			grid-area: title;
 		}
@@ -140,7 +146,7 @@
 		grid-template-areas: "top" "bottom";
 		grid-template-rows: 30px auto;
 		flex-grow: 1;
-		//align-items: center;
+		align-items: center;
 		.top-body {
 			grid-area: top;
 		}
@@ -155,7 +161,7 @@
 		-webkit-line-clamp: 3;
 		display: -webkit-box;
 		overflow: hidden;
-		margin-top: 0.5em;
+		padding-bottom: var(--space-md);
 	}
 	div.publication {
 		display: flex;
@@ -164,6 +170,6 @@
 	}
 	div.publication-tag {
 		display: flex;
-		transform: translateY(-2px);
+		/* transform: translateY(-2px); */
 	}
 </style>

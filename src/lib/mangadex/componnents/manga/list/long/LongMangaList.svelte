@@ -1,7 +1,9 @@
 <script lang="ts" module>
 	import type { ComponentProps } from "svelte";
 
-	export type LongMangaListItemProps = ComponentProps<typeof MangaElementBase2> & {
+	export type LongMangaListItemProps = ComponentProps<
+		typeof MangaElementBase2
+	> & {
 		id: string;
 	};
 </script>
@@ -39,16 +41,16 @@
 			onclick={() => {
 				goto(
 					route("/mangadex/title/[id]", {
-						id: data.id
-					})
+						id: data.id,
+					}),
 				);
 			}}
 			ontagClick={(e) => {
 				const id = e.id;
 				goto(
 					route("/mangadex/tag/[id]", {
-						id
-					})
+						id,
+					}),
 				);
 			}}
 			--button-justify-content="start"
