@@ -16,7 +16,9 @@
 	let { error, label, retry, close }: Props = $props();
 	let extensions = $derived.by(() => {
 		if (error instanceof CombinedError) {
-			return error.graphQLErrors.flatMap((e) => Object.entries(e.extensions));
+			return error.graphQLErrors.flatMap((e) =>
+				Object.entries(e.extensions),
+			);
 		}
 	});
 	onMount(() => {
@@ -60,17 +62,20 @@
 
 <style lang="scss">
 	.with-margin {
-		margin-left: 1em;
-		margin-right: 1em;
+		margin: var(--space-md) var(--space-xl);
 	}
 	div.error {
 		border-left: 10px;
-		background-color: color-mix(in srgb, var(--danger) 70%, transparent 30%);
-		border-radius: 8px;
+		background-color: color-mix(
+			in srgb,
+			var(--danger) 70%,
+			transparent 30%
+		);
+		border-radius: var(--radius-md);
 		border: solid 3px var(--mid-tone);
 		box-shadow: 0px 1px 0px var(--mid-tone);
 		color: var(--text-color);
-		padding: 1em;
+		padding: var(--space-md);
 		.title {
 			display: flex;
 			align-items: center;
@@ -82,7 +87,7 @@
 		.details {
 			display: flex;
 			align-items: center;
-			gap: 10px;
+			gap: var(--space-md);
 			flex-direction: row;
 			overflow: hidden;
 		}
