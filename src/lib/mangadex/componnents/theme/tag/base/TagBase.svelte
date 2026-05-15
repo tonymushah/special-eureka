@@ -39,4 +39,8 @@
 		box-shadow: none;
 		transform: translateY(3px);
 	}
+	button:disabled {
+		box-shadow: none;
+		transform: translateY(0px);
+	}
 </style>
