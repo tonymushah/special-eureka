@@ -34,6 +34,7 @@
 }
 
 .closeButton {
+	--box-shadow-color: var(--mid-tone);
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -41,7 +42,7 @@
 	background-color: var(--accent-l4);
 	border: 3px solid var(--mid-tone);
 	border-radius: 3px;
-	box-shadow: 0px 4px 0px var(--mid-tone);
+	box-shadow: 0px 4px 0px var(--box-shadow-color);
 	transform: translateY(-4px);
 }
 
@@ -53,4 +54,11 @@
 	background-color: var(--accent-l4-active);
 	transform: translateY(0px);
 	box-shadow: none;
+}
+
+.closeButton:focus {
+	outline: none;
+	border-color: var(--contrast-l1);
+	--box-shadow-color: var(--contrast-l1);
+	/* color: var(--primary-l2); */
 }
