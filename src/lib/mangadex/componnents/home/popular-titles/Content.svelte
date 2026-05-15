@@ -21,6 +21,7 @@
 			pauseOnMouseEnter: true,
 			delay: 5000,
 		},
+		virtual: true,
 		on: {
 			init() {
 				if (swiper_container != undefined) {
