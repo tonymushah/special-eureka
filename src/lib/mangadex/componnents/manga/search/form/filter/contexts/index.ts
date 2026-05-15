@@ -1,17 +1,17 @@
 import { type ContentProfileItemFragmentType as ContentProfile } from "@mangadex/content-profile/graphql";
 import defaultContentProfile from "@mangadex/content-profile/graphql/defaultProfile";
 import {
-    TagSearchMode,
-    type ContentRating,
-    type Demographic,
-    type MangaStatus
+	TagSearchMode,
+	type ContentRating,
+	type Demographic,
+	type MangaStatus
 } from "@mangadex/gql/graphql";
 import { generateContextStoresMethods } from "@mangadex/utils/contexts";
 import { derived, get, type Writable } from "svelte/store";
 import {
-    defaultAuthorArtistOptions,
-    initMangaSearchAuthorArtistsOptions,
-    type AuthorArtistOptions
+	defaultAuthorArtistOptions,
+	initMangaSearchAuthorArtistsOptions,
+	type AuthorArtistOptions
 } from "./authorArtist";
 import { initMangaSearchContentRatingContextStore } from "./contentRating";
 import { initMangaSearchLanguagesContextStore, type MangaSearchLanguages } from "./languages";
