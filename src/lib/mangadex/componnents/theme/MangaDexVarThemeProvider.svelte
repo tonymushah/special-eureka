@@ -5,6 +5,7 @@
 	import ButtonFlexContentProvider from "./buttons/ButtonFlexContentProvider.svelte";
 	import { custom } from "@mangadex/theme";
 	import { derived } from "svelte/store";
+	import otherTokens from "./other-tokens.module.scss";
 
 	interface Props {
 		fonts?: string;
@@ -63,6 +64,7 @@
 	--tag-font-size={"12px"}
 	--tag-font-weight={"600"}
 	--context-menu-font-size="14px"
+	class={otherTokens.baseLayout}
 >
 	<ButtonFlexContentProvider>
 		{@render children?.()}
