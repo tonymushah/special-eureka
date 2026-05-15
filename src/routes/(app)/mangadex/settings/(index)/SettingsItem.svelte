@@ -35,7 +35,7 @@
 
 <style lang="scss">
 	:root {
-		--button-dept: 4px;
+		--button-dept: 5px;
 	}
 	p {
 		text-align: center;
@@ -60,14 +60,14 @@
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		border-radius: 8px;
+		border-radius: var(--radius-lg);
 		background-color: var(--accent-l1);
 		border: 3px solid var(--mid-tone);
-		padding: 8px;
+		padding: var(--space-md);
 		transition:
-			box-shadow 50ms ease-in-out,
-			background-color 50ms ease-in-out,
-			transform 50ms ease-in-out;
+			box-shadow 10ms ease-in-out,
+			background-color 10ms ease-in-out,
+			transform 10ms ease-in-out;
 		box-shadow: 0 var(--button-dept) 0 var(--mid-tone);
 	}
 	.icon {
