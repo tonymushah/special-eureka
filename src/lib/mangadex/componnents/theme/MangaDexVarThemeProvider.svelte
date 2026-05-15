@@ -19,7 +19,7 @@
 </script>
 
 <SomeDiv
-	--font-size={"16px"}
+	--font-size={"var(--text-body)"}
 	--fonts={fonts}
 	--text-color={$theme_store.textColor}
 	--main-background={$theme_store.mainBackground}
@@ -61,9 +61,9 @@
 	--danger-l1={$theme_store.danger.l1}
 	--danger-l2={$theme_store.danger.l2}
 	--tag-padding={"2px 6px"}
-	--tag-font-size={"12px"}
+	--tag-font-size={"var(--text-overline)"}
 	--tag-font-weight={"600"}
-	--context-menu-font-size="14px"
+	--context-menu-font-size={"var(--text-caption)"}
 	class={otherTokens.baseLayout}
 >
 	<ButtonFlexContentProvider>
