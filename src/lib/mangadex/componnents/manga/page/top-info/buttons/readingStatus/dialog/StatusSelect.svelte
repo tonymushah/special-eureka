@@ -11,7 +11,11 @@
 	let { readingStatus, disabled }: Props = $props();
 </script>
 
-<select bind:value={$readingStatus} {disabled} class:isNotLinux={!$isLinuxStore}>
+<select
+	bind:value={$readingStatus}
+	{disabled}
+	class:isNotLinux={!$isLinuxStore}
+>
 	<option value={undefined}>None</option>
 	<option value={ReadingStatus.Reading}>Reading</option>
 	<option value={ReadingStatus.OnHold}>On Hold</option>
@@ -24,14 +28,19 @@
 <style lang="scss">
 	select {
 		background-color: var(--accent-l1);
-		border-radius: 6px;
-		padding: 8px 12px;
+		border-radius: var(--radius-md);
+		padding: var(--space-xs);
 		border: 3px solid var(--mid-tone);
 		min-height: 3em;
 		min-width: 3em;
-		padding-left: 0.75rem;
-		padding-right: 0.75rem;
+		padding-left: var(--space-md);
+		padding-right: var(--space-md);
 		font-family: inherit;
+		transform: translateY(4px);
+	}
+	select:focus {
+		outline: none;
+		border-color: var(--primary-l1);
 	}
 	select.isNotLinux {
 		color: var(--text-color);
