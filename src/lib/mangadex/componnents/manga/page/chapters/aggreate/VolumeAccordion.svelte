@@ -27,7 +27,7 @@
 	.volume {
 		display: flex;
 		flex-direction: column;
-		gap: 2px;
-		padding: 5px;
+		gap: var(--space-xs);
+		padding: var(--space-xs);
 	}
 </style>
