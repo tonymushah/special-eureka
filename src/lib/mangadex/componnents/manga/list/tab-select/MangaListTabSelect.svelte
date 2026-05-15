@@ -84,11 +84,11 @@
 		--box-shadow-color: var(--contrast-l1);
 	}
 	.grid-mode {
-		border-top-left-radius: var(--radius-sm);
-		border-bottom-left-radius: var(--radius-sm);
+		border-top-left-radius: var(--radius-md);
+		border-bottom-left-radius: var(--radius-md);
 	}
 	.cover-mode {
-		border-top-right-radius: var(--radius-sm);
-		border-bottom-right-radius: var(--radius-sm);
+		border-top-right-radius: var(--radius-md);
+		border-bottom-right-radius: var(--radius-md);
 	}
 </style>
