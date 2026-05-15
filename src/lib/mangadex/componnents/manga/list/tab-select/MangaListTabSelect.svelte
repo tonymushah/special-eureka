@@ -9,36 +9,39 @@
 </script>
 
 <div class="tab-select">
-	<ButtonAccent
+	<button
 		onclick={() => {
 			style.set(MangaListStyle.Grid);
 		}}
-		variant={$style == MangaListStyle.Grid ? "4" : "1"}
+		class:active={$style == MangaListStyle.Grid}
+		class="grid-mode"
 	>
 		<div class="icon">
 			<LayoutGrid {size} />
 		</div>
-	</ButtonAccent>
-	<ButtonAccent
+	</button>
+	<button
 		onclick={() => {
 			style.set(MangaListStyle.Rows);
 		}}
-		variant={$style == MangaListStyle.Rows ? "5" : "1"}
+		class:active={$style == MangaListStyle.Rows}
+		class="row-list-mode"
 	>
 		<div class="icon">
 			<LayoutList {size} />
 		</div>
-	</ButtonAccent>
-	<ButtonAccent
+	</button>
+	<button
 		onclick={() => {
 			style.set(MangaListStyle.Cover);
 		}}
-		variant={$style == MangaListStyle.Cover ? "5" : "1"}
+		class:active={$style == MangaListStyle.Cover}
+		class="cover-mode"
 	>
 		<div class="icon">
 			<Grid3x2 {size} />
 		</div>
-	</ButtonAccent>
+	</button>
 </div>
 
 <style lang="scss">
@@ -46,12 +49,46 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		gap: 5px;
+		flex-direction: row;
+		flex-wrap: nowrap;
 	}
 	.icon {
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		padding: 2px;
+		padding: var(--space-xs);
+	}
+	button {
+		--box-shadow-color: var(--mid-tone);
+		color: var(--text-color);
+		background-color: var(--accent-l2);
+		border: 3px var(--box-shadow-color) solid;
+		box-shadow: 0px 4px 0px var(--box-shadow-color);
+		font-family: inherit;
+		transform: translateY(-4px);
+	}
+	button:hover {
+		background-color: var(--accent-l2-hover);
+	}
+	button:active {
+		background-color: var(--accent-l2-active);
+		transform: translateY(0px);
+		box-shadow: none;
+	}
+	button.active {
+		background-color: var(--accent-l2-active);
+		transform: translateY(0px);
+		box-shadow: none;
+	}
+	button:focus {
+		--box-shadow-color: var(--contrast-l1);
+	}
+	.grid-mode {
+		border-top-left-radius: var(--radius-md);
+		border-bottom-left-radius: var(--radius-md);
+	}
+	.cover-mode {
+		border-top-right-radius: var(--radius-md);
+		border-bottom-right-radius: var(--radius-md);
 	}
 </style>
