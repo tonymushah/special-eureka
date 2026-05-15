@@ -11,6 +11,7 @@
 
 <style lang="scss">
 	button {
+		--shadow-border: var(--mid-tone);
 		/* transition: background-color 300ms ease-in-out; */
 		font-size: var(--tag-font-size);
 		font-weight: var(--tag-font-weight);
@@ -19,8 +20,8 @@
 		font-family: var(--fonts);
 		padding: var(--tag-padding);
 		border-radius: var(--radius-md);
-		border: 1px solid var(--mid-tone);
-		box-shadow: 0px 3px 0px var(--mid-tone);
+		border: 1px solid var(--shadow-border);
+		box-shadow: 0px 3px 0px var(--shadow-border);
 		transform: translateY(0px);
 	}
 	button:hover {
@@ -29,6 +30,7 @@
 			var(--tag-color) 75%,
 			transparent 25%
 		);
+		cursor: pointer;
 	}
 	button:active {
 		background-color: color-mix(
@@ -41,11 +43,12 @@
 	}
 	button:focus {
 		outline: none;
-		border-color: var(--contrast-l1);
+		--shadow-border: var(--contrast-l1);
 	}
 	button:disabled {
 		box-shadow: none;
 		transform: translateY(3px);
-		border-color: var(--mid-tone);
+		cursor: not-allowed;
+		--shadow-border: var(--mid-tone);
 	}
 </style>
