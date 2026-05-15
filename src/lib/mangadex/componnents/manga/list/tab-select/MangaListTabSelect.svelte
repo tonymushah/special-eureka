@@ -3,20 +3,25 @@
 	import { MangaListStyle } from "@mangadex/gql/graphql";
 	import { LayoutList, Grid3x2, LayoutGrid } from "@lucide/svelte";
 	import { getMangaListStyleContextWritable } from "../contexts/style";
+	import buttonGroupCssMod from "@mangadex/componnents/theme/selects/button-group.module.scss";
 
 	const style = getMangaListStyleContextWritable();
 	const size = "24";
 </script>
 
-<div class="tab-select">
+<div class={[buttonGroupCssMod.tabSelect]}>
 	<button
 		onclick={() => {
 			style.set(MangaListStyle.Grid);
 		}}
-		class:active={$style == MangaListStyle.Grid}
-		class="grid-mode"
+		disabled={$style == MangaListStyle.Grid}
+		class={[
+			"grid-mode",
+			buttonGroupCssMod.button,
+			$style == MangaListStyle.Grid && buttonGroupCssMod.active,
+		]}
 	>
-		<div class="icon">
+		<div class={buttonGroupCssMod.icon}>
 			<LayoutGrid {size} />
 		</div>
 	</button>
@@ -24,10 +29,14 @@
 		onclick={() => {
 			style.set(MangaListStyle.Rows);
 		}}
-		class:active={$style == MangaListStyle.Rows}
-		class="row-list-mode"
+		disabled={$style == MangaListStyle.Rows}
+		class={[
+			"row-list-mode",
+			buttonGroupCssMod.button,
+			$style == MangaListStyle.Rows && buttonGroupCssMod.active,
+		]}
 	>
-		<div class="icon">
+		<div class={buttonGroupCssMod.icon}>
 			<LayoutList {size} />
 		</div>
 	</button>
@@ -35,55 +44,20 @@
 		onclick={() => {
 			style.set(MangaListStyle.Cover);
 		}}
-		class:active={$style == MangaListStyle.Cover}
-		class="cover-mode"
+		disabled={$style == MangaListStyle.Cover}
+		class={[
+			"cover-mode",
+			buttonGroupCssMod.button,
+			$style == MangaListStyle.Cover && buttonGroupCssMod.active,
+		]}
 	>
-		<div class="icon">
+		<div class={buttonGroupCssMod.icon}>
 			<Grid3x2 {size} />
 		</div>
 	</button>
 </div>
 
 <style lang="scss">
-	.tab-select {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		flex-direction: row;
-		flex-wrap: nowrap;
-	}
-	.icon {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		padding: var(--space-xs);
-	}
-	button {
-		--box-shadow-color: var(--mid-tone);
-		color: var(--text-color);
-		background-color: var(--accent-l2);
-		border: 3px var(--box-shadow-color) solid;
-		box-shadow: 0px 4px 0px var(--box-shadow-color);
-		font-family: inherit;
-		transform: translateY(-4px);
-	}
-	button:hover {
-		background-color: var(--accent-l2-hover);
-	}
-	button:active {
-		background-color: var(--accent-l2-active);
-		transform: translateY(0px);
-		box-shadow: none;
-	}
-	button.active {
-		background-color: var(--accent-l2-active);
-		transform: translateY(0px);
-		box-shadow: none;
-	}
-	button:focus {
-		outline: none;
-		--box-shadow-color: var(--contrast-l1);
-	}
 	.grid-mode {
 		border-top-left-radius: var(--radius-md);
 		border-bottom-left-radius: var(--radius-md);
