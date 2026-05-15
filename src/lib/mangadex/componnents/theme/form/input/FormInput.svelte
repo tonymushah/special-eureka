@@ -13,7 +13,7 @@
 		inputProps,
 		value = $bindable(undefined),
 		widthFull = false,
-		self = $bindable()
+		self = $bindable(),
 	}: Props = $props();
 </script>
 
@@ -28,8 +28,8 @@
 		font-family: var(--fonts);
 		font-size: var(--font-size);
 		border-style: solid;
-		border-radius: 0.25em;
-		padding: 5px;
+		padding: var(--space-xs);
+		border-radius: var(--radius-md);
 		border-color: var(--mid-tone);
 	}
 	input.widthFull {
