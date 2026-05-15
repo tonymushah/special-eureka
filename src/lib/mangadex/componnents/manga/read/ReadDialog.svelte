@@ -6,13 +6,22 @@
 	import type { Chapter } from "@mangadex/componnents/chapter/feed";
 	import Fetching from "@mangadex/componnents/search/content/Fetching.svelte";
 	import ButtonAccentOnlyLabel from "@mangadex/componnents/theme/buttons/ButtonAccentOnlyLabel.svelte";
-	import { createQuery, type CreateQueryOptions } from "@tanstack/svelte-query";
+	import {
+		createQuery,
+		type CreateQueryOptions,
+	} from "@tanstack/svelte-query";
 	import { openUrl } from "@tauri-apps/plugin-opener";
 	import { debounce } from "es-toolkit/compat";
 	import { writable } from "svelte/store";
 	import { fetchComments } from "../page/chapters/aggreate/utils";
 	import chapterStores from "../page/chapters/aggreate/utils/chapterStores.svelte";
 	import getMangaToReadChapter from "./getMangaToReadChapter";
+	import { initContextReadChapterMarkers } from "@mangadex/stores/read-markers/context.svelte";
+	import { isLogged } from "@mangadex/utils/auth";
+	import { client } from "@mangadex/gql/urql";
+	import { mangaReadMarkers } from "@mangadex/gql-docs/read-markers/chapters";
+	import { listenToAnyChapterReadMarkers } from "@mangadex/stores/read-markers";
+	import { untrack } from "svelte";
 
 	const currentMangaId = writable<string | null>(null);
 	export const readManga = debounce(function (id: string) {
@@ -30,19 +39,68 @@
 			dialog?.showModal();
 		}
 	});
+	// TODO refactor this shit
+	let chapterReadMarkers = createQuery(() => {
+		let id = $currentMangaId;
+		return {
+			queryKey: ["title", id, "read-markers", "page"],
+			async queryFn() {
+				const res = await client
+					.query(mangaReadMarkers, {
+						id: id ?? "",
+					})
+					.toPromise();
+				if (res.error) {
+					throw res.error;
+				} else {
+					return (
+						res.data?.readMarker.mangaReadMarkersByMangaId.map(
+							String,
+						) ?? []
+					);
+				}
+			},
+			enabled: $isLogged && id != null,
+		} satisfies CreateQueryOptions;
+	});
+	let readContextMarkers = initContextReadChapterMarkers();
+	$effect(() => {
+		const query = chapterReadMarkers;
+		if (query.isSuccess) {
+			readContextMarkers.clear();
+			query.data.forEach((d) => readContextMarkers.set(d, true));
+			const sub = listenToAnyChapterReadMarkers.subscribe((a) => {
+				untrack(() => {
+					if (a != undefined) {
+						if (query.isSuccess) {
+							if (readContextMarkers.size > 1) {
+								const state = readContextMarkers.get(a.chapter);
+								if (state != undefined) {
+									readContextMarkers.set(a.chapter, a.read);
+								}
+							}
+						}
+					}
+				});
+			});
+			return sub;
+		}
+	});
 	const chapter_store = chapterStores();
 	let threadUrls = $state(new Map<string, string>());
 	let query = createQuery(() => {
 		const manga_id = $currentMangaId;
 		return {
-			queryKey: manga_id ? ["manga", manga_id, "read"] : ["manga", "noop", "read"],
+			queryKey: manga_id
+				? ["manga", manga_id, "read"]
+				: ["manga", "noop", "read"],
 			async queryFn() {
 				if (!manga_id) {
 					throw new Error("no manga id");
 				} else {
 					return await getMangaToReadChapter(manga_id);
 				}
-			}
+			},
 		} satisfies CreateQueryOptions<Chapter[]>;
 	});
 	$effect(() => {
@@ -54,8 +112,8 @@
 			chapter_store.addByBatch(
 				res.data.map((d) => ({
 					id: d.chapterId,
-					...d
-				}))
+					...d,
+				})),
 			);
 			fetchComments(res.data.map((d) => d.chapterId)).then((coms) => {
 				coms.forEach((e) => {
@@ -64,8 +122,8 @@
 				chapter_store.setComments(
 					coms.map((com) => ({
 						id: com.id,
-						comments: com.stats.comments
-					}))
+						comments: com.stats.comments,
+					})),
 				);
 			});
 		}
@@ -156,7 +214,11 @@
 	dialog::backdrop {
 		backdrop-filter: blur(10px);
 		-webkit-backdrop-filter: blur(10px);
-		background-color: color-mix(in srgb, var(--main-background) 50%, transparent 50%);
+		background-color: color-mix(
+			in srgb,
+			var(--main-background) 50%,
+			transparent 50%
+		);
 	}
 	.chapters {
 		display: grid;
