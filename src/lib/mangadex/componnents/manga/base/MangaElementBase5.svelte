@@ -10,12 +10,12 @@
 		onreadClick?: (
 			ev: MouseEvent & {
 				currentTarget: EventTarget & HTMLButtonElement;
-			}
+			},
 		) => any;
 		onmoreInfoClick?: (
 			ev: MouseEvent & {
 				currentTarget: EventTarget & HTMLButtonElement;
-			}
+			},
 		) => any;
 	}
 
@@ -27,15 +27,24 @@
 		blur?: boolean;
 	}
 
-	let { coverImageAlt, title, description, mangaId, onmoreInfoClick, onreadClick, blur }: Props =
-		$props();
+	let {
+		coverImageAlt,
+		title,
+		description,
+		mangaId,
+		onmoreInfoClick,
+		onreadClick,
+		blur,
+	}: Props = $props();
 	let isHover = $state(false);
-	setContextMenuContext(() => mangaElementContextMenu({ id: mangaId, coverArtId: mangaId }));
+	setContextMenuContext(() =>
+		mangaElementContextMenu({ id: mangaId, coverArtId: mangaId }),
+	);
 
 	let coverImage = get_cover_image_auto_handle_error(() => ({
 		id: mangaId,
 		asManga: true,
-		quality: "256"
+		quality: "256",
 	}));
 </script>
 
@@ -50,7 +59,7 @@
 
 <style lang="scss">
 	:root {
-		--transition-duration: 500ms;
+		--transition-duration: 100ms;
 		--transition-timing-function: ease-in-out;
 		--width: 16em;
 		--height: 23em;
@@ -60,7 +69,7 @@
 		width: var(--width);
 		height: var(--height);
 		object-fit: cover;
-		border-radius: 0.25rem;
+		border-radius: var(--radius-lg);
 	}
 	img {
 		transition: filter 100ms ease-in-out;
