@@ -39,8 +39,13 @@
 		box-shadow: none;
 		transform: translateY(3px);
 	}
+	button:focus {
+		outline: none;
+		border-color: var(--contrast-l1);
+	}
 	button:disabled {
 		box-shadow: none;
 		transform: translateY(3px);
+		border-color: var(--mid-tone);
 	}
 </style>

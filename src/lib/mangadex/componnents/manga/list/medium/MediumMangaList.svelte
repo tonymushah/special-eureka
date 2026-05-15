@@ -1,5 +1,7 @@
 <script lang="ts" module>
-	export type MediumMangaListElementProps = ComponentProps<typeof MangaElementBase1> & {
+	export type MediumMangaListElementProps = ComponentProps<
+		typeof MangaElementBase1
+	> & {
 		id: string;
 	};
 </script>
@@ -9,7 +11,7 @@
 	import { route } from "$lib/ROUTES";
 	import { isArray } from "es-toolkit/compat";
 	import type { ComponentProps } from "svelte";
-	import { flip } from "svelte/animate";
+	// import { flip } from "svelte/animate";
 	import MangaElementBase1 from "../../base/MangaElementBase1.svelte";
 	import { crossfade, fade } from "svelte/transition";
 
@@ -32,7 +34,7 @@
 		return map.values().toArray();
 	});
 	const [send, receive] = crossfade({
-		fallback: (node) => fade(node)
+		fallback: (node) => fade(node),
 	});
 </script>
 
@@ -44,8 +46,8 @@
 			onclick={() => {
 				goto(
 					route("/mangadex/title/[id]", {
-						id: data.id
-					})
+						id: data.id,
+					}),
 				);
 			}}
 		/>
@@ -78,6 +80,9 @@
 		container-name: list;
 		container-type: initial;
 		gap: 10px;
-		grid-template-columns: repeat(var(--medium-column), calc(98% / var(--medium-column)));
+		grid-template-columns: repeat(
+			var(--medium-column),
+			calc(98% / var(--medium-column))
+		);
 	}
 </style>
