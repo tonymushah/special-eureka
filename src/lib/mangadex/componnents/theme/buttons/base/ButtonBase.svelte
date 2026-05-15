@@ -50,7 +50,7 @@
 		display: var(--button-display);
 		align-items: var(--button-align-items);
 		justify-content: var(--button-justify-content);
-		transform: translateY(-4px);
+		/* transform: translateY(0px); */
 	}
 
 	button:hover:disabled {
@@ -92,7 +92,7 @@
 	}
 	button:active {
 		box-shadow: none;
-		transform: translateY(0px);
+		transform: translateY(4px);
 	}
 	button.with-active:active {
 		background-color: var(--button-active);
@@ -116,9 +116,18 @@
 			var(--button-color) 100%
 		);
 		box-shadow: none;
-		transform: translateY(0px);
+		transform: translateY(4px);
 	}
 	button.isBase:disabled {
 		box-shadow: none;
+	}
+	button:global([data-top-abit]) {
+		transform: translateY(-4px);
+	}
+	button:global([data-top-abit]):active {
+		transform: translateY(0px);
+	}
+	button:global([data-top-abit]):disabled {
+		transform: translateY(-4px);
 	}
 </style>
