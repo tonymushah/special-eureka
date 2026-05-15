@@ -107,6 +107,7 @@
 		</swiper-container>
 		<div class="pagination">
 			<ButtonAccent
+				data-top-abit
 				isBase={false}
 				onclick={() => {
 					if (swiper_container != undefined) {
@@ -117,6 +118,7 @@
 				<ArrowLeftIcon />
 			</ButtonAccent>
 			<ButtonAccent
+				data-top-abit
 				onclick={() => {
 					if (current_page_) {
 						const title = popular_titles[current_page_];
@@ -133,6 +135,7 @@
 				<span class="current-page">{current_page}</span>
 			</ButtonAccent>
 			<ButtonAccent
+				data-top-abit
 				isBase={false}
 				onclick={() => {
 					if (swiper_container != undefined) {
@@ -161,7 +164,7 @@
 		.pagination {
 			align-items: end;
 			display: flex;
-			gap: 1em;
+			gap: var(--space-md);
 			justify-content: end;
 			position: absolute;
 			bottom: 0em;
