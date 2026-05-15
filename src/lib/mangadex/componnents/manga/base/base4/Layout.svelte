@@ -5,7 +5,7 @@
 		onclick?: (
 			ev: MouseEvent & {
 				currentTarget: EventTarget & HTMLElement;
-			}
+			},
 		) => any;
 	}
 	interface Props extends Events {
@@ -20,7 +20,7 @@
 	class="layout manga-element"
 	data-manga-id={mangaId}
 	oncontextmenu={registerContextMenuEvent({
-		preventDefault: true
+		preventDefault: true,
 	})}
 	{onclick}
 >
@@ -31,7 +31,7 @@
 	.layout {
 		width: var(--w-base);
 		overflow: hidden;
-		border-radius: 0.25rem;
+		border-radius: var(--space-sm);
 		display: flex;
 		flex-direction: column;
 	}
@@ -51,7 +51,12 @@
 	button:hover:disabled {
 		background: linear-gradient(
 			45deg,
-			color-mix(in srgb, var(--main-background) 95%, var(--danger, transparent) 05%) 0% 0%,
+			color-mix(
+					in srgb,
+					var(--main-background) 95%,
+					var(--danger, transparent) 05%
+				)
+				0% 0%,
 			var(--mid-tone) 100%
 		);
 	}
@@ -61,7 +66,11 @@
 		filter: brightness(75%);
 	}
 	.manga-element:global([data-selecto-selected]) {
-		background-color: color-mix(in srgb, var(--primary) 50%, transparent 50%);
+		background-color: color-mix(
+			in srgb,
+			var(--primary) 50%,
+			transparent 50%
+		);
 		border-radius: 3px;
 		border: 2px solid var(--primary);
 	}

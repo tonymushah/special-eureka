@@ -1,12 +1,15 @@
 <script lang="ts">
+	import type { ClassValue } from "svelte/elements";
+
 	interface Props {
 		children?: import("svelte").Snippet;
+		class?: ClassValue;
 	}
 
-	let { children }: Props = $props();
+	let { children, class: _cl }: Props = $props();
 </script>
 
-<div>
+<div class={_cl}>
 	{@render children?.()}
 </div>
 

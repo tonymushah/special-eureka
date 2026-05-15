@@ -31,7 +31,8 @@
 
 	let swiper_container: SwiperContainer | undefined = $state(undefined);
 	const swiperParams: SwiperOptions = {
-		slidesPerView: "auto",
+		slidesPerView: 1,
+		virtual: true,
 		breakpoints: {
 			640: {
 				slidesPerView: 3,

@@ -12,13 +12,21 @@
 		href: string;
 		ext_href?: string | undefined;
 		children?: import("svelte").Snippet;
-		onclick?: (e?: MouseEvent & { currentTarget: EventTarget & HTMLElement }) => unknown;
+		onclick?: (
+			e?: MouseEvent & { currentTarget: EventTarget & HTMLElement },
+		) => unknown;
 	}
 	let unlistens: UnlistenFn[] = [];
 	onDestroy(() => {
 		unlistens.forEach((u) => u());
 	});
-	let { variant = "primary", href, ext_href = undefined, children, onclick }: Props = $props();
+	let {
+		variant = "primary",
+		href,
+		ext_href = undefined,
+		children,
+		onclick,
+	}: Props = $props();
 	let primary = $derived(variant == "primary");
 	let base = $derived(variant == "base");
 </script>
@@ -37,13 +45,13 @@
 					text: "Open",
 					action() {
 						goto(href);
-					}
+					},
 				}),
 				ContextMenuItemProvider.menuItem({
 					text: "Open in a new window",
 					action() {
 						openNewWindow(currentLocationWithNewPath(href));
-					}
+					},
 				}),
 				ContextMenuItemProvider.menuItem({
 					text: "Open external link",
@@ -52,12 +60,12 @@
 						if (ext_href) {
 							openUrl(ext_href);
 						}
-					}
-				})
+					},
+				}),
 			];
 
 			return items;
-		}
+		},
 	})}
 >
 	{@render children?.()}
@@ -66,10 +74,6 @@
 <style lang="scss">
 	a {
 		text-decoration: none;
-
-		transition:
-			color 300ms ease-in-out,
-			text-decoration 300ms ease-in-out;
 	}
 	/*
 	a:hover {

@@ -22,7 +22,11 @@
 	}: Props = $props();
 </script>
 
-<button bind:this={_this} {...restProps} class:users-simple-selectable={selectable}>
+<button
+	bind:this={_this}
+	{...restProps}
+	class:users-simple-selectable={selectable}
+>
 	<img alt="{camelCase(name)}-profile-picture" src={profilePicture} />
 	<p>{name}</p>
 	<div class="right">
@@ -32,7 +36,7 @@
 
 <style lang="scss">
 	:root {
-		--outer-border: 3px;
+		--outer-border: 4px;
 	}
 	img {
 		border-radius: 100vh;
@@ -44,25 +48,28 @@
 		margin: 0px;
 	}
 	button {
-		padding: 0.5em 0.25em;
-		padding-right: 1em;
+		--shadows-border: var(--mid-tone);
+		padding: var(--space-xs) var(--space-sm);
+		padding-right: var(--space-md);
 		display: flex;
-		gap: 0.5em;
+		gap: var(--space-sm);
 		align-items: center;
 		background-color: var(--accent);
-		transition:
-			(box-shadow, transform) 100ms ease-in-out,
-			background-color 200ms ease-in-out;
 		color: var(--text-color);
 		font-family: var(--fonts);
-		border-radius: 8px;
-		border-color: var(--mid-tone);
+		border-radius: var(--radius-sm);
+		border-color: var(--shadows-border);
 		border-style: solid;
-		border-width: var(--outer-border);
-		box-shadow: 0px var(--outer-border) 0px var(--mid-tone);
+		border-width: 3px;
+		box-shadow: 0px var(--outer-border) 0px var(--shadows-border);
 	}
 	button:hover {
 		background-color: var(--accent-hover);
+		cursor: pointer;
+	}
+	button:focus {
+		outline: none;
+		--shadows-border: var(--contrast-l1);
 	}
 	button:active {
 		background-color: var(--accent-active);

@@ -36,8 +36,7 @@
 		display: flex;
 		flex-direction: row;
 		overflow-y: hidden;
-		border-radius: 0.25rem;
-		border-radius: 0.25em;
+		border-radius: var(--radius-sm);
 		transition:
 			background-color,
 			filter 200ms ease-in-out;
@@ -54,13 +53,13 @@
 	}
 	.layout:hover {
 		background-color: var(--accent-l3-hover);
-		box-shadow: 0px 4px 0px var(--shadow-color);
-		transform: translateY(-4px);
+		/* box-shadow: 0px 4px 0px var(--shadow-color); */
+		/* transform: translateY(-4px); */
 	}
 	.layout:active {
 		background-color: var(--accent-l3-active);
-		box-shadow: none;
-		transform: translateY(0px);
+		/* box-shadow: none; */
+		/* transform: translateY(0px); */
 	}
 	.manga-element:global([data-selecto-selected]) {
 		background-color: color-mix(

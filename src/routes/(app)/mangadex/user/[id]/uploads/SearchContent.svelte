@@ -5,10 +5,17 @@
 	import Fetching from "@mangadex/componnents/search/content/Fetching.svelte";
 	import HasNext from "@mangadex/componnents/search/content/HasNext.svelte";
 	import NothingToShow from "@mangadex/componnents/search/content/NothingToShow.svelte";
-	import { ForumThreadType, OrderDirection, type ChapterSortOrder } from "@mangadex/gql/graphql";
+	import {
+		ForumThreadType,
+		OrderDirection,
+		type ChapterSortOrder,
+	} from "@mangadex/gql/graphql";
 	import chapterFeedStyle from "@mangadex/stores/chapterFeedStyle";
 	import type AbstractSearchResult from "@mangadex/utils/searchResult/AbstractSearchResult";
-	import { createInfiniteQuery, type CreateInfiniteQueryOptions } from "@tanstack/svelte-query";
+	import {
+		createInfiniteQuery,
+		type CreateInfiniteQueryOptions,
+	} from "@tanstack/svelte-query";
 	import { getContextClient } from "@urql/svelte";
 	import { debounce } from "es-toolkit/compat";
 	import { onDestroy } from "svelte";
@@ -16,7 +23,7 @@
 	import { derived, get, writable } from "svelte/store";
 	import executeSearchQuery, {
 		type ChapterFeedListItemExt,
-		type UserUploadsFeedChapterParams
+		type UserUploadsFeedChapterParams,
 	} from "./search";
 	import pageLimit from "@mangadex/stores/page-limit";
 	import ChapterSortSelector from "@mangadex/componnents/chapter/feed/list/sort/ChapterSortSelector.svelte";
@@ -32,11 +39,18 @@
 	let { userId }: Props = $props();
 	const client = getContextClient();
 	let order = $state<ChapterSortOrder | undefined>({
-		readableAt: OrderDirection.Descending
+		readableAt: OrderDirection.Descending,
 	});
+	$inspect(order);
 	let queryOptions = $derived.by(() => {
 		return {
-			queryKey: ["user", userId, "uploads", `limit:${$pageLimit}`, `${order}`],
+			queryKey: [
+				"user",
+				userId,
+				"uploads",
+				`limit:${$pageLimit}`,
+				`${JSON.stringify(order)}`,
+			],
 			async queryFn({ pageParam }) {
 				return await executeSearchQuery(client, pageParam);
 			},
@@ -49,15 +63,16 @@
 					return {
 						...lastPageParam,
 						offset: next_offset,
-						limit
+						limit,
+						order,
 					};
 				}
 			},
 			initialPageParam: {
 				user: userId,
 				limit: $pageLimit,
-				order
-			} satisfies UserUploadsFeedChapterParams
+				order,
+			} satisfies UserUploadsFeedChapterParams,
 		} satisfies CreateInfiniteQueryOptions<
 			AbstractSearchResult<ChapterFeedListItemExt>,
 			Error,
@@ -86,8 +101,8 @@
 			}
 		},
 		{
-			threshold: 0.2
-		}
+			threshold: 0.2,
+		},
 	);
 	onDestroy(() => {
 		observer.disconnect();
@@ -113,8 +128,8 @@
 			const id = e.id;
 			goto(
 				route("/mangadex/title/[id]", {
-					id
-				})
+					id,
+				}),
 			);
 		}}
 		oncomments={({ id }) => {
@@ -125,7 +140,7 @@
 				createForumThreadMutation.mutate(
 					{
 						id: id,
-						threadType: ForumThreadType.Chapter
+						threadType: ForumThreadType.Chapter,
 					},
 					{
 						onError(error) {
@@ -133,8 +148,8 @@
 						},
 						onSuccess(data) {
 							openUrl(data.forumUrl);
-						}
-					}
+						},
+					},
 				);
 			}
 		}}

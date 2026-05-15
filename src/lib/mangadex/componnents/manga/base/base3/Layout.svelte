@@ -40,7 +40,7 @@
 		width: var(--element-w);
 		height: var(--element-h);
 		overflow: hidden;
-		border-radius: 0.25rem;
+		border-radius: var(--radius-sm);
 	}
 	button {
 		--shadow-color: var(--mid-tone);

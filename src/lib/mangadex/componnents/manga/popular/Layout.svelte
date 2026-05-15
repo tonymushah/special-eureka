@@ -3,7 +3,7 @@
 	import type { Snippet } from "svelte";
 
 	interface Props {
-		coverImage: string;
+		coverImage?: string;
 		nOindex?: Snippet;
 		children?: Snippet;
 	}
@@ -15,7 +15,7 @@
 	class="layout-image"
 	style={`background-image: url(${coverImage});`}
 	oncontextmenu={registerContextMenuEvent({
-		preventDefault: true
+		preventDefault: true,
 	})}
 >
 	<div class="layout-color">

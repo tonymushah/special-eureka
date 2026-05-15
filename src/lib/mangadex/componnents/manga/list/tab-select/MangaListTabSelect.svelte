@@ -1,57 +1,69 @@
 <script lang="ts">
-	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
+	// import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import { MangaListStyle } from "@mangadex/gql/graphql";
 	import { LayoutList, Grid3x2, LayoutGrid } from "@lucide/svelte";
 	import { getMangaListStyleContextWritable } from "../contexts/style";
+	import buttonGroupCssMod from "@mangadex/componnents/theme/selects/button-group.module.scss";
 
 	const style = getMangaListStyleContextWritable();
 	const size = "24";
 </script>
 
-<div class="tab-select">
-	<ButtonAccent
+<div class={[buttonGroupCssMod.tabSelect]}>
+	<button
 		onclick={() => {
 			style.set(MangaListStyle.Grid);
 		}}
-		variant={$style == MangaListStyle.Grid ? "4" : "1"}
+		disabled={$style == MangaListStyle.Grid}
+		class={[
+			"grid-mode",
+			buttonGroupCssMod.button,
+			$style == MangaListStyle.Grid && buttonGroupCssMod.active,
+		]}
 	>
-		<div class="icon">
+		<div class={buttonGroupCssMod.icon}>
 			<LayoutGrid {size} />
 		</div>
-	</ButtonAccent>
-	<ButtonAccent
+	</button>
+	<button
 		onclick={() => {
 			style.set(MangaListStyle.Rows);
 		}}
-		variant={$style == MangaListStyle.Rows ? "5" : "1"}
+		disabled={$style == MangaListStyle.Rows}
+		class={[
+			"row-list-mode",
+			buttonGroupCssMod.button,
+			$style == MangaListStyle.Rows && buttonGroupCssMod.active,
+		]}
 	>
-		<div class="icon">
+		<div class={buttonGroupCssMod.icon}>
 			<LayoutList {size} />
 		</div>
-	</ButtonAccent>
-	<ButtonAccent
+	</button>
+	<button
 		onclick={() => {
 			style.set(MangaListStyle.Cover);
 		}}
-		variant={$style == MangaListStyle.Cover ? "5" : "1"}
+		disabled={$style == MangaListStyle.Cover}
+		class={[
+			"cover-mode",
+			buttonGroupCssMod.button,
+			$style == MangaListStyle.Cover && buttonGroupCssMod.active,
+		]}
 	>
-		<div class="icon">
+		<div class={buttonGroupCssMod.icon}>
 			<Grid3x2 {size} />
 		</div>
-	</ButtonAccent>
+	</button>
 </div>
 
 <style lang="scss">
-	.tab-select {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		gap: 5px;
+	.grid-mode {
+		border-top-left-radius: var(--radius-md);
+		border-bottom-left-radius: var(--radius-md);
 	}
-	.icon {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		padding: 2px;
+	.cover-mode {
+		border-top-right-radius: var(--radius-md);
+		border-bottom-right-radius: var(--radius-md);
 	}
 </style>

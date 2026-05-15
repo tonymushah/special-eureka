@@ -10,7 +10,7 @@
 		onvalidate?: (
 			ev: MouseEvent & {
 				currentTarget: EventTarget & HTMLButtonElement;
-			}
+			},
 		) => unknown;
 	}
 	interface Props extends Events {
@@ -21,7 +21,7 @@
 	let {
 		dialog_bind = $bindable(undefined),
 		requireValidation = false,
-		onvalidate
+		onvalidate,
 	}: Props = $props();
 </script>
 
@@ -105,6 +105,13 @@
 	dialog::backdrop {
 		backdrop-filter: blur(5px);
 		-webkit-backdrop-filter: blur(5px);
-		background-color: color-mix(in srgb, var(--main-background) 50%, transparent 50%);
+		background-color: color-mix(
+			in srgb,
+			var(--main-background) 50%,
+			transparent 50%
+		);
+	}
+	dialog:focus {
+		outline: none;
 	}
 </style>

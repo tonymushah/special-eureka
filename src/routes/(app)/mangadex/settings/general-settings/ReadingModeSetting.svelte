@@ -33,7 +33,11 @@
 		border: 3px var(--mid-tone) solid;
 		font-family: var(--fonts);
 		font-weight: 800;
-		padding: 2px;
-		border-radius: 3px;
+		padding: var(--space-xs);
+		border-radius: var(--radius-md);
+	}
+	select:focus {
+		outline: none;
+		border-color: var(--contrast-l1);
 	}
 </style>

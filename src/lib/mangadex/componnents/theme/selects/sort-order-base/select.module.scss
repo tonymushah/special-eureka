@@ -100,3 +100,8 @@
 .trigger:hover {
 	background-color: var(--accent-active);
 }
+
+.trigger:focus {
+	border-color: var(--contrast-l1);
+	outline: none;
+}

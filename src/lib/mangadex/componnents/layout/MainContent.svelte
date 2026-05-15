@@ -13,7 +13,11 @@
 	let isRTL = $derived($isSidebarRtl);
 </script>
 
-<div class="provider" class:isRTL class:defaultDecoration={$isDefaultDecoration}>
+<div
+	class="provider"
+	class:isRTL
+	class:defaultDecoration={$isDefaultDecoration}
+>
 	<div class="sidebar">
 		<Sidebar />
 	</div>
@@ -125,6 +129,9 @@
 	.inner.loading :global(*) {
 		pointer-events: none;
 	}
+	.inner:focus {
+		outline: none;
+	}
 	@keyframes loading {
 		from {
 			filter: blur(0px);
@@ -133,7 +140,11 @@
 		to {
 			filter: blur(10px);
 			-webkit-filter: blur(10px);
-			background-color: color-mix(in srgb, var(--main-background) 50%, transparent 50%);
+			background-color: color-mix(
+				in srgb,
+				var(--main-background) 50%,
+				transparent 50%
+			);
 		}
 	}
 </style>

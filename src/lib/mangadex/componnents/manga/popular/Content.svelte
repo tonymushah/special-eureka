@@ -15,19 +15,19 @@
 		onclick?: (
 			ev: MouseEvent & {
 				currentTarget: EventTarget & HTMLDivElement;
-			}
+			},
 		) => any;
 		onauthorClick?: (
 			ev: MouseEvent & {
 				currentTarget: EventTarget & HTMLButtonElement;
 				id: string;
-			}
+			},
 		) => any;
 		ontagClick?: (
 			ev: MouseEvent & {
 				currentTarget: EventTarget & HTMLButtonElement;
 				id: string;
-			}
+			},
 		) => any;
 	}
 	interface Props extends Events {
@@ -46,7 +46,7 @@
 		authors,
 		onauthorClick,
 		onclick,
-		ontagClick
+		ontagClick,
 	}: Props = $props();
 </script>
 
@@ -111,6 +111,7 @@
 			-webkit-line-clamp: 2;
 			overflow: hidden;
 			-webkit-box-orient: vertical;
+			font-size: var(--text-heading-lg);
 		}
 	}
 	div.title:hover {
@@ -122,7 +123,8 @@
 	}
 	.content {
 		display: flex;
-		margin-bottom: 1em;
+		gap: var(--space-md);
+		/* margin-bottom: 1em; */
 		flex-direction: column;
 		align-items: start;
 		text-align: start;
@@ -133,6 +135,7 @@
 			width: 100%;
 			display: flex;
 			flex-direction: column;
+			gap: var(--space-sm);
 			height: 100%;
 		}
 	}
@@ -146,6 +149,7 @@
 		overflow-y: auto;
 		width: 100%;
 		flex: 1;
+		font-size: var(--text-caption);
 	}
 	.authors {
 		display: flex;
