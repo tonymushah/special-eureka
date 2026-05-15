@@ -155,14 +155,14 @@
 		}
 	}
 	div.description {
-		font-size: var(--text-caption);
 		text-align: left;
-		/* -webkit-box-orient: vertical; */
+		font-size: var(--text-caption);
+		overflow: hidden;
+		padding-bottom: var(--space-md);
+		-webkit-box-orient: vertical;
 		line-clamp: 3;
 		-webkit-line-clamp: 3;
 		display: -webkit-box;
-		overflow: hidden;
-		padding-bottom: var(--space-md);
 	}
 	div.publication {
 		display: flex;
