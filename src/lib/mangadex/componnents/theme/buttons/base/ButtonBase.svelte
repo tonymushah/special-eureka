@@ -66,7 +66,7 @@
 		);
 	}
 	button.haveBorderRadius {
-		border-radius: 0.25rem;
+		border-radius: var(--radius-md);
 	}
 	button.noPadding {
 		padding: 0px;
