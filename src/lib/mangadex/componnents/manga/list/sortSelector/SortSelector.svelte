@@ -1,51 +1,56 @@
 <script lang="ts" module>
 	const sortsData: Record<string, MangaSortOrder> = {
 		"Recently Created": {
-			createdAt: OrderDirection.Ascending
+			createdAt: OrderDirection.Ascending,
 		},
 		"Anciently Created": {
-			createdAt: OrderDirection.Descending
+			createdAt: OrderDirection.Descending,
 		},
 		"Most Followed": {
-			followedCount: OrderDirection.Ascending
+			followedCount: OrderDirection.Ascending,
 		},
 		"Least Followed": {
-			followedCount: OrderDirection.Descending
+			followedCount: OrderDirection.Descending,
 		},
 		"Latest Upload": {
-			latestUploadedChapter: OrderDirection.Ascending
+			latestUploadedChapter: OrderDirection.Ascending,
 		},
 		"Oldest Upload": {
-			latestUploadedChapter: OrderDirection.Descending
+			latestUploadedChapter: OrderDirection.Descending,
 		},
 		"Relevance Ascending": {
-			relevance: OrderDirection.Ascending
+			relevance: OrderDirection.Ascending,
 		},
 		"Relevance Descending": {
-			relevance: OrderDirection.Descending
+			relevance: OrderDirection.Descending,
 		},
 		"Title Ascending": {
-			title: OrderDirection.Ascending
+			title: OrderDirection.Ascending,
 		},
 		"Title Descending": {
-			title: OrderDirection.Descending
+			title: OrderDirection.Descending,
 		},
 		"Recently Updated": {
-			updatedAt: OrderDirection.Ascending
+			updatedAt: OrderDirection.Ascending,
 		},
 		"Anciently Updated": {
-			updatedAt: OrderDirection.Descending
+			updatedAt: OrderDirection.Descending,
 		},
 		"Year Ascending": {
-			year: OrderDirection.Ascending
+			year: OrderDirection.Ascending,
 		},
 		"Year Descending": {
-			year: OrderDirection.Descending
-		}
+			year: OrderDirection.Descending,
+		},
 	};
-	const sortDataMap = new Map(Object.entries(sortsData).map(([key, value]) => [key, value]));
+	const sortDataMap = new Map(
+		Object.entries(sortsData).map(([key, value]) => [key, value]),
+	);
 	const sortDataMapRev = new Map(
-		Object.entries(sortsData).map(([key, value]) => [JSON.stringify(value), key])
+		Object.entries(sortsData).map(([key, value]) => [
+			JSON.stringify(value),
+			key,
+		]),
 	);
 </script>
 
@@ -60,7 +65,10 @@
 		sort: MangaSortOrder | undefined;
 	}
 	let { sort = $bindable() }: Props = $props();
-	const collection = createListCollection({ items: sortDataMap.keys().toArray() });
+	const collection = createListCollection({
+		items: sortDataMap.keys().toArray(),
+	});
+	$inspect(sort);
 </script>
 
 <SelectSortOrderBase
@@ -69,9 +77,12 @@
 	bind:value={
 		() => {
 			if (sort == undefined) {
-				return undefined;
+				return [];
 			} else {
-				const res = sortDataMapRev.get(JSON.stringify({ ...sort }));
+				const key = JSON.stringify({
+					...sort,
+				});
+				const res = sortDataMapRev.get(key);
 				if (res) {
 					return [res];
 				} else {
@@ -80,6 +91,7 @@
 			}
 		},
 		(val) => {
+			console.log(val);
 			if (val) {
 				if (val.length > 0) {
 					sort = sortDataMap.get(val[0]);

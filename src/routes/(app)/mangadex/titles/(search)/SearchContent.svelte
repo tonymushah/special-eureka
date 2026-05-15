@@ -6,8 +6,14 @@
 	import Fetching from "@mangadex/componnents/search/content/Fetching.svelte";
 	import HasNext from "@mangadex/componnents/search/content/HasNext.svelte";
 	import NothingToShow from "@mangadex/componnents/search/content/NothingToShow.svelte";
-	import type { MangaListParams, MangaSortOrder } from "@mangadex/gql/graphql";
-	import { createInfiniteQuery, type CreateInfiniteQueryOptions } from "@tanstack/svelte-query";
+	import type {
+		MangaListParams,
+		MangaSortOrder,
+	} from "@mangadex/gql/graphql";
+	import {
+		createInfiniteQuery,
+		type CreateInfiniteQueryOptions,
+	} from "@tanstack/svelte-query";
 	import { getContextClient } from "@urql/svelte";
 	import { debounce /* , last, range */ } from "es-toolkit/compat";
 	import { onDestroy } from "svelte";
@@ -28,7 +34,7 @@
 		offlineStore,
 		excludeContentProfile,
 		hideReadTitle = $bindable(false),
-		disableAuthorArtitsBlacklist
+		disableAuthorArtitsBlacklist,
 	}: Props = $props();
 	// $inspect(offlineStore);
 	let initialParam = $derived(structuredClone(_initialParam));
@@ -38,27 +44,38 @@
 		limit: number;
 		total: number;
 	}
+	let _order = $state<MangaSortOrder | undefined>();
+	$inspect(_order);
 	let infiniteQuery = createInfiniteQuery(() => {
 		let params = initialParam;
 		let isOffline = offlineStore;
+		let order = _order;
 		return {
 			queryKey: [
 				"manga-search",
+				{ order, ...params },
+				isOffline,
+				hideReadTitle,
+				disableAuthorArtitsBlacklist ?? false,
+				order,
+			],
+			initialPageParam: [
 				params,
 				isOffline,
 				hideReadTitle,
-				disableAuthorArtitsBlacklist ?? false
-			],
-			initialPageParam: [
-				{ ...params },
-				isOffline,
-				hideReadTitle,
-				disableAuthorArtitsBlacklist ?? false
+				disableAuthorArtitsBlacklist ?? false,
+				order,
 			],
 			getNextPageParam(
 				lastPage,
 				allPages,
-				[lastPageParam, lastPageOffline, lastHideReadTitle, disableAuthorArtistsBlacklist]
+				[
+					lastPageParam,
+					lastPageOffline,
+					lastHideReadTitle,
+					disableAuthorArtistsBlacklist,
+					order,
+				],
 			) {
 				const next_offset = lastPage.limit + lastPage.offset;
 				if (next_offset > lastPage.total) {
@@ -68,28 +85,35 @@
 						{
 							...lastPageParam,
 							limit: lastPage.limit,
-							offset: next_offset
+							offset: next_offset,
 						},
 						lastPageOffline,
 						lastHideReadTitle,
-						disableAuthorArtistsBlacklist
+						disableAuthorArtistsBlacklist,
+						order,
 					];
 				}
 			},
 			async queryFn({
-				pageParam: [p, offline, hideReadTitle, disableAuthorArtistsBlacklist]
+				pageParam: [
+					p,
+					offline,
+					hideReadTitle,
+					disableAuthorArtistsBlacklist,
+					order,
+				],
 			}) {
 				const res = await executeSearchQuery(
 					client,
-					p,
+					{ ...p, order },
 					offline,
 					excludeContentProfile,
 					hideReadTitle,
-					disableAuthorArtistsBlacklist
+					disableAuthorArtistsBlacklist,
 				);
 				return {
 					data: res.data,
-					...res.paginationData
+					...res.paginationData,
 				};
 			},
 			getPreviousPageParam(
@@ -99,8 +123,9 @@
 					firstPageParam,
 					firstPageOffline,
 					firstHideReadTitle,
-					disableAuthorArtistsBlacklist
-				]
+					disableAuthorArtistsBlacklist,
+					order,
+				],
 			) {
 				const next_offset = firstPage.limit - firstPage.offset;
 				if (next_offset < 0) {
@@ -110,20 +135,21 @@
 						{
 							...firstPageParam,
 							limit: firstPage.limit,
-							offset: next_offset
+							offset: next_offset,
 						},
 						firstPageOffline,
 						firstHideReadTitle,
-						disableAuthorArtistsBlacklist
+						disableAuthorArtistsBlacklist,
+						order,
 					];
 				}
-			}
+			},
 		} satisfies CreateInfiniteQueryOptions<
 			InfiniteQueryData,
 			Error,
 			InfiniteQueryData,
-			[string, MangaListParams, boolean, boolean, boolean],
-			[MangaListParams, boolean, boolean, boolean]
+			[string, MangaListParams, boolean, boolean, boolean, typeof order],
+			[MangaListParams, boolean, boolean, boolean, typeof order]
 		>;
 	});
 	let titles = $derived.by(() => {
@@ -136,7 +162,7 @@
 	$effect(() =>
 		listenToBlacklistChange(() => {
 			infiniteQuery.refetch();
-		})
+		}),
 	);
 	let isFetching = $derived(infiniteQuery.isFetching);
 	let hasNext = $derived(infiniteQuery.hasNextPage);
@@ -173,8 +199,8 @@
 			}
 		},
 		{
-			threshold: 1.0
-		}
+			threshold: 1.0,
+		},
 	);
 	let to_obserce_bind: HTMLElement | undefined = $state(undefined);
 	$effect(() => {
@@ -195,14 +221,7 @@
 		<div class="additional-content">
 			<section>
 				<p>Sort by:</p>
-				<SortSelector
-					bind:sort={
-						() => initialParam.order ?? undefined,
-						(val) => {
-							initialParam.order = val;
-						}
-					}
-				/>
+				<SortSelector bind:sort={_order} />
 			</section>
 		</div>
 	{/snippet}
