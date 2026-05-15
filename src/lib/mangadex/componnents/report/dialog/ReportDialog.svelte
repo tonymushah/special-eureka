@@ -5,7 +5,6 @@
 	import {
 		createReportReasonListQuery,
 		createSendReportMutation,
-		ReportAttributesFrag,
 		ReportReasonAttributesFrag,
 	} from "@mangadex/gql-docs/report";
 	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
