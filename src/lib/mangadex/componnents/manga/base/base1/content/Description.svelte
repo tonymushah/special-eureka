@@ -40,5 +40,6 @@
 		display: -webkit-box;
 		overflow: hidden;
 		margin: 2px;
+		font-size: var(--text-caption);
 	}
 </style>

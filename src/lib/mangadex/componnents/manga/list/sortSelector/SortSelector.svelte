@@ -1,22 +1,22 @@
 <script lang="ts" module>
 	const sortsData: Record<string, MangaSortOrder> = {
 		"Recently Created": {
-			createdAt: OrderDirection.Ascending,
-		},
-		"Anciently Created": {
 			createdAt: OrderDirection.Descending,
 		},
-		"Most Followed": {
-			followedCount: OrderDirection.Ascending,
+		"Anciently Created": {
+			createdAt: OrderDirection.Ascending,
 		},
-		"Least Followed": {
+		"Most Followed": {
 			followedCount: OrderDirection.Descending,
 		},
+		"Least Followed": {
+			followedCount: OrderDirection.Ascending,
+		},
 		"Latest Upload": {
-			latestUploadedChapter: OrderDirection.Ascending,
+			latestUploadedChapter: OrderDirection.Descending,
 		},
 		"Oldest Upload": {
-			latestUploadedChapter: OrderDirection.Descending,
+			latestUploadedChapter: OrderDirection.Ascending,
 		},
 		"Relevance Ascending": {
 			relevance: OrderDirection.Ascending,
@@ -31,10 +31,10 @@
 			title: OrderDirection.Descending,
 		},
 		"Recently Updated": {
-			updatedAt: OrderDirection.Ascending,
+			updatedAt: OrderDirection.Descending,
 		},
 		"Anciently Updated": {
-			updatedAt: OrderDirection.Descending,
+			updatedAt: OrderDirection.Ascending,
 		},
 		"Year Ascending": {
 			year: OrderDirection.Ascending,
