@@ -175,6 +175,7 @@
 		{/if}
 		<div class="bottom">
 			<ButtonAccentOnlyLabel
+				isBase
 				label="Close"
 				onclick={() => {
 					dialog?.close();
@@ -194,8 +195,8 @@
 		color: var(--text-color);
 		width: 50vw;
 		height: 65vh;
-		border: 2px solid var(--primary);
-		border-radius: 3px;
+		border: 3px solid var(--primary);
+		border-radius: var(--radius-md);
 		padding: 12px;
 		z-index: 30;
 	}
@@ -204,7 +205,8 @@
 		flex-direction: column;
 		justify-content: space-between;
 		align-items: center;
-		max-height: 100%;
+		height: 100%;
+		gap: var(--space-xs);
 	}
 	.bottom {
 		display: flex;
@@ -221,8 +223,10 @@
 		);
 	}
 	.chapters {
-		display: grid;
+		display: flex;
+		flex-direction: column;
 		overflow-y: scroll;
+		gap: var(--space-xs);
 		flex: 1;
 	}
 </style>
