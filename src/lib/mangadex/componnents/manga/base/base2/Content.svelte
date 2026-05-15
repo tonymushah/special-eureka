@@ -112,7 +112,7 @@
 	}
 	div.title > p {
 		margin: 0px;
-		font-size: 20px;
+		font-size: var(--text-heading-sm);
 		-webkit-box-orient: vertical;
 		line-clamp: 1;
 		-webkit-line-clamp: 1;
@@ -155,6 +155,7 @@
 		}
 	}
 	div.description {
+		font-size: var(--text-caption);
 		text-align: left;
 		-webkit-box-orient: vertical;
 		line-clamp: 3;
