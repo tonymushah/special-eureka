@@ -18,7 +18,7 @@
 		color: var(--text-color);
 		font-family: var(--fonts);
 		padding: var(--tag-padding);
-		border-radius: 0.25em;
+		border-radius: var(--radius-md);
 		border: 1px solid var(--mid-tone);
 		box-shadow: 0px 3px 0px var(--mid-tone);
 		transform: translateY(0px);
@@ -41,6 +41,6 @@
 	}
 	button:disabled {
 		box-shadow: none;
-		transform: translateY(0px);
+		transform: translateY(3px);
 	}
 </style>
