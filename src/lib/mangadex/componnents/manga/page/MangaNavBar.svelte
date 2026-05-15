@@ -16,7 +16,7 @@
 		oncomment?: (
 			ev: MouseEvent & {
 				currentTarget: EventTarget & HTMLButtonElement;
-			}
+			},
 		) => unknown;
 	}
 	interface Props extends Events {
@@ -31,7 +31,7 @@
 		hasRelation = false,
 		comments = undefined,
 		oncomment,
-		disableComments
+		disableComments,
 	}: Props = $props();
 </script>
 
@@ -55,7 +55,8 @@
 	</button>
 	{#if hasRelation}
 		<button
-			class:active={$path == route("/mangadex/title/[id]/related", { id })}
+			class:active={$path ==
+				route("/mangadex/title/[id]/related", { id })}
 			onclick={() => {
 				goto(route("/mangadex/title/[id]/related", { id }));
 			}}
@@ -77,13 +78,14 @@
 
 <style lang="scss">
 	button {
-		transition: background-color 300ms ease-in-out;
+		transition: background-color 50ms ease-in-out;
 		color: var(--text-color);
 		font-family: var(--fonts);
 		background-color: var(--accent-l1);
 		border: none;
 		font-size: 16px;
-		padding: 5px 10px;
+		padding: var(--space-xs) var(--space-sm);
+		border-radius: var(--radius-sm);
 	}
 
 	button:hover {
@@ -111,5 +113,6 @@
 		gap: 10px;
 		padding: 5px 10px;
 		width: fit-content;
+		border-radius: var(--radius-sm);
 	}
 </style>
