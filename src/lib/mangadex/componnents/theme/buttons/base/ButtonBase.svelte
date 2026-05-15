@@ -45,7 +45,7 @@
 		color: var(--text-color);
 		background-color: var(--button-color);
 		font-family: var(--fonts);
-		border: var(--mid-tone) solid 3px;
+		border: 3px solid var(--mid-tone);
 		box-shadow: 0px 4px 0px var(--mid-tone);
 		display: var(--button-display);
 		align-items: var(--button-align-items);

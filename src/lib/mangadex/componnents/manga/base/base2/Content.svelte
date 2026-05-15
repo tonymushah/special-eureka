@@ -157,12 +157,14 @@
 	div.description {
 		text-align: left;
 		font-size: var(--text-caption);
-		overflow: hidden;
+
 		padding-bottom: var(--space-md);
-		-webkit-box-orient: vertical;
+		/* -webkit-box-orient: vertical;
 		line-clamp: 3;
 		-webkit-line-clamp: 3;
-		display: -webkit-box;
+		display: -webkit-box; */
+		overflow: hidden;
+		text-overflow: ellipsis;
 	}
 	div.publication {
 		display: flex;
