@@ -163,8 +163,9 @@
 			display: flex;
 			gap: 1em;
 			justify-content: end;
-			position: relative;
-			top: -2em;
+			position: absolute;
+			bottom: 0em;
+			right: 0em;
 			z-index: 1;
 			margin-right: 2em;
 		}
