@@ -28,7 +28,7 @@
 		<div class="input">
 			<FormInput
 				inputProps={{
-					placeholder: "Group name"
+					placeholder: "Group name",
 				}}
 				bind:value={inputName}
 				widthFull
@@ -42,13 +42,18 @@
 			}}
 		>
 			{#if realTime}
-				<ButtonAccent variant="accent" isBase type="submit">
+				<ButtonAccent
+					variant="accent"
+					isBase
+					type="submit"
+					data-top-abit
+				>
 					<div class="icons">
 						<SearchIcon />
 					</div>
 				</ButtonAccent>
 			{:else}
-				<PrimaryButton variant="1" isBase type="submit">
+				<PrimaryButton variant="1" isBase type="submit" data-top-abit>
 					<div class="icons">
 						<SearchIcon />
 					</div>
