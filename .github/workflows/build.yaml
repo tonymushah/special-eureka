@@ -47,8 +47,29 @@ jobs:
       - name: install aarch64-pc-windows-msvc target for arm64 windows
         if: matrix.id == 'windows-arm'
         run: rustup target add aarch64-pc-windows-msvc
+      - name: install dependencies (ubuntu arm only)
+        if: matrix.platform == 'ubuntu-24.04-arm'
+        run: |
+          sudo apt update;
+          sudo apt install -y \
+            build-essential \
+            curl \
+            wget \
+            file \
+            libssl-dev \
+            libgtk-3-dev \
+            libappindicator3-dev \
+            xdg-utils \
+            librsvg2-dev;
+          sudo apt install -y \
+            libwebkit2gtk-4.1-0=2.44.0-2 \
+            libwebkit2gtk-4.1-dev=2.44.0-2 \
+            libjavascriptcoregtk-4.1-0=2.44.0-2 \
+            libjavascriptcoregtk-4.1-dev=2.44.0-2 \
+            gir1.2-javascriptcoregtk-4.1=2.44.0-2 \
+            gir1.2-webkit2-4.1=2.44.0-2;
       - name: install dependencies (ubuntu only)
-        if: matrix.platform == 'ubuntu-24.04' || matrix.platform == 'ubuntu-24.04-arm'
+        if: matrix.platform == 'ubuntu-24.04'
         run: |
           sudo apt update;
           sudo apt install -y \
