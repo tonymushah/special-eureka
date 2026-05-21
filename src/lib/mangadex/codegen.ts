@@ -32,9 +32,9 @@ const config: CodegenConfig = {
 				extractAllFieldsToTypes: true
 			},
 			presetConfig: {
-				persistedDocuments: true,
+				persistedDocuments: true
 			},
-			plugins: [],
+			plugins: []
 		}
 	}
 };
