@@ -16,3 +16,9 @@ time.workspace = true
 tauri = { workspace = true }
 async-graphql = {workspace = true, features = ["apollo_persisted_queries"]}
 log.workspace = true
+dirs.workspace = true
+once_cell.workspace = true
+anyhow.workspace = true
+async-trait.workspace = true
+async-graphql-parser.workspace = true
+graphql-persistent-queries-sqlite-schema = { path = "../graphql-persistent-queries-sqlite-schema" }

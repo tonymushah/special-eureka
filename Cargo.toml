@@ -72,6 +72,11 @@ duration-string = "0.5"
 special-eureka-notification = { path = "./crates/special-eureka-notification" }
 async-trait = "0.1"
 ciborium = "0.2"
+once_cell = "1"
+# this is for future uses
+async-once-cell = "0.5"
+async-graphql-parser = "7"
+graphql-persistent-queries = { path = "./crates/graphql-persistent-queries" }
 
 # disabled in favor of `special-eureka-notification`
 # [workspace.dependencies.tauri-plugin-notification]

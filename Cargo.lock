@@ -2600,12 +2600,18 @@ dependencies = [
 name = "graphql-persistent-queries"
 version = "0.2.4-6"
 dependencies = [
+ "anyhow",
  "async-graphql",
+ "async-graphql-parser",
+ "async-trait",
  "ciborium",
  "diesel",
  "diesel-sqlite-utils",
  "diesel_migrations",
+ "dirs",
+ "graphql-persistent-queries-sqlite-schema",
  "log",
+ "once_cell",
  "tauri",
  "time",
 ]
