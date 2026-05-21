@@ -1,5 +1,4 @@
 import type { CodegenConfig } from "@graphql-codegen/cli";
-import { addTypenameSelectionDocumentTransform } from '@graphql-codegen/client-preset';
 
 const config: CodegenConfig = {
 	schema: "./src/lib/mangadex/schemas.graphqls",
@@ -12,7 +11,7 @@ const config: CodegenConfig = {
 	ignoreNoDocuments: false, // for better experience with the watcher
 	generates: {
 		"./src/lib/mangadex/gql/": {
-			preset: "client",
+			preset: "client-preset",
 			config: {
 				useTypeImports: true,
 				// fragmentMaking: false,
@@ -28,14 +27,14 @@ const config: CodegenConfig = {
 					Url: "string",
 					Username: "string"
 				},
-					persistedDocuments: true
-				,
 				maybeValue: "T | null | undefined",
 				inputMaybeValue: "T | null | undefined",
 				extractAllFieldsToTypes: true
 			},
+			presetConfig: {
+				persistedDocuments: true,
+			},
 			plugins: [],
-			documentTransforms: [addTypenameSelectionDocumentTransform]
 		}
 	}
 };
