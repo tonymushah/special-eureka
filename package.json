@@ -77,6 +77,7 @@
 		"@tauri-apps/plugin-clipboard-manager": "^2.3.2",
 		"@tauri-apps/plugin-dialog": "^2.7.1",
 		"@tauri-apps/plugin-opener": "^2.5.4",
+		"@urql/exchange-persisted": "^5.0.1",
 		"@urql/svelte": "^5.0.0",
 		"@viselect/vanilla": "^3.9.0",
 		"core-js": "^3.49.0",
