@@ -31,9 +31,6 @@ const config: CodegenConfig = {
 				inputMaybeValue: "T | null | undefined",
 				extractAllFieldsToTypes: true
 			},
-			presetConfig: {
-				persistedDocuments: true
-			},
 			plugins: []
 		}
 	}
