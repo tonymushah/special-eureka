@@ -7,5 +7,6 @@ diesel::table! {
         fragments -> Binary,
         insert_date -> Nullable<Timestamp>,
         last_update -> Nullable<Timestamp>,
+        version_insert -> Text,
     }
 }

@@ -4,5 +4,6 @@ create table persistent_queries(
 	operations blob NOT NULL,
 	fragments blob NOT NULL,
 	insert_date DATETIME default CURRENT_TIMESTAMP,
-	last_update DATETIME default CURRENT_TIMESTAMP
+	last_update DATETIME default CURRENT_TIMESTAMP,
+	version_insert TEXT NOT NULL
 );
