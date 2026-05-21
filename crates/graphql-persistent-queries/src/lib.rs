@@ -25,6 +25,7 @@ use crate::types::{InsertQuery, PersQuery};
 #[derive(Debug, Default, Clone)]
 pub struct SqlitePersistentQueries {
     pool: Arc<OnceCell<DbPool>>,
+    namespace: Option<String>,
 }
 
 fn crate_verstion() -> &'static str {
@@ -64,6 +65,11 @@ impl SqlitePersistentQueries {
     pub fn get_connection(&self) -> anyhow::Result<DbPoolConnection> {
         Ok(self.pool.get_or_try_init(load_pool)?.get()?)
     }
+    pub fn with_namespace(&self, namespace: String) -> Self {
+        let mut self_clone = self.clone();
+        self_clone.namespace = Some(namespace);
+        self_clone
+    }
 }
 
 #[async_trait::async_trait]
@@ -75,8 +81,11 @@ impl CacheStorage for SqlitePersistentQueries {
             move || -> anyhow::Result<Option<ExecutableDocument>> {
                 use schema::persistent_queries::dsl::*;
                 let mut conn = self_clone.get_connection()?;
-                let maybe_res = persistent_queries
-                    .filter(key.eq(_key))
+                let mut sel = persistent_queries.filter(key.eq(_key)).into_boxed();
+                if let Some(_namespace) = self_clone.namespace {
+                    sel = sel.filter(namespace.eq(_namespace));
+                }
+                let maybe_res = sel
                     .select(PersQuery::as_select())
                     .get_result(&mut conn)
                     .optional()?;
@@ -124,6 +133,7 @@ impl CacheStorage for SqlitePersistentQueries {
                             fragments: &_fragments,
                             operations: &_operations,
                             version_insert: crate_verstion(),
+                            namespace: self_clone.namespace.as_deref(),
                         })
                         .execute(conn)
                 })?;

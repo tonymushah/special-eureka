@@ -8,5 +8,6 @@ diesel::table! {
         insert_date -> Nullable<Timestamp>,
         last_update -> Nullable<Timestamp>,
         version_insert -> Text,
+        namespace -> Nullable<Text>,
     }
 }

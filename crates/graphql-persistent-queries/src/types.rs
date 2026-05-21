@@ -11,6 +11,7 @@ pub struct InsertQuery<'a> {
     pub operations: &'a [u8],
     pub fragments: &'a [u8],
     pub version_insert: &'a str,
+    pub namespace: Option<&'a str>,
 }
 
 #[derive(Debug, Selectable, Queryable)]

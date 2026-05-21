@@ -45,7 +45,9 @@ pub fn init<R: Runtime>() -> MizukiPlugin<R, Q, M, S> {
     mizuki::Builder::new(
         "mangadex-desktop-api",
         Schema::build(Query, Mutation, Subscriptions::default())
-            .extension(ApolloPersistedQueries::new((*PERSISTENT_QUERIES).clone()))
+            .extension(ApolloPersistedQueries::new(
+                PERSISTENT_QUERIES.with_namespace("org.mangadex".into()),
+            ))
             .finish(),
     )
     .js_init_script(format!(
