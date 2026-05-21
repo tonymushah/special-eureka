@@ -36,7 +36,7 @@
 				"source.organizeImports": true
 			},
 			"format_on_save": "on",
-			"language_servers": ["!tailwindcss-language-server", "eslint", "vtsls", "graphql"],
+			"language_servers": ["!tailwindcss-language-server", "!eslint", "vtsls", "graphql"],
 			"prettier": {
 				"allowed": false
 			},
