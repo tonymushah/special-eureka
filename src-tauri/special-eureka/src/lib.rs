@@ -66,16 +66,13 @@ pub fn run() {
                     label,
                     event: WindowEvent::Focused(is_focused),
                     ..
-                } => {
-                    if is_focused {
-                        let last_focused_window_state =
-                            app_handle.state::<LastFocusedWindow<Wry>>();
-                        if let Ok(mut write) = last_focused_window_state.write()
-                            && let Some(window) = app_handle.get_window(&label)
-                        {
-                            write.replace(window);
-                        };
-                    }
+                } if is_focused => {
+                    let last_focused_window_state = app_handle.state::<LastFocusedWindow<Wry>>();
+                    if let Ok(mut write) = last_focused_window_state.write()
+                        && let Some(window) = app_handle.get_window(&label)
+                    {
+                        write.replace(window);
+                    };
                 }
                 tauri::RunEvent::Exit => {
                     if let Ok(mut lock) = runtime_guard.lock()
