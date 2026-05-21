@@ -1,4 +1,4 @@
-use diesel_migrations::{embed_migrations, EmbeddedMigrations};
+use diesel_migrations::{EmbeddedMigrations, embed_migrations};
 
 pub mod schema;
 
