@@ -1,8 +1,8 @@
 <script lang="ts">
-	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import { ChapterFeedStyle } from "@mangadex/gql/graphql";
 	import { ListIcon, Rows3 } from "@lucide/svelte";
 	import type { Writable } from "svelte/store";
+	import buttonGroupCssMod from "@mangadex/componnents/theme/selects/button-group.module.scss";
 
 	interface Props {
 		style: Writable<ChapterFeedStyle>;
@@ -12,42 +12,49 @@
 	const size = "24";
 </script>
 
-<div class="tab-select">
-	<ButtonAccent
+<div class={buttonGroupCssMod.tabSelect}>
+	<button
 		onclick={() => {
 			style.set(ChapterFeedStyle.CoverLess);
 		}}
-		variant={$style == ChapterFeedStyle.CoverLess ? "5" : "1"}
 		disabled={$style == ChapterFeedStyle.CoverLess}
+		class={[
+			buttonGroupCssMod.button,
+			"list",
+			$style == ChapterFeedStyle.CoverLess && buttonGroupCssMod.active,
+		]}
 	>
-		<div class="icon">
+		<div class={[buttonGroupCssMod.icon, "aka-icon"]}>
 			<ListIcon {size} />
 		</div>
-	</ButtonAccent>
-	<ButtonAccent
+	</button>
+	<button
 		onclick={() => {
 			style.set(ChapterFeedStyle.CoverFull);
 		}}
-		variant={$style == ChapterFeedStyle.CoverFull ? "5" : "1"}
 		disabled={$style == ChapterFeedStyle.CoverFull}
+		class={[
+			buttonGroupCssMod.button,
+			"rows",
+			$style == ChapterFeedStyle.CoverFull && buttonGroupCssMod.active,
+		]}
 	>
-		<div class="icon">
+		<div class={[buttonGroupCssMod.icon, "aka-icon"]}>
 			<Rows3 {size} />
 		</div>
-	</ButtonAccent>
+	</button>
 </div>
 
 <style lang="scss">
-	.tab-select {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		gap: 5px;
+	.list {
+		border-top-left-radius: var(--radius-md);
+		border-bottom-left-radius: var(--radius-md);
 	}
-	.icon {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		padding: 2px;
+	.rows {
+		border-top-right-radius: var(--radius-md);
+		border-bottom-right-radius: var(--radius-md);
+	}
+	.aka-icon {
+		padding: 0px;
 	}
 </style>

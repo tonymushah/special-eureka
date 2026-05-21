@@ -18,7 +18,11 @@
 		<p>{title}</p>
 	</div>
 	<div class="publication">
-		<DefaultSpan --font-size="12px">Publication : <PublicationStatusTag {status} /></DefaultSpan
+		<DefaultSpan --font-size="12px"
+			>Publication : <PublicationStatusTag
+				disabled
+				{status}
+			/></DefaultSpan
 		>
 	</div>
 	<Description {description} />

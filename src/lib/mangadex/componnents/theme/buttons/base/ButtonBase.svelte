@@ -45,12 +45,12 @@
 		color: var(--text-color);
 		background-color: var(--button-color);
 		font-family: var(--fonts);
-		border: var(--mid-tone) solid 3px;
+		border: 3px solid var(--mid-tone);
 		box-shadow: 0px 4px 0px var(--mid-tone);
 		display: var(--button-display);
 		align-items: var(--button-align-items);
 		justify-content: var(--button-justify-content);
-		transform: translateY(-4px);
+		/* transform: translateY(0px); */
 	}
 
 	button:hover:disabled {
@@ -66,14 +66,15 @@
 		);
 	}
 	button.haveBorderRadius {
-		border-radius: 0.25rem;
+		border-radius: var(--radius-md);
 	}
 	button.noPadding {
 		padding: 0px;
 	}
 	button.isBase {
-		border-color: var(--button-active, var(--mid-tone));
-		box-shadow: 0px 4px 0px var(--button-active, var(--mid-tone));
+		/* We used var(--button-active, var(--mid-tone)) for the border but it is inconsistent */
+		border-color: var(--mid-tone);
+		box-shadow: 0px 4px 0px var(--mid-tone);
 		min-height: 3em;
 		min-width: 3em;
 		padding-left: 0.75rem;
@@ -92,7 +93,7 @@
 	}
 	button:active {
 		box-shadow: none;
-		transform: translateY(0px);
+		transform: translateY(4px);
 	}
 	button.with-active:active {
 		background-color: var(--button-active);
@@ -116,9 +117,18 @@
 			var(--button-color) 100%
 		);
 		box-shadow: none;
-		transform: translateY(0px);
+		transform: translateY(4px);
 	}
 	button.isBase:disabled {
 		box-shadow: none;
+	}
+	button:global([data-top-abit]) {
+		transform: translateY(-4px);
+	}
+	button:global([data-top-abit]):active {
+		transform: translateY(0px);
+	}
+	button:global([data-top-abit]):disabled {
+		transform: translateY(0px);
 	}
 </style>

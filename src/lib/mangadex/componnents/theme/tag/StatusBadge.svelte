@@ -1,3 +1,4 @@
+<!-- TODO optimize this by using `TagBase` directly -->
 <script lang="ts">
 	import type { StatusColor } from "@mangadex/utils/types/status";
 	import Blue from "./status/Blue.svelte";

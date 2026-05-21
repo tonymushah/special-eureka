@@ -21,7 +21,7 @@
 	}}
 	data-manga-id={mangaId}
 	oncontextmenu={registerContextMenuEvent({
-		preventDefault: true
+		preventDefault: true,
 	})}
 >
 	{@render children?.()}
@@ -32,11 +32,15 @@
 		width: var(--width);
 		height: var(--height);
 		overflow: hidden;
-		border-radius: 0.25rem;
+		border-radius: var(--radius-md);
 		color: var(--text-color);
 	}
 	.manga-element:global([data-selecto-selected]) {
-		background-color: color-mix(in srgb, var(--primary) 50%, transparent 50%);
+		background-color: color-mix(
+			in srgb,
+			var(--primary) 50%,
+			transparent 50%
+		);
 		border-radius: 3px;
 		border: 2px solid var(--primary);
 	}

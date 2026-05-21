@@ -19,11 +19,18 @@
 	const currentPageIndex = getChapterDoublePageCurrentPageIndex();
 	const images_indexes = getChapterDoublePageIndexes();
 	const images = getCurrentChapterImages();
-	let images_length = $derived.by(() => images.pagesAsDoublePageIndexes.length);
+	let images_length = $derived.by(
+		() => images.pagesAsDoublePageIndexes.length,
+	);
 	let currentPage = $derived.by(() => {
-		const doublePageMaybe = images.getDoublePageState(currentPageIndex.value);
+		const doublePageMaybe = images.getDoublePageState(
+			currentPageIndex.value,
+		);
 		if (isArray(doublePageMaybe) && $readingDirection == Direction.Rtl) {
-			return [doublePageMaybe[1], doublePageMaybe[0]] satisfies DoublePageState;
+			return [
+				doublePageMaybe[1],
+				doublePageMaybe[0],
+			] satisfies DoublePageState;
 		} else {
 			return doublePageMaybe satisfies DoublePageState;
 		}
@@ -148,8 +155,8 @@
 							default:
 								console.error(
 									new Error("no source", {
-										cause: e
-									})
+										cause: e,
+									}),
 								);
 								return;
 						}
@@ -158,9 +165,9 @@
 								e,
 								{ pageNumber },
 								{
-									source: undefined as never
-								}
-							)
+									source: undefined as never,
+								},
+							),
 						);
 					}}
 				/>
@@ -182,23 +189,34 @@
 								<DangerButtonOnlyLabel
 									label="Error"
 									onclick={() => {
-										const pageIndex = images_indexes.value.at(
-											currentPageIndex.value
-										);
+										const pageIndex =
+											images_indexes.value.at(
+												currentPageIndex.value,
+											);
 										if (isArray(pageIndex)) {
 											images.removePageError(
 												pageIndex[
-													$readingDirection == Direction.Ltr ? 0 : 1
-												]
+													$readingDirection ==
+													Direction.Ltr
+														? 0
+														: 1
+												],
 											);
 											images.refetchChapterPage(
 												pageIndex[
-													$readingDirection == Direction.Ltr ? 0 : 1
-												]
+													$readingDirection ==
+													Direction.Ltr
+														? 0
+														: 1
+												],
 											);
-										} else if (typeof pageIndex == "number") {
+										} else if (
+											typeof pageIndex == "number"
+										) {
 											images.removePageError(pageIndex);
-											images.refetchChapterPage(pageIndex);
+											images.refetchChapterPage(
+												pageIndex,
+											);
 										}
 									}}
 								/>
@@ -226,23 +244,34 @@
 								<DangerButtonOnlyLabel
 									label="Error"
 									onclick={() => {
-										const pageIndex = images_indexes.value.at(
-											currentPageIndex.value
-										);
+										const pageIndex =
+											images_indexes.value.at(
+												currentPageIndex.value,
+											);
 										if (isArray(pageIndex)) {
 											images.removePageError(
 												pageIndex[
-													$readingDirection == Direction.Ltr ? 1 : 0
-												]
+													$readingDirection ==
+													Direction.Ltr
+														? 1
+														: 0
+												],
 											);
 											images.refetchChapterPage(
 												pageIndex[
-													$readingDirection == Direction.Ltr ? 1 : 0
-												]
+													$readingDirection ==
+													Direction.Ltr
+														? 1
+														: 0
+												],
 											);
-										} else if (typeof pageIndex == "number") {
+										} else if (
+											typeof pageIndex == "number"
+										) {
 											images.removePageError(pageIndex);
-											images.refetchChapterPage(pageIndex);
+											images.refetchChapterPage(
+												pageIndex,
+											);
 										}
 									}}
 								/>
@@ -266,7 +295,9 @@
 						<DangerButtonOnlyLabel
 							label="Error"
 							onclick={() => {
-								const pageIndex = images_indexes.value.at(currentPageIndex.value);
+								const pageIndex = images_indexes.value.at(
+									currentPageIndex.value,
+								);
 								if (typeof pageIndex == "number") {
 									images.removePageError(pageIndex);
 									images.refetchChapterPage(pageIndex);
@@ -296,6 +327,7 @@
 		display: grid;
 		grid-template-columns: 50% 50%;
 		grid-template-columns: 100%;
+		height: 100%;
 	}
 	.error {
 		display: flex;

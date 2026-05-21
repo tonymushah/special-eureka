@@ -10,7 +10,7 @@
 		getMangaSearchTagOptionsContextStoreWritable,
 		groupTagOption,
 		TagOptionState,
-		toggleTagOption
+		toggleTagOption,
 	} from "../../contexts/tags";
 
 	interface Props {
@@ -22,7 +22,7 @@
 	const options = getMangaSearchTagOptionsContextStoreWritable();
 	const grouped = groupTagOption(
 		readonly(options),
-		toStore(() => group)
+		toStore(() => group),
 	);
 	function toggle(id: string, inverted?: boolean) {
 		options.update((opts) => {
@@ -53,11 +53,11 @@
 							class="icon"
 							transition:fade={{
 								easing: bounceInOut,
-								duration: 100
+								duration: 100,
 							}}
 						>
 							{#if tag.state == TagOptionState.EXCLUDE}
-								<Ban size="24" />
+								<Ban />
 							{:else if tag.state == TagOptionState.INCLUDE}
 								<PlusIcon />
 							{/if}
@@ -89,15 +89,15 @@
 	button {
 		display: flex;
 		flex-direction: row;
-		gap: 5px;
-		padding: 5px;
-		transition: background-color 200ms ease-in-out;
+		align-items: center;
+		gap: var(--space-sm);
+		padding: var(--space-xs);
 		background-color: var(--accent-l1);
 		color: var(--text-color);
 		font-size: var(--font-size);
 		font-family: var(--fonts);
 		border: none;
-		border-radius: 0.25em;
+		border-radius: var(--radius-sm);
 	}
 	button:hover {
 		background-color: var(--accent-l1-hover);
@@ -109,18 +109,38 @@
 		background-color: var(--status-green);
 	}
 	button.included:hover {
-		background-color: color-mix(in srgb, var(--status-green) 50%, var(--accent-l1-hover) 50%);
+		background-color: color-mix(
+			in srgb,
+			var(--status-green) 50%,
+			var(--accent-l1-hover) 50%
+		);
 	}
 	button.included:active {
-		background-color: color-mix(in srgb, var(--status-green) 50%, var(--accent-l1-active) 50%);
+		background-color: color-mix(
+			in srgb,
+			var(--status-green) 50%,
+			var(--accent-l1-active) 50%
+		);
 	}
 	button.excluded {
 		background-color: var(--status-red);
 	}
 	button.excluded:hover {
-		background-color: color-mix(in srgb, var(--status-red) 50%, var(--accent-l1-hover) 50%);
+		background-color: color-mix(
+			in srgb,
+			var(--status-red) 50%,
+			var(--accent-l1-hover) 50%
+		);
 	}
 	button.excluded:active {
-		background-color: color-mix(in srgb, var(--status-red) 50%, var(--accent-l1-active) 50%);
+		background-color: color-mix(
+			in srgb,
+			var(--status-red) 50%,
+			var(--accent-l1-active) 50%
+		);
+	}
+	button:focus {
+		outline: none;
+		border: 1px var(--contrast-l1) dashed;
 	}
 </style>

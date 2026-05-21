@@ -3,7 +3,15 @@
 	import ButtonBase from "./base/ButtonBase.svelte";
 
 	interface Props extends HTMLButtonAttributes {
-		variant?: "default" | "1" | "2" | "3" | "4" | "5" | "accent" | "accent-alt";
+		variant?:
+			| "default"
+			| "1"
+			| "2"
+			| "3"
+			| "4"
+			| "5"
+			| "accent"
+			| "accent-alt";
 		isBase?: boolean;
 	}
 
@@ -45,9 +53,9 @@
 			case "5":
 				return "var(--accent-l5-hover)";
 			case "accent":
-				return "var(--button-accent)";
+				return undefined;
 			case "accent-alt":
-				return "var(--button-accent-alt)";
+				return undefined;
 			default:
 				return "var(--accent-hover)";
 		}
@@ -67,9 +75,9 @@
 			case "5":
 				return "var(--accent-l5-active)";
 			case "accent":
-				return "var(--button-accent)";
+				return undefined;
 			case "accent-alt":
-				return "var(--button-accent-alt)";
+				return undefined;
 			default:
 				return "var(--accent-active)";
 		}

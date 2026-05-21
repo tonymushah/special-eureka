@@ -6,46 +6,48 @@
 		currentTarget: HTMLDivElement & EventTarget;
 	};
 	export interface ChapterEl1Events {
-		onclick?: (e?: MouseEvent & { currentTarget: EventTarget & HTMLElement }) => any;
+		onclick?: (
+			e?: MouseEvent & { currentTarget: EventTarget & HTMLElement },
+		) => any;
 		ondownload?: (
 			ev: MouseEnvDiv & {
 				id: string;
-			}
+			},
 		) => any;
 		ondownloadKeyPress?: (
 			ev: KeyboardEnvDiv & {
 				id: string;
-			}
+			},
 		) => any;
 		onremove?: (
 			ev: MouseEnvDiv & {
 				id: string;
-			}
+			},
 		) => any;
 		onremoveKeyPress?: (
 			ev: KeyboardEnvDiv & {
 				id: string;
-			}
+			},
 		) => any;
 		onread?: (
 			ev: MouseEnvDiv & {
 				id: string;
-			}
+			},
 		) => any;
 		onreadKeyPress?: (
 			ev: KeyboardEnvDiv & {
 				id: string;
-			}
+			},
 		) => any;
 		oncomments?: (
 			ev: Partial<MouseEnvDiv> & {
 				id: string;
-			}
+			},
 		) => any;
 		oncommentsKeyPress?: (
 			ev: KeyboardEnvDiv & {
 				id: string;
-			}
+			},
 		) => any;
 	}
 	type Group = {
@@ -83,17 +85,23 @@
 	import { isLogged } from "@mangadex/utils/auth";
 	import chapterElementContextMenuItems from "@mangadex/utils/context-menu/chapter";
 	import registerContextMenuEvent, {
-		setContextMenuContext
+		setContextMenuContext,
 	} from "@special-eureka/core/utils/contextMenuContext";
 	import { debounce } from "es-toolkit/compat";
-	import { BookSearch, EyeIcon, EyeOffIcon, MessageSquareIcon, UsersIcon } from "@lucide/svelte";
+	import {
+		BookSearch,
+		EyeIcon,
+		EyeOffIcon,
+		MessageSquareIcon,
+		UsersIcon,
+	} from "@lucide/svelte";
 	import DownloadStateComp from "./DownloadStateComp.svelte";
 	import Layout from "./Layout.svelte";
 	import { cancelChapterDownload, downloadChapter } from "./utils";
 	import IndicationBadge from "@mangadex/componnents/theme/tag/IndicationBadge.svelte";
 	import {
 		// Debounced,
-		IsInViewport
+		IsInViewport,
 	} from "runed";
 
 	let {
@@ -113,18 +121,18 @@
 		onremove,
 		onremoveKeyPress,
 		onclick,
-		end
+		end,
 	}: Props = $props();
 
 	let readMarkers = readMarkersLoader();
 	let layoutElement = $state<HTMLElement | undefined>();
 	let isInViewport = new IsInViewport(() => layoutElement, {
-		threshold: 0.2
+		threshold: 0.2,
 	});
 	// let isInViewportDebounced = new Debounced(() => isInViewport.current, 500);
 	let downloadInstance = new ChapterDownload(
 		() => id,
-		() => isInViewport.current
+		() => isInViewport.current,
 	);
 
 	const handle_download_event = debounce(async function () {
@@ -135,8 +143,9 @@
 		}
 	});
 	let showTrashButton = $derived(
-		(downloadInstance.hasChapterDownloadingFailed || downloadInstance.isChapterDownloaded) &&
-			!downloadInstance.isDownloading
+		(downloadInstance.hasChapterDownloadingFailed ||
+			downloadInstance.isChapterDownloaded) &&
+			!downloadInstance.isDownloading,
 	);
 	setContextMenuContext(() => {
 		return chapterElementContextMenuItems({
@@ -147,7 +156,7 @@
 				? () => {
 						oncomments({ id });
 					}
-				: undefined
+				: undefined,
 		});
 	}, true);
 	// TODO make a reaction read marker system
@@ -159,12 +168,12 @@
 				if (hasBeenRead) {
 					readMarkers.mutate({
 						reads: [],
-						unreads: [id]
+						unreads: [id],
 					});
 				} else {
 					readMarkers.mutate({
 						reads: [id],
-						unreads: []
+						unreads: [],
 					});
 				}
 			}
@@ -175,7 +184,7 @@
 <article
 	class="border"
 	oncontextmenu={registerContextMenuEvent({
-		preventDefault: true
+		preventDefault: true,
 	})}
 	bind:this={layoutElement}
 >
@@ -191,7 +200,7 @@
 				onkeypress={async (e) => {
 					ondownloadKeyPress?.({
 						...e,
-						id
+						id,
 					});
 					if (e.key == "Enter") {
 						await handle_download_event();
@@ -208,7 +217,7 @@
 					onclick={async (e) => {
 						onremove?.({
 							...e,
-							id
+							id,
 						});
 						downloadInstance.remove();
 					}}
@@ -238,7 +247,7 @@
 					if (onread) {
 						onread?.({
 							...e,
-							id
+							id,
 						});
 					} else {
 						handleRead();
@@ -249,7 +258,7 @@
 					if (onreadKeyPress) {
 						onreadKeyPress?.({
 							...e,
-							id
+							id,
 						});
 					} else {
 						if (e.key == "Enter") {
@@ -273,7 +282,7 @@
 				<Link
 					variant="base"
 					href={route("/mangadex/chapter/[id]", {
-						id
+						id,
 					})}
 					{onclick}
 					ext_href={`https://mangadex.org/chapter/${id}`}
@@ -287,7 +296,9 @@
 					</h4>
 				</Link>
 				{#if end}
-					<IndicationBadge --tag-padding="0px 4px">END</IndicationBadge>
+					<IndicationBadge --tag-padding="0px 4px"
+						>END</IndicationBadge
+					>
 				{/if}
 			</div>
 
@@ -298,11 +309,14 @@
 						<Link
 							variant="base"
 							href={route("/mangadex/group/[id]", {
-								id
+								id,
 							})}
 							ext_href={`https://mangadex.org/group/${id}`}
 						>
-							<span data-scanlation-group-id={id} class="users-simple-selectable">
+							<span
+								data-scanlation-group-id={id}
+								class="users-simple-selectable"
+							>
 								{name}
 							</span>
 						</Link>
@@ -319,7 +333,7 @@
 			<UserRolesComp roles={uploader.roles}>
 				<a
 					href={route("/mangadex/user/[id]", {
-						id: uploader.id
+						id: uploader.id,
 					})}
 					class="uploader users-simple-selectable"
 					data-user-id={uploader.id}
@@ -336,13 +350,13 @@
 				onclick={(e) => {
 					oncomments?.({
 						...e,
-						id
+						id,
 					});
 				}}
 				onkeypress={(e) => {
 					oncommentsKeyPress?.({
 						...e,
-						id
+						id,
 					});
 				}}
 				tabindex={0}
@@ -375,8 +389,9 @@
 	}
 	.border {
 		display: flex;
-		border-radius: 0.5rem;
+		border-radius: var(--radius-sm);
 		border: 1px solid var(--accent-l3);
+		overflow: hidden;
 	}
 	.title {
 		margin: 0px;

@@ -8,15 +8,17 @@
 	<select bind:value={$mangaInfoPosition}>
 		<option value={MangaInfosPositions.Left}>Left</option>
 		<option value={MangaInfosPositions.Right}>Right</option>
-		<option value={MangaInfosPositions.BeneathDescription}>Beneath Description</option>
+		<option value={MangaInfosPositions.BeneathDescription}
+			>Beneath Description</option
+		>
 	</select>
 </div>
 
 <section>
 	<p>
 		<i>
-			You know, that title section with the authors, artists, links, and alt-titles that is
-			always on the left side
+			You know, that title section with the authors, artists, links, and
+			alt-titles that is always on the left side
 		</i>, <br />
 		This option allows you to move it. <br />
 		<i>
@@ -50,8 +52,12 @@
 		border: 3px var(--mid-tone) solid;
 		font-family: var(--fonts);
 		font-weight: 800;
-		padding: 2px;
-		border-radius: 3px;
+		padding: var(--space-xs);
+		border-radius: var(--radius-md);
+	}
+	select:focus {
+		outline: none;
+		border-color: var(--contrast-l1);
 	}
 	.beneath-title-description {
 		display: inline;

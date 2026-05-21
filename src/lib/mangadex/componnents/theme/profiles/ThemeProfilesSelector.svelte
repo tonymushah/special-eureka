@@ -1,6 +1,8 @@
 <script lang="ts">
 	import defaultThemeProfileKey from "@mangadex/theme/graphql/defaultThemeProfileKey";
-	import themes, { singleUpdateMutation } from "@mangadex/theme/graphql/themes";
+	import themes, {
+		singleUpdateMutation,
+	} from "@mangadex/theme/graphql/themes";
 	import { getContextClient } from "@urql/svelte";
 	import { XCircleIcon } from "@lucide/svelte";
 	import { derived } from "svelte/store";
@@ -19,11 +21,11 @@
 
 	const client = getContextClient();
 	const list = derived(themes, ($ths) =>
-		Array.from($ths.entries()).map(([name, value]) => ({ name, value }))
+		Array.from($ths.entries()).map(([name, value]) => ({ name, value })),
 	);
 	async function addNew(name: string) {
 		await client.mutation(singleUpdateMutation, {
-			name
+			name,
 		});
 		defaultThemeProfileKey.set(name);
 	}
@@ -51,7 +53,7 @@
 			--mid-tone={profile.value.mid_tone}
 		>
 			{#if $defaultThemeProfileKey == profile.name}
-				<PrimaryButton>
+				<PrimaryButton disabled>
 					<div class="inner-button">
 						<p>{profile.name}</p>
 						<div>
@@ -60,6 +62,7 @@
 									e.stopPropagation();
 									deleteTheme(profile.name);
 								}}
+								data-top-abit
 							>
 								<div class="delete-icon">
 									<XCircleIcon />
@@ -78,6 +81,7 @@
 						<p>{profile.name}</p>
 						<div>
 							<DangerButton
+								data-top-abit
 								onclick={(e) => {
 									e.stopPropagation();
 									deleteTheme(profile.name);
@@ -114,12 +118,12 @@
 			widthFull
 			inputProps={{
 				name: "name",
-				placeholder: "The New Theme Profile Name"
+				placeholder: "The New Theme Profile Name",
 			}}
 		/>
 	</div>
 
-	<PrimaryButton type="submit">
+	<PrimaryButton type="submit" data-top-abit>
 		<p>Add</p>
 	</PrimaryButton>
 </form>

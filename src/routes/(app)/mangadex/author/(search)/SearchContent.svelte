@@ -14,7 +14,10 @@
 	import ErrorComponent from "@mangadex/componnents/ErrorComponent.svelte";
 	import UsersSimpleBase from "@mangadex/componnents/users/simple/UsersSimpleBase.svelte";
 	import pageLimit from "@mangadex/stores/page-limit";
-	import { createInfiniteQuery, type CreateInfiniteQueryOptions } from "@tanstack/svelte-query";
+	import {
+		createInfiniteQuery,
+		type CreateInfiniteQueryOptions,
+	} from "@tanstack/svelte-query";
 
 	const client = getContextClient();
 	interface Props {
@@ -22,12 +25,15 @@
 	}
 
 	let { authorName }: Props = $props();
-	const params = derived([toStore(() => authorName), pageLimit], ([$authorName, $limit]) => {
-		return {
-			name: $authorName,
-			limit: $limit
-		} satisfies AuthorListParams;
-	});
+	const params = derived(
+		[toStore(() => authorName), pageLimit],
+		([$authorName, $limit]) => {
+			return {
+				name: $authorName,
+				limit: $limit,
+			} satisfies AuthorListParams;
+		},
+	);
 	interface InfiniteQueryData {
 		data: AuthorListItemData[];
 		offset: number;
@@ -46,7 +52,7 @@
 					return {
 						...lastPageParam,
 						limit: lastPage.limit,
-						offset: next_offset
+						offset: next_offset,
 					};
 				}
 			},
@@ -54,7 +60,7 @@
 				const res = await executeSearchQuery(client, pageParam);
 				return {
 					data: res.data,
-					...res.paginationData
+					...res.paginationData,
 				};
 			},
 			getPreviousPageParam(firstPage, allPages, firstPageParam) {
@@ -65,10 +71,10 @@
 					return {
 						...firstPageParam,
 						limit: firstPage.limit,
-						offset: next_offset
+						offset: next_offset,
 					};
 				}
-			}
+			},
 		} satisfies CreateInfiniteQueryOptions<
 			InfiniteQueryData,
 			Error,
@@ -84,11 +90,11 @@
 		}
 		return Array.from(
 			new Map(
-				(result.data?.pages.map((d) => d.data).flatMap((i) => i) ?? []).map((d) => [
-					d.id,
-					d
-				])
-			).values()
+				(
+					result.data?.pages.map((d) => d.data).flatMap((i) => i) ??
+					[]
+				).map((d) => [d.id, d]),
+			).values(),
 		);
 	});
 	let isFetching = $derived(infiniteQuery.isFetching);
@@ -108,8 +114,8 @@
 			}
 		},
 		{
-			threshold: 1.0
-		}
+			threshold: 1.0,
+		},
 	);
 	let to_obserce_bind: HTMLElement | undefined = $state(undefined);
 	$effect(() => {
@@ -132,8 +138,8 @@
 			onclick={() => {
 				goto(
 					route("/mangadex/author/[id]", {
-						id: author.id
-					})
+						id: author.id,
+					}),
 				);
 			}}
 			profilePicture={author.profilePicture}
@@ -160,7 +166,12 @@
 	/>
 {/if}
 
-<div class="observer-trigger" bind:this={to_obserce_bind}>
+<!-- svelte-ignore a11y_no_static_element_interactions -->
+<div
+	class="observer-trigger"
+	bind:this={to_obserce_bind}
+	onmouseenter={fetchNext}
+>
 	{#if isFetching}
 		<Fetching />
 	{:else if hasNext}

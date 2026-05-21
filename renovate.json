@@ -8,7 +8,8 @@
 	"packageRules": [
 		{
 			"matchManagers": ["npm", "nvm"],
-			"addLabels": ["javascript"]
+			"addLabels": ["javascript"],
+			"minimumReleaseAge": "1 day"
 		},
 		{
 			"matchManagers": ["cargo"],

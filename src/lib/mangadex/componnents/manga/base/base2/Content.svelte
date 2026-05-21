@@ -5,7 +5,11 @@
 	import DangerBadge from "@mangadex/componnents/theme/tag/DangerBadge.svelte";
 	import StatusBadge from "@mangadex/componnents/theme/tag/StatusBadge.svelte";
 	import DefaultSpan from "@mangadex/componnents/theme/texts/span/DefaultSpan.svelte";
-	import { ContentRating, Language, type MangaStatus } from "@mangadex/gql/graphql";
+	import {
+		ContentRating,
+		Language,
+		type MangaStatus,
+	} from "@mangadex/gql/graphql";
 	import type { Tag } from "@mangadex/utils/types/Tag";
 	import PublicationStatusTag from "../../publicationStatusTag/PublicationStatusTag.svelte";
 
@@ -14,7 +18,7 @@
 			ev: MouseEvent & {
 				currentTarget: EventTarget & HTMLElement;
 				id: string;
-			}
+			},
 		) => any;
 	}
 
@@ -34,7 +38,7 @@
 		tags,
 		contentRating = ContentRating.Safe,
 		language,
-		ontagClick
+		ontagClick,
 	}: Props = $props();
 
 	$effect(() => {
@@ -50,9 +54,9 @@
 					<FlagIcon lang={language} />
 				</div>
 			{/if}
-			<p>
+			<h4>
 				{title}
-			</p>
+			</h4>
 		</div>
 		<div class="publication">
 			<DefaultSpan --font-size="12px">
@@ -66,7 +70,7 @@
 	<div class="bottom-body">
 		<div class="tags">
 			{#if contentRating == ContentRating.Erotica || contentRating == ContentRating.Pornographic}
-				<DangerBadge variant="l1">
+				<DangerBadge variant="l1" disabled>
 					{#if contentRating == ContentRating.Erotica}
 						Erotica
 					{:else}
@@ -74,7 +78,7 @@
 					{/if}
 				</DangerBadge>
 			{:else if contentRating == ContentRating.Suggestive}
-				<StatusBadge color="green">Suggestive</StatusBadge>
+				<StatusBadge color="green" disabled>Suggestive</StatusBadge>
 			{/if}
 			<TagComponnents
 				onclick={(e) => {
@@ -94,25 +98,29 @@
 		display: flex;
 		gap: 6px;
 		flex-wrap: wrap;
-		height: 1.5em;
-		overflow: hidden;
-		padding: 2px 0px;
-		transform: translateY(-2px);
+		/* height: 1.5em; */
+		padding-bottom: var(--space-xs);
+		/* transform: translateY(-2px); */
+	}
+	.pub-tag {
+		text-wrap: nowrap;
 	}
 	@media (width < 600px) {
 		.pub-tag {
 			display: none;
 		}
 	}
-	div.title > p {
+	div.title > h4 {
 		margin: 0px;
-		font-size: 20px;
+		font-size: var(--text-heading-sm);
 		-webkit-box-orient: vertical;
 		line-clamp: 1;
 		-webkit-line-clamp: 1;
 		display: -webkit-box;
 		overflow: hidden;
 		font-weight: 700;
+		text-align: start;
+		font-family: inherit;
 	}
 	div.title {
 		display: flex;
@@ -125,7 +133,7 @@
 		grid-template-areas: "title publication";
 		flex-direction: row;
 		align-items: center;
-		grid-template-columns: auto 160px;
+		grid-template-columns: auto 170px;
 		.title {
 			grid-area: title;
 		}
@@ -134,28 +142,29 @@
 		}
 	}
 	div.body {
-		display: grid;
+		display: flex;
+		flex-direction: column;
 		margin: 10px;
-		gap: 10px;
-		grid-template-areas: "top" "bottom";
-		grid-template-rows: 30px auto;
+		/* gap: 10px; */
 		flex-grow: 1;
-		//align-items: center;
-		.top-body {
-			grid-area: top;
-		}
+		/* align-items: center; */
+		/* overflow: hidden; */
+
 		.bottom-body {
-			grid-area: bottom;
+			display: contents;
 		}
 	}
 	div.description {
 		text-align: left;
-		-webkit-box-orient: vertical;
+		font-size: var(--text-caption);
+
+		padding-bottom: var(--space-md);
+		/* -webkit-box-orient: vertical;
 		line-clamp: 3;
 		-webkit-line-clamp: 3;
-		display: -webkit-box;
+		display: -webkit-box; */
 		overflow: hidden;
-		margin-top: 0.5em;
+		text-overflow: ellipsis;
 	}
 	div.publication {
 		display: flex;
@@ -164,6 +173,6 @@
 	}
 	div.publication-tag {
 		display: flex;
-		transform: translateY(-2px);
+		/* transform: translateY(-2px); */
 	}
 </style>

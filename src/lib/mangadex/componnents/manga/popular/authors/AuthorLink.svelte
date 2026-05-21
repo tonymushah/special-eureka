@@ -5,7 +5,7 @@
 			ev: MouseEvent & {
 				currentTarget: EventTarget & HTMLButtonElement;
 				id: string;
-			}
+			},
 		) => any;
 	}
 	interface Props extends Events {
@@ -17,12 +17,13 @@
 </script>
 
 <ButtonBase
+	data-top-abit
 	with_hover
 	with_active
 	onclick={(e) => {
 		onclick?.({
 			...e,
-			id
+			id,
 		});
 	}}
 	--button-color={"var(--accent-l3)"}

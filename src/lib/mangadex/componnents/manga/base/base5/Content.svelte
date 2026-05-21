@@ -8,12 +8,12 @@
 		onreadClick?: (
 			ev: MouseEvent & {
 				currentTarget: EventTarget & HTMLButtonElement;
-			}
+			},
 		) => any;
 		onmoreInfoClick?: (
 			ev: MouseEvent & {
 				currentTarget: EventTarget & HTMLButtonElement;
-			}
+			},
 		) => any;
 	}
 	interface Props extends Events {
@@ -22,7 +22,8 @@
 		isHover: boolean;
 	}
 
-	let { title, description, isHover, onmoreInfoClick, onreadClick }: Props = $props();
+	let { title, description, isHover, onmoreInfoClick, onreadClick }: Props =
+		$props();
 </script>
 
 <div class="title has-transition" class:isHover>
@@ -57,16 +58,17 @@
 
 <style lang="scss">
 	:root {
-		--transition-duration: 100ms;
+		--transition-duration: 50ms;
 		--transition-timing-function: ease-in-out;
 		--width: 16em;
 		--height: 23em;
 		--height-c: 24em;
 	}
 	div.has-transition {
-		transition:
-			opacity var(--transition-duration) var(--transition-timing-function),
-			transform var(--transition-duration) var(--transition-timing-function);
+		transition: opacity var(--transition-duration)
+			var(--transition-timing-function);
+		/* transform var(--transition-duration)
+				var(--transition-timing-function); */
 		width: var(--width);
 		height: var(--height-c);
 		display: flex;
@@ -77,9 +79,13 @@
 		align-items: end;
 		justify-content: center;
 		opacity: 1;
-		background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, var(--accent) 100%);
-		border-radius: 0.25rem;
-		transform: translateY(0em);
+		background: linear-gradient(
+			180deg,
+			rgba(0, 0, 0, 0) 0%,
+			var(--accent) 100%
+		);
+		border-radius: var(--radius-md);
+		/* transform: translateY(0em); */
 	}
 	div.title > h3 {
 		margin: 1em;
@@ -93,13 +99,13 @@
 	}
 	div.title.isHover {
 		opacity: 0;
-		transform: translateY(var(--height-c));
+		/* transform: translateY(var(--height-c)); */
 	}
 	div.contents {
 		top: -48em;
 		opacity: 0;
 		align-items: center;
-		transform: translateY(var(--height-c));
+		/* transform: translateY(var(--height-c)); */
 		flex-direction: column;
 		justify-content: center;
 		background: linear-gradient(
@@ -117,7 +123,7 @@
 	}
 	div.contents.isHover {
 		opacity: 1;
-		transform: translateY(0em);
+		/* transform: translateY(0em); */
 	}
 	div.read-btn-content {
 		display: flex;

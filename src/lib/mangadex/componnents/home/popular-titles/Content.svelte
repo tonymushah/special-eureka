@@ -1,7 +1,6 @@
 <script lang="ts">
 	import type { ContentRating } from "@mangadex/gql/graphql";
 	import { ArrowLeftIcon, ArrowRightIcon } from "@lucide/svelte";
-	import type { Readable } from "svelte/store";
 	import type { SwiperContainer } from "swiper/element";
 	import MangaPopularElement from "../../manga/popular/MangaPopularElement.svelte";
 	import ButtonAccent from "../../theme/buttons/ButtonAccent.svelte";
@@ -22,6 +21,7 @@
 			pauseOnMouseEnter: true,
 			delay: 5000,
 		},
+		virtual: true,
 		on: {
 			init() {
 				if (swiper_container != undefined) {
@@ -49,8 +49,6 @@
 		id: string;
 		title: string;
 		description: string;
-		coverImage: string;
-		coverImageAlt: string;
 		contentRating: ContentRating | undefined;
 		tags: {
 			id: string;
@@ -72,13 +70,11 @@
 {#if popular_titles.length > 0}
 	<div class="result">
 		<swiper-container bind:this={swiper_container} init="false">
-			{#each popular_titles as { coverImage, coverImageAlt, title, tags, contentRating, authors, description, id }, index (id)}
+			{#each popular_titles as { title, tags, contentRating, authors, description, id }, index (id)}
 				<swiper-slide>
 					<MangaPopularElement
 						mangaId={id}
 						{index}
-						{coverImage}
-						{coverImageAlt}
 						{tags}
 						{title}
 						{contentRating}
@@ -107,6 +103,7 @@
 		</swiper-container>
 		<div class="pagination">
 			<ButtonAccent
+				data-top-abit
 				isBase={false}
 				onclick={() => {
 					if (swiper_container != undefined) {
@@ -117,6 +114,7 @@
 				<ArrowLeftIcon />
 			</ButtonAccent>
 			<ButtonAccent
+				data-top-abit
 				onclick={() => {
 					if (current_page_) {
 						const title = popular_titles[current_page_];
@@ -133,6 +131,7 @@
 				<span class="current-page">{current_page}</span>
 			</ButtonAccent>
 			<ButtonAccent
+				data-top-abit
 				isBase={false}
 				onclick={() => {
 					if (swiper_container != undefined) {
@@ -161,10 +160,11 @@
 		.pagination {
 			align-items: end;
 			display: flex;
-			gap: 1em;
+			gap: var(--space-md);
 			justify-content: end;
-			position: relative;
-			top: -2em;
+			position: absolute;
+			bottom: 0em;
+			right: 0em;
 			z-index: 1;
 			margin-right: 2em;
 		}

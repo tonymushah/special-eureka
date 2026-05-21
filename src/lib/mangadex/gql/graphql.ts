@@ -1210,10 +1210,7 @@ export type HomePopularTitleQuery = {
 					description: Record<string, unknown>;
 					tags: Array<{ id: string; attributes: { name: Record<string, unknown> } }>;
 				};
-				relationships: {
-					authorArtists: Array<{ id: string; attributes: { name: string } }>;
-					coverArt: { id: string; attributes: { fileName: string } };
-				};
+				relationships: { authorArtists: Array<{ id: string; attributes: { name: string } }> };
 			}>;
 		};
 	};
@@ -5137,29 +5134,6 @@ export const HomePopularTitleDocument = {
 																							{
 																								kind: "Field",
 																								name: { kind: "Name", value: "name" }
-																							}
-																						]
-																					}
-																				}
-																			]
-																		}
-																	},
-																	{
-																		kind: "Field",
-																		name: { kind: "Name", value: "coverArt" },
-																		selectionSet: {
-																			kind: "SelectionSet",
-																			selections: [
-																				{ kind: "Field", name: { kind: "Name", value: "id" } },
-																				{
-																					kind: "Field",
-																					name: { kind: "Name", value: "attributes" },
-																					selectionSet: {
-																						kind: "SelectionSet",
-																						selections: [
-																							{
-																								kind: "Field",
-																								name: { kind: "Name", value: "fileName" }
 																							}
 																						]
 																					}

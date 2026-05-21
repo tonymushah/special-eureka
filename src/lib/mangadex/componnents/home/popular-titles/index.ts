@@ -24,12 +24,6 @@ export const popular_title_query = graphql(`
 								name
 							}
 						}
-						coverArt {
-							id
-							attributes {
-								fileName
-							}
-						}
 					}
 				}
 			}

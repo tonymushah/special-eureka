@@ -1,6 +1,6 @@
 <script lang="ts">
 	import ChapterElement1, {
-		type ChapterEl1Events
+		type ChapterEl1Events,
 	} from "@mangadex/componnents/chapter/base/element1/ChapterElement1.svelte";
 	import Accordion from "@mangadex/componnents/theme/accordion/Accordion.svelte";
 	import { type ComponentProps } from "svelte";
@@ -33,12 +33,12 @@
 
 <style lang="scss">
 	.chapters {
-		padding-top: 5px;
+		padding-top: var(--space-sm);
 		display: flex;
 		flex-direction: column;
-		gap: 5px;
+		gap: var(--space-xs);
 	}
 	.some-margin {
-		margin: 5px;
+		margin: var(--space-sm);
 	}
 </style>

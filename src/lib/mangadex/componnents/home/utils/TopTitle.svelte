@@ -9,7 +9,7 @@
 		onrefresh?: (
 			ev: MouseEvent & {
 				currentTarget: EventTarget & HTMLButtonElement;
-			}
+			},
 		) => void;
 	}
 
@@ -29,6 +29,7 @@
 	<span class="buttons">
 		{#if href}
 			<ButtonAccent
+				data-top-abit
 				onclick={() => {
 					if (href) goto(href);
 				}}
@@ -40,6 +41,7 @@
 			</ButtonAccent>
 		{/if}
 		<ButtonAccent
+			data-top-abit
 			onclick={(e) => {
 				onrefresh?.(e);
 			}}

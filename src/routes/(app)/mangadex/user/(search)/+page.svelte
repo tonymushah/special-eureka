@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { preventDefault } from "svelte/legacy";
-
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import PrimaryButton from "@mangadex/componnents/theme/buttons/PrimaryButton.svelte";
 	import FormInput from "@mangadex/componnents/theme/form/input/FormInput.svelte";
@@ -20,16 +18,17 @@
 
 <section>
 	<form
-		onsubmit={preventDefault(() => {
+		onsubmit={(e) => {
+			e.preventDefault();
 			if (!realTime) {
 				userName = inputName;
 			}
-		})}
+		}}
 	>
 		<div class="input">
 			<FormInput
 				inputProps={{
-					placeholder: "User Name"
+					placeholder: "User Name",
 				}}
 				bind:value={inputName}
 				widthFull
@@ -37,18 +36,24 @@
 		</div>
 		<article
 			class="buttons"
-			oncontextmenu={preventDefault(() => {
+			oncontextmenu={(e) => {
+				e.preventDefault();
 				realTime = !realTime;
-			})}
+			}}
 		>
 			{#if realTime}
-				<ButtonAccent variant="accent" isBase type="submit">
+				<ButtonAccent
+					variant="accent"
+					isBase
+					type="submit"
+					data-top-abit
+				>
 					<div class="icons">
 						<SearchIcon />
 					</div>
 				</ButtonAccent>
 			{:else}
-				<PrimaryButton variant="1" isBase type="submit">
+				<PrimaryButton variant="1" isBase type="submit" data-top-abit>
 					<div class="icons">
 						<SearchIcon />
 					</div>

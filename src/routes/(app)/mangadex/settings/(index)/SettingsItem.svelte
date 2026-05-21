@@ -14,16 +14,7 @@
 	const SvelteComponent = $derived(icon);
 </script>
 
-<section
-	role="button"
-	tabindex="0"
-	onkeydown={(e) => {
-		if (e.key == "Enter") {
-			goto(href);
-		}
-	}}
-	onclick={() => goto(href)}
->
+<button onclick={() => goto(href)}>
 	<div class="icon">
 		{#if SvelteComponent}
 			<SvelteComponent />
@@ -31,11 +22,11 @@
 	</div>
 	<h2>{title}</h2>
 	<p>{description}</p>
-</section>
+</button>
 
 <style lang="scss">
 	:root {
-		--button-dept: 4px;
+		--button-dept: 5px;
 	}
 	p {
 		text-align: center;
@@ -54,21 +45,27 @@
 		overflow: hidden;
 		margin: 0px;
 		width: 100%;
+		font-family: var(--fonts);
+		font-size: var(--text-heading-sm);
 	}
-	section {
+	button {
+		--border-shadows-color: var(--mid-tone);
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		border-radius: 8px;
+		border-radius: var(--radius-lg);
 		background-color: var(--accent-l1);
-		border: 3px solid var(--mid-tone);
-		padding: 8px;
+		border: 3px solid var(--border-shadows-color);
+		padding: var(--space-md);
 		transition:
-			box-shadow 50ms ease-in-out,
-			background-color 50ms ease-in-out,
-			transform 50ms ease-in-out;
-		box-shadow: 0 var(--button-dept) 0 var(--mid-tone);
+			box-shadow 10ms ease-in-out,
+			background-color 10ms ease-in-out,
+			transform 10ms ease-in-out;
+		box-shadow: 0 var(--button-dept) 0 var(--border-shadows-color);
+		font-family: var(--fonts);
+		color: var(--text-color);
+		font-size: inherit;
 	}
 	.icon {
 		display: flex;
@@ -77,15 +74,19 @@
 		width: 100%;
 		transition: color 50ms ease-in-out;
 	}
-	section:hover {
+	button:hover {
 		background-color: var(--accent-l1-hover);
 		.icon {
 			color: var(--primary);
 		}
 	}
-	section:active {
+	button:active {
 		background-color: var(--accent-l1-active);
-		box-shadow: 0 0px 0 var(--mid-tone);
+		box-shadow: none;
 		transform: translateY(var(--button-dept));
+	}
+	button:focus {
+		--border-shadows-color: var(--contrast-l1);
+		outline: none;
 	}
 </style>

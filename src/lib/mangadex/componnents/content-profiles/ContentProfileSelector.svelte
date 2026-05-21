@@ -1,14 +1,17 @@
 <script lang="ts">
-	import themes, { singleUpdateMutation } from "@mangadex/content-profile/graphql/profiles";
+	import themes, {
+		singleUpdateMutation,
+	} from "@mangadex/content-profile/graphql/profiles";
 	import { derived } from "svelte/store";
 	import Title from "@mangadex/componnents/theme/texts/title/Title.svelte";
 	import { getContextClient } from "@urql/svelte";
 	import defaultThemeProfileKey from "@mangadex/content-profile/graphql/defaultProfileName";
 	import PrimaryButton from "@mangadex/componnents/theme/buttons/PrimaryButton.svelte";
 	import DangerButton from "@mangadex/componnents/theme/buttons/DangerButton.svelte";
-	import { XCircleIcon } from "@lucide/svelte";
+	import { Trash, XCircleIcon } from "@lucide/svelte";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import FormInput from "@mangadex/componnents/theme/form/input/FormInput.svelte";
+	import TrashIcon from "../manga/page/top-info/buttons/download/TrashIcon.svelte";
 
 	interface Props {
 		withTitle?: boolean;
@@ -17,11 +20,11 @@
 
 	const client = getContextClient();
 	const list = derived(themes, ($ths) =>
-		Array.from($ths.entries()).map(([name, value]) => ({ name, value }))
+		Array.from($ths.entries()).map(([name, value]) => ({ name, value })),
 	);
 	async function addNew(name: string) {
 		await client.mutation(singleUpdateMutation, {
-			name
+			name,
 		});
 		defaultThemeProfileKey.set(name);
 	}
@@ -49,9 +52,10 @@
 								e.stopPropagation();
 								deleteProfile(profile.name);
 							}}
+							data-top-abit
 						>
 							<div class="delete-icon">
-								<XCircleIcon />
+								<Trash />
 							</div>
 						</DangerButton>
 					</div>
@@ -71,9 +75,10 @@
 								e.stopPropagation();
 								deleteProfile(profile.name);
 							}}
+							data-top-abit
 						>
 							<div class="delete-icon">
-								<XCircleIcon />
+								<TrashIcon />
 							</div>
 						</DangerButton>
 					</div>
@@ -102,12 +107,12 @@
 			widthFull
 			inputProps={{
 				name: "name",
-				placeholder: "The New Theme Profile Name"
+				placeholder: "The New Theme Profile Name",
 			}}
 		/>
 	</div>
 
-	<PrimaryButton type="submit">
+	<PrimaryButton type="submit" data-top-abit>
 		<p>Add</p>
 	</PrimaryButton>
 </form>

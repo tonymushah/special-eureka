@@ -16,6 +16,11 @@
 	// swiper parameters
 	const swiperParams: SwiperOptions = {
 		slidesPerView: 1,
+		virtual: {
+			addSlidesAfter: 1,
+			addSlidesBefore: 1,
+		},
+		loop: true,
 		breakpoints: {
 			640: {
 				slidesPerView: 2,
