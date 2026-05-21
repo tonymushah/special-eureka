@@ -6482,6 +6482,7 @@ dependencies = [
  "flate2",
  "futures-util",
  "governor",
+ "graphql-persistent-queries",
  "hotpath",
  "image",
  "impl-trait-for-tuples",

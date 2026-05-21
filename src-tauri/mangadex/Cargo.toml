@@ -31,7 +31,7 @@ mangadex-api-schema-rust = { version = "1", default-features = false, features =
 mangadex-api-types-rust = { version = "1", default-features = false, features = [
 	"async-graphql",
 ] }
-async-graphql = {workspace = true, features = ["time"]}
+async-graphql = {workspace = true, features = ["time", "apollo_persisted_queries"]}
 convert_case = "0.11"
 tokio-stream = { version = "0", features = ["sync"] }
 regex.workspace = true
@@ -70,6 +70,7 @@ diesel_migrations.workspace = true
 diesel-sqlite-utils.workspace = true
 non-exhaustive.workspace = true
 special-eureka-notification.workspace = true
+graphql-persistent-queries.workspace = true
 
 [dependencies.eureka-mmanager]
 git = "https://github.com/tonymushah/eureka-mmanager.git"

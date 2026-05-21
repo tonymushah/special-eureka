@@ -1,7 +1,7 @@
 #![warn(clippy::perf)]
 #![warn(clippy::style)]
 
-use async_graphql::Schema;
+use async_graphql::{Schema, extensions::apollo_persisted_queries::ApolloPersistedQueries};
 use mutation::Mutation;
 use plugin_setup::setup;
 // use mangadex_desktop_api2::AppState;
@@ -43,7 +43,11 @@ pub(crate) use error::ErrorWrapper;
 pub fn init<R: Runtime>() -> MizukiPlugin<R, Q, M, S> {
     mizuki::Builder::new(
         "mangadex-desktop-api",
-        Schema::new(Query, Mutation, Subscriptions::default()),
+        Schema::build(Query, Mutation, Subscriptions::default())
+            .extension(ApolloPersistedQueries::new(
+                graphql_persistent_queries::SqlitePersistentQueries::default(),
+            ))
+            .finish(),
     )
     .js_init_script(format!(
         r"
