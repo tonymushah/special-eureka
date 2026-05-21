@@ -1,6 +1,10 @@
 mod types;
 
-use std::{fs::create_dir_all, io::Cursor, sync::Arc};
+use std::{
+    fs::create_dir_all,
+    io::Cursor,
+    sync::{Arc, LazyLock},
+};
 
 use anyhow::anyhow;
 use async_graphql_parser::types::ExecutableDocument;
@@ -138,3 +142,6 @@ impl CacheStorage for SqlitePersistentQueries {
         }
     }
 }
+
+pub static PERSISTENT_QUERIES: LazyLock<SqlitePersistentQueries> =
+    LazyLock::new(SqlitePersistentQueries::default);
