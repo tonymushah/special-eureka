@@ -2,6 +2,11 @@
 
 [![build-test](https://github.com/tonymushah/special-eureka/actions/workflows/build.yaml/badge.svg)](https://github.com/tonymushah/special-eureka/actions/workflows/build.yaml)
 
+> [!IMPORTANT]
+>
+> Moved to [codeberg.org](https://codeberg.org/tonymushah/special-eureka)
+> 
+
 A desktop manga reader which support for :
 
 - the [Mangadex](https://mangadex.org) website.
